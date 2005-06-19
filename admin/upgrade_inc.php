@@ -171,6 +171,10 @@ array( 'PHP' => '
 // STEP 3
 array( 'QUERY' =>
 	array( 'SQL92' => array(
+		"UPDATE `".BIT_DB_PREFIX."users_grouppermissions` SET `perm_name`=replace(`perm_name`,'tiki_','bit_')",
+		"UPDATE `".BIT_DB_PREFIX."users_permissions` SET `perm_name`=replace(`perm_name`,'tiki_','bit_')",
+		"UPDATE `".BIT_DB_PREFIX."users_objectpermissions` SET `perm_name`=replace(`perm_name`,'tiki_','bit_')",
+
 		"INSERT INTO `".BIT_DB_PREFIX."users_users` (`real_name`, `login`, `email`, `user_id` ) VALUES ('Anonymous', 'anonymous', 'anonymous@localhost', ".ANONYMOUS_USER_ID.")",
 // TikiWiki assigns the creator user foreign key as 'system' even if there is now 'system' user - XOXO spiderr
 // In order for all pages to upgrade, there must be at least an 'admin' and 'system' user
