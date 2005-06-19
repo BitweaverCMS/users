@@ -180,7 +180,6 @@ array( 'QUERY' =>
 // In order for all pages to upgrade, there must be at least an 'admin' and 'system' user
  		"INSERT INTO `".BIT_DB_PREFIX."users_users` (`real_name`, `login`, `email`, `user_id` ) VALUES ('Administrator', 'admin', 'root@localhost', ".ROOT_USER_ID.")",
  		"INSERT INTO `".BIT_DB_PREFIX."users_users` (`real_name`, `login`, `email` ) VALUES ('System', 'system', 'system@localhost' )",
-		"UPDATE `".BIT_DB_PREFIX."users_users` SET `login`='system' WHERE `user_id`=".ROOT_USER_ID,
 		"UPDATE `".BIT_DB_PREFIX."tiki_sessions` SET `user_id`=(SELECT `user_id` FROM `".BIT_DB_PREFIX."users_users` WHERE `".BIT_DB_PREFIX."users_users`.`login`=`".BIT_DB_PREFIX."tiki_sessions`.`user`)",
 		"UPDATE `".BIT_DB_PREFIX."tiki_user_preferences` SET `user_id`=(SELECT `user_id` FROM `".BIT_DB_PREFIX."users_users` WHERE `".BIT_DB_PREFIX."users_users`.`login`=`".BIT_DB_PREFIX."tiki_user_preferences`.`user`)",
 		"UPDATE `".BIT_DB_PREFIX."tiki_user_bookmarks_folders` SET `user_id`=(SELECT `user_id` FROM `".BIT_DB_PREFIX."users_users` WHERE `".BIT_DB_PREFIX."users_users`.`login`=`".BIT_DB_PREFIX."tiki_user_bookmarks_folders`.`user`)",
