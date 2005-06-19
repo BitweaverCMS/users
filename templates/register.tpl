@@ -1,0 +1,126 @@
+{strip}
+
+<div class="display login">
+	<div class="header">
+		<h1>{tr}Register as a new user{/tr}</h1>
+		{if $showmsg eq 'y'}<h2>{$msg}</h2>{/if}
+	</div>
+
+	<div class="body">
+		<p>{tr}If you are already registered, please{/tr} <a href="{$gBitLoc.USERS_PKG_URL}login.php">{tr}login{/tr}</a></p>
+		{form legend="Please fill in the following details"}
+			{if $notrecognized eq 'y'}
+				<input type="hidden" name="REG[login]" value="{$reg.login}"/>
+				<input type="hidden" name="REG[password]" value="{$reg.password}"/>
+				<input type="hidden" name="REG[novalidation]" value="yes"/>
+
+				<div class="row">
+					{formfeedback error=$errors.validate}
+					{formlabel label="Username" for="email"}
+					{forminput}
+						<input type="text" name="REG[email]" id="email" value="{$reg.email}"/>
+					{/forminput}
+				</div>
+
+				<div class="row submit">
+					<input type="submit" name="REG[register]" value="{tr}register{/tr}" />
+				</div>
+			{elseif $showmsg ne 'y'}
+				{if $gBitSystem->mPrefs.rnd_num_reg eq 'y'}
+					<div class="row">
+						{formfeedback error=$errors.rnd_num_reg}
+						{formlabel label="Your registration code"}
+						{forminput}
+							<img src="{$gBitLoc.USERS_PKG_URL}random_num_img.php" alt="{tr}Random Image{/tr}"/>
+						{/forminput}
+					</div>
+
+					<div class="row">
+						{formlabel label="Registration code" for="regcode"}
+						{forminput}
+							<input type="text" maxlength="8" size="8" name="REG[regcode]" id="regcode" />
+						{/forminput}
+					</div>
+				{/if}
+
+				<div class="row">
+					{formlabel label="Real name" for="real_name"}
+					{forminput}
+						<input type="text" name="REG[real_name]" id="real_name" value="{$reg.real_name}" />
+					{/forminput}
+				</div>
+
+				<div class="row">
+					{formfeedback error=$errors.login}
+					{formlabel label="Username" for="login"}
+					{forminput}
+						<input type="text" name="REG[login]" id="login" value="{$reg.login}" />
+						{formhelp note="Your username can only contain numbers, characters, and underscores."}
+					{/forminput}
+				</div>
+
+				<div class="row">
+					{formfeedback error=$errors.email}
+					{formlabel label="Email" for="email"}
+					{forminput}
+						<input type="text" name="REG[email]" id="email" value="{$reg.email}" />
+					{/forminput}
+				</div>
+
+				{if $gBitSystem->mPrefs.useRegisterPasscode eq 'y'}
+					<div class="row">
+						{formfeedback error=$errors.passcode}
+						{formlabel label="Passcode to register<br />(not your user password)" for="passcode"}
+						{forminput}
+							<input type="password" name="REG[passcode]" id="passcode" />
+						{/forminput}
+					</div>
+				{/if}
+
+				{if $gBitSystem->isFeatureActive( 'validateUsers' )}
+					<div class="row">
+						{formfeedback warning="A confirmation email will be sent to you with instructions how to login"}
+					</div>
+				{else}
+					<div class="row">
+						{formfeedback error=$errors.password}
+						{formlabel label="Password" for="pass"}
+						{forminput}
+							<input id="pass1" type="password" name="REG[password]" value="{$reg.password}" />
+						{/forminput}
+					</div>
+					<div class="row">
+						{formlabel label="Repeat password" for="password2"}
+						{forminput}
+							<input id="password2" type="password" name="REG[password2]" />
+						{/forminput}
+					</div>
+					{if $gBitSystem->isFeatureActive( 'user_password_generator' )}
+					<div class="row">
+						{formlabel label="<a href=\"javascript:genPass('genepass','pass1','pass2');\">{tr}Generate a password{/tr}</a>" for="email"}
+						{forminput}
+							<input id="genepass" type="text" />
+							{formhelp note="You can use this link to create a random password. Make sure you make a note of it somewhere to log in to this site in the future."}
+						{/forminput}
+					</div>
+					{/if}
+				{/if}
+
+				{section name=f loop=$customFields}
+				<div class="row">
+					{formlabel label="$customFields[f]}
+					{forminput}
+						<input type="text" name="CUSTOM[{$customFields[f]|escape}]" />
+					{/forminput}
+				</div>
+				{/section}
+
+				<div class="row submit">
+					<input type="submit" name="register" value="{tr}register{/tr}" />
+				</div>
+			{/if}
+		{/form}
+	</div><!-- end .body -->
+</div><!-- end .login -->
+
+{/strip}

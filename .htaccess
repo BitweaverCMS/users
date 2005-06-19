@@ -1,0 +1,5 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+	RewriteBase		/users/
+	RewriteRule		^([A-Za-z0-9_]+)$		index.php?home=$1 [L,QSA]
+</IfModule>
