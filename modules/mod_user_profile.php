@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | PHP Source
 // +----------------------------------------------------------------------
-// | Copyright (C) 2004 by Tikipro - cfowler, btodoroff, et al
+// | Copyright (C) 2004 by bitweaver - cfowler, btodoroff, et al
 // +----------------------------------------------------------------------
 global $gQueryUser, $gBitUser, $smarty;
 if( !empty( $gQueryUser->mInfo ) ) {

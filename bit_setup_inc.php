@@ -58,7 +58,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 
 	// in the case of tikis on same domain we have to distinguish the realm
 	// changed cookie and session variable name by a name made with siteTitle
-	$cookie_site = strtolower( ereg_replace("[^a-zA-Z0-9]", "", $gBitSystem->getPreference('siteTitle', 'Tikipro')) );
+	$cookie_site = strtolower( ereg_replace("[^a-zA-Z0-9]", "", $gBitSystem->getPreference('siteTitle', 'bitweaver')) );
 	global $user_cookie_site;
 	$user_cookie_site = 'tiki-user-' . $cookie_site;
 
