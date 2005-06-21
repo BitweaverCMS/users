@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.1 2005/06/19 05:12:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.2 2005/06/21 17:02:33 spiderr Exp $ *}
 {strip}
 {if $userData->mUserPrefs.user_information eq 'public' or $gBitUser.mUserId eq $userData.mUserId}
 	<div class="row">
@@ -30,7 +30,7 @@
 		<div class="row">
 			{formlabel label="Language"}
 			{forminput}
-				{$userData->mUserPrefs.tikilanguage}
+				{$userData->mUserPrefs.bitlanguage}
 			{/forminput}
 		</div>
 	{/if}

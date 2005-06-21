@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.1 2005/06/19 05:12:21 bitweaver Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.2 2005/06/21 17:02:33 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -153,7 +153,7 @@ while ($file = readdir($h)) {
 closedir ($h);
 $smarty->assign('flags', $flags);
 // Get preferences
-$gBitLanguage->mLanguage = $gBitUser->getPreference('tikilanguage', $gBitLanguage->mLanguage);
+$gBitLanguage->mLanguage = $gBitUser->getPreference('bitlanguage', $gBitLanguage->mLanguage);
 $real_name = $gBitUser->getPreference('real_name', '');
 $country = $gBitUser->getPreference('country', 'Other');
 $smarty->assign('country', $country);

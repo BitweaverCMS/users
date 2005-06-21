@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.1 2005/06/19 05:12:21 bitweaver Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.2 2005/06/21 17:02:33 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -46,7 +46,7 @@ if( !empty( $gBitSystem->mPrefs['custom_user_fields'] ) ) {
 	$smarty->assign('customFields', $customFields);
 }
 
-$gBitLanguage->mLanguage = $editUser->getPreference( 'tikilanguage', $gBitLanguage->mLanguage);
+$gBitLanguage->mLanguage = $editUser->getPreference( 'bitlanguage', $gBitLanguage->mLanguage);
 $smarty->assign( 'gBitLanguage', $gBitLanguage );
 if (isset($_REQUEST["prefs"])) {
 	// setting preferences
@@ -59,7 +59,7 @@ if (isset($_REQUEST["prefs"])) {
 		$editUser->storePreference( 'homePage', $_REQUEST["homePage"]);
 	if ($change_language == 'y') {
 		if (isset($_REQUEST["language"])) {
-			$editUser->storePreference( 'tikilanguage', $_REQUEST["language"]);
+			$editUser->storePreference( 'bitlanguage', $_REQUEST["language"]);
 		}
 	}
 	if (isset($_REQUEST["style"]))

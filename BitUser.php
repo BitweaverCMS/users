@@ -11,7 +11,7 @@
 // | Authors: spider <spider@steelsun.com>
 // +----------------------------------------------------------------------+
 //
-// $Id: BitUser.php,v 1.1 2005/06/19 05:12:21 bitweaver Exp $
+// $Id: BitUser.php,v 1.2 2005/06/21 17:02:32 spiderr Exp $
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 define( 'AVATAR_TYPE_CENTRALIZED', 'c' );
 define( 'AVATAR_TYPE_USER_DB', 'u' );
@@ -33,7 +33,7 @@ define("ACCOUNT_DISABLED", -6);
 * Class that holds all information for a given user
 *
 * @author   spider <spider@steelsun.com>
-* @version  $Revision: 1.1 $
+* @version  $Revision: 1.2 $
 * @package  BitUser
 */
 class BitUser extends LibertyAttachable {
@@ -212,9 +212,9 @@ class BitUser extends LibertyAttachable {
 		if( empty( $this->mUserPrefs['userbreadCrumb'] ) ) {
 			$this->mUserPrefs['userbreadCrumb'] = $gBitSystem->getPreference('userbreadCrumb',4);
 		}
-		if( empty( $this->mUserPrefs['tikilanguage'] ) ) {
+		if( empty( $this->mUserPrefs['bitlanguage'] ) ) {
 			global $gBitLanguage;
-			$this->mUserPrefs['tikilanguage'] = $gBitLanguage->mLanguage;
+			$this->mUserPrefs['bitlanguage'] = $gBitLanguage->mLanguage;
 		}
 		if( empty( $this->mUserPrefs['theme'] ) ) {
 			global $site_style;
