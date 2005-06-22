@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.1 2005/06/19 05:12:22 bitweaver Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.1.1.1.2.1 2005/06/22 20:11:15 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -12,29 +12,19 @@ if (!isset($_REQUEST["oldpass"]))
 $smarty->assign('login', $_REQUEST['login']);
 $smarty->assign('oldpass', $_REQUEST["oldpass"]);
 if (isset($_REQUEST["change"])) {
-	
+
 	if ($_REQUEST["pass"] != $_REQUEST["pass2"]) {
-		$smarty->assign('msg', tra("The passwords didn't match"));
-		$gBitSystem->display( 'error.tpl' );
-		die;
+		$gBitSystem->fatalError( tra("The passwords didn't match") );
 	}
 	if ($_REQUEST["pass"] == $_REQUEST["oldpass"]) {
-		$smarty->assign('msg', tra("You can not use the same password again"));
-		$gBitSystem->display( 'error.tpl' );
-		die;
+		$gBitSystem->fatalError( tra("You can not use the same password again") );
 	}
-	if (!$gBitUser->validate_user($_REQUEST['login'], $_REQUEST["oldpass"], '', '')) {
-		if(!$gBitUser->validate_user("admin",substr($_REQUEST["oldpass"],6,200),'','') or (!$gBitUser->isAdmin())) {
-			$smarty->assign('msg', tra("Invalid old password"));
-			$gBitSystem->display( 'error.tpl' );
-		die;
-		}
+	if( !$gBitUser->isAdmin() && !$gBitUser->validate($_REQUEST['login'], $_REQUEST["oldpass"], '', '') ) {
+		$gBitSystem->fatalError( tra("Invalid old password") );
 	}
 	//Validate password here
 	if (strlen($_REQUEST["pass"]) < $min_pass_length) {
-		$smarty->assign('msg', tra("Password should be at least"). ' ' . $min_pass_length . ' ' . tra("characters long"));
-		$gBitSystem->display( 'error.tpl' );
-		die;
+		$gBitSystem->fatalError(  tra("Password should be at least"). ' ' . $min_pass_length . ' ' . tra("characters long") );
 	}
 	// Check this code
 	if ($pass_chr_num == 'y') {

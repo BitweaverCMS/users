@@ -11,7 +11,7 @@
 // | Authors: spider <spider@steelsun.com>
 // +----------------------------------------------------------------------+
 //
-// $Id: BitUser.php,v 1.2 2005/06/21 17:02:32 spiderr Exp $
+// $Id: BitUser.php,v 1.2.2.1 2005/06/22 20:11:15 spiderr Exp $
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 define( 'AVATAR_TYPE_CENTRALIZED', 'c' );
 define( 'AVATAR_TYPE_USER_DB', 'u' );
@@ -33,7 +33,7 @@ define("ACCOUNT_DISABLED", -6);
 * Class that holds all information for a given user
 *
 * @author   spider <spider@steelsun.com>
-* @version  $Revision: 1.2 $
+* @version  $Revision: 1.2.2.1 $
 * @package  BitUser
 */
 class BitUser extends LibertyAttachable {
@@ -296,7 +296,7 @@ class BitUser extends LibertyAttachable {
 				$this->mErrors['login'] = tra( "Your username can only contain numbers, characters, and underscores." );
 			} else {
 				// LOWER CASE all logins
-				$pParamHash['login'] = strtolower( $pParamHash['login'] );
+				$pParamHash['login'] = $pParamHash['login'];
 				$pParamHash['user_store']['login'] = $pParamHash['login'];
 			}
 		}
@@ -344,7 +344,7 @@ class BitUser extends LibertyAttachable {
 				$this->mErrors['password'] = tra( 'Password must contain both letters and numbers' );
 			} else {
 				// Generate a unique hash
-				$pParamHash['user_store']['hash'] = md5( $pParamHash['login'].$pParamHash['password'].$pParamHash['email'] );
+				$pParamHash['user_store']['hash'] = md5( strtolower( $pParamHash['login'] ).$pParamHash['password'].$pParamHash['email'] );
 				$now = date("U");
 				if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getPreference('pass_due') ) {
 					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getPreference('pass_due') );
@@ -369,17 +369,13 @@ class BitUser extends LibertyAttachable {
 		} else {
 			$errors = array();
 		}
-		if( !empty( $this ) && is_object( $this ) ) {
-			// we might be having this called statically
-			$userInfo = $this->getUserInfo( array( 'email' => $pEmail ) );
-		}
 		if( !eregi (
 			  '^[-!#$%&\`*+\\./0-9=?A-Z^_`a-z{|}~]+'.'@'.
 			   '(localhost|[-!$%&\'*+\\/0-9=?A-Z^_`a-z{|}~]+\.'.
 			   '[-!$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+)$'
 				, $pEmail ) ) {
 			$errors['email'] = 'The email address "'.$pEmail.'" is invalid.';
-		} elseif( !empty( $userInfo['user_id'] ) ) {
+		} elseif( !empty( $this ) && is_object( $this ) && $this->userExists( array( 'email' => $pEmail ) ) ) {
 			$errors['email'] = 'The email address "'.$pEmail.'" has already been registered.';
 		} elseif( $gBitSystem->isFeatureActive( 'validateUsers' ) ) {
 			list ( $Username, $domain ) = split ("@",$pEmail);
@@ -558,15 +554,11 @@ if ($gDebug) echo "Run : QUIT<br>";
 		return( md5(BitSystem::genPass()) );
 	}
 
-	function validate_hash($user, $hash) {
-		return $this->mDb->getOne( "select count(*) from `".BIT_DB_PREFIX."users_users` where " . $this->convert_binary(). " `login` = ? and `hash`=?", array($user, $hash) );
-	}
-
 	function login( $pLogin, $pPassword, $pChallenge=NULL, $pResponse=NULL ) {
 		global $gBitSystem, $user_cookie_site;
 		$isvalid = false;
 		// Verify user is valid
-		if( $this->validate_user($pLogin, $pPassword, $pChallenge, $pResponse) ) {
+		if( $this->validate($pLogin, $pPassword, $pChallenge, $pResponse) ) {
 			$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
 			$userInfo = $this->getUserInfo( array( $loginCol => $pLogin ) );
 			// If the password is valid but it is due then force the user to change the password by
@@ -617,7 +609,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 		return( $url );
 	}
 
-	function validate_user($user, $pass, $challenge, $response) {
+	function validate($user, $pass, $challenge, $response) {
 		global $gBitSystem;
 		// these will help us keep tabs of what is going on
 		$userTikiValid = false;
@@ -630,7 +622,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 		$create_auth = ($gBitSystem->getPreference("auth_create_user_auth", "n") == "y");
 		$skip_admin = ($gBitSystem->getPreference("auth_skip_admin", "n") == "y");
 		// first attempt a login via the standard Tiki system
-		$userId = $this->validate_gBitDbUser($user, $pass, $challenge, $response);
+		$userId = $this->validateBitUser($user, $pass, $challenge, $response);
 		if ($userId) {
 			$userTikiValid = true;
 			$userTikiPresent = true;
@@ -644,7 +636,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 		} elseif ( $auth_pear ) {
 			// next see if we need to check LDAP
 			// check the user account
-			$result = $this->validate_user_auth($user, $pass);
+			$result = $this->validateAuth($user, $pass);
 			switch ($result) {
 				case USER_VALID:
 					unset($this->mErrors['login']);
@@ -733,7 +725,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		return( count( $this->mErrors ) == 0 );
 	}
 	// validate the user in the PEAR::Auth system
-	function validate_user_auth($user, $pass) {
+	function validateAuth($user, $pass) {
 		global $gBitSystem;
 		require_once (UTIL_PKG_PATH."pear/Auth/Auth.php");
 		// just make sure we're supposed to be here
@@ -787,8 +779,8 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		return $ret;
 	}
 
-	// validate the user in the Tiki database
-	function validate_gBitDbUser( $pLogin, $pass, $challenge, $response ) {
+	// validate the user in the bitweaver database - validation is case insensitive, and we like it that way!
+	function validateBitUser( $pLogin, $pass, $challenge, $response ) {
 		global $gBitSystem;
 		$ret = NULL;
 		if( empty( $pLogin ) ) {
@@ -796,23 +788,25 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		} elseif( empty( $pass ) ) {
 			$this->mErrors['login'] = 'Password incorrect';
 		} else {
-			$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
+			$loginVal = strtoupper( $pLogin ); // case insensitive login
+			$loginCol = ' UPPER(`'.(strpos( $pLogin, '@' ) ? 'email' : 'login').'`)';
 			// first verify that the user exists
-			$query = "select `email`, `login`, `user_id`, `password` from `".BIT_DB_PREFIX."users_users` where " . $this->convert_binary(). " UPPER(`$loginCol`) = ?";
-			$result = $this->query( $query, array( strtoupper($pLogin) ) );
+			$query = "select `email`, `login`, `user_id`, `password` from `".BIT_DB_PREFIX."users_users` where " . $this->convert_binary(). " $loginCol = ?";
+			$result = $this->query( $query, array( $loginVal ) );
 			if( !$result->numRows() ) {
 				$this->mErrors['login'] = 'User not found';
 			} else {
 				$res = $result->fetchRow();
 				$userId = $res['user_id'];
 				$user = $res['login'];
-				$hash = md5($user . $pass . trim($res['email']));
+				// TikiWiki 1.8+ uses this bizarro conglomeration of fields to get the hash. this sucks for many reasons
+				$hash = md5( strtolower($user) . $pass . trim($res['email']));
 				$hash2 = md5($pass);
 				// next verify the password with 2 hashes methods, the old one (pass)) and the new one (login.pass;email)
 				// TODO - this needs cleaning up - wolff_borg
 				if( !$gBitSystem->isFeatureActive( 'feature_challenge' ) || empty($response) ) {
-					$query = "select `user_id` from `".BIT_DB_PREFIX."users_users` where " . $this->convert_binary(). " `$loginCol` = ? and (`hash`=? or `hash`=?)";
-					$result = $this->query( $query, array( $pLogin, $hash, $hash2 ) );
+					$query = "select `user_id` from `".BIT_DB_PREFIX."users_users` where " . $this->convert_binary(). " $loginCol = ? and (`hash`=? or `hash`=?)";
+					$result = $this->query( $query, array( $loginVal, $hash, $hash2 ) );
 					if ($result->numRows()) {
 						$query = "update `".BIT_DB_PREFIX."users_users` set `last_login`=`current_login`, `current_login`=? where `user_id`=?";
 						$result = $this->query($query, array( (int)date("U"), $userId ));
@@ -823,14 +817,14 @@ echo "userAuthPresent: $userAuthPresent<br>";
 				} else {
 					// Use challenge-reponse method
 					// Compare pass against md5(user,challenge,hash)
-					$hash = $this->getOne("select `hash`  from `".BIT_DB_PREFIX."users_users` where " . $this->convert_binary(). " `$loginCol`=?", array( $pLogin ) );
+					$hash = $this->getOne("select `hash`  from `".BIT_DB_PREFIX."users_users` where " . $this->convert_binary(). " $loginCol = ?", array( $pLogin ) );
 					if (!isset($_SESSION["challenge"])) {
 						$this->mErrors['login'] = 'Invalid challenge';
 					}
 					//print("pass: $pass user: $user hash: $hash <br/>");
 					//print("challenge: ".$_SESSION["challenge"]." challenge: $challenge<br/>");
 					//print("response : $response<br/>");
-					if ($response == md5($user . $hash . $_SESSION["challenge"])) {
+					if ($response == md5( strtolower($user) . $hash . $_SESSION["challenge"]) ) {
 						$ret = $userId;
 						$this->update_lastlogin( $userId );
 					} else {
@@ -946,8 +940,8 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$ret = NULL;
 		if( is_array( $pUserMixed ) ) {
 			$query = "SELECT  uu.* FROM `".BIT_DB_PREFIX."users_users` uu LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON (tc.`content_id`=uu.`content_id`)
-					  WHERE uu.`".key( $pUserMixed )."` = ?";
-			$ret = $this->mDb->GetRow( $query, array( current( $pUserMixed ) ) );
+					  WHERE UPPER( uu.`".key( $pUserMixed )."` ) = ?";
+			$ret = $this->mDb->GetRow( $query, array( strtoupper( current( $pUserMixed ) ) ) );
 		}
 		return $ret;
 	}
