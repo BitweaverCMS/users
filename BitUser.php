@@ -11,7 +11,7 @@
 // | Authors: spider <spider@steelsun.com>
 // +----------------------------------------------------------------------+
 //
-// $Id: BitUser.php,v 1.2.2.2 2005/06/23 10:35:38 jht001 Exp $
+// $Id: BitUser.php,v 1.2.2.3 2005/06/23 20:04:15 drewslater Exp $
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 define( 'AVATAR_TYPE_CENTRALIZED', 'c' );
 define( 'AVATAR_TYPE_USER_DB', 'u' );
@@ -33,7 +33,7 @@ define("ACCOUNT_DISABLED", -6);
 * Class that holds all information for a given user
 *
 * @author   spider <spider@steelsun.com>
-* @version  $Revision: 1.2.2.2 $
+* @version  $Revision: 1.2.2.3 $
 * @package  BitUser
 */
 class BitUser extends LibertyAttachable {
@@ -1413,7 +1413,21 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$this->query($sql, array($newRealName, $this->mUserId));
 		}
 	}
-
+	
+	function storeLogin($newLogin) {
+		$newLogin = substr($newLogin,0,40);
+		if ($this->userExists(array('login' => $newLogin))) {
+			$this->mErrors[] = "The username '$newLogin' is already taken";
+		} elseif ($this->mUserId) {
+			$sql = "UPDATE `".BIT_DB_PREFIX."users_users` SET `login` = ? WHERE `user_id` = ?";
+			$rs = $this->query($sql, array($newLogin, $this->mUserId));
+		} else {
+			$this->mErrors[] = "Invalid user";
+		}
+		
+		return (count($this->mErrors) == 0);
+	}
+	
 	function getList( &$pParamHash ) {
 
 		if ( !isset( $pParamHash['sort_mode']) or $pParamHash['sort_mode'] == '' ) $pParamHash['sort_mode'] = 'registration_date_desc';
