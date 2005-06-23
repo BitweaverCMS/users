@@ -11,7 +11,7 @@
 // | Authors: spider <spider@steelsun.com>
 // +----------------------------------------------------------------------+
 //
-// $Id: BitUser.php,v 1.2.2.1 2005/06/22 20:11:15 spiderr Exp $
+// $Id: BitUser.php,v 1.2.2.2 2005/06/23 10:35:38 jht001 Exp $
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 define( 'AVATAR_TYPE_CENTRALIZED', 'c' );
 define( 'AVATAR_TYPE_USER_DB', 'u' );
@@ -33,7 +33,7 @@ define("ACCOUNT_DISABLED", -6);
 * Class that holds all information for a given user
 *
 * @author   spider <spider@steelsun.com>
-* @version  $Revision: 1.2.2.1 $
+* @version  $Revision: 1.2.2.2 $
 * @package  BitUser
 */
 class BitUser extends LibertyAttachable {
@@ -322,7 +322,9 @@ class BitUser extends LibertyAttachable {
 			if( empty( $pParamHash['email'] ) ) {
 				$this->mErrors['email'] = tra( 'You must enter your email address' );
 			}
-			if( $gBitSystem->isFeatureActive( 'validateUsers' ) ) {
+			// jht 2005-06-22_23:51:58 $pParamHash['admin_add'] is set on adds from admin page - a kludge
+			// that should be fixed in some better way.
+			if(empty($pParamHash['admin_add']) && $gBitSystem->isFeatureActive( 'validateUsers' ) ) {
 				$pParamHash['password'] = $this->genPass();
 				$pParamHash['user_store']['provpass'] = substr( md5( $pParamHash['password'] ), 0, 30 );
 				$pParamHash['pass_due'] = 0;
