@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/logout.php,v 1.1.1.1.2.1 2005/06/23 10:58:52 wolff_borg Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/logout.php,v 1.1.1.1.2.2 2005/06/24 13:30:00 wolff_borg Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -15,6 +15,6 @@ if ($gBitSystem->isPackageActive( 'LIVE_SUPPORT_PKG_NAME' ) ) {
 	}
 }
 $gBitUser->logout();
-header ("location: ".BIT_ROOT_URL.$gBitSystem->getDefaultPage());
+header ("location: ".$gBitSystem->getDefaultPage());
 exit;
 ?>
