@@ -141,12 +141,15 @@ class BitPermUser extends BitUser {
 
 	function getAllGroups( &$pListHash ) {
 		$this->prepGetList( $pListHash );
-		if( empty(  $pListHash['sort_mode'] ) ) {
+		if( empty(  $pListHash['sort_mode'] ) || $pListHash['sort_mode'] == 'name_asc' ) {
  			$pListHash['sort_mode'] = 'group_name_asc';
 		}
 
 		$sortMode = $this->convert_sortmode( $pListHash['sort_mode'] );
-		if( !empty( $pListHash['find'] ) ) {
+		if( !empty( $pListHash['find_groups'] ) ) {
+			$mid = " WHERE UPPER(`group_name`) like ?";
+			$bindvars[] = "%".strtoupper( $pListHash['find_groups'] )."%";
+		} elseif( !empty( $pListHash['find'] ) ) {
 			$mid = " WHERE UPPER(`group_name`) like ?";
 			$bindvars[] = "%".strtoupper( $pListHash['find'] )."%";
 		} else {
@@ -177,8 +180,8 @@ class BitPermUser extends BitUser {
 				$rs->MoveNext();
 			}
 		}
-		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_groups`";
-		$cant = $this->getOne($query_cant, false);
+		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_groups` $mid";
+		$cant = $this->getOne($query_cant, $bindvars);
 		$retval = array();
 		$retval["data"] = $ret;
 		$retval["cant"] = $cant;
