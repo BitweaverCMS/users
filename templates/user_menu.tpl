@@ -7,7 +7,7 @@
 			{if $opensec eq 'y'}</div>{/if}
 
 			{if $gBitSystemPrefs.feature_menusfolderstyle eq 'y'}
-				<a class="menuhead" href="javascript:icntoggle('menu{$cname}');">{biticon ipackage=liberty iname="folder" name="menu`$cname`img" iexplain="folder"}
+				<a class="menuhead" href="javascript:icntoggle('menu{$cname}');">{biticon ipackage=liberty iname="collapsed" name="menu`$cname`img" iexplain="folder"}
 			{else}
 				<a class="menuhead" href="javascript:toggle('menu{$cname}');">
 			{/if} 
