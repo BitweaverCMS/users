@@ -1,9 +1,21 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.2.2.1 2005/06/22 20:11:15 spiderr Exp $
-// Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
-// All Rights Reserved. See copyright.txt for details and a complete list of authors.
-// Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
-// Initialization
+/**
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.2.2.2 2005/06/27 17:48:00 lsces Exp $
+ *
+ * Copyright (c) 2004 bitweaver.org
+ * Copyright (c) 2003 tikwiki.org
+ * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
+ * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
+ *
+ * $Id: preferences.php,v 1.2.2.2 2005/06/27 17:48:00 lsces Exp $
+ * @package users
+ * @subpackage functions
+ */
+
+/**
+ * required setup
+ */
 require_once( '../bit_setup_inc.php' );
 include_once( KERNEL_PKG_PATH.'mod_lib.php' );
 if( $gBitSystem->isPackageActive( 'wiki' ) ) {

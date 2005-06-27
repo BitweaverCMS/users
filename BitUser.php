@@ -1,17 +1,24 @@
 <?php
-// +----------------------------------------------------------------------+
-// | Copyright (c) 2004, bitweaver.org
-// +----------------------------------------------------------------------+
-// | All Rights Reserved. See copyright.txt for details and a complete list of authors.
-// | Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
-// |
-// | For comments, please use phpdocu.sourceforge.net documentation standards!!!
-// | -> see http://phpdocu.sourceforge.net/
-// +----------------------------------------------------------------------+
-// | Authors: spider <spider@steelsun.com>
-// +----------------------------------------------------------------------+
-//
-// $Id: BitUser.php,v 1.2.2.4 2005/06/27 10:08:42 lsces Exp $
+/**
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.5 2005/06/27 17:48:00 lsces Exp $
+ *
+ * Lib for user administration, groups and permissions
+ * This lib uses pear so the constructor requieres
+ * a pear DB object
+ 
+ * Copyright (c) 2004 bitweaver.org
+ * Copyright (c) 2003 tikwiki.org
+ * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
+ * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
+ *
+ * $Id: BitUser.php,v 1.2.2.5 2005/06/27 17:48:00 lsces Exp $
+ * @package users
+ */
+
+/**
+ * required setup
+ */
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 define( 'AVATAR_TYPE_CENTRALIZED', 'c' );
 define( 'AVATAR_TYPE_USER_DB', 'u' );
@@ -33,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.4 $
+ * @version  $Revision: 1.2.2.5 $
  * @package  users
  * @subpackage  BitUser
  */
