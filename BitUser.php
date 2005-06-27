@@ -11,7 +11,7 @@
 // | Authors: spider <spider@steelsun.com>
 // +----------------------------------------------------------------------+
 //
-// $Id: BitUser.php,v 1.2.2.3 2005/06/23 20:04:15 drewslater Exp $
+// $Id: BitUser.php,v 1.2.2.4 2005/06/27 10:08:42 lsces Exp $
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 define( 'AVATAR_TYPE_CENTRALIZED', 'c' );
 define( 'AVATAR_TYPE_USER_DB', 'u' );
@@ -30,12 +30,13 @@ define("USER_NOT_FOUND", -5);
 define("ACCOUNT_DISABLED", -6);
 
 /**
-* Class that holds all information for a given user
-*
-* @author   spider <spider@steelsun.com>
-* @version  $Revision: 1.2.2.3 $
-* @package  BitUser
-*/
+ * Class that holds all information for a given user
+ *
+ * @author   spider <spider@steelsun.com>
+ * @version  $Revision: 1.2.2.4 $
+ * @package  users
+ * @subpackage  BitUser
+ */
 class BitUser extends LibertyAttachable {
 /**
 * associative hash of all entries from tiki_user_preferences

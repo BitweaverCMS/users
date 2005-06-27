@@ -5,6 +5,14 @@
 
 require_once( USERS_PKG_PATH.'BitUser.php' );
 
+/**
+ * Class that holds all information for a given user
+ *
+ * @author   spider <spider@steelsun.com>
+ * @version  $Revision: 1.1.1.1.2.2 $
+ * @package  users
+ * @subpackage  BitPermUser
+ */
 class BitPermUser extends BitUser {
 # var $db;  // The PEAR db object used to access the database
 	// change this to an email address to receive debug emails from the LDAP code
