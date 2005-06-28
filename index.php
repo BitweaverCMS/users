@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.1.1.1.2.1 2005/06/27 17:47:59 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.1.1.1.2.2 2005/06/28 20:51:11 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.1.1.1.2.1 2005/06/27 17:47:59 lsces Exp $
+ * $Id: index.php,v 1.1.1.1.2.2 2005/06/28 20:51:11 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -21,6 +21,12 @@ define('ACTIVE_PACKAGE', 'users');	// Todo: use a different $_SERVER variable to
 require_once( '../bit_setup_inc.php' );
 global $gBitSystem;
 require_once( LIBERTY_PKG_PATH."LibertyStructure.php" );
+
+// custom userfields
+if( !empty( $gBitSystem->mPrefs['custom_user_fields'] ) ) {
+	$customFields= explode( ',', $gBitSystem->mPrefs['custom_user_fields']  );
+	$smarty->assign('customFields', $customFields);
+}
 
 require_once( USERS_PKG_PATH.'lookup_user_inc.php' );
 if( !empty( $_REQUEST['home'] ) ) {

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.2 2005/06/21 17:02:33 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.2.2.1 2005/06/28 20:51:12 squareing Exp $ *}
 {strip}
 {if $userData->mUserPrefs.user_information eq 'public' or $gBitUser.mUserId eq $userData.mUserId}
 	<div class="row">
@@ -35,6 +35,15 @@
 		</div>
 	{/if}
 
+	{foreach from=$customFields key=i item=field}
+		<div class="row">
+			{formlabel label=$field}
+			{forminput}
+				{$userData->mUserPrefs.$field}
+			{/forminput}
+		</div>
+	{/foreach}
+
 	{if $gBitUser->isAdmin()}
 		<div class="row">
 			{formlabel label="User ID"}
@@ -42,6 +51,7 @@
 				{$userData->mInfo.user_id}
 			{/forminput}
 		</div>
+
 		<div class="row">
 			{formlabel label="Registered Email"}
 			{forminput}
