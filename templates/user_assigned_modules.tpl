@@ -144,7 +144,9 @@
 						</div>
 					{/form}
 				{/jstab}
+			{/if}
 
+			{if $gBitSystemPrefs.feature_user_theme eq 'y' or $gBitSystemPrefs.feature_user_theme eq 'h'}
 				{jstab title="Select Theme"}
 					{form legend="Select Theme"}
 						<div class="row">

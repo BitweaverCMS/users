@@ -1,9 +1,21 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.2 2005/06/21 17:02:33 spiderr Exp $
-// Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
-// All Rights Reserved. See copyright.txt for details and a complete list of authors.
-// Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
-// Initialization
+/**
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.3 2005/06/28 07:46:23 spiderr Exp $
+ *
+ * Copyright (c) 2004 bitweaver.org
+ * Copyright (c) 2003 tikwiki.org
+ * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
+ * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
+ *
+ * $Id: preferences.php,v 1.3 2005/06/28 07:46:23 spiderr Exp $
+ * @package users
+ * @subpackage functions
+ */
+
+/**
+ * required setup
+ */
 require_once( '../bit_setup_inc.php' );
 include_once( KERNEL_PKG_PATH.'mod_lib.php' );
 if( $gBitSystem->isPackageActive( 'wiki' ) ) {
@@ -95,9 +107,9 @@ if (isset($_REQUEST["prefs"])) {
 	die;
 }
 if (isset($_REQUEST['chgemail'])) {
-	
+
 	// check user's password
-	if (!$editUser->validate_user($editUser->mUsername, $_REQUEST['pass'], '', '')) {
+	if (!$editUser->validate($editUser->mUsername, $_REQUEST['pass'], '', '')) {
 		$smarty->assign('msg', tra("Invalid password.  You current password is required to change your email address."));
 		$gBitSystem->display( 'error.tpl' );
 		die;
@@ -107,37 +119,21 @@ if (isset($_REQUEST['chgemail'])) {
 	}
 }
 if (isset($_REQUEST["chgpswd"])) {
-	
+
 	if( $_REQUEST["pass1"] != $_REQUEST["pass2"] ) {
-		$smarty->assign('msg', tra("The passwords didn't match"));
-		$gBitSystem->display( 'error.tpl' );
-		die;
+		$gBitSystem->fatalError( tra("The passwords didn't match") );
 	}
-	if( $gBitUser->isAdmin() ) {
-		if( !$editUser->validate_user( $editUser->mUsername, $_REQUEST["old"], '', '' ) && empty( $_REQUEST['view_user'] ) ) {
-			$smarty->assign('msg', tra( "Invalid old password" ) );
-			$gBitSystem->display( 'error.tpl' );
-			die;
-		}
-	} else {
-		if( !$editUser->validate_user( $editUser->mUsername, $_REQUEST["old"], '', '' ) ) {
-			$smarty->assign('msg', tra( "Invalid old password" ) );
-			$gBitSystem->display( 'error.tpl' );
-			die;
-		}
+	if( !$gBitUser->isAdmin() && !$editUser->validate( $editUser->mUsername, $_REQUEST["old"], '', '' ) ) {
+		$gBitSystem->fatalError( tra( "Invalid old password" ) );
 	}
 	//Validate password here
 	if (strlen($_REQUEST["pass1"]) < $min_pass_length) {
-		$smarty->assign('msg', tra("Password should be at least"). ' ' . $min_pass_length . ' ' . tra("characters long"));
-		$gBitSystem->display( 'error.tpl' );
-		die;
+		$gBitSystem->fatalError( tra("Password should be at least"). ' ' . $min_pass_length . ' ' . tra("characters long") );
 	}
 	// Check this code
 	if ($pass_chr_num == 'y') {
 		if (!preg_match_all("/[0-9]+/", $_REQUEST["pass1"], $foo) || !preg_match_all("/[A-Za-z]+/", $_REQUEST["pass1"], $foo)) {
-			$smarty->assign('msg', tra("Password must contain both letters and numbers"));
-			$gBitSystem->display( 'error.tpl' );
-			die;
+			$gBitSystem->fatalError(tra("Password must contain both letters and numbers") );
 		}
 	}
 	if( $gBitUser->change_user_password($editUser->mUsername, $_REQUEST["pass1"]) ) {
@@ -145,7 +141,7 @@ if (isset($_REQUEST["chgpswd"])) {
 	}
 }
 if (isset($_REQUEST['messprefs'])) {
-	
+
 	$editUser->storePreference( 'mess_maxRecords', $_REQUEST['mess_maxRecords']);
 	$editUser->storePreference( 'minPrio', $_REQUEST['minPrio']);
 	if (isset($_REQUEST['allowMsgs']) && $_REQUEST['allowMsgs'] == 'on') {
@@ -155,7 +151,7 @@ if (isset($_REQUEST['messprefs'])) {
 	}
 }
 if (isset($_REQUEST['mybitweaverprefs'])) {
-	
+
 	if (isset($_REQUEST['mybitweaver_pages']) && $_REQUEST['mybitweaver_pages'] == 'on') {
 		$editUser->storePreference( 'mybitweaver_pages', 'y');
 	} else {
@@ -188,7 +184,7 @@ if (isset($_REQUEST['mybitweaverprefs'])) {
 	}
 }
 if (isset($_REQUEST['tasksprefs'])) {
-	
+
 	$editUser->storePreference( 'tasks_maxRecords', $_REQUEST['tasks_maxRecords']);
 	if (isset($_REQUEST['tasks_use_dates']) && $_REQUEST['tasks_use_dates'] == 'on') {
 		$editUser->storePreference( 'tasks_use_dates', 'y');

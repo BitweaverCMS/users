@@ -85,7 +85,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		// if the auth method is 'web site', look for the username in $_SERVER
 		if ($auth_method == 'ws') {
 			if (isset($_SERVER['REMOTE_USER'])) {
-				if ($gBitUser->exists($_SERVER['REMOTE_USER'])) {
+				if ($gBitUser->userExists($_SERVER['REMOTE_USER'])) {
 					$_SESSION[$user_cookie_site] = $_SERVER['REMOTE_USER'];
 				}
 			}
