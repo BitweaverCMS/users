@@ -1,17 +1,24 @@
 <?php
-// +----------------------------------------------------------------------+
-// | Copyright (c) 2004, bitweaver.org
-// +----------------------------------------------------------------------+
-// | All Rights Reserved. See copyright.txt for details and a complete list of authors.
-// | Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
-// |
-// | For comments, please use phpdocu.sourceforge.net documentation standards!!!
-// | -> see http://phpdocu.sourceforge.net/
-// +----------------------------------------------------------------------+
-// | Authors: spider <spider@steelsun.com>
-// +----------------------------------------------------------------------+
-//
-// $Id: BitUser.php,v 1.2 2005/06/21 17:02:32 spiderr Exp $
+/**
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.3 2005/06/28 07:37:54 spiderr Exp $
+ *
+ * Lib for user administration, groups and permissions
+ * This lib uses pear so the constructor requieres
+ * a pear DB object
+ 
+ * Copyright (c) 2004 bitweaver.org
+ * Copyright (c) 2003 tikwiki.org
+ * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
+ * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
+ *
+ * $Id: BitUser.php,v 1.3 2005/06/28 07:37:54 spiderr Exp $
+ * @package users
+ */
+
+/**
+ * required setup
+ */
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
 define( 'AVATAR_TYPE_CENTRALIZED', 'c' );
 define( 'AVATAR_TYPE_USER_DB', 'u' );
@@ -30,12 +37,13 @@ define("USER_NOT_FOUND", -5);
 define("ACCOUNT_DISABLED", -6);
 
 /**
-* Class that holds all information for a given user
-*
-* @author   spider <spider@steelsun.com>
-* @version  $Revision: 1.2 $
-* @package  BitUser
-*/
+ * Class that holds all information for a given user
+ *
+ * @author   spider <spider@steelsun.com>
+ * @version  $Revision: 1.3 $
+ * @package  users
+ * @subpackage  BitUser
+ */
 class BitUser extends LibertyAttachable {
 /**
 * associative hash of all entries from tiki_user_preferences
@@ -806,7 +814,8 @@ echo "userAuthPresent: $userAuthPresent<br>";
 				$res = $result->fetchRow();
 				$userId = $res['user_id'];
 				$user = $res['login'];
-				$hash = md5($user . $pass . trim($res['email']));
+				// TikiWiki 1.8+ uses this bizarro conglomeration of fields to get the hash. this sucks for many reasons
+				$hash = md5( strtolower($user) . $pass . trim($res['email']));
 				$hash2 = md5($pass);
 				// next verify the password with 2 hashes methods, the old one (pass)) and the new one (login.pass;email)
 				// TODO - this needs cleaning up - wolff_borg
