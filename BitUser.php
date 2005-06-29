@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.4 2005/06/28 07:46:22 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.5 2005/06/29 05:43:40 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.4 2005/06/28 07:46:22 spiderr Exp $
+ * $Id: BitUser.php,v 1.5 2005/06/29 05:43:40 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,11 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.4 $
+<<<<<<< BitUser.php
+ * @version  $Revision: 1.5 $
+=======
+ * @version  $Revision: 1.5 $
+>>>>>>> 1.2.2.6
  * @package  users
  * @subpackage  BitUser
  */
@@ -810,7 +814,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 				$userId = $res['user_id'];
 				$user = $res['login'];
 				// TikiWiki 1.8+ uses this bizarro conglomeration of fields to get the hash. this sucks for many reasons
-				$hash = md5( strtolower($user) . $pass . trim($res['email']));
+				$hash = md5( strtolower($user) . $pass . $res['email']);
 				$hash2 = md5($pass);
 				// next verify the password with 2 hashes methods, the old one (pass)) and the new one (login.pass;email)
 				// TODO - this needs cleaning up - wolff_borg
@@ -917,7 +921,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 
 	function change_user_email( $pUserId, $pUsername, $pEmail, $pPass ) {
-		$hash = md5( $pUsername . $pPass . $pEmail );
+		$hash = md5( strtolower($pUsername) . $pPass . $pEmail );
 		$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `email`=?, `hash`=? WHERE " . $this->convert_binary(). " `user_id`=?";
 		$result = $this->query( $query, array( $pEmail, $hash, $pUserId ) );
 		$query = "UPDATE `".BIT_DB_PREFIX."tiki_user_watches` SET `email`=? WHERE " . $this->convert_binary(). " `user_id`=?";
@@ -1011,7 +1015,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$pass = BitSystem::genPass();
 		$query = "select `email` from `".BIT_DB_PREFIX."users_users` where `login` = ?";
 		$email = $this->getOne($query, array($user));
-		$hash = md5($user . $pass . $email);
+		$hash = md5(strtolower($user) . $pass . $email);
 		// Note that tiki-generated passwords are due inmediatley
 		$now = date("U");
 		$query = "update `".BIT_DB_PREFIX."users_users` set `password` = ?, `hash` = ?, `pass_due` = ? where ".$this->convert_binary()." `login` = ?";
@@ -1024,7 +1028,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$query = "select `email` from `".BIT_DB_PREFIX."users_users` where `login` = ?";
 		$email = $this->getOne($query, array($user));
 		$email=trim($email);
-		$hash = md5($user . $pass . $email);
+		$hash = md5(strtolower($user) . $pass . $email);
 		$now = date("U");
 		$new_pass_due = $now + (60 * 60 * 24 * $gBitSystem->getPreference( 'pass_due' ) );
 		if( !$gBitSystem->isFeatureActive( 'feature_clear_passwords' ) ) {

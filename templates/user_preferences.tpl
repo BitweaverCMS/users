@@ -88,12 +88,12 @@
 					 {/if}
 
 					{foreach from=$customFields key=i item=field}
-					<div class="row">
-						{formlabel label="$field}
-						{forminput}
-							<input type="text" name="CUSTOM[{$field}]" value="{$userPrefs.$field}" maxlength="250" />
-						{/forminput}
-					</div>
+						<div class="row">
+							{formlabel label="$field}
+							{forminput}
+								<input type="text" name="CUSTOM[{$field}]" value="{$userPrefs.$field}" maxlength="250" />
+							{/forminput}
+						</div>
 					{/foreach}
 
 					<div class="row">

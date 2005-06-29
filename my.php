@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.3 2005/06/28 07:46:23 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.4 2005/06/29 05:43:40 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my.php,v 1.3 2005/06/28 07:46:23 spiderr Exp $
+ * $Id: my.php,v 1.4 2005/06/29 05:43:40 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -22,6 +22,12 @@ include_once( USERS_PKG_PATH.'task_lib.php' );
 if( !$gBitUser->isRegistered() ) {
 	Header( 'Location: '.USERS_PKG_URL.'login.php' );
 	die;
+}
+
+// custom userfields
+if( !empty( $gBitSystem->mPrefs['custom_user_fields'] ) ) {
+	$customFields= explode( ',', $gBitSystem->mPrefs['custom_user_fields']  );
+	$smarty->assign('customFields', $customFields);
 }
 
 // some content specific offsets and pagination settings
