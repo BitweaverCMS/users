@@ -6,9 +6,9 @@
 				{formlabel label="Authentication method" for="auth_method"}
 				{forminput}
 					<select name="auth_method" id="auth_method">
-						<option value="tiki" {if $auth_method eq 'tiki'} selected="selected"{/if}>{tr}Just Tiki{/tr}</option>
+						<option value="tiki" {if $auth_method eq 'tiki'} selected="selected"{/if}>{tr}Just bitweaver{/tr}</option>
 						<option value="ws" {if $auth_method eq 'ws'} selected="selected"{/if}>{tr}Web Server{/tr}</option>
-						<option value="auth" {if $auth_method eq 'auth'} selected="selected"{/if}>{tr}Tiki and PEAR::Auth{/tr}</option>
+						<option value="auth" {if $auth_method eq 'auth'} selected="selected"{/if}>{tr}bitweaver and PEAR::Auth{/tr}</option>
 					</select>
 					{formhelp note=""}
 				{/forminput}
@@ -262,7 +262,7 @@ if (!function_exists("gd_info"))
 		{form legend="PEAR::Auth"}
 			<input type="hidden" name="page" value="{$page}" />
 			<div class="row">
-				{formlabel label="Create user if not in Tiki" for="auth_create_gBitDbUser"}
+				{formlabel label="Create user if not in bitweaver" for="auth_create_gBitDbUser"}
 				{forminput}
 					<input type="checkbox" name="auth_create_gBitDbUser" id="auth_create_gBitDbUser" {if $auth_create_gBitDbUser eq 'y'}checked="checked"{/if} />
 					{formhelp note=""}
@@ -278,7 +278,7 @@ if (!function_exists("gd_info"))
 			</div>
 
 			<div class="row">
-				{formlabel label="Just use Tiki auth for admin" for="auth_skip_admin"}
+				{formlabel label="Just use bitweaver auth for admin" for="auth_skip_admin"}
 				{forminput}
 					<input type="checkbox" name="auth_skip_admin" id="auth_skip_admin" {if $auth_skip_admin eq 'y'}checked="checked"{/if} />
 					{formhelp note=""}
