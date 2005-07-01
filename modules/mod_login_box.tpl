@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.1 2005/06/19 05:12:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.1.1.1.2.1 2005/07/01 18:10:28 tarus Exp $ *}
 {bitmodule title="$moduleTitle" name="login_box"}
    {if $gBitUser->IsRegistered()}
      {tr}Logged in as{/tr}: {$gBitUser->getDisplayName()}<br />
@@ -60,7 +60,7 @@
 			{forminput}
 				<input type="password" name="pass" alt="password" size="20" value="password" onFocus="this.value=''" />
 				{if $forgotPass eq 'y'}
-					<br /><a href="`$gBitLoc.USERS_PKG_URL`remind_password.php">I forgot my password</a>
+					<br /><a href="{$gBitLoc.USERS_PKG_URL}remind_password.php">I forgot my password</a>
 				{/if}
 			{/forminput}
 		</div>
