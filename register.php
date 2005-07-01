@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.1.1.1.2.1 2005/06/27 17:48:00 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.1.1.1.2.2 2005/07/01 07:24:50 jht001 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.1.1.1.2.1 2005/06/27 17:48:00 lsces Exp $
+ * $Id: register.php,v 1.1.1.1.2.2 2005/07/01 07:24:50 jht001 Exp $
  * @package users
  * @subpackage functions
  */
@@ -70,7 +70,7 @@ if( isset( $_REQUEST["register"] ) ) {
 				$smarty->assign('mail_user',$reg['login']);
 				$smarty->assign('mail_apass',$apass);
 				$mail_data = $smarty->fetch('bitpackage:users/user_validation_mail.tpl');
-				mail($reg["email"], tra('Your Tiki information registration'),$mail_data,"From: ".$gBitSystem->getPreference('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+				mail($reg["email"], tra('Your bitweaver information registration'),$mail_data,"From: ".$gBitSystem->getPreference('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
 				$smarty->assign('showmsg','y');
 			} else {
 				$url = $newUser->login( $reg['login'], $reg['password'], FALSE, FALSE );
