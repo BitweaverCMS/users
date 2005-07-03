@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.6 2005/06/28 07:18:13 bitweaver Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.7 2005/07/03 09:16:43 wolff_borg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.6 2005/06/28 07:18:13 bitweaver Exp $
+ * $Id: BitUser.php,v 1.2.2.7 2005/07/03 09:16:43 wolff_borg Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.6 $
+ * @version  $Revision: 1.2.2.7 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1341,7 +1341,6 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	}
 
 	function getDisplayUrl( $pUserName=NULL, $pMixed=NULL ) {
-//	function getDisplayUrl( $pUserName=NULL ) {
 		if( empty( $pUserName ) && !empty( $this ) ) {
 			$pUserName = $this->mUsername;
 		}
@@ -1367,6 +1366,13 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		return $this->getDisplayName( FALSE, $pHash );
 	}
 
+    /**
+* Get user information for a particular user
+*
+* @param pUseLink return the information in the form of a url that links to the users information page
+* @param pHash todo - need explanation on how to use this...
+* @return display name or link to user information page
+**/
 	function getDisplayName($pUseLink = FALSE, $pHash=NULL) {
 		global $gBitSystem;
 		$ret = NULL;
