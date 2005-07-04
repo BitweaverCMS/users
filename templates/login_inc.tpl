@@ -32,6 +32,7 @@
 
 	{legend legend="Sign in with your username or email to continue"}
 		<div class="row">
+			{formfeedback success=$msg.success}
 			{formfeedback error="$error"}
 			{formlabel label="Username or Email" for="user"}
 			{forminput}
