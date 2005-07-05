@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.1.1.1.2.1 2005/07/05 18:48:35 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.1.1.1.2.2 2005/07/05 19:19:36 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -243,7 +243,6 @@ $smarty->assign("validateUsers", $gBitSystem->getPreference("validateUsers", 'n'
 $smarty->assign("validateEmail", $gBitSystem->getPreference("validateEmail", 'n'));
 $smarty->assign("rnd_num_reg", $gBitSystem->getPreference("rnd_num_reg", 'n'));
 $smarty->assign("pass_chr_num", $gBitSystem->getPreference("pass_chr_num", 'n'));
-$smarty->assign("feature_challenge", $gBitSystem->getPreference("feature_challenge", 'n'));
 $smarty->assign("feature_clear_passwords", $gBitSystem->getPreference("feature_clear_passwords", 'n'));
 $smarty->assign("forgotPass", $gBitSystem->getPreference("forgotPass", 'n'));
 $smarty->assign("https_login", $gBitSystem->getPreference("https_login", 'n'));

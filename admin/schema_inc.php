@@ -287,7 +287,6 @@ $gBitInstaller->registerPreferences( USERS_PKG_NAME, array(
 	array('users','useRegisterPasscode','n'),
 	array('users','validateUsers','n'),
 	array('users','validateEmail','n'),
-	array('users','feature_challenge','n'),
 	array('users','min_pass_length','4'),
 	array('users','feature_clear_passwords','n'),
 	array('users','feature_custom_home','n'),
