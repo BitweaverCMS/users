@@ -121,7 +121,7 @@
 				{/if}
 
 				<div class="row submit">
-					<input type="submit" name="register" value="{tr}register{/tr}" />
+					<input type="submit" name="register" value="{tr}Register{/tr}" />
 				</div>
 			{/if}
 		{/form}
