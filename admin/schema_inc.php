@@ -246,7 +246,7 @@ $gBitInstaller->registerSchemaSequences( USERS_PKG_NAME, $sequences );
 
 // ### Default MenuOptions
 $gBitInstaller->registerMenuOptions( USERS_PKG_NAME, array(
-	array(42,'o','My files', USERS_PKG_DIR.'userfiles.php',95,'feature_userfiles','bit_p_userfiles','Registered')
+	array(42,'o','My files', USERS_PKG_NAME.'userfiles.php',95,'feature_userfiles','bit_p_userfiles','Registered')
 ) );
 
 // ### Default Preferences
