@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.7 2005/07/03 09:16:43 wolff_borg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.8 2005/07/05 09:57:51 wolff_borg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.7 2005/07/03 09:16:43 wolff_borg Exp $
+ * $Id: BitUser.php,v 1.2.2.8 2005/07/05 09:57:51 wolff_borg Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.7 $
+ * @version  $Revision: 1.2.2.8 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1320,6 +1320,14 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	function remove_user_watch_by_hash($hash) {
 		$query = "delete from `".BIT_DB_PREFIX."tiki_user_watches` where `hash`=?";
 		$this->query($query,array($hash));
+	}
+
+	/*shared*/
+	function expungeWatch( $event, $object ) {
+		if( $this->isValid() ) {
+			$query = "delete from `".TIKI_DB_PREFIX."tiki_user_watches` where `user_id`=? and `event`=? and `object`=?";
+			$this->query( $query, array( $this->mUserId, $event, $object ) );
+		}
 	}
 
 	/*shared*/
