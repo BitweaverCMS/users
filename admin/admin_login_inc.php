@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.1 2005/06/19 05:12:24 bitweaver Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.1.1.1.2.1 2005/07/05 18:48:35 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -71,13 +71,6 @@ if (isset($_REQUEST["loginprefs"])) {
 	} else {
 		$gBitSystem->storePreference("pass_chr_num", 'n');
 		$smarty->assign('pass_chr_num', 'n');
-	}
-	if (isset($_REQUEST["feature_challenge"]) && $_REQUEST["feature_challenge"] == "on") {
-		$gBitSystem->storePreference("feature_challenge", 'y');
-		$smarty->assign('feature_challenge', 'y');
-	} else {
-		$gBitSystem->storePreference("feature_challenge", 'n');
-		$smarty->assign('feature_challenge', 'n');
 	}
 	if (isset($_REQUEST["feature_clear_passwords"]) && $_REQUEST["feature_clear_passwords"] == "on") {
 		$gBitSystem->storePreference("feature_clear_passwords", 'y');

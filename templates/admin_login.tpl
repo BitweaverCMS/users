@@ -46,10 +46,10 @@
 				{/forminput}
 			</div>
 
-{php}
-if (!function_exists("gd_info"))
-	$this->assign( 'warning','PHP GD library is required for this feature (not found on your system)' );
-{/php}
+			{php}
+				if (!function_exists("gd_info"))
+					$this->assign( 'warning','PHP GD library is required for this feature (not found on your system)' );
+			{/php}
 
 			<div class="row">
 				{formfeedback warning=$warning}
@@ -75,7 +75,7 @@ if (!function_exists("gd_info"))
 				{formlabel label="Validate email address" for="validateEmail"}
 				{forminput}
 					<input type="checkbox" name="validateEmail" id="validateEmail" {if !$gBitSystem->hasValidSenderEmail()}disabled="disabled"{elseif $validateEmail eq 'y'}checked="checked"{/if} />
-					{formhelp note="This feature should be used only when you need the maximum security and should be used with discretion. If a visitor's email server is not responding, they will not be able to register. You also must have a valid sender email to use this feature (This setting can be found in Administration --&gt; Kernel --&gt; General Settings"}
+					{formhelp link="kernel/admin/index.php?page=server/General Settings" note="This feature should be used only when you need the maximum security and should be used with discretion. If a visitor's email server is not responding, they will not be able to register. You also must have a valid sender email to use this feature."}
 				{/forminput}
 			</div>
 
@@ -112,15 +112,7 @@ if (!function_exists("gd_info"))
 			</div>
 
 			<div class="row">
-				{formlabel label="Use challenge/response authentication" for="feature_challenge"}
-				{forminput}
-					<input type="checkbox" name="feature_challenge" id="feature_challenge" {if $gBitSystemPrefs.feature_challenge eq 'y'}checked="checked"{/if}/>
-					{formhelp note="Some javascript stuff."}
-				{/forminput}
-			</div>
-
-			<div class="row">
-				{formlabel label="Force to use characters <b>and</b> numbers in passwords" for="pass_chr_num"}
+				{formlabel label="Force to use characters <strong>and</strong> numbers in passwords" for="pass_chr_num"}
 				{forminput}
 					<input type="checkbox" name="pass_chr_num" id="pass_chr_num" {if $pass_chr_num eq 'y'}checked="checked"{/if}/>
 					{formhelp note=""}
