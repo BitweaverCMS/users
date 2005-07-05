@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.1.1.1.2.2 2005/06/28 20:51:11 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.1.1.1.2.3 2005/07/05 21:17:05 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.1.1.1.2.2 2005/06/28 20:51:11 squareing Exp $
+ * $Id: index.php,v 1.1.1.1.2.3 2005/07/05 21:17:05 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -68,6 +68,7 @@ if( !empty( $_REQUEST['home'] ) ) {
 } else {
 	$gQueryUser->getList( $_REQUEST );
 	$smarty->assign_by_ref('users', $_REQUEST["data"]);
+	$smarty->assign_by_ref('usercount', $_REQUEST["cant"]);
 	if (isset($_REQUEST["numrows"]))
 		$_REQUEST["control"]["numrows"] = $_REQUEST["numrows"];
 	else
