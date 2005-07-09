@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.9 2005/07/05 10:00:39 wolff_borg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.10 2005/07/09 02:51:39 jht001 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.9 2005/07/05 10:00:39 wolff_borg Exp $
+ * $Id: BitUser.php,v 1.2.2.10 2005/07/09 02:51:39 jht001 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.9 $
+ * @version  $Revision: 1.2.2.10 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1342,8 +1342,6 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	}
 
 
-
-
 	function getUserId() {
 		return( !empty( $this->mUserId ) ? $this->mUserId : ANONYMOUS_USER_ID );
 	}
@@ -1352,19 +1350,25 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( empty( $pUserName ) && !empty( $this ) ) {
 			$pUserName = $this->mUsername;
 		}
-        if( function_exists( 'override_user_url' ) ) {
-            $ret = override_user_url( $pUserName );
-        } else {
+		if( function_exists( 'override_user_url' ) ) {
+		    $ret = override_user_url( $pUserName );
+		} else {
 			global $gBitSystem;
 
-			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) ) {
-				$ret = USERS_PKG_URL.$pUserName;
-			} else {
-				$ret = USERS_PKG_URL.'index.php?home='.$pUserName;
+			$rewrite_tag = $gBitSystem->isFeatureActive( 'feature_pretty_urls_extended' ) ? 'view/':'';
+			
+			if ($gBitSystem->isFeatureActive( 'pretty_urls' ) 
+			|| $gBitSystem->isFeatureActive( 'feature_pretty_urls_extended' ) ) {
+				$ret =  USERS_PKG_URL . $rewrite_tag;
+				$ret .= urlencode( $pUserName );
 			}
+			else {
+				$ret =  USERS_PKG_URL . 'index.php?home=';
+				$ret .= urlencode( $pUserName );
+			}	
+			return $ret;
 		}
-		return $ret;
-	}
+	}	
 
 	function getDisplayLink( $pUserName, $pDisplayHash ) {
 		return BitUser::getDisplayName( TRUE, $pDisplayHash );

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.1.1.1.2.3 2005/07/05 21:17:05 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.1.1.1.2.4 2005/07/09 02:51:39 jht001 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.1.1.1.2.3 2005/07/05 21:17:05 squareing Exp $
+ * $Id: index.php,v 1.1.1.1.2.4 2005/07/09 02:51:39 jht001 Exp $
  * @package users
  * @subpackage functions
  */
@@ -27,7 +27,10 @@ if( !empty( $gBitSystem->mPrefs['custom_user_fields'] ) ) {
 	$customFields= explode( ',', $gBitSystem->mPrefs['custom_user_fields']  );
 	$smarty->assign('customFields', $customFields);
 }
-
+$search_request = '';
+if (!empty($_REQUEST['home'])) {
+	$search_request = $_REQUEST['home'];
+	}
 require_once( USERS_PKG_PATH.'lookup_user_inc.php' );
 if( !empty( $_REQUEST['home'] ) ) {
 	$smarty->assign( 'home', $_REQUEST['home'] );
@@ -67,6 +70,7 @@ if( !empty( $_REQUEST['home'] ) ) {
 	$centerDisplay = ( count( $gCenterPieces ) ? 'bitpackage:kernel/dynamic.tpl' : 'bitpackage:users/center_user_wiki_page.tpl' );
 } else {
 	$gQueryUser->getList( $_REQUEST );
+	$smarty->assign('search_request',$search_request);
 	$smarty->assign_by_ref('users', $_REQUEST["data"]);
 	$smarty->assign_by_ref('usercount', $_REQUEST["cant"]);
 	if (isset($_REQUEST["numrows"]))
