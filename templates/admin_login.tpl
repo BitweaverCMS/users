@@ -23,6 +23,14 @@
 			</div>
 
 			<div class="row">
+				{formlabel label="Send registration welcome email" for="send_welcome_email"}
+				{forminput}
+					<input type="checkbox" name="send_welcome_email" id="send_welcome_email" {if $gBitSystem->isFeatureActive( 'send_welcome_email' )}checked="checked"{/if}/>
+					{formhelp note="Upon successful registration, this will send the user an email with login information, including their password."}
+				{/forminput}
+			</div>
+
+			<div class="row">
 				{formlabel label="Create a group for each user" for="eponymousGroups"}
 				{forminput}
 					<input type="checkbox" name="eponymousGroups" id="eponymousGroups" {if $eponymousGroups eq 'y'}checked="checked"{/if}/>
@@ -130,7 +138,7 @@
 			<div class="row">
 				{formlabel label="Remember me feature" for="rememberme"}
 				{forminput}
-					<input type="checkbox" name="rememberme" id="rememberme" {if $gBitSystem->isFeatureActive('rememberme')}checked="checked"{/if}/>				
+					<input type="checkbox" name="rememberme" id="rememberme" {if $gBitSystem->isFeatureActive('rememberme')}checked="checked"{/if}/>
 					{formhelp note="Registered users will stay logged even if they close their browser."}
 				{/forminput}
 			</div>

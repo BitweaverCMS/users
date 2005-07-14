@@ -1,10 +1,10 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.1.1.1.2.2 2005/07/05 19:19:36 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.1.1.1.2.3 2005/07/14 19:52:02 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 if (isset($_REQUEST["loginprefs"])) {
-	
+
 	if (isset($_REQUEST["eponymousGroups"]) && $_REQUEST["eponymousGroups"] == "on") {
 		$gBitSystem->storePreference("eponymousGroups", 'y');
 		$smarty->assign('eponymousGroups', 'y');
@@ -18,6 +18,13 @@ if (isset($_REQUEST["loginprefs"])) {
 	} else {
 		$gBitSystem->storePreference("allowRegister", 'n');
 		$smarty->assign('allowRegister', 'n');
+	}
+	if (isset($_REQUEST["send_welcome_email"]) && $_REQUEST["send_welcome_email"] == "on") {
+		$gBitSystem->storePreference("send_welcome_email", 'y');
+		$smarty->assign('send_welcome_email', 'y');
+	} else {
+		$gBitSystem->storePreference("send_welcome_email", 'n');
+		$smarty->assign('send_welcome_email', 'n');
 	}
 	if (isset($_REQUEST["webserverauth"]) && $_REQUEST["webserverauth"] == "on") {
 		$gBitSystem->storePreference("webserverauth", 'y');
@@ -148,7 +155,7 @@ if (isset($_REQUEST["httpprefs"])) {
 	$smarty->assign('https_prefix', $v);
 }
 if (isset($_REQUEST["auth_pear"])) {
-	
+
 	if (isset($_REQUEST["auth_create_gBitDbUser"]) && $_REQUEST["auth_create_gBitDbUser"] == "on") {
 	$gBitSystem->storePreference("auth_create_gBitDbUser", 'y');
 	$smarty->assign("auth_create_gBitDbUser", 'y');
