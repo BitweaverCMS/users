@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.11 2005/07/14 08:13:45 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.12 2005/07/14 17:38:26 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.11 2005/07/14 08:13:45 spiderr Exp $
+ * $Id: BitUser.php,v 1.2.2.12 2005/07/14 17:38:26 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.11 $
+ * @version  $Revision: 1.2.2.12 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1404,8 +1404,8 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			global $gBitSystem;
 
 			$rewrite_tag = $gBitSystem->isFeatureActive( 'feature_pretty_urls_extended' ) ? 'view/':'';
-			
-			if ($gBitSystem->isFeatureActive( 'pretty_urls' ) 
+
+			if ($gBitSystem->isFeatureActive( 'pretty_urls' )
 			|| $gBitSystem->isFeatureActive( 'feature_pretty_urls_extended' ) ) {
 				$ret =  USERS_PKG_URL . $rewrite_tag;
 				$ret .= urlencode( $pUserName );
@@ -1413,10 +1413,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			else {
 				$ret =  USERS_PKG_URL . 'index.php?home=';
 				$ret .= urlencode( $pUserName );
-			}	
-			return $ret;
+			}
 		}
-	}	
+		return $ret;
+	}
 
 	function getDisplayLink( $pUserName, $pDisplayHash ) {
 		return BitUser::getDisplayName( TRUE, $pDisplayHash );
