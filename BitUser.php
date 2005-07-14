@@ -1,18 +1,18 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.10 2005/07/09 02:51:39 jht001 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.11 2005/07/14 08:13:45 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
  * a pear DB object
- 
+
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
  * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.10 2005/07/09 02:51:39 jht001 Exp $
+ * $Id: BitUser.php,v 1.2.2.11 2005/07/14 08:13:45 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.10 $
+ * @version  $Revision: 1.2.2.11 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -62,7 +62,7 @@ class BitUser extends LibertyAttachable {
 * Constructor - will automatically load all relevant data if passed a user string
 *
 * @access public
-* @author author<author@phpshop.org>
+* @author Christian Fower<spider@viovio.com>
 * @return returnString
 */
 	function BitUser( $pUserId=NULL, $pContentId=NULL ) {
@@ -453,6 +453,54 @@ if ($gDebug) echo "Run : QUIT<br>";
 			}
 		}
 		return( count( $errors ) == 0 );
+	}
+
+
+/**
+* register - will handle everything necessary for registering a user and sending appropriate emails, etc.
+*
+* @access public
+* @author Christian Fowler<spider@viovio.com>
+* @return returnString
+*/
+	function register( &$pParamHash ) {
+		global $notificationlib, $smarty, $gBitSystem;
+		$ret = FALSE;
+		if( $this->store( $pParamHash ) ) {
+			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
+			$ret = TRUE;
+			$emails = $notificationlib->get_mail_events('user_registers','*');
+			foreach($emails as $email) {
+				$smarty->assign('mail_user',$pParamHash['login']);
+				$smarty->assign('mail_date',date("U"));
+				$smarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
+				$mail_data = $smarty->fetch('bitpackage:users/new_user_notification.tpl');
+				mail( $pParamHash['email'], tra('New user registration'),$mail_data,"From: ".$gBitSystem->getPreference('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+			}
+			if( !empty( $_REQUEST['CUSTOM'] ) ) {
+				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
+					$this->storePreference( $field, $value );
+				}
+			}
+			if( $gBitSystem->isFeatureActive( 'validateUsers' ) ) {
+				// $apass = addslashes(substr(md5($gBitSystem->genPass()),0,25));
+				$apass = $pParamHash['user_store']['provpass'];
+				$foo = parse_url($_SERVER["REQUEST_URI"]);
+				$foo1=str_replace("register","confirm",$foo["path"]);
+				$machine = httpPrefix().$foo1;
+
+				// Send the mail
+				$smarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
+				$smarty->assign('mail_machine',$machine);
+				$smarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
+				$smarty->assign('mail_user',$pParamHash['login']);
+				$smarty->assign('mail_apass',$apass);
+				$mail_data = $smarty->fetch('bitpackage:users/user_validation_mail.tpl');
+				mail($pParamHash["email"], tra('Your bitweaver information registration'),$mail_data,"From: ".$gBitSystem->getPreference('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+				$smarty->assign('showmsg','y');
+			}
+		}
+		return( $ret );
 	}
 
 
@@ -1439,7 +1487,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$this->query($sql, array($newRealName, $this->mUserId));
 		}
 	}
-	
+
 	function storeLogin($newLogin) {
 		$newLogin = substr($newLogin,0,40);
 		if ($this->userExists(array('login' => $newLogin))) {
@@ -1450,10 +1498,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		} else {
 			$this->mErrors[] = "Invalid user";
 		}
-		
+
 		return (count($this->mErrors) == 0);
 	}
-	
+
 	function getList( &$pParamHash ) {
 
 		if ( !isset( $pParamHash['sort_mode']) or $pParamHash['sort_mode'] == '' ) $pParamHash['sort_mode'] = 'registration_date_desc';
