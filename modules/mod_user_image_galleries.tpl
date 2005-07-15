@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_image_galleries.tpl,v 1.1 2005/06/19 05:12:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_image_galleries.tpl,v 1.1.1.1.2.1 2005/07/15 12:01:28 squareing Exp $ *}
 {if $user}
-	{if $gBitSystemPrefs.feature_galleries eq 'y'}
+	{if $gBitSystem->isFeatureActive( 'feature_galleries' )}
 		{bitmodule title="$moduleTitle" name="user_image_galleries"}
 			<table class="module box">
 				{section name=ix loop=$modUserG}

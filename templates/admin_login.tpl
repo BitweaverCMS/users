@@ -106,7 +106,7 @@
 			<div class="row">
 				{formlabel label="Store plaintext passwords" for="feature_clear_passwords"}
 				{forminput}
-					<input type="checkbox" name="feature_clear_passwords" id="feature_clear_passwords" {if $gBitSystemPrefs.feature_clear_passwords eq 'y'}checked="checked"{/if}/>
+					<input type="checkbox" name="feature_clear_passwords" id="feature_clear_passwords" {if $gBitSystem->isFeatureActive( 'feature_clear_passwords' )}checked="checked"{/if}/>
 					{formhelp note="Passwords will be visible in the database. If a user requests a password, their password will *not* be reset and simply emailed to them in plain text. This option is less secure, but better suited to sites with a wide variety of users."}
 				{/forminput}
 			</div>
@@ -114,7 +114,7 @@
 			<div class="row">
 				{formlabel label="Password generator" for="user_password_generator"}
 				{forminput}
-					<input type="checkbox" name="user_password_generator" id="user_password_generator" {if $gBitSystemPrefs.user_password_generator eq 'y'}checked="checked"{/if}/>
+					<input type="checkbox" name="user_password_generator" id="user_password_generator" {if $gBitSystem->isFeatureActive( 'user_password_generator' )}checked="checked"{/if}/>
 					{formhelp note="Display password generator on registration page that creates secure passwords."}
 				{/forminput}
 			</div>

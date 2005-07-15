@@ -316,7 +316,7 @@
 				{/jstab}
 			{/if}
 
-			{if $gBitSystemPrefs.feature_tasks eq 'y'}
+			{if $gBitSystem->isFeatureActive( 'feature_tasks' )}
 				{jstab title="User Tasks"}
 					{form legend="User Tasks"}
 						<div class="row">

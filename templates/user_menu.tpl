@@ -6,7 +6,7 @@
 		{if $chdata.type eq 's'}
 			{if $opensec eq 'y'}</div>{/if}
 
-			{if $gBitSystemPrefs.feature_menusfolderstyle eq 'y'}
+			{if $gBitSystem->isFeatureActive( 'feature_menusfolderstyle' )}
 				<a class="menuhead" href="javascript:icntoggle('menu{$cname}');">{biticon ipackage=liberty iname="collapsed" name="menu`$cname`img" iexplain="folder"}
 			{else}
 				<a class="menuhead" href="javascript:toggle('menu{$cname}');">
@@ -18,7 +18,7 @@
 			<a class="menuoption" href="{$chdata.url|escape}">{tr}{$chdata.name}{/tr}</a>
 		{/if}
 		<script language="Javascript" type="text/javascript">
-			{if $gBitSystemPrefs.feature_menusfolderstyle eq 'y'}
+			{if $gBitSystem->isFeatureActive( 'feature_menusfolderstyle' )}
 				setfoldericonstate('menu{$menu_info.menuId|cat:'__'|cat:$chdata.position}', '{$menu_info.type}');
 			{/if}
 		</script>

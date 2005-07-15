@@ -1,5 +1,5 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_tasks.tpl,v 1.1 2005/06/19 05:12:23 bitweaver Exp $ *}
-{if $gBitSystemPrefs.feature_tasks eq 'y' and $user}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_tasks.tpl,v 1.1.1.1.2.1 2005/07/15 12:01:28 squareing Exp $ *}
+{if $gBitSystem->isFeatureActive( 'feature_tasks' ) and $user}
 	{bitmodule title="$moduleTitle" name="user_tasks"}
 		{form action=$ownurl}
 			<input type="text" name="modTasksTitle" />
