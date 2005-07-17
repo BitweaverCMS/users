@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.tpl,v 1.1 2005/06/19 05:12:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.tpl,v 1.2 2005/07/17 17:36:44 squareing Exp $ *}
 {if $user}
-	{if $gBitSystemPrefs.feature_wiki eq 'y'}
+	{if $gBitSystem->isFeatureActive( 'feature_wiki' )}
 		{bitmodule title="$moduleTitle" name="user_pages"}
 			<table class="module box">
 				{section name=ix loop=$modUserPages}
@@ -15,5 +15,5 @@
 				{/section}
 			</table>
 		{/bitmodule}
-	{/if} {* $gBitSystemPrefs.feature_wiki eq 'y' *}
+	{/if} {* $gBitSystem->isFeatureActive( 'feature_wiki' ) *}
 {/if}   {* $user *}

@@ -2,7 +2,7 @@
 <a class="pagetitle" href="{$gBitLoc.USERS_PKG_URL}menu.php">{tr}User Menu{/tr}</a><br /><br />
 {include file="bitpackage:users/my_bitweaver_bar.tpl"}
 <br />
-{if $gBitSystemPrefs.feature_user_bookmarks eq 'y' and $gBitUser->hasPermission( 'bit_p_create_bookmarks' )}
+{if $gBitSystem->isFeatureActive( 'feature_user_bookmarks' ) and $gBitUser->hasPermission( 'bit_p_create_bookmarks' )}
 <a title="({tr}May need to refresh twice to see changes{/tr})" href="{$gBitLoc.USERS_PKG_URL}menu.php?addbk=1">{tr}Add top level bookmarks to menu{/tr}</a> 
 {/if}
 <br /><br />

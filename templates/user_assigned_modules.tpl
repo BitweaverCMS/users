@@ -10,7 +10,7 @@
 
 	<div class="body">
 
-		{if $gBitSystemPrefs.feature_user_layout eq 'y' or $gBitSystemPrefs.feature_user_layout eq 'h'}
+		{if $gBitSystem->isFeatureActive( 'feature_user_layout' ) or $gBitSystemPrefs.feature_user_layout eq 'h'}
 			<table style="width:100%" cellpadding="5" cellspacing="0" border="0">
 				<caption>{tr}Your HomePage Layout{/tr}</caption>
 				<tr>
@@ -53,7 +53,7 @@
 		{/if}
 
 		{jstabs}
-			{if $gBitSystemPrefs.feature_user_layout eq 'y' or $gBitSystemPrefs.feature_user_layout eq 'h' and $canassign eq 'y'}
+			{if $gBitSystem->isFeatureActive( 'feature_user_layout' ) or $gBitSystemPrefs.feature_user_layout eq 'h' and $canassign eq 'y'}
 				{jstab title="Assign Side Piece"}
 					{form legend="Assign Side Piece"}
 						{if $fEdit && $fAssign.name}
@@ -146,7 +146,7 @@
 				{/jstab}
 			{/if}
 
-			{if $gBitSystemPrefs.feature_user_theme eq 'y' or $gBitSystemPrefs.feature_user_theme eq 'h'}
+			{if $gBitSystem->isFeatureActive( 'feature_user_theme' ) or $gBitSystemPrefs.feature_user_theme eq 'h'}
 				{jstab title="Select Theme"}
 					{form legend="Select Theme"}
 						<div class="row">
@@ -178,7 +178,7 @@
 for instance, i don't know where the page heading stuff is used.
 
 <table width="100%">
-{if $gBitSystemPrefs.feature_user_layout eq 'y' or $gBitSystemPrefs.feature_user_layout eq 'h'}
+{if $gBitSystem->isFeatureActive( 'feature_user_layout' ) or $gBitSystemPrefs.feature_user_layout eq 'h'}
 
 {if $canassign eq 'y'}
 <tr>
@@ -326,7 +326,7 @@ for instance, i don't know where the page heading stuff is used.
 	</form>
 </td>
 <td style="vertical-align:top;">
-{if $gBitSystemPrefs.feature_user_theme eq 'y' || $gBitSystemPrefs.feature_user_theme eq 'h' }
+{if $gBitSystem->isFeatureActive( 'feature_user_theme' ) || $gBitSystemPrefs.feature_user_theme eq 'h' }
 
 	<form method="POST" action="{$gBitLoc.USERS_PKG_URL}assigned_modules.php">
 	<table class="panel">

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_who_is_there.tpl,v 1.1 2005/06/19 05:12:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_who_is_there.tpl,v 1.2 2005/07/17 17:36:44 squareing Exp $ *}
 {bitmodule title="$moduleTitle" name="who_is_there"}
 	<div>
 		{$logged_users}
@@ -9,7 +9,7 @@
 		{/if}
 	</div>
 	{section name=ix loop=$online_users}
-		{if $user and $gBitSystemPrefs.feature_messages eq 'y' and $gBitUser->hasPermission( 'bit_p_messages' )}
+		{if $user and $gBitSystem->isFeatureActive( 'feature_messages' ) and $gBitUser->hasPermission( 'bit_p_messages' )}
 			<a href="{$gBitLoc.MESSU_PKG_URL}compose.php?to={$online_users[ix].user}" title="{tr}Send a message to{/tr} {$online_users[ix].user}">{biticon ipackage="users" iname="send_msg_small" iexplain="send message"}</a>
 		{/if}
 		{if $online_users[ix].user_information eq 'public'}

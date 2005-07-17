@@ -15,10 +15,10 @@
 <td style="width: 50%; vertical-align: top;">
 	<div class="box">
 		<div class="boxtitle">
-			What is Tiki?
+			What is bitweaver?
 		</div>
 		<div class="boxcontent">
-			Tiki is a powerful Content Management System easy to customize and
+			bitweaver is a powerful Content Management System easy to customize and
 			configure designed to create Portals, community sites, intranets,
 			and general web applications.
 		</div>
@@ -40,7 +40,7 @@
 Download!
 </div>
 <div class="boxcontent">
-Our last stable release of bitweaver is 1.2 - Bonnie - you can download bitweaver from <a href="http://www.sourceforge.net/projects/tikipro/">Sourceforge</a>
+Our last stable release of bitweaver is 1.2 - Bonnie - you can download bitweaver from <a href="http://www.sourceforge.net/projects/bitweaver/">Sourceforge</a>
 </div>
 </div>
 
@@ -68,7 +68,7 @@ Some of the many features in bitweaver
 <li>Chatrooms</li>
 <li>FAQs</li>
 <li>Polls</li>
-<li>Send and receive objects to/from other Tiki sites</li>
+<li>Send and receive objects to/from other bitweaver sites</li>
 <li>Powerful permission system with users/groups for all the sections and features</li>
 </ul>
 </div>
@@ -76,11 +76,11 @@ Some of the many features in bitweaver
 
 <div class="box">
 <div class="boxtitle">
-Testing Tiki
+Testing bitweaver
 </div>
 <div class="boxcontent">
 <ol>
-<li>May be you want to start reading the tiki <a href="{$gBitLoc.FAQS_PKG_URL}index.php">FAQ</a></li>
+<li>May be you want to start reading the bitweaver <a href="{$gBitLoc.FAQS_PKG_URL}index.php">FAQ</a></li>
 <li>Test the wiki following this <a href="{$gBitLoc.WIKI_PKG_URL}index.php">link</a></li>
 <li>Visit the <a href="{$gBitLoc.BITFORUMS_PKG_URL}index.php">forums</a>, write a topic or reply to an existing topic if you want</li>
 <li>At the <a href="{$gBitLoc.IMAGEGALS_PKG_URL}index.php">images galleries</a> section you can see some images try <a href="{$gBitLoc.IMAGEGALS_PKG_URL}upload_image.php?gallery_id=2">uploading images</a> to our public gallery</li>

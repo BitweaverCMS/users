@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.2 2005/06/28 07:46:23 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.3 2005/07/17 17:36:44 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: edit_personal_page.php,v 1.2 2005/06/28 07:46:23 spiderr Exp $
+ * $Id: edit_personal_page.php,v 1.3 2005/07/17 17:36:44 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -17,6 +17,9 @@
  * required setup
  */
 require_once( '../bit_setup_inc.php' );
+
+// include plugin help
+include_once( LIBERTY_PKG_PATH.'edit_help_inc.php' );
 
 // Check if the page has changed
 if (isset($_REQUEST["fSavePage"])) {

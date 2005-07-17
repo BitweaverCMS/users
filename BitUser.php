@@ -1,18 +1,18 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.5 2005/06/29 05:43:40 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.6 2005/07/17 17:36:44 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
  * a pear DB object
- 
+
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
  * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.5 2005/06/29 05:43:40 spiderr Exp $
+ * $Id: BitUser.php,v 1.6 2005/07/17 17:36:44 squareing Exp $
  * @package users
  */
 
@@ -40,11 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
-<<<<<<< BitUser.php
- * @version  $Revision: 1.5 $
-=======
- * @version  $Revision: 1.5 $
->>>>>>> 1.2.2.6
+ * @version  $Revision: 1.6 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -66,7 +62,7 @@ class BitUser extends LibertyAttachable {
 * Constructor - will automatically load all relevant data if passed a user string
 *
 * @access public
-* @author author<author@phpshop.org>
+* @author Christian Fower<spider@viovio.com>
 * @return returnString
 */
 	function BitUser( $pUserId=NULL, $pContentId=NULL ) {
@@ -460,6 +456,64 @@ if ($gDebug) echo "Run : QUIT<br>";
 	}
 
 
+/**
+* register - will handle everything necessary for registering a user and sending appropriate emails, etc.
+*
+* @access public
+* @author Christian Fowler<spider@viovio.com>
+* @return returnString
+*/
+	function register( &$pParamHash ) {
+		global $notificationlib, $smarty, $gBitSystem;
+		$ret = FALSE;
+		if( $this->store( $pParamHash ) ) {
+			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
+			$ret = TRUE;
+			$emails = $notificationlib->get_mail_events('user_registers','*');
+			foreach($emails as $email) {
+				$smarty->assign('mail_user',$pParamHash['login']);
+				$smarty->assign('mail_date',date("U"));
+				$smarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
+				$mail_data = $smarty->fetch('bitpackage:users/new_user_notification.tpl');
+
+				mail( $pParamHash['email'], tra('New user registration'),$mail_data,"From: ".$gBitSystem->getPreference('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+			}
+			if( !empty( $_REQUEST['CUSTOM'] ) ) {
+				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
+					$this->storePreference( $field, $value );
+				}
+			}
+			$siteName = $gBitSystem->getPreference('siteTitle', $_SERVER['HTTP_HOST'] );
+			$smarty->assign('siteName',$_SERVER["SERVER_NAME"]);
+			$smarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
+			$smarty->assign('mail_user',$pParamHash['login']);
+			if( $gBitSystem->isFeatureActive( 'validateUsers' ) ) {
+				// $apass = addslashes(substr(md5($gBitSystem->genPass()),0,25));
+				$apass = $pParamHash['user_store']['provpass'];
+				$foo = parse_url($_SERVER["REQUEST_URI"]);
+				$foo1=str_replace("register","confirm",$foo["path"]);
+				$machine = httpPrefix().$foo1;
+
+				// Send the mail
+				$smarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
+				$smarty->assign('mail_machine',$machine);
+				$smarty->assign('mail_apass',$apass);
+				$mail_data = $smarty->fetch('bitpackage:users/user_validation_mail.tpl');
+				mail($pParamHash["email"], $siteName.' - '.tra('Your registration information'),$mail_data,"From: ".$gBitSystem->getPreference('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+				$smarty->assign('showmsg','y');
+			}
+			if( $gBitSystem->isFeatureActive( 'send_welcome_email' ) ) {
+				// Send the welcome mail
+				$smarty->assign( 'mailPassword',$pParamHash['password'] );
+				$smarty->assign( 'mailEmail',$pParamHash['email'] );
+				$mail_data = $smarty->fetch('bitpackage:users/welcome_mail.tpl');
+				mail($pParamHash["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getPreference('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+			}
+		}
+		return( $ret );
+	}
+
+
 	function store( &$pParamHash ) {
 		if( $this->verify( $pParamHash ) ) {
 			$this->mDb->StartTrans();
@@ -733,6 +787,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 //echo "5<br>";
 			$this->update_lastlogin( $userId );
 			$this->mUserId = $userId;
+			$this->load();
 		}
 //echo "6<br>";
 //vd($this->mErrors);
@@ -1327,6 +1382,14 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	}
 
 	/*shared*/
+	function expungeWatch( $event, $object ) {
+		if( $this->isValid() ) {
+			$query = "delete from `".BIT_DB_PREFIX."tiki_user_watches` where `user_id`=? and `event`=? and `object`=?";
+			$this->query( $query, array( $this->mUserId, $event, $object ) );
+		}
+	}
+
+	/*shared*/
 	function get_watches_events() {
 		$query = "select distinct `event` from `".BIT_DB_PREFIX."tiki_user_watches`";
 		$result = $this->query($query,array());
@@ -1338,26 +1401,29 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	}
 
 
-
-
 	function getUserId() {
 		return( !empty( $this->mUserId ) ? $this->mUserId : ANONYMOUS_USER_ID );
 	}
 
 	function getDisplayUrl( $pUserName=NULL, $pMixed=NULL ) {
-//	function getDisplayUrl( $pUserName=NULL ) {
 		if( empty( $pUserName ) && !empty( $this ) ) {
 			$pUserName = $this->mUsername;
 		}
-        if( function_exists( 'override_user_url' ) ) {
-            $ret = override_user_url( $pUserName );
-        } else {
+		if( function_exists( 'override_user_url' ) ) {
+		    $ret = override_user_url( $pUserName );
+		} else {
 			global $gBitSystem;
 
-			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) ) {
-				$ret = USERS_PKG_URL.$pUserName;
-			} else {
-				$ret = USERS_PKG_URL.'index.php?home='.$pUserName;
+			$rewrite_tag = $gBitSystem->isFeatureActive( 'feature_pretty_urls_extended' ) ? 'view/':'';
+
+			if ($gBitSystem->isFeatureActive( 'pretty_urls' )
+			|| $gBitSystem->isFeatureActive( 'feature_pretty_urls_extended' ) ) {
+				$ret =  USERS_PKG_URL . $rewrite_tag;
+				$ret .= urlencode( $pUserName );
+			}
+			else {
+				$ret =  USERS_PKG_URL . 'index.php?home=';
+				$ret .= urlencode( $pUserName );
 			}
 		}
 		return $ret;
@@ -1371,6 +1437,13 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		return $this->getDisplayName( FALSE, $pHash );
 	}
 
+    /**
+* Get user information for a particular user
+*
+* @param pUseLink return the information in the form of a url that links to the users information page
+* @param pHash todo - need explanation on how to use this...
+* @return display name or link to user information page
+**/
 	function getDisplayName($pUseLink = FALSE, $pHash=NULL) {
 		global $gBitSystem;
 		$ret = NULL;
@@ -1425,7 +1498,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$this->query($sql, array($newRealName, $this->mUserId));
 		}
 	}
-	
+
 	function storeLogin($newLogin) {
 		$newLogin = substr($newLogin,0,40);
 		if ($this->userExists(array('login' => $newLogin))) {
@@ -1436,10 +1509,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		} else {
 			$this->mErrors[] = "Invalid user";
 		}
-		
+
 		return (count($this->mErrors) == 0);
 	}
-	
+
 	function getList( &$pParamHash ) {
 
 		if ( !isset( $pParamHash['sort_mode']) or $pParamHash['sort_mode'] == '' ) $pParamHash['sort_mode'] = 'registration_date_desc';

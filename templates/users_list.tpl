@@ -43,8 +43,11 @@
 		</li>
 	{/section}
 </ul>
-
 <div class="clear"></div>
+
+<p class="total small">
+	{tr}Total number of entries{/tr}: {$usercount}
+</p>
 
 {pagination_c numrows=$numrows}
 

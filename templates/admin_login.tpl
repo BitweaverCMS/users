@@ -6,9 +6,9 @@
 				{formlabel label="Authentication method" for="auth_method"}
 				{forminput}
 					<select name="auth_method" id="auth_method">
-						<option value="tiki" {if $auth_method eq 'tiki'} selected="selected"{/if}>{tr}Just Tiki{/tr}</option>
+						<option value="tiki" {if $auth_method eq 'tiki'} selected="selected"{/if}>{tr}Just bitweaver{/tr}</option>
 						<option value="ws" {if $auth_method eq 'ws'} selected="selected"{/if}>{tr}Web Server{/tr}</option>
-						<option value="auth" {if $auth_method eq 'auth'} selected="selected"{/if}>{tr}Tiki and PEAR::Auth{/tr}</option>
+						<option value="auth" {if $auth_method eq 'auth'} selected="selected"{/if}>{tr}bitweaver and PEAR::Auth{/tr}</option>
 					</select>
 					{formhelp note=""}
 				{/forminput}
@@ -19,6 +19,14 @@
 				{forminput}
 					<input type="checkbox" name="allowRegister" id="allowRegister" {if $allowRegister eq 'y'}checked="checked"{/if}/>
 					{formhelp note=""}
+				{/forminput}
+			</div>
+
+			<div class="row">
+				{formlabel label="Send registration welcome email" for="send_welcome_email"}
+				{forminput}
+					<input type="checkbox" name="send_welcome_email" id="send_welcome_email" {if $gBitSystem->isFeatureActive( 'send_welcome_email' )}checked="checked"{/if}/>
+					{formhelp note="Upon successful registration, this will send the user an email with login information, including their password."}
 				{/forminput}
 			</div>
 
@@ -46,10 +54,10 @@
 				{/forminput}
 			</div>
 
-{php}
-if (!function_exists("gd_info"))
-	$this->assign( 'warning','PHP GD library is required for this feature (not found on your system)' );
-{/php}
+			{php}
+				if (!function_exists("gd_info"))
+					$this->assign( 'warning','PHP GD library is required for this feature (not found on your system)' );
+			{/php}
 
 			<div class="row">
 				{formfeedback warning=$warning}
@@ -70,12 +78,12 @@ if (!function_exists("gd_info"))
 
 			<div class="row">
 				{if !$gBitSystem->hasValidSenderEmail()}
-					{formfeedback error="Site <a href=\"`$gBitLoc.BIT_ROOT_URL`kernel/admin/index.php?page=general\">emailer return address</a> is not valid!"}
+					{formfeedback error="Site <a href=\"`$gBitLoc.BIT_ROOT_URL`kernel/admin/index.php?page=server\">emailer return address</a> is not valid!"}
 				{/if}
 				{formlabel label="Validate email address" for="validateEmail"}
 				{forminput}
 					<input type="checkbox" name="validateEmail" id="validateEmail" {if !$gBitSystem->hasValidSenderEmail()}disabled="disabled"{elseif $validateEmail eq 'y'}checked="checked"{/if} />
-					{formhelp note="This feature should be used only when you need the maximum security and should be used with discretion. If a visitor's email server is not responding, they will not be able to register. You also must have a valid sender email to use this feature (This setting can be found in Administration --&gt; Kernel --&gt; General Settings"}
+					{formhelp link="kernel/admin/index.php?page=server/General Settings" note="This feature should be used only when you need the maximum security and should be used with discretion. If a visitor's email server is not responding, they will not be able to register. You also must have a valid sender email to use this feature."}
 				{/forminput}
 			</div>
 
@@ -98,7 +106,7 @@ if (!function_exists("gd_info"))
 			<div class="row">
 				{formlabel label="Store plaintext passwords" for="feature_clear_passwords"}
 				{forminput}
-					<input type="checkbox" name="feature_clear_passwords" id="feature_clear_passwords" {if $gBitSystemPrefs.feature_clear_passwords eq 'y'}checked="checked"{/if}/>
+					<input type="checkbox" name="feature_clear_passwords" id="feature_clear_passwords" {if $gBitSystem->isFeatureActive( 'feature_clear_passwords' )}checked="checked"{/if}/>
 					{formhelp note="Passwords will be visible in the database. If a user requests a password, their password will *not* be reset and simply emailed to them in plain text. This option is less secure, but better suited to sites with a wide variety of users."}
 				{/forminput}
 			</div>
@@ -106,21 +114,13 @@ if (!function_exists("gd_info"))
 			<div class="row">
 				{formlabel label="Password generator" for="user_password_generator"}
 				{forminput}
-					<input type="checkbox" name="user_password_generator" id="user_password_generator" {if $gBitSystemPrefs.user_password_generator eq 'y'}checked="checked"{/if}/>
+					<input type="checkbox" name="user_password_generator" id="user_password_generator" {if $gBitSystem->isFeatureActive( 'user_password_generator' )}checked="checked"{/if}/>
 					{formhelp note="Display password generator on registration page that creates secure passwords."}
 				{/forminput}
 			</div>
 
 			<div class="row">
-				{formlabel label="Use challenge/response authentication" for="feature_challenge"}
-				{forminput}
-					<input type="checkbox" name="feature_challenge" id="feature_challenge" {if $gBitSystemPrefs.feature_challenge eq 'y'}checked="checked"{/if}/>
-					{formhelp note="Some javascript stuff."}
-				{/forminput}
-			</div>
-
-			<div class="row">
-				{formlabel label="Force to use characters <b>and</b> numbers in passwords" for="pass_chr_num"}
+				{formlabel label="Force to use characters <strong>and</strong> numbers in passwords" for="pass_chr_num"}
 				{forminput}
 					<input type="checkbox" name="pass_chr_num" id="pass_chr_num" {if $pass_chr_num eq 'y'}checked="checked"{/if}/>
 					{formhelp note=""}
@@ -138,7 +138,7 @@ if (!function_exists("gd_info"))
 			<div class="row">
 				{formlabel label="Remember me feature" for="rememberme"}
 				{forminput}
-					<input type="checkbox" name="rememberme" id="rememberme" {if $gBitSystem->isFeatureActive('rememberme')}checked="checked"{/if}/>				
+					<input type="checkbox" name="rememberme" id="rememberme" {if $gBitSystem->isFeatureActive('rememberme')}checked="checked"{/if}/>
 					{formhelp note="Registered users will stay logged even if they close their browser."}
 				{/forminput}
 			</div>
@@ -262,7 +262,7 @@ if (!function_exists("gd_info"))
 		{form legend="PEAR::Auth"}
 			<input type="hidden" name="page" value="{$page}" />
 			<div class="row">
-				{formlabel label="Create user if not in Tiki" for="auth_create_gBitDbUser"}
+				{formlabel label="Create user if not in bitweaver" for="auth_create_gBitDbUser"}
 				{forminput}
 					<input type="checkbox" name="auth_create_gBitDbUser" id="auth_create_gBitDbUser" {if $auth_create_gBitDbUser eq 'y'}checked="checked"{/if} />
 					{formhelp note=""}
@@ -278,7 +278,7 @@ if (!function_exists("gd_info"))
 			</div>
 
 			<div class="row">
-				{formlabel label="Just use Tiki auth for admin" for="auth_skip_admin"}
+				{formlabel label="Just use bitweaver auth for admin" for="auth_skip_admin"}
 				{forminput}
 					<input type="checkbox" name="auth_skip_admin" id="auth_skip_admin" {if $auth_skip_admin eq 'y'}checked="checked"{/if} />
 					{formhelp note=""}

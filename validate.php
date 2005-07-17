@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.2 2005/06/28 07:46:23 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.3 2005/07/17 17:36:44 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: validate.php,v 1.2 2005/06/28 07:46:23 spiderr Exp $
+ * $Id: validate.php,v 1.3 2005/07/17 17:36:44 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -19,23 +19,6 @@ $bypass_siteclose_check = 'y';
  */
 require_once( '../bit_setup_inc.php' );
 global $gBitSystem;
-/*
-if (!isset($_REQUEST["login"])) {
-  header("location: $HTTP_REFERER");
-  die;
-}
-*/
-/* SPIDERKILL - nuked this since it seems to go off at odd times
-// Alert user if cookies are switched off
-if (ini_get('session.use_cookies') == 1) {
-vd( $_COOKIE );
-	if(!isset($_COOKIE[BIT_SESSION_NAME])) {
-		$url = KERNEL_PKG_URL.'error.php?error=' . urlencode(tra('You have to enable cookies to be able to login to this site'));
-		header("location: $url");
-		die;
-	}
-}
-*/
 
 //Remember where user is logging in from and send them back later; using session variable for those of us who use WebISO services
 if( empty( $_SESSION['loginfrom'] ) ) {
@@ -60,7 +43,7 @@ if ($gBitUser->hasPermission( 'bit_p_admin' )) {
 
 $https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
 $https_login_required = $gBitSystem->getPreference('https_login_required', 'n');
-if ($https_login_required == 'y' && !$https_mode) {
+if ($gBitSystem->isFeatureActive( 'https_login_required' ) && !$https_mode) {
 	$url = 'https://' . $https_domain;
 	if ($https_port != 443)
 		$url .= ':' . $https_port;
@@ -76,19 +59,12 @@ $pass = isset($_REQUEST['pass']) ? $_REQUEST['pass'] : false;
 $challenge = isset($_REQUEST['challenge']) ? $_REQUEST['challenge'] : false;
 $response = isset($_REQUEST['response']) ? $_REQUEST['response'] : false;
 
+// if $referer is set, login() will return the user to whence he came
 $url = $gBitUser->login( $user, $pass, $challenge, $response );
-
-// if $referer is set, we return the user to whence he came
-if( !strpos( $url, 'login.php?' ) ) {
-	if( isset( $_REQUEST['referer'] ) ) {
-		$url = $_REQUEST['referer'];
-	} elseif( !empty( $_SERVER['HTTP_REFERER'] ) ) { 
-		$url = $_SERVER['HTTP_REFERER'];
-	} else {
-		$url = BIT_ROOT_URL;
-	}
+// but if we came from a login page, let's go home
+if( strpos( $url, 'login.php?' ) || strpos( $url, 'remind_password.php' )  ) {
+	$url = $gBitSystem->getDefaultPage();
 }
-
 header('location: ' . $url);
 exit;
 ?>

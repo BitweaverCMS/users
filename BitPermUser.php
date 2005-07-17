@@ -1,18 +1,18 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.2 2005/06/28 07:46:22 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.3 2005/07/17 17:36:44 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
  * a pear DB object
- 
+
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
  * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.2 2005/06/28 07:46:22 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.3 2005/07/17 17:36:44 squareing Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2 $
+ * @version  $Revision: 1.3 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -70,7 +70,7 @@ class BitPermUser extends BitUser {
 			}
 		}
 	}
-	
+
 	function store( &$pParamHash ) {
 		global $gBitSystem;
 		// keep track of newUser before calling base class
@@ -113,6 +113,8 @@ class BitPermUser extends BitUser {
 					$rv[$pUserId] = array();
 				}
 				$rv[$pUserId][$pGroupName] = $result[$pGroupName];
+			} else {
+				$rv[$pUserId][$pGroupName]['group_id'] = NULL;
 			}
 		}
 		return( $rv[$pUserId][$pGroupName]['group_id'] );

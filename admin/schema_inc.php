@@ -205,7 +205,7 @@ $tables = array(
 global $gBitInstaller;
 
 foreach( array_keys( $tables ) AS $tableName ) {
-	$gBitInstaller->registerSchemaTable( USERS_PKG_DIR, $tableName, $tables[$tableName], TRUE );
+	$gBitInstaller->registerSchemaTable( USERS_PKG_NAME, $tableName, $tables[$tableName], TRUE );
 }
 
 $indices = array (
@@ -227,7 +227,7 @@ $indices = array (
 
 
 
-$gBitInstaller->registerSchemaIndexes( USERS_PKG_DIR, $indices );
+$gBitInstaller->registerSchemaIndexes( USERS_PKG_NAME, $indices );
 
 $gBitInstaller->registerPackageInfo( USERS_PKG_NAME, array(
 	'description' => "The users package contains all user information and gives you the possiblity to assign permissions to groups of users.",
@@ -242,11 +242,11 @@ $sequences = array (
 	'users_users_user_id_seq' => array( 'start' => 2 ),
 	'users_groups_id_seq' => array( 'start' => 4 )
 );
-$gBitInstaller->registerSchemaSequences( USERS_PKG_DIR, $sequences );
+$gBitInstaller->registerSchemaSequences( USERS_PKG_NAME, $sequences );
 
 // ### Default MenuOptions
 $gBitInstaller->registerMenuOptions( USERS_PKG_NAME, array(
-	array(42,'o','My files', USERS_PKG_DIR.'userfiles.php',95,'feature_userfiles','bit_p_userfiles','Registered')
+	array(42,'o','My files', USERS_PKG_NAME.'userfiles.php',95,'feature_userfiles','bit_p_userfiles','Registered')
 ) );
 
 // ### Default Preferences
@@ -287,7 +287,6 @@ $gBitInstaller->registerPreferences( USERS_PKG_NAME, array(
 	array('users','useRegisterPasscode','n'),
 	array('users','validateUsers','n'),
 	array('users','validateEmail','n'),
-	array('users','feature_challenge','n'),
 	array('users','min_pass_length','4'),
 	array('users','feature_clear_passwords','n'),
 	array('users','feature_custom_home','n'),

@@ -125,7 +125,7 @@
 					<div class="row">
 						{formlabel label="HomePage" for="homePage"}
 						{forminput}
-							<input size="54" type="text" name="homePage" id="homePage" value="{$editUser.homePage|escape}" />
+							<input size="50" type="text" name="homePage" id="homePage" value="{$editUser.homePage|escape}" />
 							{formhelp note=""}
 						{/forminput}
 					</div>
@@ -201,7 +201,7 @@
 					<div class="row">
 						{formlabel label="Email" for="email"}
 						{forminput}
-							<input size="54" type="text" name="email" id="email" value="{$editUser.email|escape}" />
+							<input size="50" type="text" name="email" id="email" value="{$editUser.email|escape}" />
 							{formhelp note=""}
 						{/forminput}
 					</div>
@@ -316,7 +316,7 @@
 				{/jstab}
 			{/if}
 
-			{if $gBitSystemPrefs.feature_tasks eq 'y'}
+			{if $gBitSystem->isFeatureActive( 'feature_tasks' )}
 				{jstab title="User Tasks"}
 					{form legend="User Tasks"}
 						<div class="row">

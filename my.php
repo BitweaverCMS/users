@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.4 2005/06/29 05:43:40 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.5 2005/07/17 17:36:44 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my.php,v 1.4 2005/06/29 05:43:40 spiderr Exp $
+ * $Id: my.php,v 1.5 2005/07/17 17:36:44 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -38,7 +38,7 @@ if( !empty( $_REQUEST['sort_mode'] ) ) {
 
 $max_content = $gBitSystem->mPrefs['maxRecords'];
 $offset_content = !empty( $_REQUEST['offset'] ) ? $_REQUEST['offset'] : 0;
-$smarty->assign( 'page', $page = !empty( $_REQUEST['page'] ) ? $_REQUEST['page'] : 1 );
+$smarty->assign( 'curPage', $page = !empty( $_REQUEST['page'] ) ? $_REQUEST['page'] : 1 );
 $offset_content = ( $page - 1 ) * $gBitSystem->mPrefs['maxRecords'];
 
 // set the user_id to only display content viewing user
@@ -57,8 +57,7 @@ $smarty->assign( 'contentTypes', $contentTypes );
 $smarty->assign( 'contentList', $contentList['data'] );
 // end of content listing
 
-$gBitSystem->setBrowserTitle( 'My '.$gBitSystem->getPreference( 'siteTitle' ) );
-$gBitSystem->display( 'bitpackage:users/my_bitweaver.tpl');
+$gBitSystem->display( 'bitpackage:users/my_bitweaver.tpl', 'My '.$gBitSystem->getPreference( 'siteTitle' ) );
 
 
 

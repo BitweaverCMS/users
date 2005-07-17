@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.2 2005/06/28 07:46:23 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.3 2005/07/17 17:36:44 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -144,6 +144,7 @@ foreach( $gBitUser->getDefaultGroup() as $defaultGroupId => $defaultGroupName ) 
 $_REQUEST['max_records'] = 20;
 $gBitUser->getList( $_REQUEST );
 $smarty->assign_by_ref('users', $_REQUEST["data"]);
+$smarty->assign_by_ref('usercount', $_REQUEST["cant"]);
 if (isset($_REQUEST["numrows"]))
 	$_REQUEST["control"]["numrows"] = $_REQUEST["numrows"];
 else

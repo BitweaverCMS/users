@@ -1,10 +1,10 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.1 2005/06/19 05:12:24 bitweaver Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.2 2005/07/17 17:36:44 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 if (isset($_REQUEST["loginprefs"])) {
-	
+
 	if (isset($_REQUEST["eponymousGroups"]) && $_REQUEST["eponymousGroups"] == "on") {
 		$gBitSystem->storePreference("eponymousGroups", 'y');
 		$smarty->assign('eponymousGroups', 'y');
@@ -18,6 +18,13 @@ if (isset($_REQUEST["loginprefs"])) {
 	} else {
 		$gBitSystem->storePreference("allowRegister", 'n');
 		$smarty->assign('allowRegister', 'n');
+	}
+	if (isset($_REQUEST["send_welcome_email"]) && $_REQUEST["send_welcome_email"] == "on") {
+		$gBitSystem->storePreference("send_welcome_email", 'y');
+		$smarty->assign('send_welcome_email', 'y');
+	} else {
+		$gBitSystem->storePreference("send_welcome_email", 'n');
+		$smarty->assign('send_welcome_email', 'n');
 	}
 	if (isset($_REQUEST["webserverauth"]) && $_REQUEST["webserverauth"] == "on") {
 		$gBitSystem->storePreference("webserverauth", 'y');
@@ -71,13 +78,6 @@ if (isset($_REQUEST["loginprefs"])) {
 	} else {
 		$gBitSystem->storePreference("pass_chr_num", 'n');
 		$smarty->assign('pass_chr_num', 'n');
-	}
-	if (isset($_REQUEST["feature_challenge"]) && $_REQUEST["feature_challenge"] == "on") {
-		$gBitSystem->storePreference("feature_challenge", 'y');
-		$smarty->assign('feature_challenge', 'y');
-	} else {
-		$gBitSystem->storePreference("feature_challenge", 'n');
-		$smarty->assign('feature_challenge', 'n');
 	}
 	if (isset($_REQUEST["feature_clear_passwords"]) && $_REQUEST["feature_clear_passwords"] == "on") {
 		$gBitSystem->storePreference("feature_clear_passwords", 'y');
@@ -155,7 +155,7 @@ if (isset($_REQUEST["httpprefs"])) {
 	$smarty->assign('https_prefix', $v);
 }
 if (isset($_REQUEST["auth_pear"])) {
-	
+
 	if (isset($_REQUEST["auth_create_gBitDbUser"]) && $_REQUEST["auth_create_gBitDbUser"] == "on") {
 	$gBitSystem->storePreference("auth_create_gBitDbUser", 'y');
 	$smarty->assign("auth_create_gBitDbUser", 'y');
@@ -250,7 +250,6 @@ $smarty->assign("validateUsers", $gBitSystem->getPreference("validateUsers", 'n'
 $smarty->assign("validateEmail", $gBitSystem->getPreference("validateEmail", 'n'));
 $smarty->assign("rnd_num_reg", $gBitSystem->getPreference("rnd_num_reg", 'n'));
 $smarty->assign("pass_chr_num", $gBitSystem->getPreference("pass_chr_num", 'n'));
-$smarty->assign("feature_challenge", $gBitSystem->getPreference("feature_challenge", 'n'));
 $smarty->assign("feature_clear_passwords", $gBitSystem->getPreference("feature_clear_passwords", 'n'));
 $smarty->assign("forgotPass", $gBitSystem->getPreference("forgotPass", 'n'));
 $smarty->assign("https_login", $gBitSystem->getPreference("https_login", 'n'));
