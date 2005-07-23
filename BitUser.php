@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.15 2005/07/16 14:13:59 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.16 2005/07/23 01:04:23 wolff_borg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.15 2005/07/16 14:13:59 spiderr Exp $
+ * $Id: BitUser.php,v 1.2.2.16 2005/07/23 01:04:23 wolff_borg Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.15 $
+ * @version  $Revision: 1.2.2.16 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1058,7 +1058,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			// get user_id to avoid NULL and zero confusion
 			$query = "SELECT `user_id`, `pass_due`
 					  FROM `".BIT_DB_PREFIX."users_users`
-					  WHERE `pass_due` IS NOT NULL AND `login`=? ";
+					  WHERE `pass_due` IS NOT NULL AND `user_id`=? ";
 			$due = $this->GetAssoc( $query, array( $this->mUserId ) );
 			if( !empty( $due['user_id'] ) ) {
 				$ret = $due['pass_due'] <= date("U");
