@@ -1,6 +1,6 @@
 {strip}
-<div class="floaticon">{bithelp}</div>
 
+<div class="floaticon">{bithelp}</div>
 <div class="display usertasks">
 	<div class="header">
 		<h1>{tr}Tasks{/tr}</h1>
