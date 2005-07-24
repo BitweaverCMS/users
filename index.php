@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.1.1.1.2.5 2005/07/09 03:55:01 jht001 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.1.1.1.2.6 2005/07/24 19:19:50 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.1.1.1.2.5 2005/07/09 03:55:01 jht001 Exp $
+ * $Id: index.php,v 1.1.1.1.2.6 2005/07/24 19:19:50 lsces Exp $
  * @package users
  * @subpackage functions
  */
@@ -27,11 +27,12 @@ if( !empty( $gBitSystem->mPrefs['custom_user_fields'] ) ) {
 	$customFields= explode( ',', $gBitSystem->mPrefs['custom_user_fields']  );
 	$smarty->assign('customFields', $customFields);
 }
+// lookup may be via content_id which will then return user_id for search request
+require_once( USERS_PKG_PATH.'lookup_user_inc.php' );
 $search_request = '';
 if (!empty($_REQUEST['home'])) {
 	$search_request = $_REQUEST['home'];
 	}
-require_once( USERS_PKG_PATH.'lookup_user_inc.php' );
 if( !empty( $_REQUEST['home'] ) ) {
 	$smarty->assign( 'home', $_REQUEST['home'] );
 	$gQueryUserId = $_REQUEST['home'];
