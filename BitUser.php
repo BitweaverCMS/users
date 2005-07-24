@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.18 2005/07/24 12:08:44 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.19 2005/07/24 16:18:52 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.18 2005/07/24 12:08:44 squareing Exp $
+ * $Id: BitUser.php,v 1.2.2.19 2005/07/24 16:18:52 lsces Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.18 $
+ * @version  $Revision: 1.2.2.19 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1015,6 +1015,20 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$query = "SELECT  uu.* FROM `".BIT_DB_PREFIX."users_users` uu LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON (tc.`content_id`=uu.`content_id`)
 					  WHERE UPPER( uu.`".key( $pUserMixed )."` ) = ?";
 			$ret = $this->mDb->GetRow( $query, array( strtoupper( current( $pUserMixed ) ) ) );
+		}
+		return $ret;
+	}
+
+	// specify lookup where by hash key lik 'login' or 'user_id' or 'email'
+	function getUserFromContentId( $content_id ) {
+		$ret = NULL;
+		if( !empty( $content_id ) ) {
+			$query = "SELECT  `user_id` FROM `".BIT_DB_PREFIX."users_users`
+					  WHERE `content_id` = ?";
+			$tmpUser = $this->mDb->GetRow( $query, array( $content_id ) );
+			if (!empty($tmpUser['user_id'])) {
+				$ret = $tmpUser['user_id'];
+			}
 		}
 		return $ret;
 	}
