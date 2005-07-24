@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.20 2005/07/24 22:10:12 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.21 2005/07/24 22:17:14 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.20 2005/07/24 22:10:12 spiderr Exp $
+ * $Id: BitUser.php,v 1.2.2.21 2005/07/24 22:17:14 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.20 $
+ * @version  $Revision: 1.2.2.21 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1260,6 +1260,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			}
 			unset( $this->mInfo[$pType.'_storage_path'] );
 			unset( $this->mInfo[$pType.'_attachment_id'] );
+			unset( $this->mInfo[$pType.'_url'] );
 			$this->mDb->CompleteTrans();
 		}
 	}
