@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.19 2005/07/24 16:18:52 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.20 2005/07/24 22:10:12 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.19 2005/07/24 16:18:52 lsces Exp $
+ * $Id: BitUser.php,v 1.2.2.20 2005/07/24 22:10:12 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.19 $
+ * @version  $Revision: 1.2.2.20 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -312,9 +312,6 @@ class BitUser extends LibertyAttachable {
 			$pParamHash['user_store']['real_name'] = substr( $pParamHash['real_name'], 0, 64 );
 			$pParamHash['title'] = substr( $pParamHash['real_name'], 0, 64 );
 		}
-		if( empty( $pParamHash['title'] ) ) {
-			$pParamHash['title'] = $pParamHash['login'];
-		}
 		if( !empty( $pParamHash['email'] ) ) {
 			// LOWER CASE all emails
 			$pParamHash['email'] = strtolower( $pParamHash['email'] );
@@ -342,6 +339,11 @@ class BitUser extends LibertyAttachable {
 				$pParamHash['pass_due'] = 0;
 			} elseif( empty( $pParamHash['password'] ) ) {
 				$this->mErrors['password'] = tra( 'Your password should be at least '.$gBitSystem->getPreference( 'min_pass_length', 4 ).' characters long' );
+			}
+		} elseif( $this->isValid() ) {
+			// Prevent loosing user info on save
+			if( empty( $pParamHash['edit'] ) ) {
+				$pParamHash['edit'] = $this->mInfo['data'];
 			}
 		}
 
