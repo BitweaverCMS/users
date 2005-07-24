@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.16 2005/07/23 01:04:23 wolff_borg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.17 2005/07/24 11:41:30 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.16 2005/07/23 01:04:23 wolff_borg Exp $
+ * $Id: BitUser.php,v 1.2.2.17 2005/07/24 11:41:30 lsces Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.16 $
+ * @version  $Revision: 1.2.2.17 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -310,6 +310,10 @@ class BitUser extends LibertyAttachable {
 		}
 		if( !empty( $pParamHash['real_name'] ) ) {
 			$pParamHash['user_store']['real_name'] = substr( $pParamHash['real_name'], 0, 64 );
+			$pParamHash['title'] = 'User - '.substr( $pParamHash['real_name'], 0, 64 );
+		}
+		if( empty( $pParamHash['title'] ) ) {
+			$pParamHash['title'] = 'User - '.$pParamHash['login'];
 		}
 		if( !empty( $pParamHash['email'] ) ) {
 			// LOWER CASE all emails
