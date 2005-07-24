@@ -16,7 +16,7 @@
 				{formlabel label="Self Portrait" for="fPortraitFile"}
 				{if $gBitUser->mInfo.portrait_url}
 					{forminput}
-						<img src="{$gQueryUser->minfo.portrait_url}?{php}print time();{/php}" alt="{tr}self portrait{/tr}" /><br />
+						<img src="{$gQueryUser->mInfo.portrait_url}?{php}print time();{/php}" alt="{tr}self portrait{/tr}" /><br />
 						<input type="submit" value="{tr}delete self portrait{/tr}" name="fSubmitDeletePortait" id="fSubmitDeletePortait"/>
 					{/forminput}
 				{/if}
