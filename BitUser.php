@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.23 2005/07/25 14:53:20 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.24 2005/07/25 15:46:28 drewslater Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.23 2005/07/25 14:53:20 spiderr Exp $
+ * $Id: BitUser.php,v 1.2.2.24 2005/07/25 15:46:28 drewslater Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.23 $
+ * @version  $Revision: 1.2.2.24 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -152,7 +152,7 @@ class BitUser extends LibertyAttachable {
 						$this->mUserPrefs['flag'] = $this->mUserPrefs['country'];
 						$this->mUserPrefs['country'] = str_replace( '_', ' ', $this->mUserPrefs['country']);
 					}
-					$this->mInfo['display_name'] = ((!empty($this->mInfo['real_name']) ? $this->mInfo['real_name'] :
+					$this->mInfo['display_name'] = (( (!empty($this->mInfo['real_name']) && $this->mInfo['real_name'] != ' ') ? $this->mInfo['real_name'] :
 													(!empty($this->mUsername) ? $this->mUsername :
 														(!empty($this->mInfo['email']) ? substr($this->mInfo['email'],0, strpos($this->mInfo['email'],'@')) :
 															$this->mUserId))));
