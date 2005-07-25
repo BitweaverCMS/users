@@ -42,6 +42,7 @@
 						{/if}
 
 						{$parsed}
+						<div style="clear:both"></div>
 					</div><!-- end .content -->
 				</div><!-- end .body -->
 			{/jstab}

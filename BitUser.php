@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.6 2005/07/17 17:36:44 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.7 2005/07/25 20:02:54 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.6 2005/07/17 17:36:44 squareing Exp $
+ * $Id: BitUser.php,v 1.7 2005/07/25 20:02:54 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.6 $
+ * @version  $Revision: 1.7 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -152,6 +152,7 @@ class BitUser extends LibertyAttachable {
 						$this->mUserPrefs['flag'] = $this->mUserPrefs['country'];
 						$this->mUserPrefs['country'] = str_replace( '_', ' ', $this->mUserPrefs['country']);
 					}
+					$this->mInfo['real_name'] = trim($this->mInfo['real_name']);
 					$this->mInfo['display_name'] = ((!empty($this->mInfo['real_name']) ? $this->mInfo['real_name'] :
 													(!empty($this->mUsername) ? $this->mUsername :
 														(!empty($this->mInfo['email']) ? substr($this->mInfo['email'],0, strpos($this->mInfo['email'],'@')) :
@@ -338,6 +339,11 @@ class BitUser extends LibertyAttachable {
 				$pParamHash['pass_due'] = 0;
 			} elseif( empty( $pParamHash['password'] ) ) {
 				$this->mErrors['password'] = tra( 'Your password should be at least '.$gBitSystem->getPreference( 'min_pass_length', 4 ).' characters long' );
+			}
+		} elseif( $this->isValid() ) {
+			// Prevent loosing user info on save
+			if( empty( $pParamHash['edit'] ) ) {
+				$pParamHash['edit'] = $this->mInfo['data'];
 			}
 		}
 
@@ -1014,6 +1020,20 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		}
 		return $ret;
 	}
+
+	// specify lookup where by hash key lik 'login' or 'user_id' or 'email'
+	function getUserFromContentId( $content_id ) {
+		$ret = NULL;
+		if( !empty( $content_id ) ) {
+			$query = "SELECT  `user_id` FROM `".BIT_DB_PREFIX."users_users`
+					  WHERE `content_id` = ?";
+			$tmpUser = $this->mDb->GetRow( $query, array( $content_id ) );
+			if (!empty($tmpUser['user_id'])) {
+				$ret = $tmpUser['user_id'];
+			}
+		}
+		return $ret;
+	}
 /*
 	// all of these methods have been replaced by the single getUserInfo method
 	function get_user_info($user, $iCaseSensitive = TRUE) {
@@ -1058,7 +1078,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			// get user_id to avoid NULL and zero confusion
 			$query = "SELECT `user_id`, `pass_due`
 					  FROM `".BIT_DB_PREFIX."users_users`
-					  WHERE `pass_due` IS NOT NULL AND `login`=? ";
+					  WHERE `pass_due` IS NOT NULL AND `user_id`=? ";
 			$due = $this->GetAssoc( $query, array( $this->mUserId ) );
 			if( !empty( $due['user_id'] ) ) {
 				$ret = $due['pass_due'] <= date("U");
@@ -1240,6 +1260,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			}
 			unset( $this->mInfo[$pType.'_storage_path'] );
 			unset( $this->mInfo[$pType.'_attachment_id'] );
+			unset( $this->mInfo[$pType.'_url'] );
 			$this->mDb->CompleteTrans();
 		}
 	}

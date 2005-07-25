@@ -6,7 +6,6 @@
 		{if $gBitSystem->isPackageActive( 'wiki' )}
 			<li><a class="item" href="{$gBitLoc.USERS_PKG_URL}edit_personal_page.php">{biticon ipackage=liberty iname=edit iforce=icon} {tr}Edit My Homepage{/tr}</a></li>
 		{/if}
-		<li><a class="item" href="{$gBitLoc.LIBERTY_PKG_URL}list_content.php">{biticon ipackage=liberty iname=spacer iforce=icon} {tr}All available Content{/tr}</a></li>
 		{if $gBitSystemPrefs.feature_user_layout eq 'h'}
 			{assign var="myLayoutConfig" value="My Homepage"}
 		{else if $gBitSystem->isFeatureActive( 'feature_user_layout' )}
