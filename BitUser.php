@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.22 2005/07/25 09:17:04 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.23 2005/07/25 14:53:20 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.22 2005/07/25 09:17:04 squareing Exp $
+ * $Id: BitUser.php,v 1.2.2.23 2005/07/25 14:53:20 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.22 $
+ * @version  $Revision: 1.2.2.23 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -305,7 +305,6 @@ class BitUser extends LibertyAttachable {
 			} else {
 				// LOWER CASE all logins
 				$pParamHash['login'] = $pParamHash['login'];
-				$pParamHash['title'] = $pParamHash['login'];
 				$pParamHash['user_store']['login'] = $pParamHash['login'];
 			}
 		}
