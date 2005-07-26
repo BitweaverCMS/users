@@ -36,7 +36,7 @@
 			{if $users[user].thumbnail_url}
 				<img alt="{tr}user portrait{/tr}" title="{$users[user].login} {tr}user portrait{/tr}" src="{$users[user].thumbnail_url}" class="thumb" />
 			{/if}
-			{if $gBitUser->hasPermission( 'bit_p_admin_users' )}{$users[user].email} ({tr}User ID{/tr}: {$users[user].user_id})<br/>{/if}
+			{if $gBitUser->hasPermission( 'bit_p_admin_users' )}{mailto address=$users[user].email encode="javascript"} ({tr}User ID{/tr}: {$users[user].user_id})<br/>{/if}
 			{tr}Member since{/tr}: {$users[user].registration_date|bit_short_date}<br/>
 			{if $users[user].current_login }{tr}Last seen{/tr}: {$users[user].current_login|bit_short_date}<br/>{/if}
 			<div class="clear"></div>
