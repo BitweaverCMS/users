@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.1.1.1.2.6 2005/07/24 19:19:50 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.1.1.1.2.7 2005/07/26 15:50:30 drewslater Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.1.1.1.2.6 2005/07/24 19:19:50 lsces Exp $
+ * $Id: index.php,v 1.1.1.1.2.7 2005/07/26 15:50:30 drewslater Exp $
  * @package users
  * @subpackage functions
  */
@@ -25,7 +25,7 @@ require_once( LIBERTY_PKG_PATH."LibertyStructure.php" );
 // custom userfields
 if( !empty( $gBitSystem->mPrefs['custom_user_fields'] ) ) {
 	$customFields= explode( ',', $gBitSystem->mPrefs['custom_user_fields']  );
-	$smarty->assign('customFields', $customFields);
+	$gBitSmarty->assign('customFields', $customFields);
 }
 // lookup may be via content_id which will then return user_id for search request
 require_once( USERS_PKG_PATH.'lookup_user_inc.php' );
@@ -34,10 +34,10 @@ if (!empty($_REQUEST['home'])) {
 	$search_request = $_REQUEST['home'];
 	}
 if( !empty( $_REQUEST['home'] ) ) {
-	$smarty->assign( 'home', $_REQUEST['home'] );
+	$gBitSmarty->assign( 'home', $_REQUEST['home'] );
 	$gQueryUserId = $_REQUEST['home'];
 	if( $gQueryUser->isValid() ) {
-		$smarty->assign( 'gQueryUserId', $gQueryUserId );
+		$gBitSmarty->assign( 'gQueryUserId', $gQueryUserId );
 	}
 
 	if( $gBitSystem->getPreference('feature_user_theme') ) {
@@ -45,7 +45,7 @@ if( !empty( $_REQUEST['home'] ) ) {
 		if( isset( $userHomeStyle ) ) {
 			$gBitSystem->setStyle($userHomeStyle );
 			$gBitLoc['styleSheet'] = $gBitSystem->getStyleCss( $userHomeStyle, $_REQUEST['home'] );
-			$smarty->assign( 'userStyle', $userHomeStyle );
+			$gBitSmarty->assign( 'userStyle', $userHomeStyle );
 		}
 	}
 	$userHomeTitle = $gQueryUser->getPreference( 'homepage_title' );
@@ -71,19 +71,19 @@ if( !empty( $_REQUEST['home'] ) ) {
 	$centerDisplay = ( count( $gCenterPieces ) ? 'bitpackage:kernel/dynamic.tpl' : 'bitpackage:users/center_user_wiki_page.tpl' );
 } elseif (empty($search_request)) {
 	$gQueryUser->getList( $_REQUEST );
-	$smarty->assign('search_request',$search_request);
-	$smarty->assign_by_ref('users', $_REQUEST["data"]);
-	$smarty->assign_by_ref('usercount', $_REQUEST["cant"]);
+	$gBitSmarty->assign('search_request',$search_request);
+	$gBitSmarty->assign_by_ref('users', $_REQUEST["data"]);
+	$gBitSmarty->assign_by_ref('usercount', $_REQUEST["cant"]);
 	if (isset($_REQUEST["numrows"]))
 		$_REQUEST["control"]["numrows"] = $_REQUEST["numrows"];
 	else
 		$_REQUEST["control"]["numrows"] = 50;
 	$_REQUEST["control"]["URL"] = USERS_PKG_URL."index.php";
-	$smarty->assign_by_ref('control', $_REQUEST["control"]);
+	$gBitSmarty->assign_by_ref('control', $_REQUEST["control"]);
 	$centerDisplay = 'bitpackage:users/index_list.tpl';
 	$browserTitle = $siteTitle.' '.tra( 'Members' );
 } else {
-	$smarty->assign('msg',tra('User not found'));
+	$gBitSmarty->assign('msg',tra('User not found'));
 	$centerDisplay = 'bitpackage:kernel/error.tpl';
 	$browserTitle = $siteTitle.' '.tra( 'Members' );
 

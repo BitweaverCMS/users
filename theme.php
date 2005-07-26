@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.1.1.1.2.1 2005/06/27 17:48:01 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: theme.php,v 1.1.1.1.2.1 2005/06/27 17:48:01 lsces Exp $
+ * $Id: theme.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
  * @package users
  * @subpackage functions
  */
@@ -28,7 +28,7 @@ global $gBitUser;
 global $gBitSystem;
 
 if (!$gBitUser->isRegistered()) {
-	$smarty->assign('msg', tra("Permission denied: You are not logged in"));
+	$gBitSmarty->assign('msg', tra("Permission denied: You are not logged in"));
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
@@ -36,7 +36,7 @@ if (!$gBitUser->isRegistered()) {
 include_once(USERS_PKG_PATH.'lookup_user_inc.php');
 
 if ($gQueryUser->mUserId != $gBitUser->mUserId && !$gBitUser->object_has_permission($gBitUser->mUserId, $gQueryUser->mInfo['content_id'], 'bituser', 'bit_p_admin_user')) {
-	$smarty->assign('msg', tra('You do not have permission to edit this user\'s theme'));
+	$gBitSmarty->assign('msg', tra('You do not have permission to edit this user\'s theme'));
 	$gBitSystem->display('error.tpl');
 	die;
 }
@@ -124,10 +124,10 @@ if ($gQueryUser->mUserPrefs['theme'] == 'custom' && $feature_custom_user_themes 
 }
 
 $usingCustomTheme = ($gQueryUser->mUserPrefs['theme'] == 'custom' ? true : false);
-$smarty->assign_by_ref('usingCustomTheme', $usingCustomTheme);
+$gBitSmarty->assign_by_ref('usingCustomTheme', $usingCustomTheme);
 
 if ($feature_user_theme == 'n') {
-	$smarty->assign('msg', tra("Feature disabled"));
+	$gBitSmarty->assign('msg', tra("Feature disabled"));
 
 	$gBitSystem->display( 'error.tpl' );
 	die;
@@ -137,12 +137,12 @@ $customCSSPath = $gQueryUser->getStoragePath('theme', $gQueryUser->mUserId, NULL
 
 $customCSSFile = $customCSSPath.'custom.css';	// Path to this user's custom stylesheet
 $customCSSImageURL = $gQueryUser->getStorageURL().'/theme/images/';
-$smarty->assign_by_ref('customCSSImageURL',$customCSSImageURL);			
+$gBitSmarty->assign_by_ref('customCSSImageURL',$customCSSImageURL);			
 
 // Create a custom.css for this user if they do not already have one
 if (!file_exists($customCSSFile)) {
 	if (!copy(THEMES_PKG_PATH.'/styles/basic/basic.css', $customCSSFile)) {
-		$smarty->assign('msg', tra("Unable to create a custom CSS file for you!"));
+		$gBitSmarty->assign('msg', tra("Unable to create a custom CSS file for you!"));
 		$gBitSystem->display( 'error.tpl' );
 		die;
 	}
@@ -167,7 +167,7 @@ if ($usingCustomTheme) {
 		$fp = fopen($customCSSFile, "w");
 	
 		if (!$fp) {
-			$smarty->assign('msg', tra("You dont have permission to write the style sheet"));
+			$gBitSmarty->assign('msg', tra("You dont have permission to write the style sheet"));
 			$gBitSystem->display( 'error.tpl' );
 			die;
 		}
@@ -196,7 +196,7 @@ if ($usingCustomTheme) {
 		$fp = fopen($customCSSFile, "w");
 	
 		if (!$fp) {
-			$smarty->assign('msg', tra("You dont have permission to write the style sheet"));
+			$gBitSmarty->assign('msg', tra("You dont have permission to write the style sheet"));
 			$gBitSystem->display( 'error.tpl' );
 			die;
 		}
@@ -257,13 +257,13 @@ if ($usingCustomTheme) {
 
 // Get the list of themes the user can choose to derive from (aka Reset to)
 $styles = &$tcontrollib->getStyles( NULL, ($usingCustomTheme ? FALSE : TRUE), FALSE );
-$smarty->assign_by_ref( 'styles', $styles );
+$gBitSmarty->assign_by_ref( 'styles', $styles );
 
 // $assignStyle is the default style which will be selected in the drop down list
 if (!isset($assignStyle)) {
 	$assignStyle = $gQueryUser->getPreference('theme', 'basic');
 }
-$smarty->assign_by_ref( 'assignStyle', $assignStyle);
+$gBitSmarty->assign_by_ref( 'assignStyle', $assignStyle);
 
 // Read in this user's custom.css to display in the textarea
 $lines = file($customCSSFile);
@@ -272,13 +272,13 @@ foreach ($lines as $line) {
 	$data .= $line;
 } 
 
-$smarty->assign('data', $data);
+$gBitSmarty->assign('data', $data);
 
 // Export success/error messages for display in the tpl.
 if (isset($successMsg)) 
-	$smarty->assign_by_ref('successMsg',$successMsg);
+	$gBitSmarty->assign_by_ref('successMsg',$successMsg);
 if (isset($errorMsg))
-	$smarty->assign_by_ref('errorMsg', $errorMsg);
+	$gBitSmarty->assign_by_ref('errorMsg', $errorMsg);
 
 // Get the list of images used by this user's custom theme
 $imageList = ls_a($customCSSPath.'images/');
@@ -291,10 +291,10 @@ if( count( $imageList ) ) {
 	}
 }
 
-$smarty->assign('imagesCount', count($themeImages));
-$smarty->assign_by_ref('themeImages',$themeImages);	
-$smarty->assign('PHP_SELF', $_SERVER['PHP_SELF']);
-$smarty->assign_by_ref('gQueryUser', $gQueryUser);
+$gBitSmarty->assign('imagesCount', count($themeImages));
+$gBitSmarty->assign_by_ref('themeImages',$themeImages);	
+$gBitSmarty->assign('PHP_SELF', $_SERVER['PHP_SELF']);
+$gBitSmarty->assign_by_ref('gQueryUser', $gQueryUser);
 
 $gBitSystem->display( 'bitpackage:users/user_theme.tpl');
 ?>

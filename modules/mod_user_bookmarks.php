@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_bookmarks.php,v 1.1.1.1.2.1 2005/06/27 17:47:37 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_bookmarks.php,v 1.1.1.1.2.2 2005/07/26 15:50:31 drewslater Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: mod_user_bookmarks.php,v 1.1.1.1.2.1 2005/06/27 17:47:37 lsces Exp $
+ * $Id: mod_user_bookmarks.php,v 1.1.1.1.2.2 2005/07/26 15:50:31 drewslater Exp $
  * @package users
  * @subpackage modules
  */
@@ -27,7 +27,7 @@ if( $gBitSystem->isFeatureActive( 'feature_user_bookmarks' ) && $gBitUser->isReg
 	}
 
 	// check the session to get the parent or create parent =0
-	$smarty->assign('ownurl', httpPrefix(). $_SERVER["REQUEST_URI"]);
+	$gBitSmarty->assign('ownurl', httpPrefix(). $_SERVER["REQUEST_URI"]);
 	if (!isset($_SESSION["bookmarks_parent"])) {
 		$_SESSION["bookmarks_parent"] = 0;
 	}
@@ -41,7 +41,7 @@ if( $gBitSystem->isFeatureActive( 'feature_user_bookmarks' ) && $gBitUser->isReg
 	} else {
 		$modb_sep = '?';
 	}
-	$smarty->assign('modb_sep', $modb_sep);
+	$gBitSmarty->assign('modb_sep', $modb_sep);
 	if (isset($_REQUEST["bookmark_removeurl"])) {
 		$bookmarklib->remove_url($_REQUEST["bookmark_removeurl"], $gBitUser->mUserId );
 		header( 'Location: '.$_SERVER['HTTP_REFERER'] );
@@ -67,7 +67,7 @@ if( $gBitSystem->isFeatureActive( 'feature_user_bookmarks' ) && $gBitUser->isReg
 	$modb_father = $modb_p_info["parent_id"];
 	// get folders for the parent
 	$modb_urls = $bookmarklib->list_folder($_SESSION["bookmarks_parent"], 0, -1, 'name_asc', '', $gBitUser->mUserId );
-	$smarty->assign('modb_urls', $modb_urls["data"]);
+	$gBitSmarty->assign('modb_urls', $modb_urls["data"]);
 	$modb_folders = $bookmarklib->get_child_folders($_SESSION["bookmarks_parent"], $gBitUser->mUserId );
 	$modb_pf = array(
 		"name" => "..",
@@ -79,7 +79,7 @@ if( $gBitSystem->isFeatureActive( 'feature_user_bookmarks' ) && $gBitUser->isReg
 	if ($_SESSION["bookmarks_parent"]) {
 		$modb_folders = array_merge($modb_pfs, $modb_folders);
 	}
-	$smarty->assign('modb_folders', $modb_folders);
+	$gBitSmarty->assign('modb_folders', $modb_folders);
 // get urls for the parent
 }
 ?>

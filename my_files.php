@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/my_files.php,v 1.1.1.1.2.1 2005/06/27 17:47:58 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/my_files.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_files.php,v 1.1.1.1.2.1 2005/06/27 17:47:58 lsces Exp $
+ * $Id: my_files.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
  * @package users
  * @subpackage functions
  */
@@ -20,15 +20,15 @@ require_once("../bit_setup_inc.php");
 global $gBitSystem;
 
 if (!$gBitUser->mUserId) {
-	$smarty->assign('msg', tra("You are not logged in"));
+	$gBitSmarty->assign('msg', tra("You are not logged in"));
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
 
 $userFiles = $gBitUser->getUserFiles();
-$smarty->assign_by_ref('userFiles', $userFiles['files']);
-$smarty->assign('numUserFiles', count($userFiles['files']));
-$smarty->assign('diskUsage', $userFiles['diskUsage']);
+$gBitSmarty->assign_by_ref('userFiles', $userFiles['files']);
+$gBitSmarty->assign('numUserFiles', count($userFiles['files']));
+$gBitSmarty->assign('diskUsage', $userFiles['diskUsage']);
 
 if (!empty($_REQUEST['deleteAttachment'])) {
 	$attachmentId = $_REQUEST['deleteAttachment'];

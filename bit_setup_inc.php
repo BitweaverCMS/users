@@ -1,5 +1,5 @@
 <?php
-global $gBitSystem, $gBitUser, $smarty;
+global $gBitSystem, $gBitUser, $gBitSmarty;
 
 $gBitSystem->registerPackage( 'users', dirname( __FILE__).'/', FALSE );
 
@@ -122,8 +122,8 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		$gBitUser->updateSession(session_id());
 	}
 
-	$smarty->assign_by_ref('gBitUser', $gBitUser);
-	$smarty->register_object('gBitUser', $gBitUser, array(), true, array('hasPermission'));
+	$gBitSmarty->assign_by_ref('gBitUser', $gBitUser);
+	$gBitSmarty->register_object('gBitUser', $gBitUser, array(), true, array('hasPermission'));
 
 	$allowRegister = $gBitSystem->getPreference("allowRegister", 'y');
 	$validateUsers = $gBitSystem->getPreference("validateUsers", 'n');
@@ -142,53 +142,53 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$https_login_required = $gBitSystem->getPreference('https_login_required', 'n');
 	$change_language = $gBitSystem->getPreference("change_language", 'y');
 
-	$smarty->assign('allowRegister', $allowRegister);
-	$smarty->assign('urlIndex', $urlIndex);
-	$smarty->assign('use_proxy', $use_proxy);
-	$smarty->assign('proxy_host', $proxy_host);
-	$smarty->assign('proxy_port', $proxy_port);
-	$smarty->assign('change_language', $change_language);
-	$smarty->assign('eponymousGroups', $eponymousGroups);
+	$gBitSmarty->assign('allowRegister', $allowRegister);
+	$gBitSmarty->assign('urlIndex', $urlIndex);
+	$gBitSmarty->assign('use_proxy', $use_proxy);
+	$gBitSmarty->assign('proxy_host', $proxy_host);
+	$gBitSmarty->assign('proxy_port', $proxy_port);
+	$gBitSmarty->assign('change_language', $change_language);
+	$gBitSmarty->assign('eponymousGroups', $eponymousGroups);
 
 	$user_assigned_modules = 'n';
-	$smarty->assign('remembertime', $remembertime);
-	$smarty->assign('webserverauth', 'n');
-	$smarty->assign('uf_use_db', 'y');
-	$smarty->assign('uf_use_dir', '');
-	$smarty->assign('userfiles_quota', 30);
-	$smarty->assign('registerPasscode', $registerPasscode);
-	$smarty->assign('useRegisterPasscode', $useRegisterPasscode);
-	$smarty->assign('min_pass_length', 1);
-	$smarty->assign('pass_chr_num', 'n');
-	$smarty->assign('pass_due', 999);
-	$smarty->assign('rnd_num_reg', 'n');
+	$gBitSmarty->assign('remembertime', $remembertime);
+	$gBitSmarty->assign('webserverauth', 'n');
+	$gBitSmarty->assign('uf_use_db', 'y');
+	$gBitSmarty->assign('uf_use_dir', '');
+	$gBitSmarty->assign('userfiles_quota', 30);
+	$gBitSmarty->assign('registerPasscode', $registerPasscode);
+	$gBitSmarty->assign('useRegisterPasscode', $useRegisterPasscode);
+	$gBitSmarty->assign('min_pass_length', 1);
+	$gBitSmarty->assign('pass_chr_num', 'n');
+	$gBitSmarty->assign('pass_due', 999);
+	$gBitSmarty->assign('rnd_num_reg', 'n');
 	// PEAR::Auth support
-	$smarty->assign('auth_method', "tiki");
-	$smarty->assign('auth_pear', "tiki");
-	$smarty->assign('auth_create_gBitDbUser', 'n');
-	$smarty->assign('auth_create_user_auth', 'n');
-	$smarty->assign('auth_skip_admin', 'y');
-	$smarty->assign('auth_ldap_host', 'localhost');
-	$smarty->assign('auth_ldap_port', '389');
-	$smarty->assign('auth_ldap_scope', 'sub');
-	$smarty->assign('auth_ldap_basedn', '');
-	$smarty->assign('auth_ldap_userdn', '');
-	$smarty->assign('auth_ldap_userattr', 'uid');
-	$smarty->assign('auth_ldap_useroc', 'inetOrgPerson');
-	$smarty->assign('auth_ldap_groupdn', '');
-	$smarty->assign('auth_ldap_groupattr', 'cn');
-	$smarty->assign('auth_ldap_groupoc', 'groupOfUniqueNames');
-	$smarty->assign('auth_ldap_memberattr', 'uniqueMember');
-	$smarty->assign('auth_ldap_memberisdn', 'y');
-	$smarty->assign('auth_ldap_adminuser', '');
-	$smarty->assign('auth_ldap_adminpass', '');
+	$gBitSmarty->assign('auth_method', "tiki");
+	$gBitSmarty->assign('auth_pear', "tiki");
+	$gBitSmarty->assign('auth_create_gBitDbUser', 'n');
+	$gBitSmarty->assign('auth_create_user_auth', 'n');
+	$gBitSmarty->assign('auth_skip_admin', 'y');
+	$gBitSmarty->assign('auth_ldap_host', 'localhost');
+	$gBitSmarty->assign('auth_ldap_port', '389');
+	$gBitSmarty->assign('auth_ldap_scope', 'sub');
+	$gBitSmarty->assign('auth_ldap_basedn', '');
+	$gBitSmarty->assign('auth_ldap_userdn', '');
+	$gBitSmarty->assign('auth_ldap_userattr', 'uid');
+	$gBitSmarty->assign('auth_ldap_useroc', 'inetOrgPerson');
+	$gBitSmarty->assign('auth_ldap_groupdn', '');
+	$gBitSmarty->assign('auth_ldap_groupattr', 'cn');
+	$gBitSmarty->assign('auth_ldap_groupoc', 'groupOfUniqueNames');
+	$gBitSmarty->assign('auth_ldap_memberattr', 'uniqueMember');
+	$gBitSmarty->assign('auth_ldap_memberisdn', 'y');
+	$gBitSmarty->assign('auth_ldap_adminuser', '');
+	$gBitSmarty->assign('auth_ldap_adminpass', '');
 
 	// Permissions
 	// Get group permissions here
 	if (is_array($gBitUser->mPerms)) {	// This avoids php warning during install
 		foreach( array_keys( $gBitUser->mPerms ) as $perm ) {
 			// print("Asignando permiso global : $perm<br/>");
-			$smarty->assign("$perm", 'y');
+			$gBitSmarty->assign("$perm", 'y');
 			$$perm = 'y';
 		}
 	}
@@ -198,11 +198,11 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 			include_once(USERS_PKG_PATH . 'user_menu_lib.php');
 
 			$user_menus = $usermenulib->list_usermenus($gBitUser->mUserId, 0, -1, 'position_asc', '');
-			$smarty->assign('usr_user_menus', $user_menus['data']);
+			$gBitSmarty->assign('usr_user_menus', $user_menus['data']);
 			$_SESSION['usermenu'] = $user_menus['data'];
 		} else {
 			$user_menus = $_SESSION['usermenu'];
-			$smarty->assign('usr_user_menus', $user_menus);
+			$gBitSmarty->assign('usr_user_menus', $user_menus);
 		}
 	}
 	// If we are processing a login then do not generate the challenge
@@ -212,11 +212,11 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 			$chall = $gBitUser->generateChallenge();
 
 			$_SESSION["challenge"] = $chall;
-			$smarty->assign('challenge', $chall);
+			$gBitSmarty->assign('challenge', $chall);
 		}
 	}
 
-	$smarty->assign('user_dbl', 'y');
+	$gBitSmarty->assign('user_dbl', 'y');
 
 	$allowMsgs = 'n';
 	if( $gBitUser->isRegistered() ) {
@@ -224,9 +224,9 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		$allowMsgs = $gBitUser->getPreference( 'allowMsgs', 'y');
 		$tasks_use_dates = $gBitUser->getPreference( 'tasks_use_dates');
 		$tasks_maxRecords = $gBitUser->getPreference( 'tasks_maxRecords');
-		$smarty->assign('tasks_use_dates', $tasks_use_dates);
-		$smarty->assign('tasks_maxRecords', $tasks_maxRecords);
-		$smarty->assign('allowMsgs', $allowMsgs);
+		$gBitSmarty->assign('tasks_use_dates', $tasks_use_dates);
+		$gBitSmarty->assign('tasks_maxRecords', $tasks_maxRecords);
+		$gBitSmarty->assign('allowMsgs', $allowMsgs);
 	}
 
 ?>

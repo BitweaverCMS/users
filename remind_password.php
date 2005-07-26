@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.1.1.1.2.2 2005/07/04 18:26:58 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.1.1.1.2.3 2005/07/26 15:50:30 drewslater Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: remind_password.php,v 1.1.1.1.2.2 2005/07/04 18:26:58 spiderr Exp $
+ * $Id: remind_password.php,v 1.1.1.1.2.3 2005/07/26 15:50:30 drewslater Exp $
  * @package users
  * @subpackage functions
  */
@@ -18,7 +18,7 @@
  */
 require_once( '../bit_setup_inc.php' );
 if ($forgotPass != 'y') {
-	$smarty->assign('msg', tra("This feature is disabled").": forgotPass");
+	$gBitSmarty->assign('msg', tra("This feature is disabled").": forgotPass");
 	$gBitSystem->display( 'error.tpl' );
 	die;
 } elseif( $gBitUser->isRegistered() ) {
@@ -35,20 +35,20 @@ if ($forgotPass != 'y') {
 		}
 		$tmp['success'] .= tra("to the registered email address for")." " . $_REQUEST["username"] . ".";
 
-		$smarty->assign('mail_site', $_SERVER["SERVER_NAME"]);
-		$smarty->assign('mail_user', $_REQUEST["username"]);
-		$smarty->assign('mail_same', $gBitSystem->isFeatureActive( 'feature_clear_passwords' ));
-		$smarty->assign('mail_pass', $pass);
-		$mail_data = $smarty->fetch('bitpackage:users/password_reminder.tpl');
+		$gBitSmarty->assign('mail_site', $_SERVER["SERVER_NAME"]);
+		$gBitSmarty->assign('mail_user', $_REQUEST["username"]);
+		$gBitSmarty->assign('mail_same', $gBitSystem->isFeatureActive( 'feature_clear_passwords' ));
+		$gBitSmarty->assign('mail_pass', $pass);
+		$mail_data = $gBitSmarty->fetch('bitpackage:users/password_reminder.tpl');
 		$subject = "Your password for ".$gBitSystem->getPreference( 'siteTitle', $_SERVER['HTTP_HOST'] );
 		mail( $userInfo['email'], $subject, $mail_data, "From: ".$gBitSystem->getPreference( 'sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n");
 		// Just show "success" message and no form
 	} else {
 		// Show error message (and leave form visible so user can fix problem)
-		$smarty->assign('showmsg', 'e');
+		$gBitSmarty->assign('showmsg', 'e');
 		$tmp['error'] = tra("Invalid or unknown username").": ".$_REQUEST["username"];
 	}
-	$smarty->assign('msg', $tmp);
+	$gBitSmarty->assign('msg', $tmp);
 }
 // Display the template
 $gBitSystem->display( 'bitpackage:users/remind_password.tpl');

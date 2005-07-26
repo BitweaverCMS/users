@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/confirm.php,v 1.1.1.1.2.1 2005/06/27 17:47:47 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/confirm.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: confirm.php,v 1.1.1.1.2.1 2005/06/27 17:47:47 lsces Exp $
+ * $Id: confirm.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
  * @package users
  * @subpackage functions
  */
@@ -19,10 +19,10 @@
 require_once( '../bit_setup_inc.php' );
 
 if( $userInfo = $gBitUser->confirmRegistration( $_REQUEST["user"], $_REQUEST["pass"] ) ) {
-	$smarty->assign_by_ref( 'userInfo', $userInfo );
+	$gBitSmarty->assign_by_ref( 'userInfo', $userInfo );
 	$gBitSystem->display( 'bitpackage:users/change_password.tpl' );
 } else {
-	$smarty->assign('msg', tra("Invalid username or password"));
+	$gBitSmarty->assign('msg', tra("Invalid username or password"));
 	$gBitSystem->display( 'error.tpl' );
 }
 ?>

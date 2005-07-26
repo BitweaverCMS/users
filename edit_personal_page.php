@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.1.1.1.2.2 2005/06/29 07:25:22 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.1.1.1.2.3 2005/07/26 15:50:30 drewslater Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: edit_personal_page.php,v 1.1.1.1.2.2 2005/06/29 07:25:22 squareing Exp $
+ * $Id: edit_personal_page.php,v 1.1.1.1.2.3 2005/07/26 15:50:30 drewslater Exp $
  * @package users
  * @subpackage functions
  */
@@ -35,14 +35,14 @@ if ($gBitSystem->getPreference('package_quicktags','n') == 'y') {
 // see if we should show the attachments tab at all
 foreach( $gLibertySystem->mPlugins as $plugin ) {
 	if( ( $plugin['plugin_type'] == 'storage' ) && ( $plugin['is_active'] == 'y' ) ) {
-		$smarty->assign( 'show_attachments','y' );
+		$gBitSmarty->assign( 'show_attachments','y' );
 	}
 }
 
-$smarty->assign('preview',0);
+$gBitSmarty->assign('preview',0);
 // If we are in preview mode then preview it!
 if(isset($_REQUEST["preview"])) {
-	$smarty->assign('preview',1);
+	$gBitSmarty->assign('preview',1);
 	$gBitUser->mInfo['title'] = $_REQUEST["title"];
 	if(isset($_REQUEST["description"])) {
 		$gBitUser->mInfo['description'] = $_REQUEST["description"];
@@ -56,18 +56,18 @@ if(isset($_REQUEST["preview"])) {
 	if ($wiki_spellcheck == 'y') {
 		if (isset($_REQUEST["spellcheck"]) && $_REQUEST["spellcheck"] == 'on') {
 			$parsed = $gBitSystem->spellcheckreplace($edit_data, $parsed, $gBitLanguage->mLanguage, 'editwiki');
-			$smarty->assign('spellcheck', 'y');
+			$gBitSmarty->assign('spellcheck', 'y');
 		} else {
-			$smarty->assign('spellcheck', 'n');
+			$gBitSmarty->assign('spellcheck', 'n');
 		}
 	}
-	$smarty->assign( 'parsed', $parsed );
+	$gBitSmarty->assign( 'parsed', $parsed );
 }
 
-$smarty->assign_by_ref( 'pageInfo', $gBitUser->mInfo );
-$smarty->assign_by_ref( 'gContent', $gBitUser );
+$gBitSmarty->assign_by_ref( 'pageInfo', $gBitUser->mInfo );
+$gBitSmarty->assign_by_ref( 'gContent', $gBitUser );
 
-$smarty->assign('show_page_bar', 'y');
+$gBitSmarty->assign('show_page_bar', 'y');
 $gBitSystem->mPrefs['feature_wiki_description'] = 'n';
 
 $gBitSystem->display( 'bitpackage:wiki/edit_page.tpl');

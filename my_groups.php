@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.1.1.1.2.1 2005/06/27 17:47:57 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.1.1.1.2.1 2005/06/27 17:47:57 lsces Exp $
+ * $Id: my_groups.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
  * @package users
  * @subpackage functions
  */
@@ -42,7 +42,7 @@ if( !empty( $_REQUEST['group_id'] ) ) {
 	$groupList = $gBitUser->getAllGroups( $listHash );
 }
 
-$smarty->assign( 'package',isset( $_REQUEST['package'] ) ? $_REQUEST['package'] : 'all' );
+$gBitSmarty->assign( 'package',isset( $_REQUEST['package'] ) ? $_REQUEST['package'] : 'all' );
 
 if( !empty( $_REQUEST["cancel"] ) ) {
 	header( 'Location: '.USERS_PKG_URL.'my_groups.php' );
@@ -105,7 +105,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 	$searchParams = array('find' => $_REQUEST['find']);
 	$gBitUser->getList($searchParams);	
 	$foundUsers = $searchParams['data'];
-	$smarty->assign_by_ref('foundUsers', $foundUsers);
+	$gBitSmarty->assign_by_ref('foundUsers', $foundUsers);
 } elseif (!empty($_REQUEST['assignuser'])) {
 	if( !empty($_REQUEST['group_id'] ) ) {
 		// need some security here people!
@@ -137,11 +137,11 @@ if( empty( $groupList ) ) {
 			}
 			$levels = $gBitUser->get_permission_levels();
 			sort($levels);
-			$smarty->assign('levels', $levels);
+			$gBitSmarty->assign('levels', $levels);
 			$groupUsers = $gBitUser->get_group_users( $_REQUEST['group_id'] );
-			$smarty->assign_by_ref('groupUsers', $groupUsers);
-			$smarty->assign_by_ref('groupInfo', $groupInfo);
-			$smarty->assign_by_ref( 'allPerms', $allPerms );
+			$gBitSmarty->assign_by_ref('groupUsers', $groupUsers);
+			$gBitSmarty->assign_by_ref('groupInfo', $groupInfo);
+			$gBitSmarty->assign_by_ref( 'allPerms', $allPerms );
 			$gBitSystem->setBrowserTitle( 'Admininster Group: '.$groupInfo['group_name'].' '.(isset( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : '') );
 			$mid = 'bitpackage:users/my_group_edit.tpl';
 		} else {
@@ -150,11 +150,11 @@ if( empty( $groupList ) ) {
 			$mid = 'bitpackage:users/my_groups_list.tpl';
 		}
 	}
-	$smarty->assign('groups', $groupList);
+	$gBitSmarty->assign('groups', $groupList);
 }
-$smarty->assign('successMsg',$successMsg);
-$smarty->assign('errorMsg',$errorMsg);
-$smarty->assign( (!empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'edit').'TabSelect', 'tdefault' );
+$gBitSmarty->assign('successMsg',$successMsg);
+$gBitSmarty->assign('errorMsg',$errorMsg);
+$gBitSmarty->assign( (!empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'edit').'TabSelect', 'tdefault' );
 
 
 // Display the template for group administration

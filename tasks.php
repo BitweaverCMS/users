@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/tasks.php,v 1.1.1.1.2.1 2005/06/27 17:47:58 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/tasks.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: tasks.php,v 1.1.1.1.2.1 2005/06/27 17:47:58 lsces Exp $
+ * $Id: tasks.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
  * @package users
  * @subpackage functions
  */
@@ -19,17 +19,17 @@
 require_once( '../bit_setup_inc.php' );
 include_once( USERS_PKG_PATH.'task_lib.php' );
 if ($feature_tasks != 'y') {
-	$smarty->assign('msg', tra("This feature is disabled").": feature_tasks");
+	$gBitSmarty->assign('msg', tra("This feature is disabled").": feature_tasks");
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
 if (!$gBitUser->mUserId) {
-	$smarty->assign('msg', tra("Must be logged to use this feature"));
+	$gBitSmarty->assign('msg', tra("Must be logged to use this feature"));
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
 if (!$gBitUser->hasPermission( 'bit_p_tasks' )) {
-	$smarty->assign('msg', tra("Permission denied to use this feature"));
+	$gBitSmarty->assign('msg', tra("Permission denied to use this feature"));
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
@@ -39,8 +39,8 @@ for ($i = 0; $i < 101; $i += 10) {
 	$comp_array[] = $i;
 	$comp_array_p[] = $i . '%';
 }
-$smarty->assign('comp_array', $comp_array);
-$smarty->assign('comp_array_p', $comp_array_p);
+$gBitSmarty->assign('comp_array', $comp_array);
+$gBitSmarty->assign('comp_array_p', $comp_array_p);
 if (!isset($_REQUEST["task_id"]))
 	$_REQUEST["task_id"] = 0;
 if (isset($_REQUEST["complete"]) && isset($_REQUEST["task"])) {
@@ -74,8 +74,8 @@ if (isset($_REQUEST["tasks_use_dates"])) {
 }
 $tasks_maxRecords = $gBitUser->getPreference('tasks_maxRecords', $maxRecords);
 $maxRecords = $tasks_maxRecords;
-$smarty->assign('tasks_use_dates', $tasks_use_dates);
-$smarty->assign('tasks_maxRecords', $tasks_maxRecords);
+$gBitSmarty->assign('tasks_use_dates', $tasks_use_dates);
+$gBitSmarty->assign('tasks_maxRecords', $tasks_maxRecords);
 if ($_REQUEST["task_id"]) {
 	$info = $tasklib->get_task($gBitUser->mUserId, $_REQUEST["task_id"]);
 } else {
@@ -111,11 +111,11 @@ if (isset($_REQUEST['save'])) {
 	$info['date'] = date("U");
 	$_REQUEST["task_id"] = 0;
 }
-$smarty->assign('task_id', $_REQUEST["task_id"]);
-$smarty->assign('info', $info);
-$smarty->assign('Date_Month', date("m", $info['date']));
-$smarty->assign('Date_Day', date("d", $info['date']));
-$smarty->assign('Date_Year', date("Y", $info['date']));
+$gBitSmarty->assign('task_id', $_REQUEST["task_id"]);
+$gBitSmarty->assign('info', $info);
+$gBitSmarty->assign('Date_Month', date("m", $info['date']));
+$gBitSmarty->assign('Date_Day', date("d", $info['date']));
+$gBitSmarty->assign('Date_Year', date("Y", $info['date']));
 if ( empty( $_REQUEST["sort_mode"] ) ) {
 	$sort_mode = 'priority_desc';
 } else {
@@ -130,14 +130,14 @@ if (isset($_REQUEST['page'])) {
 	$page = &$_REQUEST['page'];
 	$offset = ($page - 1) * $maxRecords;
 }
-$smarty->assign_by_ref('offset', $offset);
+$gBitSmarty->assign_by_ref('offset', $offset);
 if (isset($_REQUEST["find"])) {
 	$find = $_REQUEST["find"];
 } else {
 	$find = '';
 }
-$smarty->assign('find', $find);
-$smarty->assign_by_ref('sort_mode', $sort_mode);
+$gBitSmarty->assign('find', $find);
+$gBitSmarty->assign_by_ref('sort_mode', $sort_mode);
 if (isset($_SESSION['thedate'])) {
 	$pdate = $_SESSION['thedate'];
 } else {
@@ -146,30 +146,30 @@ if (isset($_SESSION['thedate'])) {
 $channels = $tasklib->list_tasks($gBitUser->mUserId, $offset, $maxRecords, $sort_mode, $find, $tasks_use_dates, $pdate);
 if($maxRecords == 0) {
 	$cant_pages = 0;
-	$smarty->assign('actual_page', '1');
+	$gBitSmarty->assign('actual_page', '1');
 } else {
 	$cant_pages = ceil($channels["cant"] / $maxRecords);
-	$smarty->assign('actual_page', 1 + ($offset / $maxRecords));
+	$gBitSmarty->assign('actual_page', 1 + ($offset / $maxRecords));
 }
-$smarty->assign_by_ref('cant_pages', $cant_pages);
+$gBitSmarty->assign_by_ref('cant_pages', $cant_pages);
 if ($channels["cant"] > ($offset + $maxRecords)) {
-	$smarty->assign('next_offset', $offset + $maxRecords);
+	$gBitSmarty->assign('next_offset', $offset + $maxRecords);
 } else {
-	$smarty->assign('next_offset', -1);
+	$gBitSmarty->assign('next_offset', -1);
 }
 // If offset is > 0 then prev_offset
 if ($offset > 0) {
-	$smarty->assign('prev_offset', $offset - $maxRecords);
+	$gBitSmarty->assign('prev_offset', $offset - $maxRecords);
 } else {
-	$smarty->assign('prev_offset', -1);
+	$gBitSmarty->assign('prev_offset', -1);
 }
-$smarty->assign_by_ref('channels', $channels["data"]);
-$smarty->assign('tasks_use_dates', $tasks_use_dates);
+$gBitSmarty->assign_by_ref('channels', $channels["data"]);
+$gBitSmarty->assign('tasks_use_dates', $tasks_use_dates);
 $percs = array();
 for ($i = 0; $i <= 100; $i += 10) {
 	$percs[] = $i;
 }
-$smarty->assign_by_ref('percs', $percs);
+$gBitSmarty->assign_by_ref('percs', $percs);
 
 $gBitSystem->display( 'bitpackage:users/user_tasks.tpl');
 ?>

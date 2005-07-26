@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/custom_home.php,v 1.1.1.1.2.1 2005/06/27 17:47:48 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/custom_home.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: custom_home.php,v 1.1.1.1.2.1 2005/06/27 17:47:48 lsces Exp $
+ * $Id: custom_home.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
  * @package users
  * @subpackage functions
  */
@@ -34,7 +34,7 @@ $b = $nntp->getBody(1);
 print_r($b);
 */
 if ($feature_custom_home != 'y') {
-	$smarty->assign('msg', tra("This feature has been disabled"));
+	$gBitSmarty->assign('msg', tra("This feature has been disabled"));
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
