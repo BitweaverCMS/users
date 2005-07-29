@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.26 2005/07/26 15:50:30 drewslater Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.27 2005/07/29 17:50:55 drewslater Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.26 2005/07/26 15:50:30 drewslater Exp $
+ * $Id: BitUser.php,v 1.2.2.27 2005/07/29 17:50:55 drewslater Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.26 $
+ * @version  $Revision: 1.2.2.27 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -360,7 +360,7 @@ class BitUser extends LibertyAttachable {
 				$this->mErrors['password'] = tra( 'Password must contain both letters and numbers' );
 			} else {
 				// Generate a unique hash
-				$pParamHash['user_store']['hash'] = md5( strtolower( $pParamHash['login'] ).$pParamHash['password'].$pParamHash['email'] );
+				$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pParamHash['password'].$pParamHash['email'] );
 				$now = date("U");
 				if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getPreference('pass_due') ) {
 					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getPreference('pass_due') );
