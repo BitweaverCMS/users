@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.2 2005/06/28 07:46:22 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: change_password.php,v 1.2 2005/06/28 07:46:22 spiderr Exp $
+ * $Id: change_password.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -21,8 +21,8 @@ if (!isset($_REQUEST['login']))
 	$_REQUEST['login'] = '';
 if (!isset($_REQUEST["oldpass"]))
 	$_REQUEST["oldpass"] = '';
-$smarty->assign('login', $_REQUEST['login']);
-$smarty->assign('oldpass', $_REQUEST["oldpass"]);
+$gBitSmarty->assign('login', $_REQUEST['login']);
+$gBitSmarty->assign('oldpass', $_REQUEST["oldpass"]);
 if (isset($_REQUEST["change"])) {
 
 	if ($_REQUEST["pass"] != $_REQUEST["pass2"]) {
@@ -41,7 +41,7 @@ if (isset($_REQUEST["change"])) {
 	// Check this code
 	if ($pass_chr_num == 'y') {
 		if (!preg_match_all("/[0-9]+/", $_REQUEST["pass"], $foo) || !preg_match_all("/[A-Za-z]+/", $_REQUEST["pass"], $foo)) {
-			$smarty->assign('msg', tra("Password must contain both letters and numbers"));
+			$gBitSmarty->assign('msg', tra("Password must contain both letters and numbers"));
 			$gBitSystem->display( 'error.tpl' );
 			die;
 		}

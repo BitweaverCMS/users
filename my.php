@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.6 2005/07/25 20:02:54 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.7 2005/08/01 18:42:02 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my.php,v 1.6 2005/07/25 20:02:54 squareing Exp $
+ * $Id: my.php,v 1.7 2005/08/01 18:42:02 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -27,18 +27,18 @@ if( !$gBitUser->isRegistered() ) {
 // custom userfields
 if( !empty( $gBitSystem->mPrefs['custom_user_fields'] ) ) {
 	$customFields= explode( ',', $gBitSystem->mPrefs['custom_user_fields']  );
-	$smarty->assign('customFields', $customFields);
+	$gBitSmarty->assign('customFields', $customFields);
 }
 
 // some content specific offsets and pagination settings
 if( !empty( $_REQUEST['sort_mode'] ) ) {
 	$content_sort_mode = $_REQUEST['sort_mode'];
-	$smarty->assign( 'sort_mode', $content_sort_mode );
+	$gBitSmarty->assign( 'sort_mode', $content_sort_mode );
 }
 
 $max_content = $gBitSystem->mPrefs['maxRecords'];
 $offset_content = !empty( $_REQUEST['offset'] ) ? $_REQUEST['offset'] : 0;
-$smarty->assign( 'curPage', $page = !empty( $_REQUEST['page'] ) ? $_REQUEST['page'] : 1 );
+$gBitSmarty->assign( 'curPage', $page = !empty( $_REQUEST['page'] ) ? $_REQUEST['page'] : 1 );
 $offset_content = ( $page - 1 ) * $gBitSystem->mPrefs['maxRecords'];
 
 // set the user_id to only display content viewing user
@@ -49,13 +49,13 @@ include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
 
 // calculate page number
 $numPages = ceil( $contentList['cant'] / $gBitSystem->mPrefs['maxRecords'] );
-$smarty->assign( 'numPages', $numPages );
+$gBitSmarty->assign( 'numPages', $numPages );
 
-//$smarty->assign_by_ref('offset', $offset);
-$smarty->assign( 'contentSelect', $contentSelect );
-$smarty->assign( 'contentTypes', $contentTypes );
-$smarty->assign( 'contentList', $contentList['data'] );
-$smarty->assign( 'contentCount', $contentList['cant'] );
+//$gBitSmarty->assign_by_ref('offset', $offset);
+$gBitSmarty->assign( 'contentSelect', $contentSelect );
+$gBitSmarty->assign( 'contentTypes', $contentTypes );
+$gBitSmarty->assign( 'contentList', $contentList['data'] );
+$gBitSmarty->assign( 'contentCount', $contentList['cant'] );
 // end of content listing
 
 $gBitSystem->display( 'bitpackage:users/my_bitweaver.tpl', 'My '.$gBitSystem->getPreference( 'siteTitle' ) );
@@ -67,7 +67,7 @@ $gBitSystem->display( 'bitpackage:users/my_bitweaver.tpl', 'My '.$gBitSystem->ge
 /*
 // User preferences screen
 if ($feature_userPreferences != 'y') {
-	$smarty->assign('msg', tra("This feature is disabled").": feature_userPreferences");
+	$gBitSmarty->assign('msg', tra("This feature is disabled").": feature_userPreferences");
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
@@ -77,8 +77,8 @@ if ($feature_userPreferences != 'y') {
 $foo = parse_url($_SERVER["REQUEST_URI"]);
 $foo1 = str_replace( USERS_PKG_URL."user_preferences", WIKI_PKG_URL."edit", $foo["path"]);
 $foo2 = str_replace( USERS_PKG_URL."user_preferences", WIKI_PKG_URL."index", $foo["path"]);
-$smarty->assign('url_edit', httpPrefix(). $foo1);
-$smarty->assign('url_visit', httpPrefix(). $foo2);
+$gBitSmarty->assign('url_edit', httpPrefix(). $foo1);
+$gBitSmarty->assign('url_visit', httpPrefix(). $foo2);
 */
 /* none of this is being used in the my_bitweaver.tpl file - xing
 if (isset($_REQUEST['messprefs'])) {
@@ -102,15 +102,15 @@ if (isset($_REQUEST['tasksprefs'])) {
 }
 $tasks_maxRecords = $gBitUser->getPreference('tasks_maxRecords');
 $tasks_use_dates = $gBitUser->getPreference('tasks_use_dates');
-$smarty->assign('tasks_maxRecords', $tasks_maxRecords);
-$smarty->assign('tasks_use_dates', $tasks_use_dates);
+$gBitSmarty->assign('tasks_maxRecords', $tasks_maxRecords);
+$gBitSmarty->assign('tasks_use_dates', $tasks_use_dates);
 $mess_maxRecords = $gBitUser->getPreference('mess_maxRecords', 20);
-$smarty->assign('mess_maxRecords', $mess_maxRecords);
+$gBitSmarty->assign('mess_maxRecords', $mess_maxRecords);
 $allowMsgs = $gBitUser->getPreference('allowMsgs', 'y');
-$smarty->assign('allowMsgs', $allowMsgs);
+$gBitSmarty->assign('allowMsgs', $allowMsgs);
 $minPrio = $gBitUser->getPreference('minPrio', 6);
-$smarty->assign('minPrio', $minPrio);
-$smarty->assign_by_ref('userinfo', $gBitUser->mInfo);
+$gBitSmarty->assign('minPrio', $minPrio);
+$gBitSmarty->assign_by_ref('userinfo', $gBitUser->mInfo);
 $styles = array();
 $h = opendir( THEMES_PKG_PATH.'styles/' );
 while ($file = readdir($h)) {
@@ -119,7 +119,7 @@ while ($file = readdir($h)) {
 	}
 }
 closedir ($h);
-$smarty->assign_by_ref('styles', $styles);
+$gBitSmarty->assign_by_ref('styles', $styles);
 $languages = array();
 $h = opendir( LANGUAGES_PKG_PATH.'lang/' );
 while ($file = readdir($h)) {
@@ -128,7 +128,7 @@ while ($file = readdir($h)) {
 	}
 }
 closedir ($h);
-$smarty->assign_by_ref('languages', $languages);
+$gBitSmarty->assign_by_ref('languages', $languages);
 // Get user pages
 if (isset($_REQUEST["by"]) && ($_REQUEST["by"]=='creator')) $who = 'creator';
 */
@@ -136,26 +136,26 @@ if (isset($_REQUEST["by"]) && ($_REQUEST["by"]=='creator')) $who = 'creator';
 if( $gBitSystem->isPackageActive( 'blogs' ) ) {
 	require_once( BLOGS_PKG_PATH.'BitBlog.php' );
 	$user_blogs = $gBlog->list_user_blogs($userwatch,false);
-	$smarty->assign_by_ref('user_blogs', $user_blogs);
+	$gBitSmarty->assign_by_ref('user_blogs', $user_blogs);
 }
 if( $gBitSystem->isPackageActive( 'wiki') && !empty( $userwatchId ) ) {
 	require_once( WIKI_PKG_PATH.'BitPage.php' );
 	global $wikilib;
 	$user_pages = $wikilib->get_user_pages( $userwatchId, -1 );
-	$smarty->assign_by_ref('user_pages', $user_pages);
+	$gBitSmarty->assign_by_ref('user_pages', $user_pages);
 }
 if( $gBitSystem->isPackageActive( 'imagegals' ) ) {
 	$user_galleries = $gBitSystem->get_user_galleries($userwatch, -1);
-	$smarty->assign_by_ref('user_galleries', $user_galleries);
+	$gBitSmarty->assign_by_ref('user_galleries', $user_galleries);
 }
 if( $gBitSystem->isPackageActive( 'trackers' ) ) {
 	$user_items = $gBitSystem->get_user_items($userwatch);
-	$smarty->assign_by_ref('user_items', $user_items);
+	$gBitSmarty->assign_by_ref('user_items', $user_items);
 }
 if( $gBitSystem->isPackageActive( 'messu' ) ) {
 	require_once( MESSU_PKG_PATH.'messu_lib.php' );
 	$msgs = $messulib->list_user_messages($user, 0, -1, 'date_desc', '', 'is_read', 'n');
-	$smarty->assign('msgs', $msgs['data']);
+	$gBitSmarty->assign('msgs', $msgs['data']);
 }
 */
 // Get flags here
@@ -169,18 +169,18 @@ while ($file = readdir($h)) {
 	}
 }
 closedir ($h);
-$smarty->assign('flags', $flags);
+$gBitSmarty->assign('flags', $flags);
 // Get preferences
 $gBitLanguage->mLanguage = $gBitUser->getPreference('bitlanguage', $gBitLanguage->mLanguage);
 $real_name = $gBitUser->getPreference('real_name', '');
 $country = $gBitUser->getPreference('country', 'Other');
-$smarty->assign('country', $country);
+$gBitSmarty->assign('country', $country);
 $anonpref = $gBitUser->getPreference('userbreadCrumb', 4);
 $userbreadCrumb = $gBitUser->getPreference('userbreadCrumb', $anonpref);
-$smarty->assign_by_ref('real_name', $real_name);
-$smarty->assign_by_ref('userbreadCrumb', $userbreadCrumb);
+$gBitSmarty->assign_by_ref('real_name', $real_name);
+$gBitSmarty->assign_by_ref('userbreadCrumb', $userbreadCrumb);
 $homePage = $gBitUser->getPreference('homePage', '');
-$smarty->assign_by_ref('homePage', $homePage);
+$gBitSmarty->assign_by_ref('homePage', $homePage);
 //Get tasks
 if (isset($_SESSION['thedate'])) {
 	$pdate = $_SESSION['thedate'];
@@ -189,20 +189,20 @@ if (isset($_SESSION['thedate'])) {
 }
 $tasks_use_dates = $gBitUser->getPreference('tasks_use_dates');
 $tasks = $tasklib->list_tasks($gBitUser->mUserId, 0, -1, 'priority_desc', '', $tasks_use_dates, $pdate);
-$smarty->assign('tasks', $tasks['data']);
+$gBitSmarty->assign('tasks', $tasks['data']);
 $user_information = $gBitUser->getPreference('user_information', 'public');
-$smarty->assign('user_information', $user_information);
+$gBitSmarty->assign('user_information', $user_information);
 $timezone_options = $gBitSystem->get_timezone_list(true);
-$smarty->assign_by_ref('timezone_options', $timezone_options);
+$gBitSmarty->assign_by_ref('timezone_options', $timezone_options);
 $server_time = new Date();
 $display_timezone = $gBitUser->getPreference('display_timezone', $server_time->tz->getID());
-$smarty->assign_by_ref('display_timezone', $display_timezone);
-$smarty->assign('mybitweaver_pages', $gBitUser->getPreference('mybitweaver_pages'), 'y');
-$smarty->assign('mybitweaver_blogs', $gBitUser->getPreference('mybitweaver_blogs'), 'y');
-$smarty->assign('mybitweaver_gals', $gBitUser->getPreference('mybitweaver_gals'), 'y');
-$smarty->assign('mybitweaver_items', $gBitUser->getPreference('mybitweaver_items'), 'y');
-$smarty->assign('mybitweaver_msgs', $gBitUser->getPreference('mybitweaver_msgs'), 'y');
-$smarty->assign('mybitweaver_tasks', $gBitUser->getPreference('mybitweaver_tasks'), 'y');
+$gBitSmarty->assign_by_ref('display_timezone', $display_timezone);
+$gBitSmarty->assign('mybitweaver_pages', $gBitUser->getPreference('mybitweaver_pages'), 'y');
+$gBitSmarty->assign('mybitweaver_blogs', $gBitUser->getPreference('mybitweaver_blogs'), 'y');
+$gBitSmarty->assign('mybitweaver_gals', $gBitUser->getPreference('mybitweaver_gals'), 'y');
+$gBitSmarty->assign('mybitweaver_items', $gBitUser->getPreference('mybitweaver_items'), 'y');
+$gBitSmarty->assign('mybitweaver_msgs', $gBitUser->getPreference('mybitweaver_msgs'), 'y');
+$gBitSmarty->assign('mybitweaver_tasks', $gBitUser->getPreference('mybitweaver_tasks'), 'y');
 $section = 'mybitweaver';
 include_once ( KERNEL_PKG_PATH.'menu_register_inc.php' );
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/watches.php,v 1.2 2005/06/28 07:46:23 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/watches.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: watches.php,v 1.2 2005/06/28 07:46:23 spiderr Exp $
+ * $Id: watches.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -19,7 +19,7 @@
 include_once( '../bit_setup_inc.php' );
 $user = $gBitUser->mUserId;
 if (!$user) {
-	$smarty->assign('msg', tra("You must log in to use this feature"));
+	$gBitSmarty->assign('msg', tra("You must log in to use this feature"));
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
@@ -38,13 +38,13 @@ if (isset($_REQUEST['watch'])) {
 }
 // Get watch events and put them in watch_events
 $events = $gBitUser->get_watches_events();
-$smarty->assign('events', $events);
+$gBitSmarty->assign('events', $events);
 // if not set event type then all
 if (!isset($_REQUEST['event']))
 	$_REQUEST['event'] = '';
 // get all the information for the event
 $watches = $gBitUser->getWatches( $_REQUEST['event'] );
-$smarty->assign('watches', $watches);
+$gBitSmarty->assign('watches', $watches);
 
 $gBitSystem->display( 'bitpackage:users/user_watches.tpl');
 ?>

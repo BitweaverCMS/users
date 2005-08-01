@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.1 2005/06/19 05:12:24 bitweaver Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.2 2005/08/01 18:42:03 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -29,7 +29,7 @@ if( !empty( $_REQUEST['group_id'] ) ) {
 	$groupList = $gBitUser->getAllGroups( $listHash );
 }
 
-$smarty->assign( 'package',isset( $_REQUEST['package'] ) ? $_REQUEST['package'] : 'all' );
+$gBitSmarty->assign( 'package',isset( $_REQUEST['package'] ) ? $_REQUEST['package'] : 'all' );
 
 if( !empty( $_REQUEST["cancel"] ) ) {
 	header( 'Location: '.USERS_PKG_URL.'admin/edit_group.php' );
@@ -51,9 +51,9 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 
 } elseif( isset($_REQUEST["members"] ) ) {
 	$groupInfo = $gBitUser->getGroupInfo( $_REQUEST["members"] );
-	$smarty->assign_by_ref( 'groupInfo', $groupInfo );
+	$gBitSmarty->assign_by_ref( 'groupInfo', $groupInfo );
 	$groupMembers = $gBitUser->get_group_users( $_REQUEST["members"] );
-	$smarty->assign_by_ref( 'groupMembers', $groupMembers );
+	$gBitSmarty->assign_by_ref( 'groupMembers', $groupMembers );
 	$mid = "bitpackage:users/group_list_members.tpl";
 		$gBitSystem->setBrowserTitle( tra( 'Group Members' ).': '.$groupInfo['group_name'] );
 } elseif( isset($_REQUEST["save"] ) ) {
@@ -88,17 +88,19 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 } elseif (isset($_REQUEST['updateperms'])) {
 
 	$updatePerms = $gBitUser->getgroupPermissions( $_REQUEST['group_id'] );
-	foreach (array_keys($_REQUEST['level'])as $per) {
-		if( $allPerms[$per]['level'] != $_REQUEST['level'][$per] ) {
-			// we changed level. perm[] checkbox is not taken into account
-			$gBitUser->change_permission_level($per, $_REQUEST['level'][$per]);
-		}
-		if( isset($_REQUEST['perm'][$per]) && !isset($updatePerms[$per]) ) {
-			// we have an unselected perm that is now selected
-			$gBitUser->assignPermissionToGroup($per, $_REQUEST['group_id']);
-		} elseif( empty($_REQUEST['perm'][$per]) && isset($updatePerms[$per]) ) {
-			// we have a selected perm that is now UNselected
-			$gBitUser->remove_permission_from_group($per, $_REQUEST['group_id']);
+	if (!empty($_REQUEST['level'])) {
+		foreach (array_keys($_REQUEST['level'])as $per) {
+			if( $allPerms[$per]['level'] != $_REQUEST['level'][$per] ) {
+				// we changed level. perm[] checkbox is not taken into account
+				$gBitUser->change_permission_level($per, $_REQUEST['level'][$per]);
+			}
+			if( isset($_REQUEST['perm'][$per]) && !isset($updatePerms[$per]) ) {
+				// we have an unselected perm that is now selected
+				$gBitUser->assignPermissionToGroup($per, $_REQUEST['group_id']);
+			} elseif( empty($_REQUEST['perm'][$per]) && isset($updatePerms[$per]) ) {
+				// we have a selected perm that is now UNselected
+				$gBitUser->remove_permission_from_group($per, $_REQUEST['group_id']);
+			}
 		}
 	}
 	// let's reload just to be safe.
@@ -130,7 +132,7 @@ $cList['NULL'] = '';
 foreach( $contentList['data'] as $cItem ) {
 	$cList[$contentTypes[$cItem['content_type_guid']]][$cItem['content_id']] = $cItem['title'].' [id: '.$cItem['content_id'].']';
 }
-$smarty->assign( 'contentList', $cList );
+$gBitSmarty->assign( 'contentList', $cList );
 
 $inc = array();
 if( empty( $mid ) ) {
@@ -143,10 +145,10 @@ if( empty( $mid ) ) {
 		}
 		$levels = $gBitUser->get_permission_levels();
 		sort($levels);
-		$smarty->assign('levels', $levels);
-		$smarty->assign_by_ref('defaultGroupId', $gBitSystem->getPreference( 'default_home_group' ) );
-		$smarty->assign_by_ref('groupInfo', $groupInfo);
-		$smarty->assign_by_ref( 'allPerms', $allPerms );
+		$gBitSmarty->assign('levels', $levels);
+		$gBitSmarty->assign_by_ref('defaultGroupId', $gBitSystem->getPreference( 'default_home_group' ) );
+		$gBitSmarty->assign_by_ref('groupInfo', $groupInfo);
+		$gBitSmarty->assign_by_ref( 'allPerms', $allPerms );
 
 		$gBitSystem->setBrowserTitle( tra( 'Admininster Group' ).': '.$groupInfo['group_name'].' '.(isset( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : '') );
 		$mid = 'bitpackage:users/admin_group_edit.tpl';
@@ -156,11 +158,11 @@ if( empty( $mid ) ) {
 		$mid = 'bitpackage:users/admin_groups_list.tpl';
 	}
 }
-$smarty->assign('groups', $groupList['data']);
-$smarty->assign('successMsg',$successMsg);
-$smarty->assign('errorMsg',$errorMsg);
+$gBitSmarty->assign('groups', $groupList['data']);
+$gBitSmarty->assign('successMsg',$successMsg);
+$gBitSmarty->assign('errorMsg',$errorMsg);
 // probably obsolete now
-//$smarty->assign( (!empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'edit').'TabSelect', 'tdefault' );
+//$gBitSmarty->assign( (!empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'edit').'TabSelect', 'tdefault' );
 
 
 // Display the template for group administration

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.3 2005/07/17 17:36:44 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.4 2005/08/01 18:42:02 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.3 2005/07/17 17:36:44 squareing Exp $
+ * $Id: register.php,v 1.4 2005/08/01 18:42:02 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -44,26 +44,26 @@ if( isset( $_REQUEST["register"] ) ) {
 		$newUser = new BitPermUser();
 		if( $newUser->register( $reg ) ) {
 			if( $gBitSystem->isFeatureActive( 'validateUsers' ) ) {
-				$smarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
-				$smarty->assign('showmsg','y');
+				$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
+				$gBitSmarty->assign('showmsg','y');
 			} else {
 				$url = $newUser->login( $reg['login'], $reg['password'], FALSE, FALSE );
 				header( 'Location: '.$url );
 				exit;
 			}
 		} else {
-			$smarty->assign_by_ref( 'errors', $newUser->mErrors );
+			$gBitSmarty->assign_by_ref( 'errors', $newUser->mErrors );
 		}
 	} else {
-		$smarty->assign_by_ref( 'errors', $errors );
+		$gBitSmarty->assign_by_ref( 'errors', $errors );
 	}
-	$smarty->assign_by_ref( 'reg', $reg );
+	$gBitSmarty->assign_by_ref( 'reg', $reg );
 
 } else {
 	if( !empty( $gBitSystem->mPrefs['custom_user_fields'] ) ) {
 		$fields= explode( ',', $gBitSystem->mPrefs['custom_user_fields']  );
 		trim_array( $fields );
-		$smarty->assign('customFields', $fields);
+		$gBitSmarty->assign('customFields', $fields);
 	}
 }
 

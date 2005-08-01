@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_images.php,v 1.2 2005/06/28 07:46:23 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_images.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_images.php,v 1.2 2005/06/28 07:46:23 spiderr Exp $
+ * $Id: my_images.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -22,12 +22,12 @@ require_once( '../bit_setup_inc.php' );
 
 // User preferences screen
 if ($feature_userPreferences != 'y') {
-	$smarty->assign('msg', tra("This feature is disabled").": feature_userPreferences");
+	$gBitSmarty->assign('msg', tra("This feature is disabled").": feature_userPreferences");
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
 if (!$gBitUser->isValid()) {
-	$smarty->assign('msg', tra("You are not logged in"));
+	$gBitSmarty->assign('msg', tra("You are not logged in"));
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
@@ -39,14 +39,14 @@ if (!isset($_REQUEST["showall"])) {
 include_once(USERS_PKG_PATH.'lookup_user_inc.php');
 
 if ($gQueryUser->mUserId != $gBitUser->mUserId && !$gBitUser->object_has_permission($gBitUser->mUserId, $gQueryUser->mInfo['content_id'], 'bituser', 'bit_p_admin_user')) {
-	$smarty->assign('msg', tra('You do not have permission to edit this user\'s images'));
+	$gBitSmarty->assign('msg', tra('You do not have permission to edit this user\'s images'));
 	$gBitSystem->display('error.tpl');
 	die;
 }
 
-$smarty->assign('showall', $_REQUEST["showall"]);
+$gBitSmarty->assign('showall', $_REQUEST["showall"]);
 $userwatch = $gQueryUser->mUsername;
-$smarty->assign('userwatch', $userwatch);
+$gBitSmarty->assign('userwatch', $userwatch);
 $_REQUEST["user_id"]=$gQueryUser->mUserId;
 
 // Upload avatar is processed here
@@ -72,7 +72,7 @@ if (isset($_REQUEST["uselib"])) {
 
 // For some reason, we have to reassign here to make our changes to gBitUser->mInfo present in smarty.
 // dunno why, but this fixes the bug. XOXO spiderr
-$smarty->assign_by_ref('gQueryUser', $gQueryUser);
+$gBitSmarty->assign_by_ref('gQueryUser', $gQueryUser);
 
 $gBitSystem->display( 'bitpackage:users/my_images.tpl');
 

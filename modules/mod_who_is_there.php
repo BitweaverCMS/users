@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/modules/mod_who_is_there.php,v 1.2 2005/06/28 07:46:24 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/modules/mod_who_is_there.php,v 1.3 2005/08/01 18:42:03 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,13 +8,13 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: mod_who_is_there.php,v 1.2 2005/06/28 07:46:24 spiderr Exp $
+ * $Id: mod_who_is_there.php,v 1.3 2005/08/01 18:42:03 squareing Exp $
  * @package users
  * @subpackage modules
  */
 global $userlib;
 $logged_users = $gBitUser->count_sessions();
 $online_users = $gBitUser->get_online_users();
-$smarty->assign('online_users', $online_users);
-$smarty->assign('logged_users', $logged_users);
+$gBitSmarty->assign('online_users', $online_users);
+$gBitSmarty->assign('logged_users', $logged_users);
 ?>

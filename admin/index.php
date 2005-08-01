@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.3 2005/07/17 17:36:44 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.4 2005/08/01 18:42:03 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -7,14 +7,14 @@
 require_once( '../../bit_setup_inc.php' );
 
 function batchImportUsers() {
-	global $smarty;
+	global $gBitSmarty;
 	$fname = $_FILES['csvlist']['tmp_name'];
 	$fhandle = fopen($fname, "r");
 	//Get the field names
 	$fields = fgetcsv($fhandle, 1000);
 	//any?
 	if (!$fields[0]) {
-		$smarty->assign('msg', tra("The file is not a CSV file or has not a correct syntax"));
+		$gBitSmarty->assign('msg', tra("The file is not a CSV file or has not a correct syntax"));
 		$gBitSystem->display( 'error.tpl' );
 		die;
 	}
@@ -30,7 +30,7 @@ function batchImportUsers() {
 	fclose ($fhandle);
 	// any?
 	if (!is_array($userrecs)) {
-		$smarty->assign('msg', tra("No records were found. Check the file please!"));
+		$gBitSmarty->assign('msg', tra("No records were found. Check the file please!"));
 		$gBitSystem->display( 'error.tpl' );
 		die;
 	}
@@ -57,11 +57,11 @@ function batchImportUsers() {
 		$i++;
 	}
 
-	$smarty->assign('added', $added);
+	$gBitSmarty->assign('added', $added);
 	if (@is_array($discarded)) {
-		$smarty->assign('discarded', count($discarded));
+		$gBitSmarty->assign('discarded', count($discarded));
 	}
-	@$smarty->assign_by_ref('discardlist', $discarded);
+	@$gBitSmarty->assign_by_ref('discardlist', $discarded);
 }
 
 $gBitSystem->verifyPermission( 'bit_p_admin_users' );
@@ -76,10 +76,10 @@ if (isset($_REQUEST["newuser"])) {
 	// jht 2005-06-22_23:51:58 flag this user store as coming from admin page -- a kludge
 	$_REQUEST['admin_add'] = 1;
 	if( $newUser->store( $_REQUEST ) ) {
-		$smarty->assign( 'addSuccess', "User Added Successfully" );
+		$gBitSmarty->assign( 'addSuccess', "User Added Successfully" );
 	} else {
-		$smarty->assign_by_ref( 'newUser', $_REQUEST );
-		$smarty->assign( 'errors', $newUser->mErrors );
+		$gBitSmarty->assign_by_ref( 'newUser', $_REQUEST );
+		$gBitSmarty->assign( 'errors', $newUser->mErrors );
 	}
 	// if no user data entered, check if it's a batch upload
 } elseif( isset( $_REQUEST["batchimport"]) ) {
@@ -137,28 +137,28 @@ if (isset($_REQUEST["action"])) {
 
 // get default group and pass it to tpl
 foreach( $gBitUser->getDefaultGroup() as $defaultGroupId => $defaultGroupName ) {
-	$smarty->assign('defaultGroupId', $defaultGroupId );
-	$smarty->assign('defaultGroupName', $defaultGroupName );
+	$gBitSmarty->assign('defaultGroupId', $defaultGroupId );
+	$gBitSmarty->assign('defaultGroupName', $defaultGroupName );
 }
 
 $_REQUEST['max_records'] = 20;
 $gBitUser->getList( $_REQUEST );
-$smarty->assign_by_ref('users', $_REQUEST["data"]);
-$smarty->assign_by_ref('usercount', $_REQUEST["cant"]);
+$gBitSmarty->assign_by_ref('users', $_REQUEST["data"]);
+$gBitSmarty->assign_by_ref('usercount', $_REQUEST["cant"]);
 if (isset($_REQUEST["numrows"]))
 	$_REQUEST["control"]["numrows"] = $_REQUEST["numrows"];
 else
 	$_REQUEST["control"]["numrows"] = 10;
 $_REQUEST["control"]["URL"] = USERS_PKG_URL."admin/index.php";
-$smarty->assign_by_ref('control', $_REQUEST["control"]);
+$gBitSmarty->assign_by_ref('control', $_REQUEST["control"]);
 
 
 // Get groups (list of groups)
 $grouplist = $gBitUser->getGroups('', '', 'group_name_asc');
-$smarty->assign( 'grouplist', $grouplist );
-$smarty->assign( 'feedback', $feedback );
+$gBitSmarty->assign( 'grouplist', $grouplist );
+$gBitSmarty->assign( 'feedback', $feedback );
 
-$smarty->assign( (!empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'userlist').'TabSelect', 'tdefault' );
+$gBitSmarty->assign( (!empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'userlist').'TabSelect', 'tdefault' );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:users/users_admin.tpl', (!empty( $title ) ? $title : 'Edit Users' ) );

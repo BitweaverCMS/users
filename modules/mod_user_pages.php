@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.php,v 1.2 2005/06/28 07:46:24 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.php,v 1.3 2005/08/01 18:42:03 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,10 +8,10 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: mod_user_pages.php,v 1.2 2005/06/28 07:46:24 spiderr Exp $
+ * $Id: mod_user_pages.php,v 1.3 2005/08/01 18:42:03 squareing Exp $
  * @package users
  * @subpackage modules
  */
 $ranking = $gBitSystem->get_user_pages($user, $module_rows);
-$smarty->assign('modUserPages', $ranking);
+$gBitSmarty->assign('modUserPages', $ranking);
 ?>

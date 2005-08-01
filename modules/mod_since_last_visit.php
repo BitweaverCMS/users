@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/modules/mod_since_last_visit.php,v 1.3 2005/07/17 17:36:44 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/modules/mod_since_last_visit.php,v 1.4 2005/08/01 18:42:03 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,13 +8,13 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: mod_since_last_visit.php,v 1.3 2005/07/17 17:36:44 squareing Exp $
+ * $Id: mod_since_last_visit.php,v 1.4 2005/08/01 18:42:03 squareing Exp $
  * @package users
  * @subpackage modules
  */
 if( $gBitSystem->isPackageActive( 'bitforums' ) ) {
 	$nvi_info = $gBitSystem->get_news_from_last_visit($user);
-	$smarty->assign('nvi_info', $nvi_info);
+	$gBitSmarty->assign('nvi_info', $nvi_info);
 }
 
 ?>

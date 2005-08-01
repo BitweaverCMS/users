@@ -48,7 +48,7 @@ if( $gBitSystem->isPackageActive( 'notepad' ) ) {
 	);
 }
 
-$smarty->assign( 'formFeatures', $formFeatures );
+$gBitSmarty->assign( 'formFeatures', $formFeatures );
 
 if( isset( $_REQUEST['fTiki'] ) ) {
 	foreach ( array_keys( $formFeatures ) as $feature) {
@@ -70,7 +70,7 @@ if( isset( $_REQUEST['fTiki'] ) ) {
 if (isset($_REQUEST["newadminpass"]) ) {
 	
     if ($_REQUEST["adminpass"] <> $_REQUEST["again"]) {
-        $smarty->assign("msg", tra("The passwords don't match"));
+        $gBitSmarty->assign("msg", tra("The passwords don't match"));
 
         $gBitSystem->display( 'error.tpl' );
         die;
@@ -82,13 +82,13 @@ if (isset($_REQUEST["newadminpass"]) ) {
 
         $text .= " " . $min_pass_length . " ";
         $text .= tra("characters long");
-        $smarty->assign("msg", $text);
+        $gBitSmarty->assign("msg", $text);
         $gBitSystem->display( 'error.tpl' );
         die;
     }
 
     $gBitUser->change_user_password("admin", $_REQUEST["adminpass"]);
-    $smarty->assign('pagetop_msg', tra("Your admin password has been changed"));
+    $gBitSmarty->assign('pagetop_msg', tra("Your admin password has been changed"));
 }
 
 
