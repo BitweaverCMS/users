@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.4 2005/08/01 18:42:01 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.5 2005/08/01 20:56:45 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.4 2005/08/01 18:42:01 squareing Exp $
+ * $Id: BitPermUser.php,v 1.5 2005/08/01 20:56:45 squareing Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.4 $
+ * @version  $Revision: 1.5 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -397,8 +397,8 @@ class BitPermUser extends BitUser {
 		$currentUserGroups = $this->getGroups($pUserId);
 		foreach( $addGroups AS $groupId ) {
 			$isInGroup = FALSE;
-			foreach ($currentUserGroups as $curGroup) {
-				if ($curGroup['group_id'] == $groupId) {
+			foreach ($currentUserGroups as $curGroupId => $curGroupInfo) {
+				if ($curGroupId == $groupId) {
 					$isInGroup = TRUE;
 				}
 			}
