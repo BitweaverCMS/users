@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/task_lib.php,v 1.1.1.1.2.1 2005/06/27 17:48:00 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/task_lib.php,v 1.1.1.1.2.2 2005/08/01 22:52:51 wolff_borg Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: task_lib.php,v 1.1.1.1.2.1 2005/06/27 17:48:00 lsces Exp $
+ * $Id: task_lib.php,v 1.1.1.1.2.2 2005/08/01 22:52:51 wolff_borg Exp $
  * @package users
  */
 
@@ -70,7 +70,7 @@ class TaskLib extends BitBase {
 		$now = date("U");
 		$bindvars=array($pUserId);
 		if ($use_date == 'y') {
-			$prio = " and date<=? ";
+			$prio = " and `date`<=? ";
 			$bindvars2=$pdate;
 		} 
 		else {
