@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.1.1.1.2.1 2005/07/26 15:50:31 drewslater Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.1.1.1.2.2 2005/08/01 08:50:35 lsces Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -88,17 +88,19 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 } elseif (isset($_REQUEST['updateperms'])) {
 
 	$updatePerms = $gBitUser->getgroupPermissions( $_REQUEST['group_id'] );
-	foreach (array_keys($_REQUEST['level'])as $per) {
-		if( $allPerms[$per]['level'] != $_REQUEST['level'][$per] ) {
-			// we changed level. perm[] checkbox is not taken into account
-			$gBitUser->change_permission_level($per, $_REQUEST['level'][$per]);
-		}
-		if( isset($_REQUEST['perm'][$per]) && !isset($updatePerms[$per]) ) {
-			// we have an unselected perm that is now selected
-			$gBitUser->assignPermissionToGroup($per, $_REQUEST['group_id']);
-		} elseif( empty($_REQUEST['perm'][$per]) && isset($updatePerms[$per]) ) {
-			// we have a selected perm that is now UNselected
-			$gBitUser->remove_permission_from_group($per, $_REQUEST['group_id']);
+	if (!empty($_REQUEST['level'])) {
+		foreach (array_keys($_REQUEST['level'])as $per) {
+			if( $allPerms[$per]['level'] != $_REQUEST['level'][$per] ) {
+				// we changed level. perm[] checkbox is not taken into account
+				$gBitUser->change_permission_level($per, $_REQUEST['level'][$per]);
+			}
+			if( isset($_REQUEST['perm'][$per]) && !isset($updatePerms[$per]) ) {
+				// we have an unselected perm that is now selected
+				$gBitUser->assignPermissionToGroup($per, $_REQUEST['group_id']);
+			} elseif( empty($_REQUEST['perm'][$per]) && isset($updatePerms[$per]) ) {
+				// we have a selected perm that is now UNselected
+				$gBitUser->remove_permission_from_group($per, $_REQUEST['group_id']);
+			}
 		}
 	}
 	// let's reload just to be safe.
