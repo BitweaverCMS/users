@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.4 2005/07/14 08:13:44 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.5 2005/08/01 16:02:49 drewslater Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.1.1.1.2.4 2005/07/14 08:13:44 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.1.1.1.2.5 2005/08/01 16:02:49 drewslater Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.1.1.1.2.4 $
+ * @version  $Revision: 1.1.1.1.2.5 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -394,8 +394,15 @@ class BitPermUser extends BitUser {
 		} elseif( is_numeric($pGroupMixed) ) {
 			$addGroups = array( $pGroupMixed );
 		}
+		$currentUserGroups = $this->getGroups($pUserId);
 		foreach( $addGroups AS $groupId ) {
-			if ( !$this->isInGroup( $groupId ) ) {
+			$isInGroup = FALSE;
+			foreach ($currentUserGroups as $curGroup) {
+				if ($curGroup['group_id'] == $groupId) {
+					$isInGroup = TRUE;
+				}
+			}
+			if ( !$isInGroup ) {
 				$query = "insert into `".BIT_DB_PREFIX."users_groups_map`(`user_id`,`group_id`) values(?,?)";
 				$result = $this->query($query, array( $pUserId, $groupId ), -1, -1);
 			}
