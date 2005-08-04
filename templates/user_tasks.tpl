@@ -16,8 +16,6 @@
 			</ul>
 		</div>
 
-		<div class="clear"></div>
-
 		{form}
 			<table class="data">
 				<caption>{tr}Your Tasks{/tr}</caption>

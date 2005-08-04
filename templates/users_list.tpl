@@ -9,11 +9,9 @@
 	</ul>
 </div>
 
-<div class="clear"></div>
-
 {formfeedback hash=$feedback}
 
-<ul class="data">
+<ul class="clear data">
 	{section name=user loop=$users}
 		<li class="item {cycle values='even,odd'}">
 			{if $gBitUser->hasPermission( 'bit_p_admin_users' )}

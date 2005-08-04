@@ -15,11 +15,9 @@
 			</ul>
 		</div><!-- end .navbar -->
 
-		<div class="clear"></div>
-
 		{formfeedback success=$successMsg error=$errorMsg}
 
-		<ul class="data">
+		<ul class="clear data">
 			{foreach from=$groups key=groupId item=group}
 				<li class="item {cycle values='odd,even'}">
 					<div class="floaticon">
