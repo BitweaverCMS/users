@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.27 2005/07/29 17:50:55 drewslater Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.28 2005/08/04 19:26:50 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.27 2005/07/29 17:50:55 drewslater Exp $
+ * $Id: BitUser.php,v 1.2.2.28 2005/08/04 19:26:50 lsces Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.27 $
+ * @version  $Revision: 1.2.2.28 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -245,6 +245,7 @@ class BitUser extends LibertyAttachable {
 			array_push( $bindVars, $this->mUserId );
 			$userDelSql = ' OR `user_id`=?';
 		}
+		$this->mDb->StartTrans();
 		$hasSession = $this->getOne( "SELECT `timestamp` FROM `".BIT_DB_PREFIX."tiki_sessions` WHERE `session_id`=? ", array( $pSessionId ) );
 		if( $hasSession ) {
 			$ret = $this->query( "UPDATE `".BIT_DB_PREFIX."tiki_sessions` SET `timestamp`=? WHERE `session_id`=? $userDelSql", $bindVars );
@@ -256,6 +257,7 @@ class BitUser extends LibertyAttachable {
 		}
 		$query = "DELETE from `".BIT_DB_PREFIX."tiki_sessions` where `timestamp`<?";
 		$result = $this->query($query, array($oldy));
+		$this->mDb->CompleteTrans();
 
 		return true;
 	}
