@@ -1,4 +1,7 @@
 {strip}
+
+{minifind}
+
 <div class="navbar">
 	<ul>
 		<li>{biticon ipackage=liberty iname=sort iexplain="sort by"}</li>
@@ -48,7 +51,5 @@
 </p>
 
 {pagination_c numrows=$numrows}
-
-{minifind}
 
 {/strip}
