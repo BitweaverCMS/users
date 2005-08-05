@@ -6,12 +6,12 @@
 	<div class="body">
 		{formfeedback success=$successMsg error=$errorMsg}
 
-		<a href="{$gBitLoc.USERS_PKG_URL}my_groups.php?action=create">{tr}Add new group{/tr}</a>
+		<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?action=create">{tr}Add new group{/tr}</a>
 
 		<table class="data">
 			<tr>
 				<th>
-					<a href="{$gBitLoc.USERS_PKG_URL}my_groups.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'group_name_desc'}group_name_asc{else}group_name_desc{/if}">{tr}Name{/tr}</a>, &amp; 
+					<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'group_name_desc'}group_name_asc{else}group_name_desc{/if}">{tr}Name{/tr}</a>, &amp; 
 					{tr}Description{/tr}</a> 
 				</th>
 			{if $gBitUser->hasPermission( 'bit_p_user_group_members' )}
@@ -60,9 +60,9 @@
 					{/if}
 
 					<td class="actionicon">
-						<a href="{$gBitLoc.USERS_PKG_URL}my_groups.php?group_id={$groupId}">{biticon ipackage=liberty iname="edit" iexplain="edit"}</a>
+						<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?group_id={$groupId}">{biticon ipackage=liberty iname="edit" iexplain="edit"}</a>
 						{if $groupId ne -1}{* sorry for hardcoding, really need php define ANONYMOUS_GROUP_ID - spiderr *}
-							<a href="{$gBitLoc.USERS_PKG_URL}my_groups.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=delete&amp;group_id={$groupId}" 
+							<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=delete&amp;group_id={$groupId}" 
 							onclick="return confirmTheLink(this,'{tr}Are you sure you want to delete this group?{/tr}')">{biticon ipackage=liberty iname="delete" iexplain="remove"}</a>
 						{/if}
 					</td>

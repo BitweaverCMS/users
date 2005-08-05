@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.1 2005/06/19 05:12:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.1.1.1.2.1 2005/08/05 23:00:59 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
@@ -76,11 +76,11 @@
 
 					<div class="row">
 						{if $defaultGroupId eq ''}
-							{formfeedback error="No default group is currently set. Please set one in the Administration --&gt; Users --&gt; <a href=\"`$gBitLoc.USERS_PKG_URL`admin/edit_group.php\">Groups and Permissions</a> page"}
+							{formfeedback error="No default group is currently set. Please set one in the Administration --&gt; Users --&gt; <a href=\"`$smarty.const.USERS_PKG_URL`admin/edit_group.php\">Groups and Permissions</a> page"}
 						{/if}
 						{formlabel label="User will be added to the following group" for=""}
 						{forminput}
-							{$defaultGroupName} <a href="{$gBitLoc.USERS_PKG_URL}admin/edit_group.php?group_id={$defaultGroupId}">{biticon ipackage=liberty iname="edit" iexplain="change settings"}</a>
+							{$defaultGroupName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$defaultGroupId}">{biticon ipackage=liberty iname="edit" iexplain="change settings"}</a>
 							{formhelp note="This is the group that is selected as the default group. If you would like to change the default group, please click on the edit icon and set a different group as default group."}
 						{/forminput}
 					</div>

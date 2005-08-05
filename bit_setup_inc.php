@@ -28,7 +28,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 
 	$cookie_path = $gBitSystem->getPreference('cookie_path', BIT_ROOT_URL);
 	$cookie_path = ($cookie_path == '') ? $cookie_path : BIT_ROOT_URL;
-	$gBitLoc['cookie_path'] = $cookie_path;
+	$gBitSystem->storePreference( 'cookie_path', $cookie_path );
 
 	// set session lifetime
 	$session_lifetime = $gBitSystem->getPreference('session_lifetime', '0');

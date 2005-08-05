@@ -34,13 +34,13 @@
 
 <br />
 
-<form action="{$gBitLoc.USERS_PKG_URL}files.php" method="post">
+<form action="{$smarty.const.USERS_PKG_URL}files.php" method="post">
 <table class="panel">
 <tr>
 <th>&nbsp;</th>
-<th><a href="{$gBitLoc.USERS_PKG_URL}files.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'filename_desc'}filename_asc{else}filename_desc{/if}">{tr}name{/tr}</a></th>
-<th><a href="{$gBitLoc.USERS_PKG_URL}files.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'created_desc'}created_asc{else}created_desc{/if}">{tr}created{/tr}</a></th>
-<th><a href="{$gBitLoc.USERS_PKG_URL}files.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'filesize_desc'}filesize_asc{else}filesize_desc{/if}">{tr}size{/tr}</a></th>
+<th><a href="{$smarty.const.USERS_PKG_URL}files.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'filename_desc'}filename_asc{else}filename_desc{/if}">{tr}name{/tr}</a></th>
+<th><a href="{$smarty.const.USERS_PKG_URL}files.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'created_desc'}created_asc{else}created_desc{/if}">{tr}created{/tr}</a></th>
+<th><a href="{$smarty.const.USERS_PKG_URL}files.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'filesize_desc'}filesize_asc{else}filesize_desc{/if}">{tr}size{/tr}</a></th>
 </tr>
 {cycle values="even,odd" print=false}
 {section name=user loop=$channels}
@@ -48,7 +48,7 @@
 <td style="text-align:center;">
 <input type="checkbox" name="userfile[{$channels[user].file_id}]" />
 </td>
-<td>{$channels[user].filename|iconify}<a href="{$gBitLoc.USERS_PKG_URL}download_userfile.php?file_id={$channels[user].file_id}">{$channels[user].filename}</a></td>
+<td>{$channels[user].filename|iconify}<a href="{$smarty.const.USERS_PKG_URL}download_userfile.php?file_id={$channels[user].file_id}">{$channels[user].filename}</a></td>
 <td>{$channels[user].created|bit_short_datetime}</td>
 <td style="text-align:right;">{$channels[user].filesize|kbsize}</td>
 </tr>
@@ -67,17 +67,17 @@
 
 <div class="pagination">
 {if $prev_offset >= 0}
-[<a href="{$gBitLoc.USERS_PKG_URL}files.php?find={$find}&amp;offset={$prev_offset}&amp;sort_mode={$sort_mode}">{tr}prev{/tr}</a>]&nbsp;
+[<a href="{$smarty.const.USERS_PKG_URL}files.php?find={$find}&amp;offset={$prev_offset}&amp;sort_mode={$sort_mode}">{tr}prev{/tr}</a>]&nbsp;
 {/if}
 {tr}Page{/tr}: {$actual_page}/{$cant_pages}
 {if $next_offset >= 0}
-&nbsp;[<a href="{$gBitLoc.USERS_PKG_URL}files.php?find={$find}&amp;offset={$next_offset}&amp;sort_mode={$sort_mode}">{tr}next{/tr}</a>]
+&nbsp;[<a href="{$smarty.const.USERS_PKG_URL}files.php?find={$find}&amp;offset={$next_offset}&amp;sort_mode={$sort_mode}">{tr}next{/tr}</a>]
 {/if}
 {if $direct_pagination eq 'y'}
 <br />
 {section loop=$cant_pages name=foo}
 {assign var=selector_offset value=$smarty.section.foo.index|times:$maxRecords}
-<a href="{$gBitLoc.USERS_PKG_URL}files.php?find={$find}&amp;offset={$selector_offset}&amp;sort_mode={$sort_mode}">
+<a href="{$smarty.const.USERS_PKG_URL}files.php?find={$find}&amp;offset={$selector_offset}&amp;sort_mode={$sort_mode}">
 {$smarty.section.foo.index_next}</a>&nbsp;
 {/section}
 {/if}
@@ -86,7 +86,7 @@
 <div class="body">
 
 <h3>{tr}Upload file{/tr}</h3>
-<form enctype="multipart/form-data" action="{$gBitLoc.USERS_PKG_URL}files.php" method="post">
+<form enctype="multipart/form-data" action="{$smarty.const.USERS_PKG_URL}files.php" method="post">
 <table class="panel">
 <!--
 <tr>

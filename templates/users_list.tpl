@@ -19,20 +19,20 @@
 		<li class="item {cycle values='even,odd'}">
 			{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
 				<div class="floaticon">
-					<a href="{$gBitLoc.USERS_PKG_URL}admin/index.php?assume_user={$users[user].user_id}" title="{tr}Assume User Identity{/tr}">{biticon ipackage=users iname="assume_user" iexplain="assume user identity"}</a>
-					<a href="{$gBitLoc.USERS_PKG_URL}preferences.php?view_user={$users[user].user_id}" title="{tr}Edit User Information{/tr}">{biticon ipackage=liberty iname="edit" iexplain="Edit User Information"}</a>
+					<a href="{$smarty.const.USERS_PKG_URL}admin/index.php?assume_user={$users[user].user_id}" title="{tr}Assume User Identity{/tr}">{biticon ipackage=users iname="assume_user" iexplain="assume user identity"}</a>
+					<a href="{$smarty.const.USERS_PKG_URL}preferences.php?view_user={$users[user].user_id}" title="{tr}Edit User Information{/tr}">{biticon ipackage=liberty iname="edit" iexplain="Edit User Information"}</a>
 				{if $gBitUser->isAdmin()}
-					<a href="{$gBitLoc.USERS_PKG_URL}admin/assign_user.php?assign_user={$users[user].user_id}" title="{tr}Assign Group{/tr}">{biticon ipackage=liberty iname="permissions" iexplain="assign group"}</a>
+					<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?assign_user={$users[user].user_id}" title="{tr}Assign Group{/tr}">{biticon ipackage=liberty iname="permissions" iexplain="assign group"}</a>
 					{if $users[user].user_id != -1}{* TODO: evil hardcoding *}
-						<a href="{$gBitLoc.USERS_PKG_URL}admin/index.php?offset={$control.offset}&amp;numrows={$control.numrows}&amp;sort_mode={$control.sort_mode}&amp;action=delete&amp;user_id={$users[user].user_id}"  title="{tr}Remove{/tr}">{biticon ipackage=liberty iname="delete" iexplain="remove user"}</a>
+						<a href="{$smarty.const.USERS_PKG_URL}admin/index.php?offset={$control.offset}&amp;numrows={$control.numrows}&amp;sort_mode={$control.sort_mode}&amp;action=delete&amp;user_id={$users[user].user_id}"  title="{tr}Remove{/tr}">{biticon ipackage=liberty iname="delete" iexplain="remove user"}</a>
 					{/if}
 				{/if}
 				</div>
 			{/if}
 			{if $users[user].real_name}
-				<h2>{displayname hash=$users[user]} <small>({$users[user].login})</small></h2>
+				<h2>{displayname real_name=$users[user].real_name} <small>{$users[user].login}</small></h2>
 			{else}
-				<h2><a href="">{$users[user].login}</a></h2>{displayname login=$users[user].login}
+				<h2>{displayname login=$users[user].login}</h2>
 			{/if}
 			{if $users[user].thumbnail_url}
 				<img alt="{tr}user portrait{/tr}" title="{$users[user].login} {tr}user portrait{/tr}" src="{$users[user].thumbnail_url}" class="thumb" />
