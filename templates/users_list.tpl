@@ -27,9 +27,9 @@
 				</div>
 			{/if}
 			{if $users[user].real_name}
-				<h2><a href="{$gBitLoc.USERS_PKG_URL}index.php?home={$users[user].login}">{$users[user].real_name}</a> <small>({$users[user].login})</small></h2>
+				<h2>{displayname hash=$users[user]} <small>({$users[user].login})</small></h2>
 			{else}
-				<h2><a href="{$gBitLoc.USERS_PKG_URL}index.php?home={$users[user].login}">{$users[user].login}</a></h2>
+				<h2><a href="">{$users[user].login}</a></h2>{displayname login=$users[user].login}
 			{/if}
 			{if $users[user].thumbnail_url}
 				<img alt="{tr}user portrait{/tr}" title="{$users[user].login} {tr}user portrait{/tr}" src="{$users[user].thumbnail_url}" class="thumb" />

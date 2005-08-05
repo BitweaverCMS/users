@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.2.2.1 2005/06/28 20:51:12 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.2.2.2 2005/08/05 20:20:07 spiderr Exp $ *}
 {strip}
-{if $userData->mUserPrefs.user_information eq 'public' or $gBitUser.mUserId eq $userData.mUserId}
+{if $userData->mUserPrefs.user_information eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
 		{formlabel label="Login"}
 		{forminput}
