@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/versions.php,v 1.1.1.1.2.2 2005/07/26 15:50:31 drewslater Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/versions.php,v 1.1.1.1.2.3 2005/08/06 05:22:00 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,16 +8,18 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: versions.php,v 1.1.1.1.2.2 2005/07/26 15:50:31 drewslater Exp $
+ * $Id: versions.php,v 1.1.1.1.2.3 2005/08/06 05:22:00 lsces Exp $
  * @package users
  * @subpackage functions
+ *
+ * @todo This needs to be check as it was still linked to the defunct hist_lib 
  */
 
 /**
  * required setup
  */
 require_once( '../bit_setup_inc.php' );
-include_once( WIKI_PKG_PATH.'hist_lib.php');
+include_once( WIKI_PKG_PATH.'BitPage.php');
 if ($feature_wiki != 'y') {
 	$gBitSmarty->assign('msg', tra("This feature is disabled").": feature_wiki");
 	$gBitSystem->display( 'error.tpl' );
