@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.29 2005/08/05 16:15:46 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.30 2005/08/06 08:34:23 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.29 2005/08/05 16:15:46 lsces Exp $
+ * $Id: BitUser.php,v 1.2.2.30 2005/08/06 08:34:23 lsces Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.29 $
+ * @version  $Revision: 1.2.2.30 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -477,16 +477,9 @@ if ($gDebug) echo "Run : QUIT<br>";
 		$ret = FALSE;
 		if( $this->store( $pParamHash ) ) {
 			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
+			$notificationlib->post_new_user_event( $pParamHash['login'] );
 			$ret = TRUE;
-			$emails = $notificationlib->get_mail_events('user_registers','*');
-			foreach($emails as $email) {
-				$gBitSmarty->assign('mail_user',$pParamHash['login']);
-				$gBitSmarty->assign('mail_date',date("U"));
-				$gBitSmarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
-				$mail_data = $gBitSmarty->fetch('bitpackage:users/new_user_notification.tpl');
 
-				mail( $pParamHash['email'], tra('New user registration'),$mail_data,"From: ".$gBitSystem->getPreference('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
-			}
 			if( !empty( $_REQUEST['CUSTOM'] ) ) {
 				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
 					$this->storePreference( $field, $value );
