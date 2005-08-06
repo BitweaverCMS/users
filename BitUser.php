@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.30 2005/08/06 08:34:23 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.31 2005/08/06 18:31:28 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.30 2005/08/06 08:34:23 lsces Exp $
+ * $Id: BitUser.php,v 1.2.2.31 2005/08/06 18:31:28 lsces Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.30 $
+ * @version  $Revision: 1.2.2.31 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -236,7 +236,7 @@ class BitUser extends LibertyAttachable {
 
 
 	function updateSession( $pSessionId ) {
-		if ( empty($this->mDb->mDb) ) return true; 
+		if ( !$this->isDatabaseValid() ) return true; 
 		$now = date("U");
 		$oldy = $now - (5 * 60);
 		$bindVars = array( $now, $pSessionId );
@@ -246,7 +246,7 @@ class BitUser extends LibertyAttachable {
 			array_push( $bindVars, $this->mUserId );
 			$userDelSql = ' OR `user_id`=?';
 		}
-		$this->mDb->StartTrans();
+		$this->StartTrans();
 		$hasSession = $this->getOne( "SELECT `timestamp` FROM `".BIT_DB_PREFIX."tiki_sessions` WHERE `session_id`=? ", array( $pSessionId ) );
 		if( $hasSession ) {
 			$ret = $this->query( "UPDATE `".BIT_DB_PREFIX."tiki_sessions` SET `timestamp`=? WHERE `session_id`=? $userDelSql", $bindVars );
@@ -258,7 +258,7 @@ class BitUser extends LibertyAttachable {
 		}
 		$query = "DELETE from `".BIT_DB_PREFIX."tiki_sessions` where `timestamp`<?";
 		$result = $this->query($query, array($oldy));
-		$this->mDb->CompleteTrans();
+		$this->CompleteTrans();
 
 		return true;
 	}
@@ -518,7 +518,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 
 	function store( &$pParamHash ) {
 		if( $this->verify( $pParamHash ) ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			$pParamHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
 
 			if( !empty( $pParamHash['user_store'] ) && count( $pParamHash['user_store'] ) ) {
@@ -564,7 +564,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 				}
 			}
 
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 			$this->load( TRUE );
 		}
 		return( count( $this->mErrors ) == 0 );
@@ -575,7 +575,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 	// removes user and associated private data
 	function expunge( $pUserId ) {
 		global $gBitSystem;
-		$this->mDb->StartTrans();
+		$this->StartTrans();
 		if( $_REQUEST["user_id"] != ANONYMOUS_USER_ID ) {
 			$userTables = array(
 				'users_groups_map',
@@ -592,10 +592,10 @@ if ($gDebug) echo "Run : QUIT<br>";
 				$query = "delete from `".BIT_DB_PREFIX.$table."` where `user_id` = ?";
 				$result = $this->query($query, array( $pUserId ) );
 			}
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 			return TRUE;
 		} else {
-			$this->mDb->RollbackTrans();
+			$this->RollbackTrans();
 			$gBitSystem->fatalError( tra( 'The anonymous user cannot be deleted' ) );
 		}
 	}
@@ -972,7 +972,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	function confirmRegistration( $pUser, $pProvpass ) {
 		$query = "select `user_id`, `provpass`, `password`, `login`, `email` FROM `".BIT_DB_PREFIX."users_users`
 				  WHERE `login`=? AND `provpass`=?";
-		return( $this->mDb->GetRow($query, array( $pUser, $pProvpass ) ) );
+		return( $this->GetRow($query, array( $pUser, $pProvpass ) ) );
 	}
 
 
@@ -1023,7 +1023,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( !empty( $content_id ) ) {
 			$query = "SELECT  `user_id` FROM `".BIT_DB_PREFIX."users_users`
 					  WHERE `content_id` = ?";
-			$tmpUser = $this->mDb->GetRow( $query, array( $content_id ) );
+			$tmpUser = $this->GetRow( $query, array( $content_id ) );
 			if (!empty($tmpUser['user_id'])) {
 				$ret = $tmpUser['user_id'];
 			}
@@ -1248,7 +1248,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 	function purgeImage( $pType ) {
 		if( !empty( $this->mUserId ) && !empty( $this->mInfo[$pType.'_attachment_id'] ) ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `".$pType."_attachment_id` = NULL WHERE `user_id`=?";
 			$result = $this->query( $query, array( $this->mUserId ) );
 			if( file_exists( $this->mInfo[$pType.'_storage_path'] ) ) {
@@ -1257,7 +1257,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			unset( $this->mInfo[$pType.'_storage_path'] );
 			unset( $this->mInfo[$pType.'_attachment_id'] );
 			unset( $this->mInfo[$pType.'_url'] );
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 		}
 	}
 

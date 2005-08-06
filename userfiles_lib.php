@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/userfiles_lib.php,v 1.1.1.1.2.1 2005/06/27 17:47:57 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/userfiles_lib.php,v 1.1.1.1.2.2 2005/08/06 18:31:28 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: userfiles_lib.php,v 1.1.1.1.2.1 2005/06/27 17:47:57 lsces Exp $
+ * $Id: userfiles_lib.php,v 1.1.1.1.2.2 2005/08/06 18:31:28 lsces Exp $
  * @package users
  */
 
@@ -33,7 +33,7 @@ class UserFilesLib extends BitBase {
 		$now = date("U");
 		$query = "insert into `".BIT_DB_PREFIX."tiki_userfiles`(`user_id`,`name`,`filename`,`filetype`,`filesize`,`data`,`created`,`hits`,`path`)
     values(?,?,?,?,?,?,?,?,?)";
-		$this->query($query,array($user,$name,$filename,$filetype,(int) $filesize,$this->mDb->db_byte_encode($data),(int) $now,0,$path));
+		$this->query($query,array($user,$name,$filename,$filetype,(int) $filesize,$this->db_byte_encode($data),(int) $now,0,$path));
 	}
 	function list_userfiles($user, $offset, $maxRecords, $sort_mode, $find) {
 		if ($find) {
@@ -61,7 +61,7 @@ class UserFilesLib extends BitBase {
 		$query = "select * from `".BIT_DB_PREFIX."tiki_userfiles` where `user_id`=? and `file_id`=?";
 		$result = $this->query($query,array($user,(int) $file_id));
 		$res = $result->fetchRow();
-		$res['data'] = $this->mDb->db_byte_decode( $res['data'] );
+		$res['data'] = $this->db_byte_decode( $res['data'] );
 		return $res;
 	}
 	function remove_userfile($user, $file_id) {
