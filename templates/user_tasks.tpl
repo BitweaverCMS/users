@@ -16,6 +16,8 @@
 			</ul>
 		</div>
 
+		{minifind}
+
 		{form}
 			<table class="data">
 				<caption>{tr}Your Tasks{/tr}</caption>
@@ -61,8 +63,6 @@
 		{/form}
 
 		{pagination}
-
-		{minifind}
 
 		<a name="tasks"></a>
 		{form legend="Add or Edit a Task"}
