@@ -1,9 +1,9 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.2 2005/07/17 17:36:44 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.3 2005/08/07 17:46:47 squareing Exp $ *}
 {strip}
 {bitmodule title="$moduleTitle" name="login_box"}
 	{if $gBitUser->IsRegistered()}
 		{tr}Logged in as <strong>{displayname}{/tr}</strong><br />
-		<a href="{$gBitLoc.USERS_PKG_URL}logout.php">{tr}Logout{/tr}</a>
+		<a href="{$smarty.const.USERS_PKG_URL}logout.php">{tr}Logout{/tr}</a>
 	{else}
 		{form ipackage=users ifile='validate.php'}
 			<div class="row">
@@ -41,11 +41,11 @@
 
 			<div class="row">
 				{if $allowRegister eq 'y'}
-					<br /><a href="{$gBitLoc.USERS_PKG_URL}register.php">{tr}Register{/tr}</a>
+					<br /><a href="{$smarty.const.USERS_PKG_URL}register.php">{tr}Register{/tr}</a>
 				{/if}
 
 				{if $forgotPass eq 'y'}
-					<br /><a href="{$gBitLoc.USERS_PKG_URL}remind_password.php">{tr}I forgot my password{/tr}</a>
+					<br /><a href="{$smarty.const.USERS_PKG_URL}remind_password.php">{tr}I forgot my password{/tr}</a>
 				{/if}
 			</div>
 		{/form}

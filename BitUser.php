@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.8 2005/08/01 18:42:01 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.9 2005/08/07 17:46:46 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.8 2005/08/01 18:42:01 squareing Exp $
+ * $Id: BitUser.php,v 1.9 2005/08/07 17:46:46 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.8 $
+ * @version  $Revision: 1.9 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -128,7 +128,7 @@ class BitUser extends LibertyAttachable {
 						$fullJoin
 					  $whereSql";
 
-			if( ($result = $this->query( $query, $bindVars )) && $result->numRows() ) {
+			if( ($result = $this->mDb->query( $query, $bindVars )) && $result->numRows() ) {
 				$this->mInfo = $result->fields;
 				$this->mInfo['valid'] = !empty( $result->fields['uu_user_id'] );
 				$this->mInfo['user_id'] = $result->fields['uu_user_id'];
@@ -147,7 +147,7 @@ class BitUser extends LibertyAttachable {
 				unset( $this->mInfo['hash'] );
 				if( $pFull ) {
 					$query = "SELECT `pref_name`, `value` FROM `".BIT_DB_PREFIX."tiki_user_preferences` WHERE `user_id`=?";
-					$this->mUserPrefs = $this->getAssoc( $query, array( $this->mUserId ) );
+					$this->mUserPrefs = $this->mDb->getAssoc( $query, array( $this->mUserId ) );
 					if( isset( $this->mUserPrefs['country'] ) ) {
 						$this->mUserPrefs['flag'] = $this->mUserPrefs['country'];
 						$this->mUserPrefs['country'] = str_replace( '_', ' ', $this->mUserPrefs['country']);
@@ -176,10 +176,10 @@ class BitUser extends LibertyAttachable {
 			$this->mUserPrefs[$pPrefName] = $pPrefValue;
 			$query = "delete from `".BIT_DB_PREFIX."tiki_user_preferences` where `user_id`=? and `pref_name`=?";
 			$bindvars=array( $this->mUserId, $pPrefName );
-			$result = $this->query($query, $bindvars);
+			$result = $this->mDb->query($query, $bindvars);
 			$query = "insert into `".BIT_DB_PREFIX."tiki_user_preferences`(`user_id`,`pref_name`,`value`) values(?, ?, ?)";
 			$bindvars[]=$pPrefValue;
-			$result = $this->query($query, $bindvars);
+			$result = $this->mDb->query($query, $bindvars);
 			$ret = TRUE;
 		}
 		return $ret;
@@ -197,7 +197,7 @@ class BitUser extends LibertyAttachable {
 			// Get a user preference for an arbitrary user
 			$sql = "SELECT `value` FROM `".BIT_DB_PREFIX."tiki_user_preferences` WHERE `pref_name` = ? and `user_id` = ?";
 
-			$rs = $this->query($sql, array($pPrefName, $pUserId));
+			$rs = $this->mDb->query($sql, array($pPrefName, $pUserId));
 			$ret = (!empty($rs->fields['value'])) ? $rs->fields['value'] : $pPrefDefault;
 		} else {
 			if( isset( $this->mUserPrefs ) && isset( $this->mUserPrefs[$pPrefName] ) ) {
@@ -236,6 +236,7 @@ class BitUser extends LibertyAttachable {
 
 
 	function updateSession( $pSessionId ) {
+		if ( !$this->isDatabaseValid() ) return true; 
 		$now = date("U");
 		$oldy = $now - (5 * 60);
 		$bindVars = array( $now, $pSessionId );
@@ -245,24 +246,26 @@ class BitUser extends LibertyAttachable {
 			array_push( $bindVars, $this->mUserId );
 			$userDelSql = ' OR `user_id`=?';
 		}
-		$hasSession = $this->getOne( "SELECT `timestamp` FROM `".BIT_DB_PREFIX."tiki_sessions` WHERE `session_id`=? ", array( $pSessionId ) );
+		$this->mDb->StartTrans();
+		$hasSession = $this->mDb->getOne( "SELECT `timestamp` FROM `".BIT_DB_PREFIX."tiki_sessions` WHERE `session_id`=? ", array( $pSessionId ) );
 		if( $hasSession ) {
-			$ret = $this->query( "UPDATE `".BIT_DB_PREFIX."tiki_sessions` SET `timestamp`=? WHERE `session_id`=? $userDelSql", $bindVars );
+			$ret = $this->mDb->query( "UPDATE `".BIT_DB_PREFIX."tiki_sessions` SET `timestamp`=? WHERE `session_id`=? $userDelSql", $bindVars );
 		} else {
 			if( $this->isRegistered() ) {
 				$query = "insert into `".BIT_DB_PREFIX."tiki_sessions`(`timestamp`,`session_id`,`user_id`) values(?,?,?)";
-				$result = $this->query($query, $bindVars);
+				$result = $this->mDb->query($query, $bindVars);
 			}
 		}
 		$query = "DELETE from `".BIT_DB_PREFIX."tiki_sessions` where `timestamp`<?";
-		$result = $this->query($query, array($oldy));
+		$result = $this->mDb->query($query, array($oldy));
+		$this->mDb->CompleteTrans();
 
 		return true;
 	}
 
 	function count_sessions() {
 		$query = "select count(*) from `".BIT_DB_PREFIX."tiki_sessions`";
-		$cant = $this->getOne($query,array());
+		$cant = $this->mDb->getOne($query,array());
 		return $cant;
 	}
 
@@ -474,16 +477,9 @@ if ($gDebug) echo "Run : QUIT<br>";
 		$ret = FALSE;
 		if( $this->store( $pParamHash ) ) {
 			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
+			$notificationlib->post_new_user_event( $pParamHash['login'] );
 			$ret = TRUE;
-			$emails = $notificationlib->get_mail_events('user_registers','*');
-			foreach($emails as $email) {
-				$gBitSmarty->assign('mail_user',$pParamHash['login']);
-				$gBitSmarty->assign('mail_date',date("U"));
-				$gBitSmarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
-				$mail_data = $gBitSmarty->fetch('bitpackage:users/new_user_notification.tpl');
 
-				mail( $pParamHash['email'], tra('New user registration'),$mail_data,"From: ".$gBitSystem->getPreference('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
-			}
 			if( !empty( $_REQUEST['CUSTOM'] ) ) {
 				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
 					$this->storePreference( $field, $value );
@@ -528,13 +524,13 @@ if ($gDebug) echo "Run : QUIT<br>";
 			if( !empty( $pParamHash['user_store'] ) && count( $pParamHash['user_store'] ) ) {
 				if( $this->isValid() ) {
 					$userId = array ( "name" => "user_id", "value" => $this->mUserId );
-					$result = $this->associateUpdate( BIT_DB_PREFIX.'users_users', $pParamHash['user_store'], $userId );
+					$result = $this->mDb->associateUpdate( BIT_DB_PREFIX.'users_users', $pParamHash['user_store'], $userId );
 				} else {
 					if( empty( $pParamHash['user_store']['user_id'] ) ) {
-						$pParamHash['user_store']['user_id'] = $this->GenID( 'users_users_user_id_seq' );
+						$pParamHash['user_store']['user_id'] = $this->mDb->GenID( 'users_users_user_id_seq' );
 					}
 					$this->mUserId = $pParamHash['user_store']['user_id'];
-					$result = $this->associateInsert( BIT_DB_PREFIX.'users_users', $pParamHash['user_store'] );
+					$result = $this->mDb->associateInsert( BIT_DB_PREFIX.'users_users', $pParamHash['user_store'] );
 				}
 			}
 			// Prevent liberty from assuming ANONYMOUS_USER_ID while storing
@@ -543,7 +539,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 			if( LibertyContent::store( $pParamHash ) ) {
 				if( empty( $this->mInfo['content_id'] ) || ($pParamHash['content_id'] != $this->mInfo['content_id']) ) {
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `content_id`=? WHERE `user_id`=?";
-					$result = $this->query( $query, array( $pParamHash['content_id'], $this->mUserId ) );
+					$result = $this->mDb->query( $query, array( $pParamHash['content_id'], $this->mUserId ) );
 					$this->mInfo['content_id'] = $pParamHash['content_id'];
 				}
 			}
@@ -594,7 +590,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 			);
 			foreach( $userTables as $table ) {
 				$query = "delete from `".BIT_DB_PREFIX.$table."` where `user_id` = ?";
-				$result = $this->query($query, array( $pUserId ) );
+				$result = $this->mDb->query($query, array( $pUserId ) );
 			}
 			$this->mDb->CompleteTrans();
 			return TRUE;
@@ -866,8 +862,8 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$loginVal = strtoupper( $pLogin ); // case insensitive login
 			$loginCol = ' UPPER(`'.(strpos( $pLogin, '@' ) ? 'email' : 'login').'`)';
 			// first verify that the user exists
-			$query = "select `email`, `login`, `user_id`, `password` from `".BIT_DB_PREFIX."users_users` where " . $this->convert_binary(). " $loginCol = ?";
-			$result = $this->query( $query, array( $loginVal ) );
+			$query = "select `email`, `login`, `user_id`, `password` from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " $loginCol = ?";
+			$result = $this->mDb->query( $query, array( $loginVal ) );
 			if( !$result->numRows() ) {
 				$this->mErrors['login'] = 'User not found';
 			} else {
@@ -880,11 +876,11 @@ echo "userAuthPresent: $userAuthPresent<br>";
 				// next verify the password with 2 hashes methods, the old one (pass)) and the new one (login.pass;email)
 				// TODO - this needs cleaning up - wolff_borg
 				if( !$gBitSystem->isFeatureActive( 'feature_challenge' ) || empty($response) ) {
-					$query = "select `user_id` from `".BIT_DB_PREFIX."users_users` where " . $this->convert_binary(). " $loginCol = ? and (`hash`=? or `hash`=?)";
-					$result = $this->query( $query, array( $loginVal, $hash, $hash2 ) );
+					$query = "select `user_id` from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " $loginCol = ? and (`hash`=? or `hash`=?)";
+					$result = $this->mDb->query( $query, array( $loginVal, $hash, $hash2 ) );
 					if ($result->numRows()) {
 						$query = "update `".BIT_DB_PREFIX."users_users` set `last_login`=`current_login`, `current_login`=? where `user_id`=?";
-						$result = $this->query($query, array( (int)date("U"), $userId ));
+						$result = $this->mDb->query($query, array( (int)date("U"), $userId ));
 						$ret = $userId;
 					} else {
 						$this->mErrors['login'] = 'Password incorrect';
@@ -892,7 +888,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 				} else {
 					// Use challenge-reponse method
 					// Compare pass against md5(user,challenge,hash)
-					$hash = $this->getOne("select `hash`  from `".BIT_DB_PREFIX."users_users` where " . $this->convert_binary(). " $loginCol = ?", array( $pLogin ) );
+					$hash = $this->mDb->getOne("select `hash`  from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " $loginCol = ?", array( $pLogin ) );
 					if (!isset($_SESSION["challenge"])) {
 						$this->mErrors['login'] = 'Invalid challenge';
 					}
@@ -916,7 +912,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( is_numeric( $pUserId ) ) {
 			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `last_login`=`current_login`, `current_login`=?
 					  WHERE `user_id`=?";
-			$result = $this->query( $query, array( (int)date("U"), $pUserId ) );
+			$result = $this->mDb->query( $query, array( (int)date("U"), $pUserId ) );
 			$ret = TRUE;
 		}
 		return $ret;
@@ -941,7 +937,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$options["adminpass"] = $gBitSystem->getPreference("auth_ldap_adminpass", "");
 		// set additional attributes here
 		$userattr = array();
-		$userattr["email"] = $this->getOne("select `email` from `".BIT_DB_PREFIX."users_users`
+		$userattr["email"] = $this->mDb->getOne("select `email` from `".BIT_DB_PREFIX."users_users`
 				where `login`=?", array($user));
 		// set the Auth options
 		$a = new Auth("LDAP", $options);
@@ -964,8 +960,8 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$mid = '';
 			$bindvars=array();
 		}
-		$query = "select `login` from `".BIT_DB_PREFIX."users_users` $mid order by ".$this->convert_sortmode($sort_mode);
-		$result = $this->query($query,$bindvars,$maxRecords,$offset);
+		$query = "select `login` from `".BIT_DB_PREFIX."users_users` $mid order by ".$this->mDb->convert_sortmode($sort_mode);
+		$result = $this->mDb->query($query,$bindvars,$maxRecords,$offset);
 		$ret = array();
 		while ($res = $result->fetchRow()) {
 			$ret[] = $res["login"];
@@ -976,17 +972,17 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	function confirmRegistration( $pUser, $pProvpass ) {
 		$query = "select `user_id`, `provpass`, `password`, `login`, `email` FROM `".BIT_DB_PREFIX."users_users`
 				  WHERE `login`=? AND `provpass`=?";
-		return( $this->mDb->GetRow($query, array( $pUser, $pProvpass ) ) );
+		return( $this->GetRow($query, array( $pUser, $pProvpass ) ) );
 	}
 
 
 
 	function change_user_email( $pUserId, $pUsername, $pEmail, $pPass ) {
 		$hash = md5( strtolower($pUsername) . $pPass . $pEmail );
-		$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `email`=?, `hash`=? WHERE " . $this->convert_binary(). " `user_id`=?";
-		$result = $this->query( $query, array( $pEmail, $hash, $pUserId ) );
-		$query = "UPDATE `".BIT_DB_PREFIX."tiki_user_watches` SET `email`=? WHERE " . $this->convert_binary(). " `user_id`=?";
-		$result = $this->query( $query, array( $pEmail, $pUserId ) );
+		$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `email`=?, `hash`=? WHERE " . $this->mDb->convert_binary(). " `user_id`=?";
+		$result = $this->mDb->query( $query, array( $pEmail, $hash, $pUserId ) );
+		$query = "UPDATE `".BIT_DB_PREFIX."tiki_user_watches` SET `email`=? WHERE " . $this->mDb->convert_binary(). " `user_id`=?";
+		$result = $this->mDb->query( $query, array( $pEmail, $pUserId ) );
 		return TRUE;
 	}
 
@@ -1027,7 +1023,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( !empty( $content_id ) ) {
 			$query = "SELECT  `user_id` FROM `".BIT_DB_PREFIX."users_users`
 					  WHERE `content_id` = ?";
-			$tmpUser = $this->mDb->GetRow( $query, array( $content_id ) );
+			$tmpUser = $this->GetRow( $query, array( $content_id ) );
 			if (!empty($tmpUser['user_id'])) {
 				$ret = $tmpUser['user_id'];
 			}
@@ -1042,7 +1038,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		} else {
 			$query = "select * from `".BIT_DB_PREFIX."users_users` where `login`=?";
 		}
-		$result = $this->query($query,array($iCaseSensitive ? $user : strtolower($user)));
+		$result = $this->mDb->query($query,array($iCaseSensitive ? $user : strtolower($user)));
 		$res = $result->fetchRow();
 		$groups = $this->getGroups( $res['user_id'] );
 		$res["groups"] = $groups;
@@ -1050,25 +1046,25 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	}
 	function get_user_info_from_email($email) {
 		$query = "select * from `".BIT_DB_PREFIX."users_users` where `email`=?";
-		$result = $this->query($query,array($email));
+		$result = $this->mDb->query($query,array($email));
 		$res = $result->fetchRow();
 		return $res;
 	}
 	function get_user_password($user) {
-		$query = "select `password`  from `".BIT_DB_PREFIX."users_users` where " . $this->convert_binary(). " `login`=?";
-		$pass = $this->getOne($query, array($user));
+		$query = "select `password`  from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " `login`=?";
+		$pass = $this->mDb->getOne($query, array($user));
 		return $pass;
 	}
 	function get_user_hash($user) {
 		$query = "select `hash`  from `".BIT_DB_PREFIX."users_users` where " .
-		$this->convert_binary(). " `login` = ?";
-		$pass = $this->getOne($query, array($user));
+		$this->mDb->convert_binary(). " `login` = ?";
+		$pass = $this->mDb->getOne($query, array($user));
 		return $pass;
 	}
 */
 	function getByHash( $hash ) {
 		$query = "select `user_id` from `".BIT_DB_PREFIX."users_users` where `hash`=?";
-		return $this->getOne( $query, array($hash) );
+		return $this->mDb->getOne( $query, array($hash) );
 	}
 
 	// NULL password due means *no* expiration
@@ -1079,7 +1075,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$query = "SELECT `user_id`, `pass_due`
 					  FROM `".BIT_DB_PREFIX."users_users`
 					  WHERE `pass_due` IS NOT NULL AND `user_id`=? ";
-			$due = $this->GetAssoc( $query, array( $this->mUserId ) );
+			$due = $this->mDb->getAssoc( $query, array( $this->mUserId ) );
 			if( !empty( $due['user_id'] ) ) {
 				$ret = $due['pass_due'] <= date("U");
 			}
@@ -1089,19 +1085,19 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	function renew_user_password($user) {
 		$pass = BitSystem::genPass();
 		$query = "select `email` from `".BIT_DB_PREFIX."users_users` where `login` = ?";
-		$email = $this->getOne($query, array($user));
+		$email = $this->mDb->getOne($query, array($user));
 		$hash = md5(strtolower($user) . $pass . $email);
 		// Note that tiki-generated passwords are due inmediatley
 		$now = date("U");
-		$query = "update `".BIT_DB_PREFIX."users_users` set `password` = ?, `hash` = ?, `pass_due` = ? where ".$this->convert_binary()." `login` = ?";
-		$result = $this->query($query, array($pass, $hash, $now, $user));
+		$query = "update `".BIT_DB_PREFIX."users_users` set `password` = ?, `hash` = ?, `pass_due` = ? where ".$this->mDb->convert_binary()." `login` = ?";
+		$result = $this->mDb->query($query, array($pass, $hash, $now, $user));
 		return $pass;
 	}
 
 	function change_user_password( $user, $pass ) {
 		global $gBitSystem;
 		$query = "select `email` from `".BIT_DB_PREFIX."users_users` where `login` = ?";
-		$email = $this->getOne($query, array($user));
+		$email = $this->mDb->getOne($query, array($user));
 		$email=trim($email);
 		$hash = md5(strtolower($user) . $pass . $email);
 		$now = date("U");
@@ -1109,13 +1105,13 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( !$gBitSystem->isFeatureActive( 'feature_clear_passwords' ) ) {
 			$pass = '';
 		}
-		$query = "update `".BIT_DB_PREFIX."users_users` set `hash`=? ,`password`=? ,`pass_due`=? where " . $this->convert_binary(). " `login`=?";
-		$result = $this->query($query, array($hash,$pass,$new_pass_due,$user));
+		$query = "update `".BIT_DB_PREFIX."users_users` set `hash`=? ,`password`=? ,`pass_due`=? where " . $this->mDb->convert_binary(). " `login`=?";
+		$result = $this->mDb->query($query, array($hash,$pass,$new_pass_due,$user));
 		return TRUE;
 	}
 
 	function get_users($offset = 0, $maxRecords = -1, $sort_mode = 'login_desc', $find = '') {
-		$sort_mode = $this->convert_sortmode($sort_mode);
+		$sort_mode = $this->mDb->convert_sortmode($sort_mode);
 		// Return an array of users indicating name, email, last changed pages, versions, last_login
 		if ($find) {
 			$findesc = '%' . strtoupper( $find ) . '%';
@@ -1127,8 +1123,8 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		}
 		$query = "select * from `".BIT_DB_PREFIX."users_users` $mid order by $sort_mode";
 		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_users`";
-		$result = $this->query($query, $bindvars, $maxRecords, $offset);
-		$cant = $this->getOne($query_cant, array());
+		$result = $this->mDb->query($query, $bindvars, $maxRecords, $offset);
+		$cant = $this->mDb->getOne($query_cant, array());
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
 			//$res["groups"] = $this->get_user_groups( $res['login'] );
@@ -1146,7 +1142,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$query = "select ts.`user_id`, `login` AS `user`, `real_name` ,`timestamp`
 				  FROM `".BIT_DB_PREFIX."tiki_sessions` ts INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (ts.`user_id`=uu.`user_id`)
 				  WHERE ts.`user_id` IS NOT NULL";
-		$result = $this->query($query);
+		$result = $this->mDb->query($query);
 		$ret = array();
 		while ($res = $result->fetchRow()) {
 			$res['user_information'] = 	$this->getPreference( 'user_information', 'public', $res['user_id'] );
@@ -1184,7 +1180,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			if( LibertyAttachable::store( $pStorageHash ) ) {
 				if($this->mInfo['portrait_attachment_id'] != $pStorageHash['attachment_id'] ) {
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `portrait_attachment_id` = ? WHERE `user_id`=?";
-					$result = $this->query( $query, array( $pStorageHash['attachment_id'], $this->mUserId ) );
+					$result = $this->mDb->query( $query, array( $pStorageHash['attachment_id'], $this->mUserId ) );
 					$this->mInfo['portrait_attachment_id'] = $pStorageHash['attachment_id'];
 					$pStorageHash['portrait_storage_path'] = $pStorageHash['upload']['dest_path'];
 				}
@@ -1215,7 +1211,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 				if( $this->mInfo['avatar_attachment_id'] != $pStorageHash['attachment_id'] ) {
 					$this->mInfo['avatar_storage_path'] = $pStorageHash['upload']['dest_path'];
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `avatar_attachment_id` = ? WHERE `user_id`=?";
-					$result = $this->query( $query, array( $pStorageHash['attachment_id'], $this->mUserId ) );
+					$result = $this->mDb->query( $query, array( $pStorageHash['attachment_id'], $this->mUserId ) );
 					$this->mInfo['avatar_attachment_id'] = $pStorageHash['attachment_id'];
 				}
 			} else {
@@ -1240,7 +1236,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			if( LibertyAttachable::store( $pStorageHash ) ) {
 				if($this->mInfo['logo_attachment_id'] != $pStorageHash['attachment_id'] ) {
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `logo_attachment_id` = ? WHERE `user_id`=?";
-					$result = $this->query( $query, array( $pStorageHash['attachment_id'], $this->mUserId ) );
+					$result = $this->mDb->query( $query, array( $pStorageHash['attachment_id'], $this->mUserId ) );
 					$this->mInfo['logo_attachment_id'] = $pStorageHash['attachment_id'];
 				}
 			} else {
@@ -1254,7 +1250,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( !empty( $this->mUserId ) && !empty( $this->mInfo[$pType.'_attachment_id'] ) ) {
 			$this->mDb->StartTrans();
 			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `".$pType."_attachment_id` = NULL WHERE `user_id`=?";
-			$result = $this->query( $query, array( $this->mUserId ) );
+			$result = $this->mDb->query( $query, array( $this->mUserId ) );
 			if( file_exists( $this->mInfo[$pType.'_storage_path'] ) ) {
 				unlink( $this->mInfo[$pType.'_storage_path'] );
 			}
@@ -1291,7 +1287,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$query = "SELECT ta.`attachment_id`, ta.`foreign_id`
 					  FROM `".BIT_DB_PREFIX."tiki_attachments` ta
 					  WHERE ta.`user_id` = ? AND ta.`attachment_plugin_guid` = 'tiki_files'";
-			$result = $this->query($query, array($this->mUserId));
+			$result = $this->mDb->query($query, array($this->mUserId));
 			$attachmentIds = $result->getRows();
 
 			$bit_files_load_func = $gLibertySystem->getPluginFunction( 'bitfile', 'load_function'  );
@@ -1318,7 +1314,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$query = "SELECT ta.*
 					  FROM `".BIT_DB_PREFIX."tiki_attachments` ta
 					  WHERE ta.`user_id` = ?";
-			$result = $this->query($query, array($this->mUserId));
+			$result = $this->mDb->query($query, array($this->mUserId));
 
 			$attachments = $result->getRows();
 			$ret = array();
@@ -1337,10 +1333,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( $this->isValid() ) {
 			$hash = md5(uniqid('.'));
 			$query = "delete from `".BIT_DB_PREFIX."tiki_user_watches` where `user_id`=? and `event`=? and `object`=?";
-			$this->query($query,array( $this->mUserId, $event, $object ) );
+			$this->mDb->query($query,array( $this->mUserId, $event, $object ) );
 			$query = "insert into `".BIT_DB_PREFIX."tiki_user_watches`(`user_id` ,`event` ,`object` , `email`, `hash`, `type`, `title`, `url`) ";
 			$query.= "values(?,?,?,?,?,?,?,?)";
-			$this->query( $query, array( $this->mUserId, $event, $object, $this->mInfo['email'], $hash, $type, $title, $url ) );
+			$this->mDb->query( $query, array( $this->mUserId, $event, $object, $this->mInfo['email'], $hash, $type, $title, $url ) );
 			return true;
 		}
 	}
@@ -1356,7 +1352,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			}
 
 			$query = "select * from `".BIT_DB_PREFIX."tiki_user_watches` where `user_id`=? $mid";
-			$result = $this->query($query,$bindvars);
+			$result = $this->mDb->query($query,$bindvars);
 			$ret = array();
 
 			while ($res = $result->fetchRow()) {
@@ -1371,7 +1367,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$ret = NULL;
 		if( $this->isValid() ) {
 			$query = "select * from `".BIT_DB_PREFIX."tiki_user_watches` WHERE `user_id`=? and `event`=? and `object`=?";
-			$result = $this->query($query,array( $this->mUserId, $event, $object ) );
+			$result = $this->mDb->query($query,array( $this->mUserId, $event, $object ) );
 			if ( $result->numRows() ) {
 				$ret = $result->fetchRow();
 			}
@@ -1384,7 +1380,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$ret = array();
 
 		$query = "select * from `".BIT_DB_PREFIX."tiki_user_watches` tw INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON ( tw.`user_id`=uu.`user_id` )  where `event`=? and `object`=?";
-		$result = $this->query($query,array($event,$object));
+		$result = $this->mDb->query($query,array($event,$object));
 
 		if (!$result->numRows())
 		return $ret;
@@ -1399,21 +1395,21 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	/*shared*/
 	function remove_user_watch_by_hash($hash) {
 		$query = "delete from `".BIT_DB_PREFIX."tiki_user_watches` where `hash`=?";
-		$this->query($query,array($hash));
+		$this->mDb->query($query,array($hash));
 	}
 
 	/*shared*/
 	function expungeWatch( $event, $object ) {
 		if( $this->isValid() ) {
 			$query = "delete from `".BIT_DB_PREFIX."tiki_user_watches` where `user_id`=? and `event`=? and `object`=?";
-			$this->query( $query, array( $this->mUserId, $event, $object ) );
+			$this->mDb->query( $query, array( $this->mUserId, $event, $object ) );
 		}
 	}
 
 	/*shared*/
 	function get_watches_events() {
 		$query = "select distinct `event` from `".BIT_DB_PREFIX."tiki_user_watches`";
-		$result = $this->query($query,array());
+		$result = $this->mDb->query($query,array());
 		$ret = array();
 		while ($res = $result->fetchRow()) {
 		$ret[] = $res['event'];
@@ -1516,7 +1512,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		}
 		if ($this->mUserId) {
 			$sql = "UPDATE `".BIT_DB_PREFIX."users_users` SET `real_name` = ? WHERE `user_id` = ?";
-			$this->query($sql, array($newRealName, $this->mUserId));
+			$this->mDb->query($sql, array($newRealName, $this->mUserId));
 		}
 	}
 
@@ -1526,7 +1522,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$this->mErrors[] = "The username '$newLogin' is already taken";
 		} elseif ($this->mUserId) {
 			$sql = "UPDATE `".BIT_DB_PREFIX."users_users` SET `login` = ? WHERE `user_id` = ?";
-			$rs = $this->query($sql, array($newLogin, $this->mUserId));
+			$rs = $this->mDb->query($sql, array($newLogin, $this->mUserId));
 		} else {
 			$this->mErrors[] = "Invalid user";
 		}
@@ -1539,7 +1535,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if ( !isset( $pParamHash['sort_mode']) or $pParamHash['sort_mode'] == '' ) $pParamHash['sort_mode'] = 'registration_date_desc';
 		$pParamHash['max_records'] = 20;
 		LibertyContent::prepGetList( $pParamHash );
-		$sort_mode = $this->convert_sortmode($pParamHash['sort_mode']);
+		$sort_mode = $this->mDb->convert_sortmode($pParamHash['sort_mode']);
 		// Return an array of users indicating name, email, last changed pages, versions, last_login
 		if ( $pParamHash['find'] ) {
 			$mid = " where UPPER(uu.`login`) LIKE ? OR UPPER(uu.real_name) LIKE ? OR UPPER(uu.email) LIKE ? ";
@@ -1554,7 +1550,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
 				 $mid order by $sort_mode";
 		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_users` uu $mid";
-		$result = $this->query($query, $bindvars, $pParamHash['max_records'], $pParamHash['offset']);
+		$result = $this->mDb->query($query, $bindvars, $pParamHash['max_records'], $pParamHash['offset']);
 
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
@@ -1568,7 +1564,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$retval = array();
 		$pParamHash["data"] = $ret;
 
-		$pParamHash["cant"] = $this->getOne($query_cant,$bindvars);
+		$pParamHash["cant"] = $this->mDb->getOne($query_cant,$bindvars);
 
 		LibertyContent::postGetList( $pParamHash );
 	}
@@ -1577,9 +1573,9 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$now = date("U");
 		$lim = $now - $pLimit;
 		$query = "delete from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`=? and `created`<?";
-		$result = $this->query($query,array( $pSemName, (int)$lim) );
+		$result = $this->mDb->query($query,array( $pSemName, (int)$lim) );
 		$query = "select `sem_name`  from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`=?";
-		$result = $this->query($query,array($pSemName));
+		$result = $this->mDb->query($query,array($pSemName));
 		return $result->numRows();
 	}
 
@@ -1589,11 +1585,11 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$now = date("U");
 		$lim = $now - $pLimit;
 		$query = "delete from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`=? and `created`<?";
-		$result = $this->query($query,array( $pSemName, (int)$lim) );
+		$result = $this->mDb->query($query,array( $pSemName, (int)$lim) );
 		$query = "SELECT uu.`login`, uu.`real_name`, uu.`email`, uu.`user_id`
 				  FROM `".BIT_DB_PREFIX."tiki_semaphores` ts INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id`=ts.`user_id`)
 				  WHERE `sem_name`=? AND ts.`user_id`!='?'";
-		$result = $this->query( $query, array( $pSemName, (int)$userId ) );
+		$result = $this->mDb->query( $query, array( $pSemName, (int)$userId ) );
 		if( $result->fields ) {
 			$ret = $result->fields;
 			$ret['nolink'] = TRUE;
@@ -1605,11 +1601,11 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( !empty( $pSemName ) ) {
 			$userId = $this->isValid() ? $this->mUserId : ANONYMOUS_USER_ID;
 			$now = date("U");
-			//	$cant=$this->getOne("select count(*) from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`='$pSemName'");
+			//	$cant=$this->mDb->getOne("select count(*) from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`='$pSemName'");
 			$query = "delete from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`=?";
-			$this->query($query,array($pSemName));
+			$this->mDb->query($query,array($pSemName));
 			$query = "insert into `".BIT_DB_PREFIX."tiki_semaphores`(`sem_name`,`created`,`user_id`) values(?,?,?)";
-			$result = $this->query($query,array($pSemName, (int)$now, $userId));
+			$result = $this->mDb->query($query,array($pSemName, (int)$now, $userId));
 			return $now;
 		}
 	}
@@ -1624,7 +1620,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if ( is_array( $pUserMixed ) ) {
 			if( $cur = current( $pUserMixed ) ) {
 				$query = "SELECT `user_id` FROM `".BIT_DB_PREFIX."users_users` WHERE UPPER(`".key( $pUserMixed )."`) = ?";
-				$ret = $this->getOne( $query, array( strtoupper( $cur ) ) );
+				$ret = $this->mDb->getOne( $query, array( strtoupper( $cur ) ) );
 			}
 		}
 		return $ret;

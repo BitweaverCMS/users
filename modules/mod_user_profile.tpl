@@ -3,7 +3,7 @@
 		<h2 style="text-align:center;">
 			{displayname hash=$userInfo}
 			{if $gQueryUserId and $gBitSystem->isPackageActive( 'messu' ) and $gBitUser->hasPermission( 'bit_p_messages' ) and $userPrefs.allowMsgs eq 'y'}
-				&nbsp;<a href="{$gBitLoc.MESSU_PKG_URL}compose.php?to={$userInfo.login}">{biticon ipackage="messu" iname="send_mail" iexplain="Send user a personal message"}</a>
+				&nbsp;<a href="{$smarty.const.MESSU_PKG_URL}compose.php?to={$userInfo.login}">{biticon ipackage="messu" iname="send_mail" iexplain="Send user a personal message"}</a>
 			{/if}
 		</h2>
 		<p style="text-align:center;">

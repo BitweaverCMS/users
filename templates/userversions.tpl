@@ -19,11 +19,11 @@
 {section name=hist loop=$history}
 <tr class="{cycle}">
 <td>{$history[hist].last_modified|bit_long_datetime}</td>
-<td><a href="{$gBitLoc.WIKI_PKG_URL}index.php?page={$history[hist].page_name|escape:"url"}">{$history[hist].page_name}</a></td>
+<td><a href="{$smarty.const.WIKI_PKG_URL}index.php?page={$history[hist].page_name|escape:"url"}">{$history[hist].page_name}</a></td>
 <td>{$history[hist].version}</td>
 <td>{$history[hist].ip}</td>
 <td>{$history[hist].comment}</td>
-<td><a href="{$gBitLoc.USERS_PKG_URL}versions.php?ruser={$ruser}&amp;page={$history[hist].page_name|escape:"url"}&amp;preview=1&amp;version={$history[hist].version}">{tr}view{/tr}</a></td>
+<td><a href="{$smarty.const.USERS_PKG_URL}versions.php?ruser={$ruser}&amp;page={$history[hist].page_name|escape:"url"}&amp;preview=1&amp;version={$history[hist].version}">{tr}view{/tr}</a></td>
 </tr>
 {sectionelse}
 <tr class="norecords"><td colspan="6">

@@ -1,5 +1,5 @@
 <h1>{tr}Change password enforced{/tr}</h1>
-<form method="post" action="{$gBitLoc.USERS_PKG_URL}change_password.php">
+<form method="post" action="{$smarty.const.USERS_PKG_URL}change_password.php">
 <table class="panel">
 <tr>
   <td>{tr}User{/tr}:</td>

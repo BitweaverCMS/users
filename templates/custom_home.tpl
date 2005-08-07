@@ -80,19 +80,19 @@ Testing bitweaver
 </div>
 <div class="boxcontent">
 <ol>
-<li>May be you want to start reading the bitweaver <a href="{$gBitLoc.FAQS_PKG_URL}index.php">FAQ</a></li>
-<li>Test the wiki following this <a href="{$gBitLoc.WIKI_PKG_URL}index.php">link</a></li>
-<li>Visit the <a href="{$gBitLoc.BITFORUMS_PKG_URL}index.php">forums</a>, write a topic or reply to an existing topic if you want</li>
-<li>At the <a href="{$gBitLoc.IMAGEGALS_PKG_URL}index.php">images galleries</a> section you can see some images try <a href="{$gBitLoc.IMAGEGALS_PKG_URL}upload_image.php?gallery_id=2">uploading images</a> to our public gallery</li>
-<li>You can download some tiki-add-ons from the <a href="{$gBitLoc.FILEGALS_PKG_URL}list_file_gallery.php?gallery_id=1">tiki-add-ons file gallery</a></li>
-<li>Visit the <a href="{$gBitLoc.CATEGORIES_PKG_URL}index.php">category browser</a> to test the tiki categorizing system</li>
-<li>You can enter the <a href="{$gBitLoc.CHAT_PKG_URL}index.php">chatrooms</a> to test our chatting system maybe you should invite a friend to test it</li>
-<li>From the <a href="{$gBitLoc.GAMES_PKG_URL}index.php">games</a> section you can play some flash games</li>
-<li>If you are not logged you can <a href="{$gBitLoc.USERS_PKG_URL}register.php">register</a> as a new user and test features available to registered users such as setting user preferences, user bookmarks or configuring modules</li>
-<li>If you are curious visit the <a href="{$gBitLoc.STATS_PKG_URL}index.php">stats</a> page</li>
-<li>The <a href="{$gBitLoc.ARTICLES_PKG_URL}index.php">articles</a> section will show a demo article that you can read and comment</li>
-<li>If you want to test editing an article or review you can <a href="{$gBitLoc.ARTICLES_PKG_URL}edit_submission.php">write a submission</a></li>
-<li>From the <a href="{$gBitLoc.BLOGS_PKG_URL}index.php">weblogs</a> section you can create a weblog and test writing to your weblog</li>
+<li>May be you want to start reading the bitweaver <a href="{$smarty.const.FAQS_PKG_URL}index.php">FAQ</a></li>
+<li>Test the wiki following this <a href="{$smarty.const.WIKI_PKG_URL}index.php">link</a></li>
+<li>Visit the <a href="{$smarty.const.BITFORUMS_PKG_URL}index.php">forums</a>, write a topic or reply to an existing topic if you want</li>
+<li>At the <a href="{$smarty.const.IMAGEGALS_PKG_URL}index.php">images galleries</a> section you can see some images try <a href="{$smarty.const.IMAGEGALS_PKG_URL}upload_image.php?gallery_id=2">uploading images</a> to our public gallery</li>
+<li>You can download some tiki-add-ons from the <a href="{$smarty.const.FILEGALS_PKG_URL}list_file_gallery.php?gallery_id=1">tiki-add-ons file gallery</a></li>
+<li>Visit the <a href="{$smarty.const.CATEGORIES_PKG_URL}index.php">category browser</a> to test the tiki categorizing system</li>
+<li>You can enter the <a href="{$smarty.const.CHAT_PKG_URL}index.php">chatrooms</a> to test our chatting system maybe you should invite a friend to test it</li>
+<li>From the <a href="{$smarty.const.GAMES_PKG_URL}index.php">games</a> section you can play some flash games</li>
+<li>If you are not logged you can <a href="{$smarty.const.USERS_PKG_URL}register.php">register</a> as a new user and test features available to registered users such as setting user preferences, user bookmarks or configuring modules</li>
+<li>If you are curious visit the <a href="{$smarty.const.STATS_PKG_URL}index.php">stats</a> page</li>
+<li>The <a href="{$smarty.const.ARTICLES_PKG_URL}index.php">articles</a> section will show a demo article that you can read and comment</li>
+<li>If you want to test editing an article or review you can <a href="{$smarty.const.ARTICLES_PKG_URL}edit_submission.php">write a submission</a></li>
+<li>From the <a href="{$smarty.const.BLOGS_PKG_URL}index.php">weblogs</a> section you can create a weblog and test writing to your weblog</li>
 </ol>
 </div>
 </div>

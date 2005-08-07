@@ -7,7 +7,7 @@
 	</div>
 
 	<div class="body">
-		<p>{tr}If you are already registered, please{/tr} <a href="{$gBitLoc.USERS_PKG_URL}login.php">{tr}login{/tr}</a></p>
+		<p>{tr}If you are already registered, please{/tr} <a href="{$smarty.const.USERS_PKG_URL}login.php">{tr}login{/tr}</a></p>
 		{form legend="Please fill in the following details"}
 			{if $notrecognized eq 'y'}
 				<input type="hidden" name="REG[login]" value="{$reg.login}"/>
@@ -107,7 +107,7 @@
 						{formfeedback error=$errors.rnd_num_reg}
 						{formlabel label="Your registration code"}
 						{forminput}
-							<img src="{$gBitLoc.USERS_PKG_URL}random_num_img.php" alt="{tr}Random Image{/tr}"/>
+							<img src="{$smarty.const.USERS_PKG_URL}random_num_img.php" alt="{tr}Random Image{/tr}"/>
 						{/forminput}
 					</div>
 

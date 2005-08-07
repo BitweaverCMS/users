@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.3 2005/06/29 05:43:41 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.4 2005/08/07 17:46:48 squareing Exp $ *}
 {strip}
-{if $userData->mUserPrefs.user_information eq 'public' or $gBitUser.mUserId eq $userData.mUserId}
+{if $userData->mUserPrefs.user_information eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
 		{formlabel label="Login"}
 		{forminput}
@@ -87,7 +87,7 @@
 		<div class="row">
 			{formlabel label="Send Message"}
 			{forminput}
-				{tr}Send a <a href="{$gBitLoc.MESSU_PKG_URL}compose.php?to={$userInfo.login}">personal message</a> to this user{/tr}
+				{tr}Send a <a href="{$smarty.const.MESSU_PKG_URL}compose.php?to={$userInfo.login}">personal message</a> to this user{/tr}
 			{/forminput}
 		</div>
 	{/if}

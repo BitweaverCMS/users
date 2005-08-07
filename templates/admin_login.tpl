@@ -78,7 +78,7 @@
 
 			<div class="row">
 				{if !$gBitSystem->hasValidSenderEmail()}
-					{formfeedback error="Site <a href=\"`$gBitLoc.BIT_ROOT_URL`kernel/admin/index.php?page=server\">emailer return address</a> is not valid!"}
+					{formfeedback error="Site <a href=\"`$smarty.const.BIT_ROOT_URL`kernel/admin/index.php?page=server\">emailer return address</a> is not valid!"}
 				{/if}
 				{formlabel label="Validate email address" for="validateEmail"}
 				{forminput}

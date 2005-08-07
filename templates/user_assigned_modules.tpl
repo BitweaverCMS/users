@@ -184,7 +184,7 @@ for instance, i don't know where the page heading stuff is used.
 <tr>
 	<td valign="top">
 
-<form action="{$gBitLoc.USERS_PKG_URL}assigned_modules.php" method="post">
+<form action="{$smarty.const.USERS_PKG_URL}assigned_modules.php" method="post">
 <table class="panel">
 <caption>{tr}Assign Left Column{/tr}</caption>
 <tr>
@@ -225,7 +225,7 @@ for instance, i don't know where the page heading stuff is used.
 	</td>
 	<td valign="top">
 
-<form action="{$gBitLoc.USERS_PKG_URL}assigned_modules.php" method="post">
+<form action="{$smarty.const.USERS_PKG_URL}assigned_modules.php" method="post">
 <table class="panel">
 <caption>{tr}Assign Center Column{/tr}</caption>
 <tr>
@@ -265,7 +265,7 @@ for instance, i don't know where the page heading stuff is used.
 	</td>
 	<td valign="top">
 
-<form action="{$gBitLoc.USERS_PKG_URL}assigned_modules.php" method="post">
+<form action="{$smarty.const.USERS_PKG_URL}assigned_modules.php" method="post">
 <table class="panel">
 <caption>{tr}Assign Right Column{/tr}</caption>
 <tr>
@@ -312,7 +312,7 @@ for instance, i don't know where the page heading stuff is used.
 <tr>
 	<td colspan="2" valign="top">
 
-	<form action="{$gBitLoc.USERS_PKG_URL}assigned_modules.php" method="post">
+	<form action="{$smarty.const.USERS_PKG_URL}assigned_modules.php" method="post">
 <table class="panel">
 <caption>{tr}Enter Homepage Heading{/tr}</caption>
 <tr><td>{tr}Enter a maximum of 250 characters. You can include Wiki syntax.{/tr}</td></tr>
@@ -328,7 +328,7 @@ for instance, i don't know where the page heading stuff is used.
 <td style="vertical-align:top;">
 {if $gBitSystem->isFeatureActive( 'feature_user_theme' ) || $gBitSystemPrefs.feature_user_theme eq 'h' }
 
-	<form method="POST" action="{$gBitLoc.USERS_PKG_URL}assigned_modules.php">
+	<form method="POST" action="{$smarty.const.USERS_PKG_URL}assigned_modules.php">
 	<table class="panel">
 		<caption>{tr}Select Theme for your Homepage{/tr}</caption>
 		<tr><td>

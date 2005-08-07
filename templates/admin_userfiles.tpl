@@ -1,7 +1,7 @@
 <div class="admin box">
 	<div class="boxtitle">{tr}User files{/tr}</div>
 	<div class="boxcontent">
-		<form action="{$gBitLoc.KERNEL_PKG_URL}admin/index.php?page=userfiles" method="post">
+		<form action="{$smarty.const.KERNEL_PKG_URL}admin/index.php?page=userfiles" method="post">
 		<table class="panel">
 		<tr><td>{tr}Quota (Mb){/tr}</td><td>
 		<input type="text" name="userfiles_quota" value="{$userfiles_quota|escape}" size="5" />

@@ -1,8 +1,8 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.1 2005/06/19 05:12:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.2 2005/08/07 17:46:48 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">
-	<a href="{$gBitLoc.USERS_PKG_URL}admin/edit_group.php">{tr}&laquo; Group List{/tr}</a> 
+	<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php">{tr}&laquo; Group List{/tr}</a> 
 	{bithelp}
 </div>
 

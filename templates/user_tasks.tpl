@@ -11,12 +11,12 @@
 	<div class="body">
 		<div class="navbar">
 			<ul>
-				<li><a href="{$gBitLoc.USERS_PKG_URL}tasks.php?tasks_use_dates=y">{tr}Use dates{/tr}</a></li>
-				<li><a href="{$gBitLoc.USERS_PKG_URL}tasks.php?tasks_use_dates=n">{tr}All tasks{/tr}</a></li>
+				<li><a href="{$smarty.const.USERS_PKG_URL}tasks.php?tasks_use_dates=y">{tr}Use dates{/tr}</a></li>
+				<li><a href="{$smarty.const.USERS_PKG_URL}tasks.php?tasks_use_dates=n">{tr}All tasks{/tr}</a></li>
 			</ul>
 		</div>
 
-		<div class="clear"></div>
+		{minifind}
 
 		{form}
 			<table class="data">
@@ -32,7 +32,7 @@
 				{section name=user loop=$channels}
 					<tr {if $channels[user].status eq 'c'}style="text-decoration:line-through;"{/if} class="{cycle values='odd,even'} prio{$channels[user].priority}">
 						<td><input type="checkbox" name="task[{$channels[user].task_id}]" /></td>
-						<td><a href="{$gBitLoc.USERS_PKG_URL}tasks.php?task_use_dates={$task_use_dates}&amp;task_id={$channels[user].task_id}&amp;offset={$offset}&amp;sort_mode={$sort_mode}&amp;find={$find}#tasks">{$channels[user].title}</a></td>
+						<td><a href="{$smarty.const.USERS_PKG_URL}tasks.php?task_use_dates={$task_use_dates}&amp;task_id={$channels[user].task_id}&amp;offset={$offset}&amp;sort_mode={$sort_mode}&amp;find={$find}#tasks">{$channels[user].title}</a></td>
 						<td {if $channels[user].status eq 'c'}style="text-decoration:line-through;"{/if} class="prio{$channels[user].priority}">{$channels[user].date|bit_short_date}</td>
 						<td style="text-align:right;{if $channels[user].status eq 'c'}text-decoration:line-through;{/if}" class="prio{$channels[user].priority}">{$channels[user].priority}</td>
 						<td style="text-align:right;{if $channels[user].status eq 'c'}text-decoration:line-through;{/if}" class="prio{$channels[user].priority}">
@@ -63,8 +63,6 @@
 		{/form}
 
 		{pagination}
-
-		{minifind}
 
 		<a name="tasks"></a>
 		{form legend="Add or Edit a Task"}

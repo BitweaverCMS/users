@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.6 2005/08/01 18:42:02 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.7 2005/08/07 17:46:46 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.6 2005/08/01 18:42:02 squareing Exp $
+ * $Id: index.php,v 1.7 2005/08/07 17:46:46 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -44,7 +44,7 @@ if( !empty( $_REQUEST['home'] ) ) {
 		$userHomeStyle = $gQueryUser->getPreference( 'theme' );
 		if( isset( $userHomeStyle ) ) {
 			$gBitSystem->setStyle($userHomeStyle );
-			$gBitLoc['styleSheet'] = $gBitSystem->getStyleCss( $userHomeStyle, $_REQUEST['home'] );
+			$gBitSystem->mStyles['styleSheet'] = $gBitSystem->getStyleCss( $userHomeStyle, $_REQUEST['home'] );
 			$gBitSmarty->assign( 'userStyle', $userHomeStyle );
 		}
 	}

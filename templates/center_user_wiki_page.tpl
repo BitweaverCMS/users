@@ -32,7 +32,7 @@
 								{if $gBitUser->mUserId ne $gQueryUser->mUserId}
 									{tr}This user has not entered any information yet.{/tr}
 								{else}
-									{tr}To enter some information here, please <a href="{$gBitLoc.USERS_PKG_URL}edit_personal_page.php">edit your personal homepage</a>.{/tr}
+									{tr}To enter some information here, please <a href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">edit your personal homepage</a>.{/tr}
 								{/if}
 							</p>
 						{/if}

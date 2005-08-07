@@ -1,6 +1,6 @@
 {strip}
 <div class="floaticon">
-	<a href="{$gBitLoc.USERS_PKG_URL}admin/edit_group.php">{tr}&laquo; Group List{/tr}</a>
+	<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php">{tr}&laquo; Group List{/tr}</a>
 	{bithelp}
 </div>
 
@@ -16,7 +16,7 @@
 			{foreach from=$groupMembers key=userId item=member}
 				<li>{displayname hash=$member}
 					{if $groupId != -1}
-						&nbsp;<a href="{$gBitLoc.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupInfo.group_id}&amp;assign_user={$member.user_id}">{biticon ipackage="liberty" iname="delete_small" iexplain="remove group"}</a>
+						&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupInfo.group_id}&amp;assign_user={$member.user_id}">{biticon ipackage="liberty" iname="delete_small" iexplain="remove group"}</a>
 					{/if}
 				</li>
 			{foreachelse}

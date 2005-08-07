@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.4 2005/08/01 18:42:02 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.5 2005/08/07 17:46:46 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: validate.php,v 1.4 2005/08/01 18:42:02 squareing Exp $
+ * $Id: validate.php,v 1.5 2005/08/07 17:46:46 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -27,7 +27,7 @@ if( empty( $_SESSION['loginfrom'] ) ) {
 		$_SESSION['loginfrom'] = $from['path'];
 	}
 }
-if ($gBitUser->hasPermission( 'bit_p_admin' )) {
+if ($gBitUser->isAdmin()) {
 	if (isset($_REQUEST["su"])) {
 		if ($gBitUser->userExists( array( 'login' => $_REQUEST['username'] ) ) ) {
 			$_SESSION["$user_cookie_site"] = $_REQUEST["username"];
@@ -50,7 +50,7 @@ if ($gBitSystem->isFeatureActive( 'https_login_required' ) && !$https_mode) {
 	$url .= $https_prefix . $gBitSystem->getDefaultPage();
 	if (SID)
 		$url .= '?' . SID;
-	header("Location " . $url);
+	header("Location: " . $url);
 	exit;
 }
 
