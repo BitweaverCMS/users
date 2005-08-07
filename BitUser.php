@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.33 2005/08/07 16:27:48 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.34 2005/08/07 20:07:44 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.33 2005/08/07 16:27:48 lsces Exp $
+ * $Id: BitUser.php,v 1.2.2.34 2005/08/07 20:07:44 lsces Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.33 $
+ * @version  $Revision: 1.2.2.34 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -972,7 +972,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	function confirmRegistration( $pUser, $pProvpass ) {
 		$query = "select `user_id`, `provpass`, `password`, `login`, `email` FROM `".BIT_DB_PREFIX."users_users`
 				  WHERE `login`=? AND `provpass`=?";
-		return( $this->GetRow($query, array( $pUser, $pProvpass ) ) );
+		return( $this->mDb->getRow($query, array( $pUser, $pProvpass ) ) );
 	}
 
 
@@ -1012,7 +1012,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( is_array( $pUserMixed ) ) {
 			$query = "SELECT  uu.* FROM `".BIT_DB_PREFIX."users_users` uu LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON (tc.`content_id`=uu.`content_id`)
 					  WHERE UPPER( uu.`".key( $pUserMixed )."` ) = ?";
-			$ret = $this->mDb->GetRow( $query, array( strtoupper( current( $pUserMixed ) ) ) );
+			$ret = $this->mDb->getRow( $query, array( strtoupper( current( $pUserMixed ) ) ) );
 		}
 		return $ret;
 	}
@@ -1023,7 +1023,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( !empty( $content_id ) ) {
 			$query = "SELECT  `user_id` FROM `".BIT_DB_PREFIX."users_users`
 					  WHERE `content_id` = ?";
-			$tmpUser = $this->GetRow( $query, array( $content_id ) );
+			$tmpUser = $this->mDb->getRow( $query, array( $content_id ) );
 			if (!empty($tmpUser['user_id'])) {
 				$ret = $tmpUser['user_id'];
 			}
