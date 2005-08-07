@@ -158,8 +158,8 @@ array( 'CREATE' => array (
 array( 'PHP' => '
 	global $gBitSystem, $gBitDb;
 	$max = $gBitDb->GetOne( "SELECT MAX(user_id) FROM `'.BIT_DB_PREFIX.'users_users`" );
-	$gBitSystem->mDb->mDb->CreateSequence( "users_users_user_id_seq", $max + 1 );
-	$gBitSystem->mDb->mDb->CreateSequence( "users_groups_id_seq", 1 );
+	$gBitSystem->getDb()->CreateSequence( "users_users_user_id_seq", $max + 1 );
+	$gBitSystem->getDb()->CreateSequence( "users_groups_id_seq", 1 );
 	$gBitDb->query( "UPDATE `'.BIT_DB_PREFIX.'users_groups` SET `group_id`=-1 WHERE group_name=\'Anonymous\'" );
 	$gBitDb->query( "INSERT INTO `'.BIT_DB_PREFIX.'users_groups_map` (`group_id`,`user_id`,`groupName`) VALUES ( -1, '.ANONYMOUS_USER_ID.',\'Anonymous\' )" );
 	$groupNames = $gBitDb->GetCol( "SELECT `group_name` FROM `'.BIT_DB_PREFIX.'users_groups` WHERE `group_name` != \'Anonymous\'" );

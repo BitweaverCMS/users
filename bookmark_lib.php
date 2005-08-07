@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/bookmark_lib.php,v 1.1.1.1.2.1 2005/06/27 17:47:58 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/bookmark_lib.php,v 1.1.1.1.2.2 2005/08/07 13:23:58 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: bookmark_lib.php,v 1.1.1.1.2.1 2005/06/27 17:47:58 lsces Exp $
+ * $Id: bookmark_lib.php,v 1.1.1.1.2.2 2005/08/07 13:23:58 lsces Exp $
  * @package users
  */
 
@@ -37,7 +37,7 @@ class BookmarkLib extends BitBase {
 	}
 	function get_folder($folder_id, $user_id) {
 		$query = "select * from `".BIT_DB_PREFIX."tiki_user_bookmarks_folders` where `folder_id`=? and `user_id`=?";
-		$result = $this->query($query,array($folder_id,$user_id));
+		$result = $this->getDb()->query($query,array($folder_id,$user_id));
 		if (!$result->numRows())
 			return false;
 		$res = $result->fetchRow();
@@ -45,7 +45,7 @@ class BookmarkLib extends BitBase {
 	}
 	function get_url($url_id) {
 		$query = "select * from `".BIT_DB_PREFIX."tiki_user_bookmarks_urls` where `url_id`=?";
-		$result = $this->query($query,array($url_id));
+		$result = $this->getDb()->query($query,array($url_id));
 		if (!$result->numRows())
 			return false;
 		$res = $result->fetchRow();
@@ -53,19 +53,19 @@ class BookmarkLib extends BitBase {
 	}
 	function remove_url($url_id, $user_id) {
 		$query = "delete from `".BIT_DB_PREFIX."tiki_user_bookmarks_urls` where `url_id`=? and `user_id`=?";
-		$result = $this->query($query,array($url_id,$user_id));
+		$result = $this->getDb()->query($query,array($url_id,$user_id));
 		return true;
 	}
 	function remove_folder($folder_id, $user_id) {
 		// Delete the category
 		$query = "delete from `".BIT_DB_PREFIX."tiki_user_bookmarks_folders` where `folder_id`=? and `user_id`=?";
-		$result = $this->query($query,array($folder_id,$user_id));
+		$result = $this->getDb()->query($query,array($folder_id,$user_id));
 		// Remove objects for this category
 		$query = "delete from `".BIT_DB_PREFIX."tiki_user_bookmarks_urls` where `folder_id`=? and `user_id`=?";
-		$result = $this->query($query,array($folder_id,$user_id));
+		$result = $this->getDb()->query($query,array($folder_id,$user_id));
 		// SUbfolders
 		$query = "select `folder_id` from `".BIT_DB_PREFIX."tiki_user_bookmarks_folders` where `parent_id`=? and `user_id`=?";
-		$result = $this->query($query,array($folder_id,$user_id));
+		$result = $this->getDb()->query($query,array($folder_id,$user_id));
 		while ($res = $result->fetchRow()) {
 			// Recursively remove the subcategory
 			$this->remove_folder($res["folder_id"], $user_id);
@@ -74,14 +74,14 @@ class BookmarkLib extends BitBase {
 	}
 	function update_folder($folder_id, $name, $user_id) {
 		$query = "update `".BIT_DB_PREFIX."tiki_user_bookmarks_folders` set `name`=? where `folder_id`=? and `user_id`=?";
-		$result = $this->query($query,array($name,$folder_id,$user_id));
+		$result = $this->getDb()->query($query,array($name,$folder_id,$user_id));
 	}
 	function add_folder($parent_id, $name, $user_id) {
 		// Don't allow empty/blank folder names.
 		if (empty($name))
 			return false;
 		$query = "insert into `".BIT_DB_PREFIX."tiki_user_bookmarks_folders`(`name`,`parent_id`,`user_id`) values(?,?,?)";
-		$result = $this->query($query,array($name,$parent_id,$user_id));
+		$result = $this->getDb()->query($query,array($name,$parent_id,$user_id));
 	}
 	function replace_url($url_id, $folder_id, $name, $url, $user_id) {
 		$id = NULL;
@@ -95,8 +95,8 @@ class BookmarkLib extends BitBase {
 		  values(?,?,?,?,?,?)";
 					$bindvars=array($name,$url,'',(int) $now,$folder_id,$user_id);
 			}
-			$result = $this->query($query,$bindvars);
-			$id = $this->getOne("select max(`url_id`) from `".BIT_DB_PREFIX."tiki_user_bookmarks_urls` where `url`=? and `last_updated`=?",array($url,(int) $now));
+			$result = $this->getDb()->query($query,$bindvars);
+			$id = $this->getDb()->getOne("select max(`url_id`) from `".BIT_DB_PREFIX."tiki_user_bookmarks_urls` where `url`=? and `last_updated`=?",array($url,(int) $now));
 		}
 		return $id;
 	}
@@ -114,7 +114,7 @@ class BookmarkLib extends BitBase {
 		fclose ($fp);
 		$now = date("U");
 		$query = "update `".BIT_DB_PREFIX."tiki_user_bookmarks_urls` set `last_updated`=?, `data`=? where `url_id`=?";
-		$result = $this->query($query,array((int) $now,BitDb::db_byte_encode( $data ),$url_id));
+		$result = $this->getDb()->query($query,array((int) $now,BitDb::db_byte_encode( $data ),$url_id));
 		return true;
 	}
 	function list_folder($folder_id, $offset, $maxRecords, $sort_mode = 'name_asc', $find, $user_id) {
@@ -126,10 +126,10 @@ class BookmarkLib extends BitBase {
 			$mid = "";
 			$bindvars=array($folder_id,$user_id);
 		}
-		$query = "select * from `".BIT_DB_PREFIX."tiki_user_bookmarks_urls` where `folder_id`=? and `user_id`=? $mid order by ".$this->convert_sortmode($sort_mode);
+		$query = "select * from `".BIT_DB_PREFIX."tiki_user_bookmarks_urls` where `folder_id`=? and `user_id`=? $mid order by ".$this->getDb()->convert_sortmode($sort_mode);
 		$query_cant = "select count(*) from `".BIT_DB_PREFIX."tiki_user_bookmarks_urls` where `folder_id`=? and `user_id`=? $mid";
-		$result = $this->query($query,$bindvars,$maxRecords,$offset);
-		$cant = $this->getOne($query_cant,$bindvars);
+		$result = $this->getDb()->query($query,$bindvars,$maxRecords,$offset);
+		$cant = $this->getDb()->getOne($query_cant,$bindvars);
 		$ret = array();
 		while ($res = $result->fetchRow()) {
 			$res["datalen"] = strlen($res["data"]);
@@ -143,9 +143,9 @@ class BookmarkLib extends BitBase {
 	function get_child_folders($folder_id, $user_id) {
 		$ret = array();
 		$query = "select * from `".BIT_DB_PREFIX."tiki_user_bookmarks_folders` where `parent_id`=? and `user_id`=?";
-		$result = $this->query($query,array($folder_id,$user_id));
+		$result = $this->getDb()->query($query,array($folder_id,$user_id));
 		while ($res = $result->fetchRow()) {
-			$cant = $this->getOne("select count(*) from `".BIT_DB_PREFIX."tiki_user_bookmarks_urls` where `folder_id`=?",array($res["folder_id"]));
+			$cant = $this->getDb()->getOne("select count(*) from `".BIT_DB_PREFIX."tiki_user_bookmarks_urls` where `folder_id`=?",array($res["folder_id"]));
 			$res["urls"] = $cant;
 			$ret[] = $res;
 		}
