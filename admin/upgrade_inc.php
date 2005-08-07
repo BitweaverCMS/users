@@ -13,6 +13,7 @@ array( 'QUERY' =>
 	"ALTER TABLE `".BIT_DB_PREFIX."users_usergroups` DROP PRIMARY KEY",
 	"ALTER TABLE `".BIT_DB_PREFIX."users_grouppermissions` DROP PRIMARY KEY",
 	"ALTER TABLE `".BIT_DB_PREFIX."tiki_group_inclusion` DROP PRIMARY KEY",
+	"ALTER TABLE `".BIT_DB_PREFIX."tiki_user_watches` DROP PRIMARY KEY",
 	)),
 ),
 
@@ -197,6 +198,11 @@ array( 'QUERY' =>
 		"UPDATE `".BIT_DB_PREFIX."users_groups_inclusion` SET `include_group_id`=(SELECT `group_id` FROM `".BIT_DB_PREFIX."users_groups` WHERE `group_name`=`includeGroup`)",
 		"UPDATE `".BIT_DB_PREFIX."users_groups` SET `user_id`=1",
 		"UPDATE `".BIT_DB_PREFIX."users_groups` SET `is_default`='y' WHERE `group_name`='Registered'",
+		"alter table `".BIT_DB_PREFIX."tiki_user_watches` add index `user_id` (`user_id`)",
+		"update `".BIT_DB_PREFIX."tiki_user_watches` set `type` = 'bitpage' where `type` = 'Wiki page'",
+		"update `".BIT_DB_PREFIX."tiki_user_watches` set `type` = 'bitpage' where `type` = 'Wiki-Seite'",
+ 
+
 	),
 )),
 
