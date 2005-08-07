@@ -1,5 +1,5 @@
 <?php
-global $gBitSystem, $gUpgradeFrom, $gUpgradeTo;
+global $gBitSystem, $gUpgradeFrom, $gUpgradeTo, $gBitDb;
 
 $upgrades = array(
 
@@ -155,16 +155,16 @@ array( 'CREATE' => array (
 
 // STEP 2
 array( 'PHP' => '
-	global $gBitSystem;
-	$max = $gBitSystem->GetOne( "SELECT MAX(user_id) FROM `'.BIT_DB_PREFIX.'users_users`" );
-	$gBitSystem->CreateSequence( "users_users_user_id_seq", $max + 1 );
-	$gBitSystem->CreateSequence( "users_groups_id_seq", 1 );
-	$gBitSystem->query( "UPDATE `'.BIT_DB_PREFIX.'users_groups` SET `group_id`=-1 WHERE group_name=\'Anonymous\'" );
-	$gBitSystem->query( "INSERT INTO `'.BIT_DB_PREFIX.'users_groups_map` (`group_id`,`user_id`,`groupName`) VALUES ( -1, '.ANONYMOUS_USER_ID.',\'Anonymous\' )" );
-	$groupNames = $gBitSystem->GetCol( "SELECT `group_name` FROM `'.BIT_DB_PREFIX.'users_groups` WHERE `group_name` != \'Anonymous\'" );
+	global $gBitSystem, $gBitDb;
+	$max = $gBitDb->GetOne( "SELECT MAX(user_id) FROM `'.BIT_DB_PREFIX.'users_users`" );
+	$gBitSystem->mDb->mDb->CreateSequence( "users_users_user_id_seq", $max + 1 );
+	$gBitSystem->mDb->mDb->CreateSequence( "users_groups_id_seq", 1 );
+	$gBitDb->query( "UPDATE `'.BIT_DB_PREFIX.'users_groups` SET `group_id`=-1 WHERE group_name=\'Anonymous\'" );
+	$gBitDb->query( "INSERT INTO `'.BIT_DB_PREFIX.'users_groups_map` (`group_id`,`user_id`,`groupName`) VALUES ( -1, '.ANONYMOUS_USER_ID.',\'Anonymous\' )" );
+	$groupNames = $gBitDb->GetCol( "SELECT `group_name` FROM `'.BIT_DB_PREFIX.'users_groups` WHERE `group_name` != \'Anonymous\'" );
 	foreach( $groupNames as $name ) {
-		$id = $gBitSystem->GenID( "users_groups_id_seq" );
-		$gBitSystem->query( "UPDATE `'.BIT_DB_PREFIX.'users_groups` SET group_id=? WHERE group_name=?", array( $id, $name ) );
+		$id = $gBitDb->GenID( "users_groups_id_seq" );
+		$gBitDb->query( "UPDATE `'.BIT_DB_PREFIX.'users_groups` SET group_id=? WHERE group_name=?", array( $id, $name ) );
 	}
 ' ),
 
@@ -226,16 +226,16 @@ array( 'SQL92' =>
 
 // STEP 2
 array( 'PHP' => '
-	global $gBitSystem;
-	$adminGroup = $gBitSystem->GetOne( "SELECT `group_id` FROM `'.BIT_DB_PREFIX.'users_grouppermissions` where perm_name=\'bit_p_admin\'" );
+	global $gBitSystem, $gBitDb;
+	$adminGroup = $gBitDb->GetOne( "SELECT `group_id` FROM `'.BIT_DB_PREFIX.'users_grouppermissions` where perm_name=\'bit_p_admin\'" );
 	if( empty( $adminGroup ) ) {
-		$adminGroup = $gBitSystem->GetOne( "SELECT `group_id` FROM `'.BIT_DB_PREFIX.'users_groups` where LOWER(`group_name`) LIKE \'administrator%\'" );
+		$adminGroup = $gBitDb->GetOne( "SELECT `group_id` FROM `'.BIT_DB_PREFIX.'users_groups` where LOWER(`group_name`) LIKE \'administrator%\'" );
 		if( empty( $adminGroup ) ) {
-			$adminGroup = $gBitSystem->GenID( "users_groups_id_seq" );
-			$gBitSystem->query( "INSERT INTO `'.BIT_DB_PREFIX.'users_groups` (`group_id`,`group_name`) VALUES ( $adminGroup, \'Administrators\' )" );
+			$adminGroup = $gBitDb->GenID( "users_groups_id_seq" );
+			$gBitDb->query( "INSERT INTO `'.BIT_DB_PREFIX.'users_groups` (`group_id`,`group_name`) VALUES ( $adminGroup, \'Administrators\' )" );
 		}
-		$gBitSystem->query( "INSERT INTO `'.BIT_DB_PREFIX.'users_groups_map` (`group_id`,`user_id`) VALUES ( $adminGroup, '.ROOT_USER_ID.' )" );
-		$gBitSystem->query( "INSERT INTO `'.BIT_DB_PREFIX.'users_grouppermissions` (`perm_name`, `group_id`) VALUES( \'bit_p_admin\', $adminGroup )" );
+		$gBitDb->query( "INSERT INTO `'.BIT_DB_PREFIX.'users_groups_map` (`group_id`,`user_id`) VALUES ( $adminGroup, '.ROOT_USER_ID.' )" );
+		$gBitDb->query( "INSERT INTO `'.BIT_DB_PREFIX.'users_grouppermissions` (`perm_name`, `group_id`) VALUES( \'bit_p_admin\', $adminGroup )" );
 	}
 ' ),
 
