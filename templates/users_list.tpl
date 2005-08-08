@@ -16,7 +16,7 @@
 
 <ul class="clear data">
 	{section name=user loop=$users}
-		<li class="clear item {cycle values='even,odd'}">
+		<li class="item {cycle values='even,odd'}">
 			{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
 				<div class="floaticon">
 					<a href="{$smarty.const.USERS_PKG_URL}admin/index.php?assume_user={$users[user].user_id}" title="{tr}Assume User Identity{/tr}">{biticon ipackage=users iname="assume_user" iexplain="assume user identity"}</a>
@@ -30,7 +30,7 @@
 				</div>
 			{/if}
 
-			{if $users[user].real_name ne ''}
+			{if $users[user].real_name}
 				<h2>{displayname real_name=$users[user].real_name} <small>{$users[user].login}</small></h2>
 			{else}
 				<h2>{displayname login=$users[user].login}</h2>
@@ -49,6 +49,8 @@
 			{if $users[user].current_login }
 				{tr}Last seen: {$users[user].current_login|bit_short_date}{/tr}<br/>
 			{/if}
+
+			<div class="clear"></div>
 		</li>
 	{/section}
 </ul>
