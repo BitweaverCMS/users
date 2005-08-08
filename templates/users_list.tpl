@@ -16,37 +16,44 @@
 
 <ul class="clear data">
 	{section name=user loop=$users}
-		<li class="item {cycle values='even,odd'}">
+		<li class="clear item {cycle values='even,odd'}">
 			{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
 				<div class="floaticon">
 					<a href="{$smarty.const.USERS_PKG_URL}admin/index.php?assume_user={$users[user].user_id}" title="{tr}Assume User Identity{/tr}">{biticon ipackage=users iname="assume_user" iexplain="assume user identity"}</a>
 					<a href="{$smarty.const.USERS_PKG_URL}preferences.php?view_user={$users[user].user_id}" title="{tr}Edit User Information{/tr}">{biticon ipackage=liberty iname="edit" iexplain="Edit User Information"}</a>
-				{if $gBitUser->isAdmin()}
-					<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?assign_user={$users[user].user_id}" title="{tr}Assign Group{/tr}">{biticon ipackage=liberty iname="permissions" iexplain="assign group"}</a>
-					{if $users[user].user_id != -1}{* TODO: evil hardcoding *}
-						<a href="{$smarty.const.USERS_PKG_URL}admin/index.php?offset={$control.offset}&amp;numrows={$control.numrows}&amp;sort_mode={$control.sort_mode}&amp;action=delete&amp;user_id={$users[user].user_id}"  title="{tr}Remove{/tr}">{biticon ipackage=liberty iname="delete" iexplain="remove user"}</a>
+					{if $gBitUser->isAdmin()}
+						<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?assign_user={$users[user].user_id}" title="{tr}Assign Group{/tr}">{biticon ipackage=liberty iname="permissions" iexplain="assign group"}</a>
+						{if $users[user].user_id != -1}{* TODO: evil hardcoding *}
+							<a href="{$smarty.const.USERS_PKG_URL}admin/index.php?offset={$control.offset}&amp;numrows={$control.numrows}&amp;sort_mode={$control.sort_mode}&amp;action=delete&amp;user_id={$users[user].user_id}"  title="{tr}Remove{/tr}">{biticon ipackage=liberty iname="delete" iexplain="remove user"}</a>
+						{/if}
 					{/if}
-				{/if}
 				</div>
 			{/if}
-			{if $users[user].real_name}
+
+			{if $users[user].real_name ne ''}
 				<h2>{displayname real_name=$users[user].real_name} <small>{$users[user].login}</small></h2>
 			{else}
 				<h2>{displayname login=$users[user].login}</h2>
 			{/if}
+
 			{if $users[user].thumbnail_url}
 				<img alt="{tr}user portrait{/tr}" title="{$users[user].login} {tr}user portrait{/tr}" src="{$users[user].thumbnail_url}" class="thumb" />
 			{/if}
-			{if $gBitUser->hasPermission( 'bit_p_admin_users' )}{mailto address=$users[user].email encode="javascript"} ({tr}User ID{/tr}: {$users[user].user_id})<br/>{/if}
+
+			{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
+				{mailto address=$users[user].email encode="javascript"} ({tr}User ID{/tr}: {$users[user].user_id})<br/>
+			{/if}
+
 			{tr}Member since{/tr}: {$users[user].registration_date|bit_short_date}<br/>
-			{if $users[user].current_login }{tr}Last seen{/tr}: {$users[user].current_login|bit_short_date}<br/>{/if}
-			<div class="clear"></div>
+
+			{if $users[user].current_login }
+				{tr}Last seen: {$users[user].current_login|bit_short_date}{/tr}<br/>
+			{/if}
 		</li>
 	{/section}
 </ul>
-<div class="clear"></div>
 
-<p class="total small">
+<p class="clear total small">
 	{tr}Total number of entries{/tr}: {$usercount}
 </p>
 
