@@ -38,7 +38,7 @@
 							<br />{tr}Included Groups{/tr}
 							<ul class="data small">
 								{foreach from=$group.included key=incGroupId item=incGroupName}
-									<li class="{cycle values="odd,even"} item">wow: {$incGroupName}</li>
+									<li class="{cycle values="odd,even"} item">{$incGroupName}</li>
 								{/foreach}
 							</ul>
 						{/if}
