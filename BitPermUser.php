@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.9 2005/08/07 16:27:48 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.10 2005/08/11 18:29:15 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.1.1.1.2.9 2005/08/07 16:27:48 lsces Exp $
+ * $Id: BitPermUser.php,v 1.1.1.1.2.10 2005/08/11 18:29:15 spiderr Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.1.1.1.2.9 $
+ * @version  $Revision: 1.1.1.1.2.10 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -166,10 +166,10 @@ class BitPermUser extends BitUser {
 	}
 
 	function getAllGroups( &$pListHash ) {
-		$this->prepGetList( $pListHash );
 		if( empty(  $pListHash['sort_mode'] ) || $pListHash['sort_mode'] == 'name_asc' ) {
  			$pListHash['sort_mode'] = 'group_name_asc';
 		}
+		$this->prepGetList( $pListHash );
 
 		$sortMode = $this->mDb->convert_sortmode( $pListHash['sort_mode'] );
 		if( !empty( $pListHash['find_groups'] ) ) {
