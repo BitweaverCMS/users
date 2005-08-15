@@ -31,9 +31,9 @@
 			{/if}
 
 			{if $users[user].real_name}
-				<h2>{displayname real_name=$users[user].real_name} <small>{$users[user].login}</small></h2>
+				<h2>{displayname hash=$users[user]} <small>{$users[user].login}</small></h2>
 			{else}
-				<h2>{displayname login=$users[user].login}</h2>
+				<h2>{displayname hash=$users[user]}</h2>
 			{/if}
 
 			{if $users[user].thumbnail_url}
