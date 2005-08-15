@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.34 2005/08/07 20:07:44 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.35 2005/08/15 11:50:15 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.34 2005/08/07 20:07:44 lsces Exp $
+ * $Id: BitUser.php,v 1.2.2.35 2005/08/15 11:50:15 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.34 $
+ * @version  $Revision: 1.2.2.35 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -479,6 +479,9 @@ if ($gDebug) echo "Run : QUIT<br>";
 			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
 			$notificationlib->post_new_user_event( $pParamHash['login'] );
 			$ret = TRUE;
+
+			// set local time zone as default when registering
+			$this->storePreference( 'display_timezone', 'Local' );
 
 			if( !empty( $_REQUEST['CUSTOM'] ) ) {
 				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
