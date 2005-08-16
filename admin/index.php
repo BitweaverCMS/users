@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.1.1.1.2.3 2005/07/26 15:50:31 drewslater Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.1.1.1.2.4 2005/08/16 11:36:36 wolff_borg Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -87,10 +87,11 @@ if (isset($_REQUEST["newuser"])) {
 		batchImportUsers();
 	}
 } elseif( isset( $_REQUEST["assume_user"]) ) {
-	$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST["assume_user"] ) );
+	$assume_user = (is_numeric( $_REQUEST["assume_user"] )) ? array( 'user_id' => $_REQUEST["assume_user"] ) : array('login' => $_REQUEST["assume_user"]) ;
+	$userInfo = $gBitUser->getUserInfo( $assume_user );
 	if( isset( $_REQUEST["confirm"] ) ) {
-		if( $gBitUser->assumeUser( $_REQUEST["assume_user"] ) ) {
-			header( 'Location: '.USERS_PKG_URL.'my.php' );
+		if( $gBitUser->assumeUser( $userInfo["user_id"] ) ) {
+			header( 'Location: '.$_SERVER["HTTP_REFERER"] );
 			die;
 		}
 	} else {
