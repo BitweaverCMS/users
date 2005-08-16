@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.1.1.1.2.4 2005/08/16 11:36:36 wolff_borg Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.1.1.1.2.5 2005/08/16 11:57:41 wolff_borg Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -86,7 +86,7 @@ if (isset($_REQUEST["newuser"])) {
 	if( $_FILES['csvlist']['size'] && is_uploaded_file($_FILES['csvlist']['tmp_name'] ) ) {
 		batchImportUsers();
 	}
-} elseif( isset( $_REQUEST["assume_user"]) ) {
+} elseif( isset( $_REQUEST["assume_user"]) && $gBitUser->hasPermission( 'bit_p_assume_users' ) ) {
 	$assume_user = (is_numeric( $_REQUEST["assume_user"] )) ? array( 'user_id' => $_REQUEST["assume_user"] ) : array('login' => $_REQUEST["assume_user"]) ;
 	$userInfo = $gBitUser->getUserInfo( $assume_user );
 	if( isset( $_REQUEST["confirm"] ) ) {
