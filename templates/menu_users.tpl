@@ -1,7 +1,7 @@
 {strip}
 <ul>
 	{if $gBitUser->isRegistered()}
-		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}my.php">{biticon ipackage=liberty iname=spacer iforce=icon} {tr}My {$siteTitle|default:Site}{/tr}</a></li>
+		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}my.php">{biticon ipackage=liberty iname=spacer iforce=icon} {tr}My {$gBitSystemPrefs.site_menu_title|default:$siteTitle}{/tr}</a></li>
 		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}index.php?home={$gBitUser->mInfo.login}">{biticon ipackage=users iname=home iexplain="Home" iforce=icon} {tr}View My Homepage{/tr}</a></li>
 		{if $gBitSystem->isPackageActive( 'wiki' )}
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">{biticon ipackage=liberty iname=edit iforce=icon} {tr}Edit My Homepage{/tr}</a></li>
