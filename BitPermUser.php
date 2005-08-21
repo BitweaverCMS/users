@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.10 2005/08/11 18:29:15 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.11 2005/08/21 19:46:11 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.1.1.1.2.10 2005/08/11 18:29:15 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.1.1.1.2.11 2005/08/21 19:46:11 spiderr Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.1.1.1.2.10 $
+ * @version  $Revision: 1.1.1.1.2.11 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -530,8 +530,15 @@ class BitPermUser extends BitUser {
 	}
 
 
-	function isAdmin() {
-		return( isset( $this->mPerms['bit_p_admin'] ) );
+	// If the request has a ticket, some form action is being processed, and we need to validate we have a matched ticket to avoid XSS
+	function isAdmin( $pCheckTicket=FALSE ) {
+		$ret = FALSE;
+		if( !empty( $_REQUEST['tk'] ) || $pCheckTicket ) {
+			$ret = $this->verifyTicket() && !empty( $this->mPerms['bit_p_admin'] );
+		} else {
+			$ret = !empty( $this->mPerms['bit_p_admin'] );
+		}
+		return( $ret );
 	}
 
 	function hasPermission( $perm ) {

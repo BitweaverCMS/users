@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.36 2005/08/16 04:38:48 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.37 2005/08/21 19:46:11 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.36 2005/08/16 04:38:48 spiderr Exp $
+ * $Id: BitUser.php,v 1.2.2.37 2005/08/21 19:46:11 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.36 $
+ * @version  $Revision: 1.2.2.37 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -161,7 +161,7 @@ class BitUser extends LibertyAttachable {
 					$this->defaults();
 					$this->mInfo['publicEmail'] = scrambleEmail( $this->mInfo['email'], (isset($this->mUserPrefs['email is public']) ? $this->mUserPrefs['email is public'] : NULL) );
 				}
-				$this->mTicket = substr(md5(rand() . $this->mUserId), 0, 20);
+				$this->mTicket = substr( md5( session_id() . $this->mUserId ), 0, 20 );
 			} else {
 				$this->mUserId = NULL;
 			}
@@ -290,6 +290,16 @@ class BitUser extends LibertyAttachable {
 //		print "PURE VIRTUAL BASE FUNCTION";
 //		die;
 		return FALSE;
+	}
+
+	function verifyTicket( $pFatalOnError=TRUE ) {
+		$ert = FALSE;
+		if( !empty( $_REQUEST['tk'] ) ) {
+			if( !($ret = $_REQUEST['tk'] == $this->mTicket ) && $pFatalOnError ) {
+				$gBitSystem->fatalError( "Security Violation" );
+			}
+		}
+		return $ret;
 	}
 
 	function verify( &$pParamHash ) {
