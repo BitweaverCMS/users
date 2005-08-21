@@ -1,5 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.1.1.1.2.1 2005/08/05 23:00:59 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.1.1.1.2.2 2005/08/21 22:36:01 squareing Exp $ *}
 {strip}
+{assign var=serviceEditTpls value=$gLibertySystem->getServiceValues('content_edit_tpl')}
 
 <div class="floaticon">{bithelp}</div>
 
@@ -93,6 +94,16 @@
 						{/forminput}
 					</div>
 
+					{if $serviceEditTpls.access_control }
+						{include file=$serviceEditTpls.access_control"}
+					{/if}
+
+					{if $serviceEditTpls.categorization }
+						{legend legend="Categorize"}
+							{include file=$serviceEditTpls.categorization"}
+						{/legend}
+					{/if}
+
 					<div class="row submit">
 						<input type="submit" name="newuser" value="{tr}Add User{/tr}"{if $defaultGroupId eq ''} disabled="disabled"{/if} />
 					</div>
@@ -107,8 +118,11 @@
 							<input type="file" name="csvlist" id="csvlist" /><br />
 							<label><input type="checkbox" name="overwrite" checked="checked" /> {tr}Overwrite existing users{/tr}</label>
 							{formhelp note="You can batch import users by uploading a CSV (comma-separated values) file. The CSV file needs to have the column names in the first record. The column titles must match with fields in 'users_users' table. Login, password and email are required fields. If an unexistant field is specified, it's ignored."}
-							<input type="submit" name="batchimport" value="{tr}import{/tr}" />
 						{/forminput}
+					</div>
+
+					<div class="row submit">
+						<input type="submit" name="batchimport" value="{tr}Import{/tr}" />
 					</div>
 				{/form}
 			{/jstab}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.1.1.1.2.5 2005/08/16 11:57:41 wolff_borg Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.1.1.1.2.6 2005/08/21 22:36:01 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -70,7 +70,6 @@ $feedback = array();
 
 // Process the form to add a user here
 if (isset($_REQUEST["newuser"])) {
-	
 	$newUser = new BitPermUser();
 	// Check if the user already exists
 	// jht 2005-06-22_23:51:58 flag this user store as coming from admin page -- a kludge
@@ -153,6 +152,7 @@ else
 $_REQUEST["control"]["URL"] = USERS_PKG_URL."admin/index.php";
 $gBitSmarty->assign_by_ref('control', $_REQUEST["control"]);
 
+$gBitUser->invokeServices( 'content_edit_function' );
 
 // Get groups (list of groups)
 $grouplist = $gBitUser->getGroups('', '', 'group_name_asc');
