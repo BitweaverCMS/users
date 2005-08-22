@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.2.2.3 2005/07/26 15:50:30 drewslater Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.2.2.4 2005/08/22 12:08:25 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.2.2.3 2005/07/26 15:50:30 drewslater Exp $
+ * $Id: preferences.php,v 1.2.2.4 2005/08/22 12:08:25 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -107,10 +107,9 @@ if (isset($_REQUEST["prefs"])) {
 	die;
 }
 if (isset($_REQUEST['chgemail'])) {
-
 	// check user's password
 	if (!$editUser->validate($editUser->mUsername, $_REQUEST['pass'], '', '')) {
-		$gBitSmarty->assign('msg', tra("Invalid password.  You current password is required to change your email address."));
+		$gBitSmarty->assign('msg', tra("Invalid password.  Your current password is required to change your email address."));
 		$gBitSystem->display( 'error.tpl' );
 		die;
 	}
@@ -119,7 +118,6 @@ if (isset($_REQUEST['chgemail'])) {
 	}
 }
 if (isset($_REQUEST["chgpswd"])) {
-
 	if( $_REQUEST["pass1"] != $_REQUEST["pass2"] ) {
 		$gBitSystem->fatalError( tra("The passwords didn't match") );
 	}
@@ -141,50 +139,13 @@ if (isset($_REQUEST["chgpswd"])) {
 	}
 }
 if (isset($_REQUEST['messprefs'])) {
-
-	$editUser->storePreference( 'mess_maxRecords', $_REQUEST['mess_maxRecords']);
-	$editUser->storePreference( 'minPrio', $_REQUEST['minPrio']);
-	if (isset($_REQUEST['allowMsgs']) && $_REQUEST['allowMsgs'] == 'on') {
-		$editUser->storePreference( 'allowMsgs', 'y');
-	} else {
-		$editUser->storePreference( 'allowMsgs', 'n');
-	}
+	$editUser->storePreference( 'mess_maxRecords', $_REQUEST['mess_maxRecords'] );
+	$editUser->storePreference( 'minPrio', $_REQUEST['minPrio'] );
+	$editUser->storePreference( 'message_alert', !empty( $_REQUEST['message_alert'] ) ? 'y' : 'n' );
+	$editUser->storePreference( 'allowMsgs', !empty( $_REQUEST['allowMsgs'] ) ? 'y' : 'n' );
 }
-if (isset($_REQUEST['mybitweaverprefs'])) {
 
-	if (isset($_REQUEST['mybitweaver_pages']) && $_REQUEST['mybitweaver_pages'] == 'on') {
-		$editUser->storePreference( 'mybitweaver_pages', 'y');
-	} else {
-		$editUser->storePreference( 'mybitweaver_pages', 'n');
-	}
-	if (isset($_REQUEST['mybitweaver_blogs']) && $_REQUEST['mybitweaver_blogs'] == 'on') {
-		$editUser->storePreference( 'mybitweaver_blogs', 'y');
-	} else {
-		$editUser->storePreference( 'mybitweaver_blogs', 'n');
-	}
-	if (isset($_REQUEST['mybitweaver_gals']) && $_REQUEST['mybitweaver_gals'] == 'on') {
-		$editUser->storePreference( 'mybitweaver_gals', 'y');
-	} else {
-		$editUser->storePreference( 'mybitweaver_gals', 'n');
-	}
-	if (isset($_REQUEST['mybitweaver_msgs']) && $_REQUEST['mybitweaver_msgs'] == 'on') {
-		$editUser->storePreference( 'mybitweaver_msgs', 'y');
-	} else {
-		$editUser->storePreference( 'mybitweaver_msgs', 'n');
-	}
-	if (isset($_REQUEST['mybitweaver_tasks']) && $_REQUEST['mybitweaver_tasks'] == 'on') {
-		$editUser->storePreference( 'mybitweaver_tasks', 'y');
-	} else {
-		$editUser->storePreference( 'mybitweaver_tasks', 'n');
-	}
-	if (isset($_REQUEST['mybitweaver_items']) && $_REQUEST['mybitweaver_items'] == 'on') {
-		$editUser->storePreference( 'mybitweaver_items', 'y');
-	} else {
-		$editUser->storePreference( 'mybitweaver_items', 'n');
-	}
-}
 if (isset($_REQUEST['tasksprefs'])) {
-
 	$editUser->storePreference( 'tasks_maxRecords', $_REQUEST['tasks_maxRecords']);
 	if (isset($_REQUEST['tasks_use_dates']) && $_REQUEST['tasks_use_dates'] == 'on') {
 		$editUser->storePreference( 'tasks_use_dates', 'y');
@@ -207,31 +168,6 @@ $gBitSmarty->assign_by_ref('userPrefs', $editUser->mUserPrefs );
 $languages = array();
 $languages = $gBitLanguage->listLanguages();
 $gBitSmarty->assign_by_ref('languages', $languages);
-// Get user pages
-if( $gBitSystem->isPackageActive( 'messu' ) ) {
-	$gBitSmarty->assign('mybitweaver_msgs', $editUser->getPreference( 'mybitweaver_msgs'), 'y');
-}
-if( $gBitSystem->isPackageActive( 'wiki' ) ) {
-	$gBitSmarty->assign('mybitweaver_pages', $editUser->getPreference( 'mybitweaver_pages'), 'y');
-	$user_pages = $wikilib->get_user_pages($editUser->mUserId, -1);
-	$gBitSmarty->assign_by_ref('user_pages', $user_pages);
-}
-if( $gBitSystem->isPackageActive( 'blogs' ) ) {
-	$gBitSmarty->assign('mybitweaver_blogs', $editUser->getPreference( 'mybitweaver_blogs'), 'y');
-	$user_blogs = $gBlog->list_user_blogs($editUser->mUserId, false);
-	$gBitSmarty->assign_by_ref('user_blogs', $user_blogs);
-}
-if( $gBitSystem->isPackageActive( 'imagegals' ) ) {
-	$gBitSmarty->assign('mybitweaver_gals', $editUser->getPreference( 'mybitweaver_gals'), 'y');
-	$user_galleries = $gBitSystem->get_user_galleries($editUser->mUsername, -1);
-	$gBitSmarty->assign_by_ref('user_galleries', $user_galleries);
-}
-if( $gBitSystem->isPackageActive( 'trackers' ) ) {
-	$gBitSmarty->assign('mybitweaver_items', $editUser->getPreference( 'mybitweaver_items'), 'y');
-	$user_items = $gBitSystem->get_user_items($editUser->mUsername);
-	$gBitSmarty->assign_by_ref('user_items', $user_items);
-	$gBitSmarty->assign('mybitweaver_tasks', $editUser->getPreference( 'mybitweaver_tasks'), 'y');
-}
 
 // Get flags here
 $flags = array();

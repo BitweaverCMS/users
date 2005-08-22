@@ -260,59 +260,7 @@
 
 			{if $gBitSystem->isPackageActive( 'messu' )}
 				{jstab title="User Messages"}
-					{form legend="User Messages"}
-						<div class="row">
-							{formlabel label="Personal Messages" for=""}
-							{forminput}
-								<a href="{$smarty.const.MESSU_PKG_URL}message_box.php">
-									{tr}You have <strong>{$unreadMsgs|default:no} unread</strong> {if $unreadMsgs eq '1'}message{else}messages{/if}{/tr}
-								</a>
-							{/forminput}
-						</div>
-
-						<div class="row">
-							{formlabel label="Messages per page" for="mess_maxRecords"}
-							{forminput}
-								<select name="mess_maxRecords" id="mess_maxRecords">
-									<option value="2" {if $mess_maxRecords eq 2}selected="selected"{/if}>{tr}2{/tr}</option>
-									<option value="5" {if $mess_maxRecords eq 5}selected="selected"{/if}>{tr}5{/tr}</option>
-									<option value="10" {if $mess_maxRecords eq 10}selected="selected"{/if}>{tr}10{/tr}</option>
-									<option value="20" {if $mess_maxRecords eq 20}selected="selected"{/if}>{tr}20{/tr}</option>
-									<option value="30" {if $mess_maxRecords eq 30}selected="selected"{/if}>{tr}30{/tr}</option>
-									<option value="40" {if $mess_maxRecords eq 40}selected="selected"{/if}>{tr}40{/tr}</option>
-									<option value="50" {if $mess_maxRecords eq 50}selected="selected"{/if}>{tr}50{/tr}</option>
-								</select>
-								{formhelp note=""}
-							{/forminput}
-						</div>
-
-						<div class="row">
-							{formlabel label="Allow messages from other users" for="allowMsgs"}
-							{forminput}
-								<input type="checkbox" name="allowMsgs" id="allowMsgs" {if $allowMsgs eq 'y'}checked="checked"{/if} />
-								{formhelp note=""}
-							{/forminput}
-						</div>
-
-						<div class="row">
-							{formlabel label="Send an email" for="minPrio"}
-							{forminput}
-								<select name="minPrio" id="minPrio">
-									<option value="1" {if $minPrio eq 1}selected="selected"{/if}>{tr}at least priority:{/tr} 1</option>
-									<option value="2" {if $minPrio eq 2}selected="selected"{/if}>{tr}at least priority:{/tr} 2</option>
-									<option value="3" {if $minPrio eq 3}selected="selected"{/if}>{tr}at least priority:{/tr} 3</option>
-									<option value="4" {if $minPrio eq 4}selected="selected"{/if}>{tr}at least priority:{/tr} 4</option>
-									<option value="5" {if $minPrio eq 5}selected="selected"{/if}>{tr}at least priority:{/tr} 5</option>
-									<option value="6" {if $minPrio eq 6}selected="selected"{/if}>{tr}never send message{/tr}</option>
-								</select>
-								{formhelp note="Here you can indicate when an email should be sent to you when you recieve a personal message."}
-							{/forminput}
-						</div>
-
-						<div class="row submit">
-							<input type="submit" name="messprefs" value="{tr}Change preferences{/tr}" />
-						</div>
-					{/form}
+					{include file='bitpackage:messu/messu_preferences_inc.tpl'}
 				{/jstab}
 			{/if}
 
