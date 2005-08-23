@@ -10,7 +10,7 @@
 			{if $userInfo.avatar_url}
 				<img src="{$userInfo.avatar_url}" class="thumb" title="{tr}Avatar{/tr}" alt="{tr}Avatar{/tr}"/>
 			{else}
-				{biticon ipackage=users iname='unknown_user' class='thumb' iexplain='no user avatar uploaded'}
+				{biticon ipackage=users iname='unknown_user' class='thumb' iexplain='no user avatar uploaded' iforce='icon'}
 			{/if}
 			<br />
 			{tr}Last login{/tr}: {$userInfo.last_login|bit_short_date}
