@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.2.2.3 2005/08/05 23:00:59 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.2.2.4 2005/08/24 13:06:57 spiderr Exp $ *}
 {strip}
 {if $userData->mUserPrefs.user_information eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
@@ -44,7 +44,7 @@
 		</div>
 	{/foreach}
 
-	{if $gBitUser->isAdmin()}
+	{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
 		<div class="row">
 			{formlabel label="User ID"}
 			{forminput}

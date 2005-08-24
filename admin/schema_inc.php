@@ -312,7 +312,6 @@ $gBitInstaller->registerUserPermissions( USERS_PKG_NAME, array(
 	array('bit_p_cache_bookmarks', 'Can cache user bookmarks', 'admin', 'users'),
 	array('bit_p_usermenu', 'Can create items in personal menu', 'registered', 'users'),
 	array('bit_p_tasks', 'Can use tasks', 'registered', 'users'),
-	array('bit_p_assume_users', 'Can assume the identity of other users', 'admin', 'users'),
 	array('bit_p_admin_users', 'Can edit the information for other users', 'admin', 'users'),
 	array('bit_p_view_tabs_and_tools', 'Can view tab and tool links', 'basic', 'users'),
 ) );

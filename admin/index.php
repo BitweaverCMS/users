@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.1.1.1.2.6 2005/08/21 22:36:01 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.1.1.1.2.7 2005/08/24 13:06:57 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -85,12 +85,12 @@ if (isset($_REQUEST["newuser"])) {
 	if( $_FILES['csvlist']['size'] && is_uploaded_file($_FILES['csvlist']['tmp_name'] ) ) {
 		batchImportUsers();
 	}
-} elseif( isset( $_REQUEST["assume_user"]) && $gBitUser->hasPermission( 'bit_p_assume_users' ) ) {
+} elseif( isset( $_REQUEST["assume_user"]) && $gBitUser->hasPermission( 'bit_p_admin_users' ) ) {
 	$assume_user = (is_numeric( $_REQUEST["assume_user"] )) ? array( 'user_id' => $_REQUEST["assume_user"] ) : array('login' => $_REQUEST["assume_user"]) ;
 	$userInfo = $gBitUser->getUserInfo( $assume_user );
 	if( isset( $_REQUEST["confirm"] ) ) {
 		if( $gBitUser->assumeUser( $userInfo["user_id"] ) ) {
-			header( 'Location: '.$_SERVER["HTTP_REFERER"] );
+			header( 'Location: '.$gBitSystem->getDefaultPage() );
 			die;
 		}
 	} else {

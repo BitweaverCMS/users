@@ -1,10 +1,10 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.1.1.1.2.6 2005/08/16 11:57:41 wolff_borg Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.1.1.1.2.7 2005/08/24 13:06:57 spiderr Exp $ *}
 {strip}
 {bitmodule title="$moduleTitle" name="login_box"}
 	{if $gBitUser->IsRegistered()}
 		{tr}Logged in as <strong>{displayname}{/tr}</strong><br />
 		<a href="{$smarty.const.USERS_PKG_URL}logout.php">{tr}Logout{/tr}</a>
-		{if $gBitUser->hasPermission( 'bit_p_assume_users' )}
+		{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
 		<div class="row">
 			{form ipackage=users ifile="admin/index.php"}
 			{forminput}

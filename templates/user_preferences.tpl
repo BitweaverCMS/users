@@ -224,7 +224,7 @@
 				{form legend="Change your password"}
 					<input type="hidden" name="view_user" value="{$editUser.user_id}" />
 
-					{if !$view_user or ( $gBitUser->isAdmin and $view_user )}
+					{if !$view_user or ( $gBitUser->hasPermission('bit_p_admin_users') and $view_user )}
 						<div class="row">
 							{formlabel label="Old password" for="old"}
 							{forminput}
