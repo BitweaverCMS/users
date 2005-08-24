@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/tasks.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/tasks.php,v 1.4 2005/08/24 20:59:13 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: tasks.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
+ * $Id: tasks.php,v 1.4 2005/08/24 20:59:13 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -143,16 +143,16 @@ if (isset($_SESSION['thedate'])) {
 } else {
 	$pdate = date("U");
 }
-$channels = $tasklib->list_tasks($gBitUser->mUserId, $offset, $maxRecords, $sort_mode, $find, $tasks_use_dates, $pdate);
+$tasks = $tasklib->list_tasks($gBitUser->mUserId, $offset, $maxRecords, $sort_mode, $find, $tasks_use_dates, $pdate);
 if($maxRecords == 0) {
 	$cant_pages = 0;
 	$gBitSmarty->assign('actual_page', '1');
 } else {
-	$cant_pages = ceil($channels["cant"] / $maxRecords);
+	$cant_pages = ceil($tasks["cant"] / $maxRecords);
 	$gBitSmarty->assign('actual_page', 1 + ($offset / $maxRecords));
 }
 $gBitSmarty->assign_by_ref('cant_pages', $cant_pages);
-if ($channels["cant"] > ($offset + $maxRecords)) {
+if ($tasks["cant"] > ($offset + $maxRecords)) {
 	$gBitSmarty->assign('next_offset', $offset + $maxRecords);
 } else {
 	$gBitSmarty->assign('next_offset', -1);
@@ -163,7 +163,7 @@ if ($offset > 0) {
 } else {
 	$gBitSmarty->assign('prev_offset', -1);
 }
-$gBitSmarty->assign_by_ref('channels', $channels["data"]);
+$gBitSmarty->assign_by_ref('tasks', $tasks["data"]);
 $gBitSmarty->assign('tasks_use_dates', $tasks_use_dates);
 $percs = array();
 for ($i = 0; $i <= 100; $i += 10) {

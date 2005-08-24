@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.6 2005/08/07 17:46:46 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.7 2005/08/24 20:59:13 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.6 2005/08/07 17:46:46 squareing Exp $
+ * $Id: BitPermUser.php,v 1.7 2005/08/24 20:59:13 squareing Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.6 $
+ * @version  $Revision: 1.7 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -166,10 +166,10 @@ class BitPermUser extends BitUser {
 	}
 
 	function getAllGroups( &$pListHash ) {
-		$this->prepGetList( $pListHash );
 		if( empty(  $pListHash['sort_mode'] ) || $pListHash['sort_mode'] == 'name_asc' ) {
  			$pListHash['sort_mode'] = 'group_name_asc';
 		}
+		$this->prepGetList( $pListHash );
 
 		$sortMode = $this->mDb->convert_sortmode( $pListHash['sort_mode'] );
 		if( !empty( $pListHash['find_groups'] ) ) {
@@ -530,8 +530,16 @@ class BitPermUser extends BitUser {
 	}
 
 
-	function isAdmin() {
-		return( isset( $this->mPerms['bit_p_admin'] ) );
+	// If the request has a ticket, some form action is being processed, and we need to validate we have a matched ticket to avoid XSS
+	function isAdmin( $pCheckTicket=FALSE ) {
+		$ret = FALSE;
+		if( !empty( $_REQUEST['tk'] ) || $pCheckTicket ) {
+			// do not fatal on isAdmin ticketVerification, else things go recursively to hell
+			$ret = $this->verifyTicket( FALSE ) && !empty( $this->mPerms['bit_p_admin'] );
+		} else {
+			$ret = !empty( $this->mPerms['bit_p_admin'] );
+		}
+		return( $ret );
 	}
 
 	function hasPermission( $perm ) {

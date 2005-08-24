@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.5 2005/08/07 17:46:46 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.6 2005/08/24 20:59:13 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: validate.php,v 1.5 2005/08/07 17:46:46 squareing Exp $
+ * $Id: validate.php,v 1.6 2005/08/24 20:59:13 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -27,6 +27,7 @@ if( empty( $_SESSION['loginfrom'] ) ) {
 		$_SESSION['loginfrom'] = $from['path'];
 	}
 }
+/* This appears obsoleted by code in users/admin/index.php (assume_user) - wolff_borg
 if ($gBitUser->isAdmin()) {
 	if (isset($_REQUEST["su"])) {
 		if ($gBitUser->userExists( array( 'login' => $_REQUEST['username'] ) ) ) {
@@ -36,10 +37,12 @@ if ($gBitUser->isAdmin()) {
 		$url = $_SESSION['loginfrom'];
 		//unset session variable for the next su
 		unset($_SESSION['loginfrom']);
-		header("location: $url");
+		echo("location: $url");
+		//header("location: $url");
 		die;
 	}
 }
+*/
 
 $https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
 $https_login_required = $gBitSystem->getPreference('https_login_required', 'n');

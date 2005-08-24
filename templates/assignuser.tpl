@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/assignuser.tpl,v 1.2 2005/08/07 17:46:48 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/assignuser.tpl,v 1.3 2005/08/24 20:59:13 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 <div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{biticon ipackage=liberty iname=back iexplain="back to users"}</a></div>
@@ -35,7 +35,7 @@
 						<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$groupId}">{$group.group_name}
 						{if $groupId eq $assignUser->mInfo.default_group_id}</strong>{/if}
 						{if $groupId != -1}
-							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="liberty" iname="delete_small" iexplain="remove group"}</a>
+							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="liberty" iname="delete_small" iexplain="remove group" iforce="icon"}</a>
 						{/if}
 						<br />
 					{/foreach}
@@ -73,7 +73,7 @@
 						<td>{$group.group_name}</td>
 						<td>{$group.group_desc}</td>
 						<td class="actionicon">
-							<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="liberty" iname="assign" iexplain="assign"}</a>
+							<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="liberty" iname="assign" iexplain="assign" iforce="icon"}</a>
 						</td>
 					</tr>
 				{/if}

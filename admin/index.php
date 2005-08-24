@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.4 2005/08/01 18:42:03 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.5 2005/08/24 20:59:13 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -70,7 +70,6 @@ $feedback = array();
 
 // Process the form to add a user here
 if (isset($_REQUEST["newuser"])) {
-	
 	$newUser = new BitPermUser();
 	// Check if the user already exists
 	// jht 2005-06-22_23:51:58 flag this user store as coming from admin page -- a kludge
@@ -86,11 +85,12 @@ if (isset($_REQUEST["newuser"])) {
 	if( $_FILES['csvlist']['size'] && is_uploaded_file($_FILES['csvlist']['tmp_name'] ) ) {
 		batchImportUsers();
 	}
-} elseif( isset( $_REQUEST["assume_user"]) ) {
-	$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST["assume_user"] ) );
+} elseif( isset( $_REQUEST["assume_user"]) && $gBitUser->hasPermission( 'bit_p_admin_users' ) ) {
+	$assume_user = (is_numeric( $_REQUEST["assume_user"] )) ? array( 'user_id' => $_REQUEST["assume_user"] ) : array('login' => $_REQUEST["assume_user"]) ;
+	$userInfo = $gBitUser->getUserInfo( $assume_user );
 	if( isset( $_REQUEST["confirm"] ) ) {
-		if( $gBitUser->assumeUser( $_REQUEST["assume_user"] ) ) {
-			header( 'Location: '.USERS_PKG_URL.'my.php' );
+		if( $gBitUser->assumeUser( $userInfo["user_id"] ) ) {
+			header( 'Location: '.$gBitSystem->getDefaultPage() );
 			die;
 		}
 	} else {
@@ -152,6 +152,7 @@ else
 $_REQUEST["control"]["URL"] = USERS_PKG_URL."admin/index.php";
 $gBitSmarty->assign_by_ref('control', $_REQUEST["control"]);
 
+$gBitUser->invokeServices( 'content_edit_function' );
 
 // Get groups (list of groups)
 $grouplist = $gBitUser->getGroups('', '', 'group_name_asc');

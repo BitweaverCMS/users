@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.10 2005/08/07 21:11:48 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.11 2005/08/24 20:59:13 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.10 2005/08/07 21:11:48 squareing Exp $
+ * $Id: BitUser.php,v 1.11 2005/08/24 20:59:13 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.10 $
+ * @version  $Revision: 1.11 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -161,7 +161,7 @@ class BitUser extends LibertyAttachable {
 					$this->defaults();
 					$this->mInfo['publicEmail'] = scrambleEmail( $this->mInfo['email'], (isset($this->mUserPrefs['email is public']) ? $this->mUserPrefs['email is public'] : NULL) );
 				}
-				$this->mTicket = substr(md5(rand() . $this->mUserId), 0, 20);
+				$this->mTicket = substr( md5( session_id() . $this->mUserId ), 0, 20 );
 			} else {
 				$this->mUserId = NULL;
 			}
@@ -236,7 +236,7 @@ class BitUser extends LibertyAttachable {
 
 
 	function updateSession( $pSessionId ) {
-		if ( !$this->isDatabaseValid() ) return true; 
+		if ( !$this->isDatabaseValid() ) return true;
 		$now = date("U");
 		$oldy = $now - (5 * 60);
 		$bindVars = array( $now, $pSessionId );
@@ -290,6 +290,17 @@ class BitUser extends LibertyAttachable {
 //		print "PURE VIRTUAL BASE FUNCTION";
 //		die;
 		return FALSE;
+	}
+
+	function verifyTicket( $pFatalOnError=TRUE ) {
+		global $gBitSystem;
+		$ret = FALSE;
+		if( !empty( $_REQUEST['tk'] ) ) {
+			if( !($ret = $_REQUEST['tk'] == $this->mTicket ) && $pFatalOnError ) {
+				$gBitSystem->fatalError( "Security Violation" );
+			}
+		}
+		return $ret;
 	}
 
 	function verify( &$pParamHash ) {
@@ -479,6 +490,9 @@ if ($gDebug) echo "Run : QUIT<br>";
 			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
 			$notificationlib->post_new_user_event( $pParamHash['login'] );
 			$ret = TRUE;
+
+			// set local time zone as default when registering
+			$this->storePreference( 'display_timezone', 'Local' );
 
 			if( !empty( $_REQUEST['CUSTOM'] ) ) {
 				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {

@@ -29,16 +29,16 @@
 					<th style="width:25%;">{smartlink ititle="Percentage Done" isort=percentage offset=$offset tasks_use_dates=$tasks_use_dates}</th>
 				</tr>
 
-				{section name=user loop=$channels}
-					<tr {if $channels[user].status eq 'c'}style="text-decoration:line-through;"{/if} class="{cycle values='odd,even'} prio{$channels[user].priority}">
-						<td><input type="checkbox" name="task[{$channels[user].task_id}]" /></td>
-						<td><a href="{$smarty.const.USERS_PKG_URL}tasks.php?task_use_dates={$task_use_dates}&amp;task_id={$channels[user].task_id}&amp;offset={$offset}&amp;sort_mode={$sort_mode}&amp;find={$find}#tasks">{$channels[user].title}</a></td>
-						<td {if $channels[user].status eq 'c'}style="text-decoration:line-through;"{/if} class="prio{$channels[user].priority}">{$channels[user].date|bit_short_date}</td>
-						<td style="text-align:right;{if $channels[user].status eq 'c'}text-decoration:line-through;{/if}" class="prio{$channels[user].priority}">{$channels[user].priority}</td>
-						<td style="text-align:right;{if $channels[user].status eq 'c'}text-decoration:line-through;{/if}" class="prio{$channels[user].priority}">
-							<select name="task_perc[{$channels[user].task_id}]">
+				{section name=user loop=$tasks}
+					<tr {if $tasks[user].status eq 'c'}style="text-decoration:line-through;"{/if} class="{cycle values='odd,even'} prio{$tasks[user].priority}">
+						<td><input type="checkbox" name="task[{$tasks[user].task_id}]" /></td>
+						<td><a href="{$smarty.const.USERS_PKG_URL}tasks.php?task_use_dates={$task_use_dates}&amp;task_id={$tasks[user].task_id}&amp;offset={$offset}&amp;sort_mode={$sort_mode}&amp;find={$find}#tasks">{$tasks[user].title}</a></td>
+						<td {if $tasks[user].status eq 'c'}style="text-decoration:line-through;"{/if} class="prio{$tasks[user].priority}">{$tasks[user].date|bit_short_date}</td>
+						<td style="text-align:right;{if $tasks[user].status eq 'c'}text-decoration:line-through;{/if}" class="prio{$tasks[user].priority}">{$tasks[user].priority}</td>
+						<td style="text-align:right;{if $tasks[user].status eq 'c'}text-decoration:line-through;{/if}" class="prio{$tasks[user].priority}">
+							<select name="task_perc[{$tasks[user].task_id}]">
 								{section name=zz loop=$percs}
-									<option value="{$percs[zz]|escape}" {if $channels[user].percentage eq $percs[zz]}selected="selected"{/if}>{$percs[zz]}%</option>	
+									<option value="{$percs[zz]|escape}" {if $tasks[user].percentage eq $percs[zz]}selected="selected"{/if}>{$percs[zz]}%</option>	
 								{/section}
 							</select>
 						</td>

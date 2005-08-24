@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.2 2005/08/01 18:42:02 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.3 2005/08/24 20:59:13 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -18,6 +18,7 @@ $assignUser = new BitPermUser( $_REQUEST["assign_user"] );
 $assignUser->load( TRUE );
 
 if( isset( $_REQUEST["action"] ) ) {
+	$gBitUser->verifyTicket();
 	if ($_REQUEST["action"] == 'assign') {
 		$assignUser->addUserToGroup( $assignUser->mUserId, $_REQUEST["group_id"] );
 	} elseif ($_REQUEST["action"] == 'removegroup') {
@@ -26,8 +27,9 @@ if( isset( $_REQUEST["action"] ) ) {
 	header( 'Location: '.$_SERVER['PHP_SELF'].'?assign_user='.$assignUser->mUserId );
 	die;
 }elseif(isset($_REQUEST['set_default'])) {
+	$gBitUser->verifyTicket();
 	$assignUser->storeUserDefaultGroup( $assignUser->mUserId, $_REQUEST['default_group'] );
-	$assignUser->load( TRUE );
+	$assignUser->load();
 }
 $gBitSmarty->assign_by_ref( 'assignUser', $assignUser );
 
