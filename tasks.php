@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/tasks.php,v 1.1.1.1.2.4 2005/08/25 21:10:31 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/tasks.php,v 1.1.1.1.2.5 2005/08/25 23:58:25 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: tasks.php,v 1.1.1.1.2.4 2005/08/25 21:10:31 lsces Exp $
+ * $Id: tasks.php,v 1.1.1.1.2.5 2005/08/25 23:58:25 lsces Exp $
  * @package users
  * @subpackage functions
  */
@@ -87,8 +87,7 @@ if ($_REQUEST["task_id"]) {
 	$info['date'] = $gBitSystem->getUTCTime();
 }
 if (isset($_REQUEST['save'])) {
-	$dc = &$gBitSystem->get_date_converter($gBitUser->mUserId);
-	$date = $dc->getServerDateFromDisplayDate(mktime(0, 0, 0, $_REQUEST["Date_Month"], $_REQUEST["Date_Day"], $_REQUEST["Date_Year"]));
+	$date = $gBitSystem->mServerTimestamp->getUTCFromDisplayDate(mktime(0, 0, 0, $_REQUEST["Date_Month"], $_REQUEST["Date_Day"], $_REQUEST["Date_Year"]));
 	if ($_REQUEST['status'] == 'c') {
 		$_REQUEST['percentage'] = 100;
 		$completed = $date;
