@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/bookmark_lib.php,v 1.1.1.1.2.3 2005/08/07 16:27:48 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/bookmark_lib.php,v 1.1.1.1.2.4 2005/08/25 21:10:31 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: bookmark_lib.php,v 1.1.1.1.2.3 2005/08/07 16:27:48 lsces Exp $
+ * $Id: bookmark_lib.php,v 1.1.1.1.2.4 2005/08/25 21:10:31 lsces Exp $
  * @package users
  */
 
@@ -86,7 +86,8 @@ class BookmarkLib extends BitBase {
 	function replace_url($url_id, $folder_id, $name, $url, $user_id) {
 		$id = NULL;
 		if( strlen( $url ) < 250 ) {
-			$now = date("U");
+			global $gBitSystem;
+			$now = $gBitSystem->getUTCTime();
 			if ($url_id) {
 				$query = "update `".BIT_DB_PREFIX."tiki_user_bookmarks_urls` set `user_id`=?,`last_updated`=?,`folder_id`=?,`name`=?,`url`=? where `url_id`=?";
 				$bindvars=array($user_id,(int) $now,$folder_id,$name,$url,$url_id);
@@ -112,7 +113,8 @@ class BookmarkLib extends BitBase {
 			$data .= fread($fp, 4096);
 		}
 		fclose ($fp);
-		$now = date("U");
+		global $gBitSystem;
+		$now = $gBitSystem->getUTCTime();
 		$query = "update `".BIT_DB_PREFIX."tiki_user_bookmarks_urls` set `last_updated`=?, `data`=? where `url_id`=?";
 		$result = $this->mDb->query($query,array((int) $now,BitDb::db_byte_encode( $data ),$url_id));
 		return true;

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_tasks.php,v 1.1.1.1.2.3 2005/07/26 15:50:31 drewslater Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_tasks.php,v 1.1.1.1.2.4 2005/08/25 21:10:31 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: mod_user_tasks.php,v 1.1.1.1.2.3 2005/07/26 15:50:31 drewslater Exp $
+ * $Id: mod_user_tasks.php,v 1.1.1.1.2.4 2005/08/25 21:10:31 lsces Exp $
  * @package users
  * @subpackage modules
  */
@@ -23,7 +23,7 @@ if ($gBitUser->getUserId() > 0 && $gBitSystem->isFeatureActive('feature_tasks') 
 	if (isset($_SESSION['thedate'])) {
 		$pdate = $_SESSION['thedate'];
 	} else {
-		$pdate = date("U");
+		$pdate = $gBitSystem->getUTCTime();	
 	}
 	if (isset($_REQUEST["modTasksDel"])) {
 		foreach (array_keys($_REQUEST["modTasks"])as $task) {
@@ -36,7 +36,7 @@ if ($gBitUser->getUserId() > 0 && $gBitSystem->isFeatureActive('feature_tasks') 
 		}
 	}
 	if (isset($_REQUEST["modTasksSave"])) {
-		$tasklib->replace_task($gBitUser->getUserId(), 0, $_REQUEST['modTasksTitle'], $_REQUEST['modTasksTitle'], date("U"), 'o', 3, 0, 0);
+		$tasklib->replace_task($gBitUser->getUserId(), 0, $_REQUEST['modTasksTitle'], $_REQUEST['modTasksTitle'], $gBitSystem->getUTCTime(), 'o', 3, 0, 0);
 	}
 	$ownurl =/*httpPrefix().*/ $_SERVER["REQUEST_URI"];
 	$gBitSmarty->assign('ownurl', $ownurl);

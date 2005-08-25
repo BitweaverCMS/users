@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/tasks.php,v 1.1.1.1.2.3 2005/08/14 08:47:37 wolff_borg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/tasks.php,v 1.1.1.1.2.4 2005/08/25 21:10:31 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: tasks.php,v 1.1.1.1.2.3 2005/08/14 08:47:37 wolff_borg Exp $
+ * $Id: tasks.php,v 1.1.1.1.2.4 2005/08/25 21:10:31 lsces Exp $
  * @package users
  * @subpackage functions
  */
@@ -84,7 +84,7 @@ if ($_REQUEST["task_id"]) {
 	$info['description'] = '';
 	$info['priority'] = 3;
 	$info['status'] = 'o';
-	$info['date'] = date("U");
+	$info['date'] = $gBitSystem->getUTCTime();
 }
 if (isset($_REQUEST['save'])) {
 	$dc = &$gBitSystem->get_date_converter($gBitUser->mUserId);
@@ -108,7 +108,7 @@ if (isset($_REQUEST['save'])) {
 	$info['description'] = '';
 	$info['priority'] = 3;
 	$info['status'] = 'o';
-	$info['date'] = date("U");
+	$info['date'] = $gBitSystem->getUTCTime();
 	$_REQUEST["task_id"] = 0;
 }
 $gBitSmarty->assign('task_id', $_REQUEST["task_id"]);
@@ -141,7 +141,7 @@ $gBitSmarty->assign_by_ref('sort_mode', $sort_mode);
 if (isset($_SESSION['thedate'])) {
 	$pdate = $_SESSION['thedate'];
 } else {
-	$pdate = date("U");
+	$pdate = $gBitSystem->getUTCTime();
 }
 $tasks = $tasklib->list_tasks($gBitUser->mUserId, $offset, $maxRecords, $sort_mode, $find, $tasks_use_dates, $pdate);
 if($maxRecords == 0) {
