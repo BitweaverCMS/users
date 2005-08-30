@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/userfiles_lib.php,v 1.3 2005/08/07 17:46:46 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/userfiles_lib.php,v 1.4 2005/08/30 22:37:36 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: userfiles_lib.php,v 1.3 2005/08/07 17:46:46 squareing Exp $
+ * $Id: userfiles_lib.php,v 1.4 2005/08/30 22:37:36 squareing Exp $
  * @package users
  */
 
@@ -30,7 +30,8 @@ class UserFilesLib extends BitBase {
 		return $part1 + $part2;
 	}
 	function upload_userfile($user, $name, $filename, $filetype, $filesize, $data, $path) {
-		$now = date("U");
+		global $gBitSystem;
+		$now = $gBitSystem->getUTCTime();
 		$query = "insert into `".BIT_DB_PREFIX."tiki_userfiles`(`user_id`,`name`,`filename`,`filetype`,`filesize`,`data`,`created`,`hits`,`path`)
     values(?,?,?,?,?,?,?,?,?)";
 		$this->mDb->query($query,array($user,$name,$filename,$filetype,(int) $filesize,$this->db_byte_encode($data),(int) $now,0,$path));

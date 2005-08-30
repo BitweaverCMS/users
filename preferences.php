@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.5 2005/08/24 20:59:13 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.6 2005/08/30 22:37:36 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.5 2005/08/24 20:59:13 squareing Exp $
+ * $Id: preferences.php,v 1.6 2005/08/30 22:37:36 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -56,6 +56,15 @@ if( $gBitSystem->isPackageActive( 'wiki' ) ) {
 if( !empty( $gBitSystem->mPrefs['custom_user_fields'] ) ) {
 	$customFields= explode( ',', $gBitSystem->mPrefs['custom_user_fields']  );
 	$gBitSmarty->assign('customFields', $customFields);
+}
+
+if( $gBitSystem->isPackageActive( 'calendar' ) ) {
+	include_once( CALENDAR_PKG_PATH.'admin/admin_calendar_inc.php' );
+	if( !empty( $_REQUEST['calendar_submit'] ) ) {
+		foreach( $calendarValues as $item ) {
+			$editUser->storePreference( $item, $_REQUEST[$item] );
+		}
+	}
 }
 
 $gBitLanguage->mLanguage = $editUser->getPreference( 'bitlanguage', $gBitLanguage->mLanguage);

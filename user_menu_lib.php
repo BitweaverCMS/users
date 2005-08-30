@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/user_menu_lib.php,v 1.3 2005/08/07 17:46:46 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/user_menu_lib.php,v 1.4 2005/08/30 22:37:36 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: user_menu_lib.php,v 1.3 2005/08/07 17:46:46 squareing Exp $
+ * $Id: user_menu_lib.php,v 1.4 2005/08/30 22:37:36 squareing Exp $
  * @package users
  */
 
@@ -76,7 +76,8 @@ class UserMenuLib extends BitBase {
 		return $this->mDb->getOne("select max(`position`) from `".BIT_DB_PREFIX."tiki_user_menus` where `user_id`=?",array($user));
 	}
 	function replace_usermenu($user, $menu_id, $name, $url, $position, $mode) {
-		$now = date("U");
+		global $gBitSystem;
+		$now = $gBitSystem->getUTCTime();
 		if ($menu_id) {
 			$query = "update `".BIT_DB_PREFIX."tiki_user_menus` set `name`=?, `position`=?, `url`=?, `mode`=? where `user_id`=? and `menu_id`=?";
 			$this->mDb->query($query,array($name,$position,$url,$mode,$user,$menu_id));

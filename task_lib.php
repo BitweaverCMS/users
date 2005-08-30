@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/task_lib.php,v 1.3 2005/08/07 17:46:46 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/task_lib.php,v 1.4 2005/08/30 22:37:36 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: task_lib.php,v 1.3 2005/08/07 17:46:46 squareing Exp $
+ * $Id: task_lib.php,v 1.4 2005/08/30 22:37:36 squareing Exp $
  * @package users
  */
 
@@ -56,7 +56,8 @@ class TaskLib extends BitBase {
 	}
 
 	function complete_task( $pUserId,  $task_id) {
-		$now = date("U");
+		global $gBitSystem;
+		$now = $gBitSystem->getUTCTime();
 		$query = "update `".BIT_DB_PREFIX."tiki_user_tasks` set `completed`=?, `status`='c', `percentage`=100 where `user_id`=? and `task_id`=?";
 		$this->mDb->query($query,array((int)$now, $pUserId, (int)$task_id));
 	}
@@ -67,7 +68,8 @@ class TaskLib extends BitBase {
 	}
 
 	function list_tasks( $pUserId,  $offset, $maxRecords, $sort_mode, $find, $use_date, $pdate) {
-		$now = date("U");
+		global $gBitSystem;
+		$now = $gBitSystem->getUTCTime();
 		$bindvars=array($pUserId);
 		if ($use_date == 'y') {
 			$prio = " and `date`<=? ";

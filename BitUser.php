@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.11 2005/08/24 20:59:13 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.12 2005/08/30 22:37:36 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.11 2005/08/24 20:59:13 squareing Exp $
+ * $Id: BitUser.php,v 1.12 2005/08/30 22:37:36 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.11 $
+ * @version  $Revision: 1.12 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -237,7 +237,8 @@ class BitUser extends LibertyAttachable {
 
 	function updateSession( $pSessionId ) {
 		if ( !$this->isDatabaseValid() ) return true;
-		$now = date("U");
+		global $gBitSystem;
+		$now = $gBitSystem->getUTCTime();
 		$oldy = $now - (5 * 60);
 		$bindVars = array( $now, $pSessionId );
 		$userDelSql = '';
@@ -375,7 +376,7 @@ class BitUser extends LibertyAttachable {
 			} else {
 				// Generate a unique hash
 				$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pParamHash['password'].$pParamHash['email'] );
-				$now = date("U");
+				$now = $gBitSystem->getUTCTime();
 				if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getPreference('pass_due') ) {
 					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getPreference('pass_due') );
 				} elseif( isset( $pParamHash['pass_due'] ) ) {
@@ -894,7 +895,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 					$result = $this->mDb->query( $query, array( $loginVal, $hash, $hash2 ) );
 					if ($result->numRows()) {
 						$query = "update `".BIT_DB_PREFIX."users_users` set `last_login`=`current_login`, `current_login`=? where `user_id`=?";
-						$result = $this->mDb->query($query, array( (int)date("U"), $userId ));
+						$result = $this->mDb->query($query, array( $gBitSystem->getUTCTime(), $userId ));
 						$ret = $userId;
 					} else {
 						$this->mErrors['login'] = 'Password incorrect';
@@ -924,9 +925,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	function update_lastlogin( $pUserId ) {
 		$ret = FALSE;
 		if( is_numeric( $pUserId ) ) {
+			global $gBitSystem;
 			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `last_login`=`current_login`, `current_login`=?
 					  WHERE `user_id`=?";
-			$result = $this->mDb->query( $query, array( (int)date("U"), $pUserId ) );
+			$result = $this->mDb->query( $query, array( $gBitSystem->getUTCTime(), $pUserId ) );
 			$ret = TRUE;
 		}
 		return $ret;
@@ -1091,18 +1093,20 @@ echo "userAuthPresent: $userAuthPresent<br>";
 					  WHERE `pass_due` IS NOT NULL AND `user_id`=? ";
 			$due = $this->mDb->getAssoc( $query, array( $this->mUserId ) );
 			if( !empty( $due['user_id'] ) ) {
-				$ret = $due['pass_due'] <= date("U");
+				global $gBitSystem;
+				$ret = $due['pass_due'] <= $gBitSystem->getUTCTime();
 			}
 		}
 		return $ret;
 	}
 	function renew_user_password($user) {
+		global $gBitSystem;
 		$pass = BitSystem::genPass();
 		$query = "select `email` from `".BIT_DB_PREFIX."users_users` where `login` = ?";
 		$email = $this->mDb->getOne($query, array($user));
 		$hash = md5(strtolower($user) . $pass . $email);
 		// Note that tiki-generated passwords are due inmediatley
-		$now = date("U");
+		$now = $gBitSystem->getUTCTime();
 		$query = "update `".BIT_DB_PREFIX."users_users` set `password` = ?, `hash` = ?, `pass_due` = ? where ".$this->mDb->convert_binary()." `login` = ?";
 		$result = $this->mDb->query($query, array($pass, $hash, $now, $user));
 		return $pass;
@@ -1114,7 +1118,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$email = $this->mDb->getOne($query, array($user));
 		$email=trim($email);
 		$hash = md5(strtolower($user) . $pass . $email);
-		$now = date("U");
+		$now = $gBitSystem->getUTCTime();;
 		$new_pass_due = $now + (60 * 60 * 24 * $gBitSystem->getPreference( 'pass_due' ) );
 		if( !$gBitSystem->isFeatureActive( 'feature_clear_passwords' ) ) {
 			$pass = '';
@@ -1584,7 +1588,8 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	}
 
 	function isSemaphoreSet( $pSemName, $pLimit ) {
-		$now = date("U");
+		global $gBitSystem;
+		$now = $gBitSystem->getUTCTime();
 		$lim = $now - $pLimit;
 		$query = "delete from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`=? and `created`<?";
 		$result = $this->mDb->query($query,array( $pSemName, (int)$lim) );
@@ -1594,9 +1599,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	}
 
 	function hasSemaphoreConflict( $pSemName, $pLimit ) {
+		global $gBitSystem;
 		$ret = NULL;
 		$userId = $this->isValid() ? $this->mUserId : ANONYMOUS_USER_ID;
-		$now = date("U");
+		$now = $gBitSystem->getUTCTime();
 		$lim = $now - $pLimit;
 		$query = "delete from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`=? and `created`<?";
 		$result = $this->mDb->query($query,array( $pSemName, (int)$lim) );
@@ -1613,8 +1619,9 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 	function storeSemaphore( $pSemName ) {
 		if( !empty( $pSemName ) ) {
+			global $gBitSystem;
 			$userId = $this->isValid() ? $this->mUserId : ANONYMOUS_USER_ID;
-			$now = date("U");
+			$now = $gBitSystem->getUTCTime();
 			//	$cant=$this->mDb->getOne("select count(*) from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`='$pSemName'");
 			$query = "delete from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`=?";
 			$this->mDb->query($query,array($pSemName));

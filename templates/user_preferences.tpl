@@ -264,6 +264,13 @@
 				{/jstab}
 			{/if}
 
+			{if $gBitSystem->isPackageActive( 'calendar' )}
+				{jstab title="Calendar"}
+				{debug}
+					{include file='bitpackage:calendar/calendar_preferences_inc.tpl' settings=$userPrefs}
+				{/jstab}
+			{/if}
+
 			{if $gBitSystem->isFeatureActive( 'feature_tasks' )}
 				{jstab title="User Tasks"}
 					{form legend="User Tasks"}
