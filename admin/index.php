@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.1.1.1.2.8 2005/09/02 13:18:04 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.1.1.1.2.9 2005/09/02 16:08:14 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -89,6 +89,7 @@ if (isset($_REQUEST["newuser"])) {
 	$assume_user = (is_numeric( $_REQUEST["assume_user"] )) ? array( 'user_id' => $_REQUEST["assume_user"] ) : array('login' => $_REQUEST["assume_user"]) ;
 	$userInfo = $gBitUser->getUserInfo( $assume_user );
 	if( isset( $_REQUEST["confirm"] ) ) {
+		$gBitUser->verifyTicket();
 		if( $gBitUser->assumeUser( $userInfo["user_id"] ) ) {
 			header( 'Location: '.$gBitSystem->getDefaultPage() );
 			die;
