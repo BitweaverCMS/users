@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.1.1.1.2.7 2005/08/24 13:06:57 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.1.1.1.2.8 2005/09/02 13:18:04 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -108,9 +108,9 @@ if (isset($_REQUEST["newuser"])) {
 // Process actions here
 // Remove user or remove user from group
 if (isset($_REQUEST["action"])) {
-	
 	$formHash['action'] = $_REQUEST['action'];
 	if ($_REQUEST["action"] == 'delete') {
+		$gBitUser->verifyTicket();
 		$formHash['user_id'] = $_REQUEST['user_id'];
 		$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST["user_id"] ) );
 		if( !empty( $userInfo['user_id'] ) ) {

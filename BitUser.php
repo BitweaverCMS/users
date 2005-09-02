@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.40 2005/08/25 21:10:31 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.41 2005/09/02 13:18:03 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.40 2005/08/25 21:10:31 lsces Exp $
+ * $Id: BitUser.php,v 1.2.2.41 2005/09/02 13:18:03 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.40 $
+ * @version  $Revision: 1.2.2.41 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -593,7 +593,6 @@ if ($gDebug) echo "Run : QUIT<br>";
 		$this->mDb->StartTrans();
 		if( $_REQUEST["user_id"] != ANONYMOUS_USER_ID ) {
 			$userTables = array(
-				'users_groups_map',
 				'tiki_semaphores',
 				'tiki_user_bookmarks_urls',
 				'tiki_user_bookmarks_folders',
@@ -602,6 +601,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 				'tiki_user_preferences',
 				'tiki_user_watches',
 				'users_users',
+				'tiki_content',
 			);
 			foreach( $userTables as $table ) {
 				$query = "delete from `".BIT_DB_PREFIX.$table."` where `user_id` = ?";
