@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.5 2005/08/24 20:59:13 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.6 2005/09/03 10:22:20 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -89,6 +89,7 @@ if (isset($_REQUEST["newuser"])) {
 	$assume_user = (is_numeric( $_REQUEST["assume_user"] )) ? array( 'user_id' => $_REQUEST["assume_user"] ) : array('login' => $_REQUEST["assume_user"]) ;
 	$userInfo = $gBitUser->getUserInfo( $assume_user );
 	if( isset( $_REQUEST["confirm"] ) ) {
+		$gBitUser->verifyTicket();
 		if( $gBitUser->assumeUser( $userInfo["user_id"] ) ) {
 			header( 'Location: '.$gBitSystem->getDefaultPage() );
 			die;
@@ -108,9 +109,9 @@ if (isset($_REQUEST["newuser"])) {
 // Process actions here
 // Remove user or remove user from group
 if (isset($_REQUEST["action"])) {
-	
 	$formHash['action'] = $_REQUEST['action'];
 	if ($_REQUEST["action"] == 'delete') {
+		$gBitUser->verifyTicket();
 		$formHash['user_id'] = $_REQUEST['user_id'];
 		$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST["user_id"] ) );
 		if( !empty( $userInfo['user_id'] ) ) {

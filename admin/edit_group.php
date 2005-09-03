@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.2 2005/08/01 18:42:03 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.3 2005/09/03 10:22:20 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -17,6 +17,10 @@ $errorMsg = NULL;
 global $gBitInstaller;
 $gBitInstaller = &$gBitSystem;
 $gBitSystem->verifyInstalledPackages();
+
+if( count( $_GET ) > 2 || count( $_POST ) > 2 ) {
+	$gBitUser->verifyTicket();
+}
 
 if( !empty( $_REQUEST['group_id'] ) ) {
 	$allPerms = $gBitUser->getGroupPermissions( NULL, NULL, NULL, !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : NULL );
@@ -61,7 +65,7 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 		$_REQUEST["name"] = $_REQUEST["olgroup"];
 	}
 	// modification
-	
+
 	$_REQUEST['user_id'] = ROOT_USER_ID;
 	if( $gBitUser->storeGroup( $_REQUEST ) ) {
 		$successMsg = "Group changes were saved sucessfully.";
@@ -77,7 +81,6 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 
 //	$mid = 'bitpackage:users/admin_groups_list.tpl';
 } elseif (isset($_REQUEST['allper'])) {
-	
 	if ($_REQUEST['oper'] == 'assign') {
 		$gBitUser->assign_level_permissions($_REQUEST['group_id'], $_REQUEST['level']);
 	} else {
@@ -86,7 +89,6 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 } elseif (isset($_REQUEST["createlevel"])) {
 	$gBitUser->create_dummy_level($_REQUEST['level']);
 } elseif (isset($_REQUEST['updateperms'])) {
-
 	$updatePerms = $gBitUser->getgroupPermissions( $_REQUEST['group_id'] );
 	if (!empty($_REQUEST['level'])) {
 		foreach (array_keys($_REQUEST['level'])as $per) {
@@ -107,7 +109,6 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 	$allPerms = $gBitUser->getGroupPermissions();
 } elseif (isset($_REQUEST["action"])) {
 // Process a form to remove a group
-	
 	if( $_REQUEST["action"] == 'delete' ) {
 		if( $_REQUEST['group_id'] == $gBitSystem->getPreference( 'default_home_group' ) ) {
 			$gBitSystem->setPreference( 'default_home_group', NULL );

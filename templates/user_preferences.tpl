@@ -266,7 +266,6 @@
 
 			{if $gBitSystem->isPackageActive( 'calendar' )}
 				{jstab title="Calendar"}
-				{debug}
 					{include file='bitpackage:calendar/calendar_preferences_inc.tpl' settings=$userPrefs}
 				{/jstab}
 			{/if}
