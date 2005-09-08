@@ -3,8 +3,6 @@ global $gBitSystem, $gBitUser, $gBitSmarty;
 
 $gBitSystem->registerPackage( 'users', dirname( __FILE__).'/', FALSE );
 
-$gBitSystem->registerAppMenu( 'login', 'Login', '', '', 'login');
-
 $gBitSystem->registerNotifyEvent( array( "user_registers" => tra("A user registers") ) );
 
 if( $gBitSystem->isFeatureActive( 'feature_userfiles' ) ) {
@@ -227,6 +225,12 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		$gBitSmarty->assign('tasks_use_dates', $tasks_use_dates);
 		$gBitSmarty->assign('tasks_maxRecords', $tasks_maxRecords);
 		$gBitSmarty->assign('allowMsgs', $allowMsgs);
+	}
+
+	// register 'my' menu
+	if( $gBitUser->isValid() ) {
+		$displayTitle = !empty( $gBitSystem->mPrefs['site_menu_title'] ) ? $gBitSystem->mPrefs['site_menu_title'] : $gBitSystem->getPreference( 'siteTitle', 'Site' );
+		$gBitSystem->registerAppMenu( 'users', 'My '.$displayTitle, ($gBitSystem->getPreference('feature_userPreferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
 	}
 
 ?>
