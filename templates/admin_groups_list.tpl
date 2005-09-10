@@ -1,3 +1,4 @@
+{strip}
 <div class="listing users">
 	<div class="header">
 		<h1>{tr}List of existing groups{/tr}</h1>
@@ -61,3 +62,4 @@
 		{pagination}
 	</div><!-- end .body -->
 </div><!-- end .users -->
+{/strip}
