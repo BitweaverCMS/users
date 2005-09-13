@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/assignuser.tpl,v 1.1.1.1.2.3 2005/08/21 19:46:11 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/assignuser.tpl,v 1.1.1.1.2.4 2005/09/13 21:48:02 spiderr Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 <div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{biticon ipackage=liberty iname=back iexplain="back to users"}</a></div>
@@ -35,7 +35,7 @@
 						<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$groupId}">{$group.group_name}
 						{if $groupId eq $assignUser->mInfo.default_group_id}</strong>{/if}
 						{if $groupId != -1}
-							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="liberty" iname="delete_small" iexplain="remove group" iforce="icon"}</a>
+							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="liberty" iname="delete_small" iexplain="remove from group" iforce="icon"}</a>
 						{/if}
 						<br />
 					{/foreach}
