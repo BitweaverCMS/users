@@ -41,6 +41,7 @@
 									{tr}To enter some information here, please <a href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">edit your personal homepage</a>.{/tr}
 								{/if}
 							</p>
+									{include file="bitpackage:users/user_information_inc.tpl" userData=$gQueryUser}
 						{/if}
 
 						{if $userInfo.portrait_url}
@@ -53,6 +54,7 @@
 				</div><!-- end .body -->
 			{/jstab}
 
+{if $parsed}
 			{jstab title="User Information"}
 				<div class="header">
 					<h1 >{displayname hash=$userInfo nolink=true}</h1>
@@ -60,7 +62,9 @@
 
 				{include file="bitpackage:users/user_information_inc.tpl" userData=$gQueryUser}
 			{/jstab}
+{/if}
 		{/jstabs}
+
 	</div><!-- end .body -->
 </div><!-- end .user -->
 {/strip}
