@@ -1,5 +1,19 @@
 {strip}
 <div class="display wiki user">
+{if $gBitUser->hasPermission( 'bit_p_admin_users' ) || $gBitUser->mUserId eq $gQueryUser->mUserId}
+	<div class="floaticon">
+		{if $gBitUser->mUserId ne $gQueryUser->mUserId}
+			{smartlink ipackage=users ifile="admin/index.php" assume_user=$userInfo.user_id ititle="Assume user identity" ibiticon="users/assume_user"}
+		{else}
+			{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" ibiticon="liberty/edit"}
+		{/if}
+
+		{if $gBitUser->mUserId eq $gQueryUser->mUserId}
+			{smartlink ipackage=users ifile="edit_personal_page.php" ititle="Edit personal wiki page" ibiticon="liberty/edit"}
+		{/if}
+	</div>
+{/if}
+
 	<div class="header">
 		<h1 >{displayname hash=$userInfo nolink=true}</h1>
 	</div>
@@ -13,20 +27,6 @@
 	<div class="body">
 		{jstabs}
 			{jstab title="User Page"}
-				{if $gBitUser->hasPermission( 'bit_p_admin_users' ) || $gBitUser->mUserId eq $gQueryUser->mUserId}
-					<div class="floaticon">
-						{if $gBitUser->mUserId ne $gQueryUser->mUserId}
-							{smartlink ipackage=users ifile="admin/index.php" assume_user=$userInfo.user_id ititle="Assume user identity" ibiticon="users/assume_user"}
-						{else}
-							{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" ibiticon="liberty/edit"}
-						{/if}
-
-						{if $gBitUser->mUserId eq $gQueryUser->mUserId}
-							{smartlink ipackage=users ifile="edit_personal_page.php" ititle="Edit personal wiki page" ibiticon="liberty/edit"}
-						{/if}
-					</div>
-				{/if}
-
 					<div class="header">
 						<h1>{$userInfo.title}</h1>
 					</div>
