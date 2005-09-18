@@ -5,7 +5,7 @@
 			{if $gBitUser->mUserId ne $gQueryUser->mUserId}
 				{smartlink ipackage=users ifile="admin/index.php" assume_user=$userInfo.user_id ititle="Assume user identity" ibiticon="users/assume_user"}
 			{else}
-				{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" ibiticon="liberty/configure"}
+				{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" ibiticon="liberty/config"}
 			{/if}
 
 			{if $gBitUser->mUserId eq $gQueryUser->mUserId}
