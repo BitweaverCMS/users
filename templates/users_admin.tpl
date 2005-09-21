@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.1.1.1.2.3 2005/09/21 21:45:06 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.1.1.1.2.4 2005/09/21 22:51:11 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -92,7 +92,7 @@
 						{/forminput}
 					</div>
 
-					{include file="bitpackage:liberty/edit_service_minis_inc.tpl}
+					{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
 
 					<div class="row submit">
 						<input type="submit" name="newuser" value="{tr}Add User{/tr}"{if $defaultGroupId eq ''} disabled="disabled"{/if} />
