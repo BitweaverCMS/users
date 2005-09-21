@@ -1,7 +1,5 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.1.1.1.2.2 2005/08/21 22:36:01 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.1.1.1.2.3 2005/09/21 21:45:06 squareing Exp $ *}
 {strip}
-{assign var=serviceEditTpls value=$gLibertySystem->getServiceValues('content_edit_tpl')}
-
 <div class="floaticon">{bithelp}</div>
 
 <div class="admin users">
@@ -94,15 +92,7 @@
 						{/forminput}
 					</div>
 
-					{if $serviceEditTpls.access_control }
-						{include file=$serviceEditTpls.access_control"}
-					{/if}
-
-					{if $serviceEditTpls.categorization }
-						{legend legend="Categorize"}
-							{include file=$serviceEditTpls.categorization"}
-						{/legend}
-					{/if}
+					{include file="bitpackage:liberty/edit_service_minis_inc.tpl}
 
 					<div class="row submit">
 						<input type="submit" name="newuser" value="{tr}Add User{/tr}"{if $defaultGroupId eq ''} disabled="disabled"{/if} />
