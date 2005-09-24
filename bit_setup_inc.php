@@ -51,6 +51,8 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	session_name( BIT_SESSION_NAME );
 	if ($gBitSystem->isFeatureActive('rememberme')) {
 		session_set_cookie_params($session_lifetime, $cookie_path, $gBitSystem->getPreference('cookie_domain'));
+	} else {
+		session_set_cookie_params($session_lifetime, BIT_ROOT_URL);
 	}
 	session_start();
 

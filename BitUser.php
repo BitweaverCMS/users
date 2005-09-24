@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.41 2005/09/02 13:18:03 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.42 2005/09/24 04:33:14 wolff_borg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.41 2005/09/02 13:18:03 spiderr Exp $
+ * $Id: BitUser.php,v 1.2.2.42 2005/09/24 04:33:14 wolff_borg Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.41 $
+ * @version  $Revision: 1.2.2.42 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -667,7 +667,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 						setcookie($user_cookie_site, $userInfo['hash'], (int)(time() + $gBitSystem->getPreference( 'remembertime' )), $gBitSystem->getPreference('cookie_path'), $gBitSystem->getPreference('cookie_domain') );
 					}
 				} else {
-					setcookie(BIT_SESSION_NAME, $userInfo['hash']);
+					setcookie(BIT_SESSION_NAME, $userInfo['hash'], 0, BIT_ROOT_URL);
 				}
 			}
 		} else {
