@@ -29,16 +29,16 @@
 				</div>
 
 				<div class="row submit">
-					<input type="submit" name="fResetCSS" id="reset" value="Reset CSS File" onclick="return confirm('{tr}Are you sure you want to reset your CSS back to the defaults? Any changes you have made will be lost.{/tr}');">
+					<input type="submit" name="fResetCSS" id="reset" value="Reset CSS File" onclick="return confirm('{tr}Are you sure you want to reset your CSS back to the defaults? Any changes you have made will be lost.{/tr}');" />
 				</div>
 
 				<div class="row">
-					<textarea name="textData" rows="42" cols="80" wrap="virtual">{$data|escape}</textarea>
+					<textarea name="textData" rows="42" cols="80">{$data|escape}</textarea>
 				</div>
 
 				<div class="row submit">
-					<input type="submit" name="fSaveCSS" value="Save">
-					<input type="submit" name="fCancelCSS" value="Cancel">
+					<input type="submit" name="fSaveCSS" value="Save" />
+					<input type="submit" name="fCancelCSS" value="Cancel" />
 				</div>
 			{/form}
 
@@ -47,14 +47,14 @@
 					<div class="row">
 						{formlabel label="Upload Image" for="upload"}
 						{forminput}
-							<input type="hidden" name="MAX_FILE_SIZE" value="1024000">
-							<input type="file" name="fImgUpload">
+							<input type="hidden" name="MAX_FILE_SIZE" value="1024000" />
+							<input type="file" name="fImgUpload" />
 							{formhelp note=""}
 						{/forminput}
 					</div>
 
 					<div class="row submit">
-						<input type="submit" value="Upload Image" name="fUpload" id="upload">
+						<input type="submit" value="Upload Image" name="fUpload" id="upload" />
 					</div>
 				{/legend}
 
@@ -62,9 +62,9 @@
 					{legend legend="Images Used By Your Custom Theme"}
 						{section name=ix loop=$themeImages}
 							<div class="{cycle values='odd,even'}">
-								{$themeImages[ix]} <input name="fDeleteImg[{$themeImages[ix]}]" class="icon" type="image" src="{$smarty.const.LIBERTY_PKG_URL}icons/delete_small.gif" title="{tr}Remove{/tr}" alt="{tr}Remove{/tr}" onclick="return confirm('Are you sure you want to delete {$themeImages[ix]}?');"/></td>
+								{$themeImages[ix]} <input name="fDeleteImg[{$themeImages[ix]}]" class="icon" type="image" src="{$smarty.const.LIBERTY_PKG_URL}icons/delete_small.gif" title="{tr}Remove{/tr}" alt="{tr}Remove{/tr}" onclick="return confirm('Are you sure you want to delete {$themeImages[ix]}?');" />
 								<br />
-								<img class="icon" src="{$gQueryUser->getStorageURL('theme/images/',$gQueryUser->mUserId,'')}{$themeImages[ix]}" title="{tr}Preview{/tr}" alt="{tr}Preview{/tr}" onclick="javascript:popup('preview_image.php?fImg={$customCSSImageURL}/{$themeImages[ix]}')">
+								<img class="icon" src="{$gQueryUser->getStorageURL('theme/images/',$gQueryUser->mUserId,'')}{$themeImages[ix]}" title="{$themeImages[ix]}" alt="{tr}Preview Image{/tr}" />
 							</div>
 						{/section}
 					{/legend}
