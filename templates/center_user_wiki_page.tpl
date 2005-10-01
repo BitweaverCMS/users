@@ -1,4 +1,11 @@
 {strip}
+
+{if $userInfo.logo_url}
+	<p style="text-align:center;">
+		<img src="{$userInfo.logo_url}" class="icon" title="{tr}Logo{/tr}" alt="{$gBitUser->getDisplayName()} {tr}Logo{/tr}" />
+	</p>
+{/if}
+
 <div class="display wiki user">
 	{if $gBitUser->hasPermission( 'bit_p_admin_users' ) || $gBitUser->mUserId eq $gQueryUser->mUserId}
 		<div class="floaticon">

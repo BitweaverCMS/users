@@ -11,8 +11,7 @@
 		{else if $gBitSystem->isFeatureActive( 'feature_user_layout' )}
 			{assign var="myLayoutConfig" value="My Site Layout"}
 		{/if}
-		{if $gBitSystem->isFeatureActive( 'feature_user_layout' ) or $gBitSystemPrefs.feature_user_layout eq 'h'
-			or $gBitSystem->isFeatureActive( 'feature_user_theme' ) || $gBitSystemPrefs.feature_user_theme eq 'h' }
+		{if $gBitUser->canCustomizeTheme() || $gBitUser->canCustomizeLayout() }
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}assigned_modules.php">{biticon ipackage=liberty iname=config iexplain=Configure iforce=icon} {tr}Configure {$myLayoutConfig}{/tr}</a></li>
 		{/if}
 		{if $gBitSystem->isFeatureActive( 'feature_userPreferences' )}
@@ -22,7 +21,7 @@
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}bookmarks.php">{biticon ipackage=liberty iname=spacer iforce=icon} {tr}Bookmarks{/tr}</a></li>
 		{/if}
 		{if $gBitSystem->isPackageActive( 'messages' ) and $gBitUser->hasPermission( 'bit_p_messages' )}
-			<li><a class="item" href="{$smarty.const.MESSU_PKG_URL}message_box.php">{biticon ipackage=liberty iname=spacer iforce=icon} {tr}Messages{/tr}</a></li> 
+			<li><a class="item" href="{$smarty.const.MESSU_PKG_URL}message_box.php">{biticon ipackage=liberty iname=spacer iforce=icon} {tr}Messages{/tr}</a></li>
 		{/if}
 		{if $gBitSystem->isPackageActive( 'minical' )}
 			<li><a class="item" href="{$smarty.const.MINICAL_PKG_URL}index.php">{biticon ipackage=liberty iname=spacer iforce=icon} {tr}Mini calendar{/tr}</a></li>

@@ -294,7 +294,6 @@ $gBitInstaller->registerPreferences( USERS_PKG_NAME, array(
 	array('users','feature_tasks','n'),
 	array('users','feature_usermenu','n'),
 	array('users','feature_userPreferences','y'),
-	array('users','change_theme','y'),
 	array('users','display_name','real_name'),
 	array('users','change_language','y'),
 	array('users','case_sensitive_login','y'),
@@ -314,6 +313,9 @@ $gBitInstaller->registerUserPermissions( USERS_PKG_NAME, array(
 	array('bit_p_tasks', 'Can use tasks', 'registered', 'users'),
 	array('bit_p_admin_users', 'Can edit the information for other users', 'admin', 'users'),
 	array('bit_p_view_tabs_and_tools', 'Can view tab and tool links', 'basic', 'users'),
+	array('bit_p_custom_home_theme', 'Can modify user homepage theme', 'editors', 'editors'),
+	array('bit_p_custom_home_layout', 'Can modify user homepage layout', 'editors', 'editors'),
+	array('bit_p_custom_css', 'Can create custom style sheets', 'editors', 'editors'),
 ) );
 
 
