@@ -29,14 +29,13 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$gBitSystem->storePreference( 'cookie_path', $cookie_path );
 
 	// set session lifetime
-	$session_lifetime = $gBitSystem->getPreference('session_lifetime', '0');
-	if ($session_lifetime > 0)
-	{
-		ini_set('session.gc_maxlifetime', $session_lifetime * 60);
+	$session_lifetime = $gBitSystem->getPreference( 'session_lifetime', '0' );
+	if( $session_lifetime > 0 ) {
+		ini_set( 'session.gc_maxlifetime', $session_lifetime );
 	}
+
 	// is session data  stored in DB or in filesystem?
-	if( $gBitSystem->isFeatureActive( 'y' ) && !empty( $gBitDbType ) )
-	{
+	if( $gBitSystem->isFeatureActive( 'y' ) && !empty( $gBitDbType ) ) {
 		include(UTIL_PKG_PATH . 'adodb/session/adodb-session.php');
 		ADODB_Session::dataFieldName('session_data');
 		ADODB_Session::driver($gBitDbType);
@@ -45,7 +44,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		ADODB_Session::password($gBitDbPassword);
 		ADODB_Session::database($gBitDbName);
 		ADODB_Session::table(BIT_DB_PREFIX.'sessions');
-		ini_set('session.save_handler', 'user');
+		ini_set( 'session.save_handler', 'user' );
 	}
 
 	session_name( BIT_SESSION_NAME );
