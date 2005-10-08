@@ -1,17 +1,45 @@
 <?php
+// $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.php,v 1.1.1.1.2.3 2005/10/08 16:46:59 squareing Exp $
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.php,v 1.1.1.1.2.2 2005/07/26 15:50:31 drewslater Exp $
- *
- * Copyright (c) 2004 bitweaver.org
- * Copyright (c) 2003 tikwiki.org
- * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * All Rights Reserved. See copyright.txt for details and a complete list of authors.
- * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
- *
- * $Id: mod_user_pages.php,v 1.1.1.1.2.2 2005/07/26 15:50:31 drewslater Exp $
- * @package users
+ * Params:
+ * - content_type_guid : if set, show only those content_type_guid's
+ * - show_date : if set, show date of last modification
+ * @package liberty
  * @subpackage modules
  */
-$ranking = $gBitSystem->get_user_pages($user, $module_rows);
-$gBitSmarty->assign('modUserPages', $ranking);
+
+
+global $gQueryUser, $gBitUser, $module_rows, $module_params, $gLibertySystem, $module_title;
+
+
+$userId = $gBitUser->mUserId;
+if( !empty( $gQueryUser->mUserId ) ) {
+	$userId = $gQueryUser->mUserId;
+}
+
+if( empty( $module_title ) ) {
+	if( !empty( $module_params['content_type_guid'] ) && !empty( $gLibertySystem->mContentTypes[$module_params['content_type_guid']] ) ) {
+		$title = tra( "Last Changes" ).': '.tra( $gLibertySystem->mContentTypes[$module_params['content_type_guid']]['content_description'] );
+		$gBitSmarty->assign( 'contentType', $module_params['content_type_guid'] );
+	} else {
+		$gBitSmarty->assign( 'userContentType', FALSE );
+		$title = tra( "Last Changes" );
+	}
+	$gBitSmarty->assign( 'moduleTitle', $title );
+}
+
+if( !empty( $module_params['show_date'] ) ) {
+	$gBitSmarty->assign( 'userShowDate' , TRUE );
+}
+
+$listHash = array(
+	'content_type_guid' => !empty( $module_params['content_type_guid'] ) ? $module_params['content_type_guid'] : NULL,
+	'offset' => 0,
+	'max_records' => $module_rows,
+	'sort_mode' => 'last_modified_desc',
+	'user_id' => $userId,
+);
+$modLastPages = $gBitUser->getContentList( $listHash );
+$gBitSmarty->assign_by_ref( 'modLastPages', $modLastPages['data'] );
 ?>
+
