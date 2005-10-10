@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.1.1.1.2.7 2005/08/16 11:36:35 wolff_borg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.1.1.1.2.8 2005/10/10 18:52:24 jht001 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: validate.php,v 1.1.1.1.2.7 2005/08/16 11:36:35 wolff_borg Exp $
+ * $Id: validate.php,v 1.1.1.1.2.8 2005/10/10 18:52:24 jht001 Exp $
  * @package users
  * @subpackage functions
  */
@@ -63,7 +63,7 @@ $challenge = isset($_REQUEST['challenge']) ? $_REQUEST['challenge'] : false;
 $response = isset($_REQUEST['response']) ? $_REQUEST['response'] : false;
 
 // if $referer is set, login() will return the user to whence he came
-$url = $gBitUser->login( $user, $pass, $challenge, $response );
+$url = httpPrefix() .  $gBitUser->login( $user, $pass, $challenge, $response );
 // but if we came from a login page, let's go home (except if we got an error when login in)
 if( (strpos( $url, 'login.php?' ) || strpos( $url, 'remind_password.php' )) && strpos( $url, 'login.php?error=') == -1) {
 	$url = $gBitSystem->getDefaultPage();

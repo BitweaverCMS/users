@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.43 2005/10/01 13:09:34 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.44 2005/10/10 18:52:24 jht001 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.43 2005/10/01 13:09:34 spiderr Exp $
+ * $Id: BitUser.php,v 1.2.2.44 2005/10/10 18:52:24 jht001 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.43 $
+ * @version  $Revision: 1.2.2.44 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -391,6 +391,21 @@ class BitUser extends LibertyAttachable {
 		return( count( $this->mErrors ) == 0 );
 	}
 
+   function get_SMTP_response ( &$pConnect ) {
+
+		$Out = "";
+		while (1) {
+			$work = fgets ( $pConnect, 1024 );
+			$Out .= $work;
+			if (!preg_match('/^\d\d\d-/',$work)) {
+				break;
+				}
+			}	
+   
+        return $Out;
+   }
+
+
 	function verifyEmail( $pEmail, $pValidate = FALSE ) {
 		global $gBitSystem, $gDebug;
 		$HTTP_HOST=$_SERVER['SERVER_NAME'];
@@ -441,21 +456,23 @@ class BitUser extends LibertyAttachable {
 					// Judgment is that service is preparing though begin by 220 getting string after connection .
 					// fgets function reference : http://www.php.net/manual/en/function.fgets.php
 					// A "Real domain name required for sender address"
-					if ( ereg ( "^220", $Out = fgets ( $Connect, 1024 ) ) ) {
+
+				$Out = $this->get_SMTP_response( $Connect );
+				if ( ereg ( "^220", $Out ) ) {
 						// Inform client's reaching to server who connect.
 						if( $gBitSystem->hasValidSenderEmail() ) {
 							$senderEmail = $gBitSystem->getPreference( 'sender_email' );
 							fputs ( $Connect, "HELO $HTTP_HOST\r\n" );
 if ($gDebug) echo "Run : HELO $HTTP_HOST<br>";
-							$Out = fgets ( $Connect, 1024 ); // Receive server's answering cord.
+							$Out = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
 							// Inform sender's address to server.
 							fputs ( $Connect, "MAIL FROM: <{$senderEmail}>\r\n" );
 if ($gDebug) echo "Run : MAIL FROM: &lt;{$senderEmail}&gt;<br>";
-							$From = fgets ( $Connect, 1024 ); // Receive server's answering cord.
+							$From = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
 							// Inform listener's address to server.
 							fputs ( $Connect, "RCPT TO: <{$pEmail}>\r\n" );
 if ($gDebug) echo "Run : RCPT TO: &lt;{$pEmail}&gt;<br>";
-							$To = fgets ( $Connect, 1024 ); // Receive server's answering cord.
+							$To = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
 							// Finish connection.
 							fputs ( $Connect, "QUIT\r\n");
 if ($gDebug) echo "Run : QUIT<br>";
@@ -643,7 +660,8 @@ if ($gDebug) echo "Run : QUIT<br>";
 		global $gBitSystem, $user_cookie_site;
 		$isvalid = false;
 		// Verify user is valid
-		if( $this->validate($pLogin, $pPassword, $pChallenge, $pResponse) ) {
+		$validate_result = $this->validate($pLogin, $pPassword, $pChallenge, $pResponse);
+		if( $validate_result ) {
 			$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
 			$userInfo = $this->getUserInfo( array( $loginCol => $pLogin ) );
 			// If the password is valid but it is due then force the user to change the password by
