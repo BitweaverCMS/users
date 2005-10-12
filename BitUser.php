@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.44 2005/10/10 18:52:24 jht001 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.45 2005/10/12 06:09:33 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.44 2005/10/10 18:52:24 jht001 Exp $
+ * $Id: BitUser.php,v 1.2.2.45 2005/10/12 06:09:33 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.44 $
+ * @version  $Revision: 1.2.2.45 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -680,12 +680,10 @@ if ($gDebug) echo "Run : QUIT<br>";
 				//unset session variable in case user su's
 				unset($_SESSION['loginfrom']);
 				// Now if the remember me feature is on and the user checked the rememberme checkbox then ...
-				if ($gBitSystem->isFeatureActive( 'rememberme' ) ) {
-					if (isset($_REQUEST['rme']) && $_REQUEST['rme'] == 'on') {
-						setcookie($user_cookie_site, $userInfo['hash'], (int)(time() + $gBitSystem->getPreference( 'remembertime' )), $gBitSystem->getPreference('cookie_path'), $gBitSystem->getPreference('cookie_domain') );
-					}
+				if ($gBitSystem->isFeatureActive( 'rememberme' )&& isset($_REQUEST['rme']) && $_REQUEST['rme'] == 'on') {
+					setcookie($user_cookie_site, $userInfo['hash'], (int)(time() + $gBitSystem->getPreference( 'remembertime' )), $gBitSystem->getPreference('cookie_path', BIT_ROOT_URL ), $gBitSystem->getPreference('cookie_domain') );
 				} else {
-					setcookie(BIT_SESSION_NAME, $userInfo['hash'], 0, BIT_ROOT_URL);
+					setcookie($user_cookie_site, $userInfo['hash'], 0, BIT_ROOT_URL);
 				}
 			}
 		} else {
