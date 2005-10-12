@@ -3,8 +3,6 @@ global $gBitSystem, $gBitUser, $gBitSmarty;
 
 $gBitSystem->registerPackage( 'users', dirname( __FILE__).'/', FALSE );
 
-$gBitSystem->registerAppMenu( 'login', 'Login', '', '', 'login');
-
 $gBitSystem->registerNotifyEvent( array( "user_registers" => tra("A user registers") ) );
 
 if( $gBitSystem->isFeatureActive( 'feature_userfiles' ) ) {
@@ -31,14 +29,13 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$gBitSystem->storePreference( 'cookie_path', $cookie_path );
 
 	// set session lifetime
-	$session_lifetime = $gBitSystem->getPreference('session_lifetime', '0');
-	if ($session_lifetime > 0)
-	{
-		ini_set('session.gc_maxlifetime', $session_lifetime * 60);
+	$session_lifetime = $gBitSystem->getPreference( 'session_lifetime', '0' );
+	if( $session_lifetime > 0 ) {
+		ini_set( 'session.gc_maxlifetime', $session_lifetime );
 	}
+
 	// is session data  stored in DB or in filesystem?
-	if( $gBitSystem->isFeatureActive( 'y' ) && !empty( $gBitDbType ) )
-	{
+	if( $gBitSystem->isFeatureActive( 'y' ) && !empty( $gBitDbType ) ) {
 		include(UTIL_PKG_PATH . 'adodb/session/adodb-session.php');
 		ADODB_Session::dataFieldName('session_data');
 		ADODB_Session::driver($gBitDbType);
@@ -47,12 +44,14 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		ADODB_Session::password($gBitDbPassword);
 		ADODB_Session::database($gBitDbName);
 		ADODB_Session::table(BIT_DB_PREFIX.'sessions');
-		ini_set('session.save_handler', 'user');
+		ini_set( 'session.save_handler', 'user' );
 	}
 
 	session_name( BIT_SESSION_NAME );
 	if ($gBitSystem->isFeatureActive('rememberme')) {
 		session_set_cookie_params($session_lifetime, $cookie_path, $gBitSystem->getPreference('cookie_domain'));
+	} else {
+		session_set_cookie_params($session_lifetime, BIT_ROOT_URL);
 	}
 	session_start();
 
@@ -221,6 +220,8 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$allowMsgs = 'n';
 	if( $gBitUser->isRegistered() ) {
 		global $tasks_use_dates, $tasks_maxRecords, $allowMsgs;
+		$user_dbl = $gBitUser->getPreference( 'user_dbl', 'y');
+		$gBitSmarty->assign('user_dbl', $user_dbl);
 		$allowMsgs = $gBitUser->getPreference( 'allowMsgs', 'y');
 		$tasks_use_dates = $gBitUser->getPreference( 'tasks_use_dates');
 		$tasks_maxRecords = $gBitUser->getPreference( 'tasks_maxRecords');
@@ -229,4 +230,9 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		$gBitSmarty->assign('allowMsgs', $allowMsgs);
 	}
 
+	// register 'my' menu
+	if( $gBitUser->isValid() && ( $gBitUser->isRegistered() || !$gBitSystem->isFeatureActive( 'hide_my_top_bar_link' ) ) ) {
+		$displayTitle = !empty( $gBitSystem->mPrefs['site_menu_title'] ) ? $gBitSystem->mPrefs['site_menu_title'] : $gBitSystem->getPreference( 'siteTitle', 'Site' );
+		$gBitSystem->registerAppMenu( 'users', 'My '.$displayTitle, ($gBitSystem->getPreference('feature_userPreferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
+	}
 ?>

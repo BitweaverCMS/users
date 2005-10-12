@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.8 2005/09/03 10:22:20 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.9 2005/10/12 15:14:07 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.8 2005/09/03 10:22:20 squareing Exp $
+ * $Id: BitPermUser.php,v 1.9 2005/10/12 15:14:07 spiderr Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.8 $
+ * @version  $Revision: 1.9 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -414,7 +414,8 @@ class BitPermUser extends BitUser {
 		$query = "delete from `".BIT_DB_PREFIX."users_groups_map` where `user_id` = ? and
 			`group_id` = ?";
 		$result = $this->mDb->query($query, array($pUserId, $pGroupId));
-		if( $pGroupId == key( $this->getDefaultGroup() ) ) {
+		$keyarray = $this->getDefaultGroup();
+		if( $pGroupId == key( $keyarray ) ) {
 			$query = "update `".BIT_DB_PREFIX."users_users` set `default_group_id` = NULL where `user_id` = ?";
 			$this->mDb->query($query, array( $pUserId ) );
 		}

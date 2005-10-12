@@ -61,14 +61,14 @@ if( isset( $_REQUEST['fTiki'] ) ) {
 	}
 	$gBitSystem->storePreference( 'custom_user_fields', $customFields );
 	$gBitSystem->storePreference( 'display_name', (isset( $_REQUEST['fTiki']['display_name'] ) ? $_REQUEST['fTiki']['display_name'] : 'real_name') );
-	$gBitSystem->storePreference( 'feature_user_theme', (isset( $_REQUEST['fTiki']['feature_user_theme'][0] ) ? $_REQUEST['fTiki']['feature_user_theme'][0] : 'n') );
-	$gBitSystem->storePreference( 'feature_user_layout', (isset( $_REQUEST['fTiki']['feature_user_layout'][0] ) ? $_REQUEST['fTiki']['feature_user_layout'][0] : 'n') );
+	$gBitSystem->storePreference( 'feature_user_theme', (isset( $_REQUEST['fTiki']['feature_user_theme'][0] ) ? $_REQUEST['fTiki']['feature_user_theme'][0] : NULL) );
+	$gBitSystem->storePreference( 'feature_user_layout', (isset( $_REQUEST['fTiki']['feature_user_layout'][0] ) ? $_REQUEST['fTiki']['feature_user_layout'][0] : NULL) );
 }
 
 // Handle Admin Password Change Request
 // doesn't seem to be working at the moment
 if (isset($_REQUEST["newadminpass"]) ) {
-	
+
     if ($_REQUEST["adminpass"] <> $_REQUEST["again"]) {
         $gBitSmarty->assign("msg", tra("The passwords don't match"));
 

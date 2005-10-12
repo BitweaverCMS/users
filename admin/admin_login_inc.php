@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.4 2005/10/12 15:14:09 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -237,7 +237,6 @@ if (isset($_REQUEST["auth_pear"])) {
 	$gBitSmarty->assign('auth_ldap_adminpass', $_REQUEST["auth_ldap_adminpass"]);
 	}
 }
-$gBitSmarty->assign("change_theme", $gBitSystem->getPreference("change_theme", "n"));
 $gBitSmarty->assign("change_language", $gBitSystem->getPreference("change_language", "n"));
 $gBitSmarty->assign("eponymousGroups", $gBitSystem->getPreference("eponymousGroups", 'n'));
 $gBitSmarty->assign("allowRegister", $gBitSystem->getPreference("allowRegister", 'n'));

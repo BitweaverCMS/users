@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.4 2005/10/12 15:14:07 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: theme.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
+ * $Id: theme.php,v 1.4 2005/10/12 15:14:07 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -71,7 +71,7 @@ function delete($dir, $pattern = "*.*")
     	$d = opendir($dir);
         while ($file = readdir($d)) {
             if (is_file($dir.$file) && ereg("^".$pattern."$", $file)){
-                if (unlink($dir.$file))    
+                if (unlink($dir.$file))
                 	$deleted[] = $file;
             }
         }
@@ -107,28 +107,21 @@ function copy_dirs($wf, $wto)
 
 //******** END HELPER FUNCTIONS **********
 
-// Permission checks
-if (!isset($feature_editcss))
-	$feature_editcss = 'n';
-
-if (!isset($bit_p_create_css))
-	$bit_p_create_css = 'n';
-
 $F = array();
 $errorMsg   = array();
 
 // Special case: the admin has turned of custom user themes but this user currently uses his/her custom theme
-if ($gQueryUser->mUserPrefs['theme'] == 'custom' && $feature_custom_user_themes == 'n') {
+if ($gQueryUser->mUserPrefs['theme'] == 'custom' && !$gBitUser->canCustomizeTheme() ) {
 	$gQueryUser->storePreference('theme', NULL);		// Set their homepage theme to fall back to the site's themeImages
 	$gQueryUser->mUserPrefs['theme'] = NULL;				// Update their mPrefs
 }
 
 $usingCustomTheme = ($gQueryUser->mUserPrefs['theme'] == 'custom' ? true : false);
+
 $gBitSmarty->assign_by_ref('usingCustomTheme', $usingCustomTheme);
 
-if ($feature_user_theme == 'n') {
+if( !$gBitUser->canCustomizeTheme() ) {
 	$gBitSmarty->assign('msg', tra("Feature disabled"));
-
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
@@ -136,8 +129,8 @@ if ($feature_user_theme == 'n') {
 $customCSSPath = $gQueryUser->getStoragePath('theme', $gQueryUser->mUserId, NULL);	// Path to this user's storage directory
 
 $customCSSFile = $customCSSPath.'custom.css';	// Path to this user's custom stylesheet
-$customCSSImageURL = $gQueryUser->getStorageURL().'/theme/images/';
-$gBitSmarty->assign_by_ref('customCSSImageURL',$customCSSImageURL);			
+$customCSSImageURL = $gQueryUser->getStorageURL( '/theme/images/', $gQueryUser->mUserId );
+$gBitSmarty->assign_by_ref('customCSSImageURL',$customCSSImageURL);
 
 // Create a custom.css for this user if they do not already have one
 if (!file_exists($customCSSFile)) {
@@ -160,55 +153,59 @@ if (isset($_REQUEST['fUseCustomTheme']) && $_REQUEST['fUseCustomTheme']) {
 
 if ($usingCustomTheme) {
 	$assignStyle = 'basic';
-	
+
 	// Action Responses
 	if (isset($_REQUEST["fSaveCSS"])and $_REQUEST["fSaveCSS"]) {
 		// Save any changes the user made to their CSS
 		$fp = fopen($customCSSFile, "w");
-	
+
 		if (!$fp) {
 			$gBitSmarty->assign('msg', tra("You dont have permission to write the style sheet"));
 			$gBitSystem->display( 'error.tpl' );
 			die;
 		}
-		
+
 		fwrite($fp, $_REQUEST["textData"]);
 		fclose ($fp);
 		$successMsg[] = "CSS Updated and Saved";
-		
+
 	} elseif (isset($_REQUEST["fCancelCSS"]) && $_REQUEST['fCancelCSS']) {
 		// Cancel (e.g. do nothing)
 		$successMsg[] = "Changes have been cancelled";
-		
+
 	} elseif (isset($_REQUEST['fResetCSS'])) {
 		// Reset CSS (e.g. copy an existing style as a base for their custom style)
+		unlink_r( $customCSSPath );
+		mkdir_p( $customCSSPath.'/images' );
 		$resetStyle = $_REQUEST['resetStyle'];
 		$cssData = $csslib->load_css2_file(THEMES_PKG_PATH."styles/$resetStyle/$resetStyle.css");
 		if (file_exists($customCSSPath.'/images')) {
 			$tcontrollib->expunge_dir($customCSSPath.'/images/');
 		} else {
-			mkdir_p($customCSSPath.'/images');
+			mkdir_p($customCSSPath);
 		}
+
 		if (file_exists(THEMES_PKG_PATH."styles/$resetStyle/images")) {
-			copy_dirs(THEMES_PKG_PATH."styles/$resetStyle/images", $customCSSPath.'/images/');				
+			//clean out any old junk
+			copy_dirs(THEMES_PKG_PATH."styles/$resetStyle/images", $customCSSPath.'/images/');
 		}
-				
+
 		$fp = fopen($customCSSFile, "w");
-	
+
 		if (!$fp) {
 			$gBitSmarty->assign('msg', tra("You dont have permission to write the style sheet"));
 			$gBitSystem->display( 'error.tpl' );
 			die;
 		}
-		
+
 		fwrite($fp, $cssData);
 		fclose ($fp);
 		$successMsg[] = "Your CSS has been reset to the $resetStyle theme.";
-		
+
 	} elseif (isset($_REQUEST['fUpload'])) {
 		if (!ereg(".JPG$|.PNG$|.GIF$|.BMP$",strtoupper($_FILES['fImgUpload']['name']))) {
 			$errorMsg[] = "Your image must be one of the following types: .jpg, .png, .gif, .bmp";
-		} else { 
+		} else {
 		//vd($_FILES['fImgUpload']['tmp_name']." -- ".$customCSSPath.'/images/'.$_FILES['fImgUpload']['name']);
 			/*vd($_FILES['fImgUpload']['error'] == UPLOAD_ERR_OK);
 			vd($_FILES['fImgUpload']['tmp_name']);
@@ -223,7 +220,7 @@ if ($usingCustomTheme) {
 				$errorMsg[] = "There was a problem uploading your image.";
 			}
 		}
-		
+
 	} elseif (isset($_REQUEST['fDeleteImg'])) {
 		/*$imgArray = $_REQUEST['fDeleteImg'];
 		foreach($imgArray as $key => $value) {
@@ -235,24 +232,25 @@ if ($usingCustomTheme) {
 				$errorMsg[] = "$key does not exists!";
 			}
 		}*/
-		$imgName = $_REQUEST['fDeleteImg'];
-		$imgPath = $customCSSPath.'/images/'.$imgName;		
+		$imgName = key( $_REQUEST['fDeleteImg'] );
+		$imgPath = $customCSSPath.'/images/'.$imgName;
 		if (file_exists($imgPath)) {
 			unlink($imgPath);
 			$successMsg[] = "$imgName successfully deleted";
 		} else {
 			$errorMsg[] = "$imgName does not exists!";
-		}		
+		}
 	} else {
 		$action = 'edit';
 	}
 } else {
 	// User is selecting from the standard themes
 	if (isset($_REQUEST['fChangeTheme']) && $_REQUEST['fChangeTheme']) {
-		$gQueryUser->storePreference('theme', $_REQUEST['fStyleChoice']);
-		$successMsg[] = "Theme successfully changed to ".$_REQUEST['fStyleChoice'];	
+		$gQueryUser->storePreference('theme', NULL);
+		$successMsg[] = "Theme successfully changed to ".$_REQUEST['fStyleChoice'];
 		$assignStyle = $_REQUEST['fStyleChoice'];
 	}
+	header( 'Location: '.USERS_PKG_URL.'assigned_modules.php' );
 }
 
 // Get the list of themes the user can choose to derive from (aka Reset to)
@@ -270,12 +268,12 @@ $lines = file($customCSSFile);
 $data = '';
 foreach ($lines as $line) {
 	$data .= $line;
-} 
+}
 
 $gBitSmarty->assign('data', $data);
 
 // Export success/error messages for display in the tpl.
-if (isset($successMsg)) 
+if (isset($successMsg))
 	$gBitSmarty->assign_by_ref('successMsg',$successMsg);
 if (isset($errorMsg))
 	$gBitSmarty->assign_by_ref('errorMsg', $errorMsg);
@@ -292,7 +290,7 @@ if( count( $imageList ) ) {
 }
 
 $gBitSmarty->assign('imagesCount', count($themeImages));
-$gBitSmarty->assign_by_ref('themeImages',$themeImages);	
+$gBitSmarty->assign_by_ref('themeImages',$themeImages);
 $gBitSmarty->assign('PHP_SELF', $_SERVER['PHP_SELF']);
 $gBitSmarty->assign_by_ref('gQueryUser', $gQueryUser);
 

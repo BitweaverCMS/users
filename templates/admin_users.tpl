@@ -26,7 +26,7 @@
 		{formlabel label="Users Can Customize Their Layout" for="feature_user_layout"}
 		{forminput}
 			<select name="fTiki[feature_user_layout]" id="feature_user_layout">
-				<option value="n">Never</option>
+				<option value="">Never</option>
 				<option value="h" {if $gBitSystemPrefs.feature_user_layout eq 'h'}selected="selected"{/if}>{tr}Just For Their Homepage{/tr}</option>
 			</select>
 			{formhelp note="Allows users to position and display their own set of modules" page="UsersConfigureModules"}
@@ -37,7 +37,7 @@
 		{formlabel label="Users Can Change Their Theme" for="feature_user_theme"}
 		{forminput}
 			<select name="fTiki[feature_user_theme]" id="feature_user_theme">
-				<option value="n">Never</option>
+				<option value="">Never</option>
 				<option value="h" {if $gBitSystemPrefs.feature_user_theme eq 'h'}selected="selected"{/if}>{tr}Just For Their Homepage{/tr}</option>
 				<option value="y" {if $gBitSystem->isFeatureActive( 'feature_user_theme' )}selected="selected"{/if}>{tr}For the Entire Site{/tr}</option>
 			</select>

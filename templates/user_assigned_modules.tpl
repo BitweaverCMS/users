@@ -10,7 +10,7 @@
 
 	<div class="body">
 
-		{if $gBitSystem->isFeatureActive( 'feature_user_layout' ) or $gBitSystemPrefs.feature_user_layout eq 'h'}
+		{if $gBitUser->canCustomizeLayout()}
 			<table style="width:100%" cellpadding="5" cellspacing="0" border="0">
 				<caption>{tr}Your HomePage Layout{/tr}</caption>
 				<tr>
@@ -39,7 +39,7 @@
 										</td>
 									</tr>
 								{sectionelse}
-									<tr class="{cycle}" >
+									<tr class="{cycle values="even,odd"}" >
 										<td colspan="3" align="center">
 											{if $colkey eq 'center'}{tr}Default{/tr}{else}{tr}None{/tr}{/if}
 										</td>
@@ -53,7 +53,7 @@
 		{/if}
 
 		{jstabs}
-			{if $gBitSystem->isFeatureActive( 'feature_user_layout' ) or $gBitSystemPrefs.feature_user_layout eq 'h' and $canassign eq 'y'}
+			{if $gBitUser->canCustomizeLayout()}
 				{jstab title="Assign Side Piece"}
 					{form legend="Assign Side Piece"}
 						{if $fEdit && $fAssign.name}
@@ -146,7 +146,7 @@
 				{/jstab}
 			{/if}
 
-			{if $gBitSystem->isFeatureActive( 'feature_user_theme' ) or $gBitSystemPrefs.feature_user_theme eq 'h'}
+			{if $gBitUser->canCustomizeTheme()}
 				{jstab title="Select Theme"}
 					{form legend="Select Theme"}
 						<div class="row">
@@ -157,6 +157,10 @@
 										<option value="{$styles[ix]|escape}" {if $assignStyle eq $styles[ix]}selected="selected"{/if}>{$styles[ix]}</option>
 									{/section}
 								</select>
+{if $gBitUser->hasPermission('bit_p_create_css')}
+	&nbsp; <strong>{tr}OR{/tr}</strong> &nbsp;
+	<a href="{$smarty.const.USERS_PKG_URL}theme.php?fUseCustomTheme=1">Use your custom theme >></a>
+{/if}
 								{formhelp note="Pick the theme for your personal Homepage."}
 							{/forminput}
 						</div>

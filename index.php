@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.7 2005/08/07 17:46:46 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.8 2005/10/12 15:14:07 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.7 2005/08/07 17:46:46 squareing Exp $
+ * $Id: index.php,v 1.8 2005/10/12 15:14:07 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -40,7 +40,7 @@ if( !empty( $_REQUEST['home'] ) ) {
 		$gBitSmarty->assign( 'gQueryUserId', $gQueryUserId );
 	}
 
-	if( $gBitSystem->getPreference('feature_user_theme') ) {
+	if( $gQueryUser->canCustomizeTheme() ) {
 		$userHomeStyle = $gQueryUser->getPreference( 'theme' );
 		if( isset( $userHomeStyle ) ) {
 			$gBitSystem->setStyle($userHomeStyle );
@@ -56,16 +56,14 @@ if( !empty( $_REQUEST['home'] ) ) {
 	//$_REQUEST['page'] = $userHomeTitle; // $_REQUEST['page'] should be used for requesting a page #! - drewslater
 
 // need to loadLayout prematurely (usually happens in modules_inc.php) so we can see if we have any center pieces
-	if( $gBitSystem->getPreference('feature_user_layout') == 'h' ) {
-		$user_name = $_REQUEST['home'];
-	} elseif( $gBitSystem->getPreference('feature_user_layout') == 'y' ) {
-		$user_name = $gBitUser->mUserId;
+	if( $gQueryUser->canCustomizeLayout() ) {
+		$homeName = $_REQUEST['home'];
 	} else {
-		$user_name = ROOT_USER_ID;
+		$homeName = ROOT_USER_ID;
 	}
 	$layout = HOMEPAGE_LAYOUT;
 	if( isset( $layout ) ) {
-		$gBitSystem->loadLayout( $user_name, $layout, ACTIVE_PACKAGE, TRUE );
+		$gBitSystem->loadLayout( $homeName, $layout, ACTIVE_PACKAGE, TRUE );
 	}
 	global $gCenterPieces;
 	$centerDisplay = ( count( $gCenterPieces ) ? 'bitpackage:kernel/dynamic.tpl' : 'bitpackage:users/center_user_wiki_page.tpl' );
