@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.45 2005/10/12 06:09:33 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.46 2005/10/20 07:06:36 jht001 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.45 2005/10/12 06:09:33 spiderr Exp $
+ * $Id: BitUser.php,v 1.2.2.46 2005/10/20 07:06:36 jht001 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.45 $
+ * @version  $Revision: 1.2.2.46 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -659,6 +659,13 @@ if ($gDebug) echo "Run : QUIT<br>";
 	function login( $pLogin, $pPassword, $pChallenge=NULL, $pResponse=NULL ) {
 		global $gBitSystem, $user_cookie_site;
 		$isvalid = false;
+		
+		// Make sure cookies are enabled
+		if ( !isset($_COOKIE['BWSESSION']) ) {
+			$url = USERS_PKG_URL.'login.php?error=' . urlencode(tra('no cookie found, please enable cookies and try again.'));
+			return ( $url );
+			}
+		
 		// Verify user is valid
 		$validate_result = $this->validate($pLogin, $pPassword, $pChallenge, $pResponse);
 		if( $validate_result ) {
