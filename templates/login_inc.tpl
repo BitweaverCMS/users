@@ -20,7 +20,7 @@
 		<div class="row">
 			{formlabel label="Remember me" for="rme"}
 			{forminput}
-				<input type="checkbox" name="rme" id="rme" value="on" checked=checked/>
+				<input type="checkbox" name="rme" id="rme" value="on" checked="checked" />
 				{formhelp note=""}
 			{/forminput}
 		</div>
