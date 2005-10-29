@@ -48,7 +48,7 @@
 	<div class="row">
 		{formlabel label="Custom User Fields" for="custom_user_fields"}
 		{forminput}
-			<textarea name="fTiki[custom_user_fields]" id="custom_user_fields" cols="60" rows="2">{$gBitSystemPrefs.custom_user_fields}</textarea>
+			<textarea name="fTiki[custom_user_fields]" id="custom_user_fields" cols="50" rows="2">{$gBitSystemPrefs.custom_user_fields}</textarea>
 			{formhelp note="Comma separated list of field names for custom user registration (maximum of 250 characters in total)." }
 		{/forminput}
 	</div>

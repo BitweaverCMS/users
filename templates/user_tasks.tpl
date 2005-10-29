@@ -83,7 +83,7 @@
 			<div class="row">
 				{formlabel label="Description" for="description"}
 				{forminput}
-					<textarea rows="10" cols="80" id="description" name="description">{$info.description|escape}</textarea>
+					<textarea rows="10" cols="50" id="description" name="description">{$info.description|escape}</textarea>
 				{/forminput}
 			</div>
 

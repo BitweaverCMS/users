@@ -321,7 +321,7 @@ for instance, i don't know where the page heading stuff is used.
 <caption>{tr}Enter Homepage Heading{/tr}</caption>
 <tr><td>{tr}Enter a maximum of 250 characters. You can include Wiki syntax.{/tr}</td></tr>
 <tr>
-	<td><textarea name="homeHeaderData" cols="60" rows="3">{$homeHeaderData}</textarea></td>
+	<td><textarea name="homeHeaderData" cols="50" rows="3">{$homeHeaderData}</textarea></td>
 </tr>
 <tr class="panelsubmitrow">
 	<td><input type="submit" name="fSubmitSetHeading" value="{tr}Set Heading{/tr}" /></td>

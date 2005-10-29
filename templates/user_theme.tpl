@@ -33,7 +33,7 @@
 				</div>
 
 				<div class="row">
-					<textarea name="textData" rows="42" cols="80">{$data|escape}</textarea>
+					<textarea name="textData" rows="42" cols="50">{$data|escape}</textarea>
 				</div>
 
 				<div class="row submit">
