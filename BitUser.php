@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.46 2005/10/20 07:06:36 jht001 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.47 2005/11/05 08:17:26 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.46 2005/10/20 07:06:36 jht001 Exp $
+ * $Id: BitUser.php,v 1.2.2.47 2005/11/05 08:17:26 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.46 $
+ * @version  $Revision: 1.2.2.47 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1355,22 +1355,37 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		return $ret;
 	}
 
-	function getUserAttachments() {
+	function getUserAttachments( &$pListHash ) {
 		global $gLibertySystem;
-		$ret = NULL;
+		LibertyContent::prepGetList( $pListHash );
 
-		if ($this->mUserId) {
+		$ret = NULL;
+		$bindVars[] = $this->mUserId;
+		$mid = '';
+
+		if( !empty( $pListHash['find'] ) ) {
+			$mid .= " AND UPPER( tc.`title` ) LIKE ? ";
+			$bindVars[] = '%'.strtoupper( $pListHash['find'] ).'%';
+		}
+
+		if( $this->mUserId ) {
 			$query = "SELECT ta.*
-					  FROM `".BIT_DB_PREFIX."tiki_attachments` ta
-					  WHERE ta.`user_id` = ?";
-			$result = $this->mDb->query($query, array($this->mUserId));
+				FROM `".BIT_DB_PREFIX."tiki_attachments` ta
+				WHERE ta.`user_id` = ? $mid";
+			$result = $this->mDb->query( $query, $bindVars, $pListHash['max_records'], $pListHash['offset'] );
 
 			$attachments = $result->getRows();
-			$ret = array();
-			foreach ($attachments as $attachment) {
-				$loadFunc = $gLibertySystem->getPluginFunction($attachment['attachment_plugin_guid'], 'load_function' );
-				$ret[] = $loadFunc($attachment);
+			$data = array();
+			foreach( $attachments as $attachment ) {
+				$loadFunc = $gLibertySystem->getPluginFunction( $attachment['attachment_plugin_guid'], 'load_function' );
+				$data[] = $loadFunc( $attachment );
 			}
+			$ret['data'] = $data;
+
+			$queryc = "SELECT COUNT( ta.`attachment_id` )
+				FROM `".BIT_DB_PREFIX."tiki_attachments` ta
+				WHERE ta.`user_id` = ?";
+			$ret['cant'] = $this->mDb->getOne( $queryc, $bindVars );
 		}
 		return $ret;
 	}
