@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.48 2005/11/05 15:01:25 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.49 2005/11/06 14:34:07 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.48 2005/11/05 15:01:25 squareing Exp $
+ * $Id: BitUser.php,v 1.2.2.49 2005/11/06 14:34:07 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.48 $
+ * @version  $Revision: 1.2.2.49 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1546,7 +1546,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			}
 
 			if( $pUseLink ) {
-				$ret = '<a class="username" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'.$displayName.'</a>';
+				$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'.$displayName.'</a>';
 			} else {
 				$ret = $displayName;
 			}
