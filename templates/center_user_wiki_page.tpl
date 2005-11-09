@@ -9,13 +9,17 @@
 <div class="display wiki user">
 	{if $gBitUser->hasPermission( 'bit_p_admin_users' ) || $gBitUser->mUserId eq $gQueryUser->mUserId}
 		<div class="floaticon">
-			{if $gBitUser->mUserId ne $gQueryUser->mUserId}
+			{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
 				{smartlink ipackage=users ifile="admin/index.php" assume_user=$userInfo.user_id ititle="Assume user identity" ibiticon="users/assume_user"}
-			{else}
-				{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" ibiticon="liberty/config"}
+				{smartlink ipackage=users ifile="admin/preferences.php" view_user=$userInfo.user_id ititle="Edit User Information" ibiticon="liberty/edit" iforce="icon"}
+				{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userInfo.user_id ititle="Assign Group" ibiticon="liberty/permissions" iforce="icon"}
+				{if $users[user].user_id != -1}{* TODO: evil hardcoding *}
+					{smartlink ipackage=users ifile="admin/index.php" action=delete user_id=$userInfo.user_id ititle="Remove" ibiticon="liberty/delete" iforce="icon"}
+				{/if}
 			{/if}
 
 			{if $gBitUser->mUserId eq $gQueryUser->mUserId}
+				{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" ibiticon="liberty/config"}
 				{smartlink ipackage=users ifile="edit_personal_page.php" ititle="Edit personal wiki page" ibiticon="liberty/edit"}
 			{/if}
 		</div>
