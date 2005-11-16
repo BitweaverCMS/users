@@ -67,7 +67,7 @@
       <input type="hidden" name="parent_id" value="{$parent_id|escape}" />
       <tr><th colspan="2">{tr}Add or edit a folder{/tr}</th></tr>
       <tr><td>{tr}Name{/tr}:</td>
-          <td><input type="text" name="foldername" value="{$foldername|escape}" /></td>
+          <td width="100%" align="right"><input type="text" name="foldername" value="{$foldername|escape}" /></td>
       </tr>
       <tr class="panelsubmitrow">
           <td colspan="2"><input type="submit" name="addfolder" value="{tr}add{/tr}" /> <a href="{$smarty.const.USERS_PKG_URL}bookmarks.php?parent_id={$parent_id}&amp;editfolder=0">{tr}new{/tr}</a></td>
@@ -81,10 +81,10 @@
       <input type="hidden" name="parent_id" value="{$parent_id|escape}" />
       <tr><th colspan="2">{tr}Add or edit a URL{/tr}</th></tr>
       <tr><td>{tr}Name{/tr}:</td>
-          <td><input type="text" name="urlname" value="{$urlname|escape}" /></td>
+          <td width="100%" align="right"><input type="text" name="urlname" value="{$urlname|escape}" /></td>
       </tr>
       <tr><td>{tr}URL{/tr}:</td>
-          <td><input type="text" name="urlurl" value="{$urlurl|escape}" /></td>
+          <td width="100%" align="right"><input type="text" name="urlurl" value="{$urlurl|escape}" /></td>
       </tr>
       <tr class="panelsubmitrow">
           <td colspan="2"><input type="submit" name="addurl" value="{tr}add{/tr}" /> <a href="{$smarty.const.USERS_PKG_URL}bookmarks.php?parent_id={$parent_id}&amp;editurl=0">{tr}new{/tr}</a></td>
