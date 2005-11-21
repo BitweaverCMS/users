@@ -53,6 +53,9 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	} else {
 		session_set_cookie_params($session_lifetime, BIT_ROOT_URL);
 	}
+	if (ini_get('safe_mode') && ini_get('safe_mode_gid')) {
+		umask(0007);
+	}
 	session_start();
 
 	// in the case of tikis on same domain we have to distinguish the realm
