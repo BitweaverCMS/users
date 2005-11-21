@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.49 2005/11/06 14:34:07 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.50 2005/11/21 16:18:49 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.49 2005/11/06 14:34:07 squareing Exp $
+ * $Id: BitUser.php,v 1.2.2.50 2005/11/21 16:18:49 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.49 $
+ * @version  $Revision: 1.2.2.50 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1364,11 +1364,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$mid = '';
 
 		if( $this->mUserId ) {
-			$query = "SELECT ta.*
+			$query = "SELECT DISTINCT ON( ta.foreign_id, ta.attachment_plugin_guid ) ta.*
 				FROM `".BIT_DB_PREFIX."tiki_attachments` ta
 				WHERE ta.`user_id` = ? $mid";
 			$result = $this->mDb->query( $query, $bindVars, $pListHash['max_records'], $pListHash['offset'] );
-
 			$attachments = $result->getRows();
 			$data = array();
 			foreach( $attachments as $attachment ) {
@@ -1377,10 +1376,12 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			}
 			$ret['data'] = $data;
 
-			$queryc = "SELECT COUNT( ta.`attachment_id` )
+			// count all entries
+			$queryc = "SELECT DISTINCT ON( ta.foreign_id, ta.attachment_plugin_guid ) ta.*
 				FROM `".BIT_DB_PREFIX."tiki_attachments` ta
-				WHERE ta.`user_id` = ?";
-			$ret['cant'] = $this->mDb->getOne( $queryc, $bindVars );
+				WHERE ta.`user_id` = ? $mid";
+			$result = $this->mDb->query( $queryc, $bindVars );
+			$ret['cant'] = count( $result->getRows() );
 		}
 		return $ret;
 	}
