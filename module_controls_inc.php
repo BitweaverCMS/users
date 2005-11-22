@@ -1,6 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/module_controls_inc.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/module_controls_inc.php,v 1.4 2005/11/22 07:28:24 squareing Exp $
+ * @package users
+ * @subpackage functions
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,11 +10,12 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: module_controls_inc.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
- * @package users
- * @subpackage functions
+ * $Id: module_controls_inc.php,v 1.4 2005/11/22 07:28:24 squareing Exp $
  */
 
+/**
+ * Initialization
+ */
 $check_req = (isset($_REQUEST["mc_unassign"])
            || isset($_REQUEST["mc_up"])
            || isset($_REQUEST["mc_down"])

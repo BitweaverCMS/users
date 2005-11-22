@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.15 2005/10/23 14:43:53 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.16 2005/11/22 07:28:24 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.15 2005/10/23 14:43:53 squareing Exp $
+ * $Id: BitUser.php,v 1.16 2005/11/22 07:28:24 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.15 $
+ * @version  $Revision: 1.16 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1355,22 +1355,33 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		return $ret;
 	}
 
-	function getUserAttachments() {
+	function getUserAttachments( &$pListHash ) {
 		global $gLibertySystem;
+		LibertyContent::prepGetList( $pListHash );
+
 		$ret = NULL;
+		$bindVars[] = $this->mUserId;
+		$mid = '';
 
-		if ($this->mUserId) {
-			$query = "SELECT ta.*
-					  FROM `".BIT_DB_PREFIX."tiki_attachments` ta
-					  WHERE ta.`user_id` = ?";
-			$result = $this->mDb->query($query, array($this->mUserId));
-
+		if( $this->mUserId ) {
+			$query = "SELECT DISTINCT ON( ta.foreign_id, ta.attachment_plugin_guid ) ta.*
+				FROM `".BIT_DB_PREFIX."tiki_attachments` ta
+				WHERE ta.`user_id` = ? $mid";
+			$result = $this->mDb->query( $query, $bindVars, $pListHash['max_records'], $pListHash['offset'] );
 			$attachments = $result->getRows();
-			$ret = array();
-			foreach ($attachments as $attachment) {
-				$loadFunc = $gLibertySystem->getPluginFunction($attachment['attachment_plugin_guid'], 'load_function' );
-				$ret[] = $loadFunc($attachment);
+			$data = array();
+			foreach( $attachments as $attachment ) {
+				$loadFunc = $gLibertySystem->getPluginFunction( $attachment['attachment_plugin_guid'], 'load_function' );
+				$data[] = $loadFunc( $attachment );
 			}
+			$ret['data'] = $data;
+
+			// count all entries
+			$queryc = "SELECT DISTINCT ON( ta.foreign_id, ta.attachment_plugin_guid ) ta.*
+				FROM `".BIT_DB_PREFIX."tiki_attachments` ta
+				WHERE ta.`user_id` = ? $mid";
+			$result = $this->mDb->query( $queryc, $bindVars );
+			$ret['cant'] = count( $result->getRows() );
 		}
 		return $ret;
 	}
@@ -1536,7 +1547,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			}
 
 			if( $pUseLink ) {
-				$ret = '<a class="username" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'.$displayName.'</a>';
+				$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'.$displayName.'</a>';
 			} else {
 				$ret = $displayName;
 			}

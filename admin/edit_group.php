@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.3 2005/09/03 10:22:20 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.4 2005/11/22 07:28:24 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -147,7 +147,8 @@ if( empty( $mid ) ) {
 		$levels = $gBitUser->get_permission_levels();
 		sort($levels);
 		$gBitSmarty->assign('levels', $levels);
-		$gBitSmarty->assign_by_ref('defaultGroupId', $gBitSystem->getPreference( 'default_home_group' ) );
+		$prefs = $gBitSystem->getPreference( 'default_home_group' );
+		$gBitSmarty->assign_by_ref('defaultGroupId', $prefs );
 		$gBitSmarty->assign_by_ref('groupInfo', $groupInfo);
 		$gBitSmarty->assign_by_ref( 'allPerms', $allPerms );
 

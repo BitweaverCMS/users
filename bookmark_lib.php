@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/bookmark_lib.php,v 1.4 2005/08/30 22:37:36 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/bookmark_lib.php,v 1.5 2005/11/22 07:28:24 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: bookmark_lib.php,v 1.4 2005/08/30 22:37:36 squareing Exp $
+ * $Id: bookmark_lib.php,v 1.5 2005/11/22 07:28:24 squareing Exp $
  * @package users
  */
 
@@ -22,7 +22,7 @@
  */
 class BookmarkLib extends BitBase {
 	function BookmarkLib() {
-	BitBase::BitBase();
+		BitBase::BitBase();
 	}
 	function get_folder_path($folder_id, $user_id) {
 		$path = '';
@@ -154,5 +154,6 @@ class BookmarkLib extends BitBase {
 		return $ret;
 	}
 }
+global $bookmarklib;
 $bookmarklib = new BookmarkLib();
 ?>

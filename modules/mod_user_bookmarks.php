@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_bookmarks.php,v 1.3 2005/08/01 18:42:03 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_bookmarks.php,v 1.4 2005/11/22 07:28:24 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: mod_user_bookmarks.php,v 1.3 2005/08/01 18:42:03 squareing Exp $
+ * $Id: mod_user_bookmarks.php,v 1.4 2005/11/22 07:28:24 squareing Exp $
  * @package users
  * @subpackage modules
  */
@@ -17,8 +17,12 @@ if( $gBitSystem->isFeatureActive( 'feature_user_bookmarks' ) && $gBitUser->isReg
 	/**
 	 * required setup
 	 */
-	include_once( USERS_PKG_PATH.'bookmark_lib.php' );
-	
+	require_once( USERS_PKG_PATH.'bookmark_lib.php' );
+	global $bookmarklib;
+	if (!is_object($bookmarklib)) {
+		bt();
+	}
+
 	$setup_parsed_uri = parse_url($_SERVER["REQUEST_URI"]);
 	if (isset($setup_parsed_uri["query"])) {
 		parse_str($setup_parsed_uri["query"], $setup_query_data);

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/assignuser.tpl,v 1.4 2005/10/12 15:14:09 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/assignuser.tpl,v 1.5 2005/11/22 07:28:24 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 <div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{biticon ipackage=liberty iname=back iexplain="back to users"}</a></div>
@@ -16,7 +16,7 @@
 			<div class="row">
 				{formlabel label="Username"}
 				{forminput}
-					{$assignUser->mInfo.login}
+					{$assignUser->getDisplayName(TRUE)}
 				{/forminput}
 			</div>
 
@@ -24,6 +24,13 @@
 				{formlabel label="Email"}
 				{forminput}
 					{$assignUser->mInfo.email}
+				{/forminput}
+			</div>
+
+			<div class="row">
+				{formlabel label="User ID"}
+				{forminput}
+					{$assignUser->mUserId}
 				{/forminput}
 			</div>
 
