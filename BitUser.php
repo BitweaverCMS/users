@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.50 2005/11/21 16:18:49 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.51 2005/11/23 03:49:15 wolff_borg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.50 2005/11/21 16:18:49 squareing Exp $
+ * $Id: BitUser.php,v 1.2.2.51 2005/11/23 03:49:15 wolff_borg Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.50 $
+ * @version  $Revision: 1.2.2.51 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -272,7 +272,12 @@ class BitUser extends LibertyAttachable {
 
 	function logout() {
 		global $user_cookie_site, $gBitSystem;
-		setcookie($user_cookie_site, '', -3600, $gBitSystem->getPreference('cookie_path'), $gBitSystem->getPreference('cookie_domain') );
+		// Now if the remember me feature is on and the user checked the rememberme checkbox then ...
+		if ($gBitSystem->isFeatureActive( 'rememberme' )) {
+			setcookie($user_cookie_site, '', time() - 3600, $gBitSystem->getPreference('cookie_path', BIT_ROOT_URL ), $gBitSystem->getPreference('cookie_domain') );
+		} else {
+			setcookie($user_cookie_site, '', time() - 3600, BIT_ROOT_URL);
+		}
 		//session_unregister ('user');
 		unset ($_SESSION[$user_cookie_site]);
 		session_destroy();
@@ -661,7 +666,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 		$isvalid = false;
 		
 		// Make sure cookies are enabled
-		if ( !isset($_COOKIE['BWSESSION']) ) {
+		if ( !isset($_COOKIE[BIT_SESSION_NAME]) ) {
 			$url = USERS_PKG_URL.'login.php?error=' . urlencode(tra('no cookie found, please enable cookies and try again.'));
 			return ( $url );
 			}
