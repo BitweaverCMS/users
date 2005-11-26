@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.51 2005/11/23 03:49:15 wolff_borg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.52 2005/11/26 12:36:17 wolff_borg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.51 2005/11/23 03:49:15 wolff_borg Exp $
+ * $Id: BitUser.php,v 1.2.2.52 2005/11/26 12:36:17 wolff_borg Exp $
  * @package users
  */
 
@@ -20,6 +20,7 @@
  * required setup
  */
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
+require_once( BIT_PKG_PATH.'util/pear/Date.php' );
 define( 'AVATAR_TYPE_CENTRALIZED', 'c' );
 define( 'AVATAR_TYPE_USER_DB', 'u' );
 define( 'AVATAR_TYPE_LIBRARY', 'l' );
@@ -40,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.51 $
+ * @version  $Revision: 1.2.2.52 $
  * @package  users
  * @subpackage  BitUser
  */
