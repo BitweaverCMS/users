@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.1.1.1.2.4 2005/10/30 09:38:22 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.1.1.1.2.5 2005/11/29 15:29:57 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -128,12 +128,12 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 }
 
 // get content and pass it on to the template
-include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
-$cList['NULL'] = '';
-foreach( $contentList['data'] as $cItem ) {
-	$cList[$contentTypes[$cItem['content_type_guid']]][$cItem['content_id']] = $cItem['title'].' [id: '.$cItem['content_id'].']';
-}
-$gBitSmarty->assign( 'contentList', $cList );
+//include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
+//$cList['NULL'] = '';
+//foreach( $contentList['data'] as $cItem ) {
+//	$cList[$contentTypes[$cItem['content_type_guid']]][$cItem['content_id']] = $cItem['title'].' [id: '.$cItem['content_id'].']';
+//}
+//$gBitSmarty->assign( 'contentList', $cList );
 
 $inc = array();
 if( empty( $mid ) ) {
@@ -147,8 +147,7 @@ if( empty( $mid ) ) {
 		$levels = $gBitUser->get_permission_levels();
 		sort($levels);
 		$gBitSmarty->assign('levels', $levels);
-		$prefs = $gBitSystem->getPreference( 'default_home_group' );
-		$gBitSmarty->assign_by_ref('defaultGroupId', $prefs );
+		$gBitSmarty->assign_by_ref('defaultGroupId', $gBitSystem->getPreference( 'default_home_group' ) );
 		$gBitSmarty->assign_by_ref('groupInfo', $groupInfo);
 		$gBitSmarty->assign_by_ref( 'allPerms', $allPerms );
 
