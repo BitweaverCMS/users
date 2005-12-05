@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.17 2005/11/27 13:08:22 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.18 2005/12/05 23:55:32 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.17 2005/11/27 13:08:22 lsces Exp $
+ * $Id: BitUser.php,v 1.18 2005/12/05 23:55:32 squareing Exp $
  * @package users
  */
 
@@ -20,6 +20,7 @@
  * required setup
  */
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
+require_once( BIT_PKG_PATH.'util/pear/Date.php' );
 define( 'AVATAR_TYPE_CENTRALIZED', 'c' );
 define( 'AVATAR_TYPE_USER_DB', 'u' );
 define( 'AVATAR_TYPE_LIBRARY', 'l' );
@@ -40,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.17 $
+ * @version  $Revision: 1.18 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -215,8 +216,8 @@ class BitUser extends LibertyAttachable {
 		if( empty( $this->mUserPrefs['user_information'] ) ) { $this->mUserPrefs['user_information'] = 'public'; }
 		if( empty( $this->mUserPrefs['allowMsgs'] ) ) { $this->mUserPrefs['allowMsgs'] = 'y'; }
 		if( empty( $this->mUserPrefs['display_timezone'] ) ) {
-			$time = new BitDate();
-			$this->mUserPrefs['display_timezone'] = $time->display_offset;
+			$server_time = new Date();
+			$this->mUserPrefs['display_timezone'] = $server_time->tz->getID();
 		}
 		if( empty( $this->mUserPrefs['userbreadCrumb'] ) ) {
 			$this->mUserPrefs['userbreadCrumb'] = $gBitSystem->getPreference('userbreadCrumb',4);
@@ -272,7 +273,12 @@ class BitUser extends LibertyAttachable {
 
 	function logout() {
 		global $user_cookie_site, $gBitSystem;
-		setcookie($user_cookie_site, '', -3600, $gBitSystem->getPreference('cookie_path'), $gBitSystem->getPreference('cookie_domain') );
+		// Now if the remember me feature is on and the user checked the rememberme checkbox then ...
+		if ($gBitSystem->isFeatureActive( 'rememberme' )) {
+			setcookie($user_cookie_site, '', time() - 3600, $gBitSystem->getPreference('cookie_path', BIT_ROOT_URL ), $gBitSystem->getPreference('cookie_domain') );
+		} else {
+			setcookie($user_cookie_site, '', time() - 3600, BIT_ROOT_URL);
+		}
 		//session_unregister ('user');
 		unset ($_SESSION[$user_cookie_site]);
 		session_destroy();
@@ -661,7 +667,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 		$isvalid = false;
 		
 		// Make sure cookies are enabled
-		if ( !isset($_COOKIE['BWSESSION']) ) {
+		if ( !isset($_COOKIE[BIT_SESSION_NAME]) ) {
 			$url = USERS_PKG_URL.'login.php?error=' . urlencode(tra('no cookie found, please enable cookies and try again.'));
 			return ( $url );
 			}
@@ -1364,7 +1370,9 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$mid = '';
 
 		if( $this->mUserId ) {
-			$query = "SELECT DISTINCT ON( ta.foreign_id, ta.attachment_plugin_guid ) ta.*
+			// TODO: this query should check for unique combinations of foreign_id *and* attachment_plugin_guid
+			// doing that causes mysql to choke
+			$query = "SELECT DISTINCT( ta.foreign_id ), ta.*
 				FROM `".BIT_DB_PREFIX."tiki_attachments` ta
 				WHERE ta.`user_id` = ? $mid";
 			$result = $this->mDb->query( $query, $bindVars, $pListHash['max_records'], $pListHash['offset'] );
@@ -1377,7 +1385,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$ret['data'] = $data;
 
 			// count all entries
-			$queryc = "SELECT DISTINCT ON( ta.foreign_id, ta.attachment_plugin_guid ) ta.*
+			$queryc = "SELECT DISTINCT( ta.foreign_id ), ta.*
 				FROM `".BIT_DB_PREFIX."tiki_attachments` ta
 				WHERE ta.`user_id` = ? $mid";
 			$result = $this->mDb->query( $queryc, $bindVars );
