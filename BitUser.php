@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.18 2005/12/05 23:55:32 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.19 2005/12/06 00:09:52 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.18 2005/12/05 23:55:32 squareing Exp $
+ * $Id: BitUser.php,v 1.19 2005/12/06 00:09:52 squareing Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.18 $
+ * @version  $Revision: 1.19 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -216,8 +216,8 @@ class BitUser extends LibertyAttachable {
 		if( empty( $this->mUserPrefs['user_information'] ) ) { $this->mUserPrefs['user_information'] = 'public'; }
 		if( empty( $this->mUserPrefs['allowMsgs'] ) ) { $this->mUserPrefs['allowMsgs'] = 'y'; }
 		if( empty( $this->mUserPrefs['display_timezone'] ) ) {
-			$server_time = new Date();
-			$this->mUserPrefs['display_timezone'] = $server_time->tz->getID();
+			$server_time = new BitDate();
+			$this->mUserPrefs['display_timezone'] = $server_time->display_offset;
 		}
 		if( empty( $this->mUserPrefs['userbreadCrumb'] ) ) {
 			$this->mUserPrefs['userbreadCrumb'] = $gBitSystem->getPreference('userbreadCrumb',4);
@@ -283,6 +283,8 @@ class BitUser extends LibertyAttachable {
 		unset ($_SESSION[$user_cookie_site]);
 		session_destroy();
 		$this->mUserId = NULL;
+		// ensure Guest default page is loaded if required
+		$this->mInfo['default_group_id'] = -1;
 	}
 
 	function isRegistered() {
