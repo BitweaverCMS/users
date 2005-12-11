@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/login.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/login.php,v 1.1.1.1.2.3 2005/12/11 09:27:37 wolff_borg Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: login.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
+ * $Id: login.php,v 1.1.1.1.2.3 2005/12/11 09:27:37 wolff_borg Exp $
  * @package users
  * @subpackage functions
  */
@@ -27,7 +27,5 @@ if( !empty( $_REQUEST['error'] ) ) {
 	$gBitSmarty->assign( 'error', $_REQUEST['error'] );
 }
 
-$gBitSystem->display( 'bitpackage:users/login.tpl');
-
-$gBitSystem->setBrowserTitle( $gBitSystem->getPreference( 'siteTitle' ).' Login' );
+$gBitSystem->display( 'bitpackage:users/login.tpl', $gBitSystem->getPreference( 'siteTitle' ).' Login' );
 ?>
