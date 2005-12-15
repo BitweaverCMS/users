@@ -10,8 +10,8 @@
 	{if $gBitUser->hasPermission( 'bit_p_admin_users' ) || $gBitUser->mUserId eq $gQueryUser->mUserId}
 		<div class="floaticon">
 			{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
-				{smartlink ipackage=users ifile="admin/index.php" assume_user=$userInfo.user_id ititle="Assume user identity" ibiticon="users/assume_user"}
-				{smartlink ipackage=users ifile="admin/preferences.php" view_user=$userInfo.user_id ititle="Edit User Information" ibiticon="liberty/edit" iforce="icon"}
+				{smartlink ipackage=users ifile="admin/index.php" assume_user=$userInfo.user_id ititle="Assume user identity" ibiticon="users/assume_user" iforce="icon"}
+				{smartlink ipackage=users ifile="preferences.php" view_user=$userInfo.user_id ititle="Edit User Information" ibiticon="liberty/edit" iforce="icon"}
 				{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userInfo.user_id ititle="Assign Group" ibiticon="liberty/permissions" iforce="icon"}
 				{if $users[user].user_id != -1}{* TODO: evil hardcoding *}
 					{smartlink ipackage=users ifile="admin/index.php" action=delete user_id=$userInfo.user_id ititle="Remove" ibiticon="liberty/delete" iforce="icon"}
