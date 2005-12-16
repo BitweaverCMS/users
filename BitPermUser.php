@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.14 2005/09/20 14:16:20 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.15 2005/12/16 17:01:36 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.1.1.1.2.14 2005/09/20 14:16:20 lsces Exp $
+ * $Id: BitPermUser.php,v 1.1.1.1.2.15 2005/12/16 17:01:36 spiderr Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.1.1.1.2.14 $
+ * @version  $Revision: 1.1.1.1.2.15 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -481,20 +481,33 @@ class BitPermUser extends BitUser {
 	}
 
 
-	// damian aka damosoft
-	function count_users($group) {
-		static $rv = array();
-		if (!isset($rv[$group])) {
-			if ($group == '') {
-				$query = "select count(login) from `".BIT_DB_PREFIX."users_users`";
-				$result = $this->mDb->getOne($query);
+	function getGroupUserData( $pGroupId, $pColumns ) {
+		$ret = array();
+		if( is_numeric( $pGroupId ) && !empty( $pColumns ) ) {
+			if( is_array( $pColumns ) ) {
+				$col = implode( $pColumns, ',' );
+				$exec = 'getAssoc';
 			} else {
-				$query = "select count(user_id) from `".BIT_DB_PREFIX."users_groups_map` where `group_name` = ?";
-				$result = $this->mDb->getOne($query, array($group));
+				$col = '`'.$pColumns.'`';
+				$exec = 'getArray';
 			}
-			$rv[$group] = $result;
+			$query = "SELECT $col
+					  FROM `".BIT_DB_PREFIX."users_users` uu
+					  	INNER JOIN `".BIT_DB_PREFIX."users_groups_map` ugm ON (uu.`user_id`=ugm.`user_id`)
+					  WHERE ugm.`group_id` = ?";
+			$ret = $this->mDb->$exec($query, array( $pGroupId ) );
 		}
-		return $rv[$group];
+		return $ret;
+	}
+
+
+	function countGroupUsers($pGroupId) {
+		static $rv = array();
+		if( !isset( $rv[$pGroupId] ) ) {
+			$query = "select count(`user_id`) from `".BIT_DB_PREFIX."users_groups_map` where `group_id` = ?";
+			$rv[$pGroupId] = $this->mDb->getOne($query, array( $pGroupId ) );
+		}
+		return $rv[$pGroupId];
 	}
 
 	// =-=-=-=-=-=-=-=-=-=-=-= PERMISSION FUNCTIONS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=
