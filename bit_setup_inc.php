@@ -25,7 +25,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$gBitUser = new BitPermUser();
 
 	$cookie_path = $gBitSystem->getPreference('cookie_path', BIT_ROOT_URL);
-	$cookie_path = ($cookie_path == '') ? $cookie_path : BIT_ROOT_URL;
+	$cookie_path = !empty($cookie_path) ? $cookie_path : BIT_ROOT_URL;
 	$gBitSystem->storePreference( 'cookie_path', $cookie_path );
 
 	// set session lifetime
@@ -236,6 +236,6 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	// register 'my' menu
 	if( $gBitUser->isValid() && ( $gBitUser->isRegistered() || !$gBitSystem->isFeatureActive( 'hide_my_top_bar_link' ) ) ) {
 		$displayTitle = !empty( $gBitSystem->mPrefs['site_menu_title'] ) ? $gBitSystem->mPrefs['site_menu_title'] : $gBitSystem->getPreference( 'siteTitle', 'Site' );
-		$gBitSystem->registerAppMenu( 'users', 'My '.$displayTitle, ($gBitSystem->getPreference('feature_userPreferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
+		$gBitSystem->registerAppMenu( USERS_PKG_DIR, 'My '.$displayTitle, ($gBitSystem->getPreference('feature_userPreferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
 	}
 ?>
