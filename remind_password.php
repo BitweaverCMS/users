@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.1.1.1.2.4 2005/12/19 01:20:08 jht001 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.1.1.1.2.5 2005/12/19 08:24:18 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: remind_password.php,v 1.1.1.1.2.4 2005/12/19 01:20:08 jht001 Exp $
+ * $Id: remind_password.php,v 1.1.1.1.2.5 2005/12/19 08:24:18 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -28,12 +28,12 @@ if ($forgotPass != 'y') {
 	if( $userInfo = $gBitUser->getUserInfo( array( 'login' => $_REQUEST["username"] ) ) ) {
 		if ( $gBitSystem->isFeatureActive( 'feature_clear_passwords' ) && !empty($userInfo['password']) ) {
 			$pass = $userInfo['password'];
-			$tmp['success'] = tra("A password reminder email has been sent ");
+			$tmp['success'] = tra("A password reminder email has been sent to the registered email address for");
 		} else {
 			$pass = $gBitUser->renew_user_password($_REQUEST["username"]);
-			$tmp['success'] = tra("A new password has been sent ");
+			$tmp['success'] = tra("A new password has been sent to the registered email address for");
 		}
-		$tmp['success'] .= tra("to the registered email address for")." " . $_REQUEST["username"] . ".";
+		$tmp['success'] .= " ".$_REQUEST["username"].".";
 
 		$gBitSmarty->assign('mail_site', $_SERVER["REMOTE_ADDR"]);
 		$gBitSmarty->assign('mail_user', $userInfo['login']);
