@@ -1,5 +1,6 @@
 {strip}
 {if $msg.success}
+	{formfeedback warning=$msg.success}
 	{include file="bitpackage:users/login.tpl"}
 {else}
 
