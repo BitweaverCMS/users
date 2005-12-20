@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.15 2005/12/16 17:01:36 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.16 2005/12/20 18:25:12 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.1.1.1.2.15 2005/12/16 17:01:36 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.1.1.1.2.16 2005/12/20 18:25:12 spiderr Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.1.1.1.2.15 $
+ * @version  $Revision: 1.1.1.1.2.16 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -241,7 +241,7 @@ class BitPermUser extends BitUser {
 	}
 
 	function get_user_groups( $pUserId ) {
-		if (!is_numeric($pUserId)) {
+		if (!$this->verifyId($pUserId)) {
 			// For legacy calls still using $user as the parameter
 			$pUserId = $this->get_user_id($pUserId);
 		}
@@ -311,7 +311,7 @@ class BitPermUser extends BitUser {
     }
 
 	function addGroupInclusion( $pGroupId, $pIncludeId ) {
-		if( is_numeric( $pGroupId ) && is_numeric( $pIncludeId )  ) {
+		if( BitBase::verifyId( $pGroupId ) && BitBase::verifyId( $pIncludeId )  ) {
 			$query = "INSERT INTO `".BIT_DB_PREFIX."users_groups_inclusion` (`group_id`,`include_group_id`)
 					  VALUES(?,?)";
 			$this->mDb->query($query, array($pGroupId, $pIncludeId));
@@ -319,7 +319,7 @@ class BitPermUser extends BitUser {
 	}
 
 	function removeGroupInclusions( $pGroupId ) {
-		if( is_numeric( $pGroupId ) ) {
+		if( BitBase::verifyId( $pGroupId ) ) {
 			$query = "DELETE FROM `".BIT_DB_PREFIX."users_groups_inclusion` where `group_id` = ?";
 			$result = $this->mDb->query($query, array($pGroupId));
 		}
@@ -391,7 +391,7 @@ class BitPermUser extends BitUser {
 		$addGroups = array();
 		if( is_array( $pGroupMixed ) ) {
 			$addGroups = array_keys( $pGroupMixed );
-		} elseif( is_numeric($pGroupMixed) ) {
+		} elseif( BitBase::verifyId($pGroupMixed) ) {
 			$addGroups = array( $pGroupMixed );
 		}
 		$currentUserGroups = $this->getGroups($pUserId);
@@ -422,12 +422,10 @@ class BitPermUser extends BitUser {
 	}
 
 	function verifyGroup( &$pParamHash ) {
-		if( !empty( $pParamHash['group_id'] ) ) {
-			if( !is_numeric( $pParamHash['group_id'] ) ) {
-				$this->mErrors['groups'] = 'Unknown Group';
-			} else {
-				$pParamHash['group_store']['group_id'] = $pParamHash['group_id'];
-			}
+		if( $this->verifyId( $pParamHash['group_id'] ) ) {
+			$pParamHash['group_store']['group_id'] = $pParamHash['group_id'];
+		} else {
+			$this->mErrors['groups'] = 'Unknown Group';
 		}
 
 		if( !empty( $pParamHash["name"] ) ) {
@@ -438,7 +436,7 @@ class BitPermUser extends BitUser {
 		}
 		$pParamHash['group_store']['group_home'] = !empty( $pParamHash["home"] ) ? $pParamHash["home"] : '';
 		$pParamHash['group_store']['is_default'] = !empty( $pParamHash["is_default"] ) ? $pParamHash["is_default"] : NULL;
-		$pParamHash['group_store']['user_id'] = !empty( $pParamHash["user_id"] ) ? $pParamHash["user_id"] : $this->mUserId;
+		$pParamHash['group_store']['user_id'] = $this->verifyId( $pParamHash["user_id"] ) ? $pParamHash["user_id"] : $this->mUserId;
 
 		return( count( $this->mErrors ) == 0 );
 	}
@@ -483,7 +481,7 @@ class BitPermUser extends BitUser {
 
 	function getGroupUserData( $pGroupId, $pColumns ) {
 		$ret = array();
-		if( is_numeric( $pGroupId ) && !empty( $pColumns ) ) {
+		if( $this->verifyId( $pGroupId ) && !empty( $pColumns ) ) {
 			if( is_array( $pColumns ) ) {
 				$col = implode( $pColumns, ',' );
 				$exec = 'getAssoc';
@@ -581,7 +579,7 @@ class BitPermUser extends BitUser {
 			$mid = ' WHERE `package`= ? ';
 			$values[] = $pPackage;
 		}
-		if( is_numeric( $pGroupId ) ) {
+		if( $this->verifyId( $pGroupId ) ) {
 			$selectSql = ', ugp.`value` AS `hasPerm` ';
 			$fromSql = ' INNER JOIN `'.BIT_DB_PREFIX.'users_grouppermissions` ugp ON ( ugp.`perm_name`=up.`perm_name` ) ';
 			if ($mid) {
@@ -682,7 +680,7 @@ class BitPermUser extends BitUser {
 
 	function object_has_one_permission( $object_id, $object_type ) {
 		$ret = NULL;
-		if( !empty( $object_id ) && !empty( $object_type )  ) {
+		if( $this->verifyId( $object_id ) && !empty( $object_type )  ) {
 			//$object_id = md5($object_type . $object_id);
 			$query = "select count(*) from `".BIT_DB_PREFIX."users_objectpermissions` where `object_id`=? and `object_type`=?";
 			$ret = $this->mDb->getOne($query, array( $object_id, $object_type	));

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/lookup_user_inc.php,v 1.1.1.1.2.3 2005/07/26 15:50:30 drewslater Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/lookup_user_inc.php,v 1.1.1.1.2.4 2005/12/20 18:25:13 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: lookup_user_inc.php,v 1.1.1.1.2.3 2005/07/26 15:50:30 drewslater Exp $
+ * $Id: lookup_user_inc.php,v 1.1.1.1.2.4 2005/12/20 18:25:13 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -25,7 +25,7 @@ if (isset($_REQUEST['home'])) {
 	$_REQUEST['fHomepage'] = $_REQUEST['home'];
 }
 
-if (isset($_REQUEST['content_id'])) {
+if ( @BitBase::verifyId( $_REQUEST['content_id'] ) ) {
 	// This identifies the user_id associated with the contact_id of a record
 	// Used to allow access to user records via the generic index.php?content_id=x
 	$_REQUEST['home'] = $gBitUser->getUserFromContentId($_REQUEST['content_id']);
