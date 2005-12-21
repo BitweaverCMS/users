@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.56 2005/12/20 20:58:47 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.57 2005/12/21 22:12:41 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.56 2005/12/20 20:58:47 squareing Exp $
+ * $Id: BitUser.php,v 1.2.2.57 2005/12/21 22:12:41 squareing Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.56 $
+ * @version  $Revision: 1.2.2.57 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -76,7 +76,7 @@ class BitUser extends LibertyAttachable {
 				'handler_file' => 'BitUser.php',
 				'maintainer_url' => 'http://www.bitweaver.org'
 			) );
-		$this->mUserId = ( $this->verifyId( $pUserId ) ? $pUserId : NULL);
+		$this->mUserId = ( @$this->verifyId( $pUserId ) ? $pUserId : NULL);
 		$this->mContentId = $pContentId;
 	}
 
@@ -131,7 +131,7 @@ class BitUser extends LibertyAttachable {
 
 			if( ($result = $this->mDb->query( $query, $bindVars )) && $result->numRows() ) {
 				$this->mInfo = $result->fields;
-				$this->mInfo['valid'] = $this->verifyId( $result->fields['uu_user_id'] );
+				$this->mInfo['valid'] = @$this->verifyId( $result->fields['uu_user_id'] );
 				$this->mInfo['user_id'] = $result->fields['uu_user_id'];
 				$this->mUserId = $result->fields['uu_user_id'];
 				$this->mContentId = $result->fields['content_id'];
@@ -292,7 +292,7 @@ class BitUser extends LibertyAttachable {
 	}
 
 	function isValid() {
-		return ( $this->verifyId( $this->mUserId ) );
+		return ( @$this->verifyId( $this->mUserId ) );
 	}
 
 	function isAdmin() {
@@ -955,7 +955,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	// update the lastlogin status on this user
 	function update_lastlogin( $pUserId ) {
 		$ret = FALSE;
-		if( $this->verifyId( $pUserId ) ) {
+		if( @$this->verifyId( $pUserId ) ) {
 			global $gBitSystem;
 			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `last_login`=`current_login`, `current_login`=?
 					  WHERE `user_id`=?";
@@ -1036,7 +1036,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 	function lookupHomepage( $iHomepage ) {
 		$ret = NULL;
-		if ( $this->verifyId($iHomepage)) {
+		if ( @$this->verifyId($iHomepage)) {
 		   	// iHomepage is the user_id for the user...
 			$key = 'user_id';
 		} elseif (substr($iHomepage,0,7) == 'mailto:') {
@@ -1047,7 +1047,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$key = 'login';
 		}
 		$tmpUser = $this->getUserInfo( array( $key => $iHomepage ) );
-		if ($this->verifyId($tmpUser['user_id'])) {
+		if (@$this->verifyId($tmpUser['user_id'])) {
 			$ret = $tmpUser['user_id'];
 		}
 		return $ret;
@@ -1067,11 +1067,11 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	// specify lookup where by hash key lik 'login' or 'user_id' or 'email'
 	function getUserFromContentId( $content_id ) {
 		$ret = NULL;
-		if( $this->verifyId( $content_id ) ) {
+		if( @$this->verifyId( $content_id ) ) {
 			$query = "SELECT  `user_id` FROM `".BIT_DB_PREFIX."users_users`
 					  WHERE `content_id` = ?";
 			$tmpUser = $this->mDb->getRow( $query, array( $content_id ) );
-			if ( $this->verifyId($tmpUser['user_id'])) {
+			if ( @$this->verifyId($tmpUser['user_id'])) {
 				$ret = $tmpUser['user_id'];
 			}
 		}
@@ -1123,7 +1123,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 					  FROM `".BIT_DB_PREFIX."users_users`
 					  WHERE `pass_due` IS NOT NULL AND `user_id`=? ";
 			$due = $this->mDb->getAssoc( $query, array( $this->mUserId ) );
-			if( $this->verifyId( $due['user_id'] ) ) {
+			if( @$this->verifyId( $due['user_id'] ) ) {
 				global $gBitSystem;
 				$ret = $due['pass_due'] <= $gBitSystem->getUTCTime();
 			}
@@ -1304,7 +1304,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	}
 
 	function purgeImage( $pType ) {
-		if( $this->isValid() && $this->verifyId( $this->mInfo[$pType.'_attachment_id'] ) ) {
+		if( $this->isValid() && @$this->verifyId( $this->mInfo[$pType.'_attachment_id'] ) ) {
 			$this->mDb->StartTrans();
 			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `".$pType."_attachment_id` = NULL WHERE `user_id`=?";
 			$result = $this->mDb->query( $query, array( $this->mUserId ) );
