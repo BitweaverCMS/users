@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.18 2005/12/23 14:32:29 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.19 2005/12/23 15:05:38 sylvieg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.1.1.1.2.18 2005/12/23 14:32:29 sylvieg Exp $
+ * $Id: BitPermUser.php,v 1.1.1.1.2.19 2005/12/23 15:05:38 sylvieg Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.1.1.1.2.18 $
+ * @version  $Revision: 1.1.1.1.2.19 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -448,6 +448,10 @@ class BitPermUser extends BitUser {
 			if( empty( $pParamHash['group_id'] ) ) {
 				$pParamHash['group_id'] = $this->mDb->GenID( 'users_groups_id_seq' );
 				$pParamHash['group_store']['group_id'] = $pParamHash['group_id'];
+				$pParamHash['group_store']['group_name'] = $pParamHash['name'];
+				$pParamHash['group_store']['group_desc'] = $pParamHash['desc'];
+				$pParamHash['group_store']['group_home'] = $pParamHash['home'];
+				$pParamHash['group_store']['is_default'] = $pParamHash['default_home_group'];
 				$result = $this->mDb->associateInsert( BIT_DB_PREFIX.'users_groups', $pParamHash['group_store'] );
 			} else {
 				$sql = "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."users_groups` WHERE `group_id` = ?";
