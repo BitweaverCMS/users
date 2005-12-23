@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.1.1.1.2.5 2005/12/19 08:24:18 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.1.1.1.2.6 2005/12/23 22:05:30 jht001 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: remind_password.php,v 1.1.1.1.2.5 2005/12/19 08:24:18 squareing Exp $
+ * $Id: remind_password.php,v 1.1.1.1.2.6 2005/12/23 22:05:30 jht001 Exp $
  * @package users
  * @subpackage functions
  */
@@ -25,18 +25,24 @@ if ($forgotPass != 'y') {
 	header( 'Location: '.BIT_ROOT_URL );
 	die;
 } elseif (isset($_REQUEST["remind"])) {
-	if( $userInfo = $gBitUser->getUserInfo( array( 'login' => $_REQUEST["username"] ) ) ) {
+	$userInfo = '';
+	$pLogin = trim( $_REQUEST["username"] );
+    if ( strlen ( $pLogin ) ) {
+		$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
+		$userInfo = $gBitUser->getUserInfo( array( $loginCol => $pLogin ) );
+	}
+	if( $userInfo ) {
 		if ( $gBitSystem->isFeatureActive( 'feature_clear_passwords' ) && !empty($userInfo['password']) ) {
 			$pass = $userInfo['password'];
-			$tmp['success'] = tra("A password reminder email has been sent to the registered email address for");
+			$tmp['success'] = tra("A password reminder email has been sent ");
 		} else {
 			$pass = $gBitUser->renew_user_password($_REQUEST["username"]);
-			$tmp['success'] = tra("A new password has been sent to the registered email address for");
+			$tmp['success'] = tra("A new password has been sent ");
 		}
-		$tmp['success'] .= " ".$_REQUEST["username"].".";
+		$tmp['success'] .= tra("to the registered email address for")." " . $_REQUEST["username"] . ".";
 
 		$gBitSmarty->assign('mail_site', $_SERVER["REMOTE_ADDR"]);
-		$gBitSmarty->assign('mail_user', $userInfo['login']);
+		$gBitSmarty->assign('mail_user', $userInfo[$loginCol]);
 		$gBitSmarty->assign('mail_same', $gBitSystem->isFeatureActive( 'feature_clear_passwords' ));
 		$gBitSmarty->assign('mail_pass', $pass);
 		$mail_data = $gBitSmarty->fetch('bitpackage:users/password_reminder.tpl');
