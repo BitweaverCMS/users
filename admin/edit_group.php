@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.1.1.1.2.5 2005/11/29 15:29:57 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.1.1.1.2.6 2005/12/23 16:59:38 sylvieg Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -24,13 +24,6 @@ if( count( $_GET ) > 2 || count( $_POST ) > 2 ) {
 
 if( !empty( $_REQUEST['group_id'] ) ) {
 	$allPerms = $gBitUser->getGroupPermissions( NULL, NULL, NULL, !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : NULL );
-	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
-	$listHash = array( 'sort_mode' => 'group_name_asc' );
-	$groupList = $gBitUser->getAllGroups( $listHash );
-} else {
-	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
-	$listHash = array( 'sort_mode' => !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : 'group_name_asc' );
-	$groupList = $gBitUser->getAllGroups( $listHash );
 }
 
 $gBitSmarty->assign( 'package',isset( $_REQUEST['package'] ) ? $_REQUEST['package'] : 'all' );
@@ -108,14 +101,27 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 	// let's reload just to be safe.
 	$allPerms = $gBitUser->getGroupPermissions();
 } elseif (isset($_REQUEST["action"])) {
+	$formHash['action'] = $_REQUEST['action'];
 // Process a form to remove a group
 	if( $_REQUEST["action"] == 'delete' ) {
-		if( $_REQUEST['group_id'] == $gBitSystem->getPreference( 'default_home_group' ) ) {
-			$gBitSystem->setPreference( 'default_home_group', NULL );
+		$gBitUser->verifyTicket();
+		$formHash['group_id'] = $_REQUEST['group_id'];
+		$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group_id'] );
+		if( isset( $_REQUEST["confirm"] ) ) {
+			if( $_REQUEST['group_id'] == $gBitSystem->getPreference( 'default_home_group' ) ) {
+				$gBitSystem->storePreference( 'default_home_group', NULL );
+			}
+			$gBitUser->remove_group($_REQUEST['group_id']);
+			$successMsg = "The group ".$groupInfo['group_name']." was deleted.";
+			unset( $_REQUEST['group_id'] );
+		} else {
+				$gBitSystem->setBrowserTitle( tra('Delete group') );
+				$msgHash = array(
+					'confirm_item' => tra( 'Are you sure you want to remove the group?' ),
+					'warning' => tra( 'This will permentally delete the group' )." <strong>$groupInfo[group_name]</strong>",
+				);
+				$gBitSystem->confirmDialog( $formHash,$msgHash );
 		}
-		$gBitUser->remove_group($_REQUEST['group_id']);
-		$successMsg = "The group ".$_REQUEST['group_id']." was deleted.";
-		unset( $_REQUEST['group_id'] );
 	} elseif ($_REQUEST["action"] == 'remove') {
 		$gBitUser->remove_permission_from_group( $_REQUEST["permission"], $_REQUEST['group_id'] );
 		$successMsg = 'The permission '.$_REQUEST['permission'].' was removed successflly. <a href="'.USERS_PKG_URL.'admin/edit_group.php?action=assign&amp;perm='.$_REQUEST['permission'].'&amp;group_id='.$_REQUEST['group_id'].'&amp;pacakge='.$_REQUEST['package'].'">Undo last action.</a>';
@@ -134,6 +140,15 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 //	$cList[$contentTypes[$cItem['content_type_guid']]][$cItem['content_id']] = $cItem['title'].' [id: '.$cItem['content_id'].']';
 //}
 //$gBitSmarty->assign( 'contentList', $cList );
+
+if( !empty( $_REQUEST['group_id'] ) ) {
+	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
+	$listHash = array( 'sort_mode' => 'group_name_asc' );
+} else {
+	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
+	$listHash = array( 'sort_mode' => !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : 'group_name_asc' );
+}
+$groupList = $gBitUser->getAllGroups( $listHash );
 
 $inc = array();
 if( empty( $mid ) ) {
