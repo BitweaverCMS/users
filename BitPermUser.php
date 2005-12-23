@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.17 2005/12/22 08:19:59 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.18 2005/12/23 14:32:29 sylvieg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.1.1.1.2.17 2005/12/22 08:19:59 squareing Exp $
+ * $Id: BitPermUser.php,v 1.1.1.1.2.18 2005/12/23 14:32:29 sylvieg Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.1.1.1.2.17 $
+ * @version  $Revision: 1.1.1.1.2.18 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -443,7 +443,7 @@ class BitPermUser extends BitUser {
 
 	function storeGroup( &$pParamHash ) {
 		global $gBitSystem;
-		if( $this->verifyGroup( $pParamHash ) ) {
+		if ((!empty($pParamHash['group_id']) && $this->verifyGroup( $pParamHash)) || empty($pParamHash['group_id']) ) {
 			$this->mDb->StartTrans();
 			if( empty( $pParamHash['group_id'] ) ) {
 				$pParamHash['group_id'] = $this->mDb->GenID( 'users_groups_id_seq' );
