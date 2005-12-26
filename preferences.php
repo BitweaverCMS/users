@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.9 2005/12/18 22:33:18 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.10 2005/12/26 12:27:13 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.9 2005/12/18 22:33:18 squareing Exp $
+ * $Id: preferences.php,v 1.10 2005/12/26 12:27:13 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -25,16 +25,14 @@ if( $gBitSystem->isPackageActive( 'blogs' ) ) {
 	include_once( BLOGS_PKG_PATH.'BitBlog.php' );
 }
 // User preferences screen
-if ($feature_userPreferences != 'y') {
-	$gBitSmarty->assign('msg', tra("This feature is disabled").": feature_userPreferences");
+$gBitSystem->verifyFeature( 'feature_userPreferences' );
+
+if( !$gBitUser->isRegistered() ) {
+	$gBitSmarty->assign( 'msg', tra( "You are not logged in" ) );
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
-if (empty($gBitUser->mUserId)) {
-	$gBitSmarty->assign('msg', tra("You are not logged in"));
-	$gBitSystem->display( 'error.tpl' );
-	die;
-}
+
 if( !empty( $_REQUEST["view_user"] ) && $_REQUEST["view_user"] <> $gBitUser->mUserId) {
 	$gBitSystem->verifyPermission( 'bit_p_admin_users' );
 	$editUser = new BitUser( $_REQUEST["view_user"] );
@@ -43,6 +41,7 @@ if( !empty( $_REQUEST["view_user"] ) && $_REQUEST["view_user"] <> $gBitUser->mUs
 } else {
 	$editUser = &$gBitUser;
 }
+
 global $gQueryUserId;
 $gQueryUserId = &$editUser->mUserId;
 
@@ -58,7 +57,7 @@ if( !empty( $gBitSystem->mPrefs['custom_user_fields'] ) ) {
 	$gBitSmarty->assign('customFields', $customFields);
 }
 
-if( $gBitSystem->isPackageActive( 'calendar' ) ) {
+if( $gBitSystem->isPackageActive( 'calendar' ) and $gBitSystem->isFeatureActive('calendar_user_prefs') ) {
 	include_once( CALENDAR_PKG_PATH.'admin/admin_calendar_inc.php' );
 	if( !empty( $_REQUEST['calendar_submit'] ) ) {
 		foreach( $calendarValues as $item ) {
