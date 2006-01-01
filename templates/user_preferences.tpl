@@ -6,8 +6,6 @@
 		<h1>{tr}User Preferences{/tr}</h1>
 	</div>
 
-	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
-
 	<div class="body">
 		{formfeedback warning=$warningMsg success=$successMsg error=$errorMsg}
 		{jstabs}
@@ -152,6 +150,97 @@
 						<input type="submit" name="prefs" value="{tr}Change preferences{/tr}" />
 					</div>
 				{/form}
+
+				{form legend="Change your email address"}
+					<input type="hidden" name="view_user" value="{$editUser.user_id}" />
+					<div class="row">
+						{formlabel label="Email" for="email"}
+						{forminput}
+							<input size="50" type="text" name="email" id="email" value="{$editUser.email|escape}" />
+							{formhelp note=""}
+						{/forminput}
+					</div>
+
+					<div class="row">
+						{formlabel label="Password" for="pass"}
+						{forminput}
+							<input type="password" name="pass" id="pass" />
+							{formhelp note=""}
+						{/forminput}
+					</div>
+
+					<div class="row submit">
+						<input type="submit" name="chgemail" value="{tr}Change email{/tr}" />
+					</div>
+				{/form}
+
+				{form legend="Change your password"}
+					<input type="hidden" name="view_user" value="{$editUser.user_id}" />
+
+					{if !$view_user or ( $gBitUser->hasPermission('bit_p_admin_users') and $view_user )}
+						<div class="row">
+							{formlabel label="Old password" for="old"}
+							{forminput}
+								<input type="password" name="old" id="old" />
+								{formhelp note=""}
+							{/forminput}
+						</div>
+					{else}
+						<input type="hidden" name="old" value="" />
+					{/if}
+
+					<div class="row">
+						{formlabel label="New password" for="pass1"}
+						{forminput}
+							<input type="password" name="pass1" id="pass1" />
+							{formhelp note=""}
+						{/forminput}
+					</div>
+
+					<div class="row">
+						{formlabel label="Again please" for="pass2"}
+						{forminput}
+							<input type="password" name="pass2" id="pass2" />
+							{formhelp note=""}
+						{/forminput}
+					</div>
+
+					<div class="row submit">
+						<input type="submit" name="chgpswd" value="{tr}Change Password{/tr}" />
+					</div>
+				{/form}
+
+				{if $gBitSystem->isFeatureActive( 'feature_tasks' )}
+					{form legend="User Tasks"}
+						<div class="row">
+							{formlabel label="Tasks per page" for="tasks_maxRecords"}
+							{forminput}
+								<select name="tasks_maxRecords" id="tasks_maxRecords">
+									<option value="2"  {if $userPrefs.tasks_maxRecords eq 2}selected="selected"{/if}>{tr}2{/tr}</option>
+									<option value="5"  {if $userPrefs.tasks_maxRecords eq 5}selected="selected"{/if}>{tr}5{/tr}</option>
+									<option value="10" {if $userPrefs.tasks_maxRecords eq 10}selected="selected"{/if}>{tr}10{/tr}</option>
+									<option value="20" {if $userPrefs.tasks_maxRecords eq 20}selected="selected"{/if}>{tr}20{/tr}</option>
+									<option value="30" {if $userPrefs.tasks_maxRecords eq 30}selected="selected"{/if}>{tr}30{/tr}</option>
+									<option value="40" {if $userPrefs.tasks_maxRecords eq 40}selected="selected"{/if}>{tr}40{/tr}</option>
+									<option value="50" {if $userPrefs.tasks_maxRecords eq 50}selected="selected"{/if}>{tr}50{/tr}</option>
+								</select>
+								{formhelp note=""}
+							{/forminput}
+						</div>
+
+						<div class="row">
+							{formlabel label="Use dates" for="tasks_use_dates"}
+							{forminput}
+								<input type="checkbox" name="tasks_use_dates" id="tasks_use_dates" {if $tasks_use_dates eq 'y'}checked="checked"{/if} />
+								{formhelp note=""}
+							{/forminput}
+						</div>
+
+						<div class="row submit">
+							<input type="submit" name="tasksprefs" value="{tr}Change preferences{/tr}" />
+						</div>
+					{/form}
+				{/if}
 			{/jstab}
 
 			{jstab title="Pictures and Icons"}
@@ -195,69 +284,6 @@
 				{/legend}
 			{/jstab}
 
-			{jstab title="e-mail"}
-				{form legend="Change your email address"}
-					<input type="hidden" name="view_user" value="{$editUser.user_id}" />
-					<div class="row">
-						{formlabel label="Email" for="email"}
-						{forminput}
-							<input size="50" type="text" name="email" id="email" value="{$editUser.email|escape}" />
-							{formhelp note=""}
-						{/forminput}
-					</div>
-
-					<div class="row">
-						{formlabel label="Password" for="pass"}
-						{forminput}
-							<input type="password" name="pass" id="pass" />
-							{formhelp note=""}
-						{/forminput}
-					</div>
-
-					<div class="row submit">
-						<input type="submit" name="chgemail" value="{tr}change email{/tr}" />
-					</div>
-				{/form}
-			{/jstab}
-
-			{jstab title="Password"}
-				{form legend="Change your password"}
-					<input type="hidden" name="view_user" value="{$editUser.user_id}" />
-
-					{if !$view_user or ( $gBitUser->hasPermission('bit_p_admin_users') and $view_user )}
-						<div class="row">
-							{formlabel label="Old password" for="old"}
-							{forminput}
-								<input type="password" name="old" id="old" />
-								{formhelp note=""}
-							{/forminput}
-						</div>
-					{else}
-						<input type="hidden" name="old" value="" />
-					{/if}
-
-					<div class="row">
-						{formlabel label="New password" for="pass1"}
-						{forminput}
-							<input type="password" name="pass1" id="pass1" />
-							{formhelp note=""}
-						{/forminput}
-					</div>
-
-					<div class="row">
-						{formlabel label="Again please" for="pass2"}
-						{forminput}
-							<input type="password" name="pass2" id="pass2" />
-							{formhelp note=""}
-						{/forminput}
-					</div>
-
-					<div class="row submit">
-						<input type="submit" name="chgpswd" value="{tr}change password{/tr}" />
-					</div>
-				{/form}
-			{/jstab}
-
 			{if $gBitSystem->isPackageActive( 'messu' )}
 				{jstab title="User Messages"}
 					{include file='bitpackage:messu/messu_preferences_inc.tpl'}
@@ -267,40 +293,6 @@
 			{if $gBitSystem->isPackageActive( 'calendar' ) and $gBitSystem->isFeatureActive('calendar_user_prefs') }
 				{jstab title="Calendar"}
 					{include file='bitpackage:calendar/calendar_preferences_inc.tpl' settings=$userPrefs}
-				{/jstab}
-			{/if}
-
-			{if $gBitSystem->isFeatureActive( 'feature_tasks' )}
-				{jstab title="User Tasks"}
-					{form legend="User Tasks"}
-						<div class="row">
-							{formlabel label="Tasks per page" for="tasks_maxRecords"}
-							{forminput}
-								<select name="tasks_maxRecords" id="tasks_maxRecords">
-									<option value="2" {if $tasks_maxRecords eq 2}selected="selected"{/if}>{tr}2{/tr}</option>
-									<option value="5" {if $tasks_maxRecords eq 5}selected="selected"{/if}>{tr}5{/tr}</option>
-									<option value="10" {if $tasks_maxRecords eq 10}selected="selected"{/if}>{tr}10{/tr}</option>
-									<option value="20" {if $tasks_maxRecords eq 20}selected="selected"{/if}>{tr}20{/tr}</option>
-									<option value="30" {if $tasks_maxRecords eq 30}selected="selected"{/if}>{tr}30{/tr}</option>
-									<option value="40" {if $tasks_maxRecords eq 40}selected="selected"{/if}>{tr}40{/tr}</option>
-									<option value="50" {if $tasks_maxRecords eq 50}selected="selected"{/if}>{tr}50{/tr}</option>
-								</select>
-								{formhelp note=""}
-							{/forminput}
-						</div>
-
-						<div class="row">
-							{formlabel label="Use dates" for="tasks_use_dates"}
-							{forminput}
-								<input type="checkbox" name="tasks_use_dates" id="tasks_use_dates" {if $tasks_use_dates eq 'y'}checked="checked"{/if} />
-								{formhelp note=""}
-							{/forminput}
-						</div>
-
-						<div class="row submit">
-							<input type="submit" name="tasksprefs" value="{tr}Change preferences{/tr}" />
-						</div>
-					{/form}
 				{/jstab}
 			{/if}
 		{/jstabs}
