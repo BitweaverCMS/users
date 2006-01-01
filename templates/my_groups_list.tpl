@@ -3,6 +3,8 @@
 		<h1>{tr}List of existing groups{/tr}</h1>
 	</div>
 
+	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
+
 	<div class="body">
 		{formfeedback success=$successMsg error=$errorMsg}
 

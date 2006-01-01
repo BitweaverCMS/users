@@ -6,6 +6,8 @@
 		<h1>{tr}User Preferences{/tr}</h1>
 	</div>
 
+	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
+
 	<div class="body">
 		{formfeedback warning=$warningMsg success=$successMsg error=$errorMsg}
 		{jstabs}
