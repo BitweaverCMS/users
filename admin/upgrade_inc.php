@@ -40,6 +40,8 @@ array( 'RENAMECOLUMN' => array(
 	'users_groups_map' => array(
 		'`userId`' => '`user_id` I4'
 	),
+	'tiki_semaphores' => array( '`semName`' => '`sem_name` C(250)',
+							   '`timestamp`' => '`created` I8' ),
 	'tiki_user_preferences' => array(
 		'`prefName`' => '`pref_name` C(40)'
 	),
@@ -94,6 +96,9 @@ array( 'ALTER' => array(
 		'avatar_attachment_id' => array( '`avatar_attachment_id`', 'I4' ), // , 'NOTNULL' ),
 		'portrait_attachment_id' => array( '`portrait_attachment_id`', 'I4' ), // , 'NOTNULL' ),
 		'logo_attachment_id' => array( '`logo_attachment_id`', 'I4' ), // , 'NOTNULL' ),
+	),
+	'tiki_semaphores' => array(
+		'user_id' => array( '`user_id`', 'I4' ), // , 'NOTNULL' ),
 	),
 	'tiki_sessions' => array(
 		'user_id' => array( '`user_id`', 'I4' ), // , 'NOTNULL' ),
@@ -184,6 +189,8 @@ array( 'QUERY' =>
 // In order for all pages to upgrade, there must be at least an 'admin' and 'system' user
  		"INSERT INTO `".BIT_DB_PREFIX."users_users` (`real_name`, `login`, `email`, `user_id` ) VALUES ('Administrator', 'admin', 'root@localhost', ".ROOT_USER_ID.")",
  		"INSERT INTO `".BIT_DB_PREFIX."users_users` (`real_name`, `login`, `email` ) VALUES ('System', 'system', 'system@localhost' )",
+		"UPDATE `".BIT_DB_PREFIX."tiki_semaphores` SET `user_id`=(SELECT `user_id` FROM `".BIT_DB_PREFIX."users_users` WHERE `".BIT_DB_PREFIX."users_users`.`login`=`".BIT_DB_PREFIX."tiki_semaphores`.`user`)",
+		"UPDATE `".BIT_DB_PREFIX."tiki_semaphores` SET `user_id`=(SELECT `user_id` FROM `".BIT_DB_PREFIX."users_users` WHERE `".BIT_DB_PREFIX."users_users`.`login`=`".BIT_DB_PREFIX."tiki_semaphores`.`user`)",
 		"UPDATE `".BIT_DB_PREFIX."tiki_sessions` SET `user_id`=(SELECT `user_id` FROM `".BIT_DB_PREFIX."users_users` WHERE `".BIT_DB_PREFIX."users_users`.`login`=`".BIT_DB_PREFIX."tiki_sessions`.`user`)",
 		"UPDATE `".BIT_DB_PREFIX."tiki_user_preferences` SET `user_id`=(SELECT `user_id` FROM `".BIT_DB_PREFIX."users_users` WHERE `".BIT_DB_PREFIX."users_users`.`login`=`".BIT_DB_PREFIX."tiki_user_preferences`.`user`)",
 		"UPDATE `".BIT_DB_PREFIX."tiki_user_bookmarks_folders` SET `user_id`=(SELECT `user_id` FROM `".BIT_DB_PREFIX."users_users` WHERE `".BIT_DB_PREFIX."users_users`.`login`=`".BIT_DB_PREFIX."tiki_user_bookmarks_folders`.`user`)",
@@ -209,6 +216,7 @@ array( 'QUERY' =>
 // STEP 4
 array( 'DATADICT' => array(
 array( 'DROPCOLUMN' => array(
+		'tiki_semaphores' => array( '`user`' ),
 		'tiki_sessions' => array( '`user`', '`sessionId`' ),
 		'users_groups_map' => array( '`groupName`' ),
 		'users_grouppermissions' => array( '`groupName`' ),
@@ -248,6 +256,7 @@ array( 'PHP' => '
 // STEP 4
 array( 'DATADICT' => array(
 array( 'CREATEINDEX' => array(
+		'tiki_sema_user_idx' => array( 'tiki_semaphores', '`user_id`', array() ),
 		'tiki_user_prefs_idx' => array( 'tiki_user_preferences', '`user_id`', array() ),
 		'tiki_user_prefs_un_idx' => array( 'tiki_user_preferences', '`user_id`,`pref_name`', array( 'UNIQUE' ) ),
 		'users_groups_map_user_idx' => array( 'users_groups_map', '`user_id`', array() ),

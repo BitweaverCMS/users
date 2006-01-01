@@ -159,6 +159,12 @@ $tables = array(
   CONSTRAINTS	', CONSTRAINT `users_cnxn_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
+'tiki_semaphores' => "
+	sem_name C(250) PRIMARY,
+	user_id I4 NOTNULL,
+	created I8
+",
+
 'tiki_user_bookmarks_folders' => "
   folder_id I4 AUTO PRIMARY,
   parent_id I4,
