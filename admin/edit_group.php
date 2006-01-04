@@ -1,11 +1,10 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.1.1.1.2.6 2005/12/23 16:59:38 sylvieg Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.1.1.1.2.7 2006/01/04 14:51:10 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 // Initialization
 require_once( '../../bit_setup_inc.php' );
-
 
 // PERMISSIONS: NEEDS admin
 $gBitSystem->verifyPermission( 'bit_p_admin' );
@@ -13,6 +12,7 @@ $gBitSystem->verifyPermission( 'bit_p_admin' );
 $successMsg = NULL;
 $errorMsg = NULL;
 
+$gBitUser->getUnassignedPerms();
 // We need to scan for defaults
 global $gBitInstaller;
 $gBitInstaller = &$gBitSystem;
@@ -31,10 +31,10 @@ $gBitSmarty->assign( 'package',isset( $_REQUEST['package'] ) ? $_REQUEST['packag
 if( !empty( $_REQUEST["cancel"] ) ) {
 	header( 'Location: '.USERS_PKG_URL.'admin/edit_group.php' );
 	die;
-} elseif( isset($_REQUEST["batch_assign"] ) ) {
+} elseif( isset( $_REQUEST["batch_assign"] ) ) {
 	$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['batch_assign'] );
 	if( isset( $_REQUEST["confirm"] ) ) {
-$gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
+		$gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 	} else {
 		$gBitSystem->setBrowserTitle( tra( 'Confirm Batch Group Assignment' ) );
 		$formHash['batch_assign'] = $_REQUEST["batch_assign"];
@@ -52,7 +52,7 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 	$groupMembers = $gBitUser->get_group_users( $_REQUEST["members"] );
 	$gBitSmarty->assign_by_ref( 'groupMembers', $groupMembers );
 	$mid = "bitpackage:users/group_list_members.tpl";
-		$gBitSystem->setBrowserTitle( tra( 'Group Members' ).': '.$groupInfo['group_name'] );
+	$gBitSystem->setBrowserTitle( tra( 'Group Members' ).': '.$groupInfo['group_name'] );
 } elseif( isset($_REQUEST["save"] ) ) {
 	if( empty($_REQUEST["name"] ) ) {
 		$_REQUEST["name"] = $_REQUEST["olgroup"];
@@ -177,9 +177,6 @@ if( empty( $mid ) ) {
 $gBitSmarty->assign('groups', $groupList['data']);
 $gBitSmarty->assign('successMsg',$successMsg);
 $gBitSmarty->assign('errorMsg',$errorMsg);
-// probably obsolete now
-//$gBitSmarty->assign( (!empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'edit').'TabSelect', 'tdefault' );
-
 
 // Display the template for group administration
 $gBitSystem->display( $mid );
