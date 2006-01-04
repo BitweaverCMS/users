@@ -1,15 +1,25 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/unassigned_perms.php,v 1.1.2.1 2006/01/04 14:51:10 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/unassigned_perms.php,v 1.1.2.2 2006/01/04 15:22:44 squareing Exp $
 // Initialization
 require_once( '../../bit_setup_inc.php' );
 
 $gBitSystem->verifyPermission( 'bit_p_admin' );
+$gBitSmarty->assign_by_ref( 'feedback', $feedback = array() );
+
+$listHash = array( 'sort_mode' => 'group_id_asc' );
+$groupList = $gBitUser->getAllGroups( $listHash );
+foreach( $groupList['data'] as $group ) {
+	$groupDrop[$group['group_id']] = $group['group_name'];
+}
+$gBitSmarty->assign( 'groupDrop', $groupDrop );
 
 if( !empty( $_REQUEST['assign_permissions'] ) && !empty( $_REQUEST['assign'] ) ) {
+	$feedback['success'] = tra( "The permissions were successfully added to the requested groups." );
 	foreach( $_REQUEST['assign'] as $p => $group_id ) {
 		$gBitUser->assignPermissionToGroup( $p, $group_id );
+		$assignedPerms[$p] = $groupDrop[$group_id];
 	}
-
+	$gBitSmarty->assign( 'assignedPerms', $assignedPerms );
 }
 
 $unassignedPerms = $gBitUser->getUnassignedPerms();
@@ -34,14 +44,5 @@ foreach( $unassignedPerms as $key => $p ) {
 }
 $gBitSmarty->assign( 'unassignedPerms', $unassignedPerms );
 
-$listHash = array( 'sort_mode' => 'group_id_asc' );
-$groupList = $gBitUser->getAllGroups( $listHash );
-foreach( $groupList['data'] as $group ) {
-	$groupDrop[$group['group_id']] = $group['group_name'];
-}
-$gBitSmarty->assign( 'groupDrop', $groupDrop );
-
-//vd($unassignedPerms);
-//vd($groupList['data']);
 $gBitSystem->display( "bitpackage:users/admin_unassigned_perms.tpl", tra( "Unassigned Permissions" ) );
 ?>

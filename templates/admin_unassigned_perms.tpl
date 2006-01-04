@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/admin_unassigned_perms.tpl,v 1.1.2.1 2006/01/04 14:51:10 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/admin_unassigned_perms.tpl,v 1.1.2.2 2006/01/04 15:22:44 squareing Exp $ *}
 {strip}
 
 <div class="admin groups">
@@ -8,6 +8,13 @@
 
 	<div class="body">
 		{formfeedback hash=$feedback}
+		{if $assignedPerms}
+			<ul>
+				{foreach from=$assignedPerms key=perm item=group}
+					<li>{$perm} --&gt; {$group}</li>
+				{/foreach}
+			</ul>
+		{/if}
 
 		{form legend="Assign Permissions"}
 			<table class="data">
