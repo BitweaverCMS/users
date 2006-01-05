@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.1.1.1.2.1 2005/08/05 23:00:43 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.1.1.1.2.2 2006/01/05 00:06:07 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -123,6 +123,7 @@
 							<table class="data">
 								<tr>
 									<th>&nbsp;</th>
+									<th><abbr title="{tr}Inherited permissions{/tr}">*</abbr></th>
 									<th>{smartlink ititle="Name" isort="up.perm_name" group_id=$groupInfo.group_id offset=$offset package=$package}</th>
 									<th>{tr}Level{/tr}</th>
 									<th>{smartlink ititle="Package" isort=package group_id=$groupInfo.group_id offset=$offset package=$package}</th>
@@ -131,15 +132,21 @@
 								{foreach key=permName item=perm from=$allPerms}
 									{if $package eq $perm.package or $package eq 'all'}
 										<tr class="{cycle values="even,odd"}">
-											<td><input type="checkbox" id="{$permName}" name="perm[{$permName}]"{if $groupInfo.perms.$permName} checked="checked"{/if} /></td>
+											<td><input type="checkbox" id="{$permName}" name="perm[{$permName}]" {if $groupInfo.perms.$permName} checked="checked"{/if} /></td>
+											<td>
+												{if $incPerms.$permName}
+													<input type="checkbox" id="{$permName}" name="inherited[{$permName}]" checked="checked" disabled="disabled" title="{tr}Inherited from{/tr}: {$incPerms.$permName.group_name}" />
+												{/if}
+											</td>
 											<td><label for="{$permName}">{$permName}</label></td>
-											<td><select name="level[{$permName}]">{html_options output=$levels values=$levels selected=$perm.level}</select></td>
+											<td>{html_options name="level[$permName]" output=$levels values=$levels selected=$perm.level}</td>
 											<td>{tr}{$perm.package}{/tr}</td>
 											<td>{tr}{$perm.perm_desc}{/tr}</td>
 										</tr>
 									{/if}
 								{/foreach}
 							</table>
+							* {formhelp note="Inherited permissions. Hover over the checkboxes to find out what group they are inherited from. Assigning them to a new level will remove them from the original group and insert them here."}
 						</div>
 
 						<div class="row submit">
@@ -148,30 +155,34 @@
 					{/form}
 				{/jstab}
 
-				{jstab title="Batch Assign"}
+				{jstab title="Advanced"}
 					{form legend="Batch assign permissions"}
 						<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
 						<input type="hidden" name="package" value="{$package|escape}" />
 
 						<div class="row">
-							<select name="oper">
-								<option value="assign">{tr}assign{/tr}</option>
-								<option value="remove">{tr}remove{/tr}</option>
-							</select> 
-							{tr}all permissions in level{/tr} 
-							<select name="level">
-								{html_options output=$levels values=$levels selected=$perms[user].level}
-							</select> 
-							{tr}to {$groupInfo.group_name}{/tr}
+							{formlabel label="Assign or Remove" for="oper"}
+							{forminput}
+								<select name="oper" id="oper">
+									<option value="assign">{tr}Assign{/tr}</option>
+									<option value="remove">{tr}Remove{/tr}</option>
+								</select>
+								<br />
+								{tr}all permissions in level{/tr} 
+								<br />
+								<select name="level">
+									{html_options output=$levels values=$levels selected=$perms[user].level}
+								</select> 
+								<br />
+								{tr}to / from {$groupInfo.group_name}{/tr}
+							{/forminput}
 						</div>
 
 						<div class="row submit">
 							<input type="submit" name="allper" value="{tr}Update{/tr}" />
 						</div>
 					{/form}
-				{/jstab}
 
-				{jstab title="Create Level"}
 					{form legend="Create a new level"}
 						<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
 						<input type="hidden" name="package" value="{$package|escape}" />

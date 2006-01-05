@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.21 2006/01/04 14:51:10 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.22 2006/01/05 00:06:06 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.1.1.1.2.21 2006/01/04 14:51:10 squareing Exp $
+ * $Id: BitPermUser.php,v 1.1.1.1.2.22 2006/01/05 00:06:06 squareing Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.1.1.1.2.21 $
+ * @version  $Revision: 1.1.1.1.2.22 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -163,15 +163,6 @@ class BitPermUser extends BitUser {
 			}
 		}
 		return $ret;
-	}
-
-	function getUnassignedPerms() {
-		$query = "SELECT up.`perm_name` AS `hash_key`, up.*
-			FROM `".BIT_DB_PREFIX."users_permissions` up
-			LEFT JOIN `".BIT_DB_PREFIX."users_grouppermissions` ugp ON( up.`perm_name` = ugp.`perm_name` )
-			WHERE ugp.`group_id` IS NULL
-			ORDER BY `package`, `perm_name` ASC";
-		return( $this->mDb->getAssoc( $query ) );
 	}
 
 	function getAllGroups( &$pListHash ) {
@@ -553,6 +544,15 @@ class BitPermUser extends BitUser {
 	}
 
 
+	function getUnassignedPerms() {
+		$query = "SELECT up.`perm_name` AS `hash_key`, up.*
+			FROM `".BIT_DB_PREFIX."users_permissions` up
+			LEFT JOIN `".BIT_DB_PREFIX."users_grouppermissions` ugp ON( up.`perm_name` = ugp.`perm_name` )
+			WHERE ugp.`group_id` IS NULL
+			ORDER BY `package`, `perm_name` ASC";
+		return( $this->mDb->getAssoc( $query ) );
+	}
+
 	// If the request has a ticket, some form action is being processed, and we need to validate we have a matched ticket to avoid XSS
 	function isAdmin( $pCheckTicket=FALSE ) {
 		$ret = FALSE;
@@ -766,13 +766,11 @@ class BitPermUser extends BitUser {
 	function assignPermissionToGroup( $perm, $pGroupId ) {
 		$gBitCache = new BitCache();
 		$gBitCache->removeCached("allperms");
-		$query = "delete from `".BIT_DB_PREFIX."users_grouppermissions` where `group_id` = ?
-			and `perm_name` = ?";
+		$query = "DELETE FROM `".BIT_DB_PREFIX."users_grouppermissions` WHERE `group_id` = ? AND `perm_name` = ?";
 		$result = $this->mDb->query($query, array($pGroupId, $perm));
-		$query = "insert into `".BIT_DB_PREFIX."users_grouppermissions`(`group_id`, `perm_name`)
-			values(?, ?)";
+		$query = "INSERT INTO `".BIT_DB_PREFIX."users_grouppermissions`(`group_id`, `perm_name`) VALUES(?, ?)";
 		$result = $this->mDb->query($query, array($pGroupId, $perm));
-		return true;
+		return TRUE;
 	}
 
 
