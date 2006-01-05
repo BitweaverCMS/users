@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.1.1.1.2.2 2006/01/05 00:06:07 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.1.1.1.2.3 2006/01/05 09:19:04 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -123,7 +123,9 @@
 							<table class="data">
 								<tr>
 									<th>&nbsp;</th>
-									<th><abbr title="{tr}Inherited permissions{/tr}">*</abbr></th>
+									{if $incPerms}
+										<th><abbr title="{tr}Inherited permissions{/tr}">*</abbr></th>
+									{/if}
 									<th>{smartlink ititle="Name" isort="up.perm_name" group_id=$groupInfo.group_id offset=$offset package=$package}</th>
 									<th>{tr}Level{/tr}</th>
 									<th>{smartlink ititle="Package" isort=package group_id=$groupInfo.group_id offset=$offset package=$package}</th>
@@ -133,11 +135,13 @@
 									{if $package eq $perm.package or $package eq 'all'}
 										<tr class="{cycle values="even,odd"}">
 											<td><input type="checkbox" id="{$permName}" name="perm[{$permName}]" {if $groupInfo.perms.$permName} checked="checked"{/if} /></td>
-											<td>
-												{if $incPerms.$permName}
-													<input type="checkbox" id="{$permName}" name="inherited[{$permName}]" checked="checked" disabled="disabled" title="{tr}Inherited from{/tr}: {$incPerms.$permName.group_name}" />
-												{/if}
-											</td>
+											{if $incPerms}
+												<td>
+													{if $incPerms.$permName}
+														<input type="checkbox" id="{$permName}" name="inherited[{$permName}]" checked="checked" disabled="disabled" title="{tr}Inherited from{/tr}: {$incPerms.$permName.group_name}" />
+													{/if}
+												</td>
+											{/if}
 											<td><label for="{$permName}">{$permName}</label></td>
 											<td>{html_options name="level[$permName]" output=$levels values=$levels selected=$perm.level}</td>
 											<td>{tr}{$perm.package}{/tr}</td>
@@ -146,7 +150,9 @@
 									{/if}
 								{/foreach}
 							</table>
-							* {formhelp note="Inherited permissions. Hover over the checkboxes to find out what group they are inherited from. Assigning them to a new level will remove them from the original group and insert them here."}
+							{if $incPerms}
+								* {formhelp note="Inherited permissions. Hover over the checkboxes to find out what group they are inherited from. Assigning them to a new level will remove them from the original group and insert them here."}
+							{/if}
 						</div>
 
 						<div class="row submit">
