@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.58 2005/12/21 22:14:46 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.59 2006/01/08 16:49:00 mej Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.58 2005/12/21 22:14:46 squareing Exp $
+ * $Id: BitUser.php,v 1.2.2.59 2006/01/08 16:49:00 mej Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.58 $
+ * @version  $Revision: 1.2.2.59 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1557,7 +1557,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			}
 
 			if( $pUseLink ) {
-				$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'.$displayName.'</a>';
+				$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName
+					.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'
+					. ((isset($pHash['link_label'])) ? ($pHash['link_label']) : ($displayName))
+					.'</a>';
 			} else {
 				$ret = $displayName;
 			}
