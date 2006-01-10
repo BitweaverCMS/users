@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.20 2005/12/26 12:27:13 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.21 2006/01/10 21:17:04 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.20 2005/12/26 12:27:13 squareing Exp $
+ * $Id: BitUser.php,v 1.21 2006/01/10 21:17:04 squareing Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.20 $
+ * @version  $Revision: 1.21 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -63,7 +63,7 @@ class BitUser extends LibertyAttachable {
 * Constructor - will automatically load all relevant data if passed a user string
 *
 * @access public
-* @author Christian Fower<spider@viovio.com>
+* @author Christian Fowler <spider@viovio.com>
 * @return returnString
 */
 	function BitUser( $pUserId=NULL, $pContentId=NULL ) {
@@ -399,19 +399,19 @@ class BitUser extends LibertyAttachable {
 		return( count( $this->mErrors ) == 0 );
 	}
 
-   function get_SMTP_response ( &$pConnect ) {
+	function get_SMTP_response ( &$pConnect ) {
 
-		$Out = "";
-		while (1) {
-			$work = fgets ( $pConnect, 1024 );
-			$Out .= $work;
-			if (!preg_match('/^\d\d\d-/',$work)) {
-				break;
+			$Out = "";
+			while (1) {
+				$work = fgets ( $pConnect, 1024 );
+				$Out .= $work;
+				if (!preg_match('/^\d\d\d-/',$work)) {
+					break;
+					}
 				}
-			}	
-   
-        return $Out;
-   }
+
+			return $Out;
+	}
 
 
 	function verifyEmail( $pEmail, $pValidate = FALSE ) {
@@ -667,13 +667,13 @@ if ($gDebug) echo "Run : QUIT<br>";
 	function login( $pLogin, $pPassword, $pChallenge=NULL, $pResponse=NULL ) {
 		global $gBitSystem, $user_cookie_site;
 		$isvalid = false;
-		
+
 		// Make sure cookies are enabled
 		if ( !isset($_COOKIE[BIT_SESSION_NAME]) ) {
 			$url = USERS_PKG_URL.'login.php?error=' . urlencode(tra('no cookie found, please enable cookies and try again.'));
 			return ( $url );
 			}
-		
+
 		// Verify user is valid
 		$validate_result = $this->validate($pLogin, $pPassword, $pChallenge, $pResponse);
 		if( $validate_result ) {
@@ -1557,7 +1557,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			}
 
 			if( $pUseLink ) {
-				$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'.$displayName.'</a>';
+				$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName
+					.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'
+					. ((isset($pHash['link_label'])) ? ($pHash['link_label']) : ($displayName))
+					.'</a>';
 			} else {
 				$ret = $displayName;
 			}

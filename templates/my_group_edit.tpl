@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_group_edit.tpl,v 1.2 2005/08/07 17:46:48 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_group_edit.tpl,v 1.3 2006/01/10 21:17:06 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -10,6 +10,8 @@
 	<div class="header">
 		<h1>{if $groupInfo.group_name}{tr}Administer Group{/tr}: {$groupInfo.group_name}{else}{tr}Create New Group{/tr}{/if}</h1>
 	</div>
+
+	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
 
 	<div class="body">
 		{formfeedback success=$successMsg error=$errorMsg}

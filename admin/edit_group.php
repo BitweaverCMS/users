@@ -1,11 +1,10 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.6 2005/12/26 12:27:13 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.7 2006/01/10 21:17:05 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 // Initialization
 require_once( '../../bit_setup_inc.php' );
-
 
 // PERMISSIONS: NEEDS admin
 $gBitSystem->verifyPermission( 'bit_p_admin' );
@@ -13,6 +12,7 @@ $gBitSystem->verifyPermission( 'bit_p_admin' );
 $successMsg = NULL;
 $errorMsg = NULL;
 
+$gBitUser->getUnassignedPerms();
 // We need to scan for defaults
 global $gBitInstaller;
 $gBitInstaller = &$gBitSystem;
@@ -24,6 +24,16 @@ if( count( $_GET ) > 2 || count( $_POST ) > 2 ) {
 
 if( !empty( $_REQUEST['group_id'] ) ) {
 	$allPerms = $gBitUser->getGroupPermissions( NULL, NULL, NULL, !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : NULL );
+
+	// get all the included permissions as well
+	$includes = array();
+	$gBitUser->getIncludedGroups( $_REQUEST['group_id'], $includes );
+	foreach( $includes as $gid => $name ) {
+		foreach( $gBitUser->getGroupPermissions( $gid ) as $p ) {
+			$incPerms[$p['perm_name']]['group_id'] = $gid;
+			$incPerms[$p['perm_name']]['group_name'] = $name;
+		}
+	}
 }
 
 $gBitSmarty->assign( 'package',isset( $_REQUEST['package'] ) ? $_REQUEST['package'] : 'all' );
@@ -31,10 +41,10 @@ $gBitSmarty->assign( 'package',isset( $_REQUEST['package'] ) ? $_REQUEST['packag
 if( !empty( $_REQUEST["cancel"] ) ) {
 	header( 'Location: '.USERS_PKG_URL.'admin/edit_group.php' );
 	die;
-} elseif( isset($_REQUEST["batch_assign"] ) ) {
+} elseif( isset( $_REQUEST["batch_assign"] ) ) {
 	$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['batch_assign'] );
 	if( isset( $_REQUEST["confirm"] ) ) {
-$gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
+		$gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 	} else {
 		$gBitSystem->setBrowserTitle( tra( 'Confirm Batch Group Assignment' ) );
 		$formHash['batch_assign'] = $_REQUEST["batch_assign"];
@@ -52,7 +62,7 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 	$groupMembers = $gBitUser->get_group_users( $_REQUEST["members"] );
 	$gBitSmarty->assign_by_ref( 'groupMembers', $groupMembers );
 	$mid = "bitpackage:users/group_list_members.tpl";
-		$gBitSystem->setBrowserTitle( tra( 'Group Members' ).': '.$groupInfo['group_name'] );
+	$gBitSystem->setBrowserTitle( tra( 'Group Members' ).': '.$groupInfo['group_name'] );
 } elseif( isset($_REQUEST["save"] ) ) {
 	if( empty($_REQUEST["name"] ) ) {
 		$_REQUEST["name"] = $_REQUEST["olgroup"];
@@ -91,6 +101,10 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 			}
 			if( isset($_REQUEST['perm'][$per]) && !isset($updatePerms[$per]) ) {
 				// we have an unselected perm that is now selected
+				// remove it from any inherited group ( we need to shuffle around perms in the users groups as well ) - xing
+				if( !empty( $incPerms[$per] ) ) {
+					$gBitUser->remove_permission_from_group( $per, $incPerms[$per]['group_id'] );
+				}
 				$gBitUser->assignPermissionToGroup($per, $_REQUEST['group_id']);
 			} elseif( empty($_REQUEST['perm'][$per]) && isset($updatePerms[$per]) ) {
 				// we have a selected perm that is now UNselected
@@ -115,12 +129,12 @@ $gBitUser->batchAssignUsersToGroup( $_REQUEST['batch_assign'] );
 			$successMsg = "The group ".$groupInfo['group_name']." was deleted.";
 			unset( $_REQUEST['group_id'] );
 		} else {
-				$gBitSystem->setBrowserTitle( tra('Delete group') );
-				$msgHash = array(
-					'confirm_item' => tra( 'Are you sure you want to remove the group?' ),
-					'warning' => tra( 'This will permentally delete the group' )." <strong>$groupInfo[group_name]</strong>",
-				);
-				$gBitSystem->confirmDialog( $formHash,$msgHash );
+			$gBitSystem->setBrowserTitle( tra('Delete group') );
+			$msgHash = array(
+				'confirm_item' => tra( 'Are you sure you want to remove the group?' ),
+				'warning' => tra( 'This will permentally delete the group' )." <strong>$groupInfo[group_name]</strong>",
+			);
+			$gBitSystem->confirmDialog( $formHash,$msgHash );
 		}
 	} elseif ($_REQUEST["action"] == 'remove') {
 		$gBitUser->remove_permission_from_group( $_REQUEST["permission"], $_REQUEST['group_id'] );
@@ -154,6 +168,17 @@ $inc = array();
 if( empty( $mid ) ) {
 	if( !empty( $_REQUEST['group_id'] ) ) {
 		$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group_id'] );
+
+		// refresh inherited permissions list
+		$incPerms = array();
+		foreach( $includes as $gid => $name ) {
+			foreach( $gBitUser->getGroupPermissions( $gid ) as $p ) {
+				$incPerms[$p['perm_name']]['group_id'] = $gid;
+				$incPerms[$p['perm_name']]['group_name'] = $name;
+			}
+		}
+		$gBitSmarty->assign( 'incPerms', $incPerms );
+
 		$rs = array();
 		$gBitUser->getIncludedGroups( $_REQUEST['group_id'], $rs );
 		foreach( array_keys( $groupList["data"] ) as $groupId ) {
@@ -177,9 +202,6 @@ if( empty( $mid ) ) {
 $gBitSmarty->assign('groups', $groupList['data']);
 $gBitSmarty->assign('successMsg',$successMsg);
 $gBitSmarty->assign('errorMsg',$errorMsg);
-// probably obsolete now
-//$gBitSmarty->assign( (!empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'edit').'TabSelect', 'tdefault' );
-
 
 // Display the template for group administration
 $gBitSystem->display( $mid );

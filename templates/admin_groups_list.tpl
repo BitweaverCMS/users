@@ -6,6 +6,8 @@
 
 	<div class="body">
 		{smartlink ititle="Add a new group" ipackage=users ifile="admin/edit_group.php" action=create}
+		<br />
+		{smartlink ititle="Check for Unassigned Permissions" ipackage=users ifile="admin/unassigned_perms.php"}
 
 		<div class="navbar">
 			<ul>
@@ -24,7 +26,7 @@
 					<div class="floaticon">
 						{smartlink ititle="Edit" ipackage="users" ifile="admin/edit_group.php" ibiticon="liberty/edit" group_id=$groupId}
 						{smartlink ititle="Group Members" ipackage="users" ifile="admin/edit_group.php" ibiticon="users/users" members=$groupId}
-						{if $groupId ne -1}{* sorry for hardcoding, really need php define ANONYMOUS_GROUP_ID - spiderr *}
+						{if $groupId ne $smarty.const.ANONYMOUS_GROUP_ID}
 							{smartlink ititle="Batch assign" ipackage="users" ifile="admin/edit_group.php" ibiticon="users/batch_assign" batch_assign=$groupId}
 							{smartlink ititle="Remove" ipackage="users" ifile="admin/edit_group.php" ibiticon="liberty/delete" action=delete group_id=$groupId}
 						{/if}

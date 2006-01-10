@@ -157,7 +157,7 @@
 						<option value="604800" {if $remembertime eq 604800} selected="selected"{/if}>1 {tr}week{/tr}</option>
 						<option value="2592000" {if $remembertime eq 2592000} selected="selected"{/if}>1 {tr}month{/tr}</option>
 						<option value="15724800" {if $remembertime eq 15724800} selected="selected"{/if}>6 {tr}months{/tr}</option>
-						<option value="2147483648" {if $remembertime eq 2147483648} selected="selected"{/if}>{tr}Forever{/tr}</option>
+						<option value="31449600" {if $remembertime eq 31449600} selected="selected"{/if}>1 {tr}year{/tr}</option>
 					</select>
 					{formhelp note=""}
 				{/forminput}

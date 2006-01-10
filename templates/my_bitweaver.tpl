@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_bitweaver.tpl,v 1.1 2005/06/19 05:12:23 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_bitweaver.tpl,v 1.2 2006/01/10 21:17:05 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
@@ -7,7 +7,7 @@
 		<h1>{tr}My {$siteTitle|default:'Site'}{/tr}</h1>
 	</div>
 
-	{*include file="bitpackage:users/my_bitweaver_bar.tpl"*}
+	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
 
 	<div class="body">
 
