@@ -1,11 +1,15 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_who_is_there.tpl,v 1.1.1.1.2.2 2005/08/05 23:00:42 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_who_is_there.tpl,v 1.1.1.1.2.3 2006/01/11 23:20:14 damosoft Exp $ *}
 {bitmodule title="$moduleTitle" name="who_is_there"}
 	<div>
+		{if $logged_users eq 0}
+			{tr}No online users{/tr}
+		{else}
 		{$logged_users}
 		{if $logged_users>1}
 			{tr}online users{/tr}
 		{elseif $logged_users>0}
 			{tr}online user{/tr}
+		{/if}
 		{/if}
 	</div>
 	{section name=ix loop=$online_users}
