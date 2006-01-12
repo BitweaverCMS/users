@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.1.1.1.2.8 2006/01/11 23:43:45 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.1.1.1.2.9 2006/01/12 00:02:03 squareing Exp $ *}
 {strip}
 {bitmodule title="$moduleTitle" name="login_box"}
 	{if $gBitUser->IsRegistered()}
@@ -7,13 +7,11 @@
 		{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
 		<div class="row">
 			{form ipackage=users ifile="admin/index.php"}
-				<input type="text" name="assume_user" value="{tr}Username{/tr}" id="assume_user" size="20" /> <input type="submit" name="confirm" value="{tr}Assume{/tr}" />
+				<input type="text" name="assume_user" value="{tr}Username{/tr}" id="assume_user" size="20" onfocus="this.value=''" /> <input type="submit" name="confirm" value="{tr}Assume{/tr}" />
 			{/form}
 		</div>
 		{/if}
 	{else}
-		{include file="bitpackage:users/login_inc.tpl"}
-		<hr />
 		{form ipackage=users ifile='validate.php'}
 			<div class="row">
 				<input type="text" name="user" id="user" value="{tr}Username{/tr}" size="20" onfocus="this.value=''" />
