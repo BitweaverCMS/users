@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.1.1.1.2.9 2006/01/12 00:02:03 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.1.1.1.2.10 2006/01/13 10:03:43 squareing Exp $ *}
 {strip}
 {bitmodule title="$moduleTitle" name="login_box"}
 	{if $gBitUser->IsRegistered()}
@@ -7,23 +7,23 @@
 		{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
 		<div class="row">
 			{form ipackage=users ifile="admin/index.php"}
-				<input type="text" name="assume_user" value="{tr}Username{/tr}" id="assume_user" size="20" onfocus="this.value=''" /> <input type="submit" name="confirm" value="{tr}Assume{/tr}" />
+				<input type="text" name="assume_user" value="{tr}Username{/tr}" id="assume_user" size="15" onfocus="this.value=''" /> <input type="submit" name="confirm" value="{tr}Assume{/tr}" />
 			{/form}
 		</div>
 		{/if}
 	{else}
 		{form ipackage=users ifile='validate.php'}
 			<div class="row">
-				<input type="text" name="user" id="user" value="{tr}Username{/tr}" size="20" onfocus="this.value=''" />
+				<input type="text" name="user" id="user" value="{tr}Username{/tr}" size="15" onfocus="this.value=''" />
 			</div>
 
 			<div class="row">
-				<input type="password" name="pass" id="pass" value="password" size="20" onfocus="this.value=''" />
+				<input type="password" name="pass" id="pass" value="password" size="15" onfocus="this.value=''" />
 			</div>
 
 			{if $gBitSystem->isFeatureActive('rememberme')}
 				<div class="row">
-					{formlabel label="Remember me" for="rme"} <input type="checkbox" name="rme" id="rme" value="on" checked="checked" />
+					<label><input type="checkbox" name="rme" id="rme" value="on" checked="checked" /> {tr}Remember me{/tr}</label>
 				</div>
 			{/if}
 
@@ -36,14 +36,14 @@
 
 			{if $show_stay_in_ssl_mode eq 'y'}
 				<div class="row">
-					{formlabel label="stay in ssl mode" for="stay_in_ssl_mode"} <input type="checkbox" name="stay_in_ssl_mode" id="stay_in_ssl_mode" {if $stay_in_ssl_mode eq 'y'}checked="checked"{/if} />
+					<label>{tr}Stay in ssl mode{/tr} <input type="checkbox" name="stay_in_ssl_mode" id="stay_in_ssl_mode" {if $stay_in_ssl_mode eq 'y'}checked="checked"{/if} /></label>
 				</div>
 			{else}
 				<input type="hidden" name="stay_in_ssl_mode" value="{$stay_in_ssl_mode|escape}" />
 			{/if}
 
 			<div class="row submit">
-				<input type="submit" name="login" value="{tr}Log in to {$siteName|default:"this site"}{/tr}" />
+				<input type="submit" name="login" value="{tr}Log in{/tr}" />
 			</div>
 
 			<div class="row">
