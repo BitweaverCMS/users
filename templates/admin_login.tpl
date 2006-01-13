@@ -65,10 +65,6 @@
 
 			{foreach from=$httpSettings key=feature item=output}
 				<div class="row">
-					{if $feature == 'validateEmail' && !$gBitSystem->hasValidSenderEmail()}
-						{formfeedback error="Site <a href=\"`$smarty.const.BIT_ROOT_URL`kernel/admin/index.php?page=server\">emailer return address</a> is not valid!"}
-					{/if}
-					{formfeedback warning=$warning}
 					{formlabel label=`$output.label` for=$feature}
 					{forminput}
 						{if $output.type == 'text'}
@@ -93,10 +89,6 @@
 
 			{foreach from=$ldapSettings key=feature item=output}
 				<div class="row">
-					{if $feature == 'validateEmail' && !$gBitSystem->hasValidSenderEmail()}
-						{formfeedback error="Site <a href=\"`$smarty.const.BIT_ROOT_URL`kernel/admin/index.php?page=server\">emailer return address</a> is not valid!"}
-					{/if}
-					{formfeedback warning=$warning}
 					{formlabel label=`$output.label` for=$feature}
 					{forminput}
 						{if $output.type == 'text'}
