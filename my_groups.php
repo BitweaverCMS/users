@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.1.1.1.2.3 2006/01/13 18:52:29 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.1.1.1.2.2 2005/07/26 15:50:30 drewslater Exp $
+ * $Id: my_groups.php,v 1.1.1.1.2.3 2006/01/13 18:52:29 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -19,9 +19,7 @@
 require_once( '../bit_setup_inc.php' );
 
 // PERMISSIONS: registered user required
-if( !$gBitUser->isRegistered() ) {
-	$gBitSystem->fatalError( 'You must be logged in to edit your groups.' );
-}
+$gBitSystem->verifyPermission( 'bit_p_create_personal_groups' );
 
 $successMsg = NULL;
 $errorMsg = NULL;
@@ -103,7 +101,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 	}
 } elseif (!empty($_REQUEST['submitUserSearch'])) {
 	$searchParams = array('find' => $_REQUEST['find']);
-	$gBitUser->getList($searchParams);	
+	$gBitUser->getList($searchParams);
 	$foundUsers = $searchParams['data'];
 	$gBitSmarty->assign_by_ref('foundUsers', $foundUsers);
 } elseif (!empty($_REQUEST['assignuser'])) {
