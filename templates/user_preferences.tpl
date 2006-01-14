@@ -62,8 +62,8 @@
 							<select name="country" id="country">
 								<option value="" />
 								{sortlinks}
-									{section name=ix loop=$flags}  
-										<option value="{$flags[ix]|escape}" {if $userPrefs.flag eq $flags[ix]}selected="selected"{/if}>{tr}{$flags[ix]}{/tr}</option>  
+									{section name=ix loop=$flags}
+										<option value="{$flags[ix]|escape}" {if $userPrefs.flag eq $flags[ix]}selected="selected"{/if}>{tr}{$flags[ix]|replace:'_':' '}{/tr}</option>
 									{/section}
 								{/sortlinks}
 							</select>

@@ -112,11 +112,13 @@
 				</a>
 			</li>
 		{/if}
+		{if $gBitUser->hasPermission( 'bit_p_create_personal_groups' )}
 		<li>
 			<a class="item" href="{$smarty.const.USERS_PKG_URL}my_groups.php">
 				{biticon ipackage=users iname=groups iexplain="My User Groups" iforce=icon}{if !$icons_only} {tr}My User Groups{/tr}{/if}
 			</a>
 		</li>
+		{/if}
 		{if $gBitSystem->isPackageActive('gatekeeper')}
 			<li>
 				<a class="item" href="{$smarty.const.GATEKEEPER_PKG_URL}">

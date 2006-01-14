@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.11 2006/01/10 21:17:05 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.12 2006/01/14 19:56:08 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.11 2006/01/10 21:17:05 squareing Exp $
+ * $Id: preferences.php,v 1.12 2006/01/14 19:56:08 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -190,11 +190,11 @@ while ($file = readdir($h)) {
 }
 closedir ($h);
 sort ($flags);
+$gBitSmarty->assign('flags', $flags);
 
 $editUser->mInfo['userbreadCrumb'] = $editUser->getPreference( 'userbreadCrumb', $gBitSystem->getPreference('userbreadCrumb', 4) );
 $editUser->mInfo['homePage'] = $editUser->getPreference( 'homePage', '');
 
-$gBitSmarty->assign('flags', $flags);
 $gBitSmarty->assign( 'editUser', $editUser->mInfo );
 
 // Get preferences

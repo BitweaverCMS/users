@@ -322,6 +322,7 @@ $gBitInstaller->registerUserPermissions( USERS_PKG_NAME, array(
 	array('bit_p_custom_home_theme', 'Can modify user homepage theme', 'editors', USERS_PKG_NAME),
 	array('bit_p_custom_home_layout', 'Can modify user homepage layout', 'editors', USERS_PKG_NAME),
 	array('bit_p_custom_css', 'Can create custom style sheets', 'editors', USERS_PKG_NAME),
+	array('bit_p_create_personal_groups', 'Can create personal user groups', 'editors', USERS_PKG_NAME),
 ) );
 
 
