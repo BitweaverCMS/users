@@ -40,6 +40,13 @@ $tables = array(
   timestamp I8
 ",
 
+'users_favorites_map' => "
+  favorites_content_id I4 PRIMARY,
+  user_id I4 PRIMARY
+  CONSTRAINTS	', CONSTRAINT `users_fav_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)
+  				 , CONSTRAINT `users_fav_con_ref` FOREIGN KEY (`favorites_content_id`) REFERENCES `".BIT_DB_PREFIX."tiki_content` (`content_id`)'
+",
+
 'tiki_user_bookmarks_urls' => "
   url_id I4 AUTO PRIMARY,
   name C(30),
@@ -228,7 +235,9 @@ $indices = array (
 	'users_objectperm_object_idx' => array( 'table' => 'users_objectpermissions', 'cols' => 'object_id', 'opts' => NULL ),
 	'users_permissions_perm_idx' => array( 'table' => 'users_permissions', 'cols' => 'perm_name', 'opts' => NULL ),
 	'users_groups_map_user_idx' => array( 'table' => 'users_groups_map', 'cols' => 'user_id', 'opts' => NULL ),
-	'users_groups_map_group_idx' => array( 'table' => 'users_groups_map', 'cols' => 'group_id', 'opts' => NULL )
+	'users_groups_map_group_idx' => array( 'table' => 'users_groups_map', 'cols' => 'group_id', 'opts' => NULL ),
+	'users_fav_con_idx' => array( 'table' => 'users_favorites_map', 'cols' => 'favorite_content_id', 'opts' => NULL ),
+	'users_fav_user_idx' => array( 'table' => 'users_favorites_map', 'cols' => 'user_id', 'opts' => NULL )
 );
 
 

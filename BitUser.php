@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.22 2006/01/14 19:56:08 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.23 2006/01/15 06:46:05 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.22 2006/01/14 19:56:08 squareing Exp $
+ * $Id: BitUser.php,v 1.23 2006/01/15 06:46:05 spiderr Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.22 $
+ * @version  $Revision: 1.23 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -638,6 +638,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 				'tiki_user_tasks',
 				'tiki_user_preferences',
 				'tiki_user_watches',
+				'users_favorites_map',
 				'users_users',
 				'tiki_content',
 			);
@@ -1407,6 +1408,24 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$ret['cant'] = count( $result->getRows() );
 		}
 		return $ret;
+	}
+
+	function storeFavorite( $pContentId ) {
+		$ret = FALSE;
+		if( $this->isValid() && $this->verifyId( $pContentId ) ) {
+			$this->mDb->query( "INSERT INTO `".BIT_DB_PREFIX."users_favorites_map` ( `user_id`, `favorite_content_id` ) VALUES (?,?)", array( $this->mUserId, $pContentId ) );
+			$ret = TRUE;
+		}
+		return( $ret );
+	}
+
+	function expungeFavorite( $pContentId ) {
+		$ret = FALSE;
+		if( $this->isValid() && $this->verifyId( $pContentId ) ) {
+			$this->mDb->query( "DELETE FROM `".BIT_DB_PREFIX."users_favorites_map` WHERE `user_id`=? AND `favorite_content_id`=?", array( $this->mUserId, $pContentId ) );
+			$ret = TRUE;
+		}
+		return( $ret );
 	}
 
 	// ============= watch functions
