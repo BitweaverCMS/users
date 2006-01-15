@@ -41,10 +41,10 @@ $tables = array(
 ",
 
 'users_favorites_map' => "
-  favorites_content_id I4 PRIMARY,
+  favorite_content_id I4 PRIMARY,
   user_id I4 PRIMARY
   CONSTRAINTS	', CONSTRAINT `users_fav_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)
-  				 , CONSTRAINT `users_fav_con_ref` FOREIGN KEY (`favorites_content_id`) REFERENCES `".BIT_DB_PREFIX."tiki_content` (`content_id`)'
+  				 , CONSTRAINT `users_fav_con_ref` FOREIGN KEY (`favorite_content_id`) REFERENCES `".BIT_DB_PREFIX."tiki_content` (`content_id`)'
 ",
 
 'tiki_user_bookmarks_urls' => "
