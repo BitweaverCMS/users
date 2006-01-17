@@ -236,6 +236,6 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	// register 'my' menu
 	if( $gBitUser->isValid() && ( $gBitUser->isRegistered() || !$gBitSystem->isFeatureActive( 'hide_my_top_bar_link' ) ) ) {
 		$displayTitle = !empty( $gBitSystem->mPrefs['site_menu_title'] ) ? $gBitSystem->mPrefs['site_menu_title'] : $gBitSystem->getPreference( 'siteTitle', 'Site' );
-		$gBitSystem->registerAppMenu( USERS_PKG_DIR, 'My '.$displayTitle, ($gBitSystem->getPreference('feature_userPreferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
+		$gBitSystem->registerAppMenu( USERS_PKG_NAME, 'My '.$displayTitle, ($gBitSystem->getPreference('feature_userPreferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
 	}
 ?>
