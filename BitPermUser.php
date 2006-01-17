@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.22 2006/01/05 00:06:06 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.1.1.1.2.23 2006/01/17 13:46:17 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.1.1.1.2.22 2006/01/05 00:06:06 squareing Exp $
+ * $Id: BitPermUser.php,v 1.1.1.1.2.23 2006/01/17 13:46:17 lsces Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.1.1.1.2.22 $
+ * @version  $Revision: 1.1.1.1.2.23 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -549,7 +549,7 @@ class BitPermUser extends BitUser {
 			FROM `".BIT_DB_PREFIX."users_permissions` up
 			LEFT JOIN `".BIT_DB_PREFIX."users_grouppermissions` ugp ON( up.`perm_name` = ugp.`perm_name` )
 			WHERE ugp.`group_id` IS NULL
-			ORDER BY `package`, `perm_name` ASC";
+			ORDER BY `package`, up.`perm_name` ASC";
 		return( $this->mDb->getAssoc( $query ) );
 	}
 
