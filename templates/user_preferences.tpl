@@ -82,7 +82,7 @@
 										</option>
 									{/foreach}
 								</select>
-								{formhelp note=""}
+								{formhelp note="Pick your preferred site language."}
 							{/forminput}
 						</div>
 					 {/if}
@@ -126,7 +126,7 @@
 						{formlabel label="HomePage" for="homePage"}
 						{forminput}
 							<input size="50" type="text" name="homePage" id="homePage" value="{$editUser.homePage|escape}" />
-							{formhelp note=""}
+							{formhelp note="If you have a personal or professional homepage, enter it here."}
 						{/forminput}
 					</div>
 

@@ -59,6 +59,32 @@
 		{/form}
 	{/jstab}
 
+	{jstab title="Registration Form"}
+		{form legend="Registration Form"}
+			<input type="hidden" name="page" value="{$page}" />
+
+			<p class="formhelp">{tr}Here you can specify what the registration page should look like. All these settings will still be available from the users preferences page.{/tr}</p>
+
+			{foreach from=$registerSettings key=feature item=output}
+				<div class="row">
+					{formlabel label=`$output.label` for=$feature}
+					{forminput}
+						{if $output.type == 'text'}
+							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystemPrefs.$feature|escape}" />
+						{else}
+							{html_checkboxes name="$feature" values="y" checked=`$gBitSystemPrefs.$feature` labels=false id=$feature}
+						{/if}
+						{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
+					{/forminput}
+				</div>
+			{/foreach}
+
+			<div class="row submit">
+				<input type="submit" name="registerprefs" value="{tr}Change preferences{/tr}" />
+			</div>
+		{/form}
+	{/jstab}
+
 	{jstab title="HTTP Settings"}
 		{form legend="HTTP Settings"}
 			<input type="hidden" name="page" value="{$page}" />

@@ -8,7 +8,7 @@
 
 	<div class="body">
 		<p>{tr}If you are already registered, please{/tr} <a href="{$smarty.const.USERS_PKG_URL}login.php">{tr}login{/tr}</a></p>
-		{form legend="Please fill in the following details"}
+		{form enctype="multipart/form-data" legend="Please fill in the following details"}
 			{if $notrecognized eq 'y'}
 				<input type="hidden" name="REG[login]" value="{$reg.login}"/>
 				<input type="hidden" name="REG[password]" value="{$reg.password}"/>
@@ -18,7 +18,7 @@
 					{formfeedback error=$errors.validate}
 					{formlabel label="Username" for="email"}
 					{forminput}
-						<input type="text" name="REG[email]" id="email" value="{$reg.email}"/>
+						<input type="text" size="50" name="REG[email]" id="email" value="{$reg.email}"/>
 					{/forminput}
 				</div>
 
@@ -26,12 +26,14 @@
 					<input type="submit" name="REG[register]" value="{tr}register{/tr}" />
 				</div>
 			{elseif $showmsg ne 'y'}
-				<div class="row">
-					{formlabel label="Real name" for="real_name"}
-					{forminput}
-						<input type="text" name="REG[real_name]" id="real_name" value="{$reg.real_name}" />
-					{/forminput}
-				</div>
+				{if $gBitSystem->isFeatureActive( 'reg_real_name' )}
+					<div class="row">
+						{formlabel label="Real name" for="real_name"}
+						{forminput}
+							<input type="text" name="REG[real_name]" id="real_name" />
+						{/forminput}
+					</div>
+				{/if}
 
 				<div class="row">
 					{formfeedback error=$errors.login}
@@ -46,7 +48,7 @@
 					{formfeedback error=$errors.email}
 					{formlabel label="Email" for="email"}
 					{forminput}
-						<input type="text" name="REG[email]" id="email" value="{$reg.email}" /> <acronym title="{tr}Required{/tr}">*</acronym>
+						<input type="text" size="50" name="REG[email]" id="email" value="{$reg.email}" /> <acronym title="{tr}Required{/tr}">*</acronym>
 					{/forminput}
 				</div>
 
@@ -89,6 +91,63 @@
 							{/forminput}
 						</div>
 					{/if}
+				{/if}
+
+				{if $gBitSystem->isFeatureActive( 'reg_real_name' ) or $gBitSystem->isFeatureActive( 'reg_homepage' ) or $gBitSystem->isFeatureActive( 'reg_country' ) or $gBitSystem->isFeatureActive( 'reg_language' ) or $gBitSystem->isFeatureActive( 'reg_portrait' )}
+					{legend legend="Optional Details"}
+						{if $gBitSystem->isFeatureActive( 'reg_homepage' )}
+							<div class="row">
+								{formlabel label="HomePage" for="homePage"}
+								{forminput}
+									<input size="50" type="text" name="REG[homePage]" id="homePage" />
+									{formhelp note="If you have a personal or professional homepage, enter it here."}
+								{/forminput}
+							</div>
+						{/if}
+
+						{if $gBitSystem->isFeatureActive( 'reg_country' )}
+							<div class="row">
+								{formlabel label="Country" for="country"}
+								{forminput}
+									<select name="REG[country]" id="country">
+										<option value="" />
+										{sortlinks}
+											{section name=ix loop=$flags}
+												<option value="{$flags[ix]|escape}" {if $userPrefs.flag eq $flags[ix]}selected="selected"{/if}>{tr}{$flags[ix]|replace:'_':' '}{/tr}</option>
+											{/section}
+										{/sortlinks}
+									</select>
+									{formhelp note=""}
+								{/forminput}
+							</div>
+						{/if}
+
+						{if $gBitSystem->isFeatureActive( 'reg_language' )}
+							<div class="row">
+								{formlabel label="Language" for="language"}
+								{forminput}
+									<select name="REG[bitlanguage]" id="language">
+										{foreach from=$languages key=langCode item=lang}
+											<option value="{$langCode}"{if $gBitLanguage->mLanguage eq $langCode} selected="selected"{/if}>
+												{$lang.full_name}
+											</option>
+										{/foreach}
+									</select>
+									{formhelp note="Pick your preferred site language."}
+								{/forminput}
+							</div>
+						{/if}
+
+						{if $gBitSystem->isFeatureActive( 'reg_portrait' )}
+							<div class="row">
+								{formlabel label="Self Portrait" for="fPortraitFile"}
+								{forminput}
+									<input name="fPortraitFile" id="fPortraitFile" type="file" />
+									{formhelp note="Upload a personal photo to be displayed on your personal page."}
+								{/forminput}
+							</div>
+						{/if}
+					{/legend}
 				{/if}
 
 				{section name=f loop=$customFields}

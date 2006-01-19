@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.62 2006/01/13 04:50:29 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.63 2006/01/19 16:15:23 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.62 2006/01/13 04:50:29 spiderr Exp $
+ * $Id: BitUser.php,v 1.2.2.63 2006/01/19 16:15:23 squareing Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.62 $
+ * @version  $Revision: 1.2.2.63 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -524,6 +524,20 @@ if ($gDebug) echo "Run : QUIT<br>";
 
 			// set local time zone as default when registering
 			$this->storePreference( 'display_timezone', 'Local' );
+
+			$regPrefs = array(
+				'reg_real_name' => 'real_name',
+				'reg_homepage' => 'homePage',
+				'reg_country' => 'country',
+				'reg_language' => 'bitlanguage'
+			);
+			foreach( $regPrefs as $feature => $pref ) {
+				if( $gBitSystem->isFeatureActive( $feature ) ) {
+					if( !empty( $pParamHash[$pref] ) ) {
+						$this->storePreference( $pref, $pParamHash[$pref] );
+					}
+				}
+			}
 
 			if( !empty( $_REQUEST['CUSTOM'] ) ) {
 				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {

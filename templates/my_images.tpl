@@ -22,7 +22,7 @@
 				{/if}
 				{forminput}
 					<input name="fPortraitFile" id="fPortraitFile" type="file" />
-					{formhelp note="Upload a personal photo to be displayed on your `$siteTitle` homepage."}
+					{formhelp note="Upload a personal photo to be displayed on your personal page."}
 				{/forminput}
 			</div>
 
