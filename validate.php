@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.1.1.1.2.8 2005/10/10 18:52:24 jht001 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.1.1.1.2.9 2006/01/19 23:16:13 mej Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: validate.php,v 1.1.1.1.2.8 2005/10/10 18:52:24 jht001 Exp $
+ * $Id: validate.php,v 1.1.1.1.2.9 2006/01/19 23:16:13 mej Exp $
  * @package users
  * @subpackage functions
  */
@@ -47,13 +47,14 @@ if ($gBitUser->isAdmin()) {
 $https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
 $https_login_required = $gBitSystem->getPreference('https_login_required', 'n');
 if ($gBitSystem->isFeatureActive( 'https_login_required' ) && !$https_mode) {
-	$url = 'https://' . $https_domain;
+	$url = $https_domain;
 	if ($https_port != 443)
 		$url .= ':' . $https_port;
 	$url .= $https_prefix . $gBitSystem->getDefaultPage();
 	if (SID)
 		$url .= '?' . SID;
-	header("Location: " . $url);
+	$url = preg_replace('/\/+/', '/', $url);
+	header("Location: https://$url");
 	exit;
 }
 
@@ -63,11 +64,15 @@ $challenge = isset($_REQUEST['challenge']) ? $_REQUEST['challenge'] : false;
 $response = isset($_REQUEST['response']) ? $_REQUEST['response'] : false;
 
 // if $referer is set, login() will return the user to whence he came
-$url = httpPrefix() .  $gBitUser->login( $user, $pass, $challenge, $response );
+$url = $gBitUser->login( $user, $pass, $challenge, $response );
+if (!preg_match('/^\w+:\/{2}/', $url)) {
+	$url = httpPrefix() . $url;
+}
+
 // but if we came from a login page, let's go home (except if we got an error when login in)
 if( (strpos( $url, 'login.php?' ) || strpos( $url, 'remind_password.php' )) && strpos( $url, 'login.php?error=') == -1) {
 	$url = $gBitSystem->getDefaultPage();
 }
-header('location: ' . $url);
+header('Location: ' . $url);
 exit;
 ?>

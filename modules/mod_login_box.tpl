@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.1.1.1.2.10 2006/01/13 10:03:43 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.1.1.1.2.11 2006/01/19 23:16:13 mej Exp $ *}
 {strip}
 {bitmodule title="$moduleTitle" name="login_box"}
 	{if $gBitUser->IsRegistered()}
@@ -12,7 +12,8 @@
 		</div>
 		{/if}
 	{else}
-		{form ipackage=users ifile='validate.php'}
+		{assign var=force_secure value=$gBitSystem->isFeatureActive("https_login_required")}
+		{form ipackage=users ifile='validate.php' secure=$force_secure}
 			<div class="row">
 				<input type="text" name="user" id="user" value="{tr}Username{/tr}" size="15" onfocus="this.value=''" />
 			</div>

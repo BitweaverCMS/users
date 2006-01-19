@@ -1,5 +1,6 @@
 {strip}
-{form legend="Sign in with your username or email to continue" ipackage=users ifile='validate.php'}
+{assign var=force_secure value=$gBitSystem->isFeatureActive("https_login_required")}
+{form legend="Sign in with your username or email to continue" ipackage=users ifile='validate.php' secure=$force_secure}
 	<div class="row">
 		{formfeedback error="$error"}
 		{formlabel label="Username or Email" for="user"}

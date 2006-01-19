@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.63 2006/01/19 16:15:23 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.64 2006/01/19 23:16:13 mej Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.63 2006/01/19 16:15:23 squareing Exp $
+ * $Id: BitUser.php,v 1.2.2.64 2006/01/19 23:16:13 mej Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.63 $
+ * @version  $Revision: 1.2.2.64 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -733,7 +733,8 @@ if ($gDebug) echo "Run : QUIT<br>";
 		}
 		$https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
 		if ($https_mode) {
-			$stay_in_ssl_mode = isset($_REQUEST['stay_in_ssl_mode']) && $_REQUEST['stay_in_ssl_mode'] == 'on';
+			$stay_in_ssl_mode = ((isset($_SERVER['HTTP_REFERER']) && (substr($_SERVER['HTTP_REFERER'], 0, 5) == 'https'))
+				|| (isset($_REQUEST['stay_in_ssl_mode']) && $_REQUEST['stay_in_ssl_mode'] == 'on'));
 			if (!$stay_in_ssl_mode) {
 				$http_domain = $gBitSystem->getPreference('http_domain', false);
 				$http_port = $gBitSystem->getPreference('http_port', 80);
@@ -742,7 +743,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 					$prefix = 'http://' . $http_domain;
 					if ($http_port != 80)
 						$prefix .= ':' . $http_port;
-					$prefix .= $https_prefix;
+					$prefix .= $http_prefix;
 					$url = $prefix . $url;
 					if (SID)
 						$url .= '?' . SID;
