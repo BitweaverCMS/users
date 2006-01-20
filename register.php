@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.4 2005/08/01 18:42:02 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.5 2006/01/20 11:11:18 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.4 2005/08/01 18:42:02 squareing Exp $
+ * $Id: register.php,v 1.5 2006/01/20 11:11:18 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -66,6 +66,24 @@ if( isset( $_REQUEST["register"] ) ) {
 		$gBitSmarty->assign('customFields', $fields);
 	}
 }
+
+$languages = array();
+$languages = $gBitLanguage->listLanguages();
+$gBitSmarty->assign_by_ref('languages', $languages);
+$gBitSmarty->assign_by_ref('gBitLanguage', $gBitLanguage);
+
+// Get flags here
+$flags = array();
+$h = opendir( USERS_PKG_PATH.'icons/flags/' );
+while ($file = readdir($h)) {
+	if (strstr($file, ".gif")) {
+		$parts = explode('.', $file);
+		$flags[] = $parts[0];
+	}
+}
+closedir ($h);
+sort ($flags);
+$gBitSmarty->assign('flags', $flags);
 
 $gBitSystem->display('bitpackage:users/register.tpl', 'Register' );
 

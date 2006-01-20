@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.23 2006/01/15 06:46:05 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.24 2006/01/20 11:11:18 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.23 2006/01/15 06:46:05 spiderr Exp $
+ * $Id: BitUser.php,v 1.24 2006/01/20 11:11:18 squareing Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.23 $
+ * @version  $Revision: 1.24 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -525,6 +525,20 @@ if ($gDebug) echo "Run : QUIT<br>";
 			// set local time zone as default when registering
 			$this->storePreference( 'display_timezone', 'Local' );
 
+			$regPrefs = array(
+				'reg_real_name' => 'real_name',
+				'reg_homepage' => 'homePage',
+				'reg_country' => 'country',
+				'reg_language' => 'bitlanguage'
+			);
+			foreach( $regPrefs as $feature => $pref ) {
+				if( $gBitSystem->isFeatureActive( $feature ) ) {
+					if( !empty( $pParamHash[$pref] ) ) {
+						$this->storePreference( $pref, $pParamHash[$pref] );
+					}
+				}
+			}
+
 			if( !empty( $_REQUEST['CUSTOM'] ) ) {
 				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
 					$this->storePreference( $field, $value );
@@ -720,7 +734,8 @@ if ($gDebug) echo "Run : QUIT<br>";
 		}
 		$https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
 		if ($https_mode) {
-			$stay_in_ssl_mode = isset($_REQUEST['stay_in_ssl_mode']) && $_REQUEST['stay_in_ssl_mode'] == 'on';
+			$stay_in_ssl_mode = ((isset($_SERVER['HTTP_REFERER']) && (substr($_SERVER['HTTP_REFERER'], 0, 5) == 'https'))
+				|| (isset($_REQUEST['stay_in_ssl_mode']) && $_REQUEST['stay_in_ssl_mode'] == 'on'));
 			if (!$stay_in_ssl_mode) {
 				$http_domain = $gBitSystem->getPreference('http_domain', false);
 				$http_port = $gBitSystem->getPreference('http_port', 80);
@@ -729,7 +744,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 					$prefix = 'http://' . $http_domain;
 					if ($http_port != 80)
 						$prefix .= ':' . $http_port;
-					$prefix .= $https_prefix;
+					$prefix .= $http_prefix;
 					$url = $prefix . $url;
 					if (SID)
 						$url .= '?' . SID;
@@ -756,9 +771,10 @@ if ($gDebug) echo "Run : QUIT<br>";
 		if ($userId) {
 			$userTikiValid = true;
 			$userTikiPresent = true;
-		} elseif ($this->mErrors['login'] == 'Password incorrect') {
+		// silence mErrors check since it's not always set.
+		} elseif (@$this->mErrors['login'] == 'Password incorrect') {
 			$userTikiPresent = true;
-		} elseif ($this->mErrors['login'] == 'User not found') {
+		} elseif (@$this->mErrors['login'] == 'User not found') {
 		}
 		// if we aren't using LDAP this will be quick
 		if ( !$auth_pear || ($user == "admin" && $skip_admin) ) {
@@ -1556,13 +1572,13 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		return $this->getDisplayName( FALSE, $pHash );
 	}
 
-    /**
-* Get user information for a particular user
-*
-* @param pUseLink return the information in the form of a url that links to the users information page
-* @param pHash todo - need explanation on how to use this...
-* @return display name or link to user information page
-**/
+	/**
+	* Get user information for a particular user
+	*
+	* @param pUseLink return the information in the form of a url that links to the users information page
+	* @param pHash todo - need explanation on how to use this...
+	* @return display name or link to user information page
+	**/
 	function getDisplayName($pUseLink = FALSE, $pHash=NULL) {
 		global $gBitSystem;
 		$ret = NULL;
@@ -1591,13 +1607,13 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			if( $pUseLink ) {
 				$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName
 					.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'
-					. ((isset($pHash['link_label'])) ? ($pHash['link_label']) : ($displayName))
+					. htmlspecialchars( ( ( isset( $pHash['link_label'] ) ) ? ( $pHash['link_label'] ) : ( $displayName ) ) )
 					.'</a>';
 			} else {
 				$ret = $displayName;
 			}
 		} else {
-			$ret = "Anonymous";
+			$ret = tra( "Anonymous" );
 		}
 		return $ret;
 

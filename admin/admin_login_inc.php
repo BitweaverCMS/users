@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.5 2006/01/14 19:56:08 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.6 2006/01/20 11:11:18 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -104,6 +104,45 @@ if( !empty( $_REQUEST["loginprefs"] ) ) {
 	}
 	foreach( array_keys( $loginSettings ) as $feature ) {
 		if( $loginSettings[$feature]['type'] == 'text' ) {
+			simple_set_value( $feature, USERS_PKG_NAME );
+		} else {
+			simple_set_toggle( $feature, USERS_PKG_NAME );
+		}
+	}
+}
+
+$registerSettings = array(
+	'reg_real_name' => array(
+		'label' => "Real Name",
+		'type' => "checkbox",
+		'note' => "Allow users to supply their real name.",
+	),
+	'reg_country' => array(
+		'label' => "Country",
+		'type' => "checkbox",
+		'note' => "Allow users to pick country of residency.",
+	),
+	'reg_language' => array(
+		'label' => "Language",
+		'type' => "checkbox",
+		'note' => "Allow users to select their preferred language.",
+	),
+	'reg_homepage' => array(
+		'label' => "Homepage URL",
+		'type' => "checkbox",
+		'note' => "Allow users to enter the url to their own homepage.",
+	),
+	'reg_portrait' => array(
+		'label' => "Self Portrait",
+		'type' => "checkbox",
+		'note' => "Allow users to upload a self portrait.",
+	),
+);
+$gBitSmarty->assign( 'registerSettings', $registerSettings );
+
+if( !empty( $_REQUEST["registerprefs"] ) ) {
+	foreach( array_keys( $registerSettings ) as $feature ) {
+		if( $registerSettings[$feature]['type'] == 'text' ) {
 			simple_set_value( $feature, USERS_PKG_NAME );
 		} else {
 			simple_set_toggle( $feature, USERS_PKG_NAME );

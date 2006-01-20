@@ -3,8 +3,75 @@ global $gBitSystem, $gUpgradeFrom, $gUpgradeTo, $gBitDb;
 
 $upgrades = array(
 
+
+'TIKIWIKI19' => array (
+	'TIKIWIKI18' => array (
+
+array( 'DATADICT' => array(
+array( 'ALTER' => array(
+	'tiki_user_tasks' => array(
+		'title' => array( '`title`', 'VARCHAR(250)' ),
+		'description' => array( '`description`', 'X' ),
+	),
+)),
+array( 'RENAMECOLUMN' => array(
+	'tiki_pages' => array( '`created`' => '`date` I8' ),
+)),
+)),
+
+array( 'QUERY' =>
+	array( 'SQL92' => array(
+		"UPDATE `tiki_user_tasks` SET `title`= (SELECT `title` FROM `tiki_user_tasks_history` WHERE `tiki_user_tasks`.`taskId`=`belongs_to`)",
+		"UPDATE `tiki_user_tasks` SET `description`= (SELECT `description` FROM `tiki_user_tasks_history` WHERE `tiki_user_tasks`.`taskId`=`belongs_to`)",
+	)
+)),
+
+
+/*
+
+alter table tiki_user_modules add parse char(1) default NULL;
+
+CREATE TABLE tiki_user_tasks_history (
+  belongs_to integer(14) NOT NULL,                   -- the fist task in a history it has the same id as the task id
+  task_version integer(4) NOT NULL DEFAULT 0,        -- version number for the history it starts with 0
+  title varchar(250) NOT NULL,                       -- title
+  description text DEFAULT NULL,                     -- description
+  start integer(14) DEFAULT NULL,                    -- date of the starting, if it is not set than there is not starting date
+  end integer(14) DEFAULT NULL,                      -- date of the end, if it is not set than there is not dealine
+  lasteditor varchar(200) NOT NULL,                  -- lasteditor: username of last editior
+  lastchanges integer(14) NOT NULL,                  -- date of last changes
+  priority integer(2) NOT NULL DEFAULT 3,            -- priority
+  completed integer(14) DEFAULT NULL,                -- date of the completation if it is null it is not yet completed
+  deleted integer(14) DEFAULT NULL,                  -- date of the deleteation it it is null it is not deleted
+  status char(1) DEFAULT NULL,                       -- null := waiting,
+                                                     -- o := open / in progress,
+                                                     -- c := completed -> (percentage = 100)
+  percentage int(4) DEFAULT NULL,
+  accepted_creator char(1) DEFAULT NULL,             -- y - yes, n - no, null - waiting
+  accepted_user char(1) DEFAULT NULL,                -- y - yes, n - no, null - waiting
+  PRIMARY KEY (belongs_to, task_version)
+) AUTO_INCREMENT=1 ;
+UPDATE tiki_user_tasks set title = '-'  where title IS NULL;
+INSERT INTO tiki_user_tasks_history (belongs_to, title, start, description, lasteditor, lastchanges, priority, completed, status, percentage) SELECT  taskId, title, date, description, user, date, priority, completed, status, percentage FROM tiki_user_tasks;
+ALTER TABLE tiki_user_tasks ADD last_version integer(4) NOT NULL DEFAULT 0 AFTER taskId;
+ALTER TABLE tiki_user_tasks MODIFY user varchar(200) NOT NULL DEFAULT '';
+ALTER TABLE tiki_user_tasks ADD creator varchar(200) NOT NULL AFTER user;
+ALTER TABLE tiki_user_tasks ADD public_for_group varchar(30) DEFAULT NULL AFTER creator;
+ALTER TABLE tiki_user_tasks ADD rights_by_creator char(1) DEFAULT NULL AFTER public_for_group;
+ALTER TABLE tiki_user_tasks ADD status char(1) default NULL;
+ALTER TABLE tiki_user_tasks ADD priority int(2) default NULL;
+ALTER TABLE tiki_user_tasks ADD completed int(14) default NULL;
+ALTER TABLE tiki_user_tasks ADD percentage int(4) default NULL;
+*/
+
+	)
+),
+
+
+
+
 'BONNIE' => array(
-	'CLYDE' => array(
+	'BWR1' => array(
 
 // STEP 1
 array( 'QUERY' =>
@@ -208,7 +275,7 @@ array( 'QUERY' =>
 		"alter table `".BIT_DB_PREFIX."tiki_user_watches` add index `user_id` (`user_id`)",
 		"update `".BIT_DB_PREFIX."tiki_user_watches` set `type` = 'bitpage' where `type` = 'Wiki page'",
 		"update `".BIT_DB_PREFIX."tiki_user_watches` set `type` = 'bitpage' where `type` = 'Wiki-Seite'",
- 
+
 
 	),
 )),
