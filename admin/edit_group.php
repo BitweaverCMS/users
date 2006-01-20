@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.1.1.1.2.9 2006/01/05 09:19:04 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.1.1.1.2.10 2006/01/20 11:56:25 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -171,10 +171,12 @@ if( empty( $mid ) ) {
 
 		// refresh inherited permissions list
 		$incPerms = array();
-		foreach( $includes as $gid => $name ) {
-			foreach( $gBitUser->getGroupPermissions( $gid ) as $p ) {
-				$incPerms[$p['perm_name']]['group_id'] = $gid;
-				$incPerms[$p['perm_name']]['group_name'] = $name;
+		if( !empty( $includes ) ) {
+			foreach( $includes as $gid => $name ) {
+				foreach( $gBitUser->getGroupPermissions( $gid ) as $p ) {
+					$incPerms[$p['perm_name']]['group_id'] = $gid;
+					$incPerms[$p['perm_name']]['group_name'] = $name;
+				}
 			}
 		}
 		$gBitSmarty->assign( 'incPerms', $incPerms );
