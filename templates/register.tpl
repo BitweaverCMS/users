@@ -99,7 +99,7 @@
 							<div class="row">
 								{formlabel label="HomePage" for="homePage"}
 								{forminput}
-									<input size="50" type="text" name="prefs[homePage" id="homePage" />
+									<input size="50" type="text" name="prefs[homePage]" id="homePage" />
 									{formhelp note="If you have a personal or professional homepage, enter it here."}
 								{/forminput}
 							</div>
@@ -109,7 +109,7 @@
 							<div class="row">
 								{formlabel label="Country" for="country"}
 								{forminput}
-									<select name="prefs[country" id="country">
+									<select name="prefs[country]" id="country">
 										<option value="" />
 										{sortlinks}
 											{section name=ix loop=$flags}
@@ -126,7 +126,7 @@
 							<div class="row">
 								{formlabel label="Language" for="language"}
 								{forminput}
-									<select name="prefs[bitlanguage" id="language">
+									<select name="prefs[bitlanguage]" id="language">
 										{foreach from=$languages key=langCode item=lang}
 											<option value="{$langCode}"{if $gBitLanguage->mLanguage eq $langCode} selected="selected"{/if}>
 												{$lang.full_name}
