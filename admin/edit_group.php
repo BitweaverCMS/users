@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.1.1.1.2.10 2006/01/20 11:56:25 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.1.1.1.2.11 2006/01/20 12:45:19 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -148,12 +148,13 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 }
 
 // get content and pass it on to the template
-//include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
-//$cList['NULL'] = '';
-//foreach( $contentList['data'] as $cItem ) {
-//	$cList[$contentTypes[$cItem['content_type_guid']]][$cItem['content_id']] = $cItem['title'].' [id: '.$cItem['content_id'].']';
-//}
-//$gBitSmarty->assign( 'contentList', $cList );
+include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
+foreach( $contentList['data'] as $cItem ) {
+	$cList[$contentTypes[$cItem['content_type_guid']]][$cItem['content_id']] = $cItem['title'].' [id: '.$cItem['content_id'].']';
+}
+$gBitSmarty->assign( 'contentList', $cList );
+$gBitSmarty->assign( 'contentSelect', $contentSelect );
+$gBitSmarty->assign( 'contentTypes', $contentTypes );
 
 if( !empty( $_REQUEST['group_id'] ) ) {
 	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
