@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.64 2006/01/19 23:16:13 mej Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.65 2006/01/20 09:55:15 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.64 2006/01/19 23:16:13 mej Exp $
+ * $Id: BitUser.php,v 1.2.2.65 2006/01/20 09:55:15 squareing Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.64 $
+ * @version  $Revision: 1.2.2.65 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -770,9 +770,10 @@ if ($gDebug) echo "Run : QUIT<br>";
 		if ($userId) {
 			$userTikiValid = true;
 			$userTikiPresent = true;
-		} elseif ($this->mErrors['login'] == 'Password incorrect') {
+		// silence mErrors check since it's not always set.
+		} elseif (@$this->mErrors['login'] == 'Password incorrect') {
 			$userTikiPresent = true;
-		} elseif ($this->mErrors['login'] == 'User not found') {
+		} elseif (@$this->mErrors['login'] == 'User not found') {
 		}
 		// if we aren't using LDAP this will be quick
 		if ( !$auth_pear || ($user == "admin" && $skip_admin) ) {
@@ -1552,13 +1553,13 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		return $this->getDisplayName( FALSE, $pHash );
 	}
 
-    /**
-* Get user information for a particular user
-*
-* @param pUseLink return the information in the form of a url that links to the users information page
-* @param pHash todo - need explanation on how to use this...
-* @return display name or link to user information page
-**/
+	/**
+	* Get user information for a particular user
+	*
+	* @param pUseLink return the information in the form of a url that links to the users information page
+	* @param pHash todo - need explanation on how to use this...
+	* @return display name or link to user information page
+	**/
 	function getDisplayName($pUseLink = FALSE, $pHash=NULL) {
 		global $gBitSystem;
 		$ret = NULL;
@@ -1587,13 +1588,13 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			if( $pUseLink ) {
 				$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName
 					.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'
-					. ((isset($pHash['link_label'])) ? ($pHash['link_label']) : ($displayName))
+					. htmlspecialchars( ( ( isset( $pHash['link_label'] ) ) ? ( $pHash['link_label'] ) : ( $displayName ) ) )
 					.'</a>';
 			} else {
 				$ret = $displayName;
 			}
 		} else {
-			$ret = "Anonymous";
+			$ret = tra( "Anonymous" );
 		}
 		return $ret;
 
