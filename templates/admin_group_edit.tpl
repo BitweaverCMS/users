@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.1.1.1.2.3 2006/01/05 09:19:04 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.1.1.1.2.4 2006/01/20 12:27:33 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -47,12 +47,12 @@
 					</div>
 
 					<div class="row">
-						{formlabel label="Group home page" for="groups_home"}
+						{formlabel label="Group home page" for="group_home"}
 						{forminput}
 							{html_options name="dummy" options=$contentList selected=`$groupInfo.group_home` onchange="document.getElementById('groups_home').value=options[selectedIndex].value;"}
 							<br />
-							<input type="text" name="home" id="groups_home" value="{$groupInfo.group_home|escape}" />
-							{formhelp note="Here you can enter the content id of any page, the wiki page name or the absolute path of any page you wish to use as a group home page"}
+							<input type="text" name="home" id="group_home" value="{$groupInfo.group_home|escape}" />
+							{formhelp note="Here you can enter the content id of any page, the wiki page name or the absolute path of any page you wish to use as a group home page. For this to work set the site homepage to <strong>Group Home</strong>" link="kernel/admin/index.php?page=general/General Settings"}
 						{/forminput}
 					</div>
 
