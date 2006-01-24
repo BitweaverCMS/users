@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/versions.php,v 1.4 2005/08/07 17:46:46 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/versions.php,v 1.5 2006/01/24 21:49:56 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: versions.php,v 1.4 2005/08/07 17:46:46 squareing Exp $
+ * $Id: versions.php,v 1.5 2006/01/24 21:49:56 squareing Exp $
  * @package users
  * @subpackage functions
  *
@@ -20,11 +20,8 @@
  */
 require_once( '../bit_setup_inc.php' );
 include_once( WIKI_PKG_PATH.'BitPage.php');
-if ($feature_wiki != 'y') {
-	$gBitSmarty->assign('msg', tra("This feature is disabled").": feature_wiki");
-	$gBitSystem->display( 'error.tpl' );
-	die;
-}
+$gBitSystem->verifyPackage( 'wiki' );
+
 // Only an admin can use this script
 if (!$gBitUser->isAdmin()) {
 	$gBitSmarty->assign('msg', tra("You dont have permission to use this feature"));
