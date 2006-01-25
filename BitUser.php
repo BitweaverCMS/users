@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.26 2006/01/25 15:40:26 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.27 2006/01/25 18:34:54 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.26 2006/01/25 15:40:26 spiderr Exp $
+ * $Id: BitUser.php,v 1.27 2006/01/25 18:34:54 spiderr Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.26 $
+ * @version  $Revision: 1.27 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -201,9 +201,7 @@ class BitUser extends LibertyAttachable {
 		if ($pUserId && ($pUserId != $this->mUserId) && !empty($pPrefName)) {
 			// Get a user preference for an arbitrary user
 			$sql = "SELECT `value` FROM `".BIT_DB_PREFIX."tiki_user_preferences` WHERE `pref_name` = ? and `user_id` = ?";
-
-			$rs = $this->mDb->query($sql, array($pPrefName, $pUserId));
-			$ret = (!empty($rs->fields['value'])) ? $rs->fields['value'] : $pPrefDefault;
+			$ret = $this->mDb->getOne($sql, array($pPrefName, $pUserId));
 		} else {
 			if( isset( $this->mUserPrefs ) && isset( $this->mUserPrefs[$pPrefName] ) ) {
 				$ret = $this->mUserPrefs[$pPrefName];
@@ -1698,9 +1696,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$query = "SELECT uu.`login`, uu.`real_name`, uu.`email`, uu.`user_id`
 				  FROM `".BIT_DB_PREFIX."tiki_semaphores` ts INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id`=ts.`user_id`)
 				  WHERE `sem_name`=? AND ts.`user_id`!='?'";
-		$result = $this->mDb->query( $query, array( $pSemName, (int)$userId ) );
-		if( $result->fields ) {
-			$ret = $result->fields;
+		if( $ret = $this->mDb->getRow( $query, array( $pSemName, (int)$userId ) ) ) {
 			$ret['nolink'] = TRUE;
 		}
 		return( $ret );
