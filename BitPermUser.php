@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.13 2006/01/18 18:04:10 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.14 2006/01/25 15:40:26 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.13 2006/01/18 18:04:10 lsces Exp $
+ * $Id: BitPermUser.php,v 1.14 2006/01/25 15:40:26 spiderr Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.13 $
+ * @version  $Revision: 1.14 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -196,14 +196,13 @@ class BitPermUser extends BitUser {
 				  ORDER BY $sortMode";
 		$ret = array();
 		if( $rs = $this->mDb->query( $query, $bindvars ) ) {
-			while( !$rs->EOF ) {
-				$groupId = $rs->fields['group_id'];
-				$ret[$groupId] = $rs->fields;
+			while( $row = $rs->fetchRow() ) {
+				$groupId = $row['group_id'];
+				$ret[$groupId] = $row;
 				$ret[$groupId]['perms'] = $this->getGroupPermissions( $groupId );
 				$inc = array();
 				$this->getIncludedGroups( $groupId, $inc );
 				$ret[$groupId]['included'] = $inc;
-				$rs->MoveNext();
 			}
 		}
 		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_groups` $mid";

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.25 2006/01/24 21:49:56 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.26 2006/01/25 15:40:26 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.25 2006/01/24 21:49:56 squareing Exp $
+ * $Id: BitUser.php,v 1.26 2006/01/25 15:40:26 spiderr Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.25 $
+ * @version  $Revision: 1.26 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -130,12 +130,12 @@ class BitUser extends LibertyAttachable {
 					  $whereSql";
 
 			if( ($result = $this->mDb->query( $query, $bindVars )) && $result->numRows() ) {
-				$this->mInfo = $result->fields;
-				$this->mInfo['valid'] = @$this->verifyId( $result->fields['uu_user_id'] );
-				$this->mInfo['user_id'] = $result->fields['uu_user_id'];
-				$this->mUserId = $result->fields['uu_user_id'];
-				$this->mContentId = $result->fields['content_id'];
-				$this->mUsername = $result->fields['login'];
+				$this->mInfo = $result->fetchRow();
+				$this->mInfo['valid'] = @$this->verifyId( $this->mInfo['uu_user_id'] );
+				$this->mInfo['user_id'] = $this->mInfo['uu_user_id'];
+				$this->mUserId = $this->mInfo['uu_user_id'];
+				$this->mContentId = $this->mInfo['content_id'];
+				$this->mUsername = $this->mInfo['login'];
 				$this->mInfo['is_registered'] = $this->isRegistered();
 				$this->mInfo['avatar_url'] = (!empty($this->mInfo['avatar_storage_path']) ? BIT_ROOT_URL . dirname( $this->mInfo['avatar_storage_path'] ).'/avatar.jpg' : NULL);
 				$this->mInfo['portrait_url'] = (!empty($this->mInfo['portrait_storage_path']) ? BIT_ROOT_URL . dirname( $this->mInfo['portrait_storage_path'] ).'/medium.jpg' : NULL);
