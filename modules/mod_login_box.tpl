@@ -1,8 +1,8 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.6 2006/01/20 11:11:18 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.7 2006/01/26 14:58:07 squareing Exp $ *}
 {strip}
 {bitmodule title="$moduleTitle" name="login_box"}
 	{if $gBitUser->IsRegistered()}
-		{tr}Logged in as <strong>{displayname}{/tr}</strong><br />
+		{tr}Logged in as{/tr}: <strong>{displayname}</strong><br />
 		<a href="{$smarty.const.USERS_PKG_URL}logout.php">{tr}Logout{/tr}</a>
 		{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
 		<div class="row">
