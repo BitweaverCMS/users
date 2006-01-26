@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.66 2006/01/20 20:38:03 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.67 2006/01/26 15:00:59 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.66 2006/01/20 20:38:03 spiderr Exp $
+ * $Id: BitUser.php,v 1.2.2.67 2006/01/26 15:00:59 squareing Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.66 $
+ * @version  $Revision: 1.2.2.67 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -130,12 +130,12 @@ class BitUser extends LibertyAttachable {
 					  $whereSql";
 
 			if( ($result = $this->mDb->query( $query, $bindVars )) && $result->numRows() ) {
-				$this->mInfo = $result->fields;
-				$this->mInfo['valid'] = @$this->verifyId( $result->fields['uu_user_id'] );
-				$this->mInfo['user_id'] = $result->fields['uu_user_id'];
-				$this->mUserId = $result->fields['uu_user_id'];
-				$this->mContentId = $result->fields['content_id'];
-				$this->mUsername = $result->fields['login'];
+				$this->mInfo = $result->fetchRow();
+				$this->mInfo['valid'] = @$this->verifyId( $this->mInfo['uu_user_id'] );
+				$this->mInfo['user_id'] = $this->mInfo['uu_user_id'];
+				$this->mUserId = $this->mInfo['uu_user_id'];
+				$this->mContentId = $this->mInfo['content_id'];
+				$this->mUsername = $this->mInfo['login'];
 				$this->mInfo['is_registered'] = $this->isRegistered();
 				$this->mInfo['avatar_url'] = (!empty($this->mInfo['avatar_storage_path']) ? BIT_ROOT_URL . dirname( $this->mInfo['avatar_storage_path'] ).'/avatar.jpg' : NULL);
 				$this->mInfo['portrait_url'] = (!empty($this->mInfo['portrait_storage_path']) ? BIT_ROOT_URL . dirname( $this->mInfo['portrait_storage_path'] ).'/medium.jpg' : NULL);
@@ -201,9 +201,7 @@ class BitUser extends LibertyAttachable {
 		if ($pUserId && ($pUserId != $this->mUserId) && !empty($pPrefName)) {
 			// Get a user preference for an arbitrary user
 			$sql = "SELECT `value` FROM `".BIT_DB_PREFIX."tiki_user_preferences` WHERE `pref_name` = ? and `user_id` = ?";
-
-			$rs = $this->mDb->query($sql, array($pPrefName, $pUserId));
-			$ret = (!empty($rs->fields['value'])) ? $rs->fields['value'] : $pPrefDefault;
+			$ret = $this->mDb->getOne($sql, array($pPrefName, $pUserId));
 		} else {
 			if( isset( $this->mUserPrefs ) && isset( $this->mUserPrefs[$pPrefName] ) ) {
 				$ret = $this->mUserPrefs[$pPrefName];
@@ -1536,7 +1534,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	}
 
 	function getTitle( $pHash = NULL ) {
-		return $this->getDisplayName( FALSE, $pHash );
+		return BitUser::getDisplayName( FALSE, $pHash );
 	}
 
 	/**
@@ -1679,9 +1677,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$query = "SELECT uu.`login`, uu.`real_name`, uu.`email`, uu.`user_id`
 				  FROM `".BIT_DB_PREFIX."tiki_semaphores` ts INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id`=ts.`user_id`)
 				  WHERE `sem_name`=? AND ts.`user_id`!='?'";
-		$result = $this->mDb->query( $query, array( $pSemName, (int)$userId ) );
-		if( $result->fields ) {
-			$ret = $result->fields;
+		if( $ret = $this->mDb->getRow( $query, array( $pSemName, (int)$userId ) ) ) {
 			$ret['nolink'] = TRUE;
 		}
 		return( $ret );
