@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/userfiles_lib.php,v 1.4 2005/08/30 22:37:36 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/userfiles_lib.php,v 1.5 2006/01/27 21:57:22 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: userfiles_lib.php,v 1.4 2005/08/30 22:37:36 squareing Exp $
+ * $Id: userfiles_lib.php,v 1.5 2006/01/27 21:57:22 squareing Exp $
  * @package users
  */
 
@@ -21,8 +21,8 @@ class UserFilesLib extends BitBase {
 		BitBase::BitBase();
 	}
 	function userfiles_quota($user) {
-		global $bit_p_admin;
-		if ($gBitUser->hasPermission( 'bit_p_admin' )) {
+		global $gBitUser;
+		if ($gBitUser->isAdmin()) {
 			return 0;
 		}
 		$part1 = $this->mDb->getOne("select sum(`filesize`) from `".BIT_DB_PREFIX."tiki_userfiles` where `user_id`=?",array($user));

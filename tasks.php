@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/tasks.php,v 1.5 2005/08/30 22:37:36 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/tasks.php,v 1.6 2006/01/27 21:57:22 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: tasks.php,v 1.5 2005/08/30 22:37:36 squareing Exp $
+ * $Id: tasks.php,v 1.6 2006/01/27 21:57:22 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -18,21 +18,10 @@
  */
 require_once( '../bit_setup_inc.php' );
 include_once( USERS_PKG_PATH.'task_lib.php' );
-if ($feature_tasks != 'y') {
-	$gBitSmarty->assign('msg', tra("This feature is disabled").": feature_tasks");
-	$gBitSystem->display( 'error.tpl' );
-	die;
-}
-if (!$gBitUser->mUserId) {
-	$gBitSmarty->assign('msg', tra("Must be logged to use this feature"));
-	$gBitSystem->display( 'error.tpl' );
-	die;
-}
-if (!$gBitUser->hasPermission( 'bit_p_tasks' )) {
-	$gBitSmarty->assign('msg', tra("Permission denied to use this feature"));
-	$gBitSystem->display( 'error.tpl' );
-	die;
-}
+
+$gBitSystem->verifyFeature( 'feature_tasks' );
+$gBitSystem->verifyPermission( 'bit_p_tasks' );
+
 $comp_array = array();
 $comp_array_p = array();
 for ($i = 0; $i < 101; $i += 10) {
