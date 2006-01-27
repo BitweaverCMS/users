@@ -1,10 +1,10 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_bitweaver.tpl,v 1.2 2006/01/10 21:17:05 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_bitweaver.tpl,v 1.3 2006/01/27 23:01:07 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
 <div class="display my">
 	<div class="header">
-		<h1>{tr}My {$siteTitle|default:'Site'}{/tr}</h1>
+		<h1>{tr}My {$gBitSystemPrefs.siteTitle|default:'Site'}{/tr}</h1>
 	</div>
 
 	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
