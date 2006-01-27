@@ -187,13 +187,16 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 
 	// Permissions
 	// Get group permissions here
-	if (is_array($gBitUser->mPerms)) {	// This avoids php warning during install
-		foreach( array_keys( $gBitUser->mPerms ) as $perm ) {
-			// print("Asignando permiso global : $perm<br/>");
-			$gBitSmarty->assign("$perm", 'y');
-			$$perm = 'y';
-		}
-	}
+
+//	======================= HOPEFULLY WE CAN SURVIVE WITHOUT THIS PREFERENCE ASSIGNEMENT STUFF =================
+//	if (is_array($gBitUser->mPerms)) {	// This avoids php warning during install
+//		foreach( array_keys( $gBitUser->mPerms ) as $perm ) {
+//			// print("Asignando permiso global : $perm<br/>");
+//			$gBitSmarty->assign("$perm", 'y');
+//			$$perm = 'y';
+//		}
+//	}
+//	============================================================================================================
 
 	if( $gBitUser->isRegistered() && $gBitSystem->getPreference('feature_usermenu') == 'y' ) {
 		if (!isset($_SESSION['usermenu'])) {
