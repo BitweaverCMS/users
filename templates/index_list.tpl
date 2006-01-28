@@ -7,7 +7,7 @@
 {/if}
 
 	<div class="header">
-		<h1>{tr}{$siteTitle} Members{/tr}</h1>
+		<h1>{tr}{$gBitSystemPrefs.siteTitle} Members{/tr}</h1>
 	</div>
 
 	<div class="body">
