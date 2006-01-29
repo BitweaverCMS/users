@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.28 2006/01/26 09:39:03 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.29 2006/01/29 23:00:35 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.28 2006/01/26 09:39:03 squareing Exp $
+ * $Id: BitUser.php,v 1.29 2006/01/29 23:00:35 spiderr Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.28 $
+ * @version  $Revision: 1.29 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -50,7 +50,6 @@ class BitUser extends LibertyAttachable {
 * associative hash of all entries from tiki_user_preferences
 * @access public
 */
-	var $mUserPrefs;
 	var $mUserId;
 	var $mUsername;
 	var $mGroups;
@@ -146,13 +145,12 @@ class BitUser extends LibertyAttachable {
 				// a few random security conscious unset's - SPIDER
 				unset( $this->mInfo['password'] );
 				unset( $this->mInfo['hash'] );
+				$this->loadPreferences();
+				if( $this->getPreference( 'country' ) ) {
+					$this->setPreference( 'flag', $this->getPreference( 'country' ) );
+					$this->setPreference( 'country', str_replace( '_', ' ', $this->getPreference( 'country' ) ) );
+				}
 				if( $pFull ) {
-					$query = "SELECT `pref_name`, `value` FROM `".BIT_DB_PREFIX."tiki_user_preferences` WHERE `user_id`=?";
-					$this->mUserPrefs = $this->mDb->getAssoc( $query, array( $this->mUserId ) );
-					if( isset( $this->mUserPrefs['country'] ) ) {
-						$this->mUserPrefs['flag'] = $this->mUserPrefs['country'];
-						$this->mUserPrefs['country'] = str_replace( '_', ' ', $this->mUserPrefs['country']);
-					}
 					$this->mInfo['real_name'] = trim($this->mInfo['real_name']);
 					$this->mInfo['display_name'] = ((!empty($this->mInfo['real_name']) ? $this->mInfo['real_name'] :
 													(!empty($this->mUsername) ? $this->mUsername :
@@ -160,7 +158,7 @@ class BitUser extends LibertyAttachable {
 															$this->mUserId))));
 					//print("displayName: ".$this->mInfo['display_name']);
 					$this->defaults();
-					$this->mInfo['publicEmail'] = scrambleEmail( $this->mInfo['email'], (isset($this->mUserPrefs['email is public']) ? $this->mUserPrefs['email is public'] : NULL) );
+					$this->mInfo['publicEmail'] = scrambleEmail( $this->mInfo['email'], ($this->getPreference( 'email is public' ) ? $this->getPreference( 'email is public' ) : NULL) );
 				}
 				$this->mTicket = substr( md5( session_id() . $this->mUserId ), 0, 20 );
 			} else {
@@ -170,67 +168,24 @@ class BitUser extends LibertyAttachable {
 		return( $this->isValid() );
 	}
 
-
-	function storePreference( $pPrefName, $pPrefValue ) {
-		$ret = FALSE;
-		if( $this->isValid() ) {
-			// validate any preferences
-			if( $pPrefName == 'homePage' && !preg_match( '/^http:\/\//', $pPrefValue ) ) {
-				$pPrefValue = 'http://'.$pPrefValue;
-			}
-			$this->mUserPrefs[$pPrefName] = $pPrefValue;
-			$query = "delete from `".BIT_DB_PREFIX."tiki_user_preferences` where `user_id`=? and `pref_name`=?";
-			$bindvars=array( $this->mUserId, $pPrefName );
-			$result = $this->mDb->query($query, $bindvars);
-			$query = "insert into `".BIT_DB_PREFIX."tiki_user_preferences`(`user_id`,`pref_name`,`value`) values(?, ?, ?)";
-			$bindvars[]=$pPrefValue;
-			$result = $this->mDb->query($query, $bindvars);
-			$ret = TRUE;
-		}
-		return $ret;
-	}
-
-
-	function getPreference( $pPrefName, $pPrefDefault=NULL, $pUserId = NULL ) {
-	// ATS - Added ability to query a preference for any user
-		$ret = NULL;
-		if (!$pUserId) {
-			$pUserId = $this->mUserId;
-		}
-
-		if ($pUserId && ($pUserId != $this->mUserId) && !empty($pPrefName)) {
-			// Get a user preference for an arbitrary user
-			$sql = "SELECT `value` FROM `".BIT_DB_PREFIX."tiki_user_preferences` WHERE `pref_name` = ? and `user_id` = ?";
-			$ret = $this->mDb->getOne($sql, array($pPrefName, $pUserId));
-		} else {
-			if( isset( $this->mUserPrefs ) && isset( $this->mUserPrefs[$pPrefName] ) ) {
-				$ret = $this->mUserPrefs[$pPrefName];
-			} else {
-				$ret = $pPrefDefault;
-			}
-		}
-		return $ret;
-	}
-
-
 	function defaults() {
 		global $gBitSystem;
-		if( empty( $this->mUserPrefs['user_information'] ) ) { $this->mUserPrefs['user_information'] = 'public'; }
-		if( empty( $this->mUserPrefs['allowMsgs'] ) ) { $this->mUserPrefs['allowMsgs'] = 'y'; }
-		if( empty( $this->mUserPrefs['display_timezone'] ) ) {
+		if( !$this->getPreference( 'user_information' ) ) { $this->setPreference( 'user_information', 'public' ); }
+		if( !$this->getPreference( 'allowMsgs' ) ) { $this->setPreference( 'allowMsgs', 'y' ); }
+		if( !$this->getPreference( 'display_timezone' ) ) {
 			$server_time = new BitDate();
-			$this->mUserPrefs['display_timezone'] = $server_time->display_offset;
+			$this->setPreference( 'display_timezone', $server_time->display_offset );
 		}
-		if( empty( $this->mUserPrefs['userbreadCrumb'] ) ) {
-			$this->mUserPrefs['userbreadCrumb'] = $gBitSystem->getPreference('userbreadCrumb',4);
+		if( !$this->getPreference( 'userbreadCrumb' ) ) {
+			$this->setPreference( 'userbreadCrumb', $gBitSystem->getPreference('userbreadCrumb',4) );
 		}
-		if( empty( $this->mUserPrefs['bitlanguage'] ) ) {
+		if( !$this->getPreference( 'bitlanguage' ) ) {
 			global $gBitLanguage;
-			$this->mUserPrefs['bitlanguage'] = $gBitLanguage->mLanguage;
+			$this->setPreference( 'bitlanguage', $gBitLanguage->mLanguage );
 		}
-		if( empty( $this->mUserPrefs['theme'] ) ) {
+		if( !$this->getPreference( 'theme' ) ) {
 			global $site_style;
-			$this->mUserPrefs['theme'] = $site_style;
+			$this->setPreference( 'theme', $gBitSystem->getStyle() );
 		}
 	}
 

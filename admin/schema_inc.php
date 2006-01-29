@@ -43,7 +43,7 @@ $tables = array(
 'users_favorites_map' => "
   favorite_content_id I4 PRIMARY,
   user_id I4 PRIMARY
-  CONSTRAINTS	', CONSTRAINT `users_fav_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)
+  CONSTRAINTS ', CONSTRAINT `users_fav_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)
   				 , CONSTRAINT `users_fav_con_ref` FOREIGN KEY (`favorite_content_id`) REFERENCES `".BIT_DB_PREFIX."tiki_content` (`content_id`)'
 ",
 
@@ -55,7 +55,7 @@ $tables = array(
   last_updated I8,
   folder_id I4 NOTNULL,
   user_id I4 NOTNULL
-  CONSTRAINTS	', CONSTRAINT `tiki_user_bookmarks_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINTS ', CONSTRAINT `tiki_user_bookmarks_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 'tiki_user_menus' => "
@@ -65,7 +65,7 @@ $tables = array(
   name C(40),
   position I4,
   mode C(1)
-  CONSTRAINTS	', CONSTRAINT `tiki_user_menus_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINT ', CONSTRAINT `tiki_user_menus_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 'tiki_user_tasks' => "
@@ -78,7 +78,7 @@ $tables = array(
   priority I4,
   completed I8,
   percentage I4
-  CONSTRAINTS	', CONSTRAINT `tiki_user_tasks_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINT ', CONSTRAINT `tiki_user_tasks_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 'tiki_user_watches' => "
@@ -90,7 +90,7 @@ $tables = array(
   type C(200),
   url C(250),
   email C(200)
-  CONSTRAINTS	', CONSTRAINT `tiki_user_watches_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINTS ', CONSTRAINT `tiki_user_watches_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 'tiki_userfiles' => "
@@ -105,7 +105,7 @@ $tables = array(
   is_file C(1),
   path C(255),
   created I8
-  CONSTRAINTS	', CONSTRAINT `tiki_userfiles_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINTS ', CONSTRAINT `tiki_userfiles_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 'users_permissions' => "
@@ -122,7 +122,7 @@ $tables = array(
   is_default C(1),
   group_desc C(255),
   group_home C(255)
-  CONSTRAINTS	', CONSTRAINT `users_groups_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINTS ', CONSTRAINT `users_groups_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 'users_groups_inclusion' => "
@@ -134,7 +134,7 @@ $tables = array(
   group_id I4 PRIMARY,
   perm_name C(30) PRIMARY,
   value C(1) default ''
-  CONSTRAINTS	', CONSTRAINT `users_groupperm_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
+  CONSTRAINTS ', CONSTRAINT `users_groupperm_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
   				, CONSTRAINT `users_groupperm_perm_ref` FOREIGN KEY (`perm_name`) REFERENCES `".BIT_DB_PREFIX."users_permissions` (`perm_name`)'
 ",
 
@@ -150,7 +150,7 @@ $tables = array(
 'users_groups_map' => "
   user_id I4 PRIMARY,
   group_id I4 PRIMARY
-  CONSTRAINTS	', CONSTRAINT `users_groups_map_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
+  CONSTRAINTS ', CONSTRAINT `users_groups_map_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
   				, CONSTRAINT `users_groups_map_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
@@ -163,7 +163,7 @@ $tables = array(
   get_count I8,
   user_agent C(128),
   current_view X
-  CONSTRAINTS	', CONSTRAINT `users_cnxn_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINTS ', CONSTRAINT `users_cnxn_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 'tiki_semaphores' => "
@@ -191,27 +191,20 @@ $tables = array(
   last I8,
   first I8,
   level I4
-  CONSTRAINTS	', CONSTRAINT `tiki_user_postings_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
-",
-
-'tiki_user_preferences' => "
-  user_id I4 PRIMARY,
-  pref_name C(40) PRIMARY,
-  value C(250)
-  CONSTRAINTS	', CONSTRAINT `tiki_user_preferences_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINTS ', CONSTRAINT `tiki_user_postings_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 'tiki_user_votings' => "
   user_id I4 PRIMARY,
   id C(160) PRIMARY
-  CONSTRAINTS	', CONSTRAINT `tiki_user_votings_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINTS ', CONSTRAINT `tiki_user_votings_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 'tiki_userpoints' => "
   user_id I4,
   points decimal(8,2),
   voted I4 DEFAULT NULL
-  CONSTRAINTS	', CONSTRAINT `tiki_userpoints_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINTS ', CONSTRAINT `tiki_userpoints_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 "
 );
 

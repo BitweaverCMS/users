@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/lookup_user_inc.php,v 1.5 2005/12/26 12:27:13 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/lookup_user_inc.php,v 1.6 2006/01/29 23:00:37 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: lookup_user_inc.php,v 1.5 2005/12/26 12:27:13 squareing Exp $
+ * $Id: lookup_user_inc.php,v 1.6 2006/01/29 23:00:37 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -44,7 +44,7 @@ if (isset($_REQUEST['home'])) {
 }
 
 if (!$gBitUser->isAdmin()) {
-	if( $gQueryUser->mUserPrefs['user_information'] == 'private') {
+	if( $gQueryUser->getPreference( 'user_information' ) == 'private') {
 		$gBitSystem->fatalError( tra("The user has choosen to make his information private") );
 		die;
 	}
@@ -55,7 +55,7 @@ $gBitSmarty->assign_by_ref('gQueryUser', $gQueryUser);
 
 if( $gQueryUser->isValid() ) {
 	$gBitSmarty->assign_by_ref( 'userInfo', $gQueryUser->mInfo );
-	$gBitSmarty->assign_by_ref( 'userPrefs', $gQueryUser->mUserPrefs );
+	$gBitSmarty->assign_by_ref( 'userPrefs', $gQueryUser->mPrefs );
 	$gBitSmarty->assign( 'homepage_header', $gQueryUser->getPreference( 'homepage_header' ) );
 }
 ?>

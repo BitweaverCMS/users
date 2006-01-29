@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.4 2005/10/12 15:14:07 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.5 2006/01/29 23:00:39 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: theme.php,v 1.4 2005/10/12 15:14:07 spiderr Exp $
+ * $Id: theme.php,v 1.5 2006/01/29 23:00:39 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -111,12 +111,12 @@ $F = array();
 $errorMsg   = array();
 
 // Special case: the admin has turned of custom user themes but this user currently uses his/her custom theme
-if ($gQueryUser->mUserPrefs['theme'] == 'custom' && !$gBitUser->canCustomizeTheme() ) {
+if ($gQueryUser->getPreference( 'theme' ) == 'custom' && !$gBitUser->canCustomizeTheme() ) {
 	$gQueryUser->storePreference('theme', NULL);		// Set their homepage theme to fall back to the site's themeImages
-	$gQueryUser->mUserPrefs['theme'] = NULL;				// Update their mPrefs
+	$gQueryUser->setPreference( 'theme', NULL );				// Update their mPrefs
 }
 
-$usingCustomTheme = ($gQueryUser->mUserPrefs['theme'] == 'custom' ? true : false);
+$usingCustomTheme = ($gQueryUser->getPreference( 'theme' ) == 'custom' ? true : false);
 
 $gBitSmarty->assign_by_ref('usingCustomTheme', $usingCustomTheme);
 

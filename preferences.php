@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.13 2006/01/27 13:27:22 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.14 2006/01/29 23:00:38 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.13 2006/01/27 13:27:22 spiderr Exp $
+ * $Id: preferences.php,v 1.14 2006/01/29 23:00:38 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -90,7 +90,7 @@ if (isset($_REQUEST["prefs"])) {
 		$editUser->storePreference( 'display_timezone', $_REQUEST['display_timezone']);
 		$gBitSmarty->assign_by_ref('display_timezone', $_REQUEST['display_timezone']);
 	}
-	$editUser->storePreference( 'country', $_REQUEST["country"]);
+	$editUser->storePreference( 'country', $_REQUEST["country"] );
 	$editUser->storePreference( 'user_information', $_REQUEST['user_information']);
 	if (isset($_REQUEST['user_dbl']) && $_REQUEST['user_dbl'] == 'on') {
 		$editUser->storePreference( 'user_dbl', 'y');
@@ -164,17 +164,8 @@ if (isset($_REQUEST['tasksprefs'])) {
 	}
 }
 
-$tasks_use_dates = $editUser->getPreference( 'tasks_use_dates');
-$gBitSmarty->assign('tasks_maxRecords', $tasks_maxRecords);
-$gBitSmarty->assign('tasks_use_dates', $tasks_use_dates);
-$mess_maxRecords = $editUser->getPreference( 'mess_maxRecords', 20);
-$gBitSmarty->assign('mess_maxRecords', $mess_maxRecords);
-$allowMsgs = $editUser->getPreference( 'allowMsgs', 'y');
-$gBitSmarty->assign('allowMsgs', $allowMsgs);
-$minPrio = $editUser->getPreference( 'minPrio', 3 );
-$gBitSmarty->assign('minPrio', $minPrio);
 $gBitSmarty->assign_by_ref('userInfo', $editUser->mInfo );
-$gBitSmarty->assign_by_ref('userPrefs', $editUser->mUserPrefs );
+$gBitSmarty->assign_by_ref('userPrefs', $editUser->mPrefs );
 $languages = array();
 $languages = $gBitLanguage->listLanguages();
 $gBitSmarty->assign_by_ref('languages', $languages);
@@ -201,8 +192,6 @@ $gBitSmarty->assign( 'editUser', $editUser->mInfo );
 //SPIDERKILL $style = $editUser->getPreference( 'theme', $style);
 //SPIDERKILL $gBitSmarty->assign_by_ref('style', $style);
 $real_name = $editUser->mInfo["real_name"];
-$country = $editUser->getPreference( 'country', 'Other');
-$gBitSmarty->assign('country', $country);
 $gBitSmarty->assign('email_isPublic', $editUser->getPreference( 'email is public', 'n'));
 $scramblingMethods = array("n", "strtr", "unicode", "x"); // email_isPublic utilizes 'n'
 $gBitSmarty->assign_by_ref('scramblingMethods', $scramblingMethods);

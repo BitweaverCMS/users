@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.5 2005/08/24 20:59:13 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.6 2006/01/29 23:00:41 spiderr Exp $ *}
 {strip}
-{if $userData->mUserPrefs.user_information eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
+{if $userData->getPreference('user_information') eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
 		{formlabel label="Login"}
 		{forminput}
@@ -19,18 +19,18 @@
 		{/forminput}
 	</div>
 
-	{if $userData->mUserPrefs.country}
+	{if $userData->getPreference('country')}
 		<div class="row">
 			{formlabel label="Country"}
 			{forminput}
-				{biticon ipackage="users" ipath="flags/" iname="`$userData->mUserPrefs.flag`" iexplain="`$userData->mUserPrefs.flag`"} {$userData->mUserPrefs.country}
+				{biticon ipackage="users" ipath="flags/" iname=$userData->getPreference('flag') iexplain=$userData->getPreference('flag')} {$userData->getPreference('country')}
 			{/forminput}
 		</div>
 
 		<div class="row">
 			{formlabel label="Language"}
 			{forminput}
-				{$userData->mUserPrefs.bitlanguage}
+				{$userData->getPreference('bitlanguage')}
 			{/forminput}
 		</div>
 	{/if}
@@ -39,7 +39,7 @@
 		<div class="row">
 			{formlabel label=$field}
 			{forminput}
-				{$userData->mUserPrefs.$field}
+				{$userData->getPreference($field)}
 			{/forminput}
 		</div>
 	{/foreach}
@@ -83,7 +83,7 @@
 		{/forminput}
 	</div>
 
-	{if $gBitSystem->isPackageActive( 'messu' ) and $userData->mUserPrefs.allowMsgs ne 'n' and $gBitUser->mUserId ne $userData->mUserId}
+	{if $gBitSystem->isPackageActive( 'messu' ) and $userData->getPreference('allowMsgs') ne 'n' and $gBitUser->mUserId ne $userData->mUserId}
 		<div class="row">
 			{formlabel label="Send Message"}
 			{forminput}
