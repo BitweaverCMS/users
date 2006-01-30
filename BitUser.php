@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.29 2006/01/29 23:00:35 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.30 2006/01/30 13:03:57 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.29 2006/01/29 23:00:35 spiderr Exp $
+ * $Id: BitUser.php,v 1.30 2006/01/30 13:03:57 squareing Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.29 $
+ * @version  $Revision: 1.30 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -589,16 +589,21 @@ if ($gDebug) echo "Run : QUIT<br>";
 				'tiki_user_bookmarks_folders',
 				'tiki_user_menus',
 				'tiki_user_tasks',
-				'tiki_user_preferences',
 				'tiki_user_watches',
 				'users_favorites_map',
 				'users_users',
 				'tiki_content',
 			);
 			foreach( $userTables as $table ) {
-				$query = "delete from `".BIT_DB_PREFIX.$table."` where `user_id` = ?";
-				$result = $this->mDb->query($query, array( $pUserId ) );
+				$query = "DELETE FROM `".BIT_DB_PREFIX.$table."` WHERE `user_id` = ?";
+				$result = $this->mDb->query( $query, array( $pUserId ) );
 			}
+
+			// we need to get the content_id of the user to nuke all the prefs that have been stored
+			$userInfo = $this->getUserInfo( array( 'user_id' => $pUserId ) );
+			$query = "DELETE FROM `".BIT_DB_PREFIX."liberty_content_prefs` WHERE `content_id` = ?";
+			$result = $this->mDb->query( $query, array( $pUserInfo['content_id'] ) );
+
 			$this->mDb->CompleteTrans();
 			return TRUE;
 		} else {
