@@ -65,7 +65,7 @@ $tables = array(
   name C(40),
   position I4,
   mode C(1)
-  CONSTRAINT ', CONSTRAINT `tiki_user_menus_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINTS ', CONSTRAINT `tiki_user_menus_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 'tiki_user_tasks' => "
