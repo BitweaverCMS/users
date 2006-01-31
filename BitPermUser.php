@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.15 2006/01/31 16:00:29 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.16 2006/01/31 20:21:27 bitweaver Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.15 2006/01/31 16:00:29 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.16 2006/01/31 20:21:27 bitweaver Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.15 $
+ * @version  $Revision: 1.16 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -617,10 +617,10 @@ class BitPermUser extends BitUser {
 
 	function assign_object_permission($pGroupId, $object_id, $object_type, $perm_name) {
 		//$object_id = md5($object_type . $object_id);
-		$query = "DELETE FROM `".BIT_DB_PREFIX."users_objectpermissions`
+		$query = "DELETE FROM `".BIT_DB_PREFIX."users_object_permissions`
 				  WHERE `group_id` = ? AND `perm_name` = ? AND `object_id` = ?";
 		$result = $this->mDb->query($query, array($pGroupId, $perm_name, $object_id), -1, -1);
-		$query = "insert into `".BIT_DB_PREFIX."users_objectpermissions`
+		$query = "insert into `".BIT_DB_PREFIX."users_object_permissions`
 				  (`group_id`,`object_id`, `object_type`, `perm_name`)
 				  VALUES ( ?, ?, ?, ? )";
 		$result = $this->mDb->query($query, array($pGroupId, $object_id,$object_type, $perm_name));
@@ -633,7 +633,7 @@ class BitPermUser extends BitUser {
 
 		foreach ( $groups as $groupId => $group_name ) {
 			$query = "SELECT count(*)
-					  FROM `".BIT_DB_PREFIX."users_objectpermissions`
+					  FROM `".BIT_DB_PREFIX."users_object_permissions`
 					  WHERE `group_id` = ? and `object_id` = ? and `object_type` = ? and `perm_name` = ?";
 					  //pvd($query);pvd($sd="groupid: $groupId | object_id: $object_id | object_type: $object_type | permname: $perm_name");
 			$bindvars = array($groupId, $object_id, $object_type, $perm_name);
@@ -648,7 +648,7 @@ class BitPermUser extends BitUser {
 
 	function remove_object_permission($pGroupId, $object_id, $object_type, $perm_name) {
 		//$object_id = md5($object_type . $object_id);
-		$query = "delete from `".BIT_DB_PREFIX."users_objectpermissions`
+		$query = "delete from `".BIT_DB_PREFIX."users_object_permissions`
 			where `group_id` = ? and `object_id` = ?
 			and `object_type` = ? and `perm_name` = ?";
 		$bindvars = array($pGroupId, $object_id, $object_type, $perm_name);
@@ -660,7 +660,7 @@ class BitPermUser extends BitUser {
 	function copy_object_permissions($object_id,$destinationObjectId,$object_type) {
 		//$object_id = md5($object_type.$object_id);
 		$query = "select `perm_name`, `group_name`
-			from `".BIT_DB_PREFIX."users_objectpermissions`
+			from `".BIT_DB_PREFIX."users_object_permissions`
 			where `object_id` =? and
 			`object_type` = ?";
 		$bindvars = array($object_id, $object_type);
@@ -675,7 +675,7 @@ class BitPermUser extends BitUser {
 	function get_object_permissions($object_id, $object_type) {
 		//$object_id = md5($object_type . $object_id);
 		$query = "select ug.`group_id`, ug.`group_name`, uop.`perm_name`
-				  FROM `".BIT_DB_PREFIX."users_objectpermissions` uop
+				  FROM `".BIT_DB_PREFIX."users_object_permissions` uop
 					INNER JOIN `".BIT_DB_PREFIX."users_groups` ug ON( uop.`group_id`=ug.`group_id` )
 				  WHERE uop.`object_id` = ? AND uop.`object_type` = ?";
 		$bindvars = array($object_id, $object_type);
@@ -692,7 +692,7 @@ class BitPermUser extends BitUser {
 		$ret = NULL;
 		if( @$this->verifyId( $object_id ) && !empty( $object_type )  ) {
 			//$object_id = md5($object_type . $object_id);
-			$query = "select count(*) from `".BIT_DB_PREFIX."users_objectpermissions` where `object_id`=? and `object_type`=?";
+			$query = "select count(*) from `".BIT_DB_PREFIX."users_object_permissions` where `object_id`=? and `object_type`=?";
 			$ret = $this->mDb->getOne($query, array( $object_id, $object_type	));
 		}
 		return $ret;

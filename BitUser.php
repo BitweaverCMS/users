@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.32 2006/01/31 16:00:29 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.33 2006/01/31 20:21:27 bitweaver Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.32 2006/01/31 16:00:29 spiderr Exp $
+ * $Id: BitUser.php,v 1.33 2006/01/31 20:21:27 bitweaver Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.32 $
+ * @version  $Revision: 1.33 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1315,9 +1315,9 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$ret['diskUsage'] = 0;
 
 		if ($this->mUserId) {
-			$query = "SELECT ta.`attachment_id`, ta.`foreign_id`
-					  FROM `".BIT_DB_PREFIX."tiki_attachments` ta
-					  WHERE ta.`user_id` = ? AND ta.`attachment_plugin_guid` = 'tiki_files'";
+			$query = "SELECT a.`attachment_id`, a.`foreign_id`
+					  FROM `".BIT_DB_PREFIX."tiki_attachments` a
+					  WHERE a.`user_id` = ? AND a.`attachment_plugin_guid` = 'tiki_files'";
 			$result = $this->mDb->query($query, array($this->mUserId));
 			$attachmentIds = $result->getRows();
 
@@ -1348,9 +1348,9 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( $this->mUserId ) {
 			// TODO: this query should check for unique combinations of foreign_id *and* attachment_plugin_guid
 			// doing that causes mysql to choke
-			$query = "SELECT DISTINCT( ta.`foreign_id` ), ta.*
-				FROM `".BIT_DB_PREFIX."tiki_attachments` ta
-				WHERE ta.`user_id` = ? $mid";
+			$query = "SELECT DISTINCT( a.`foreign_id` ), a.*
+				FROM `".BIT_DB_PREFIX."tiki_attachments` a
+				WHERE a.`user_id` = ? $mid";
 			$result = $this->mDb->query( $query, $bindVars, $pListHash['max_records'], $pListHash['offset'] );
 			$attachments = $result->getRows();
 			$data = array();
@@ -1361,9 +1361,9 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$ret['data'] = $data;
 
 			// count all entries
-			$queryc = "SELECT DISTINCT( ta.`foreign_id` ), ta.*
-				FROM `".BIT_DB_PREFIX."tiki_attachments` ta
-				WHERE ta.`user_id` = ? $mid";
+			$queryc = "SELECT DISTINCT( a.`foreign_id` ), a.*
+				FROM `".BIT_DB_PREFIX."tiki_attachments` a
+				WHERE a.`user_id` = ? $mid";
 			$result = $this->mDb->query( $queryc, $bindVars );
 			$ret['cant'] = count( $result->getRows() );
 		}
