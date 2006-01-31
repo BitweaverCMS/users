@@ -339,6 +339,24 @@ array( 'CREATEINDEX' => array(
 
 
 	)
+), 
+
+'BWR1' => array(
+	'BWR2' => array(
+
+
+// STEP 1
+array( 'DATADICT' => array(
+array( 'RENAMETABLE' => array(
+		'tiki_semaphores' => 'users_semaphores',
+		'users_objectpermissions' => 'users_object_permissions',
+		'users_grouppermissions' => 'users_group_permissions',
+		'tiki_user_watches' => 'users_watches',
+	)
+),
+
+
+	)
 )
 
 );

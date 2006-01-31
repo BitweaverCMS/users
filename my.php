@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.10 2006/01/10 21:17:05 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.11 2006/01/31 16:00:30 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my.php,v 1.10 2006/01/10 21:17:05 squareing Exp $
+ * $Id: my.php,v 1.11 2006/01/31 16:00:30 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -17,7 +17,6 @@
  * required setup
  */
 require_once( '../bit_setup_inc.php' );
-include_once( USERS_PKG_PATH.'task_lib.php' );
 
 if( !$gBitUser->isRegistered() ) {
 	Header( 'Location: '.USERS_PKG_URL.'login.php' );

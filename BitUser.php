@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.31 2006/01/30 13:06:46 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.32 2006/01/31 16:00:29 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.31 2006/01/30 13:06:46 squareing Exp $
+ * $Id: BitUser.php,v 1.32 2006/01/31 16:00:29 spiderr Exp $
  * @package users
  */
 
@@ -20,7 +20,7 @@
  * required setup
  */
 require_once( LIBERTY_PKG_PATH.'LibertyAttachable.php' );
-require_once( BIT_PKG_PATH.'util/pear/Date.php' );
+//require_once( BIT_PKG_PATH.'util/pear/Date.php' );
 define( 'AVATAR_TYPE_CENTRALIZED', 'c' );
 define( 'AVATAR_TYPE_USER_DB', 'u' );
 define( 'AVATAR_TYPE_LIBRARY', 'l' );
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.31 $
+ * @version  $Revision: 1.32 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -584,12 +584,12 @@ if ($gDebug) echo "Run : QUIT<br>";
 		$this->mDb->StartTrans();
 		if( $_REQUEST["user_id"] != ANONYMOUS_USER_ID ) {
 			$userTables = array(
-				'tiki_semaphores',
+				'users_semaphores',
 				'tiki_user_bookmarks_urls',
 				'tiki_user_bookmarks_folders',
 				'tiki_user_menus',
 				'tiki_user_tasks',
-				'tiki_user_watches',
+				'users_watches',
 				'users_favorites_map',
 				'users_users',
 				'tiki_content',
@@ -1002,7 +1002,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$hash = md5( strtolower($pUsername) . $pPass . $pEmail );
 		$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `email`=?, `hash`=? WHERE " . $this->mDb->convert_binary(). " `user_id`=?";
 		$result = $this->mDb->query( $query, array( $pEmail, $hash, $pUserId ) );
-		$query = "UPDATE `".BIT_DB_PREFIX."tiki_user_watches` SET `email`=? WHERE " . $this->mDb->convert_binary(). " `user_id`=?";
+		$query = "UPDATE `".BIT_DB_PREFIX."users_watches` SET `email`=? WHERE " . $this->mDb->convert_binary(). " `user_id`=?";
 		$result = $this->mDb->query( $query, array( $pEmail, $pUserId ) );
 		return TRUE;
 	}
@@ -1394,9 +1394,9 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		global $userlib;
 		if( $this->isValid() ) {
 			$hash = md5(uniqid('.'));
-			$query = "delete from `".BIT_DB_PREFIX."tiki_user_watches` where `user_id`=? and `event`=? and `object`=?";
+			$query = "delete from `".BIT_DB_PREFIX."users_watches` where `user_id`=? and `event`=? and `object`=?";
 			$this->mDb->query($query,array( $this->mUserId, $event, $object ) );
-			$query = "insert into `".BIT_DB_PREFIX."tiki_user_watches`(`user_id` ,`event` ,`object` , `email`, `hash`, `type`, `title`, `url`) ";
+			$query = "insert into `".BIT_DB_PREFIX."users_watches`(`user_id` ,`event` ,`object` , `email`, `hash`, `type`, `title`, `url`) ";
 			$query.= "values(?,?,?,?,?,?,?,?)";
 			$this->mDb->query( $query, array( $this->mUserId, $event, $object, $this->mInfo['email'], $hash, $type, $title, $url ) );
 			return true;
@@ -1413,7 +1413,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 				$bindvars[]=$pEvent;
 			}
 
-			$query = "select * from `".BIT_DB_PREFIX."tiki_user_watches` where `user_id`=? $mid";
+			$query = "select * from `".BIT_DB_PREFIX."users_watches` where `user_id`=? $mid";
 			$result = $this->mDb->query($query,$bindvars);
 			$ret = array();
 
@@ -1428,7 +1428,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	function getEventWatches( $event, $object ) {
 		$ret = NULL;
 		if( $this->isValid() ) {
-			$query = "select * from `".BIT_DB_PREFIX."tiki_user_watches` WHERE `user_id`=? and `event`=? and `object`=?";
+			$query = "select * from `".BIT_DB_PREFIX."users_watches` WHERE `user_id`=? and `event`=? and `object`=?";
 			$result = $this->mDb->query($query,array( $this->mUserId, $event, $object ) );
 			if ( $result->numRows() ) {
 				$ret = $result->fetchRow();
@@ -1441,7 +1441,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	function get_event_watches($event, $object) {
 		$ret = array();
 
-		$query = "select * from `".BIT_DB_PREFIX."tiki_user_watches` tw INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON ( tw.`user_id`=uu.`user_id` )  where `event`=? and `object`=?";
+		$query = "select * from `".BIT_DB_PREFIX."users_watches` tw INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON ( tw.`user_id`=uu.`user_id` )  where `event`=? and `object`=?";
 		$result = $this->mDb->query($query,array($event,$object));
 
 		if (!$result->numRows())
@@ -1456,21 +1456,21 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 	/*shared*/
 	function remove_user_watch_by_hash($hash) {
-		$query = "delete from `".BIT_DB_PREFIX."tiki_user_watches` where `hash`=?";
+		$query = "delete from `".BIT_DB_PREFIX."users_watches` where `hash`=?";
 		$this->mDb->query($query,array($hash));
 	}
 
 	/*shared*/
 	function expungeWatch( $event, $object ) {
 		if( $this->isValid() ) {
-			$query = "delete from `".BIT_DB_PREFIX."tiki_user_watches` where `user_id`=? and `event`=? and `object`=?";
+			$query = "delete from `".BIT_DB_PREFIX."users_watches` where `user_id`=? and `event`=? and `object`=?";
 			$this->mDb->query( $query, array( $this->mUserId, $event, $object ) );
 		}
 	}
 
 	/*shared*/
 	function get_watches_events() {
-		$query = "select distinct `event` from `".BIT_DB_PREFIX."tiki_user_watches`";
+		$query = "select distinct `event` from `".BIT_DB_PREFIX."users_watches`";
 		$result = $this->mDb->query($query,array());
 		$ret = array();
 		while ($res = $result->fetchRow()) {
@@ -1638,9 +1638,9 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		global $gBitSystem;
 		$now = $gBitSystem->getUTCTime();
 		$lim = $now - $pLimit;
-		$query = "delete from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`=? and `created`<?";
+		$query = "delete from `".BIT_DB_PREFIX."users_semaphores` where `sem_name`=? and `created`<?";
 		$result = $this->mDb->query($query,array( $pSemName, (int)$lim) );
-		$query = "select `sem_name`  from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`=?";
+		$query = "select `sem_name`  from `".BIT_DB_PREFIX."users_semaphores` where `sem_name`=?";
 		$result = $this->mDb->query($query,array($pSemName));
 		return $result->numRows();
 	}
@@ -1651,10 +1651,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$userId = $this->isValid() ? $this->mUserId : ANONYMOUS_USER_ID;
 		$now = $gBitSystem->getUTCTime();
 		$lim = $now - $pLimit;
-		$query = "delete from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`=? and `created`<?";
+		$query = "delete from `".BIT_DB_PREFIX."users_semaphores` where `sem_name`=? and `created`<?";
 		$result = $this->mDb->query($query,array( $pSemName, (int)$lim) );
 		$query = "SELECT uu.`login`, uu.`real_name`, uu.`email`, uu.`user_id`
-				  FROM `".BIT_DB_PREFIX."tiki_semaphores` ts INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id`=ts.`user_id`)
+				  FROM `".BIT_DB_PREFIX."users_semaphores` ts INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id`=ts.`user_id`)
 				  WHERE `sem_name`=? AND ts.`user_id`!='?'";
 		if( $ret = $this->mDb->getRow( $query, array( $pSemName, (int)$userId ) ) ) {
 			$ret['nolink'] = TRUE;
@@ -1667,10 +1667,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			global $gBitSystem;
 			$userId = $this->isValid() ? $this->mUserId : ANONYMOUS_USER_ID;
 			$now = $gBitSystem->getUTCTime();
-			//	$cant=$this->mDb->getOne("select count(*) from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`='$pSemName'");
-			$query = "delete from `".BIT_DB_PREFIX."tiki_semaphores` where `sem_name`=?";
+			//	$cant=$this->mDb->getOne("select count(*) from `".BIT_DB_PREFIX."users_semaphores` where `sem_name`='$pSemName'");
+			$query = "delete from `".BIT_DB_PREFIX."users_semaphores` where `sem_name`=?";
 			$this->mDb->query($query,array($pSemName));
-			$query = "insert into `".BIT_DB_PREFIX."tiki_semaphores`(`sem_name`,`created`,`user_id`) values(?,?,?)";
+			$query = "insert into `".BIT_DB_PREFIX."users_semaphores`(`sem_name`,`created`,`user_id`) values(?,?,?)";
 			$result = $this->mDb->query($query,array($pSemName, (int)$now, $userId));
 			return $now;
 		}

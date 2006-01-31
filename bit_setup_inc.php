@@ -65,8 +65,9 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$user_cookie_site = 'tiki-user-' . $cookie_site;
 
 
-	if( function_exists( 'tiki_login_override' ) ) {
-		$gBitUser->mUserId = tiki_login_override();
+	global $gOverrideLoginFunction;
+	if( !empty( $gOverrideLoginFunction ) ) {
+		$gBitUser->mUserId = $gOverrideLoginFunction();
 		if ($gBitUser->mUserId) {
 			$gBitUser->load();
 			$gBitUser->loadPermissions();

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.14 2006/01/25 15:40:26 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.15 2006/01/31 16:00:29 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.14 2006/01/25 15:40:26 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.15 2006/01/31 16:00:29 spiderr Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.14 $
+ * @version  $Revision: 1.15 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -265,7 +265,7 @@ class BitPermUser extends BitUser {
 			$query = "DELETE FROM `".BIT_DB_PREFIX."users_groups_inclusion`
 					  WHERE `group_id` = ? OR `include_group_id` = ?";
 			$result = $this->mDb->query($query, array($pGroupId, $pGroupId));
-			$query = "delete from `".BIT_DB_PREFIX."users_grouppermissions` where `group_id` = ?";
+			$query = "delete from `".BIT_DB_PREFIX."users_group_permissions` where `group_id` = ?";
 			$result = $this->mDb->query($query, array($pGroupId));
 			$query = "delete from `".BIT_DB_PREFIX."users_groups` where `group_id` = ?";
 			$result = $this->mDb->query($query, array($pGroupId));
@@ -518,7 +518,7 @@ class BitPermUser extends BitUser {
 		// the double up.`perm_name` is intentional - the first is for hash key, the second is for hash value
 			$query = "SELECT up.`perm_name` AS `hash_key`, up.`perm_name`, up.`perm_desc`, up.`level`, up.`package`
 					  FROM `".BIT_DB_PREFIX."users_permissions` up
-						INNER JOIN `".BIT_DB_PREFIX."users_grouppermissions` ugp ON ( ugp.`perm_name`=up.`perm_name` )
+						INNER JOIN `".BIT_DB_PREFIX."users_group_permissions` ugp ON ( ugp.`perm_name`=up.`perm_name` )
 						INNER JOIN `".BIT_DB_PREFIX."users_groups` ug ON ( ug.`group_id`=ugp.`group_id` )
 					    LEFT OUTER JOIN `".BIT_DB_PREFIX."users_groups_map` ugm ON ( ugm.`group_id`=ugp.`group_id` AND ugm.`user_id` = ?)
 					  WHERE ug.`group_id`= ".ANONYMOUS_GROUP_ID." OR ugm.`group_id`=ug.`group_id`";
@@ -533,7 +533,7 @@ class BitPermUser extends BitUser {
 			}
 			if ( $groupCount > 1)
 			{	$sql = "SELECT up.`perm_name`, up.`perm_desc`, up.`level`, up.`package` FROM `".BIT_DB_PREFIX."users_permissions` up
-						INNER JOIN `".BIT_DB_PREFIX."users_grouppermissions` ugp ON (ugp.`perm_name` = up.`perm_name`)
+						INNER JOIN `".BIT_DB_PREFIX."users_group_permissions` ugp ON (ugp.`perm_name` = up.`perm_name`)
 						WHERE ugp.`group_id` IN ($groupIdsString)";
 				$this->mPerms = $this->mDb->getAssoc( $sql );
 			}
@@ -546,7 +546,7 @@ class BitPermUser extends BitUser {
 	function getUnassignedPerms() {
 		$query = "SELECT up.`perm_name` AS `hash_key`, up.*
 			FROM `".BIT_DB_PREFIX."users_permissions` up
-			LEFT JOIN `".BIT_DB_PREFIX."users_grouppermissions` ugp ON( up.`perm_name` = ugp.`perm_name` )
+			LEFT JOIN `".BIT_DB_PREFIX."users_group_permissions` ugp ON( up.`perm_name` = ugp.`perm_name` )
 			WHERE ugp.`group_id` IS NULL
 			ORDER BY `package`, up.`perm_name` ASC";
 		return( $this->mDb->getAssoc( $query ) );
@@ -591,7 +591,7 @@ class BitPermUser extends BitUser {
 		}
 		if( @$this->verifyId( $pGroupId ) ) {
 			$selectSql = ', ugp.`value` AS `hasPerm` ';
-			$fromSql = ' INNER JOIN `'.BIT_DB_PREFIX.'users_grouppermissions` ugp ON ( ugp.`perm_name`=up.`perm_name` ) ';
+			$fromSql = ' INNER JOIN `'.BIT_DB_PREFIX.'users_group_permissions` ugp ON ( ugp.`perm_name`=up.`perm_name` ) ';
 			if ($mid) {
 				$mid .= " AND  ugp.`group_id`=?";
 			} else {
@@ -765,9 +765,9 @@ class BitPermUser extends BitUser {
 	function assignPermissionToGroup( $perm, $pGroupId ) {
 		$gBitCache = new BitCache();
 		$gBitCache->removeCached("allperms");
-		$query = "DELETE FROM `".BIT_DB_PREFIX."users_grouppermissions` WHERE `group_id` = ? AND `perm_name` = ?";
+		$query = "DELETE FROM `".BIT_DB_PREFIX."users_group_permissions` WHERE `group_id` = ? AND `perm_name` = ?";
 		$result = $this->mDb->query($query, array($pGroupId, $perm));
-		$query = "INSERT INTO `".BIT_DB_PREFIX."users_grouppermissions`(`group_id`, `perm_name`) VALUES(?, ?)";
+		$query = "INSERT INTO `".BIT_DB_PREFIX."users_group_permissions`(`group_id`, `perm_name`) VALUES(?, ?)";
 		$result = $this->mDb->query($query, array($pGroupId, $perm));
 		return TRUE;
 	}
@@ -776,7 +776,7 @@ class BitPermUser extends BitUser {
 	function group_has_permission( $pGroupId, $perm ) {
 		if (!isset($perm, $this->groupperm_cache[$pGroupId][$perm])) {
 			$query = "SELECT count(*)
-					  FROM `".BIT_DB_PREFIX."users_grouppermissions`
+					  FROM `".BIT_DB_PREFIX."users_group_permissions`
 					  WHERE `group_id`=? AND `perm_name`=?";
 			$result = $this->mDb->getOne( $query, array( $pGroupId, $perm ) );
 			$this->groupperm_cache[$pGroupId][$perm] = $result;
@@ -790,7 +790,7 @@ class BitPermUser extends BitUser {
 	function remove_permission_from_group($perm, $pGroupId) {
 		$gBitCache = new BitCache();
 		$gBitCache->removeCached("allperms");
-		$query = "delete from `".BIT_DB_PREFIX."users_grouppermissions` where `perm_name` = ?	and `group_id` = ?";
+		$query = "delete from `".BIT_DB_PREFIX."users_group_permissions` where `perm_name` = ?	and `group_id` = ?";
 		$result = $this->mDb->query($query, array($perm, $pGroupId));
 		return true;
 	}

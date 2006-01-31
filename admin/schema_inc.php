@@ -2,13 +2,6 @@
 
 $tables = array(
 
-'sessions' => "
-  expiry I8 unsigned NOTNULL,
-  sesskey C(32) NOTNULL,
-  expireref C(64),
-  session_data X
-",
-
 'users_users' => "
   user_id I4 PRIMARY,
   content_id I4,
@@ -27,85 +20,19 @@ $tables = array(
   created I8,
   avatar_attachment_id I4,
   portrait_attachment_id I4,
-  logo_attachment_id I4", /* temporarily removed do to indterminate scan order
-  CONSTRAINT	', CONSTRAINT `tiki_avatar_attach_ref` FOREIGN KEY (`avatar_attachment_id`) REFERENCES `".BIT_DB_PREFIX."tiki_attachments` (`attachment_id`)
-			 , CONSTRAINT `tiki_users_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."tiki_content` (`content_id`)
-			 , CONSTRAINT `tiki_portrait_attach_ref` FOREIGN KEY (`portrait_attachment_id`) REFERENCES `".BIT_DB_PREFIX."tiki_attachments` (`attachment_id`)
-			 , CONSTRAINT `tiki_logo_attach_ref` FOREIGN KEY (`logo_attachment_id`) REFERENCES `".BIT_DB_PREFIX."tiki_attachments` (`attachment_id`)'
-",*/
-
-'tiki_sessions' => "
-  session_id C(32) PRIMARY,
-  user_id I4,
-  timestamp I8
+  logo_attachment_id I4
+  CONSTRAINT	', CONSTRAINT `users_avatar_attach_ref` FOREIGN KEY (`avatar_attachment_id`) REFERENCES `".BIT_DB_PREFIX."tiki_attachments` (`attachment_id`)
+			 , CONSTRAINT `users_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."tiki_content` (`content_id`)
+			 , CONSTRAINT `users_portrait_attach_ref` FOREIGN KEY (`portrait_attachment_id`) REFERENCES `".BIT_DB_PREFIX."tiki_attachments` (`attachment_id`)
+			 , CONSTRAINT `users_logo_attach_ref` FOREIGN KEY (`logo_attachment_id`) REFERENCES `".BIT_DB_PREFIX."tiki_attachments` (`attachment_id`)'
 ",
 
 'users_favorites_map' => "
   favorite_content_id I4 PRIMARY,
-  user_id I4 PRIMARY
+  user_id I4 PRIMARY,
+  position I4
   CONSTRAINTS ', CONSTRAINT `users_fav_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)
   				 , CONSTRAINT `users_fav_con_ref` FOREIGN KEY (`favorite_content_id`) REFERENCES `".BIT_DB_PREFIX."tiki_content` (`content_id`)'
-",
-
-'tiki_user_bookmarks_urls' => "
-  url_id I4 AUTO PRIMARY,
-  name C(30),
-  url C(250),
-  data X,
-  last_updated I8,
-  folder_id I4 NOTNULL,
-  user_id I4 NOTNULL
-  CONSTRAINTS ', CONSTRAINT `tiki_user_bookmarks_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
-",
-
-'tiki_user_menus' => "
-  menu_id I4 AUTO PRIMARY,
-  user_id I4 NOTNULL,
-  url C(250),
-  name C(40),
-  position I4,
-  mode C(1)
-  CONSTRAINTS ', CONSTRAINT `tiki_user_menus_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
-",
-
-'tiki_user_tasks' => "
-  task_id I4 AUTO PRIMARY,
-  user_id I4 NOTNULL,
-  title C(250),
-  description X,
-  date I8,
-  status C(1),
-  priority I4,
-  completed I8,
-  percentage I4
-  CONSTRAINT ', CONSTRAINT `tiki_user_tasks_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
-",
-
-'tiki_user_watches' => "
-  user_id I4 PRIMARY,
-  event C(40) PRIMARY,
-  object C(120) PRIMARY,
-  hash C(32),
-  title C(250),
-  type C(200),
-  url C(250),
-  email C(200)
-  CONSTRAINTS ', CONSTRAINT `tiki_user_watches_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
-",
-
-'tiki_userfiles' => "
-  file_id I4 AUTO PRIMARY,
-  user_id I4 NOTNULL,
-  name C(200),
-  filename C(200),
-  filetype C(200),
-  filesize C(200),
-  data B,
-  hits I4,
-  is_file C(1),
-  path C(255),
-  created I8
-  CONSTRAINTS ', CONSTRAINT `tiki_userfiles_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 'users_permissions' => "
@@ -130,21 +57,21 @@ $tables = array(
   include_group_id I4 PRIMARY
 ",
 
-'users_grouppermissions' => "
+'users_group_permissions' => "
   group_id I4 PRIMARY,
   perm_name C(30) PRIMARY,
   value C(1) default ''
-  CONSTRAINTS ', CONSTRAINT `users_groupperm_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
-  				, CONSTRAINT `users_groupperm_perm_ref` FOREIGN KEY (`perm_name`) REFERENCES `".BIT_DB_PREFIX."users_permissions` (`perm_name`)'
+  CONSTRAINTS ', CONSTRAINT `users_group_perm_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
+  				, CONSTRAINT `users_group_perm_perm_ref` FOREIGN KEY (`perm_name`) REFERENCES `".BIT_DB_PREFIX."users_permissions` (`perm_name`)'
 ",
 
-'users_objectpermissions' => "
+'users_object_permissions' => "
   group_id I4 PRIMARY,
   perm_name C(30) PRIMARY,
   object_type C(20) PRIMARY,
   object_id I4 PRIMARY
-  CONSTRAINTS   ', CONSTRAINT `users_objectperm_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
-                , CONSTRAINT `users_objectperm_perm_ref` FOREIGN KEY (`perm_name`) REFERENCES `".BIT_DB_PREFIX."users_permissions` (`perm_name`)'
+  CONSTRAINTS   ', CONSTRAINT `users_object_perm_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
+                , CONSTRAINT `users_object_perm_perm_ref` FOREIGN KEY (`perm_name`) REFERENCES `".BIT_DB_PREFIX."users_permissions` (`perm_name`)'
 ",
 
 'users_groups_map' => "
@@ -166,46 +93,24 @@ $tables = array(
   CONSTRAINTS ', CONSTRAINT `users_cnxn_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
-'tiki_semaphores' => "
+'users_semaphores' => "
 	sem_name C(250) PRIMARY,
 	user_id I4 NOTNULL,
 	created I8
 ",
 
-'tiki_user_bookmarks_folders' => "
-  folder_id I4 AUTO PRIMARY,
-  parent_id I4,
+'users_watches' => "
   user_id I4 PRIMARY,
-  name C(30)
+  event C(40) PRIMARY,
+  object C(120) PRIMARY,
+  hash C(32),
+  title C(250),
+  type C(200),
+  url C(250),
+  email C(200)
+  CONSTRAINTS ', CONSTRAINT `users_watches_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
-'tiki_user_modules' => "
-  name C(200) PRIMARY,
-  title C(40),
-  data X
-",
-
-'tiki_user_postings' => "
-  user_id I4 PRIMARY,
-  posts I8,
-  last I8,
-  first I8,
-  level I4
-  CONSTRAINTS ', CONSTRAINT `tiki_user_postings_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
-",
-
-'tiki_user_votings' => "
-  user_id I4 PRIMARY,
-  id C(160) PRIMARY
-  CONSTRAINTS ', CONSTRAINT `tiki_user_votings_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
-",
-
-'tiki_userpoints' => "
-  user_id I4,
-  points decimal(8,2),
-  voted I4 DEFAULT NULL
-  CONSTRAINTS ', CONSTRAINT `tiki_userpoints_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
-"
 );
 
 global $gBitInstaller;
@@ -221,11 +126,11 @@ $indices = array (
 	'users_users_avatar_atment_idx' => array( 'table' => 'users_users', 'cols' => 'avatar_attachment_id', 'opts' => NULL ),
 	'users_groups_user_idx' => array( 'table' => 'users_groups', 'cols' => 'user_id', 'opts' => NULL ),
 	'users_groups_user_name_idx' => array( 'table' => 'users_groups', 'cols' => 'user_id,group_name', 'opts' => array('UNIQUE') ),
-	'users_groupperm_group_idx' => array( 'table' => 'users_grouppermissions', 'cols' => 'group_id', 'opts' => NULL ),
-	'users_groupperm_perm_idx' => array( 'table' => 'users_grouppermissions', 'cols' => 'perm_name', 'opts' => NULL ),
-	'users_objectperm_group_idx' =>  array( 'table' => 'users_objectpermissions', 'cols' => 'group_id', 'opts' => NULL ),
-	'users_objectperm_perm_idx' => array( 'table' => 'users_objectpermissions', 'cols' => 'perm_name', 'opts' => NULL ),
-	'users_objectperm_object_idx' => array( 'table' => 'users_objectpermissions', 'cols' => 'object_id', 'opts' => NULL ),
+	'users_group_perm_group_idx' => array( 'table' => 'users_group_permissions', 'cols' => 'group_id', 'opts' => NULL ),
+	'users_group_perm_perm_idx' => array( 'table' => 'users_group_permissions', 'cols' => 'perm_name', 'opts' => NULL ),
+	'users_object_perm_group_idx' =>  array( 'table' => 'users_object_permissions', 'cols' => 'group_id', 'opts' => NULL ),
+	'users_object_perm_perm_idx' => array( 'table' => 'users_object_permissions', 'cols' => 'perm_name', 'opts' => NULL ),
+	'users_object_perm_object_idx' => array( 'table' => 'users_object_permissions', 'cols' => 'object_id', 'opts' => NULL ),
 	'users_permissions_perm_idx' => array( 'table' => 'users_permissions', 'cols' => 'perm_name', 'opts' => NULL ),
 	'users_groups_map_user_idx' => array( 'table' => 'users_groups_map', 'cols' => 'user_id', 'opts' => NULL ),
 	'users_groups_map_group_idx' => array( 'table' => 'users_groups_map', 'cols' => 'group_id', 'opts' => NULL ),
