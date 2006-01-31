@@ -199,18 +199,6 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 //	}
 //	============================================================================================================
 
-	if( $gBitUser->isRegistered() && $gBitSystem->getPreference('feature_usermenu') == 'y' ) {
-		if (!isset($_SESSION['usermenu'])) {
-			include_once(USERS_PKG_PATH . 'user_menu_lib.php');
-
-			$user_menus = $usermenulib->list_usermenus($gBitUser->mUserId, 0, -1, 'position_asc', '');
-			$gBitSmarty->assign('usr_user_menus', $user_menus['data']);
-			$_SESSION['usermenu'] = $user_menus['data'];
-		} else {
-			$user_menus = $_SESSION['usermenu'];
-			$gBitSmarty->assign('usr_user_menus', $user_menus);
-		}
-	}
 	// If we are processing a login then do not generate the challenge
 	// if we are in any other case then yes.
 	if( !empty( $_SERVER["REQUEST_URI"] ) && !strstr($_SERVER["REQUEST_URI"], USERS_PKG_URL . 'validate')) {
