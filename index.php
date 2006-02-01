@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.8 2005/10/12 15:14:07 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.9 2006/02/01 08:07:55 bitweaver Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.8 2005/10/12 15:14:07 spiderr Exp $
+ * $Id: index.php,v 1.9 2006/02/01 08:07:55 bitweaver Exp $
  * @package users
  * @subpackage functions
  */
@@ -79,11 +79,11 @@ if( !empty( $_REQUEST['home'] ) ) {
 	$_REQUEST["control"]["URL"] = USERS_PKG_URL."index.php";
 	$gBitSmarty->assign_by_ref('control', $_REQUEST["control"]);
 	$centerDisplay = 'bitpackage:users/index_list.tpl';
-	$browserTitle = $siteTitle.' '.tra( 'Members' );
+	$browserTitle = $gBitSystem_>getPreference( 'siteTitle' ).' '.tra( 'Members' );
 } else {
 	$gBitSmarty->assign('msg',tra('User not found'));
 	$centerDisplay = 'bitpackage:kernel/error.tpl';
-	$browserTitle = $siteTitle.' '.tra( 'Members' );
+	$browserTitle = $gBitSystem_>getPreference( 'siteTitle' ).' '.tra( 'Members' );
 
 }
 
