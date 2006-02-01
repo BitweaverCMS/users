@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.33 2006/01/31 20:21:27 bitweaver Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.34 2006/02/01 11:15:19 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.33 2006/01/31 20:21:27 bitweaver Exp $
+ * $Id: BitUser.php,v 1.34 2006/02/01 11:15:19 squareing Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.33 $
+ * @version  $Revision: 1.34 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -206,16 +206,16 @@ class BitUser extends LibertyAttachable {
 			$userDelSql = ' OR `user_id`=?';
 		}
 		$this->mDb->StartTrans();
-		$hasSession = $this->mDb->getOne( "SELECT `timestamp` FROM `".BIT_DB_PREFIX."tiki_sessions` WHERE `session_id`=? ", array( $pSessionId ) );
+		$hasSession = $this->mDb->getOne( "SELECT `timestamp` FROM `".BIT_DB_PREFIX."users_sessions` WHERE `session_id`=? ", array( $pSessionId ) );
 		if( $hasSession ) {
-			$ret = $this->mDb->query( "UPDATE `".BIT_DB_PREFIX."tiki_sessions` SET `timestamp`=? WHERE `session_id`=? $userDelSql", $bindVars );
+			$ret = $this->mDb->query( "UPDATE `".BIT_DB_PREFIX."users_sessions` SET `timestamp`=? WHERE `session_id`=? $userDelSql", $bindVars );
 		} else {
 			if( $this->isRegistered() ) {
-				$query = "insert into `".BIT_DB_PREFIX."tiki_sessions`(`timestamp`,`session_id`,`user_id`) values(?,?,?)";
+				$query = "insert into `".BIT_DB_PREFIX."users_sessions`(`timestamp`,`session_id`,`user_id`) values(?,?,?)";
 				$result = $this->mDb->query($query, $bindVars);
 			}
 		}
-		$query = "DELETE from `".BIT_DB_PREFIX."tiki_sessions` where `timestamp`<?";
+		$query = "DELETE from `".BIT_DB_PREFIX."users_sessions` where `timestamp`<?";
 		$result = $this->mDb->query($query, array($oldy));
 		$this->mDb->CompleteTrans();
 
@@ -223,7 +223,7 @@ class BitUser extends LibertyAttachable {
 	}
 
 	function count_sessions() {
-		$query = "select count(*) from `".BIT_DB_PREFIX."tiki_sessions`";
+		$query = "select count(*) from `".BIT_DB_PREFIX."users_sessions`";
 		$cant = $this->mDb->getOne($query,array());
 		return $cant;
 	}
@@ -1163,7 +1163,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	function get_online_users() {
 		global $gBitSystem;
 		$query = "select ts.`user_id`, `login` AS `user`, `real_name` ,`timestamp`
-				  FROM `".BIT_DB_PREFIX."tiki_sessions` ts INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (ts.`user_id`=uu.`user_id`)
+				  FROM `".BIT_DB_PREFIX."users_sessions` ts INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (ts.`user_id`=uu.`user_id`)
 				  WHERE ts.`user_id` IS NOT NULL";
 		$result = $this->mDb->query($query);
 		$ret = array();
