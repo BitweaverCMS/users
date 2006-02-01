@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.36 2006/02/01 16:18:24 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.37 2006/02/01 16:20:22 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.36 2006/02/01 16:18:24 squareing Exp $
+ * $Id: BitUser.php,v 1.37 2006/02/01 16:20:22 spiderr Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.36 $
+ * @version  $Revision: 1.37 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -196,26 +196,31 @@ class BitUser extends LibertyAttachable {
 	function updateSession( $pSessionId ) {
 		if ( !$this->isDatabaseValid() ) return true;
 		global $gBitSystem;
-		$now = $gBitSystem->getUTCTime();
-		$oldy = $now - (5 * 60);
-		$bindVars = array( $now, $pSessionId );
-		$userDelSql = '';
+		$update['last_get'] = $gBitSystem->getUTCTime();
+		$update['current_view'] = $_SERVER['PHP_SELF'];
+		$oldy = $update['last_get'] - (7 * 24 * 60);
 
-		if( $this->isRegistered() ) {
-			array_push( $bindVars, $this->mUserId );
-			$userDelSql = ' OR `user_id`=?';
-		}
 		$this->mDb->StartTrans();
-		$hasSession = $this->mDb->getOne( "SELECT `timestamp` FROM `".BIT_DB_PREFIX."users_sessions` WHERE `session_id`=? ", array( $pSessionId ) );
-		if( $hasSession ) {
-			$ret = $this->mDb->query( "UPDATE `".BIT_DB_PREFIX."users_sessions` SET `timestamp`=? WHERE `session_id`=? $userDelSql", $bindVars );
+		$row = $this->mDb->getRow( "SELECT `last_get`, `connect_time`, `get_count`, `user_agent`, `current_view` FROM `".BIT_DB_PREFIX."users_cnxn` WHERE `cookie`=? ", array( $pSessionId ) );
+		if( $row ) {
+			if( empty( $row['ip'] ) || $row['ip'] != $_SERVER['REMOTE_ADDR'] ) {
+				$update['ip'] = $_SERVER['REMOTE_ADDR'];
+			}
+			if( empty( $row['user_agent'] ) || $row['user_agent'] != $_SERVER['HTTP_USER_AGENT'] ) {
+				$update['user_agent'] = substr( $_SERVER['HTTP_USER_AGENT'], 0, 128 );
+			}
+			$update['get_count'] = $row['get_count'] + 1;
+			$ret = $this->mDb->associateUpdate( BIT_DB_PREFIX.'users_cnxn', $update, array( 'name' => 'cookie', 'value' => $pSessionId ) );
 		} else {
 			if( $this->isRegistered() ) {
-				$query = "insert into `".BIT_DB_PREFIX."users_sessions`(`timestamp`,`session_id`,`user_id`) values(?,?,?)";
-				$result = $this->mDb->query($query, $bindVars);
+				$update['ip'] = $_SERVER['REMOTE_ADDR'];
+				$update['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
+				$update['get_count'] = 1;
+				$update['cookie'] = $pSessionId;
+				$result = $this->mDb->associateInsert( BIT_DB_PREFIX.'users_cnxn', $update );
 			}
 		}
-		$query = "DELETE from `".BIT_DB_PREFIX."users_sessions` where `timestamp`<?";
+		$query = "DELETE from `".BIT_DB_PREFIX."users_cnxn` where `connect_time`<?";
 		$result = $this->mDb->query($query, array($oldy));
 		$this->mDb->CompleteTrans();
 
@@ -223,7 +228,7 @@ class BitUser extends LibertyAttachable {
 	}
 
 	function count_sessions() {
-		$query = "select count(*) from `".BIT_DB_PREFIX."users_sessions`";
+		$query = "select count(*) from `".BIT_DB_PREFIX."users_cnxn`";
 		$cant = $this->mDb->getOne($query,array());
 		return $cant;
 	}
@@ -263,7 +268,7 @@ class BitUser extends LibertyAttachable {
 		$ret = FALSE;
 		if( !empty( $_REQUEST['tk'] ) ) {
 			if( !($ret = $_REQUEST['tk'] == $this->mTicket ) && $pFatalOnError ) {
-				$gBitSystem->fatalError( "Security Violation" );
+//				$gBitSystem->fatalError( "Security Violation" );
 			}
 		}
 		return $ret;
@@ -1163,8 +1168,8 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	/*shared*/
 	function get_online_users() {
 		global $gBitSystem;
-		$query = "select ts.`user_id`, `login` AS `user`, `real_name` ,`timestamp`
-				  FROM `".BIT_DB_PREFIX."users_sessions` ts INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (ts.`user_id`=uu.`user_id`)
+		$query = "select ts.`user_id`, `login` AS `user`, `real_name` ,`connect_time`
+				  FROM `".BIT_DB_PREFIX."users_cnxn` ts INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (ts.`user_id`=uu.`user_id`)
 				  WHERE ts.`user_id` IS NOT NULL";
 		$result = $this->mDb->query($query);
 		$ret = array();
