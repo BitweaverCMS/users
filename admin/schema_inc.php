@@ -21,10 +21,10 @@ $tables = array(
   avatar_attachment_id I4,
   portrait_attachment_id I4,
   logo_attachment_id I4
-  CONSTRAINT	', CONSTRAINT `users_avatar_attach_ref` FOREIGN KEY (`avatar_attachment_id`) REFERENCES `".BIT_DB_PREFIX."tiki_attachments` (`attachment_id`)
-			 , CONSTRAINT `users_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."tiki_content` (`content_id`)
-			 , CONSTRAINT `users_portrait_attach_ref` FOREIGN KEY (`portrait_attachment_id`) REFERENCES `".BIT_DB_PREFIX."tiki_attachments` (`attachment_id`)
-			 , CONSTRAINT `users_logo_attach_ref` FOREIGN KEY (`logo_attachment_id`) REFERENCES `".BIT_DB_PREFIX."tiki_attachments` (`attachment_id`)'
+  CONSTRAINTS	', CONSTRAINT `users_avatar_attach_ref` FOREIGN KEY (`avatar_attachment_id`) REFERENCES `".BIT_DB_PREFIX."tiki_attachments` (`attachment_id`)
+				 , CONSTRAINT `users_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."tiki_content` (`content_id`)
+				 , CONSTRAINT `users_portrait_attach_ref` FOREIGN KEY (`portrait_attachment_id`) REFERENCES `".BIT_DB_PREFIX."tiki_attachments` (`attachment_id`)
+				 , CONSTRAINT `users_logo_attach_ref` FOREIGN KEY (`logo_attachment_id`) REFERENCES `".BIT_DB_PREFIX."tiki_attachments` (`attachment_id`)'
 ",
 
 'users_favorites_map' => "
