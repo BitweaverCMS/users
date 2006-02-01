@@ -221,7 +221,7 @@ $gBitInstaller->registerUserPermissions( USERS_PKG_NAME, array(
 	array('bit_p_user_group_members', 'Can assign users to personal groups', 'registered', USERS_PKG_NAME),
 	array('bit_p_user_group_subgroups', 'Can include other groups in groups', 'editors', USERS_PKG_NAME),
 	//array('bit_p_create_bookmarks', 'Can create user bookmarksche user bookmarks', 'registered', USERS_PKG_NAME),
-	array('bit_p_configure_modules', 'Can configure modules', 'registered', USERS_PKG_NAME),
+	//array('bit_p_configure_modules', 'Can configure modules', 'registered', USERS_PKG_NAME),
 	//array('bit_p_cache_bookmarks', 'Can cache user bookmarks', 'admin', USERS_PKG_NAME),
 	//array('bit_p_usermenu', 'Can create items in personal menu', 'registered', USERS_PKG_NAME),
 	//array('bit_p_tasks', 'Can use tasks', 'registered', USERS_PKG_NAME),
