@@ -42,12 +42,6 @@ $tables = array(
   package C(100)
 ",
 
-'users_sessions' => "
-  session_id C(32) PRIMARY,
-  user_id I4,
-  timestamp I8
-",
-
 'users_groups' => "
   group_id I4 PRIMARY,
   user_id I4 NOTNULL,
