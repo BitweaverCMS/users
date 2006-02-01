@@ -39,7 +39,7 @@
 		{/if}
 		{if $gBitSystem->isFeatureActive( 'feature_user_bookmarks' ) and $gBitUser->hasPermission( 'bit_p_create_bookmarks' )}
 			<li>
-				<a class="item" href="{$smarty.const.PROFILE_PKG_URL}bookmarks.php">
+				<a class="item" href="{$smarty.const.TIDBITS_PKG_URL}bookmarks.php">
 					{biticon ipackage=users iname=bookmarks iexplain="Links to my favourite pages" iforce=icon}{if !$icons_only} {tr}Bookmarks{/tr}{/if}
 				</a>
 			</li>
@@ -81,14 +81,14 @@
 		{/if}
 		{if $gBitSystem->isFeatureActive( 'feature_tasks' ) and $gBitUser->hasPermission( 'bit_p_tasks' )}
 			<li>
-				<a class="item" href="{$smarty.const.PROFILE_PKG_URL}tasks.php">
+				<a class="item" href="{$smarty.const.TIDBITS_PKG_URL}tasks.php">
 					{biticon ipackage=users iname=tasks iexplain="Tasks" iforce=icon}{if !$icons_only} {tr}Tasks{/tr}{/if}
 				</a>
 			</li>
 		{/if}
 		{if $gBitSystem->isFeatureActive( 'feature_usermenu' )}
 			<li>
-				<a class="item" href="{$smarty.const.PROFILE_PKG_URL}menu.php">
+				<a class="item" href="{$smarty.const.TIDBITS_PKG_URL}menu.php">
 					{biticon ipackage=liberty iname=tree iexplain="User Mneu" iforce=icon}{if !$icons_only} {tr}User menu{/tr}{/if}
 				</a>
 			</li>
