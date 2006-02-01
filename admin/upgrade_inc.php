@@ -352,8 +352,8 @@ array( 'RENAMETABLE' => array(
 		'users_objectpermissions' => 'users_object_permissions',
 		'users_grouppermissions' => 'users_group_permissions',
 		'tiki_user_watches' => 'users_watches',
-	)
-),
+	))
+)),
 
 
 	)
