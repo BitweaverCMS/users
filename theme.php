@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.5 2006/01/29 23:00:39 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.6 2006/02/01 20:38:42 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: theme.php,v 1.5 2006/01/29 23:00:39 spiderr Exp $
+ * $Id: theme.php,v 1.6 2006/02/01 20:38:42 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -21,11 +21,9 @@ $gEditMode = 'theme';
 include_once( '../bit_setup_inc.php' );
 include_once( USERS_PKG_PATH.'BitUser.php' );
 include_once( THEMES_PKG_PATH.'css_lib.php' );
-include_once( THEMES_PKG_PATH.'theme_control_lib.php' );
 include_once( KERNEL_PKG_PATH.'BitSystem.php' );
 
-global $gBitUser;
-global $gBitSystem;
+global $gBitUser, $gBitSystem;
 
 if (!$gBitUser->isRegistered()) {
 	$gBitSmarty->assign('msg', tra("Permission denied: You are not logged in"));
@@ -180,7 +178,7 @@ if ($usingCustomTheme) {
 		$resetStyle = $_REQUEST['resetStyle'];
 		$cssData = $csslib->load_css2_file(THEMES_PKG_PATH."styles/$resetStyle/$resetStyle.css");
 		if (file_exists($customCSSPath.'/images')) {
-			$tcontrollib->expunge_dir($customCSSPath.'/images/');
+			$gBitThemes->expunge_dir($customCSSPath.'/images/');
 		} else {
 			mkdir_p($customCSSPath);
 		}
@@ -254,7 +252,7 @@ if ($usingCustomTheme) {
 }
 
 // Get the list of themes the user can choose to derive from (aka Reset to)
-$styles = &$tcontrollib->getStyles( NULL, ($usingCustomTheme ? FALSE : TRUE), FALSE );
+$styles = $gBitThemes->getStyles( NULL, ($usingCustomTheme ? FALSE : TRUE), FALSE );
 $gBitSmarty->assign_by_ref( 'styles', $styles );
 
 // $assignStyle is the default style which will be selected in the drop down list
