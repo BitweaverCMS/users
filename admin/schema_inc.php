@@ -163,11 +163,6 @@ $sequences = array (
 );
 $gBitInstaller->registerSchemaSequences( USERS_PKG_NAME, $sequences );
 
-// ### Default MenuOptions
-$gBitInstaller->registerMenuOptions( USERS_PKG_NAME, array(
-	array(42,'o','My files', USERS_PKG_NAME.'userfiles.php',95,'feature_userfiles','bit_p_userfiles','Registered')
-) );
-
 // ### Default Preferences
 $gBitInstaller->registerPreferences( USERS_PKG_NAME, array(
 	array(USERS_PKG_NAME,'webserverauth','n'),
@@ -221,20 +216,20 @@ $gBitInstaller->registerPreferences( USERS_PKG_NAME, array(
 
 // ### Default Permissions
 $gBitInstaller->registerUserPermissions( USERS_PKG_NAME, array(
-	array('bit_p_userfiles', 'Can upload personal files', 'registered', USERS_PKG_NAME),
+	//array('bit_p_userfiles', 'Can upload personal files', 'registered', USERS_PKG_NAME),
 	array('bit_p_user_group_perms', 'Can assign permissions to personal groups', 'editors', USERS_PKG_NAME),
 	array('bit_p_user_group_members', 'Can assign users to personal groups', 'registered', USERS_PKG_NAME),
 	array('bit_p_user_group_subgroups', 'Can include other groups in groups', 'editors', USERS_PKG_NAME),
-	array('bit_p_create_bookmarks', 'Can create user bookmarksche user bookmarks', 'registered', USERS_PKG_NAME),
+	//array('bit_p_create_bookmarks', 'Can create user bookmarksche user bookmarks', 'registered', USERS_PKG_NAME),
 	array('bit_p_configure_modules', 'Can configure modules', 'registered', USERS_PKG_NAME),
-	array('bit_p_cache_bookmarks', 'Can cache user bookmarks', 'admin', USERS_PKG_NAME),
-	array('bit_p_usermenu', 'Can create items in personal menu', 'registered', USERS_PKG_NAME),
-	array('bit_p_tasks', 'Can use tasks', 'registered', USERS_PKG_NAME),
+	//array('bit_p_cache_bookmarks', 'Can cache user bookmarks', 'admin', USERS_PKG_NAME),
+	//array('bit_p_usermenu', 'Can create items in personal menu', 'registered', USERS_PKG_NAME),
+	//array('bit_p_tasks', 'Can use tasks', 'registered', USERS_PKG_NAME),
 	array('bit_p_admin_users', 'Can edit the information for other users', 'admin', USERS_PKG_NAME),
-	array('bit_p_view_tabs_and_tools', 'Can view tab and tool links', 'basic', USERS_PKG_NAME),
-	array('bit_p_custom_home_theme', 'Can modify user homepage theme', 'editors', USERS_PKG_NAME),
-	array('bit_p_custom_home_layout', 'Can modify user homepage layout', 'editors', USERS_PKG_NAME),
-	array('bit_p_custom_css', 'Can create custom style sheets', 'editors', USERS_PKG_NAME),
+	//array('bit_p_view_tabs_and_tools', 'Can view tab and tool links', 'basic', USERS_PKG_NAME),
+	//array('bit_p_custom_home_theme', 'Can modify user homepage theme', 'editors', USERS_PKG_NAME),
+	//array('bit_p_custom_home_layout', 'Can modify user homepage layout', 'editors', USERS_PKG_NAME),
+	//array('bit_p_custom_css', 'Can create custom style sheets', 'editors', USERS_PKG_NAME),
 	array('bit_p_create_personal_groups', 'Can create personal user groups', 'editors', USERS_PKG_NAME),
 ) );
 
