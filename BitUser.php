@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.35 2006/02/01 16:10:18 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.36 2006/02/01 16:18:24 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.35 2006/02/01 16:10:18 squareing Exp $
+ * $Id: BitUser.php,v 1.36 2006/02/01 16:18:24 squareing Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.35 $
+ * @version  $Revision: 1.36 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -586,10 +586,10 @@ if ($gDebug) echo "Run : QUIT<br>";
 			$userTables = array(
 				'users_semaphores',
 				// this has to be dealt with by a function in tidbits
-				//'tiki_user_bookmarks_urls',
-				//'tiki_user_bookmarks_folders',
-				//'tiki_user_menus',
-				//'tiki_user_tasks',
+				//'tidbits_user_bookmarks_urls',
+				//'tidbits_user_bookmarks_folders',
+				//'tidbits_user_menus',
+				//'tidbits_user_tasks',
 				'users_watches',
 				'users_favorites_map',
 				'users_users',
