@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.38 2006/02/01 18:23:50 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.39 2006/02/01 18:43:55 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.38 2006/02/01 18:23:50 spiderr Exp $
+ * $Id: BitUser.php,v 1.39 2006/02/01 18:43:55 squareing Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.38 $
+ * @version  $Revision: 1.39 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -113,18 +113,18 @@ class BitUser extends LibertyAttachable {
 			$fullSelect = '';
 			$fullJoin = '';
 			if( $pFull ) {
-				$fullSelect = ' , tc.* ';
-				$fullJoin = " LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON ( uu.`content_id`=tc.`content_id` )";
+				$fullSelect = ' , lc.* ';
+				$fullJoin = " LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON ( uu.`content_id`=lc.`content_id` )";
 			}
 			// uu.`user_id` AS `uu_user_id` is last and aliases to avoid possible column name collisions
 			$query = "select uu.*, uu.`login` AS `user`, tf_ava.`storage_path` AS `avatar_storage_path`, tf_por.`storage_path` AS `portrait_storage_path`, tf_logo.`storage_path` AS `logo_storage_path`  $fullSelect, uu.`user_id` AS `uu_user_id`
 					  FROM `".BIT_DB_PREFIX."users_users` uu
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` ta_por ON ( uu.`portrait_attachment_id`=ta_por.`attachment_id` )
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf_por ON ( tf_por.`file_id`=ta_por.`foreign_id` )
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` ta_logo ON ( uu.`logo_attachment_id`=ta_logo.`attachment_id` )
-						LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf_logo ON ( tf_logo.`file_id`=ta_logo.`foreign_id` )
+						LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
+						LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
+						LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_por ON ( uu.`portrait_attachment_id`=ta_por.`attachment_id` )
+						LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_por ON ( tf_por.`file_id`=ta_por.`foreign_id` )
+						LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_logo ON ( uu.`logo_attachment_id`=ta_logo.`attachment_id` )
+						LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_logo ON ( tf_logo.`file_id`=ta_logo.`foreign_id` )
 						$fullJoin
 					  $whereSql";
 
@@ -598,7 +598,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 				'users_watches',
 				'users_favorites_map',
 				'users_users',
-				'tiki_content',
+				'liberty_content',
 			);
 			foreach( $userTables as $table ) {
 				$query = "DELETE FROM `".BIT_DB_PREFIX.$table."` WHERE `user_id` = ?";
@@ -1037,7 +1037,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	function getUserInfo( $pUserMixed ) {
 		$ret = NULL;
 		if( is_array( $pUserMixed ) ) {
-			$query = "SELECT  uu.* FROM `".BIT_DB_PREFIX."users_users` uu LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_content` tc ON (tc.`content_id`=uu.`content_id`)
+			$query = "SELECT  uu.* FROM `".BIT_DB_PREFIX."users_users` uu LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lc.`content_id`=uu.`content_id`)
 					  WHERE UPPER( uu.`".key( $pUserMixed )."` ) = ?";
 			$ret = $this->mDb->getRow( $query, array( strtoupper( current( $pUserMixed ) ) ) );
 		}
@@ -1168,9 +1168,9 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	/*shared*/
 	function get_online_users() {
 		global $gBitSystem;
-		$query = "select ts.`user_id`, `login` AS `user`, `real_name` ,`connect_time`
-				  FROM `".BIT_DB_PREFIX."users_cnxn` ts INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (ts.`user_id`=uu.`user_id`)
-				  WHERE ts.`user_id` IS NOT NULL";
+		$query = "select ls.`user_id`, `login` AS `user`, `real_name` ,`connect_time`
+				  FROM `".BIT_DB_PREFIX."users_cnxn` ls INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (ls.`user_id`=uu.`user_id`)
+				  WHERE ls.`user_id` IS NOT NULL";
 		$result = $this->mDb->query($query);
 		$ret = array();
 		while ($res = $result->fetchRow()) {
@@ -1322,8 +1322,8 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 		if ($this->mUserId) {
 			$query = "SELECT a.`attachment_id`, a.`foreign_id`
-					  FROM `".BIT_DB_PREFIX."tiki_attachments` a
-					  WHERE a.`user_id` = ? AND a.`attachment_plugin_guid` = 'tiki_files'";
+					  FROM `".BIT_DB_PREFIX."liberty_attachments` a
+					  WHERE a.`user_id` = ? AND a.`attachment_plugin_guid` = 'liberty_files'";
 			$result = $this->mDb->query($query, array($this->mUserId));
 			$attachmentIds = $result->getRows();
 
@@ -1355,7 +1355,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			// TODO: this query should check for unique combinations of foreign_id *and* attachment_plugin_guid
 			// doing that causes mysql to choke
 			$query = "SELECT DISTINCT( a.`foreign_id` ), a.*
-				FROM `".BIT_DB_PREFIX."tiki_attachments` a
+				FROM `".BIT_DB_PREFIX."liberty_attachments` a
 				WHERE a.`user_id` = ? $mid";
 			$result = $this->mDb->query( $query, $bindVars, $pListHash['max_records'], $pListHash['offset'] );
 			$attachments = $result->getRows();
@@ -1368,7 +1368,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 			// count all entries
 			$queryc = "SELECT DISTINCT( a.`foreign_id` ), a.*
-				FROM `".BIT_DB_PREFIX."tiki_attachments` a
+				FROM `".BIT_DB_PREFIX."liberty_attachments` a
 				WHERE a.`user_id` = ? $mid";
 			$result = $this->mDb->query( $queryc, $bindVars );
 			$ret['cant'] = count( $result->getRows() );
@@ -1617,8 +1617,8 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		}
 		$query = "SELECT uu.*, tf_ava.`storage_path` AS `avatar_storage_path`
 				  FROM `".BIT_DB_PREFIX."users_users` uu
-					LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
-					LEFT OUTER JOIN `".BIT_DB_PREFIX."tiki_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
 				 $mid order by $sort_mode";
 		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_users` uu $mid";
 		$result = $this->mDb->query($query, $bindvars, $pParamHash['max_records'], $pParamHash['offset']);
@@ -1660,8 +1660,8 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$query = "delete from `".BIT_DB_PREFIX."users_semaphores` where `sem_name`=? and `created`<?";
 		$result = $this->mDb->query($query,array( $pSemName, (int)$lim) );
 		$query = "SELECT uu.`login`, uu.`real_name`, uu.`email`, uu.`user_id`
-				  FROM `".BIT_DB_PREFIX."users_semaphores` ts INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id`=ts.`user_id`)
-				  WHERE `sem_name`=? AND ts.`user_id`!='?'";
+				  FROM `".BIT_DB_PREFIX."users_semaphores` ls INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id`=ls.`user_id`)
+				  WHERE `sem_name`=? AND ls.`user_id`!='?'";
 		if( $ret = $this->mDb->getRow( $query, array( $pSemName, (int)$userId ) ) ) {
 			$ret['nolink'] = TRUE;
 		}
