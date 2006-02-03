@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.6 2006/01/20 11:11:18 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.7 2006/02/03 11:30:57 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -109,6 +109,7 @@ if( !empty( $_REQUEST["loginprefs"] ) ) {
 			simple_set_toggle( $feature, USERS_PKG_NAME );
 		}
 	}
+	simple_set_value( 'remembertime', USERS_PKG_NAME );
 }
 
 $registerSettings = array(
