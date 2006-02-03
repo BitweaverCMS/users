@@ -21,56 +21,21 @@ $formFeatures = array(
 );
 
 
-if ($gBitSystem->isPackageActive('tidbits')) {
-	$formFeaturesTidbits = array(
-		'feature_tasks' => array(
-			'label' => 'User Tasks',
-			'note' => 'Make notes of tasks with due date and priority.',
-			'page' => 'UserTasks',
-		),
-		'feature_user_bookmarks' => array(
-			'label' => 'User Bookmarks',
-			'note' => 'Users can create their own list of private bookmarks.',
-			'page' => 'UserBookmarks',
-		),
-		'feature_userfiles' => array(
-			'label' => 'User Files',
-			'note' => 'Users can upload private user files.',
-			'page' => 'UserFiles',
-		),
-		'feature_usermenu' => array(
-			'label' => 'User menu',
-			'note' => 'Users can customise their own menus.',
-			'page' => 'UserMenu',
-		),
-	);
-
-	$formFeatures= array_merge($formFeaturesTidbits,$formFeatures);
-}
-
-if( $gBitSystem->isPackageActive( 'notepad' ) ) {
-	$formFeatures['feature_notepad'] = array(
-		'label' => 'User Notepad',
-		'note' => 'Allow users to make notes.',
-		'page' => 'UserNotepad'
-	);
-}
-
 $gBitSmarty->assign( 'formFeatures', $formFeatures );
 
-if( isset( $_REQUEST['fTiki'] ) ) {
+if( isset( $_REQUEST['settings'] ) ) {
 	foreach ( array_keys( $formFeatures ) as $feature) {
-		$gBitSystem->storePreference( $feature, (isset( $_REQUEST['fTiki'][$feature][0] ) ? $_REQUEST['fTiki'][$feature][0] : 'n') );
+		$gBitSystem->storePreference( $feature, (isset( $_REQUEST['settings'][$feature][0] ) ? $_REQUEST['settings'][$feature][0] : 'n') );
 	}
 
-	if( $customFields = explode( ',', $_REQUEST['fTiki']['custom_user_fields'] ) ) {
+	if( $customFields = explode( ',', $_REQUEST['settings']['custom_user_fields'] ) ) {
 		trim_array( $customFields );
 		$customFields = implode( ',', $customFields );
 	}
 	$gBitSystem->storePreference( 'custom_user_fields', $customFields );
-	$gBitSystem->storePreference( 'display_name', (isset( $_REQUEST['fTiki']['display_name'] ) ? $_REQUEST['fTiki']['display_name'] : 'real_name') );
-	$gBitSystem->storePreference( 'feature_user_theme', (isset( $_REQUEST['fTiki']['feature_user_theme'][0] ) ? $_REQUEST['fTiki']['feature_user_theme'][0] : NULL) );
-	$gBitSystem->storePreference( 'feature_user_layout', (isset( $_REQUEST['fTiki']['feature_user_layout'][0] ) ? $_REQUEST['fTiki']['feature_user_layout'][0] : NULL) );
+	$gBitSystem->storePreference( 'display_name', (isset( $_REQUEST['settings']['display_name'] ) ? $_REQUEST['settings']['display_name'] : 'real_name') );
+	$gBitSystem->storePreference( 'feature_user_theme', (isset( $_REQUEST['settings']['feature_user_theme'][0] ) ? $_REQUEST['settings']['feature_user_theme'][0] : NULL) );
+	$gBitSystem->storePreference( 'feature_user_layout', (isset( $_REQUEST['settings']['feature_user_layout'][0] ) ? $_REQUEST['settings']['feature_user_layout'][0] : NULL) );
 }
 
 // Handle Admin Password Change Request

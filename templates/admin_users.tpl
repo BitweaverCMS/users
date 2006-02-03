@@ -5,7 +5,7 @@
 		<div class="row">
 			{formlabel label=`$output.label` for=$feature}
 			{forminput}
-				{html_checkboxes name="fTiki[$feature]" values="y" checked=`$gBitSystemPrefs.$feature` labels=false id=$feature}
+				{html_checkboxes name="settings[$feature]" values="y" checked=`$gBitSystemPrefs.$feature` labels=false id=$feature}
 				{formhelp note=`$output.note` page=`$output.link`}
 			{/forminput}
 		</div>
@@ -14,7 +14,7 @@
 	<div class="row">
 		{formlabel label="Display" for="display_name"}
 		{forminput}
-			<select name="fTiki[display_name]" id="display_name">
+			<select name="settings[display_name]" id="display_name">
 				<option value="real_name" {if $gBitSystemPrefs.display_name eq 'real_name'}selected="selected"{/if}>{tr}Real Name{/tr}</option>
 				<option value="login" {if $gBitSystemPrefs.display_name eq 'login'}selected="selected"{/if}>{tr}Login / Nick Name{/tr}</option>
 			</select>
@@ -25,7 +25,7 @@
 	<div class="row">
 		{formlabel label="Users Can Customize Their Layout" for="feature_user_layout"}
 		{forminput}
-			<select name="fTiki[feature_user_layout]" id="feature_user_layout">
+			<select name="settings[feature_user_layout]" id="feature_user_layout">
 				<option value="">Never</option>
 				<option value="h" {if $gBitSystemPrefs.feature_user_layout eq 'h'}selected="selected"{/if}>{tr}Just For Their Homepage{/tr}</option>
 			</select>
@@ -36,7 +36,7 @@
 	<div class="row">
 		{formlabel label="Users Can Change Their Theme" for="feature_user_theme"}
 		{forminput}
-			<select name="fTiki[feature_user_theme]" id="feature_user_theme">
+			<select name="settings[feature_user_theme]" id="feature_user_theme">
 				<option value="">Never</option>
 				<option value="h" {if $gBitSystemPrefs.feature_user_theme eq 'h'}selected="selected"{/if}>{tr}Just For Their Homepage{/tr}</option>
 				<option value="y" {if $gBitSystem->isFeatureActive( 'feature_user_theme' )}selected="selected"{/if}>{tr}For the Entire Site{/tr}</option>
@@ -48,7 +48,7 @@
 	<div class="row">
 		{formlabel label="Custom User Fields" for="custom_user_fields"}
 		{forminput}
-			<textarea name="fTiki[custom_user_fields]" id="custom_user_fields" cols="50" rows="2">{$gBitSystemPrefs.custom_user_fields}</textarea>
+			<textarea name="settings[custom_user_fields]" id="custom_user_fields" cols="50" rows="2">{$gBitSystemPrefs.custom_user_fields}</textarea>
 			{formhelp note="Comma separated list of field names for custom user registration (maximum of 250 characters in total)." }
 		{/forminput}
 	</div>
