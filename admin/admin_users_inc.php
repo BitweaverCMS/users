@@ -14,10 +14,6 @@ $formFeatures = array(
                 'note' => 'Users can mark pages to be watched. If a watched page is modified, the user is informed.',
                 'page' => 'UserWatches',
         ),
-        'case_sensitive_login' => array(
-                'label' => 'Case-Sensitive Login',
-                'note' => 'This determines whether user login names are case-sensitive.'
-        ),
 );
 
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.7 2006/02/03 11:30:57 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.8 2006/02/03 17:51:52 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -60,6 +60,11 @@ $loginSettings = array(
 		'label' => "Store plaintext passwords",
 		'type' => "checkbox",
 		'note' => "Passwords will be visible in the database. If a user requests a password, their password will *not* be reset and simply emailed to them in plain text. This option is less secure, but better suited to sites with a wide variety of users.",
+	),
+	'case_sensitive_login' => array(
+		'label' => 'Case-Sensitive Login',
+		'type' => "checkbox",
+		'note' => 'This determines whether user login names are case-sensitive.'
 	),
 	'user_password_generator' => array(
 		'label' => "Password generator",
