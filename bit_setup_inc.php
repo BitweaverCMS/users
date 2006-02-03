@@ -22,7 +22,9 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 
 	// **********  USER  ************
 	require_once(USERS_PKG_PATH . 'BitPermUser.php');
-	$gBitUser = new BitPermUser();
+	// a package can decide to override the default user class
+	$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+	$gBitUser = new $userClass();
 
 	$cookie_path = $gBitSystem->getPreference('cookie_path', BIT_ROOT_URL);
 	$cookie_path = !empty($cookie_path) ? $cookie_path : BIT_ROOT_URL;
