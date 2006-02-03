@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.40 2006/02/02 10:32:23 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.41 2006/02/03 14:58:34 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.40 2006/02/02 10:32:23 squareing Exp $
+ * $Id: BitUser.php,v 1.41 2006/02/03 14:58:34 spiderr Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.40 $
+ * @version  $Revision: 1.41 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -341,7 +341,8 @@ class BitUser extends LibertyAttachable {
 				$this->mErrors['password'] = tra( 'Password must contain both letters and numbers' );
 			} else {
 				// Generate a unique hash
-				$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pParamHash['password'].$pParamHash['email'] );
+//				$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pParamHash['password'].$pParamHash['email'] );
+				$pParamHash['user_store']['hash'] = md5( $pParamHash['password'] );
 				$now = $gBitSystem->getUTCTime();
 				if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getPreference('pass_due') ) {
 					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getPreference('pass_due') );
@@ -646,7 +647,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 		if ( !isset($_COOKIE[BIT_SESSION_NAME]) ) {
 			$url = USERS_PKG_URL.'login.php?error=' . urlencode(tra('no cookie found, please enable cookies and try again.'));
 			return ( $url );
-			}
+		}
 
 		// Verify user is valid
 		$validate_result = $this->validate($pLogin, $pPassword, $pChallenge, $pResponse);
