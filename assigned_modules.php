@@ -3,13 +3,13 @@
  * assigned_modules
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.5 $
+ * @version  $Revision: 1.6 $
  * @package  users
  * @subpackage  functions
  * @copyright Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
  * @license Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
  */
-// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.5 2006/02/01 20:38:42 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.6 2006/02/03 17:23:55 squareing Exp $
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Initialization
 
@@ -20,7 +20,6 @@ $gEditMode = 'layout';
  * required setup
  */
 require_once( '../bit_setup_inc.php' );
-include_once( KERNEL_PKG_PATH.'mod_lib.php' );
 
 $gBitSystem->verifyPermission('bit_p_configure_modules');
 
@@ -59,26 +58,26 @@ if (isset($_REQUEST['fSubmitSetTheme'] ) ) {
 	$fAssign = &$_REQUEST['fAssign'];
 	$fAssign['user_id'] = $gQueryUser->mUserId;
 	$fAssign['layout'] = $_REQUEST['fLayout'];
-	$modlib->storeLayout( $fAssign );
+	$gBitThemes->storeLayout( $fAssign );
 	$gBitSmarty->assign_by_ref( 'fAssign', $fAssign );
 } elseif (isset($_REQUEST["fMove"])) {
 
 	if( isset( $_REQUEST["fMove"] ) && isset( $_REQUEST["fModule"] ) ) {
 		switch( $_REQUEST["fMove"] ) {
 			case "unassign":
-				$modlib->unassignModule( $_REQUEST['fModule'], $gQueryUser->mUserId, $_REQUEST['fLayout'] );
+				$gBitThemes->unassignModule( $_REQUEST['fModule'], $gQueryUser->mUserId, $_REQUEST['fLayout'] );
 				break;
 			case "up":
-				$modlib->moduleUp( $_REQUEST['fModule'], $gQueryUser->mUserId, $_REQUEST['fLayout'] );
+				$gBitThemes->moduleUp( $_REQUEST['fModule'], $gQueryUser->mUserId, $_REQUEST['fLayout'] );
 				break;
 			case "down":
-				$modlib->moduleDown( $_REQUEST['fModule'], $gQueryUser->mUserId, $_REQUEST['fLayout'] );
+				$gBitThemes->moduleDown( $_REQUEST['fModule'], $gQueryUser->mUserId, $_REQUEST['fLayout'] );
 				break;
 			case "left":
-				$modlib->modulePosition( $_REQUEST['fModule'], $gQueryUser->mUserId, $_REQUEST['fLayout'], 'l' );
+				$gBitThemes->modulePosition( $_REQUEST['fModule'], $gQueryUser->mUserId, $_REQUEST['fLayout'], 'l' );
 				break;
 			case "right":
-				$modlib->modulePosition( $_REQUEST['fModule'], $gQueryUser->mUserId, $_REQUEST['fLayout'], 'r' );
+				$gBitThemes->modulePosition( $_REQUEST['fModule'], $gQueryUser->mUserId, $_REQUEST['fLayout'], 'r' );
 				break;
 		}
 	}
@@ -98,14 +97,14 @@ if( $gBitUser->canCustomizeTheme() ) {
 	}
 	$gBitSmarty->assign( 'assignStyle', $assignStyle );
 }
-$assignables = $modlib->getAssignableModules();
+$assignables = $gBitThemes->getAssignableModules();
 if (count($assignables) > 0) {
 	$gBitSmarty->assign('canassign', 'y');
 } else {
 	$gBitSmarty->assign('canassign', 'n');
 }
 $modules = $gBitSystem->getLayout( $gQueryUser->mUserId, HOMEPAGE_LAYOUT, FALSE );
-$modlib->generateModuleNames( $modules );
+$gBitThemes->generateModuleNames( $modules );
 //print_r($modules);
 $gBitSmarty->assign_by_ref('assignables', $assignables);
 $layoutAreas = array( 'left'=>'l', 'center'=>'c', 'right'=>'r' );

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.16 2006/02/03 16:11:32 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.17 2006/02/03 17:23:55 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.16 2006/02/03 16:11:32 spiderr Exp $
+ * $Id: preferences.php,v 1.17 2006/02/03 17:23:55 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -17,7 +17,7 @@
  * required setup
  */
 require_once( '../bit_setup_inc.php' );
-include_once( KERNEL_PKG_PATH.'mod_lib.php' );
+
 if( $gBitSystem->isPackageActive( 'wiki' ) ) {
 	include_once( WIKI_PKG_PATH.'BitPage.php' );
 }
