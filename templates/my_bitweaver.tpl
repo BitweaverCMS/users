@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_bitweaver.tpl,v 1.3 2006/01/27 23:01:07 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_bitweaver.tpl,v 1.4 2006/02/03 19:17:26 spiderr Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
@@ -73,10 +73,11 @@
 					{formhelp note="If you wish to change any of this information, please visit your personal preferences page" link="users/preferences.php/Personal Preferences"}
 				{/legend}
 			{/jstab}
-
+		{if $contentList}
 			{jstab title="My Content"}
 				{include file="bitpackage:liberty/list_content_inc.tpl"}
 			{/jstab}
+		{/if}
 		{/jstabs}
 	</div><!-- end .body -->
 </div><!-- end .my -->

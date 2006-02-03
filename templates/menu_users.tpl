@@ -6,12 +6,14 @@
 					{biticon ipackage=users iname=home iexplain="My Personal Homepage" iforce=icon}{if !$icons_only} {tr}My {$gBitSystemPrefs.site_menu_title|default:$gBitSystemPrefs.siteTitle}{/tr}{/if}
 				</a>
 			</li>
+		{if $gBitUser->hasPermission( 'bit_p_view_user_homepage' )}
 		<li>
 				<a class="item" href="{$smarty.const.USERS_PKG_URL}index.php?home={$gBitUser->mInfo.login}">
 					{biticon ipackage=users iname=home iexplain="Home" iforce=icon}{if !$icons_only} {tr}View My Homepage{/tr}{/if}
 				</a>
 			</li>
-		{if $gBitSystem->isPackageActive( 'wiki' )}
+		{/if}
+		{if $gBitUser->hasPermission( 'bit_p_edit_user_homepage' )}
 			<li>
 				<a class="item" href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">
 					{biticon ipackage=liberty iname=edit iexplain="Edit My Homepage" iforce=icon}{if !$icons_only} {tr}Edit My Homepage{/tr}{/if}

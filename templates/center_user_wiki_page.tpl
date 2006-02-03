@@ -19,8 +19,12 @@
 			{/if}
 
 			{if $gBitUser->mUserId eq $gQueryUser->mUserId}
-				{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" ibiticon="liberty/config"}
-				{smartlink ipackage=users ifile="edit_personal_page.php" ititle="Edit personal wiki page" ibiticon="liberty/edit"}
+				{if $gBitSystem->isFeatureActive('feature_userPreferences')}
+					{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" ibiticon="liberty/config"}
+				{/if}
+				{if $gBitUser->hasPermission('bit_p_edit_user_homepage')}
+					{smartlink ipackage=users ifile="edit_personal_page.php" ititle="Edit personal wiki page" ibiticon="liberty/edit"}
+				{/if}
 			{/if}
 		</div>
 	{/if}
@@ -41,13 +45,11 @@
 
 	<div class="body">
 		{if !$parsed}
-			<p>
-				{if $gBitUser->mUserId ne $gQueryUser->mUserId}
-					{tr}This user has not entered any information yet.{/tr}
-				{else}
-					{tr}To enter some information here, please <a href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">edit your personal homepage</a>.{/tr}
-				{/if}
-			</p>
+			{if $gBitUser->mUserId ne $gQueryUser->mUserId}
+				<p>{tr}This user has not entered any information yet.{/tr}</p>
+			{elseif $gBitUser->hasPermission('bit_p_edit_user_homepage')}
+				<p>{tr}To enter some information here, please <a href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">edit your personal homepage</a>.{/tr}</p>
+			{/if}
 
 			{if $userInfo.portrait_url}
 				<p style="text-align:center;">

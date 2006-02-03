@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.41 2006/02/03 14:58:34 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.42 2006/02/03 19:17:25 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.41 2006/02/03 14:58:34 spiderr Exp $
+ * $Id: BitUser.php,v 1.42 2006/02/03 19:17:25 spiderr Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.41 $
+ * @version  $Revision: 1.42 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1527,7 +1527,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	* @return display name or link to user information page
 	**/
 	function getDisplayName($pUseLink = FALSE, $pHash=NULL) {
-		global $gBitSystem;
+		global $gBitSystem, $gBitUser;
 		$ret = NULL;
 		if( empty( $pHash ) && !empty( $this->mInfo ) ) {
 			$pHash = &$this->mInfo;
@@ -1552,10 +1552,17 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			}
 
 			if( $pUseLink ) {
-				$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName
-					.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'
-					. htmlspecialchars( ( ( isset( $pHash['link_label'] ) ) ? ( $pHash['link_label'] ) : ( $displayName ) ) )
-					.'</a>';
+				if( $gBitUser->hasPermission( 'bit_p_view_user_homepage' ) ) {
+					$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName
+						.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'
+						. htmlspecialchars( ( ( isset( $pHash['link_label'] ) ) ? ( $pHash['link_label'] ) : ( $displayName ) ) )
+						.'</a>';
+				} else {
+					$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName
+						.'" href="'.USERS_PKG_URL.'my.php">'
+						. htmlspecialchars( ( ( isset( $pHash['link_label'] ) ) ? ( $pHash['link_label'] ) : ( $displayName ) ) )
+						.'</a>';
+				}
 			} else {
 				$ret = $displayName;
 			}

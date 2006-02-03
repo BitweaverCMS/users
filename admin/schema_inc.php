@@ -205,7 +205,7 @@ $gBitInstaller->registerPreferences( USERS_PKG_NAME, array(
 	array(USERS_PKG_NAME,'display_name','real_name'),
 	array(USERS_PKG_NAME,'change_language','y'),
 	array(USERS_PKG_NAME,'case_sensitive_login','y'),
-	array('common', 'feature_user_watches','n'),
+	array(USERS_PKG_NAME, 'feature_user_watches','n'),
 ) );
 
 // ### Default Permissions
@@ -225,6 +225,9 @@ $gBitInstaller->registerUserPermissions( USERS_PKG_NAME, array(
 	//array('bit_p_custom_home_layout', 'Can modify user homepage layout', 'editors', USERS_PKG_NAME),
 	//array('bit_p_custom_css', 'Can create custom style sheets', 'editors', USERS_PKG_NAME),
 	array('bit_p_create_personal_groups', 'Can create personal user groups', 'editors', USERS_PKG_NAME),
+	array('bit_p_view_user_list', 'Can view list of registered users', 'registered', USERS_PKG_NAME),
+	array('bit_p_view_user_homepage', 'Can view personalized homepages', 'basic', USERS_PKG_NAME),
+	array('bit_p_edit_user_homepage', 'Can create and display a personalized homepage', 'registered', USERS_PKG_NAME),
 ) );
 
 

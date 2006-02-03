@@ -1,19 +1,24 @@
 <?php
 $formFeatures = array(
-        'feature_userPreferences' => array(
-                'label' => 'User Preferences',
-                'note' => 'Users can view and modify their personal preferences.',
-                'page' => 'UserPreferences',
-        ),
-        'change_language' => array(
-                'label' => 'Registered users can change language',
-                'note' => 'Allows users to view a translated version of the site.'
-        ),
-        'feature_user_watches' => array(
-                'label' => 'User Watches',
-                'note' => 'Users can mark pages to be watched. If a watched page is modified, the user is informed.',
-                'page' => 'UserWatches',
-        ),
+	'feature_userPreferences' => array(
+			'label' => 'User Preferences',
+			'note' => 'Users can view and modify their personal preferences.',
+			'page' => 'UserPreferences',
+	),
+	'change_language' => array(
+			'label' => 'Registered users can change language',
+			'note' => 'Allows users to view a translated version of the site.'
+	),
+	'feature_user_watches' => array(
+			'label' => 'User Watches',
+			'note' => 'Users can mark pages to be watched. If a watched page is modified, the user is informed.',
+			'page' => 'UserWatches',
+	),
+	'display_users_content_list' => array(
+			'label' => 'Display User\'s Content',
+			'note' => 'Display listing of all content owned by this user on the user My page.',
+			'page' => 'UserContentList',
+	),
 );
 
 

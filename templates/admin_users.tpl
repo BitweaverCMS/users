@@ -1,16 +1,5 @@
 {strip}
 {form legend="User Settings"}
-	<input type="hidden" name="page" value="{$page}" />
-	{foreach from=$formFeatures key=feature item=output}
-		<div class="row">
-			{formlabel label=`$output.label` for=$feature}
-			{forminput}
-				{html_checkboxes name="settings[$feature]" values="y" checked=`$gBitSystemPrefs.$feature` labels=false id=$feature}
-				{formhelp note=`$output.note` page=`$output.link`}
-			{/forminput}
-		</div>
-	{/foreach}
-
 	<div class="row">
 		{formlabel label="Display" for="display_name"}
 		{forminput}
@@ -21,6 +10,17 @@
 			{formhelp note="Decide what name should be displayed throughout your site, login name or real name"}
 		{/forminput}
 	</div>
+
+	<input type="hidden" name="page" value="{$page}" />
+	{foreach from=$formFeatures key=feature item=output}
+		<div class="row">
+			{formlabel label=`$output.label` for=$feature}
+			{forminput}
+				{html_checkboxes name="settings[$feature]" values="y" checked=`$gBitSystemPrefs.$feature` labels=false id=$feature}
+				{formhelp note=`$output.note` page=`$output.link`}
+			{/forminput}
+		</div>
+	{/foreach}
 
 	<div class="row">
 		{formlabel label="Users Can Customize Their Layout" for="feature_user_layout"}
