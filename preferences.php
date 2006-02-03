@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.14 2006/01/29 23:00:38 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.15 2006/02/03 09:35:26 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.14 2006/01/29 23:00:38 spiderr Exp $
+ * $Id: preferences.php,v 1.15 2006/02/03 09:35:26 lsces Exp $
  * @package users
  * @subpackage functions
  */
@@ -62,7 +62,7 @@ if( $gBitSystem->isPackageActive( 'calendar' ) && $gBitSystem->isFeatureActive('
 	if( !empty( $_REQUEST['calendar_submit'] ) ) {
 		foreach( $calendarValues as $item ) {
 			if( !empty( $_REQUEST[$item] ) ) {
-				$editUser->storePreference( $item, $_REQUEST[$item] );
+				$editUser->storePreference( $item, $_REQUEST[$item], 'calendar' );
 			}
 		}
 	}
@@ -76,39 +76,39 @@ if (isset($_REQUEST["prefs"])) {
 	if (isset($_REQUEST["real_name"]))
 		$editUser->store( $_REQUEST );
 	if (isset($_REQUEST["userbreadCrumb"]))
-		$editUser->storePreference( 'userbreadCrumb', $_REQUEST["userbreadCrumb"]);
+		$editUser->storePreference( 'userbreadCrumb', $_REQUEST["userbreadCrumb"], 'users');
 	if (isset($_REQUEST["homePage"]))
-		$editUser->storePreference( 'homePage', $_REQUEST["homePage"]);
-	if ($change_language == 'y') {
+		$editUser->storePreference( 'homePage', $_REQUEST["homePage"], 'users');
+	if (isset($change_language) && $change_language == 'y') {
 		if (isset($_REQUEST["language"])) {
-			$editUser->storePreference( 'bitlanguage', $_REQUEST["language"]);
+			$editUser->storePreference( 'bitlanguage', $_REQUEST["language"], 'languages');
 		}
 	}
 	if (isset($_REQUEST["style"]))
 		$gBitSmarty->assign('style', $_REQUEST["style"]);
 	if (isset($_REQUEST['display_timezone'])) {
-		$editUser->storePreference( 'display_timezone', $_REQUEST['display_timezone']);
-		$gBitSmarty->assign_by_ref('display_timezone', $_REQUEST['display_timezone']);
+		$editUser->storePreference( 'display_timezone', $_REQUEST['display_timezone'], 'users');
+		$gBitSmarty->assign_by_ref('display_timezone', $_REQUEST['display_timezone'], 'users');
 	}
-	$editUser->storePreference( 'country', $_REQUEST["country"] );
-	$editUser->storePreference( 'user_information', $_REQUEST['user_information']);
+	$editUser->storePreference( 'country', $_REQUEST["country"], 'users' );
+	$editUser->storePreference( 'user_information', $_REQUEST['user_information'], 'users');
 	if (isset($_REQUEST['user_dbl']) && $_REQUEST['user_dbl'] == 'on') {
-		$editUser->storePreference( 'user_dbl', 'y');
+		$editUser->storePreference( 'user_dbl', 'y', 'users');
 		$gBitSmarty->assign('user_dbl', 'y');
 	} else {
-		$editUser->storePreference( 'user_dbl', 'n');
+		$editUser->storePreference( 'user_dbl', 'n', 'users');
 		$gBitSmarty->assign('user_dbl', 'n');
 	}
 	if( isset( $customFields ) && is_array( $customFields ) ) {
 		foreach( $customFields as $f ) {
 			if( isset( $_REQUEST['CUSTOM'][$f] ) ) {
-				$editUser->storePreference( trim( $f ), trim( $_REQUEST['CUSTOM'][$f] ) );
+				$editUser->storePreference( trim( $f ), trim( $_REQUEST['CUSTOM'][$f] ), 'users' );
 			}
 		}
 	}
 
 	$email_isPublic = isset($_REQUEST['email_isPublic']) ? $_REQUEST['email_isPublic']: 'n';
-	$editUser->storePreference( 'email is public', $email_isPublic);
+	$editUser->storePreference( 'email is public', $email_isPublic, 'users');
 	if (isset($_REQUEST['view_user'])) {
 		header ("location: ".USERS_PKG_URL."preferences.php?view_user=$editUser->mUserId");
 	} else {
@@ -149,18 +149,18 @@ if (isset($_REQUEST["chgpswd"])) {
 	}
 }
 if (isset($_REQUEST['messprefs'])) {
-	$editUser->storePreference( 'mess_maxRecords', $_REQUEST['mess_maxRecords'] );
-	$editUser->storePreference( 'minPrio', $_REQUEST['minPrio'] );
-	$editUser->storePreference( 'message_alert', !empty( $_REQUEST['message_alert'] ) ? 'y' : 'n' );
-	$editUser->storePreference( 'allowMsgs', !empty( $_REQUEST['allowMsgs'] ) ? 'y' : 'n' );
+	$editUser->storePreference( 'mess_maxRecords', $_REQUEST['mess_maxRecords'], 'users' );
+	$editUser->storePreference( 'minPrio', $_REQUEST['minPrio'], 'users' );
+	$editUser->storePreference( 'message_alert', !empty( $_REQUEST['message_alert'] ) ? 'y' : 'n', 'users' );
+	$editUser->storePreference( 'allowMsgs', !empty( $_REQUEST['allowMsgs'] ) ? 'y' : 'n', 'users' );
 }
 
 if (isset($_REQUEST['tasksprefs'])) {
-	$editUser->storePreference( 'tasks_maxRecords', $_REQUEST['tasks_maxRecords']);
+	$editUser->storePreference( 'tasks_maxRecords', $_REQUEST['tasks_maxRecords'], 'users');
 	if (isset($_REQUEST['tasks_use_dates']) && $_REQUEST['tasks_use_dates'] == 'on') {
-		$editUser->storePreference( 'tasks_use_dates', 'y');
+		$editUser->storePreference( 'tasks_use_dates', 'y', 'users');
 	} else {
-		$editUser->storePreference( 'tasks_use_dates', 'n');
+		$editUser->storePreference( 'tasks_use_dates', 'n', 'users');
 	}
 }
 
