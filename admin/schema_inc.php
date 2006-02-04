@@ -21,19 +21,21 @@ $tables = array(
   avatar_attachment_id I4,
   portrait_attachment_id I4,
   logo_attachment_id I4
-  CONSTRAINTS	', CONSTRAINT `users_avatar_attach_ref` FOREIGN KEY (`avatar_attachment_id`) REFERENCES `".BIT_DB_PREFIX."liberty_attachments` (`attachment_id`)
+",
+/* chicken-and-egg constraint dependencies: Liberty needs user_id, Users needs liberty
+  CONSTRAINT	', CONSTRAINT `users_avatar_attach_ref` FOREIGN KEY (`avatar_attachment_id`) REFERENCES `".BIT_DB_PREFIX."liberty_attachments` (`attachment_id`)
 				 , CONSTRAINT `users_content_ref` FOREIGN KEY (`content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)
 				 , CONSTRAINT `users_portrait_attach_ref` FOREIGN KEY (`portrait_attachment_id`) REFERENCES `".BIT_DB_PREFIX."liberty_attachments` (`attachment_id`)
-				 , CONSTRAINT `users_logo_attach_ref` FOREIGN KEY (`logo_attachment_id`) REFERENCES `".BIT_DB_PREFIX."liberty_attachments` (`attachment_id`)'
-",
+				 , CONSTRAINT `users_logo_attach_ref` FOREIGN KEY (`logo_attachment_id`) REFERENCES `".BIT_DB_PREFIX."liberty_attachments` (`attachment_id`)' */
 
 'users_favorites_map' => "
   favorite_content_id I4 PRIMARY,
   user_id I4 PRIMARY,
   position I4
-  CONSTRAINTS ', CONSTRAINT `users_fav_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)
-  				 , CONSTRAINT `users_fav_con_ref` FOREIGN KEY (`favorite_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
+  CONSTRAINT ', CONSTRAINT `users_fav_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
+// another chicken and egg thing.
+//  				 , CONSTRAINT `users_fav_con_ref` FOREIGN KEY (`favorite_content_id`) REFERENCES `".BIT_DB_PREFIX."liberty_content` (`content_id`)'
 
 'users_permissions' => "
   perm_name C(30) PRIMARY,
@@ -49,7 +51,7 @@ $tables = array(
   is_default C(1),
   group_desc C(255),
   group_home C(255)
-  CONSTRAINTS ', CONSTRAINT `users_groups_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINT ', CONSTRAINT `users_groups_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 'users_groups_inclusion' => "
@@ -61,7 +63,7 @@ $tables = array(
   group_id I4 PRIMARY,
   perm_name C(30) PRIMARY,
   value C(1) default ''
-  CONSTRAINTS ', CONSTRAINT `users_group_perm_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
+  CONSTRAINT ', CONSTRAINT `users_group_perm_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
   				, CONSTRAINT `users_group_perm_perm_ref` FOREIGN KEY (`perm_name`) REFERENCES `".BIT_DB_PREFIX."users_permissions` (`perm_name`)'
 ",
 
@@ -70,14 +72,14 @@ $tables = array(
   perm_name C(30) PRIMARY,
   object_type C(20) PRIMARY,
   object_id I4 PRIMARY
-  CONSTRAINTS   ', CONSTRAINT `users_object_perm_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
+  CONSTRAINT   ', CONSTRAINT `users_object_perm_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
                 , CONSTRAINT `users_object_perm_perm_ref` FOREIGN KEY (`perm_name`) REFERENCES `".BIT_DB_PREFIX."users_permissions` (`perm_name`)'
 ",
 
 'users_groups_map' => "
   user_id I4 PRIMARY,
   group_id I4 PRIMARY
-  CONSTRAINTS ', CONSTRAINT `users_groups_map_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
+  CONSTRAINT ', CONSTRAINT `users_groups_map_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
   				, CONSTRAINT `users_groups_map_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
@@ -90,7 +92,7 @@ $tables = array(
   get_count I8,
   user_agent C(128),
   current_view X
-  CONSTRAINTS ', CONSTRAINT `users_cnxn_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINT ', CONSTRAINT `users_cnxn_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 'users_semaphores' => "
@@ -108,7 +110,7 @@ $tables = array(
   type C(200),
   url C(250),
   email C(200)
-  CONSTRAINTS ', CONSTRAINT `users_watches_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+  CONSTRAINT ', CONSTRAINT `users_watches_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
 );
