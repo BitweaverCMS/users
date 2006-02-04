@@ -232,12 +232,4 @@ $gBitInstaller->registerUserPermissions( USERS_PKG_NAME, array(
 	array('bit_p_edit_user_homepage', 'Can create and display a personalized homepage', 'registered', USERS_PKG_NAME),
 ) );
 
-
-$gBitInstaller->registerSchemaDefault( USERS_PKG_NAME, array(
-	"INSERT INTO `".BIT_DB_PREFIX."users_groups` (`user_id`, `group_id`, `group_name`,`group_desc`) VALUES ( ".ROOT_USER_ID.", 1, 'Administrators','Site operators')",
-	"INSERT INTO `".BIT_DB_PREFIX."users_groups` (`user_id`, `group_id`, `group_name`,`group_desc`) VALUES ( ".ROOT_USER_ID.", -1, 'Anonymous','Public users not logged')",
-	"INSERT INTO `".BIT_DB_PREFIX."users_groups` (`user_id`, `group_id`, `group_name`,`group_desc`) VALUES ( ".ROOT_USER_ID.", 2, 'Editors','Site  Editors')",
-	"INSERT INTO `".BIT_DB_PREFIX."users_groups` (`user_id`, `group_id`, `group_name`,`group_desc`,`is_default`) VALUES ( ".ROOT_USER_ID.", 3, 'Registered', 'Users logged into the system', 'y')",
-) );
-
 ?>
