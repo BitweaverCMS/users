@@ -212,13 +212,9 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		}
 	}
 
-	$gBitSmarty->assign('user_dbl', 'y');
-
 	$allowMsgs = 'n';
 	if( $gBitUser->isRegistered() ) {
 		global $tasks_use_dates, $tasks_maxRecords, $allowMsgs;
-		$user_dbl = $gBitUser->getPreference( 'user_dbl', 'y');
-		$gBitSmarty->assign('user_dbl', $user_dbl);
 		$allowMsgs = $gBitUser->getPreference( 'allowMsgs', 'y');
 		$tasks_use_dates = $gBitUser->getPreference( 'tasks_use_dates');
 		$tasks_maxRecords = $gBitUser->getPreference( 'tasks_maxRecords');
