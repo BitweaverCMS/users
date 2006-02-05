@@ -3,7 +3,7 @@
 	{if $gBitUser->isRegistered()}
 		<li>
 				<a class="item" href="{$smarty.const.USERS_PKG_URL}my.php">
-					{biticon ipackage=users iname=home iexplain="My Personal Homepage" iforce=icon}{if !$icons_only} {tr}My {$gBitSystemPrefs.site_menu_title|default:$gBitSystemPrefs.siteTitle}{/tr}{/if}
+					{biticon ipackage=users iname=home iexplain="My Personal Homepage" iforce=icon}{if !$icons_only} {tr}My {$gBitSystemPrefs.site_menu_title|default:$gBitSystemPrefs.site_title}{/tr}{/if}
 				</a>
 			</li>
 		{if $gBitUser->hasPermission( 'bit_p_view_user_homepage' )}
@@ -32,7 +32,7 @@
 				</a>
 			</li>
 		{/if}
-		{if $gBitSystem->isFeatureActive( 'feature_userPreferences' )}
+		{if $gBitSystem->isFeatureActive( 'feature_user_preferences' )}
 			<li>
 				<a class="item" href="{$smarty.const.USERS_PKG_URL}preferences.php">
 					{biticon ipackage=liberty iname=settings iexplain=Preferences iforce=icon}{if !$icons_only} {tr}Preferences{/tr}{/if}

@@ -19,7 +19,7 @@
 			{/if}
 
 			{if $gBitUser->mUserId eq $gQueryUser->mUserId}
-				{if $gBitSystem->isFeatureActive('feature_userPreferences')}
+				{if $gBitSystem->isFeatureActive('feature_user_preferences')}
 					{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" ibiticon="liberty/config"}
 				{/if}
 				{if $gBitUser->hasPermission('bit_p_edit_user_homepage')}

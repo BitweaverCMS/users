@@ -52,7 +52,7 @@
 					{/forminput}
 				</div>
 
-				{if $gBitSystem->mPrefs.useRegisterPasscode eq 'y'}
+				{if $gBitSystem->mPrefs.use_register_passcode eq 'y'}
 					<div class="row">
 						{formfeedback error=$errors.passcode}
 						{formlabel label="Passcode to register<br />(not your user password)" for="passcode"}
@@ -62,7 +62,7 @@
 					</div>
 				{/if}
 
-				{if $gBitSystem->isFeatureActive( 'validateUsers' )}
+				{if $gBitSystem->isFeatureActive( 'validate_user' )}
 					<div class="row">
 						{formfeedback warning="A confirmation email will be sent to you with instructions how to login"}
 					</div>

@@ -17,7 +17,7 @@
 
 			{foreach from=$loginSettings key=feature item=output}
 				<div class="row">
-					{if $feature == 'validateEmail' && !$gBitSystem->hasValidSenderEmail()}
+					{if $feature == 'validate_email' && !$gBitSystem->hasValidSenderEmail()}
 						{formfeedback error="Site <a href=\"`$smarty.const.BIT_ROOT_URL`kernel/admin/index.php?page=server\">emailer return address</a> is not valid!"}
 					{/if}
 					{if $feature == 'rnd_num_reg'}
