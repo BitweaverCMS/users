@@ -9,7 +9,7 @@ $formFeatures = array(
 			'label' => 'Registered users can change language',
 			'note' => 'Allows users to view a translated version of the site.'
 	),
-	'feature_user_watches' => array(
+	'user_watches' => array(
 			'label' => 'User Watches',
 			'note' => 'Users can mark pages to be watched. If a watched page is modified, the user is informed.',
 			'page' => 'UserWatches',

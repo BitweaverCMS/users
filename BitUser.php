@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.45 2006/02/06 11:02:42 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.46 2006/02/06 22:56:51 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.45 2006/02/06 11:02:42 lsces Exp $
+ * $Id: BitUser.php,v 1.46 2006/02/06 22:56:51 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.45 $
+ * @version  $Revision: 1.46 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -349,7 +349,7 @@ class BitUser extends LibertyAttachable {
 					// renew password only next half year ;)
 					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
 				}
-				if( $gBitSystem->isFeatureActive( 'feature_clear_passwords' ) || !empty( $pParamHash['user_store']['provpass'] ) ) {
+				if( $gBitSystem->isFeatureActive( 'clear_passwords' ) || !empty( $pParamHash['user_store']['provpass'] ) ) {
 					$pParamHash['user_store']['password'] = $pParamHash['password'];
 				}
 			}
@@ -1127,7 +1127,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$hash = md5(strtolower($user) . $pass . $email);
 		$now = $gBitSystem->getUTCTime();;
 		$new_pass_due = $now + (60 * 60 * 24 * $gBitSystem->getPreference( 'pass_due' ) );
-		if( !$gBitSystem->isFeatureActive( 'feature_clear_passwords' ) ) {
+		if( !$gBitSystem->isFeatureActive( 'clear_passwords' ) ) {
 			$pass = '';
 		}
 		$query = "update `".BIT_DB_PREFIX."users_users` set `hash`=? ,`password`=? ,`pass_due`=? where " . $this->mDb->convert_binary(). " `login`=?";

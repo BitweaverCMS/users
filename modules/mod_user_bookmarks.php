@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_bookmarks.php,v 1.4 2005/11/22 07:28:24 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_bookmarks.php,v 1.5 2006/02/06 22:56:52 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,12 +8,12 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: mod_user_bookmarks.php,v 1.4 2005/11/22 07:28:24 squareing Exp $
+ * $Id: mod_user_bookmarks.php,v 1.5 2006/02/06 22:56:52 squareing Exp $
  * @package users
  * @subpackage modules
  */
 
-if( $gBitSystem->isFeatureActive( 'feature_user_bookmarks' ) && $gBitUser->isRegistered() && $gBitUser->hasPermission( 'bit_p_create_bookmarks' ) ) {
+if( $gBitSystem->isFeatureActive( 'user_bookmarks' ) && $gBitUser->isRegistered() && $gBitUser->hasPermission( 'bit_p_create_bookmarks' ) ) {
 	/**
 	 * required setup
 	 */

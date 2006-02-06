@@ -5,7 +5,7 @@ $gBitSystem->registerPackage( 'users', dirname( __FILE__).'/', FALSE );
 
 $gBitSystem->registerNotifyEvent( array( "user_registers" => tra("A user registers") ) );
 
-if( $gBitSystem->isFeatureActive( 'feature_userfiles' ) ) {
+if( $gBitSystem->isFeatureActive( 'user_files' ) ) {
 	$gBitSystem->registerAppMenu( 'userfiles', 'User Files', '', '', 'userfiles');
 }
 

@@ -39,7 +39,7 @@
 				</a>
 			</li>
 		{/if}
-		{if $gBitSystem->isPackageActive( 'tidbits' ) and $gBitSystem->isFeatureActive( 'feature_user_bookmarks' ) and $gBitUser->hasPermission( 'bit_p_create_bookmarks' )}
+		{if $gBitSystem->isPackageActive( 'tidbits' ) and $gBitSystem->isFeatureActive( 'user_bookmarks' ) and $gBitUser->hasPermission( 'bit_p_create_bookmarks' )}
 			<li>
 				<a class="item" href="{$smarty.const.TIDBITS_PKG_URL}bookmarks.php">
 					{biticon ipackage=users iname=bookmarks iexplain="Links to my favourite pages" iforce=icon}{if !$icons_only} {tr}Bookmarks{/tr}{/if}
@@ -60,7 +60,7 @@
 				</a>
 			</li>
 		{/if}
-		{if $gBitSystem->isFeatureActive('feature_user_watches') }
+		{if $gBitSystem->isFeatureActive('user_watches') }
 			<li>
 				<a class="item" href="{$smarty.const.USERS_PKG_URL}watches.php">
 					{biticon ipackage=users iname=watch iexplain="My Watches" iforce=icon}{if !$icons_only} {tr}My watches{/tr}{/if}
@@ -88,7 +88,7 @@
 				</a>
 			</li>
 		{/if}
-		{if $gBitSystem->isPackageActive( 'tidbits' ) and $gBitSystem->isFeatureActive( 'feature_usermenu' )}
+		{if $gBitSystem->isPackageActive( 'tidbits' ) and $gBitSystem->isFeatureActive( 'usermenu' )}
 			<li>
 				<a class="item" href="{$smarty.const.TIDBITS_PKG_URL}menu.php">
 					{biticon ipackage=liberty iname=tree iexplain="User Mneu" iforce=icon}{if !$icons_only} {tr}User menu{/tr}{/if}

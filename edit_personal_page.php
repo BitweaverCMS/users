@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.5 2006/01/27 23:01:05 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.6 2006/02/06 22:56:51 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: edit_personal_page.php,v 1.5 2006/01/27 23:01:05 squareing Exp $
+ * $Id: edit_personal_page.php,v 1.6 2006/02/06 22:56:51 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -68,7 +68,7 @@ $gBitSmarty->assign_by_ref( 'pageInfo', $gBitUser->mInfo );
 $gBitSmarty->assign_by_ref( 'gContent', $gBitUser );
 
 $gBitSmarty->assign('show_page_bar', 'y');
-$gBitSystem->mPrefs['feature_wiki_description'] = 'n';
+$gBitSystem->mPrefs['wiki_description'] = 'n';
 
 $gBitSystem->display( 'bitpackage:wiki/edit_page.tpl');
 ?>
