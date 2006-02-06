@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.6 2005/09/03 10:22:20 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.7 2006/02/06 21:35:17 lsces Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -147,11 +147,11 @@ $gBitUser->getList( $_REQUEST );
 $gBitSmarty->assign_by_ref('users', $_REQUEST["data"]);
 $gBitSmarty->assign_by_ref('usercount', $_REQUEST["cant"]);
 if (isset($_REQUEST["numrows"]))
-	$_REQUEST["control"]["numrows"] = $_REQUEST["numrows"];
+	$_REQUEST['listInfo']["numrows"] = $_REQUEST["numrows"];
 else
-	$_REQUEST["control"]["numrows"] = 10;
-$_REQUEST["control"]["URL"] = USERS_PKG_URL."admin/index.php";
-$gBitSmarty->assign_by_ref('control', $_REQUEST["control"]);
+	$_REQUEST['listInfo']["numrows"] = 10;
+$_REQUEST['listInfo']["URL"] = USERS_PKG_URL."admin/index.php";
+$gBitSmarty->assign_by_ref('control', $_REQUEST['listInfo']);
 
 $gBitUser->invokeServices( 'content_edit_function' );
 

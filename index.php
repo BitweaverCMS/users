@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.12 2006/02/06 00:12:08 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.13 2006/02/06 21:35:17 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.12 2006/02/06 00:12:08 squareing Exp $
+ * $Id: index.php,v 1.13 2006/02/06 21:35:17 lsces Exp $
  * @package users
  * @subpackage functions
  */
@@ -75,11 +75,11 @@ if( !empty( $_REQUEST['home'] ) && ($gBitUser->hasPermission( 'bit_p_view_user_h
 	$gBitSmarty->assign_by_ref('users', $_REQUEST["data"]);
 	$gBitSmarty->assign_by_ref('usercount', $_REQUEST["cant"]);
 	if (isset($_REQUEST["numrows"]))
-		$_REQUEST["control"]["numrows"] = $_REQUEST["numrows"];
+		$_REQUEST['listInfo']["numrows"] = $_REQUEST["numrows"];
 	else
-		$_REQUEST["control"]["numrows"] = 50;
-	$_REQUEST["control"]["URL"] = USERS_PKG_URL."index.php";
-	$gBitSmarty->assign_by_ref('control', $_REQUEST["control"]);
+		$_REQUEST['listInfo']["numrows"] = 50;
+	$_REQUEST['listInfo']["URL"] = USERS_PKG_URL."index.php";
+	$gBitSmarty->assign_by_ref('control', $_REQUEST['listInfo']);
 	$centerDisplay = 'bitpackage:users/index_list.tpl';
 	$browserTitle = $gBitSystem->getPreference( 'site_title' ).' '.tra( 'Members' );
 } elseif( !$gBitSystem->isFeatureActive( 'users_homepages' ) ) {
@@ -88,11 +88,11 @@ if( !empty( $_REQUEST['home'] ) && ($gBitUser->hasPermission( 'bit_p_view_user_h
 	$gBitSmarty->assign_by_ref('users', $_REQUEST["data"]);
 	$gBitSmarty->assign_by_ref('usercount', $_REQUEST["cant"]);
 	if (isset($_REQUEST["numrows"]))
-		$_REQUEST["control"]["numrows"] = $_REQUEST["numrows"];
+		$_REQUEST['listInfo']["numrows"] = $_REQUEST["numrows"];
 	else
-		$_REQUEST["control"]["numrows"] = 50;
-	$_REQUEST["control"]["URL"] = USERS_PKG_URL."index.php";
-	$gBitSmarty->assign_by_ref('control', $_REQUEST["control"]);
+		$_REQUEST['listInfo']["numrows"] = 50;
+	$_REQUEST['listInfo']["URL"] = USERS_PKG_URL."index.php";
+	$gBitSmarty->assign_by_ref('control', $_REQUEST['listInfo']);
 	$centerDisplay = 'bitpackage:users/index_list.tpl';
 	$browserTitle = $gBitSystem->getPreference( 'site_title' ).' '.tra( 'Members' );
 } else {
