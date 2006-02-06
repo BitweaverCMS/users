@@ -1,6 +1,6 @@
 <?php
 $formFeatures = array(
-	'feature_userPreferences' => array(
+	'feature_user_preferences' => array(
 			'label' => 'User Preferences',
 			'note' => 'Users can view and modify their personal preferences.',
 			'page' => 'UserPreferences',

@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.3 2005/08/24 20:59:13 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.4 2006/02/06 00:12:08 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -38,7 +38,7 @@ $groupList = $gBitUser->getAllGroups( $listHash );
 
 /*
 // If offset is set use it if not then use offset =0
-// use the maxRecords php variable to set the limit
+// use the max_records php variable to set the limit
 // if sortMode is not set then use last_modified_desc
 if (!isset($_REQUEST["offset"])) {
 	$offset = 0;
@@ -47,7 +47,7 @@ if (!isset($_REQUEST["offset"])) {
 }
 if (isset($_REQUEST['page'])) {
 	$page = &$_REQUEST['page'];
-	$offset = ($page - 1) * $maxRecords;
+	$offset = ($page - 1) * $max_records;
 }
 $gBitSmarty->assign_by_ref('offset', $offset);
 if (isset($_REQUEST["find"])) {
@@ -56,17 +56,17 @@ if (isset($_REQUEST["find"])) {
 	$find = '';
 }
 $gBitSmarty->assign('find', $find);
-$cant_pages = ceil($users["cant"] / $maxRecords);
+$cant_pages = ceil($users["cant"] / $max_records);
 $gBitSmarty->assign_by_ref('cant_pages', $cant_pages);
-$gBitSmarty->assign('actual_page', 1 + ($offset / $maxRecords));
-if ($users["cant"] > ($offset + $maxRecords)) {
-	$gBitSmarty->assign('next_offset', $offset + $maxRecords);
+$gBitSmarty->assign('actual_page', 1 + ($offset / $max_records));
+if ($users["cant"] > ($offset + $max_records)) {
+	$gBitSmarty->assign('next_offset', $offset + $max_records);
 } else {
 	$gBitSmarty->assign('next_offset', -1);
 }
 // If offset is > 0 then prev_offset
 if ($offset > 0) {
-	$gBitSmarty->assign('prev_offset', $offset - $maxRecords);
+	$gBitSmarty->assign('prev_offset', $offset - $max_records);
 } else {
 	$gBitSmarty->assign('prev_offset', -1);
 }

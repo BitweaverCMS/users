@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.5 2005/12/26 12:27:13 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.6 2006/02/06 00:12:08 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: remind_password.php,v 1.5 2005/12/26 12:27:13 squareing Exp $
+ * $Id: remind_password.php,v 1.6 2006/02/06 00:12:08 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -17,8 +17,8 @@
  * required setup
  */
 require_once( '../bit_setup_inc.php' );
-if ($forgotPass != 'y') {
-	$gBitSmarty->assign('msg', tra("This feature is disabled").": forgotPass");
+if ($forgot_pass != 'y') {
+	$gBitSmarty->assign('msg', tra("This feature is disabled").": forgot_pass");
 	$gBitSystem->display( 'error.tpl' );
 	die;
 } elseif( $gBitUser->isRegistered() ) {
@@ -46,7 +46,7 @@ if ($forgotPass != 'y') {
 		$gBitSmarty->assign('mail_same', $gBitSystem->isFeatureActive( 'feature_clear_passwords' ));
 		$gBitSmarty->assign('mail_pass', $pass);
 		$mail_data = $gBitSmarty->fetch('bitpackage:users/password_reminder.tpl');
-		$subject = "Your password for ".$gBitSystem->getPreference( 'siteTitle', $_SERVER['HTTP_HOST'] );
+		$subject = "Your password for ".$gBitSystem->getPreference( 'site_title', $_SERVER['HTTP_HOST'] );
 		mail( $userInfo['email'], $subject, $mail_data, "From: ".$gBitSystem->getPreference( 'sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n");
 		// Just show "success" message and no form
 	} else {

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.16 2006/01/31 20:21:27 bitweaver Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.17 2006/02/06 00:12:08 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.16 2006/01/31 20:21:27 bitweaver Exp $
+ * $Id: BitPermUser.php,v 1.17 2006/02/06 00:12:08 squareing Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( USERS_PKG_PATH.'BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.16 $
+ * @version  $Revision: 1.17 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -79,7 +79,7 @@ class BitPermUser extends BitUser {
 		if( BitUser::store( $pParamHash ) && $newUser ) {
 			$defaultGroups = $this->getDefaultGroup();
 			$this->addUserToGroup( $this->mUserId, $defaultGroups );
-			if( $gBitSystem->isFeatureActive( 'eponymousGroups' ) ) {
+			if( $gBitSystem->isFeatureActive( 'eponymous_groups' ) ) {
 				// Create a group just for this user, for permissions assignment.
 				$groupParams = array(
 					'user_id' => $this->mUserId,

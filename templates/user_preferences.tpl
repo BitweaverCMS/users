@@ -215,16 +215,16 @@
 				{if $gBitSystem->isFeatureActive( 'feature_tasks' )}
 					{form legend="User Tasks"}
 						<div class="row">
-							{formlabel label="Tasks per page" for="tasks_maxRecords"}
+							{formlabel label="Tasks per page" for="tasks_max_records"}
 							{forminput}
-								<select name="tasks_maxRecords" id="tasks_maxRecords">
-									<option value="2"  {if $userPrefs.tasks_maxRecords eq 2}selected="selected"{/if}>{tr}2{/tr}</option>
-									<option value="5"  {if $userPrefs.tasks_maxRecords eq 5}selected="selected"{/if}>{tr}5{/tr}</option>
-									<option value="10" {if $userPrefs.tasks_maxRecords eq 10}selected="selected"{/if}>{tr}10{/tr}</option>
-									<option value="20" {if $userPrefs.tasks_maxRecords eq 20}selected="selected"{/if}>{tr}20{/tr}</option>
-									<option value="30" {if $userPrefs.tasks_maxRecords eq 30}selected="selected"{/if}>{tr}30{/tr}</option>
-									<option value="40" {if $userPrefs.tasks_maxRecords eq 40}selected="selected"{/if}>{tr}40{/tr}</option>
-									<option value="50" {if $userPrefs.tasks_maxRecords eq 50}selected="selected"{/if}>{tr}50{/tr}</option>
+								<select name="tasks_max_records" id="tasks_max_records">
+									<option value="2"  {if $userPrefs.tasks_max_records eq 2}selected="selected"{/if}>{tr}2{/tr}</option>
+									<option value="5"  {if $userPrefs.tasks_max_records eq 5}selected="selected"{/if}>{tr}5{/tr}</option>
+									<option value="10" {if $userPrefs.tasks_max_records eq 10}selected="selected"{/if}>{tr}10{/tr}</option>
+									<option value="20" {if $userPrefs.tasks_max_records eq 20}selected="selected"{/if}>{tr}20{/tr}</option>
+									<option value="30" {if $userPrefs.tasks_max_records eq 30}selected="selected"{/if}>{tr}30{/tr}</option>
+									<option value="40" {if $userPrefs.tasks_max_records eq 40}selected="selected"{/if}>{tr}40{/tr}</option>
+									<option value="50" {if $userPrefs.tasks_max_records eq 50}selected="selected"{/if}>{tr}50{/tr}</option>
 								</select>
 								{formhelp note=""}
 							{/forminput}

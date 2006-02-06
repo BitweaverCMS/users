@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.6 2006/01/24 21:49:56 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.7 2006/02/06 00:12:08 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.6 2006/01/24 21:49:56 squareing Exp $
+ * $Id: register.php,v 1.7 2006/02/06 00:12:08 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -21,7 +21,7 @@ require_once( KERNEL_PKG_PATH.'BitBase.php' );
 include_once( KERNEL_PKG_PATH.'notification_lib.php' );
 
 // Permission: needs p_register
-$gBitSystem->verifyFeature( 'allowRegister' );
+$gBitSystem->verifyFeature( 'allow_register' );
 
 if( isset( $_REQUEST["register"] ) ) {
 	$reg = $_REQUEST;
@@ -34,8 +34,8 @@ if( isset( $_REQUEST["register"] ) ) {
 	}
 
 	// Check the mode
-	if( $gBitSystem->isFeatureActive( 'useRegisterPasscode' ) ) {
-		if( $reg["passcode"] != $gBitSystem->getPreference( "registerPasscode",md5( $gBitUser->genPass() ) ) ) {
+	if( $gBitSystem->isFeatureActive( 'use_register_passcode' ) ) {
+		if( $reg["passcode"] != $gBitSystem->getPreference( "register_passcode",md5( $gBitUser->genPass() ) ) ) {
 			$errors['passcode'] = 'Wrong passcode! You need to know the passcode to register at this site';
 		}
 	}
@@ -43,7 +43,7 @@ if( isset( $_REQUEST["register"] ) ) {
 	if( empty( $errors ) ) {
 		$newUser = new BitPermUser();
 		if( $newUser->register( $reg ) ) {
-			if( $gBitSystem->isFeatureActive( 'validateUsers' ) ) {
+			if( $gBitSystem->isFeatureActive( 'validate_user' ) ) {
 				$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
 				$gBitSmarty->assign('showmsg','y');
 			} else {

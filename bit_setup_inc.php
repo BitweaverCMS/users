@@ -61,8 +61,8 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	session_start();
 
 	// in the case of tikis on same domain we have to distinguish the realm
-	// changed cookie and session variable name by a name made with siteTitle
-	$cookie_site = strtolower( ereg_replace("[^a-zA-Z0-9]", "", $gBitSystem->getPreference('siteTitle', 'bitweaver')) );
+	// changed cookie and session variable name by a name made with site_title
+	$cookie_site = strtolower( ereg_replace("[^a-zA-Z0-9]", "", $gBitSystem->getPreference('site_title', 'bitweaver')) );
 	global $user_cookie_site;
 	$user_cookie_site = 'tiki-user-' . $cookie_site;
 
@@ -130,13 +130,13 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$gBitSmarty->assign_by_ref('gBitUser', $gBitUser);
 	$gBitSmarty->register_object('gBitUser', $gBitUser, array(), true, array('hasPermission'));
 
-	$allowRegister = $gBitSystem->getPreference("allowRegister", 'y');
-	$validateUsers = $gBitSystem->getPreference("validateUsers", 'n');
-	$forgotPass = $gBitSystem->getPreference("forgotPass", 'y');
-	$eponymousGroups = $gBitSystem->getPreference("eponymousGroups", 'n');
-	$useRegisterPasscode = $gBitSystem->getPreference("useRegisterPasscode", 'n');
-	$registerPasscode = $gBitSystem->getPreference("registerPasscode", '');
-	$urlIndex = $gBitSystem->getPreference("urlIndex", '');
+	$allow_register = $gBitSystem->getPreference("allow_register", 'y');
+	$validate_user = $gBitSystem->getPreference("validate_user", 'n');
+	$forgot_pass = $gBitSystem->getPreference("forgot_pass", 'y');
+	$eponymous_groups = $gBitSystem->getPreference("eponymous_groups", 'n');
+	$use_register_passcode = $gBitSystem->getPreference("use_register_passcode", 'n');
+	$register_passcode = $gBitSystem->getPreference("register_passcode", '');
+	$url_index = $gBitSystem->getPreference("url_index", '');
 	$use_proxy = $gBitSystem->getPreference("use_proxy", 'n');
 	$proxy_host = $gBitSystem->getPreference("proxy_host", '');
 	$proxy_port = $gBitSystem->getPreference("proxy_port", '');
@@ -147,13 +147,13 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$https_login_required = $gBitSystem->getPreference('https_login_required', 'n');
 	$change_language = $gBitSystem->getPreference("change_language", 'y');
 
-	$gBitSmarty->assign('allowRegister', $allowRegister);
-	$gBitSmarty->assign('urlIndex', $urlIndex);
+	$gBitSmarty->assign('allow_register', $allow_register);
+	$gBitSmarty->assign('url_index', $url_index);
 	$gBitSmarty->assign('use_proxy', $use_proxy);
 	$gBitSmarty->assign('proxy_host', $proxy_host);
 	$gBitSmarty->assign('proxy_port', $proxy_port);
 	$gBitSmarty->assign('change_language', $change_language);
-	$gBitSmarty->assign('eponymousGroups', $eponymousGroups);
+	$gBitSmarty->assign('eponymous_groups', $eponymous_groups);
 
 	$user_assigned_modules = 'n';
 	$gBitSmarty->assign('remembertime', $remembertime);
@@ -161,8 +161,8 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$gBitSmarty->assign('uf_use_db', 'y');
 	$gBitSmarty->assign('uf_use_dir', '');
 	$gBitSmarty->assign('userfiles_quota', 30);
-	$gBitSmarty->assign('registerPasscode', $registerPasscode);
-	$gBitSmarty->assign('useRegisterPasscode', $useRegisterPasscode);
+	$gBitSmarty->assign('register_passcode', $register_passcode);
+	$gBitSmarty->assign('use_register_passcode', $use_register_passcode);
 	$gBitSmarty->assign('min_pass_length', 1);
 	$gBitSmarty->assign('pass_chr_num', 'n');
 	$gBitSmarty->assign('pass_due', 999);
@@ -214,18 +214,18 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 
 	$allowMsgs = 'n';
 	if( $gBitUser->isRegistered() ) {
-		global $tasks_use_dates, $tasks_maxRecords, $allowMsgs;
+		global $tasks_use_dates, $tasks_max_records, $allowMsgs;
 		$allowMsgs = $gBitUser->getPreference( 'allowMsgs', 'y');
 		$tasks_use_dates = $gBitUser->getPreference( 'tasks_use_dates');
-		$tasks_maxRecords = $gBitUser->getPreference( 'tasks_maxRecords');
+		$tasks_max_records = $gBitUser->getPreference( 'tasks_max_records');
 		$gBitSmarty->assign('tasks_use_dates', $tasks_use_dates);
-		$gBitSmarty->assign('tasks_maxRecords', $tasks_maxRecords);
+		$gBitSmarty->assign('tasks_max_records', $tasks_max_records);
 		$gBitSmarty->assign('allowMsgs', $allowMsgs);
 	}
 
 	// register 'my' menu
 	if( $gBitUser->isValid() && ( $gBitUser->isRegistered() || !$gBitSystem->isFeatureActive( 'hide_my_top_bar_link' ) ) ) {
-		$displayTitle = !empty( $gBitSystem->mPrefs['site_menu_title'] ) ? $gBitSystem->mPrefs['site_menu_title'] : $gBitSystem->getPreference( 'siteTitle', 'Site' );
-		$gBitSystem->registerAppMenu( USERS_PKG_NAME, 'My '.$displayTitle, ($gBitSystem->getPreference('feature_userPreferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
+		$displayTitle = !empty( $gBitSystem->mPrefs['site_menu_title'] ) ? $gBitSystem->mPrefs['site_menu_title'] : $gBitSystem->getPreference( 'site_title', 'Site' );
+		$gBitSystem->registerAppMenu( USERS_PKG_NAME, 'My '.$displayTitle, ($gBitSystem->getPreference('feature_user_preferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
 	}
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.17 2006/02/03 17:23:55 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.18 2006/02/06 00:12:08 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.17 2006/02/03 17:23:55 squareing Exp $
+ * $Id: preferences.php,v 1.18 2006/02/06 00:12:08 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -25,7 +25,7 @@ if( $gBitSystem->isPackageActive( 'blogs' ) ) {
 	include_once( BLOGS_PKG_PATH.'BitBlog.php' );
 }
 // User preferences screen
-$gBitSystem->verifyFeature( 'feature_userPreferences' );
+$gBitSystem->verifyFeature( 'feature_user_preferences' );
 
 if( !$gBitUser->isRegistered() ) {
 	$gBitSmarty->assign( 'msg', tra( "You are not logged in" ) );
@@ -149,14 +149,14 @@ if (isset($_REQUEST["chgpswd"])) {
 	}
 }
 if (isset($_REQUEST['messprefs'])) {
-	$editUser->storePreference( 'mess_maxRecords', $_REQUEST['mess_maxRecords'], 'users' );
+	$editUser->storePreference( 'mess_max_records', $_REQUEST['mess_max_records'], 'users' );
 	$editUser->storePreference( 'minPrio', $_REQUEST['minPrio'], 'users' );
 	$editUser->storePreference( 'message_alert', !empty( $_REQUEST['message_alert'] ) ? 'y' : 'n', 'users' );
 	$editUser->storePreference( 'allowMsgs', !empty( $_REQUEST['allowMsgs'] ) ? 'y' : 'n', 'users' );
 }
 
 if (isset($_REQUEST['tasksprefs'])) {
-	$editUser->storePreference( 'tasks_maxRecords', $_REQUEST['tasks_maxRecords'], 'users');
+	$editUser->storePreference( 'tasks_max_records', $_REQUEST['tasks_max_records'], 'users');
 	if (isset($_REQUEST['tasks_use_dates']) && $_REQUEST['tasks_use_dates'] == 'on') {
 		$editUser->storePreference( 'tasks_use_dates', 'y', 'users');
 	} else {

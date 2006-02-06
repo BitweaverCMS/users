@@ -1,11 +1,11 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.8 2006/02/03 17:51:52 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.9 2006/02/06 00:12:08 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 
 $loginSettings = array(
-	'allowRegister' => array(
+	'allow_register' => array(
 		'label' => "Users can register",
 		'type' => "checkbox",
 		'note' => "",
@@ -15,17 +15,17 @@ $loginSettings = array(
 		'type' => "checkbox",
 		'note' => "Upon successful registration, this will send the user an email with login information, including their password.",
 	),
-	'eponymousGroups' => array(
+	'eponymous_groups' => array(
 		'label' => "Create a group for each user",
 		'type' => "checkbox",
 		'note' => "This will create a group for each user with the same name as the user. This might be useful if you want to assign different permission settings to every user.",
 	),
-	'useRegisterPasscode' => array(
+	'use_register_passcode' => array(
 		'label' => "Request passcode to register",
 		'type' => "checkbox",
 		'note' => "",
 	),
-	'registerPasscode' => array(
+	'register_passcode' => array(
 		'label' => "Passcode",
 		'type' => "text",
 		'note' => "Enter the Passcode that is required for users to register with your site.",
@@ -35,18 +35,18 @@ $loginSettings = array(
 		'type' => "checkbox",
 		'note' => "This will generate a random number as an image, the user has to confirm during the registration step.",
 	),
-	'validateUsers' => array(
+	'validate_user' => array(
 		'label' => "Validate users by email",
 		'type' => "checkbox",
 		'note' => "Send an email to the user, to validate registration.",
 	),
-	'validateEmail' => array(
+	'validate_email' => array(
 		'label' => "Validate email address",
 		'type' => "checkbox",
 		'link' => "kernel/admin/index.php?page=server/General Settings",
 		'note' => "This feature should be used only when you need the maximum security and should be used with discretion. If a visitor's email server is not responding, they will not be able to register. You also must have a valid sender email to use this feature.",
 	),
-	'forgotPass' => array(
+	'forgot_pass' => array(
 		'label' => "Remind passwords by email",
 		'type' => "checkbox",
 		'note' => "This will display a 'forgot password' link on the login page and allow users to have their password sent to their registered email address.",

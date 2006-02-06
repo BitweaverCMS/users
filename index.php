@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.11 2006/02/03 19:17:26 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.12 2006/02/06 00:12:08 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.11 2006/02/03 19:17:26 spiderr Exp $
+ * $Id: index.php,v 1.12 2006/02/06 00:12:08 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -81,7 +81,7 @@ if( !empty( $_REQUEST['home'] ) && ($gBitUser->hasPermission( 'bit_p_view_user_h
 	$_REQUEST["control"]["URL"] = USERS_PKG_URL."index.php";
 	$gBitSmarty->assign_by_ref('control', $_REQUEST["control"]);
 	$centerDisplay = 'bitpackage:users/index_list.tpl';
-	$browserTitle = $gBitSystem->getPreference( 'siteTitle' ).' '.tra( 'Members' );
+	$browserTitle = $gBitSystem->getPreference( 'site_title' ).' '.tra( 'Members' );
 } elseif( !$gBitSystem->isFeatureActive( 'users_homepages' ) ) {
 	$gBitSystem->verifyPermission( 'bit_p_view_user_list' );
 	$gQueryUser->getList( $_REQUEST );
@@ -94,11 +94,11 @@ if( !empty( $_REQUEST['home'] ) && ($gBitUser->hasPermission( 'bit_p_view_user_h
 	$_REQUEST["control"]["URL"] = USERS_PKG_URL."index.php";
 	$gBitSmarty->assign_by_ref('control', $_REQUEST["control"]);
 	$centerDisplay = 'bitpackage:users/index_list.tpl';
-	$browserTitle = $gBitSystem->getPreference( 'siteTitle' ).' '.tra( 'Members' );
+	$browserTitle = $gBitSystem->getPreference( 'site_title' ).' '.tra( 'Members' );
 } else {
 	$gBitSmarty->assign('msg',tra('User not found'));
 	$centerDisplay = 'bitpackage:kernel/error.tpl';
-	$browserTitle = $gBitSystem->getPreference( 'siteTitle' ).' '.tra( 'Members' );
+	$browserTitle = $gBitSystem->getPreference( 'site_title' ).' '.tra( 'Members' );
 }
 
 $gBitSystem->display( $centerDisplay, $browserTitle );

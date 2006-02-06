@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/login.php,v 1.4 2005/12/18 22:33:18 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/login.php,v 1.5 2006/02/06 00:12:08 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: login.php,v 1.4 2005/12/18 22:33:18 squareing Exp $
+ * $Id: login.php,v 1.5 2006/02/06 00:12:08 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -27,5 +27,5 @@ if( !empty( $_REQUEST['error'] ) ) {
 	$gBitSmarty->assign( 'error', $_REQUEST['error'] );
 }
 
-$gBitSystem->display( 'bitpackage:users/login.tpl', $gBitSystem->getPreference( 'siteTitle' ).' Login' );
+$gBitSystem->display( 'bitpackage:users/login.tpl', $gBitSystem->getPreference( 'site_title' ).' Login' );
 ?>

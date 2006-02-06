@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_images.php,v 1.6 2006/01/27 21:57:22 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_images.php,v 1.7 2006/02/06 00:12:08 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_images.php,v 1.6 2006/01/27 21:57:22 squareing Exp $
+ * $Id: my_images.php,v 1.7 2006/02/06 00:12:08 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -21,7 +21,7 @@ $gEditMode = 'images';
 require_once( '../bit_setup_inc.php' );
 
 // User preferences screen
-$gBitSystem->verifyFeature( 'feature_userPreferences' );
+$gBitSystem->verifyFeature( 'feature_user_preferences' );
 
 if (!$gBitUser->isRegistered()) {
 	$gBitSmarty->assign('msg', tra("You are not logged in"));

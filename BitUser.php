@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.42 2006/02/03 19:17:25 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.43 2006/02/06 00:12:08 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.42 2006/02/03 19:17:25 spiderr Exp $
+ * $Id: BitUser.php,v 1.43 2006/02/06 00:12:08 squareing Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.42 $
+ * @version  $Revision: 1.43 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -314,7 +314,7 @@ class BitUser extends LibertyAttachable {
 			}
 			// jht 2005-06-22_23:51:58 $pParamHash['admin_add'] is set on adds from admin page - a kludge
 			// that should be fixed in some better way.
-			if(empty($pParamHash['admin_add']) && $gBitSystem->isFeatureActive( 'validateUsers' ) ) {
+			if(empty($pParamHash['admin_add']) && $gBitSystem->isFeatureActive( 'validate_user' ) ) {
 				$pParamHash['password'] = $this->genPass();
 				$pParamHash['user_store']['provpass'] = substr( md5( $pParamHash['password'] ), 0, 30 );
 				$pParamHash['pass_due'] = 0;
@@ -388,7 +388,7 @@ class BitUser extends LibertyAttachable {
 			$errors['email'] = 'The email address "'.$pEmail.'" is invalid.';
 		} elseif( !empty( $this ) && is_object( $this ) && $this->userExists( array( 'email' => $pEmail ) ) ) {
 			$errors['email'] = 'The email address "'.$pEmail.'" has already been registered.';
-		} elseif( $gBitSystem->isFeatureActive( 'validateUsers' ) ) {
+		} elseif( $gBitSystem->isFeatureActive( 'validate_user' ) ) {
 			list ( $Username, $domain ) = split ("@",$pEmail);
 			// That MX(mail exchanger) record exists in domain check .
 			// checkdnsrr function reference : http://www.php.net/manual/en/function.checkdnsrr.php
@@ -493,11 +493,11 @@ if ($gDebug) echo "Run : QUIT<br>";
 				}
 			}
 
-			$siteName = $gBitSystem->getPreference('siteTitle', $_SERVER['HTTP_HOST'] );
+			$siteName = $gBitSystem->getPreference('site_title', $_SERVER['HTTP_HOST'] );
 			$gBitSmarty->assign('siteName',$_SERVER["SERVER_NAME"]);
 			$gBitSmarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
 			$gBitSmarty->assign('mail_user',$pParamHash['login']);
-			if( $gBitSystem->isFeatureActive( 'validateUsers' ) ) {
+			if( $gBitSystem->isFeatureActive( 'validate_user' ) ) {
 				// $apass = addslashes(substr(md5($gBitSystem->genPass()),0,25));
 				$apass = $pParamHash['user_store']['provpass'];
 				$foo = parse_url($_SERVER["REQUEST_URI"]);
@@ -974,7 +974,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		return $status;
 	}
 
-	function get_users_names($offset = 0, $maxRecords = -1, $sort_mode = 'login_desc', $find = '') {
+	function get_users_names($offset = 0, $max_records = -1, $sort_mode = 'login_desc', $find = '') {
 		// Return an array of users indicating name, email, last changed pages, versions, last_login
 		if ($find) {
 			$findesc = '%' . strtoupper( $find ) . '%';
@@ -985,7 +985,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$bindvars=array();
 		}
 		$query = "select `login` from `".BIT_DB_PREFIX."users_users` $mid order by ".$this->mDb->convert_sortmode($sort_mode);
-		$result = $this->mDb->query($query,$bindvars,$maxRecords,$offset);
+		$result = $this->mDb->query($query,$bindvars,$max_records,$offset);
 		$ret = array();
 		while ($res = $result->fetchRow()) {
 			$ret[] = $res["login"];
@@ -1136,7 +1136,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		return TRUE;
 	}
 
-	function get_users($offset = 0, $maxRecords = -1, $sort_mode = 'login_desc', $find = '') {
+	function get_users($offset = 0, $max_records = -1, $sort_mode = 'login_desc', $find = '') {
 		$sort_mode = $this->mDb->convert_sortmode($sort_mode);
 		// Return an array of users indicating name, email, last changed pages, versions, last_login
 		if ($find) {
@@ -1149,7 +1149,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		}
 		$query = "select * from `".BIT_DB_PREFIX."users_users` $mid order by $sort_mode";
 		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_users`";
-		$result = $this->mDb->query($query, $bindvars, $maxRecords, $offset);
+		$result = $this->mDb->query($query, $bindvars, $max_records, $offset);
 		$cant = $this->mDb->getOne($query_cant, array());
 		$ret = array();
 		while( $res = $result->fetchRow() ) {

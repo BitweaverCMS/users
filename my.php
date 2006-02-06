@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.12 2006/02/03 19:17:26 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.13 2006/02/06 00:12:08 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my.php,v 1.12 2006/02/03 19:17:26 spiderr Exp $
+ * $Id: my.php,v 1.13 2006/02/06 00:12:08 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -37,10 +37,10 @@ vd( 'yo' );
 		$gBitSmarty->assign( 'sort_mode', $content_sort_mode );
 	}
 	
-	$max_content = $gBitSystem->mPrefs['maxRecords'];
+	$max_content = $gBitSystem->mPrefs['max_records'];
 	$offset_content = !empty( $_REQUEST['offset'] ) ? $_REQUEST['offset'] : 0;
 	$gBitSmarty->assign( 'curPage', $page = !empty( $_REQUEST['page'] ) ? $_REQUEST['page'] : 1 );
-	$offset_content = ( $page - 1 ) * $gBitSystem->mPrefs['maxRecords'];
+	$offset_content = ( $page - 1 ) * $gBitSystem->mPrefs['max_records'];
 	
 	// set the user_id to only display content viewing user
 	$_REQUEST['user_id'] = $gBitUser->mUserId;
@@ -49,7 +49,7 @@ vd( 'yo' );
 	include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
 	
 	// calculate page number
-	$numPages = ceil( $contentList['cant'] / $gBitSystem->mPrefs['maxRecords'] );
+	$numPages = ceil( $contentList['cant'] / $gBitSystem->mPrefs['max_records'] );
 	$gBitSmarty->assign( 'numPages', $numPages );
 	
 	//$gBitSmarty->assign_by_ref('offset', $offset);
@@ -60,6 +60,6 @@ vd( 'yo' );
 	// end of content listing
 }
 
-$gBitSystem->display( 'bitpackage:users/my_bitweaver.tpl', 'My '.$gBitSystem->getPreference( 'siteTitle' ) );
+$gBitSystem->display( 'bitpackage:users/my_bitweaver.tpl', 'My '.$gBitSystem->getPreference( 'site_title' ) );
 
 ?>
