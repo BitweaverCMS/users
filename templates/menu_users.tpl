@@ -102,15 +102,15 @@
 				</a>
 			</li>
 		{/if}
-		{if $gBitSystem->isPackageActive( 'messu' )}
+		{if $gBitSystem->isPackageActive( 'messages' )}
 			<li>
-				<a class="item" {if $unreadMsgs}title="{tr}You have unread messages{/tr}"{/if} href="{$smarty.const.MESSU_PKG_URL}message_box.php">
-					{biticon ipackage=messu iname=recieve_mail iexplain="Send and recieve personal messages" iforce=icon}{if !$icons_only} {tr}Message Box{/tr} {/if}{if $unreadMsgs}<strong>[ {$unreadMsgs} ]</strong>{/if}
+				<a class="item" {if $unreadMsgs}title="{tr}You have unread messages{/tr}"{/if} href="{$smarty.const.MESSAGES_PKG_URL}message_box.php">
+					{biticon ipackage=messages iname=recieve_mail iexplain="Send and recieve personal messages" iforce=icon}{if !$icons_only} {tr}Message Box{/tr} {/if}{if $unreadMsgs}<strong>[ {$unreadMsgs} ]</strong>{/if}
 				</a>
 			</li>
 			<li>
-				<a class="item" href="{$smarty.const.MESSU_PKG_URL}compose.php">
-					{biticon ipackage=messu iname=send_mail iexplain="Send a personal messages to a user" iforce=icon}{if !$icons_only} {tr}Compose Message{/tr}{/if}
+				<a class="item" href="{$smarty.const.MESSAGES_PKG_URL}compose.php">
+					{biticon ipackage=messages iname=send_mail iexplain="Send a personal messages to a user" iforce=icon}{if !$icons_only} {tr}Compose Message{/tr}{/if}
 				</a>
 			</li>
 		{/if}

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.6 2006/01/29 23:00:41 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.7 2006/02/08 18:32:11 mej Exp $ *}
 {strip}
 {if $userData->getPreference('user_information') eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
@@ -83,11 +83,11 @@
 		{/forminput}
 	</div>
 
-	{if $gBitSystem->isPackageActive( 'messu' ) and $userData->getPreference('allowMsgs') ne 'n' and $gBitUser->mUserId ne $userData->mUserId}
+	{if $gBitSystem->isPackageActive( 'messages' ) and $userData->getPreference('allowMsgs') ne 'n' and $gBitUser->mUserId ne $userData->mUserId}
 		<div class="row">
 			{formlabel label="Send Message"}
 			{forminput}
-				{tr}Send a <a href="{$smarty.const.MESSU_PKG_URL}compose.php?to={$userInfo.login}">personal message</a> to this user{/tr}
+				{tr}Send a <a href="{$smarty.const.MESSAGES_PKG_URL}compose.php?to={$userInfo.login}">personal message</a> to this user{/tr}
 			{/forminput}
 		</div>
 	{/if}

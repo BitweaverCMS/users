@@ -2,8 +2,8 @@
 	{bitmodule title="$moduleTitle"}
 		<h2 style="text-align:center;">
 			{displayname hash=$userInfo}
-			{if $gQueryUserId and $gBitSystem->isPackageActive( 'messu' ) and $gBitUser->hasPermission( 'bit_p_messages' ) and $userPrefs.allowMsgs eq 'y'}
-				&nbsp;<a href="{$smarty.const.MESSU_PKG_URL}compose.php?to={$userInfo.login}">{biticon ipackage="messu" iname="send_mail" iexplain="Send user a personal message" iforce="icon"}</a>
+			{if $gQueryUserId and $gBitSystem->isPackageActive( 'messages' ) and $gBitUser->hasPermission( 'bit_p_messages' ) and $userPrefs.allowMsgs eq 'y'}
+				&nbsp;<a href="{$smarty.const.MESSAGES_PKG_URL}compose.php?to={$userInfo.login}">{biticon ipackage="messages" iname="send_mail" iexplain="Send user a personal message" iforce="icon"}</a>
 			{/if}
 		</h2>
 		<p style="text-align:center;">

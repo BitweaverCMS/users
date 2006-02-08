@@ -286,9 +286,9 @@
 				{/legend}
 			{/jstab}
 
-			{if $gBitSystem->isPackageActive( 'messu' )}
+			{if $gBitSystem->isPackageActive( 'messages' )}
 				{jstab title="User Messages"}
-					{include file='bitpackage:messu/messages_preferences_inc.tpl'}
+					{include file='bitpackage:messages/messages_preferences_inc.tpl'}
 				{/jstab}
 			{/if}
 
