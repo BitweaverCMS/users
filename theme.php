@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.6 2006/02/01 20:38:42 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.7 2006/02/08 21:51:15 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: theme.php,v 1.6 2006/02/01 20:38:42 squareing Exp $
+ * $Id: theme.php,v 1.7 2006/02/08 21:51:15 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -80,27 +80,23 @@ function delete($dir, $pattern = "*.*")
 }
 
 // it copies $wf to $wto
-function copy_dirs($wf, $wto)
-{
-   if (!file_exists($wto))
-   {
-       mkdir($wto, 0777);
-   }
-   $arr=ls_a($wf);
-   foreach ($arr as $fn)
-   {
-       if($fn)
-       {
-           $fl=$wf."/".$fn;
-           $flto=$wto."/".$fn;
-           if(is_dir($fl)) copy_dirs($fl, $flto);
-           else // begin 2nd improvement
-           {
-               @copy($fl, $flto);
-               chmod($flto, 0666);
-           } // end 2nd improvement
-       }
-   }
+function copy_dirs($wf, $wto) {
+	if (!file_exists($wto)) {
+		mkdir($wto, 0777);
+	}
+	$arr=ls_a($wf);
+	foreach ($arr as $fn) {
+		if($fn) {
+			$fl=$wf."/".$fn;
+			$flto=$wto."/".$fn;
+			if(is_dir($fl)) copy_dirs($fl, $flto);
+			else // begin 2nd improvement
+			{
+				@copy($fl, $flto);
+				chmod($flto, 0666);
+			} // end 2nd improvement
+		}
+	}
 }
 
 //******** END HELPER FUNCTIONS **********

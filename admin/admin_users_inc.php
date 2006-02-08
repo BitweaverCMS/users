@@ -26,43 +26,42 @@ $gBitSmarty->assign( 'formFeatures', $formFeatures );
 
 if( isset( $_REQUEST['settings'] ) ) {
 	foreach ( array_keys( $formFeatures ) as $feature) {
-		$gBitSystem->storePreference( $feature, (isset( $_REQUEST['settings'][$feature][0] ) ? $_REQUEST['settings'][$feature][0] : 'n') );
+		$gBitSystem->storePreference( $feature, (isset( $_REQUEST['settings'][$feature][0] ) ? $_REQUEST['settings'][$feature][0] : 'n'), USERS_PKG_NAME );
 	}
 
 	if( $customFields = explode( ',', $_REQUEST['settings']['custom_user_fields'] ) ) {
 		trim_array( $customFields );
 		$customFields = implode( ',', $customFields );
 	}
-	$gBitSystem->storePreference( 'custom_user_fields', $customFields );
-	$gBitSystem->storePreference( 'display_name', (isset( $_REQUEST['settings']['display_name'] ) ? $_REQUEST['settings']['display_name'] : 'real_name') );
-	$gBitSystem->storePreference( 'feature_user_theme', (isset( $_REQUEST['settings']['feature_user_theme'][0] ) ? $_REQUEST['settings']['feature_user_theme'][0] : NULL) );
-	$gBitSystem->storePreference( 'feature_user_layout', (isset( $_REQUEST['settings']['feature_user_layout'][0] ) ? $_REQUEST['settings']['feature_user_layout'][0] : NULL) );
+	$gBitSystem->storePreference( 'custom_user_fields', $customFields, USERS_PKG_NAME );
+	$gBitSystem->storePreference( 'display_name', (isset( $_REQUEST['settings']['display_name'] ) ? $_REQUEST['settings']['display_name'] : 'real_name'), USERS_PKG_NAME );
+	$gBitSystem->storePreference( 'feature_user_theme', (isset( $_REQUEST['settings']['feature_user_theme'][0] ) ? $_REQUEST['settings']['feature_user_theme'][0] : NULL), USERS_PKG_NAME );
+	$gBitSystem->storePreference( 'feature_user_layout', (isset( $_REQUEST['settings']['feature_user_layout'][0] ) ? $_REQUEST['settings']['feature_user_layout'][0] : NULL), USERS_PKG_NAME );
 }
 
 // Handle Admin Password Change Request
 // doesn't seem to be working at the moment
 if (isset($_REQUEST["newadminpass"]) ) {
+	if ($_REQUEST["adminpass"] <> $_REQUEST["again"]) {
+		$gBitSmarty->assign("msg", tra("The passwords don't match"));
 
-    if ($_REQUEST["adminpass"] <> $_REQUEST["again"]) {
-        $gBitSmarty->assign("msg", tra("The passwords don't match"));
+		$gBitSystem->display( 'error.tpl' );
+		die;
+	}
 
-        $gBitSystem->display( 'error.tpl' );
-        die;
-    }
+	// Validate password here
+	if (strlen($_REQUEST["adminpass"]) < $min_pass_length) {
+		$text = tra("Password should be at least");
 
-    // Validate password here
-    if (strlen($_REQUEST["adminpass"]) < $min_pass_length) {
-        $text = tra("Password should be at least");
+		$text .= " " . $min_pass_length . " ";
+		$text .= tra("characters long");
+		$gBitSmarty->assign("msg", $text);
+		$gBitSystem->display( 'error.tpl' );
+		die;
+	}
 
-        $text .= " " . $min_pass_length . " ";
-        $text .= tra("characters long");
-        $gBitSmarty->assign("msg", $text);
-        $gBitSystem->display( 'error.tpl' );
-        die;
-    }
-
-    $gBitUser->change_user_password("admin", $_REQUEST["adminpass"]);
-    $gBitSmarty->assign('pagetop_msg', tra("Your admin password has been changed"));
+	$gBitUser->change_user_password("admin", $_REQUEST["adminpass"]);
+	$gBitSmarty->assign('pagetop_msg', tra("Your admin password has been changed"));
 }
 
 
