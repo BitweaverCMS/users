@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.18 2006/02/06 16:28:49 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.19 2006/02/08 23:24:28 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.18 2006/02/06 16:28:49 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.19 2006/02/08 23:24:28 spiderr Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.18 $
+ * @version  $Revision: 1.19 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -454,8 +454,7 @@ class BitPermUser extends BitUser {
 				$sql = "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."users_groups` WHERE `group_id` = ?";
 				$groupExists = $this->mDb->getOne($sql, array($pParamHash['group_id']));
 				if ($groupExists) {
-					$groupPrimary = array ( "name" => "group_id", "value" => $pParamHash['group_id'] );
-					$result = $this->mDb->associateUpdate( BIT_DB_PREFIX.'users_groups', $pParamHash['group_store'], $groupPrimary );
+					$result = $this->mDb->associateUpdate( BIT_DB_PREFIX.'users_groups', $pParamHash['group_store'], array( "group_id" => $pParamHash['group_id'] ) );
 				} else {
 					// A group_id was specified but that group does not exist yet
 					$pParamHash['group_store']['group_id'] = $pParamHash['group_id'];

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.46 2006/02/06 22:56:51 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.47 2006/02/08 23:24:28 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.46 2006/02/06 22:56:51 squareing Exp $
+ * $Id: BitUser.php,v 1.47 2006/02/08 23:24:28 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.46 $
+ * @version  $Revision: 1.47 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -205,7 +205,7 @@ class BitUser extends LibertyAttachable {
 				$update['user_agent'] = substr( $_SERVER['HTTP_USER_AGENT'], 0, 128 );
 			}
 			$update['get_count'] = $row['get_count'] + 1;
-			$ret = $this->mDb->associateUpdate( BIT_DB_PREFIX.'users_cnxn', $update, array( 'name' => 'cookie', 'value' => $pSessionId ) );
+			$ret = $this->mDb->associateUpdate( BIT_DB_PREFIX.'users_cnxn', $update, array( 'cookie' => $pSessionId ) );
 		} else {
 			if( $this->isRegistered() ) {
 				$update['ip'] = $_SERVER['REMOTE_ADDR'];
