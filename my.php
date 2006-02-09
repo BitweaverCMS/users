@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.14 2006/02/09 10:30:38 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.15 2006/02/09 10:41:47 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my.php,v 1.14 2006/02/09 10:30:38 squareing Exp $
+ * $Id: my.php,v 1.15 2006/02/09 10:41:47 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -24,7 +24,7 @@ if( !$gBitUser->isRegistered() ) {
 }
 
 // custom userfields
-if( !empty( $gBitSystem->getPreference( 'custom_user_fields' ) ) ) {
+if( $gBitSystem->isFeatureActive( 'custom_user_fields' ) ) {
 	$customFields= explode( ',', $gBitSystem->getPreference( 'custom_user_fields' )  );
 	$gBitSmarty->assign('customFields', $customFields);
 }
