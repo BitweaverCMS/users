@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.18 2006/02/06 00:12:08 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.19 2006/02/09 10:30:38 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.18 2006/02/06 00:12:08 squareing Exp $
+ * $Id: preferences.php,v 1.19 2006/02/09 10:30:38 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -52,8 +52,8 @@ if( $gBitSystem->isPackageActive( 'wiki' ) ) {
 	$gBitSmarty->assign('url_edit', httpPrefix(). $foo1);
 	$gBitSmarty->assign('url_visit', httpPrefix(). $foo2);
 }
-if( !empty( $gBitSystem->mPrefs['custom_user_fields'] ) ) {
-	$customFields= explode( ',', $gBitSystem->mPrefs['custom_user_fields']  );
+if( !empty( $gBitSystem->getPreference( 'custom_user_fields' ) ) ) {
+	$customFields= explode( ',', $gBitSystem->getPreference( 'custom_user_fields' )  );
 	$gBitSmarty->assign('customFields', $customFields);
 }
 
