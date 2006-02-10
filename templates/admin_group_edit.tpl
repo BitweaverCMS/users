@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.4 2006/01/24 21:49:56 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.5 2006/02/10 23:33:42 lsces Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -49,7 +49,7 @@
 					<div class="row">
 						{formlabel label="Group home page" for="group_home"}
 						{forminput}
-							{html_options values=$contentTypes options=$contentTypes name=content_type_guid selected=$contentSelect}
+							{html_options options=$contentTypes name=content_type_guid selected=$contentSelect}
 							<br />
 							{html_options name="dummy" id="content-list" values=$contentList options=$contentList onchange="$('group_home').value=options[selectedIndex].value;"}
 							<br />
