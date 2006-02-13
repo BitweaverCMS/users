@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.47 2006/02/08 23:24:28 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.48 2006/02/13 10:06:24 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.47 2006/02/08 23:24:28 spiderr Exp $
+ * $Id: BitUser.php,v 1.48 2006/02/13 10:06:24 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.47 $
+ * @version  $Revision: 1.48 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -166,7 +166,7 @@ class BitUser extends LibertyAttachable {
 	function defaults() {
 		global $gBitSystem;
 		if( !$this->getPreference( 'user_information' ) ) { $this->setPreference( 'user_information', 'public' ); }
-		if( !$this->getPreference( 'allowMsgs' ) ) { $this->setPreference( 'allowMsgs', 'y' ); }
+		if( !$this->getPreference( 'messages_allow_messages' ) ) { $this->setPreference( 'messages_allow_messages', 'y' ); }
 		if( !$this->getPreference( 'display_timezone' ) ) {
 			$server_time = new BitDate();
 			$this->setPreference( 'display_timezone', $server_time->display_offset );
@@ -1180,7 +1180,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 	function canCustomizeTheme() {
 		global $gBitSystem;
-		return( $this->hasPermission( 'bit_p_custom_home_theme' ) || $gBitSystem->getPreference('feature_user_theme') == 'y' || $gBitSystem->getPreference('feature_user_theme') == 'h' );
+		return( $this->hasPermission( 'bit_p_custom_home_theme' ) || $gBitSystem->getPreference('users_themes') == 'y' || $gBitSystem->getPreference('users_themes') == 'h' );
 
 	}
 
@@ -1188,7 +1188,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 	function canCustomizeLayout() {
 		global $gBitSystem;
-		return( $this->hasPermission( 'bit_p_custom_home_layout' ) || $gBitSystem->getPreference('feature_user_layout') == 'y' || $gBitSystem->getPreference('feature_user_layout') == 'h' );
+		return( $this->hasPermission( 'bit_p_custom_home_layout' ) || $gBitSystem->getPreference('users_layouts') == 'y' || $gBitSystem->getPreference('users_layouts') == 'h' );
 	}
 
 
@@ -1495,10 +1495,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		} else {
 			global $gBitSystem;
 
-			$rewrite_tag = $gBitSystem->isFeatureActive( 'feature_pretty_urls_extended' ) ? 'view/':'';
+			$rewrite_tag = $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ? 'view/':'';
 
 			if ($gBitSystem->isFeatureActive( 'pretty_urls' )
-			|| $gBitSystem->isFeatureActive( 'feature_pretty_urls_extended' ) ) {
+			|| $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$ret =  USERS_PKG_URL . $rewrite_tag;
 				$ret .= urlencode( $pUserName );
 			}

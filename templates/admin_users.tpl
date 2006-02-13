@@ -23,23 +23,23 @@
 	{/foreach}
 
 	<div class="row">
-		{formlabel label="Users Can Customize Their Layout" for="feature_user_layout"}
+		{formlabel label="Users Can Customize Their Layout" for="users_layouts"}
 		{forminput}
-			<select name="settings[feature_user_layout]" id="feature_user_layout">
+			<select name="settings[users_layouts]" id="users_layouts">
 				<option value="">Never</option>
-				<option value="h" {if $gBitSystemPrefs.feature_user_layout eq 'h'}selected="selected"{/if}>{tr}Just For Their Homepage{/tr}</option>
+				<option value="h" {if $gBitSystemPrefs.users_layouts eq 'h'}selected="selected"{/if}>{tr}Just For Their Homepage{/tr}</option>
 			</select>
 			{formhelp note="Allows users to position and display their own set of modules" page="UsersConfigureModules"}
 		{/forminput}
 	</div>
 
 	<div class="row">
-		{formlabel label="Users Can Change Their Theme" for="feature_user_theme"}
+		{formlabel label="Users Can Change Their Theme" for="users_themes"}
 		{forminput}
-			<select name="settings[feature_user_theme]" id="feature_user_theme">
+			<select name="settings[users_themes]" id="users_themes">
 				<option value="">Never</option>
-				<option value="h" {if $gBitSystemPrefs.feature_user_theme eq 'h'}selected="selected"{/if}>{tr}Just For Their Homepage{/tr}</option>
-				<option value="y" {if $gBitSystem->isFeatureActive( 'feature_user_theme' )}selected="selected"{/if}>{tr}For the Entire Site{/tr}</option>
+				<option value="h" {if $gBitSystemPrefs.users_themes eq 'h'}selected="selected"{/if}>{tr}Just For Their Homepage{/tr}</option>
+				<option value="y" {if $gBitSystem->isFeatureActive( 'users_themes' )}selected="selected"{/if}>{tr}For the Entire Site{/tr}</option>
 			</select>
 			{formhelp note="Allows users to choose their own theme." page="UserTheme"}
 		{/forminput}

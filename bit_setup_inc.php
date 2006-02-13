@@ -212,21 +212,21 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		}
 	}
 
-	$allowMsgs = 'n';
+	$messages_allow_messages = 'n';
 	if( $gBitUser->isRegistered() ) {
-		global $tasks_use_dates, $tasks_max_records, $allowMsgs;
-		$allowMsgs = $gBitUser->getPreference( 'allowMsgs', 'y');
+		global $tasks_use_dates, $tasks_max_records, $messages_allow_messages;
+		$messages_allow_messages = $gBitUser->getPreference( 'messages_allow_messages', 'y');
 		$tasks_use_dates = $gBitUser->getPreference( 'tasks_use_dates');
 		$tasks_max_records = $gBitUser->getPreference( 'tasks_max_records');
 		$gBitSmarty->assign('tasks_use_dates', $tasks_use_dates);
 		$gBitSmarty->assign('tasks_max_records', $tasks_max_records);
-		$gBitSmarty->assign('allowMsgs', $allowMsgs);
+		$gBitSmarty->assign('messages_allow_messages', $messages_allow_messages);
 	}
 
 	// register 'my' menu
 	if( $gBitUser->isValid() && ( $gBitUser->isRegistered() || !$gBitSystem->isFeatureActive( 'hide_my_top_bar_link' ) ) ) {
 		$site_menu_title = $gBitSystem->getPreference( 'site_menu_title' );
 		$displayTitle = !empty( $site_menu_title ) ? $site_menu_title : $gBitSystem->getPreference( 'site_title', 'Site' );
-		$gBitSystem->registerAppMenu( USERS_PKG_NAME, 'My '.$displayTitle, ($gBitSystem->getPreference('feature_user_preferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
+		$gBitSystem->registerAppMenu( USERS_PKG_NAME, 'My '.$displayTitle, ($gBitSystem->getPreference('users_preferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
 	}
 ?>

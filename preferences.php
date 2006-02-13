@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.20 2006/02/09 10:41:47 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.21 2006/02/13 10:06:24 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.20 2006/02/09 10:41:47 squareing Exp $
+ * $Id: preferences.php,v 1.21 2006/02/13 10:06:24 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -25,7 +25,7 @@ if( $gBitSystem->isPackageActive( 'blogs' ) ) {
 	include_once( BLOGS_PKG_PATH.'BitBlog.php' );
 }
 // User preferences screen
-$gBitSystem->verifyFeature( 'feature_user_preferences' );
+$gBitSystem->verifyFeature( 'users_preferences' );
 
 if( !$gBitUser->isRegistered() ) {
 	$gBitSmarty->assign( 'msg', tra( "You are not logged in" ) );
@@ -152,7 +152,7 @@ if (isset($_REQUEST['messprefs'])) {
 	$editUser->storePreference( 'mess_max_records', $_REQUEST['mess_max_records'], 'users' );
 	$editUser->storePreference( 'minPrio', $_REQUEST['minPrio'], 'users' );
 	$editUser->storePreference( 'message_alert', !empty( $_REQUEST['message_alert'] ) ? 'y' : 'n', 'users' );
-	$editUser->storePreference( 'allowMsgs', !empty( $_REQUEST['allowMsgs'] ) ? 'y' : 'n', 'users' );
+	$editUser->storePreference( 'messages_allow_messages', !empty( $_REQUEST['messages_allow_messages'] ) ? 'y' : 'n', 'users' );
 }
 
 if (isset($_REQUEST['tasksprefs'])) {

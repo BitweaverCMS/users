@@ -20,9 +20,9 @@
 				</a>
 			</li>
 		{/if}
-		{if $gBitSystemPrefs.feature_user_layout eq 'h'}
+		{if $gBitSystemPrefs.users_layouts eq 'h'}
 			{assign var="myLayoutConfig" value="My Homepage"}
-		{else if $gBitSystem->isFeatureActive( 'feature_user_layout' )}
+		{else if $gBitSystem->isFeatureActive( 'users_layouts' )}
 			{assign var="myLayoutConfig" value="My Site Layout"}
 		{/if}
 		{if $gBitUser->canCustomizeTheme() || $gBitUser->canCustomizeLayout() }
@@ -32,7 +32,7 @@
 				</a>
 			</li>
 		{/if}
-		{if $gBitSystem->isFeatureActive( 'feature_user_preferences' )}
+		{if $gBitSystem->isFeatureActive( 'users_preferences' )}
 			<li>
 				<a class="item" href="{$smarty.const.USERS_PKG_URL}preferences.php">
 					{biticon ipackage=liberty iname=settings iexplain=Preferences iforce=icon}{if !$icons_only} {tr}Preferences{/tr}{/if}

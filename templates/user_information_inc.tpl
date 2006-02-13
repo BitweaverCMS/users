@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.7 2006/02/08 18:32:11 mej Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.8 2006/02/13 10:06:26 squareing Exp $ *}
 {strip}
 {if $userData->getPreference('user_information') eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
@@ -83,7 +83,7 @@
 		{/forminput}
 	</div>
 
-	{if $gBitSystem->isPackageActive( 'messages' ) and $userData->getPreference('allowMsgs') ne 'n' and $gBitUser->mUserId ne $userData->mUserId}
+	{if $gBitSystem->isPackageActive( 'messages' ) and $userData->getPreference('messages_allow_messages') ne 'n' and $gBitUser->mUserId ne $userData->mUserId}
 		<div class="row">
 			{formlabel label="Send Message"}
 			{forminput}

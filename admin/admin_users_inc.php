@@ -1,6 +1,6 @@
 <?php
 $formFeatures = array(
-	'feature_user_preferences' => array(
+	'users_preferences' => array(
 			'label' => 'User Preferences',
 			'note' => 'Users can view and modify their personal preferences.',
 			'page' => 'UserPreferences',
@@ -35,8 +35,8 @@ if( isset( $_REQUEST['settings'] ) ) {
 	}
 	$gBitSystem->storePreference( 'custom_user_fields', $customFields, USERS_PKG_NAME );
 	$gBitSystem->storePreference( 'display_name', (isset( $_REQUEST['settings']['display_name'] ) ? $_REQUEST['settings']['display_name'] : 'real_name'), USERS_PKG_NAME );
-	$gBitSystem->storePreference( 'feature_user_theme', (isset( $_REQUEST['settings']['feature_user_theme'][0] ) ? $_REQUEST['settings']['feature_user_theme'][0] : NULL), USERS_PKG_NAME );
-	$gBitSystem->storePreference( 'feature_user_layout', (isset( $_REQUEST['settings']['feature_user_layout'][0] ) ? $_REQUEST['settings']['feature_user_layout'][0] : NULL), USERS_PKG_NAME );
+	$gBitSystem->storePreference( 'users_themes', (isset( $_REQUEST['settings']['users_themes'][0] ) ? $_REQUEST['settings']['users_themes'][0] : NULL), USERS_PKG_NAME );
+	$gBitSystem->storePreference( 'users_layouts', (isset( $_REQUEST['settings']['users_layouts'][0] ) ? $_REQUEST['settings']['users_layouts'][0] : NULL), USERS_PKG_NAME );
 }
 
 // Handle Admin Password Change Request
