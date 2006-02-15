@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.48 2006/02/13 10:06:24 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.49 2006/02/15 20:45:11 wakeworks Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.48 2006/02/13 10:06:24 squareing Exp $
+ * $Id: BitUser.php,v 1.49 2006/02/15 20:45:11 wakeworks Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.48 $
+ * @version  $Revision: 1.49 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -530,7 +530,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 
 			if( !empty( $pParamHash['user_store'] ) && count( $pParamHash['user_store'] ) ) {
 				if( $this->isValid() ) {
-					$userId = array ( "name" => "user_id", "value" => $this->mUserId );
+					$userId = array ( "user_id" => $this->mUserId );
 					$result = $this->mDb->associateUpdate( BIT_DB_PREFIX.'users_users', $pParamHash['user_store'], $userId );
 				} else {
 					if( empty( $pParamHash['user_store']['user_id'] ) ) {
