@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.21 2006/02/10 23:21:55 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.22 2006/02/17 22:06:23 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.21 2006/02/10 23:21:55 lsces Exp $
+ * $Id: BitPermUser.php,v 1.22 2006/02/17 22:06:23 spiderr Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.21 $
+ * @version  $Revision: 1.22 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -515,7 +515,7 @@ class BitPermUser extends BitUser {
 			/* **** NOTICE **** This query is dog slow! I get much better performance with the alternative method below - drewslater
 			*/
 		// the double up.`perm_name` is intentional - the first is for hash key, the second is for hash value
-			$query = "SELECT up.`perm_name` AS `hash_key`, up.`perm_name`, up.`perm_desc`, up.`level`, up.`package`
+			$query = "SELECT up.`perm_name` AS `hash_key`, up.`perm_name`, up.`perm_desc`, up.`perm_level`, up.`package`
 					  FROM `".BIT_DB_PREFIX."users_permissions` up
 						INNER JOIN `".BIT_DB_PREFIX."users_group_permissions` ugp ON ( ugp.`perm_name`=up.`perm_name` )
 						INNER JOIN `".BIT_DB_PREFIX."users_groups` ug ON ( ug.`group_id`=ugp.`group_id` )
@@ -531,7 +531,7 @@ class BitPermUser extends BitUser {
 				$groupIdsString .= $groupId.($groupCount++ >= count($this->mGroups) ? '' : ', ');
 			}
 			if ( $groupCount > 1)
-			{	$sql = "SELECT up.`perm_name`, up.`perm_desc`, up.`level`, up.`package` FROM `".BIT_DB_PREFIX."users_permissions` up
+			{	$sql = "SELECT up.`perm_name`, up.`perm_desc`, up.`perm_level`, up.`package` FROM `".BIT_DB_PREFIX."users_permissions` up
 						INNER JOIN `".BIT_DB_PREFIX."users_group_permissions` ugp ON (ugp.`perm_name` = up.`perm_name`)
 						WHERE ugp.`group_id` IN ($groupIdsString)";
 				$this->mPerms = $this->mDb->getAssoc( $sql );
@@ -607,7 +607,7 @@ class BitPermUser extends BitUser {
 			$values[] = '%'.$find.'%';
 		}
 		// the double up.`perm_name` is intentional - the first is for hash key, the second is for hash value
-		$query = "SELECT up.`perm_name` AS `hash_key`, up.`perm_name`, up.`perm_desc`, up.`level`, up.`package` $selectSql
+		$query = "SELECT up.`perm_name` AS `hash_key`, up.`perm_name`, up.`perm_desc`, up.`perm_level`, up.`package` $selectSql
 				  FROM `".BIT_DB_PREFIX."users_permissions` up $fromSql $mid
 				  ORDER BY $sortMode";
 		return( $this->mDb->getAssoc( $query, $values ) );
@@ -701,7 +701,7 @@ class BitPermUser extends BitUser {
 	function change_permission_level($perm, $level) {
 		$gBitCache = new BitCache();
 		$gBitCache->removeCached("allperms");
-		$query = "update `".BIT_DB_PREFIX."users_permissions` set `level` = ?
+		$query = "update `".BIT_DB_PREFIX."users_permissions` set `perm_level` = ?
 			where `perm_name` = ?";
 		$this->mDb->query($query, array($level, $perm));
 	}
@@ -716,7 +716,7 @@ class BitPermUser extends BitUser {
 			$whereSql = ' AND `package`=?';
 			array_push( $bindvars, $pPackage );
 		}
-		$query = "SELECT `perm_name` FROM `".BIT_DB_PREFIX."users_permissions` WHERE `level` = ? $whereSql";
+		$query = "SELECT `perm_name` FROM `".BIT_DB_PREFIX."users_permissions` WHERE `perm_level` = ? $whereSql";
 		$result = $this->mDb->query($query, $bindvars);
 		$ret = array();
 		if( $result ) {
@@ -730,7 +730,7 @@ class BitPermUser extends BitUser {
 	function remove_level_permissions($group, $level) {
 		$gBitCache = new BitCache();
 		$gBitCache->removeCached("allperms");
-		$query = "select `perm_name` from `".BIT_DB_PREFIX."users_permissions` where `level` = ?";
+		$query = "select `perm_name` from `".BIT_DB_PREFIX."users_permissions` where `perm_level` = ?";
 		$result = $this->mDb->query($query, array($level));
 		$ret = array();
 		while ($res = $result->fetchRow()) {
@@ -745,17 +745,17 @@ class BitPermUser extends BitUser {
 		$query = "delete from `".BIT_DB_PREFIX."users_permissions` where `perm_name` = ?";
 		$result = $this->mDb->query($query, array(''));
 		$query = "insert into `".BIT_DB_PREFIX."users_permissions` (`perm_name`, `perm_desc`,
-			`package`, `level`) VALUES ('','','',?)";
+			`package`, `perm_level`) VALUES ('','','',?)";
 		$this->mDb->query($query, array($level));
 	}
 
 
 	function get_permission_levels() {
-		$query = "select distinct(`level`) from `".BIT_DB_PREFIX."users_permissions`";
+		$query = "select distinct(`perm_level`) from `".BIT_DB_PREFIX."users_permissions`";
 		$result = $this->mDb->query($query);
 		$ret = array();
 		while ($res = $result->fetchRow()) {
-			$ret[] = $res['level'];
+			$ret[] = $res['perm_level'];
 		}
 		return $ret;
 	}
