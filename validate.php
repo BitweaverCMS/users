@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.9 2006/02/06 16:20:09 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.10 2006/02/17 13:57:55 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: validate.php,v 1.9 2006/02/06 16:20:09 squareing Exp $
+ * $Id: validate.php,v 1.10 2006/02/17 13:57:55 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -23,26 +23,10 @@ global $gBitSystem;
 //Remember where user is logging in from and send them back later; using session variable for those of us who use WebISO services
 if( empty( $_SESSION['loginfrom'] ) ) {
 	if( isset( $_SERVER['HTTP_REFERER'] ) && !strpos( $_SERVER['HTTP_REFERER'], 'login.php' )  && !strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) ) {
-		$from = (parse_url($_SERVER['HTTP_REFERER']));
+		$from = parse_url( $_SERVER['HTTP_REFERER'] );
 		$_SESSION['loginfrom'] = $from['path'];
 	}
 }
-/* This appears obsoleted by code in users/admin/index.php (assume_user) - wolff_borg
-if ($gBitUser->isAdmin()) {
-	if (isset($_REQUEST["su"])) {
-		if ($gBitUser->userExists( array( 'login' => $_REQUEST['username'] ) ) ) {
-			$_SESSION["$user_cookie_site"] = $_REQUEST["username"];
-			$gBitSmarty->assign_by_ref('user', $_REQUEST["username"]);
-		}
-		$url = $_SESSION['loginfrom'];
-		//unset session variable for the next su
-		unset($_SESSION['loginfrom']);
-		echo("location: $url");
-		//header("location: $url");
-		die;
-	}
-}
-*/
 
 $https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
 $https_login_required = $gBitSystem->getPreference('https_login_required', 'n');
@@ -74,6 +58,7 @@ if (!preg_match('/^\w+:\/{2}/', $url)) {
 if( (strpos( $url, 'login.php?' ) || strpos( $url, 'remind_password.php' )) && strpos( $url, 'login.php?error=') == -1) {
 	$url = $gBitSystem->getDefaultPage();
 }
+
 header('Location: ' . $url);
 exit;
 ?>
