@@ -124,7 +124,6 @@ foreach( array_keys( $tables ) AS $tableName ) {
 $indices = array (
 	'users_users_email_idx' => array( 'table' => 'users_users', 'cols' => 'email', 'opts' => array('UNIQUE') ),
 	'users_users_login_idx' => array( 'table' => 'users_users', 'cols' => 'login', 'opts' => array('UNIQUE') ),
-	'users_permissions_name_idx' => array( 'table' => 'users_permissions', 'cols' => 'perm_name', 'opts' => array('UNIQUE') ),
 	'users_users_avatar_atment_idx' => array( 'table' => 'users_users', 'cols' => 'avatar_attachment_id', 'opts' => NULL ),
 	'users_groups_user_idx' => array( 'table' => 'users_groups', 'cols' => 'user_id', 'opts' => NULL ),
 	'users_groups_user_name_idx' => array( 'table' => 'users_groups', 'cols' => 'user_id,group_name', 'opts' => array('UNIQUE') ),
@@ -133,7 +132,6 @@ $indices = array (
 	'users_object_perm_group_idx' =>  array( 'table' => 'users_object_permissions', 'cols' => 'group_id', 'opts' => NULL ),
 	'users_object_perm_perm_idx' => array( 'table' => 'users_object_permissions', 'cols' => 'perm_name', 'opts' => NULL ),
 	'users_object_perm_object_idx' => array( 'table' => 'users_object_permissions', 'cols' => 'object_id', 'opts' => NULL ),
-	'users_permissions_perm_idx' => array( 'table' => 'users_permissions', 'cols' => 'perm_name', 'opts' => NULL ),
 	'users_groups_map_user_idx' => array( 'table' => 'users_groups_map', 'cols' => 'user_id', 'opts' => NULL ),
 	'users_groups_map_group_idx' => array( 'table' => 'users_groups_map', 'cols' => 'group_id', 'opts' => NULL ),
 	'users_fav_con_idx' => array( 'table' => 'users_favorites_map', 'cols' => 'favorite_content_id', 'opts' => NULL ),

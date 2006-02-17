@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.22 2006/02/17 22:06:23 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.23 2006/02/17 23:48:28 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.22 2006/02/17 22:06:23 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.23 2006/02/17 23:48:28 spiderr Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.22 $
+ * @version  $Revision: 1.23 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -720,8 +720,8 @@ class BitPermUser extends BitUser {
 		$result = $this->mDb->query($query, $bindvars);
 		$ret = array();
 		if( $result ) {
-			while ($res = $result->fetchRow()) {
-				$this->assignPermissionToGroup($res['perm_name'], $pGroupId );
+			while ($row = $result->fetchRow()) {
+				$this->assignPermissionToGroup($row['perm_name'], $pGroupId );
 			}
 		}
 	}
