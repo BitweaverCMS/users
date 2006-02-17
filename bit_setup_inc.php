@@ -1,7 +1,12 @@
 <?php
 global $gBitSystem, $gBitUser, $gBitSmarty;
 
-$gBitSystem->registerPackage( 'users', dirname( __FILE__).'/', FALSE );
+$registerHash = array(
+	'package_name' => 'users',
+	'package_path' => dirname( __FILE__ ).'/',
+	'activatable' => FALSE,
+);
+$gBitSystem->registerPackage( $registerHash );
 
 $gBitSystem->registerNotifyEvent( array( "user_registers" => tra("A user registers") ) );
 
