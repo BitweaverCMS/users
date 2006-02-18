@@ -8,7 +8,7 @@ $tables = array(
   email C(200),
   login C(40),
   real_name C(64),
-  password C(32),
+  user_password C(32),
   provpass C(32),
   default_group_id I4,
   last_login I8,
@@ -31,7 +31,7 @@ $tables = array(
 'users_favorites_map' => "
   favorite_content_id I4 PRIMARY,
   user_id I4 PRIMARY,
-  position I4
+  map_position I4
   CONSTRAINT ', CONSTRAINT `users_fav_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 // another chicken and egg thing.
@@ -62,7 +62,7 @@ $tables = array(
 'users_group_permissions' => "
   group_id I4 PRIMARY,
   perm_name C(30) PRIMARY,
-  value C(1) default ''
+  perm_value C(1) default ''
   CONSTRAINT ', CONSTRAINT `users_group_perm_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
   				, CONSTRAINT `users_group_perm_perm_ref` FOREIGN KEY (`perm_name`) REFERENCES `".BIT_DB_PREFIX."users_permissions` (`perm_name`)'
 ",
@@ -107,7 +107,7 @@ $tables = array(
   object C(120) PRIMARY,
   hash C(32),
   title C(250),
-  type C(200),
+  watch_type C(200),
   url C(250),
   email C(200)
   CONSTRAINT ', CONSTRAINT `users_watches_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
