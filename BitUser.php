@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.50 2006/02/17 23:48:28 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.51 2006/02/18 09:16:27 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.50 2006/02/17 23:48:28 spiderr Exp $
+ * $Id: BitUser.php,v 1.51 2006/02/18 09:16:27 lsces Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.50 $
+ * @version  $Revision: 1.51 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -885,7 +885,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$loginVal = strtoupper( $pLogin ); // case insensitive login
 			$loginCol = ' UPPER(`'.(strpos( $pLogin, '@' ) ? 'email' : 'login').'`)';
 			// first verify that the user exists
-			$query = "select `email`, `login`, `user_id`, `password` from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " $loginCol = ?";
+			$query = "select `email`, `login`, `user_id`, `user_password` from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " $loginCol = ?";
 			$result = $this->mDb->query( $query, array( $loginVal ) );
 			if( !$result->numRows() ) {
 				$this->mErrors['login'] = 'User not found';
@@ -994,7 +994,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	}
 
 	function confirmRegistration( $pUser, $pProvpass ) {
-		$query = "select `user_id`, `provpass`, `password`, `login`, `email` FROM `".BIT_DB_PREFIX."users_users`
+		$query = "select `user_id`, `provpass`, `user_password`, `login`, `email` FROM `".BIT_DB_PREFIX."users_users`
 				  WHERE `login`=? AND `provpass`=?";
 		return( $this->mDb->getRow($query, array( $pUser, $pProvpass ) ) );
 	}
@@ -1075,7 +1075,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		return $res;
 	}
 	function get_user_password($user) {
-		$query = "select `password`  from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " `login`=?";
+		$query = "select `user_password`  from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " `login`=?";
 		$pass = $this->mDb->getOne($query, array($user));
 		return $pass;
 	}
@@ -1115,7 +1115,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$hash = md5(strtolower($user) . $pass . $email);
 		// Note that tiki-generated passwords are due inmediatley
 		$now = $gBitSystem->getUTCTime();
-		$query = "update `".BIT_DB_PREFIX."users_users` set `password` = ?, `hash` = ?, `pass_due` = ? where ".$this->mDb->convert_binary()." `login` = ?";
+		$query = "update `".BIT_DB_PREFIX."users_users` set `user_password` = ?, `hash` = ?, `pass_due` = ? where ".$this->mDb->convert_binary()." `login` = ?";
 		$result = $this->mDb->query($query, array($pass, $hash, $now, $user));
 		return $pass;
 	}
@@ -1131,7 +1131,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( !$gBitSystem->isFeatureActive( 'clear_passwords' ) ) {
 			$pass = '';
 		}
-		$query = "update `".BIT_DB_PREFIX."users_users` set `hash`=? ,`password`=? ,`pass_due`=? where " . $this->mDb->convert_binary(). " `login`=?";
+		$query = "update `".BIT_DB_PREFIX."users_users` set `hash`=? ,`user_password`=? ,`pass_due`=? where " . $this->mDb->convert_binary(). " `login`=?";
 		$result = $this->mDb->query($query, array($hash,$pass,$new_pass_due,$user));
 		return TRUE;
 	}
@@ -1399,7 +1399,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$hash = md5(uniqid('.'));
 			$query = "delete from `".BIT_DB_PREFIX."users_watches` where `user_id`=? and `event`=? and `object`=?";
 			$this->mDb->query($query,array( $this->mUserId, $event, $object ) );
-			$query = "insert into `".BIT_DB_PREFIX."users_watches`(`user_id` ,`event` ,`object` , `email`, `hash`, `type`, `title`, `url`) ";
+			$query = "insert into `".BIT_DB_PREFIX."users_watches`(`user_id` ,`event` ,`object` , `email`, `hash`, `watch_type`, `title`, `url`) ";
 			$query.= "values(?,?,?,?,?,?,?,?)";
 			$this->mDb->query( $query, array( $this->mUserId, $event, $object, $this->mInfo['email'], $hash, $type, $title, $url ) );
 			return true;
