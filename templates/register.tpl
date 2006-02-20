@@ -30,7 +30,7 @@
 					<div class="row">
 						{formlabel label="Real name" for="real_name"}
 						{forminput}
-							<input type="text" name="real_name" id="real_name" />
+							<input type="text" name="real_name" id="real_name" value="{$smarty.request.real_name}" />
 						{/forminput}
 					</div>
 				{/if}
@@ -99,7 +99,7 @@
 							<div class="row">
 								{formlabel label="HomePage" for="homePage"}
 								{forminput}
-									<input size="50" type="text" name="prefs[homePage]" id="homePage" />
+									<input size="50" type="text" name="prefs[homePage]" id="homePage" value="{$smarty.request.prefs.homePage}" />
 									{formhelp note="If you have a personal or professional homepage, enter it here."}
 								{/forminput}
 							</div>
@@ -113,7 +113,7 @@
 										<option value="" />
 										{sortlinks}
 											{section name=ix loop=$flags}
-												<option value="{$flags[ix]|escape}" {if $userPrefs.flag eq $flags[ix]}selected="selected"{/if}>{tr}{$flags[ix]|replace:'_':' '}{/tr}</option>
+												<option value="{$flags[ix]|escape}" {if $smarty.request.prefs.country eq $flags[ix]}selected="selected"{/if}>{tr}{$flags[ix]|replace:'_':' '}{/tr}</option>
 											{/section}
 										{/sortlinks}
 									</select>
@@ -154,7 +154,7 @@
 					<div class="row">
 						{formlabel label="$customFields[f]}
 						{forminput}
-							<input type="text" name="CUSTOM[{$customFields[f]|escape}" />
+							<input type="text" name="CUSTOM[{$customFields[f]|escape}" value="{$smarty.request.CUSTOM.$customFields[f]}" />
 						{/forminput}
 					</div>
 				{/section}

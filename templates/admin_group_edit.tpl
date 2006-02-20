@@ -1,8 +1,8 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.5 2006/02/10 23:33:42 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.6 2006/02/20 16:28:42 spiderr Exp $ *}
 {strip}
 
 <div class="floaticon">
-	<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php">{tr}&laquo; Group List{/tr}</a> 
+	<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php">{tr}&laquo; Group List{/tr}</a>
 	{bithelp}
 </div>
 
@@ -119,7 +119,7 @@
 							{forminput}
 								{smartlink ititle="All packages" group_id=$groupInfo.group_id}
 								{foreach from=$gBitSystem->mPackages key=packageKey item=packageItem}
-									{if $packageItem.installed and $packageItem.defaults} 
+									{if $packageItem.installed and $packageItem.defaults}
 										&nbsp;&bull; {smartlink ititle=$gBitSystem->mPackages.$packageKey.name group_id=$groupInfo.group_id package=$packageKey}
 									{/if}
 								{/foreach}
@@ -150,7 +150,7 @@
 												</td>
 											{/if}
 											<td><label for="{$permName}">{$permName}</label></td>
-											<td>{html_options name="level[$permName]" output=$levels values=$levels selected=$perm.level}</td>
+											<td>{html_options name="perm_level[$permName]" output=$levels values=$levels selected=$perm.perm_level}</td>
 											<td>{tr}{$perm.package}{/tr}</td>
 											<td>{tr}{$perm.perm_desc}{/tr}</td>
 										</tr>
@@ -181,11 +181,11 @@
 									<option value="remove">{tr}Remove{/tr}</option>
 								</select>
 								<br />
-								{tr}all permissions in level{/tr} 
+								{tr}all permissions in level{/tr}
 								<br />
-								<select name="level">
-									{html_options output=$levels values=$levels selected=$perms[user].level}
-								</select> 
+								<select name="perm_level">
+									{html_options output=$levels values=$levels selected=$perms[user].perm_level}
+								</select>
 								<br />
 								{tr}to / from {$groupInfo.group_name}{/tr}
 							{/forminput}
@@ -202,7 +202,7 @@
 						<div class="row">
 							{formlabel label="Level" for="level"}
 							{forminput}
-								<input type="text" name="level" id="level" />
+								<input type="text" name="perm_level" id="level" />
 								{formhelp note="Levels can be used to group certain permissions and thus easily assign a set of permissions to a group. Assinging a permission to a level has no outcome on the users or groups. It's merely a way to organise permissions."}
 							{/forminput}
 						</div>

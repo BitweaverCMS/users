@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.10 2006/02/08 21:51:15 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.11 2006/02/20 16:28:40 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -85,19 +85,19 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 //	$mid = 'bitpackage:users/admin_groups_list.tpl';
 } elseif (isset($_REQUEST['allper'])) {
 	if ($_REQUEST['oper'] == 'assign') {
-		$gBitUser->assign_level_permissions($_REQUEST['group_id'], $_REQUEST['level']);
+		$gBitUser->assign_level_permissions($_REQUEST['group_id'], $_REQUEST['perm_level']);
 	} else {
-		$gBitUser->remove_level_permissions($_REQUEST['group_id'], $_REQUEST['level']);
+		$gBitUser->remove_level_permissions($_REQUEST['group_id'], $_REQUEST['perm_level']);
 	}
 } elseif (isset($_REQUEST["createlevel"])) {
-	$gBitUser->create_dummy_level($_REQUEST['level']);
+	$gBitUser->create_dummy_level($_REQUEST['perm_level']);
 } elseif (isset($_REQUEST['updateperms'])) {
 	$updatePerms = $gBitUser->getgroupPermissions( $_REQUEST['group_id'] );
-	if (!empty($_REQUEST['level'])) {
-		foreach (array_keys($_REQUEST['level'])as $per) {
-			if( $allPerms[$per]['level'] != $_REQUEST['level'][$per] ) {
+	if (!empty($_REQUEST['perm_level'])) {
+		foreach (array_keys($_REQUEST['perm_level'])as $per) {
+			if( $allPerms[$per]['perm_level'] != $_REQUEST['perm_level'][$per] ) {
 				// we changed level. perm[] checkbox is not taken into account
-				$gBitUser->change_permission_level($per, $_REQUEST['level'][$per]);
+				$gBitUser->change_permission_level($per, $_REQUEST['perm_level'][$per]);
 			}
 			if( isset($_REQUEST['perm'][$per]) && !isset($updatePerms[$per]) ) {
 				// we have an unselected perm that is now selected
@@ -147,18 +147,18 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 	}
 }
 
-// get content and pass it on to the template
-include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
-foreach( $contentList['data'] as $cItem ) {
-	$cList[$contentTypes[$cItem['content_type_guid']]][$cItem['content_id']] = $cItem['title'].' [id: '.$cItem['content_id'].']';
-}
-$gBitSmarty->assign( 'contentList', $cList );
-$gBitSmarty->assign( 'contentSelect', $contentSelect );
-$gBitSmarty->assign( 'contentTypes', $contentTypes );
-
-if( !empty( $_REQUEST['group_id'] ) ) {
+if( !empty( $_REQUEST['group_id'] ) || (!empty( $_REQUEST["action"] ) && $_REQUEST["action"] == 'create' ) ) {
 	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
 	$listHash = array( 'sort_mode' => 'group_name_asc' );
+
+	// get content and pass it on to the template
+	include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
+	foreach( $contentList['data'] as $cItem ) {
+		$cList[$contentTypes[$cItem['content_type_guid']]][$cItem['content_id']] = $cItem['title'].' [id: '.$cItem['content_id'].']';
+	}
+	$gBitSmarty->assign( 'contentList', $cList );
+	$gBitSmarty->assign( 'contentSelect', $contentSelect );
+	$gBitSmarty->assign( 'contentTypes', $contentTypes );
 } else {
 	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
 	$listHash = array( 'sort_mode' => !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : 'group_name_asc' );

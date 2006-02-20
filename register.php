@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.9 2006/02/09 10:41:47 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.10 2006/02/20 16:28:40 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.9 2006/02/09 10:41:47 squareing Exp $
+ * $Id: register.php,v 1.10 2006/02/20 16:28:40 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -16,6 +16,11 @@
 /**
  * required setup
  */
+// Avoid user hell
+if( isset( $_REQUEST['tk'] ) ) {
+	unset( $_REQUEST['tk'] );
+}
+
 require_once( '../bit_setup_inc.php' );
 require_once( KERNEL_PKG_PATH.'BitBase.php' );
 include_once( KERNEL_PKG_PATH.'notification_lib.php' );
