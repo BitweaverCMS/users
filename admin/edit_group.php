@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.11 2006/02/20 16:28:40 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.12 2006/02/22 22:23:06 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -13,10 +13,11 @@ $successMsg = NULL;
 $errorMsg = NULL;
 
 $gBitUser->getUnassignedPerms();
-// We need to scan for defaults
-global $gBitInstaller;
-$gBitInstaller = &$gBitSystem;
-$gBitSystem->verifyInstalledPackages();
+
+// We need to scan for defaults - why?? spiderr has remove this code until we have a good reason
+//global $gBitInstaller;
+//$gBitInstaller = &$gBitSystem;
+//$gBitSystem->verifyInstalledPackages();
 
 if( count( $_GET ) > 2 || count( $_POST ) > 2 ) {
 	$gBitUser->verifyTicket();
