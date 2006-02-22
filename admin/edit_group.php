@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.12 2006/02/22 22:23:06 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.13 2006/02/22 23:00:32 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -13,11 +13,6 @@ $successMsg = NULL;
 $errorMsg = NULL;
 
 $gBitUser->getUnassignedPerms();
-
-// We need to scan for defaults - why?? spiderr has remove this code until we have a good reason
-//global $gBitInstaller;
-//$gBitInstaller = &$gBitSystem;
-//$gBitSystem->verifyInstalledPackages();
 
 if( count( $_GET ) > 2 || count( $_POST ) > 2 ) {
 	$gBitUser->verifyTicket();
@@ -149,6 +144,9 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 }
 
 if( !empty( $_REQUEST['group_id'] ) || (!empty( $_REQUEST["action"] ) && $_REQUEST["action"] == 'create' ) ) {
+	$permPackages = $gBitUser->getPermissionPackages();
+	$gBitSmarty->assign_by_ref( 'permPackages', $permPackages );
+
 	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
 	$listHash = array( 'sort_mode' => 'group_name_asc' );
 
@@ -188,8 +186,7 @@ if( empty( $mid ) ) {
 		foreach( array_keys( $groupList["data"] ) as $groupId ) {
 			$groupList["data"][$groupId]['included'] = isset( $rs[$groupId] ) ? 'y' : 'n';
 		}
-		$levels = $gBitUser->get_permission_levels();
-		sort($levels);
+		$levels = $gBitUser->getPermissionLevels();
 		$gBitSmarty->assign('levels', $levels);
 
 		$defaultGroupId = $gBitSystem->getPreference( 'default_home_group' );

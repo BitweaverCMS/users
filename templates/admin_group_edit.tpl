@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.6 2006/02/20 16:28:42 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.7 2006/02/22 23:00:32 spiderr Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -118,10 +118,8 @@
 							{formlabel label="Display permissions of package"}
 							{forminput}
 								{smartlink ititle="All packages" group_id=$groupInfo.group_id}
-								{foreach from=$gBitSystem->mPackages key=packageKey item=packageItem}
-									{if $packageItem.installed and $packageItem.defaults}
-										&nbsp;&bull; {smartlink ititle=$gBitSystem->mPackages.$packageKey.name group_id=$groupInfo.group_id package=$packageKey}
-									{/if}
+								{foreach from=$permPackages key=i item=packageKey}
+									&nbsp;&bull; {smartlink ititle=$gBitSystem->mPackages.$packageKey.name group_id=$groupInfo.group_id package=$packageKey}
 								{/foreach}
 							{/forminput}
 						</div>

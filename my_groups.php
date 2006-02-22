@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.4 2006/01/14 19:56:08 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.5 2006/02/22 23:00:32 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.4 2006/01/14 19:56:08 squareing Exp $
+ * $Id: my_groups.php,v 1.5 2006/02/22 23:00:32 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -133,8 +133,7 @@ if( empty( $groupList ) ) {
 			foreach( array_keys( $groupList ) as $groupId ) {
 				$groupList["data"][$groupId]['included'] = isset( $rs[$groupId] ) ? 'y' : 'n';
 			}
-			$levels = $gBitUser->get_permission_levels();
-			sort($levels);
+			$levels = $gBitUser->getPermissionLevels();
 			$gBitSmarty->assign('levels', $levels);
 			$groupUsers = $gBitUser->get_group_users( $_REQUEST['group_id'] );
 			$gBitSmarty->assign_by_ref('groupUsers', $groupUsers);

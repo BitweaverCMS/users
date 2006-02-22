@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.25 2006/02/20 16:28:40 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.26 2006/02/22 23:00:31 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.25 2006/02/20 16:28:40 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.26 2006/02/22 23:00:31 spiderr Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.25 $
+ * @version  $Revision: 1.26 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -750,14 +750,13 @@ class BitPermUser extends BitUser {
 	}
 
 
-	function get_permission_levels() {
-		$query = "select distinct(`perm_level`) from `".BIT_DB_PREFIX."users_permissions`";
-		$result = $this->mDb->query($query);
-		$ret = array();
-		while ($res = $result->fetchRow()) {
-			$ret[] = $res['perm_level'];
-		}
-		return $ret;
+	function getPermissionLevels() {
+		return ( $this->mDb->getCol( "select distinct(`perm_level`) from `".BIT_DB_PREFIX."users_permissions` ORDER BY `perm_level`" ) );
+	}
+
+
+	function getPermissionPackages() {
+		return( $this->mDb->getCol( "select distinct(`package`) from `".BIT_DB_PREFIX."users_permissions` ORDER BY `package`" ) );
 	}
 
 
