@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.21 2006/02/13 10:06:24 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.22 2006/02/22 10:27:21 jht001 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.21 2006/02/13 10:06:24 squareing Exp $
+ * $Id: preferences.php,v 1.22 2006/02/22 10:27:21 jht001 Exp $
  * @package users
  * @subpackage functions
  */
@@ -118,7 +118,7 @@ if (isset($_REQUEST["prefs"])) {
 }
 if (isset($_REQUEST['chgemail'])) {
 	// check user's password
-	if (!$editUser->validate($editUser->mUsername, $_REQUEST['pass'], '', '')) {
+	if (!$gBitUser->hasPermission( 'bit_p_admin_users' ) && !$editUser->validate($editUser->mUsername, $_REQUEST['pass'], '', '')) {
 		$gBitSmarty->assign('msg', tra("Invalid password.  Your current password is required to change your email address."));
 		$gBitSystem->display( 'error.tpl' );
 		die;
