@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.52 2006/02/20 16:27:16 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.53 2006/02/24 20:58:50 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.52 2006/02/20 16:27:16 spiderr Exp $
+ * $Id: BitUser.php,v 1.53 2006/02/24 20:58:50 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.52 $
+ * @version  $Revision: 1.53 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1351,11 +1351,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( $this->mUserId ) {
 			// TODO: this query should check for unique combinations of foreign_id *and* attachment_plugin_guid
 			// doing that causes mysql to choke
-			$query = "SELECT DISTINCT( a.`foreign_id` ), a.*
-				FROM `".BIT_DB_PREFIX."liberty_attachments` a
-				WHERE a.`user_id` = ? $mid";
-			$result = $this->mDb->query( $query, $bindVars, $pListHash['max_records'], $pListHash['offset'] );
-			$attachments = $result->getRows();
+			$query = "SELECT DISTINCT( a.`foreign_id` ) AS `hash_key`, a.*
+						FROM `".BIT_DB_PREFIX."liberty_attachments` a
+						WHERE a.`user_id` = ? $mid";
+			$attachments = $this->mDb->getAll( $query, $bindVars, $pListHash['max_records'], $pListHash['offset'] );
 			$data = array();
 			foreach( $attachments as $attachment ) {
 				$loadFunc = $gLibertySystem->getPluginFunction( $attachment['attachment_plugin_guid'], 'load_function' );
@@ -1364,11 +1363,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$ret['data'] = $data;
 
 			// count all entries
-			$queryc = "SELECT DISTINCT( a.`foreign_id` ), a.*
-				FROM `".BIT_DB_PREFIX."liberty_attachments` a
-				WHERE a.`user_id` = ? $mid";
-			$result = $this->mDb->query( $queryc, $bindVars );
-			$ret['cant'] = count( $result->getRows() );
+			$queryc = "SELECT COUNT( DISTINCT( a.`foreign_id` ) ) AS `attachment_count`
+						FROM `".BIT_DB_PREFIX."liberty_attachments` a
+						WHERE a.`user_id` = ? $mid";
+			$ret['cant'] = $this->mDb->getOne( $queryc, $bindVars );
 		}
 		return $ret;
 	}
