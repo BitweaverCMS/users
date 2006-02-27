@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/unassigned_perms.php,v 1.2 2006/01/10 21:17:05 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/unassigned_perms.php,v 1.3 2006/02/27 16:08:27 bitweaver Exp $
 // Initialization
 require_once( '../../bit_setup_inc.php' );
 
@@ -24,22 +24,24 @@ if( !empty( $_REQUEST['assign_permissions'] ) && !empty( $_REQUEST['assign'] ) )
 
 $unassignedPerms = $gBitUser->getUnassignedPerms();
 foreach( $unassignedPerms as $key => $p ) {
-	switch( $p['level'] ) {
-		case "basic":
-			$unassignedPerms[$key]['suggestion'] = -1;
-			break;
-		case "admin":
-			$unassignedPerms[$key]['suggestion'] = 1;
-			break;
-		case "editors":
-			$unassignedPerms[$key]['suggestion'] = 2;
-			break;
-		case "registered":
-			$unassignedPerms[$key]['suggestion'] = 3;
-			break;
-		default:
-			$unassignedPerms[$key]['suggestion'] = 0;
-			break;
+	if( !empty( $p['level'] ) ) {
+		switch( $p['level'] ) {
+			case "basic":
+				$unassignedPerms[$key]['suggestion'] = -1;
+				break;
+			case "admin":
+				$unassignedPerms[$key]['suggestion'] = 1;
+				break;
+			case "editors":
+				$unassignedPerms[$key]['suggestion'] = 2;
+				break;
+			case "registered":
+				$unassignedPerms[$key]['suggestion'] = 3;
+				break;
+			default:
+				$unassignedPerms[$key]['suggestion'] = 0;
+				break;
+		}
 	}
 }
 $gBitSmarty->assign( 'unassignedPerms', $unassignedPerms );
