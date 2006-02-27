@@ -42,7 +42,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	}
 
 	// is session data  stored in DB or in filesystem?
-	if( $gBitSystem->isFeatureActive( 'y' ) && !empty( $gBitDbType ) ) {
+	if( $gBitSystem->isFeatureActive( 'session_db' ) && !empty( $gBitDbType ) ) {
 		include(UTIL_PKG_PATH . 'adodb/session/adodb-session.php');
 		ADODB_Session::dataFieldName('session_data');
 		ADODB_Session::driver($gBitDbType);
@@ -64,7 +64,6 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		umask(0007);
 	}
 	session_start();
-
 	// in the case of tikis on same domain we have to distinguish the realm
 	// changed cookie and session variable name by a name made with site_title
 	$cookie_site = strtolower( ereg_replace("[^a-zA-Z0-9]", "", $gBitSystem->getPreference('site_title', 'bitweaver')) );
