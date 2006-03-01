@@ -3,7 +3,7 @@
 	{if $gBitUser->isRegistered()}
 		<li>
 				<a class="item" href="{$smarty.const.USERS_PKG_URL}my.php">
-					{biticon ipackage=users iname=home iexplain="My Personal Homepage" iforce=icon}{if !$icons_only} {tr}My {$gBitSystemPrefs.site_menu_title|default:$gBitSystemPrefs.site_title}{/tr}{/if}
+					{biticon ipackage=users iname=home iexplain="My Personal Homepage" iforce=icon}{if !$icons_only} {tr}My {$gBitSystem->getConfig('site_menu_title')|default:$gBitSystem->getConfig('site_title')}{/tr}{/if}
 				</a>
 			</li>
 		{if $gBitUser->hasPermission( 'bit_p_view_user_homepage' )}
@@ -20,7 +20,7 @@
 				</a>
 			</li>
 		{/if}
-		{if $gBitSystemPrefs.users_layouts eq 'h'}
+		{if $gBitSystem->getConfig('users_layouts') eq 'h'}
 			{assign var="myLayoutConfig" value="My Homepage"}
 		{else if $gBitSystem->isFeatureActive( 'users_layouts' )}
 			{assign var="myLayoutConfig" value="My Site Layout"}

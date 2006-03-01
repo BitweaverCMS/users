@@ -7,7 +7,7 @@
 {/if}
 
 	<div class="header">
-		<h1>{tr}{$gBitSystemPrefs.site_title} Members{/tr}</h1>
+		<h1>{tr}{$gBitSystem->getConfig('site_title')} Members{/tr}</h1>
 	</div>
 
 	<div class="body">

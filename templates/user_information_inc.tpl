@@ -1,21 +1,21 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.8 2006/02/13 10:06:26 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.9 2006/03/01 18:35:20 spiderr Exp $ *}
 {strip}
 {if $userData->getPreference('user_information') eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
 		{formlabel label="Login"}
 		{forminput}
-			{if $gBitSystemPrefs.display_name eq 'login'}<strong>{/if}
+			{if $gBitSystem->getConfig('display_name') eq 'login'}<strong>{/if}
 				{$userData->mInfo.login}
-			{if $gBitSystemPrefs.display_name eq 'login'}</strong>{/if}
+			{if $gBitSystem->getConfig('display_name') eq 'login'}</strong>{/if}
 		{/forminput}
 	</div>
 
 	<div class="row">
 		{formlabel label="Real Name"}
 		{forminput}
-			{if $gBitSystemPrefs.display_name eq 'real_name'}<strong>{/if}
+			{if $gBitSystem->getConfig('display_name') eq 'real_name'}<strong>{/if}
 				{$userData->mInfo.real_name}
-			{if $gBitSystemPrefs.display_name eq 'real_name'}</strong>{/if}
+			{if $gBitSystem->getConfig('display_name') eq 'real_name'}</strong>{/if}
 		{/forminput}
 	</div>
 

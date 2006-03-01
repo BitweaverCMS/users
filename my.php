@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.15 2006/02/09 10:41:47 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.16 2006/03/01 18:35:20 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my.php,v 1.15 2006/02/09 10:41:47 squareing Exp $
+ * $Id: my.php,v 1.16 2006/03/01 18:35:20 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -25,7 +25,7 @@ if( !$gBitUser->isRegistered() ) {
 
 // custom userfields
 if( $gBitSystem->isFeatureActive( 'custom_user_fields' ) ) {
-	$customFields= explode( ',', $gBitSystem->getPreference( 'custom_user_fields' )  );
+	$customFields= explode( ',', $gBitSystem->getConfig( 'custom_user_fields' )  );
 	$gBitSmarty->assign('customFields', $customFields);
 }
 
@@ -36,10 +36,10 @@ if( $gBitSystem->isFeatureActive( 'display_users_content_list' ) ) {
 		$gBitSmarty->assign( 'sort_mode', $content_sort_mode );
 	}
 
-	$max_content = $gBitSystem->getPreference( 'max_records' );
+	$max_content = $gBitSystem->getConfig( 'max_records' );
 	$offset_content = !empty( $_REQUEST['offset'] ) ? $_REQUEST['offset'] : 0;
 	$gBitSmarty->assign( 'curPage', $page = !empty( $_REQUEST['page'] ) ? $_REQUEST['page'] : 1 );
-	$offset_content = ( $page - 1 ) * $gBitSystem->getPreference( 'max_records' );
+	$offset_content = ( $page - 1 ) * $gBitSystem->getConfig( 'max_records' );
 
 	// set the user_id to only display content viewing user
 	$_REQUEST['user_id'] = $gBitUser->mUserId;
@@ -48,7 +48,7 @@ if( $gBitSystem->isFeatureActive( 'display_users_content_list' ) ) {
 	include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
 
 	// calculate page number
-	$numPages = ceil( $contentList['cant'] / $gBitSystem->getPreference( 'max_records' ) );
+	$numPages = ceil( $contentList['cant'] / $gBitSystem->getConfig( 'max_records' ) );
 	$gBitSmarty->assign( 'numPages', $numPages );
 
 	//$gBitSmarty->assign_by_ref('offset', $offset);
@@ -59,6 +59,6 @@ if( $gBitSystem->isFeatureActive( 'display_users_content_list' ) ) {
 	// end of content listing
 }
 
-$gBitSystem->display( 'bitpackage:users/my_bitweaver.tpl', 'My '.$gBitSystem->getPreference( 'site_title' ) );
+$gBitSystem->display( 'bitpackage:users/my_bitweaver.tpl', 'My '.$gBitSystem->getConfig( 'site_title' ) );
 
 ?>

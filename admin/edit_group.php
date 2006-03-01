@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.13 2006/02/22 23:00:32 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.14 2006/03/01 18:35:20 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -73,7 +73,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 	}
 	if( !empty( $_REQUEST['default_home_group'] ) ) {
 		$gBitSystem->storePreference( 'default_home_group', $_REQUEST['group_id'], USERS_PKG_NAME );
-	} elseif( $_REQUEST['group_id'] == $gBitSystem->getPreference( 'default_home_group' ) ) {
+	} elseif( $_REQUEST['group_id'] == $gBitSystem->getConfig( 'default_home_group' ) ) {
 		// the default home group was unchecked.
 		$gBitSystem->storePreference( 'default_home_group', NULL, USERS_PKG_NAME );
 	}
@@ -118,7 +118,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 		$formHash['group_id'] = $_REQUEST['group_id'];
 		$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group_id'] );
 		if( isset( $_REQUEST["confirm"] ) ) {
-			if( $_REQUEST['group_id'] == $gBitSystem->getPreference( 'default_home_group' ) ) {
+			if( $_REQUEST['group_id'] == $gBitSystem->getConfig( 'default_home_group' ) ) {
 				$gBitSystem->storePreference( 'default_home_group', NULL, USERS_PKG_NAME );
 			}
 			$gBitUser->remove_group($_REQUEST['group_id']);
@@ -189,7 +189,7 @@ if( empty( $mid ) ) {
 		$levels = $gBitUser->getPermissionLevels();
 		$gBitSmarty->assign('levels', $levels);
 
-		$defaultGroupId = $gBitSystem->getPreference( 'default_home_group' );
+		$defaultGroupId = $gBitSystem->getConfig( 'default_home_group' );
 		$gBitSmarty->assign_by_ref('defaultGroupId', $defaultGroupId );
 		$gBitSmarty->assign_by_ref('groupInfo', $groupInfo);
 		$gBitSmarty->assign_by_ref( 'allPerms', $allPerms );

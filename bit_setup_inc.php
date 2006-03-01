@@ -31,12 +31,12 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
 	$gBitUser = new $userClass();
 
-	$cookie_path = $gBitSystem->getPreference('cookie_path', BIT_ROOT_URL);
+	$cookie_path = $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL);
 	$cookie_path = !empty($cookie_path) ? $cookie_path : BIT_ROOT_URL;
 	$gBitSystem->storePreference( 'cookie_path', $cookie_path, KERNEL_PKG_NAME );
 
 	// set session lifetime
-	$session_lifetime = $gBitSystem->getPreference( 'session_lifetime', '0' );
+	$session_lifetime = $gBitSystem->getConfig( 'session_lifetime', '0' );
 	if( $session_lifetime > 0 ) {
 		ini_set( 'session.gc_maxlifetime', $session_lifetime );
 	}
@@ -56,7 +56,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 
 	session_name( BIT_SESSION_NAME );
 	if ($gBitSystem->isFeatureActive('rememberme')) {
-		session_set_cookie_params($session_lifetime, $cookie_path, $gBitSystem->getPreference('cookie_domain'));
+		session_set_cookie_params($session_lifetime, $cookie_path, $gBitSystem->getConfig('cookie_domain'));
 	} else {
 		session_set_cookie_params($session_lifetime, BIT_ROOT_URL);
 	}
@@ -66,7 +66,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	session_start();
 	// in the case of tikis on same domain we have to distinguish the realm
 	// changed cookie and session variable name by a name made with site_title
-	$cookie_site = strtolower( ereg_replace("[^a-zA-Z0-9]", "", $gBitSystem->getPreference('site_title', 'bitweaver')) );
+	$cookie_site = strtolower( ereg_replace("[^a-zA-Z0-9]", "", $gBitSystem->getConfig('site_title', 'bitweaver')) );
 	global $user_cookie_site;
 	$user_cookie_site = 'tiki-user-' . $cookie_site;
 
@@ -90,7 +90,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 			}
 		}
 		// check what auth metod is selected. default is for the 'tiki' to auth users
-		$auth_method = $gBitSystem->getPreference('auth_method', 'tiki');
+		$auth_method = $gBitSystem->getConfig('auth_method', 'tiki');
 		// if the auth method is 'web site', look for the username in $_SERVER
 		if ($auth_method == 'ws') {
 			if (isset($_SERVER['REMOTE_USER'])) {
@@ -134,22 +134,22 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$gBitSmarty->assign_by_ref('gBitUser', $gBitUser);
 	$gBitSmarty->register_object('gBitUser', $gBitUser, array(), true, array('hasPermission'));
 
-	$allow_register = $gBitSystem->getPreference("allow_register", 'y');
-	$validate_user = $gBitSystem->getPreference("validate_user", 'n');
-	$forgot_pass = $gBitSystem->getPreference("forgot_pass", 'y');
-	$eponymous_groups = $gBitSystem->getPreference("eponymous_groups", 'n');
-	$use_register_passcode = $gBitSystem->getPreference("use_register_passcode", 'n');
-	$register_passcode = $gBitSystem->getPreference("register_passcode", '');
-	$url_index = $gBitSystem->getPreference("url_index", '');
-	$use_proxy = $gBitSystem->getPreference("use_proxy", 'n');
-	$proxy_host = $gBitSystem->getPreference("proxy_host", '');
-	$proxy_port = $gBitSystem->getPreference("proxy_port", '');
-	$session_db = $gBitSystem->getPreference("session_db", 'n');
-	$session_lifetime = $gBitSystem->getPreference("session_lifetime", 0);
-	$remembertime = $gBitSystem->getPreference('remembertime', 7200);
-	$https_login = $gBitSystem->getPreference('https_login', 'n');
-	$https_login_required = $gBitSystem->getPreference('https_login_required', 'n');
-	$change_language = $gBitSystem->getPreference("change_language", 'y');
+	$allow_register = $gBitSystem->getConfig("allow_register", 'y');
+	$validate_user = $gBitSystem->getConfig("validate_user", 'n');
+	$forgot_pass = $gBitSystem->getConfig("forgot_pass", 'y');
+	$eponymous_groups = $gBitSystem->getConfig("eponymous_groups", 'n');
+	$use_register_passcode = $gBitSystem->getConfig("use_register_passcode", 'n');
+	$register_passcode = $gBitSystem->getConfig("register_passcode", '');
+	$url_index = $gBitSystem->getConfig("url_index", '');
+	$use_proxy = $gBitSystem->getConfig("use_proxy", 'n');
+	$proxy_host = $gBitSystem->getConfig("proxy_host", '');
+	$proxy_port = $gBitSystem->getConfig("proxy_port", '');
+	$session_db = $gBitSystem->getConfig("session_db", 'n');
+	$session_lifetime = $gBitSystem->getConfig("session_lifetime", 0);
+	$remembertime = $gBitSystem->getConfig('remembertime', 7200);
+	$https_login = $gBitSystem->getConfig('https_login', 'n');
+	$https_login_required = $gBitSystem->getConfig('https_login_required', 'n');
+	$change_language = $gBitSystem->getConfig("change_language", 'y');
 
 	$gBitSmarty->assign('allow_register', $allow_register);
 	$gBitSmarty->assign('url_index', $url_index);
@@ -208,7 +208,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	// If we are processing a login then do not generate the challenge
 	// if we are in any other case then yes.
 	if( !empty( $_SERVER["REQUEST_URI"] ) && !strstr($_SERVER["REQUEST_URI"], USERS_PKG_URL . 'validate')) {
-		if ($gBitSystem->getPreference('feature_challenge') == 'y') {
+		if ($gBitSystem->getConfig('feature_challenge') == 'y') {
 			$chall = $gBitUser->generateChallenge();
 
 			$_SESSION["challenge"] = $chall;
@@ -229,8 +229,8 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 
 	// register 'my' menu
 	if( $gBitUser->isValid() && ( $gBitUser->isRegistered() || !$gBitSystem->isFeatureActive( 'hide_my_top_bar_link' ) ) ) {
-		$site_menu_title = $gBitSystem->getPreference( 'site_menu_title' );
-		$displayTitle = !empty( $site_menu_title ) ? $site_menu_title : $gBitSystem->getPreference( 'site_title', 'Site' );
-		$gBitSystem->registerAppMenu( USERS_PKG_NAME, 'My '.$displayTitle, ($gBitSystem->getPreference('users_preferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
+		$site_menu_title = $gBitSystem->getConfig( 'site_menu_title' );
+		$displayTitle = !empty( $site_menu_title ) ? $site_menu_title : $gBitSystem->getConfig( 'site_title', 'Site' );
+		$gBitSystem->registerAppMenu( USERS_PKG_NAME, 'My '.$displayTitle, ($gBitSystem->getConfig('users_preferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
 	}
 ?>

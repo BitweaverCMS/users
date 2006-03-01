@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.54 2006/02/26 21:58:58 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.55 2006/03/01 18:35:19 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.54 2006/02/26 21:58:58 spiderr Exp $
+ * $Id: BitUser.php,v 1.55 2006/03/01 18:35:19 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.54 $
+ * @version  $Revision: 1.55 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -173,7 +173,7 @@ class BitUser extends LibertyAttachable {
 			$this->setPreference( 'display_timezone', $server_time->display_offset );
 		}
 		if( !$this->getPreference( 'userbreadCrumb' ) ) {
-			$this->setPreference( 'userbreadCrumb', $gBitSystem->getPreference('userbreadCrumb',4) );
+			$this->setPreference( 'userbreadCrumb', $gBitSystem->getConfig('userbreadCrumb',4) );
 		}
 		if( !$this->getPreference( 'bitlanguage' ) ) {
 			global $gBitLanguage;
@@ -233,7 +233,7 @@ class BitUser extends LibertyAttachable {
 		global $user_cookie_site, $gBitSystem;
 		// Now if the remember me feature is on and the user checked the rememberme checkbox then ...
 		if ($gBitSystem->isFeatureActive( 'rememberme' )) {
-			setcookie($user_cookie_site, '', time() - 3600, $gBitSystem->getPreference('cookie_path', BIT_ROOT_URL ), $gBitSystem->getPreference('cookie_domain') );
+			setcookie($user_cookie_site, '', time() - 3600, $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig('cookie_domain') );
 		} else {
 			setcookie($user_cookie_site, '', time() - 3600, BIT_ROOT_URL);
 		}
@@ -321,7 +321,7 @@ class BitUser extends LibertyAttachable {
 				$pParamHash['user_store']['provpass'] = substr( md5( $pParamHash['password'] ), 0, 30 );
 				$pParamHash['pass_due'] = 0;
 			} elseif( empty( $pParamHash['password'] ) ) {
-				$this->mErrors['password'] = tra( 'Your password should be at least '.$gBitSystem->getPreference( 'min_pass_length', 4 ).' characters long' );
+				$this->mErrors['password'] = tra( 'Your password should be at least '.$gBitSystem->getConfig( 'min_pass_length', 4 ).' characters long' );
 			}
 		} elseif( $this->isValid() ) {
 			// Prevent loosing user info on save
@@ -333,7 +333,7 @@ class BitUser extends LibertyAttachable {
 
 		//Validate password here
 		if( !empty( $pParamHash['password'] ) ) {
-			$minPassword = $gBitSystem->getPreference( 'min_pass_length', 4 );
+			$minPassword = $gBitSystem->getConfig( 'min_pass_length', 4 );
 			if(strlen( $pParamHash['password'] ) < $minPassword ) {
 				$this->mErrors['password'] = tra( 'Your password should be at least '.$minPassword.' characters long' );
 			} elseif( !empty( $pParamHash['password2'] ) && ($pParamHash['password'] != $pParamHash['password2']) ) {
@@ -346,8 +346,8 @@ class BitUser extends LibertyAttachable {
 //				$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pParamHash['password'].$pParamHash['email'] );
 				$pParamHash['user_store']['hash'] = md5( $pParamHash['password'] );
 				$now = $gBitSystem->getUTCTime();
-				if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getPreference('pass_due') ) {
-					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getPreference('pass_due') );
+				if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getConfig('pass_due') ) {
+					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getConfig('pass_due') );
 				} elseif( isset( $pParamHash['pass_due'] ) ) {
 					// renew password only next half year ;)
 					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
@@ -428,7 +428,7 @@ class BitUser extends LibertyAttachable {
 				if ( ereg ( "^220", $Out ) ) {
 						// Inform client's reaching to server who connect.
 						if( $gBitSystem->hasValidSenderEmail() ) {
-							$senderEmail = $gBitSystem->getPreference( 'sender_email' );
+							$senderEmail = $gBitSystem->getConfig( 'sender_email' );
 							fputs ( $Connect, "HELO $HTTP_HOST\r\n" );
 if ($gDebug) echo "Run : HELO $HTTP_HOST<br>";
 							$Out = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
@@ -495,7 +495,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 				}
 			}
 
-			$siteName = $gBitSystem->getPreference('site_title', $_SERVER['HTTP_HOST'] );
+			$siteName = $gBitSystem->getConfig('site_title', $_SERVER['HTTP_HOST'] );
 			$gBitSmarty->assign('siteName',$_SERVER["SERVER_NAME"]);
 			$gBitSmarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
 			$gBitSmarty->assign('mail_user',$pParamHash['login']);
@@ -511,7 +511,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 				$gBitSmarty->assign('mail_machine',$machine);
 				$gBitSmarty->assign('mail_apass',$apass);
 				$mail_data = $gBitSmarty->fetch('bitpackage:users/user_validation_mail.tpl');
-				mail($pParamHash["email"], $siteName.' - '.tra('Your registration information'),$mail_data,"From: ".$gBitSystem->getPreference('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+				mail($pParamHash["email"], $siteName.' - '.tra('Your registration information'),$mail_data,"From: ".$gBitSystem->getConfig('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
 				$gBitSmarty->assign('showmsg','y');
 			}
 			if( $gBitSystem->isFeatureActive( 'send_welcome_email' ) ) {
@@ -519,7 +519,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 				$gBitSmarty->assign( 'mailPassword',$pParamHash['password'] );
 				$gBitSmarty->assign( 'mailEmail',$pParamHash['email'] );
 				$mail_data = $gBitSmarty->fetch('bitpackage:users/welcome_mail.tpl');
-				mail($pParamHash["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getPreference('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+				mail($pParamHash["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getConfig('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
 			}
 		}
 		return( $ret );
@@ -625,7 +625,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 		$consonantes = "BbCcDdFfGgHhJjKkLlMmNnPpQqRrSsTtVvWwXxYyZz24679";
 		$r = '';
 		if( empty( $pLength ) || !is_numeric( $pLength ) ) {
-			$pLength = $gBitSystem->getPreference( 'min_pass_length', 4 );
+			$pLength = $gBitSystem->getConfig( 'min_pass_length', 4 );
 		}
 		for ($i = 0; $i < $pLength; $i++) {
 			if ($i % 2) {
@@ -673,7 +673,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 				unset($_SESSION['loginfrom']);
 				// Now if the remember me feature is on and the user checked the rememberme checkbox then ...
 				if ($gBitSystem->isFeatureActive( 'rememberme' )&& isset($_REQUEST['rme']) && $_REQUEST['rme'] == 'on') {
-					setcookie($user_cookie_site, $userInfo['hash'], (int)(time() + $gBitSystem->getPreference( 'remembertime' )), $gBitSystem->getPreference('cookie_path', BIT_ROOT_URL ), $gBitSystem->getPreference('cookie_domain') );
+					setcookie($user_cookie_site, $userInfo['hash'], (int)(time() + $gBitSystem->getConfig( 'remembertime' )), $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig('cookie_domain') );
 				} else {
 					setcookie($user_cookie_site, $userInfo['hash'], 0, BIT_ROOT_URL);
 				}
@@ -686,9 +686,9 @@ if ($gDebug) echo "Run : QUIT<br>";
 			$stay_in_ssl_mode = ((isset($_SERVER['HTTP_REFERER']) && (substr($_SERVER['HTTP_REFERER'], 0, 5) == 'https'))
 				|| (isset($_REQUEST['stay_in_ssl_mode']) && $_REQUEST['stay_in_ssl_mode'] == 'on'));
 			if (!$stay_in_ssl_mode) {
-				$http_domain = $gBitSystem->getPreference('http_domain', false);
-				$http_port = $gBitSystem->getPreference('http_port', 80);
-				$http_prefix = $gBitSystem->getPreference('http_prefix', '/');
+				$http_domain = $gBitSystem->getConfig('http_domain', false);
+				$http_port = $gBitSystem->getConfig('http_port', 80);
+				$http_prefix = $gBitSystem->getConfig('http_prefix', '/');
 				if ($http_domain) {
 					$prefix = 'http://' . $http_domain;
 					if ($http_port != 80)
@@ -711,10 +711,10 @@ if ($gDebug) echo "Run : QUIT<br>";
 		$userAuthValid = false;
 		$userAuthPresent = false;
 		// see if we are to use PEAR::Auth
-		$auth_pear = ($gBitSystem->getPreference("auth_method", "tiki") == "auth");
-		$create_tiki = ($gBitSystem->getPreference("auth_create_gBitDbUser", "n") == "y");
-		$create_auth = ($gBitSystem->getPreference("auth_create_user_auth", "n") == "y");
-		$skip_admin = ($gBitSystem->getPreference("auth_skip_admin", "n") == "y");
+		$auth_pear = ($gBitSystem->getConfig("auth_method", "tiki") == "auth");
+		$create_tiki = ($gBitSystem->getConfig("auth_create_gBitDbUser", "n") == "y");
+		$create_auth = ($gBitSystem->getConfig("auth_create_user_auth", "n") == "y");
+		$skip_admin = ($gBitSystem->getConfig("auth_skip_admin", "n") == "y");
 		// first attempt a login via the standard Tiki system
 		$userId = $this->validateBitUser($user, $pass, $challenge, $response);
 		if ($userId) {
@@ -825,23 +825,23 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		global $gBitSystem;
 		require_once (UTIL_PKG_PATH."pear/Auth/Auth.php");
 		// just make sure we're supposed to be here
-		if ($gBitSystem->getPreference("auth_method", "tiki") != "auth")
+		if ($gBitSystem->getConfig("auth_method", "tiki") != "auth")
 			return false;
 		// get all of the LDAP options from the database
-		$options["host"] = $gBitSystem->getPreference("auth_ldap_host", "localhost");
-		$options["port"] = $gBitSystem->getPreference("auth_ldap_port", "389");
-		$options["scope"] = $gBitSystem->getPreference("auth_ldap_scope", "sub");
-		$options["basedn"] = $gBitSystem->getPreference("auth_ldap_basedn", "");
-		$options["userdn"] = $gBitSystem->getPreference("auth_ldap_userdn", "");
-		$options["userattr"] = $gBitSystem->getPreference("auth_ldap_userattr", "uid");
-		$options["useroc"] = $gBitSystem->getPreference("auth_ldap_useroc", "posixAccount");
-		$options["groupdn"] = $gBitSystem->getPreference("auth_ldap_groupdn", "");
-		$options["groupattr"] = $gBitSystem->getPreference("auth_ldap_groupattr", "cn");
-		$options["groupoc"] = $gBitSystem->getPreference("auth_ldap_groupoc", "groupOfUniqueNames");
-		$options["memberattr"] = $gBitSystem->getPreference("auth_ldap_memberattr", "uniqueMember");
-		$options["memberisdn"] = ($gBitSystem->getPreference("auth_ldap_memberisdn", "y") == "y");
-		$options["adminuser"] = $gBitSystem->getPreference("auth_ldap_adminuser", "");
-		$options["adminpass"] = $gBitSystem->getPreference("auth_ldap_adminpass", "");
+		$options["host"] = $gBitSystem->getConfig("auth_ldap_host", "localhost");
+		$options["port"] = $gBitSystem->getConfig("auth_ldap_port", "389");
+		$options["scope"] = $gBitSystem->getConfig("auth_ldap_scope", "sub");
+		$options["basedn"] = $gBitSystem->getConfig("auth_ldap_basedn", "");
+		$options["userdn"] = $gBitSystem->getConfig("auth_ldap_userdn", "");
+		$options["userattr"] = $gBitSystem->getConfig("auth_ldap_userattr", "uid");
+		$options["useroc"] = $gBitSystem->getConfig("auth_ldap_useroc", "posixAccount");
+		$options["groupdn"] = $gBitSystem->getConfig("auth_ldap_groupdn", "");
+		$options["groupattr"] = $gBitSystem->getConfig("auth_ldap_groupattr", "cn");
+		$options["groupoc"] = $gBitSystem->getConfig("auth_ldap_groupoc", "groupOfUniqueNames");
+		$options["memberattr"] = $gBitSystem->getConfig("auth_ldap_memberattr", "uniqueMember");
+		$options["memberisdn"] = ($gBitSystem->getConfig("auth_ldap_memberisdn", "y") == "y");
+		$options["adminuser"] = $gBitSystem->getConfig("auth_ldap_adminuser", "");
+		$options["adminpass"] = $gBitSystem->getConfig("auth_ldap_adminpass", "");
 
 		// set the Auth options
 		$a = new Auth("LDAP", $options, "", false, $user, $pass);
@@ -947,20 +947,20 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	function create_user_auth($user, $pass) {
 		global $gBitSystem;
 		$options = array();
-		$options["host"] = $gBitSystem->getPreference("auth_ldap_host", "localhost");
-		$options["port"] = $gBitSystem->getPreference("auth_ldap_port", "389");
-		$options["scope"] = $gBitSystem->getPreference("auth_ldap_scope", "sub");
-		$options["basedn"] = $gBitSystem->getPreference("auth_ldap_basedn", "");
-		$options["userdn"] = $gBitSystem->getPreference("auth_ldap_userdn", "");
-		$options["userattr"] = $gBitSystem->getPreference("auth_ldap_userattr", "uid");
-		$options["useroc"] = $gBitSystem->getPreference("auth_ldap_useroc", "posixAccount");
-		$options["groupdn"] = $gBitSystem->getPreference("auth_ldap_groupdn", "");
-		$options["groupattr"] = $gBitSystem->getPreference("auth_ldap_groupattr", "cn");
-		$options["groupoc"] = $gBitSystem->getPreference("auth_ldap_groupoc", "groupOfUniqueNames");
-		$options["memberattr"] = $gBitSystem->getPreference("auth_ldap_memberattr", "uniqueMember");
-		$options["memberisdn"] = ($gBitSystem->getPreference("auth_ldap_memberisdn", "y") == "y");
-		$options["adminuser"] = $gBitSystem->getPreference("auth_ldap_adminuser", "");
-		$options["adminpass"] = $gBitSystem->getPreference("auth_ldap_adminpass", "");
+		$options["host"] = $gBitSystem->getConfig("auth_ldap_host", "localhost");
+		$options["port"] = $gBitSystem->getConfig("auth_ldap_port", "389");
+		$options["scope"] = $gBitSystem->getConfig("auth_ldap_scope", "sub");
+		$options["basedn"] = $gBitSystem->getConfig("auth_ldap_basedn", "");
+		$options["userdn"] = $gBitSystem->getConfig("auth_ldap_userdn", "");
+		$options["userattr"] = $gBitSystem->getConfig("auth_ldap_userattr", "uid");
+		$options["useroc"] = $gBitSystem->getConfig("auth_ldap_useroc", "posixAccount");
+		$options["groupdn"] = $gBitSystem->getConfig("auth_ldap_groupdn", "");
+		$options["groupattr"] = $gBitSystem->getConfig("auth_ldap_groupattr", "cn");
+		$options["groupoc"] = $gBitSystem->getConfig("auth_ldap_groupoc", "groupOfUniqueNames");
+		$options["memberattr"] = $gBitSystem->getConfig("auth_ldap_memberattr", "uniqueMember");
+		$options["memberisdn"] = ($gBitSystem->getConfig("auth_ldap_memberisdn", "y") == "y");
+		$options["adminuser"] = $gBitSystem->getConfig("auth_ldap_adminuser", "");
+		$options["adminpass"] = $gBitSystem->getConfig("auth_ldap_adminpass", "");
 		// set additional attributes here
 		$userattr = array();
 		$userattr["email"] = $this->mDb->getOne("select `email` from `".BIT_DB_PREFIX."users_users`
@@ -1129,7 +1129,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$email=trim($email);
 		$hash = md5(strtolower($user) . $pass . $email);
 		$now = $gBitSystem->getUTCTime();;
-		$new_pass_due = $now + (60 * 60 * 24 * $gBitSystem->getPreference( 'pass_due' ) );
+		$new_pass_due = $now + (60 * 60 * 24 * $gBitSystem->getConfig( 'pass_due' ) );
 		if( !$gBitSystem->isFeatureActive( 'clear_passwords' ) ) {
 			$pass = '';
 		}
@@ -1183,7 +1183,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 	function canCustomizeTheme() {
 		global $gBitSystem;
-		return( $this->hasPermission( 'bit_p_custom_home_theme' ) || $gBitSystem->getPreference('users_themes') == 'y' || $gBitSystem->getPreference('users_themes') == 'h' );
+		return( $this->hasPermission( 'bit_p_custom_home_theme' ) || $gBitSystem->getConfig('users_themes') == 'y' || $gBitSystem->getConfig('users_themes') == 'h' );
 
 	}
 
@@ -1191,7 +1191,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 	function canCustomizeLayout() {
 		global $gBitSystem;
-		return( $this->hasPermission( 'bit_p_custom_home_layout' ) || $gBitSystem->getPreference('users_layouts') == 'y' || $gBitSystem->getPreference('users_layouts') == 'h' );
+		return( $this->hasPermission( 'bit_p_custom_home_layout' ) || $gBitSystem->getConfig('users_layouts') == 'y' || $gBitSystem->getConfig('users_layouts') == 'h' );
 	}
 
 
@@ -1533,7 +1533,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$pHash = &$this->mInfo;
 		}
 		if( !empty( $pHash ) ) {
-			$displayName = (((!empty($pHash['real_name']) && $gBitSystem->getPreference( 'display_name', 'real_name' ) == 'real_name') ? $pHash['real_name'] :
+			$displayName = (((!empty($pHash['real_name']) && $gBitSystem->getConfig( 'display_name', 'real_name' ) == 'real_name') ? $pHash['real_name'] :
 							(!empty($pHash['user']) ? $pHash['user'] :
 							(!empty($pHash['login']) ? $pHash['login'] :
 							(!empty($pHash['email']) ? substr($pHash['email'],0, strpos($pHash['email'],'@')) : $pHash['user_id'])))));

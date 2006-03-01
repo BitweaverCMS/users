@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.10 2006/02/17 13:57:55 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.11 2006/03/01 18:35:20 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: validate.php,v 1.10 2006/02/17 13:57:55 squareing Exp $
+ * $Id: validate.php,v 1.11 2006/03/01 18:35:20 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -29,13 +29,13 @@ if( empty( $_SESSION['loginfrom'] ) ) {
 }
 
 $https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$https_login_required = $gBitSystem->getPreference('https_login_required', 'n');
+$https_login_required = $gBitSystem->getConfig('https_login_required', 'n');
 if ($gBitSystem->isFeatureActive( 'https_login_required' ) && !$https_mode) {
-	$url = $gBitSystem->getPreference( 'https_domain' );
-	$https_port = $gBitSystem->getPreference('https_port', $https_port);
+	$url = $gBitSystem->getConfig( 'https_domain' );
+	$https_port = $gBitSystem->getConfig('https_port', $https_port);
 	if ($https_port != 443)
 		$url .= ':' . $https_port;
-	$url .= $gBitSystem->getPreference( 'https_prefix' ) . $gBitSystem->getDefaultPage();
+	$url .= $gBitSystem->getConfig( 'https_prefix' ) . $gBitSystem->getDefaultPage();
 	if (SID)
 		$url .= '?' . SID;
 	$url = preg_replace('/\/+/', '/', $url);

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.10 2006/02/20 16:28:40 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.11 2006/03/01 18:35:20 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.10 2006/02/20 16:28:40 spiderr Exp $
+ * $Id: register.php,v 1.11 2006/03/01 18:35:20 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -40,7 +40,7 @@ if( isset( $_REQUEST["register"] ) ) {
 
 	// Check the mode
 	if( $gBitSystem->isFeatureActive( 'use_register_passcode' ) ) {
-		if( $reg["passcode"] != $gBitSystem->getPreference( "register_passcode",md5( $gBitUser->genPass() ) ) ) {
+		if( $reg["passcode"] != $gBitSystem->getConfig( "register_passcode",md5( $gBitUser->genPass() ) ) ) {
 			$errors['passcode'] = 'Wrong passcode! You need to know the passcode to register at this site';
 		}
 	}
@@ -66,7 +66,7 @@ if( isset( $_REQUEST["register"] ) ) {
 
 } else {
 	if( $gBitSystem->isFeatureActive( 'custom_user_fields' ) ) {
-		$fields= explode( ',', $gBitSystem->getPreference( 'custom_user_fields' )  );
+		$fields= explode( ',', $gBitSystem->getConfig( 'custom_user_fields' )  );
 		trim_array( $fields );
 		$gBitSmarty->assign('customFields', $fields);
 	}

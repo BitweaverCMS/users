@@ -184,7 +184,7 @@
 for instance, i don't know where the page heading stuff is used.
 
 <table width="100%">
-{if $gBitSystem->isFeatureActive( 'users_layouts' ) or $gBitSystemPrefs.users_layouts eq 'h'}
+{if $gBitSystem->isFeatureActive( 'users_layouts' ) or $gBitSystem->getConfig('users_layouts') eq 'h'}
 
 {if $canassign eq 'y'}
 <tr>
@@ -332,7 +332,7 @@ for instance, i don't know where the page heading stuff is used.
 	</form>
 </td>
 <td style="vertical-align:top;">
-{if $gBitSystem->isFeatureActive( 'users_themes' ) || $gBitSystemPrefs.users_themes eq 'h' }
+{if $gBitSystem->isFeatureActive( 'users_themes' ) || $gBitSystem->getConfig('users_themes') eq 'h' }
 
 	<form method="POST" action="{$smarty.const.USERS_PKG_URL}assigned_modules.php">
 	<table class="panel">
