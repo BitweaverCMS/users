@@ -26,17 +26,17 @@ $gBitSmarty->assign( 'formFeatures', $formFeatures );
 
 if( isset( $_REQUEST['settings'] ) ) {
 	foreach ( array_keys( $formFeatures ) as $feature) {
-		$gBitSystem->storePreference( $feature, (isset( $_REQUEST['settings'][$feature][0] ) ? $_REQUEST['settings'][$feature][0] : 'n'), USERS_PKG_NAME );
+		$gBitSystem->storeConfig( $feature, (isset( $_REQUEST['settings'][$feature][0] ) ? $_REQUEST['settings'][$feature][0] : 'n'), USERS_PKG_NAME );
 	}
 
 	if( $customFields = explode( ',', $_REQUEST['settings']['custom_user_fields'] ) ) {
 		trim_array( $customFields );
 		$customFields = implode( ',', $customFields );
 	}
-	$gBitSystem->storePreference( 'custom_user_fields', $customFields, USERS_PKG_NAME );
-	$gBitSystem->storePreference( 'display_name', (isset( $_REQUEST['settings']['display_name'] ) ? $_REQUEST['settings']['display_name'] : 'real_name'), USERS_PKG_NAME );
-	$gBitSystem->storePreference( 'users_themes', (isset( $_REQUEST['settings']['users_themes'][0] ) ? $_REQUEST['settings']['users_themes'][0] : NULL), USERS_PKG_NAME );
-	$gBitSystem->storePreference( 'users_layouts', (isset( $_REQUEST['settings']['users_layouts'][0] ) ? $_REQUEST['settings']['users_layouts'][0] : NULL), USERS_PKG_NAME );
+	$gBitSystem->storeConfig( 'custom_user_fields', $customFields, USERS_PKG_NAME );
+	$gBitSystem->storeConfig( 'display_name', (isset( $_REQUEST['settings']['display_name'] ) ? $_REQUEST['settings']['display_name'] : 'real_name'), USERS_PKG_NAME );
+	$gBitSystem->storeConfig( 'users_themes', (isset( $_REQUEST['settings']['users_themes'][0] ) ? $_REQUEST['settings']['users_themes'][0] : NULL), USERS_PKG_NAME );
+	$gBitSystem->storeConfig( 'users_layouts', (isset( $_REQUEST['settings']['users_layouts'][0] ) ? $_REQUEST['settings']['users_layouts'][0] : NULL), USERS_PKG_NAME );
 }
 
 // Handle Admin Password Change Request

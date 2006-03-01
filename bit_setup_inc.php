@@ -33,7 +33,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 
 	$cookie_path = $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL);
 	$cookie_path = !empty($cookie_path) ? $cookie_path : BIT_ROOT_URL;
-	$gBitSystem->storePreference( 'cookie_path', $cookie_path, KERNEL_PKG_NAME );
+	$gBitSystem->storeConfig( 'cookie_path', $cookie_path, KERNEL_PKG_NAME );
 
 	// set session lifetime
 	$session_lifetime = $gBitSystem->getConfig( 'session_lifetime', '0' );

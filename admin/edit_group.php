@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.14 2006/03/01 18:35:20 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.15 2006/03/01 20:16:36 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -72,10 +72,10 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 		$errorMsg = $gBitUser->mErrors['groups'];
 	}
 	if( !empty( $_REQUEST['default_home_group'] ) ) {
-		$gBitSystem->storePreference( 'default_home_group', $_REQUEST['group_id'], USERS_PKG_NAME );
+		$gBitSystem->storeConfig( 'default_home_group', $_REQUEST['group_id'], USERS_PKG_NAME );
 	} elseif( $_REQUEST['group_id'] == $gBitSystem->getConfig( 'default_home_group' ) ) {
 		// the default home group was unchecked.
-		$gBitSystem->storePreference( 'default_home_group', NULL, USERS_PKG_NAME );
+		$gBitSystem->storeConfig( 'default_home_group', NULL, USERS_PKG_NAME );
 	}
 
 //	$mid = 'bitpackage:users/admin_groups_list.tpl';
@@ -119,7 +119,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 		$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group_id'] );
 		if( isset( $_REQUEST["confirm"] ) ) {
 			if( $_REQUEST['group_id'] == $gBitSystem->getConfig( 'default_home_group' ) ) {
-				$gBitSystem->storePreference( 'default_home_group', NULL, USERS_PKG_NAME );
+				$gBitSystem->storeConfig( 'default_home_group', NULL, USERS_PKG_NAME );
 			}
 			$gBitUser->remove_group($_REQUEST['group_id']);
 			$successMsg = "The group ".$groupInfo['group_name']." was deleted.";
