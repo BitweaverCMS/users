@@ -26,9 +26,9 @@
 					{formlabel label=`$output.label` for=$feature}
 					{forminput}
 						{if $output.type == 'text'}
-							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig('')$feature|escape}" />
+							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
 						{else}
-							{html_checkboxes name="$feature" values="y" checked=`$gBitSystem->getConfig('')$feature` labels=false id=$feature}
+							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
 						{/if}
 						{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
 					{/forminput}
@@ -72,9 +72,9 @@
 					{formlabel label=`$output.label` for=$feature}
 					{forminput}
 						{if $output.type == 'text'}
-							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig('')$feature|escape}" />
+							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
 						{else}
-							{html_checkboxes name="$feature" values="y" checked=`$gBitSystem->getConfig('')$feature` labels=false id=$feature}
+							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
 						{/if}
 						{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
 					{/forminput}
@@ -96,9 +96,9 @@
 					{formlabel label=`$output.label` for=$feature}
 					{forminput}
 						{if $output.type == 'text'}
-							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig('')$feature|escape}" />
+							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
 						{else}
-							{html_checkboxes name="$feature" values="y" checked=`$gBitSystem->getConfig('')$feature` labels=false id=$feature}
+							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
 						{/if}
 						{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
 					{/forminput}
@@ -120,9 +120,9 @@
 					{formlabel label=`$output.label` for=$feature}
 					{forminput}
 						{if $output.type == 'text'}
-							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig('')$feature|escape}" />
+							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
 						{else}
-							{html_checkboxes name="$feature" values="y" checked=`$gBitSystem->getConfig('')$feature` labels=false id=$feature}
+							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
 						{/if}
 						{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
 					{/forminput}
