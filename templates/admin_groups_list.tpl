@@ -21,7 +21,7 @@
 		{formfeedback success=$successMsg error=$errorMsg}
 
 		<ul class="clear data">
-			{foreach from=$groups key=groupId item=group}
+			{foreach from=$groupList key=groupId item=grp}
 				<li class="item {cycle values='odd,even'}">
 					<div class="floaticon">
 						{smartlink ititle="Edit" ipackage="users" ifile="admin/edit_group.php" ibiticon="liberty/edit" group_id=$groupId}
@@ -32,15 +32,15 @@
 						{/if}
 					</div>
 
-					<h2>{$group.group_name}</h2>
+					<h2>{$grp.group_name}</h2>
 					<div style="float:left;width:30%;">
-						{$group.group_desc}<br />
-						{if $group.is_default eq 'y'}<small class="warning"> *{tr}Default group{/tr}*</small><br/>{/if}
-						{if $group.group_home}{tr}Home Page{/tr}:<strong> {$group.group_home}</strong><br />{/if}
-						{if $group.included}
+						{$grp.group_desc}<br />
+						{if $grp.is_default eq 'y'}<small class="warning"> *{tr}Default group{/tr}*</small><br/>{/if}
+						{if $grp.group_home}{tr}Home Page{/tr}:<strong> {$grp.group_home}</strong><br />{/if}
+						{if $grp.included}
 							<br />{tr}Included Groups{/tr}
 							<ul class="data small">
-								{foreach from=$group.included key=incGroupId item=incGroupName}
+								{foreach from=$grp.included key=incGroupId item=incGroupName}
 									<li class="{cycle values="odd,even"} item">{$incGroupName}</li>
 								{/foreach}
 							</ul>
@@ -50,7 +50,7 @@
 					<div style="float:right;width:70%;">
 						{tr}Permissions{/tr}
 						<ul class="small">
-							{foreach from=$group.perms key=permName item=perm}
+							{foreach from=$grp.perms key=permName item=perm}
 								<li>{$perm.perm_desc}</li>
 							{foreachelse}
 								<li>{tr}none{/tr}</li>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.15 2006/03/01 20:16:36 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.16 2006/03/03 21:00:02 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -202,7 +202,8 @@ if( empty( $mid ) ) {
 		$mid = 'bitpackage:users/admin_groups_list.tpl';
 	}
 }
-$gBitSmarty->assign('groups', $groupList['data']);
+
+$gBitSmarty->assign('groupList', $groupList['data']);
 $gBitSmarty->assign('successMsg',$successMsg);
 $gBitSmarty->assign('errorMsg',$errorMsg);
 

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.7 2006/02/22 23:00:32 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.8 2006/03/03 21:00:02 spiderr Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -36,7 +36,7 @@
 						{formlabel label="Include" for="groups_inc"}
 						{forminput}
 							<select name="include_groups[]" id="groups_inc" multiple="multiple" size="4">
-							{foreach from=$groups key=groupId item=group}
+							{foreach from=$groupList key=groupId item=group}
 								{if $groupId != $groupInfo.group_id}
 									<option value="{$groupId}" {if $group.included eq 'y'} selected="selected"{/if}>{$group.group_name}</option>
 								{/if}
