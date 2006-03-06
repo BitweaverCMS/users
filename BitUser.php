@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.58 2006/03/05 02:16:29 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.59 2006/03/06 21:29:30 bitweaver Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.58 2006/03/05 02:16:29 spiderr Exp $
+ * $Id: BitUser.php,v 1.59 2006/03/06 21:29:30 bitweaver Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.58 $
+ * @version  $Revision: 1.59 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1169,10 +1169,10 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	/*shared*/
 	function get_online_users() {
 		global $gBitSystem;
-		$query = "select ls.`user_id`, `login` AS `user`, `real_name` ,`connect_time`
+		$query = "select DISTINCT ls.`user_id`, `login` AS `user`, `real_name` ,`connect_time`
 				  FROM `".BIT_DB_PREFIX."users_cnxn` ls INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (ls.`user_id`=uu.`user_id`)
-				  WHERE ls.`user_id` IS NOT NULL";
-		$result = $this->mDb->query($query);
+				  WHERE ls.`user_id` IS NOT NULL AND `last_get` > ? ORDER BY `connect_time` DESC";
+		$result = $this->mDb->query($query, array( time() - 3600 ) );
 		$ret = array();
 		while ($res = $result->fetchRow()) {
 			$res['user_information'] = 	$this->getPreference( 'user_information', 'public', $res['user_id'] );
