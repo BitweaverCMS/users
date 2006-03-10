@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.8 2006/03/01 18:35:20 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.9 2006/03/10 18:24:33 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: remind_password.php,v 1.8 2006/03/01 18:35:20 spiderr Exp $
+ * $Id: remind_password.php,v 1.9 2006/03/10 18:24:33 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -17,11 +17,10 @@
  * required setup
  */
 require_once( '../bit_setup_inc.php' );
-if ($forgot_pass != 'y') {
-	$gBitSmarty->assign('msg', tra("This feature is disabled").": forgot_pass");
-	$gBitSystem->display( 'error.tpl' );
-	die;
-} elseif( $gBitUser->isRegistered() ) {
+
+$gBitSystem->verifyFeature( 'forgot_pass' );
+
+if( $gBitUser->isRegistered() ) {
 	header( 'Location: '.BIT_ROOT_URL );
 	die;
 } elseif (isset($_REQUEST["remind"])) {
