@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.67 2006/01/26 15:00:59 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.68 2006/03/13 20:38:27 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.67 2006/01/26 15:00:59 squareing Exp $
+ * $Id: BitUser.php,v 1.2.2.68 2006/03/13 20:38:27 spiderr Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.67 $
+ * @version  $Revision: 1.2.2.68 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -532,7 +532,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 			// Handle optional user preferences that may be collected during registration
 			if( !empty( $pParamHash['prefs'] ) ) {
 				foreach( array_keys( $pParamHash['prefs'] ) as $key ) {
-					$newUser->storePreference( $key, $pParamHash['prefs'][$key] );
+					$this->storePreference( $key, $pParamHash['prefs'][$key] );
 				}
 			}
 
