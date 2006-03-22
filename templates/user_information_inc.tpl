@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.9 2006/03/01 18:35:20 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.10 2006/03/22 10:24:32 squareing Exp $ *}
 {strip}
 {if $userData->getPreference('user_information') eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
