@@ -71,7 +71,7 @@
 						{formfeedback error=$errors.password}
 						{formlabel label="Password" for="pass"}
 						{forminput}
-							<input id="pass1" type="password" name="password" value="{$reg.password}" /> <acronym title="{tr}Required{/tr}">*</acronym>
+							<input id="pass1" type="password" name="password" /> <acronym title="{tr}Required{/tr}">*</acronym>
 						{/forminput}
 					</div>
 
@@ -159,7 +159,7 @@
 					</div>
 				{/section}
 
-				{if $gBitSystem->mPrefs.rnd_num_reg eq 'y'}
+				{if $gBitSystem->getConfig( 'rnd_num_reg' )}
 					<hr />
 
 					<div class="row">
