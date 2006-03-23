@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.11 2006/03/01 18:35:20 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.12 2006/03/23 19:17:10 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: validate.php,v 1.11 2006/03/01 18:35:20 spiderr Exp $
+ * $Id: validate.php,v 1.12 2006/03/23 19:17:10 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -21,11 +21,12 @@ require_once( '../bit_setup_inc.php' );
 global $gBitSystem;
 
 //Remember where user is logging in from and send them back later; using session variable for those of us who use WebISO services
-if( empty( $_SESSION['loginfrom'] ) ) {
-	if( isset( $_SERVER['HTTP_REFERER'] ) && !strpos( $_SERVER['HTTP_REFERER'], 'login.php' )  && !strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) ) {
-		$from = parse_url( $_SERVER['HTTP_REFERER'] );
-		$_SESSION['loginfrom'] = $from['path'];
-	}
+//do not use session loginfrom with login.php or register.php - only "inline" login forms display in perm denied fatals, etc.
+if( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], 'login.php' ) === FALSE && strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) === FALSE ) {
+	$from = parse_url( $_SERVER['HTTP_REFERER'] );
+	$_SESSION['loginfrom'] = $from['path'];
+} elseif( !empty( $_SESSION['loginfrom'] ) ) {
+	unset( $_SESSION['loginfrom'] );
 }
 
 $https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
