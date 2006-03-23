@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/admin_unassigned_perms.tpl,v 1.2 2006/01/10 21:17:05 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/admin_unassigned_perms.tpl,v 1.3 2006/03/23 13:19:47 squareing Exp $ *}
 {strip}
 
 <div class="admin groups">
@@ -30,7 +30,7 @@
 						<tr class="{cycle values="odd,even"}">
 							<td><strong>{$perm.perm_name}</strong><br />{$perm.perm_desc}</td>
 							<td>{$perm.package}</td>
-							<td>{$perm.level}</td>
+							<td>{$perm.perm_level}</td>
 							<td>{html_options name="assign[`$perm.perm_name`]" options=$groupDrop values=$groupDrop selected=$perm.suggestion}</td>
 						</tr>
 					{/foreach}

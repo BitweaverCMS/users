@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/unassigned_perms.php,v 1.3 2006/02/27 16:08:27 bitweaver Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/unassigned_perms.php,v 1.4 2006/03/23 13:19:46 squareing Exp $
 // Initialization
 require_once( '../../bit_setup_inc.php' );
 
@@ -24,8 +24,8 @@ if( !empty( $_REQUEST['assign_permissions'] ) && !empty( $_REQUEST['assign'] ) )
 
 $unassignedPerms = $gBitUser->getUnassignedPerms();
 foreach( $unassignedPerms as $key => $p ) {
-	if( !empty( $p['level'] ) ) {
-		switch( $p['level'] ) {
+	if( !empty( $p['perm_level'] ) ) {
+		switch( $p['perm_level'] ) {
 			case "basic":
 				$unassignedPerms[$key]['suggestion'] = -1;
 				break;
