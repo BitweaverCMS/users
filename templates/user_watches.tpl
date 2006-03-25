@@ -36,7 +36,7 @@
 					<tr class="{cycle values="odd,even"}">
 						<td><label><input type="checkbox" name="watch[{$watches[ix].hash}]" /> {$watches[ix].event}</label></td>
 						<td>{$watches[ix].type}</td>
-						<td><a href="{$watches[ix].url}">{$watches[ix].title}</a></td>
+						<td><a href="{$watches[ix].url}">{$watches[ix].title|escape}</a></td>
 					</tr>
 				{sectionelse}
 					<tr>

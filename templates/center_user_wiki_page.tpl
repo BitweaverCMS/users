@@ -62,7 +62,7 @@
 			{jstabs}
 				{jstab title="User Page"}
 					<div class="header">
-						<h1>{$userInfo.title}</h1>
+						<h1>{$userInfo.title|escape}</h1>
 					</div>
 
 					<div class="body">
