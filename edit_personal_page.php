@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.8 2006/03/01 18:35:20 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.9 2006/03/29 17:04:32 sylvieg Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: edit_personal_page.php,v 1.8 2006/03/01 18:35:20 spiderr Exp $
+ * $Id: edit_personal_page.php,v 1.9 2006/03/29 17:04:32 sylvieg Exp $
  * @package users
  * @subpackage functions
  */
@@ -51,6 +51,7 @@ if(isset($_REQUEST["preview"])) {
 
 	$parsed = $gBitUser->parseData($_REQUEST["edit"], (!empty( $_REQUEST['format_guid'] ) ? $_REQUEST['format_guid'] :
 		( isset($gBitUser->mInfo['format_guid']) ? $gBitUser->mInfo['format_guid'] : 'tikiwiki' ) ) );
+	$gBitUser->mInfo['parsed_data'] = $parsed;
 	/* SPELLCHECKING INITIAL ATTEMPT */
 	//This nice function does all the job!
 	if ($gBitSystem->isFeatureActive( 'wiki_spellcheck' )) {
@@ -61,7 +62,7 @@ if(isset($_REQUEST["preview"])) {
 			$gBitSmarty->assign('spellcheck', 'n');
 		}
 	}
-	$gBitSmarty->assign( 'parsed', $parsed );
+	$gBitSmarty->assign_by_ref( 'pageInfo', $gBitUser->mInfo );
 }
 
 $gBitSmarty->assign_by_ref( 'pageInfo', $gBitUser->mInfo );
