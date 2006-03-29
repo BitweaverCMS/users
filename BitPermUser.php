@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.29 2006/03/29 18:03:25 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.30 2006/03/29 22:37:34 sylvieg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.29 2006/03/29 18:03:25 sylvieg Exp $
+ * $Id: BitPermUser.php,v 1.30 2006/03/29 22:37:34 sylvieg Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.29 $
+ * @version  $Revision: 1.30 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -817,7 +817,7 @@ class BitPermUser extends BitUser {
 			$bindVars[] = $groupList;
 			$mid = 'like ?';
 		}
-		$query = "update `users_groups` set `registration_choice`= ? where `group_id` in ($mid)";
+		$query = "update `".BIT_DB_PREFIX."users_groups` set `registration_choice`= ? where `group_id` in ($mid)";
 		$result = $this->mDb->query( $query, $bindVars );
 	}
 
