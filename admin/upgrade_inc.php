@@ -359,6 +359,23 @@ array( 'DATADICT' => array(
 		'tiki_userpoints'             => 'tidbits_userpoints',
 		'tiki_userfiles'              => 'tidbits_userfiles',
 	)),
+	array( 'RENAMECOLUMN' => array(
+		'users_watches' => array(
+			'`type`' => 'watch_type'
+		),
+		'users_group_permissions' => array(
+			'`value`' => 'perm_value'
+		),
+		'users_favorites_map' => array(
+			'`position`' => 'map_postion'
+		),
+		'users_users' => array(
+			'`password`' => 'user_password'
+		),
+		'users_permissions' => array(
+			'`level`' => 'perm_level'
+		),
+	)),
 	array( 'DROPTABLE' => array(
 		'tiki_sessions'
 	)),
