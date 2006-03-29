@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.28 2006/03/29 15:35:39 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.29 2006/03/29 18:03:25 sylvieg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.28 2006/03/29 15:35:39 sylvieg Exp $
+ * $Id: BitPermUser.php,v 1.29 2006/03/29 18:03:25 sylvieg Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.28 $
+ * @version  $Revision: 1.29 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -165,7 +165,7 @@ class BitPermUser extends BitUser {
 		return $ret;
 	}
 
-	function getAllGroups( &$pListHash=NULL ) {
+	function getAllGroups( &$pListHash ) {
 		if( empty(  $pListHash['sort_mode'] ) || $pListHash['sort_mode'] == 'name_asc' ) {
  			$pListHash['sort_mode'] = 'group_name_asc';
 		}
