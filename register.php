@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.11 2006/03/01 18:35:20 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.12 2006/03/29 15:35:38 sylvieg Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.11 2006/03/01 18:35:20 spiderr Exp $
+ * $Id: register.php,v 1.12 2006/03/29 15:35:38 sylvieg Exp $
  * @package users
  * @subpackage functions
  */
@@ -48,6 +48,17 @@ if( isset( $_REQUEST["register"] ) ) {
 	if( empty( $errors ) ) {
 		$newUser = new BitPermUser();
 		if( $newUser->register( $reg ) ) {
+			if ( !empty( $_REQUEST['group'] ) ) {
+				$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group'] );
+				if ( empty($groupInfo) || $groupInfo['registration_choice'] != 'y' ) {
+					$errors[] = "You can't use this group";
+					$gBitSmarty->assign_by_ref( 'errors', $errors );
+				} else {
+					$userId = $newUser->getUserId();
+					$gBitUser->addUserToGroup( $userId, $_REQUEST['group'] );
+					$gBitUser->storeUserDefaultGroup( $userId, $_REQUEST['group'] );
+				}
+			}
 			if( $gBitSystem->isFeatureActive( 'validate_user' ) ) {
 				$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
 				$gBitSmarty->assign('showmsg','y');
@@ -89,6 +100,12 @@ while ($file = readdir($h)) {
 closedir ($h);
 sort ($flags);
 $gBitSmarty->assign('flags', $flags);
+
+$listHash = array( 'registration_choice'=>'y', 'sort_mode'=>'is_default_asc' );
+$groupList = $gBitUser->getAllGroups( $listHash );
+if ( $groupList['cant'] ) {
+	$gBitSmarty->assign_by_ref( 'groupList', $groupList['data'] );
+}
 
 $gBitSystem->display('bitpackage:users/register.tpl', 'Register' );
 

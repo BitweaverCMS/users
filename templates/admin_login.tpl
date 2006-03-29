@@ -55,6 +55,21 @@
 				{/forminput}
 			</div>
 
+			<div class="row">
+				{formlabel label="Groups choice at registration" for="registration_group_choice"}
+				{forminput}
+					<select name="registration_group_choice[]" multiple="multiple" size="5">
+						<option value="">&nbsp;</option>
+						{foreach key=g item=gr from=$groupList}
+							{if $gr.group_id ne -1} 
+								<option value="{$gr.group_id}" {if $gr.registration_choice eq 'y'} selected="selected"{/if}>{$gr.group_name|truncate:"52":" ..."}</option>
+							{/if}
+						{/foreach}
+					</select>
+					{formhelp note="A user will be able to select one of the selected group at registration. If you select the default group (Registered), he will not be obliged to select a group."}
+				{/forminput}
+			</div>
+
 			<div class="row submit">
 				<input type="submit" name="loginprefs" value="{tr}Change preferences{/tr}" />
 			</div>

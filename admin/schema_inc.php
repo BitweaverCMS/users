@@ -50,7 +50,8 @@ $tables = array(
   group_name C(30),
   is_default C(1),
   group_desc C(255),
-  group_home C(255)
+  group_home C(255),
+  registration_choice C(1)
   CONSTRAINT ', CONSTRAINT `users_groups_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 

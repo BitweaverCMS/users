@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.27 2006/02/26 21:58:58 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.28 2006/03/29 15:35:39 sylvieg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.27 2006/02/26 21:58:58 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.28 2006/03/29 15:35:39 sylvieg Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.27 $
+ * @version  $Revision: 1.28 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -165,7 +165,7 @@ class BitPermUser extends BitUser {
 		return $ret;
 	}
 
-	function getAllGroups( &$pListHash ) {
+	function getAllGroups( &$pListHash=NULL ) {
 		if( empty(  $pListHash['sort_mode'] ) || $pListHash['sort_mode'] == 'name_asc' ) {
  			$pListHash['sort_mode'] = 'group_name_asc';
 		}
@@ -190,8 +190,17 @@ class BitPermUser extends BitUser {
 				$mid = " WHERE `user_id` <> ".ROOT_USER_ID;
 			}
 		}
+		if ( !empty( $pListHash['registration_choice'] ) ) {
+			if (strlen($mid) > 0) {
+				$mid .= ' AND ';
+			} else {
+				$mid = 'WHERE ';
+			}
+			$mid .= '`registration_choice`= ?';
+			$bindvars[] = $pListHash['registration_choice'];
+		}
 
-		$query = "SELECT `user_id`, `group_id`, `group_name` , `group_desc`, `group_home`, `is_default`
+		$query = "SELECT `user_id`, `group_id`, `group_name` , `group_desc`, `group_home`, `is_default`, `registration_choice`
 				  FROM `".BIT_DB_PREFIX."users_groups` $mid
 				  ORDER BY $sortMode";
 		$ret = array();
@@ -798,6 +807,20 @@ class BitPermUser extends BitUser {
 			}
 		}
 	}
+	function storeRegistrationChoice( $groupList, $flag ) {
+		$bindVars = array();
+		$bindVars[] = $flag;
+		if (is_array( $groupList )) {
+			$mid = implode(',',array_fill( 0, count( $groupList ),'?' ) );
+			$bindVars = array_merge( $bindVars, $groupList );
+		} else {
+			$bindVars[] = $groupList;
+			$mid = 'like ?';
+		}
+		$query = "update `users_groups` set `registration_choice`= ? where `group_id` in ($mid)";
+		$result = $this->mDb->query( $query, $bindVars );
+	}
+
 
 }
 

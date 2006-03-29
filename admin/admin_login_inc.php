@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.10 2006/02/06 22:56:52 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.11 2006/03/29 15:35:40 sylvieg Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -115,6 +115,26 @@ if( !empty( $_REQUEST["loginprefs"] ) ) {
 		}
 	}
 	simple_set_value( 'remembertime', USERS_PKG_NAME );
+
+	if ( isset( $_REQUEST['registration_group_choice'] ) ) {
+		$groupList = $gBitUser->getAllGroups();
+		$in = array();
+		$out = array();
+		foreach ( $groupList['data'] as $gr ) {
+			if ($gr['group_id'] == -1)
+				continue;
+			if ( $gr['registration_choice'] == 'y' && !in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] ) ) // deselect
+				$out[] = $gr['group_id'];
+			elseif ( $gr['registration_choice'] != 'y' && in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] ) ) //select
+				$in[] = $gr['group_id'];
+		}
+		if ( count($in) ) {
+			$gBitUser->storeRegistrationChoice( $in, 'y' );
+		}
+		if ( count($out) ) {
+			$gBitUser->storeRegistrationChoice( $out, NULL );
+		}
+	}
 }
 
 $registerSettings = array(
@@ -303,5 +323,7 @@ if( !empty( $_REQUEST["auth_pear"] ) ) {
 		}
 	}
 }
+$groupList = $gBitUser->getAllGroups();
+$gBitSmarty->assign_by_ref('groupList', $groupList['data']);
 
 ?>
