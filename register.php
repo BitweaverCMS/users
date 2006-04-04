@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.12 2006/03/29 15:35:38 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.13 2006/04/04 22:23:27 sylvieg Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.12 2006/03/29 15:35:38 sylvieg Exp $
+ * $Id: register.php,v 1.13 2006/04/04 22:23:27 sylvieg Exp $
  * @package users
  * @subpackage functions
  */
@@ -50,7 +50,7 @@ if( isset( $_REQUEST["register"] ) ) {
 		if( $newUser->register( $reg ) ) {
 			if ( !empty( $_REQUEST['group'] ) ) {
 				$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group'] );
-				if ( empty($groupInfo) || $groupInfo['registration_choice'] != 'y' ) {
+				if ( empty($groupInfo) || $groupInfo['is_public'] != 'y' ) {
 					$errors[] = "You can't use this group";
 					$gBitSmarty->assign_by_ref( 'errors', $errors );
 				} else {
@@ -101,7 +101,7 @@ closedir ($h);
 sort ($flags);
 $gBitSmarty->assign('flags', $flags);
 
-$listHash = array( 'registration_choice'=>'y', 'sort_mode'=>'is_default_asc' );
+$listHash = array( 'is_public'=>'y', 'sort_mode'=>'is_default_asc' );
 $groupList = $gBitUser->getAllGroups( $listHash );
 if ( $groupList['cant'] ) {
 	$gBitSmarty->assign_by_ref( 'groupList', $groupList['data'] );

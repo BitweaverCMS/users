@@ -62,7 +62,7 @@
 						<option value="">&nbsp;</option>
 						{foreach key=g item=gr from=$groupList}
 							{if $gr.group_id ne -1} 
-								<option value="{$gr.group_id}" {if $gr.registration_choice eq 'y'} selected="selected"{/if}>{$gr.group_name|truncate:"52":" ..."}</option>
+								<option value="{$gr.group_id}" {if $gr.is_public eq 'y'} selected="selected"{/if}>{$gr.group_name|truncate:"52":" ..."}</option>
 							{/if}
 						{/foreach}
 					</select>

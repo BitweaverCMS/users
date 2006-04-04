@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.12 2006/03/29 18:03:25 sylvieg Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.13 2006/04/04 22:23:27 sylvieg Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -124,9 +124,9 @@ if( !empty( $_REQUEST["loginprefs"] ) ) {
 		foreach ( $groupList['data'] as $gr ) {
 			if ($gr['group_id'] == -1)
 				continue;
-			if ( $gr['registration_choice'] == 'y' && !in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] ) ) // deselect
+			if ( $gr['is_public'] == 'y' && !in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] ) ) // deselect
 				$out[] = $gr['group_id'];
-			elseif ( $gr['registration_choice'] != 'y' && in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] ) ) //select
+			elseif ( $gr['is_public'] != 'y' && in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] ) ) //select
 				$in[] = $gr['group_id'];
 		}
 		if ( count($in) ) {
