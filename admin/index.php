@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.7 2006/02/06 21:35:17 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.8 2006/04/04 22:21:13 sylvieg Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -7,7 +7,7 @@
 require_once( '../../bit_setup_inc.php' );
 
 function batchImportUsers() {
-	global $gBitSmarty;
+	global $gBitSmarty, $gBitUser;
 	$fname = $_FILES['csvlist']['tmp_name'];
 	$fhandle = fopen($fname, "r");
 	//Get the field names
@@ -44,7 +44,7 @@ function batchImportUsers() {
 			if( !empty( $u['groups'] ) ) {
 				$grps = explode(",", $u['groups']);
 				foreach ($grps as $grp) {
-					if( $groupId = $newUser->group_exists( $grp, ROOT_USER_ID ) ) {
+					if( $groupId = $gBitUser->groupExists( $grp, ROOT_USER_ID ) ) {
 						$newUser->addUserToGroup( $newUser->mUserId, $groupId );
 					}
 				}
