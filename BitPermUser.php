@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.30 2006/03/29 22:37:34 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.31 2006/04/04 23:07:48 sylvieg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.30 2006/03/29 22:37:34 sylvieg Exp $
+ * $Id: BitPermUser.php,v 1.31 2006/04/04 23:07:48 sylvieg Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.30 $
+ * @version  $Revision: 1.31 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -190,17 +190,17 @@ class BitPermUser extends BitUser {
 				$mid = " WHERE `user_id` <> ".ROOT_USER_ID;
 			}
 		}
-		if ( !empty( $pListHash['registration_choice'] ) ) {
+		if ( !empty( $pListHash['is_public'] ) ) {
 			if (strlen($mid) > 0) {
 				$mid .= ' AND ';
 			} else {
 				$mid = 'WHERE ';
 			}
-			$mid .= '`registration_choice`= ?';
-			$bindvars[] = $pListHash['registration_choice'];
+			$mid .= '`is_public`= ?';
+			$bindvars[] = $pListHash['is_public'];
 		}
 
-		$query = "SELECT `user_id`, `group_id`, `group_name` , `group_desc`, `group_home`, `is_default`, `registration_choice`
+		$query = "SELECT `user_id`, `group_id`, `group_name` , `group_desc`, `group_home`, `is_default`, `is_public`
 				  FROM `".BIT_DB_PREFIX."users_groups` $mid
 				  ORDER BY $sortMode";
 		$ret = array();
@@ -817,7 +817,7 @@ class BitPermUser extends BitUser {
 			$bindVars[] = $groupList;
 			$mid = 'like ?';
 		}
-		$query = "update `".BIT_DB_PREFIX."users_groups` set `registration_choice`= ? where `group_id` in ($mid)";
+		$query = "update `".BIT_DB_PREFIX."users_groups` set `is_public`= ? where `group_id` in ($mid)";
 		$result = $this->mDb->query( $query, $bindVars );
 	}
 
