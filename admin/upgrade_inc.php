@@ -350,30 +350,19 @@ array( 'DATADICT' => array(
 		'users_objectpermissions'     => 'users_object_permissions',
 		'users_grouppermissions'      => 'users_group_permissions',
 		'tiki_user_watches'           => 'users_watches',
-		'tiki_user_bookmarks_urls'    => 'tidbits_user_bookmarks_urls',
-		'tiki_user_menus'             => 'tidbits_user_menus',
-		'tiki_user_tasks'             => 'tidbits_user_tasks',
-		'tiki_user_bookmarks_folders' => 'tidbits_user_bookmarks_folders',
-		'tiki_user_postings'          => 'tidbits_user_postings',
-		'tiki_user_votings'           => 'tidbits_user_votings',
-		'tiki_userpoints'             => 'tidbits_userpoints',
-		'tiki_userfiles'              => 'tidbits_userfiles',
 	)),
 	array( 'RENAMECOLUMN' => array(
 		'users_watches' => array(
-			'`type`' => 'watch_type'
+			'`type`' => '`watch_type` C(200)'
 		),
 		'users_group_permissions' => array(
-			'`value`' => 'perm_value'
-		),
-		'users_favorites_map' => array(
-			'`position`' => 'map_postion'
+			'`value`' => "`perm_value` C(1) default ''"
 		),
 		'users_users' => array(
-			'`password`' => 'user_password'
+			'`password`' => '`user_password` C(32)'
 		),
 		'users_permissions' => array(
-			'`level`' => 'perm_level'
+			'`level`' => '`perm_level` C(80)'
 		),
 	)),
 	array( 'DROPTABLE' => array(
