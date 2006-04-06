@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.31 2006/04/04 23:07:48 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.32 2006/04/06 20:16:44 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.31 2006/04/04 23:07:48 sylvieg Exp $
+ * $Id: BitPermUser.php,v 1.32 2006/04/06 20:16:44 spiderr Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.31 $
+ * @version  $Revision: 1.32 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -121,7 +121,7 @@ class BitPermUser extends BitUser {
 	}
 
 	// removes user and associated private data
-	function expunge( $pUserId ) {
+	function expunge() {
 		global $gBitSystem;
 		$this->mDb->StartTrans();
 		if( $_REQUEST["user_id"] != ANONYMOUS_USER_ID ) {
@@ -130,9 +130,9 @@ class BitPermUser extends BitUser {
 			);
 			foreach( $userTables as $table ) {
 				$query = "delete from `".BIT_DB_PREFIX.$table."` where `user_id` = ?";
-				$result = $this->mDb->query($query, array( $pUserId ) );
+				$result = $this->mDb->query($query, array( $this->mUserId ) );
 			}
-			$ret = BitUser::expunge( $pUserId );
+			$ret = BitUser::expunge();
 		} else {
 			$this->mDb->RollbackTrans();
 			$gBitSystem->fatalError( tra( 'The anonymous user cannot be deleted' ) );
