@@ -159,7 +159,7 @@
 					</div>
 				{/section}
 
-				{if $gBitSystem->getConfig( 'rnd_num_reg' )}
+				{if $gBitSystem->isFeatureActive('rnd_num_reg')}
 					<hr />
 
 					<div class="row">
