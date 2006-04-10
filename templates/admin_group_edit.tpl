@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.8 2006/03/03 21:00:02 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.9 2006/04/10 21:16:34 spiderr Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -49,17 +49,38 @@
 					<div class="row">
 						{formlabel label="Group home page" for="group_home"}
 						{forminput}
-							{html_options options=$contentTypes name=content_type_guid selected=$contentSelect}
-							<br />
-							{html_options name="dummy" id="content-list" values=$contentList options=$contentList onchange="$('group_home').value=options[selectedIndex].value;"}
-							<br />
-							<input type="text" size="30" name="find_objects" value="{$smarty.request.find_objects}" />
-							<input type="submit" value="{tr}Apply filter{/tr}" name="search_objects" />
-						{/forminput}
-
-						{forminput}
 							<input type="text" name="home" id="group_home" value="{$groupInfo.group_home|escape}" />
 							{formhelp note="Here you can enter the content id of any page, the wiki page name or the absolute path of any page you wish to use as a group home page. For this to work set the site homepage to <strong>Group Home</strong>" link="kernel/admin/index.php?page=general/General Settings"}
+
+							Search for Content:<br/>
+							{html_options options=$contentTypes name=content_type_guid selected=$contentSelect}
+<script type="text/javascript" src="{$smarty.const.UTIL_PKG_URL}javascript/libs/suggest/suggest.js"></script>
+<script type="text/javascript" src="{$smarty.const.UTIL_PKG_URL}javascript/libs/rico.js"></script>
+<script type="text/javascript">
+{literal}   
+      var suggestOptions = { 
+        matchAnywhere      : true,
+        ignoreCase         : true
+      };
+
+      function injectSuggestBehavior() {                          
+         suggest = new TextSuggest( 
+			'group_home_lookup', 
+			'/liberty/list_content.php', 
+			suggestOptions
+	 );
+      } 
+{/literal}	  
+</script>
+					<input type="hidden" name="group_home_lookup_hidden" id="group_home_lookup_hidden" value="{$groupInfo.group_home|escape}" />
+					<input type="text" id="group_home_lookup" name="group_home_name">
+					{formhelp note="Enter the title of the content you are looking for to receive an auto-suggest list of possibilities."}
+{*						
+							{html_options name="dummy" id="content-list" values=$contentList options=$contentList onchange="$('group_home').value=options[selectedIndex].value;"}
+							<input type="text" size="30" name="find_objects" value="{$smarty.request.find_objects}" />
+							<input type="submit" value="{tr}Apply filter{/tr}" name="search_objects" />
+							<br />
+*}
 						{/forminput}
 					</div>
 

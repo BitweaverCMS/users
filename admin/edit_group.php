@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.16 2006/03/03 21:00:02 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.17 2006/04/10 21:16:34 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -13,6 +13,9 @@ $successMsg = NULL;
 $errorMsg = NULL;
 
 $gBitUser->getUnassignedPerms();
+
+$gBitSmarty->assign( 'loadAjax', TRUE );
+array_push( $gBodyOnload, 'injectSuggestBehavior();' );
 
 if( count( $_GET ) > 2 || count( $_POST ) > 2 ) {
 	$gBitUser->verifyTicket();
@@ -150,6 +153,7 @@ if( !empty( $_REQUEST['group_id'] ) || (!empty( $_REQUEST["action"] ) && $_REQUE
 	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
 	$listHash = array( 'sort_mode' => 'group_name_asc' );
 
+/*
 	// get content and pass it on to the template
 	include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
 	foreach( $contentList['data'] as $cItem ) {
@@ -157,6 +161,11 @@ if( !empty( $_REQUEST['group_id'] ) || (!empty( $_REQUEST["action"] ) && $_REQUE
 	}
 	$gBitSmarty->assign( 'contentList', $cList );
 	$gBitSmarty->assign( 'contentSelect', $contentSelect );
+*/
+	$contentTypes = array( '' => 'All Content' );
+	foreach( $gLibertySystem->mContentTypes as $cType ) {
+		$contentTypes[$cType['content_type_guid']] = $cType['content_description'];
+	}
 	$gBitSmarty->assign( 'contentTypes', $contentTypes );
 } else {
 	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
@@ -202,6 +211,8 @@ if( empty( $mid ) ) {
 		$mid = 'bitpackage:users/admin_groups_list.tpl';
 	}
 }
+
+// $gBitSmarty->assign( 'loadDebug', TRUE ); // Ajax / prototype debug
 
 $gBitSmarty->assign('groupList', $groupList['data']);
 $gBitSmarty->assign('successMsg',$successMsg);
