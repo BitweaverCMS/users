@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/module_controls_inc.php,v 1.4 2005/11/22 07:28:24 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/module_controls_inc.php,v 1.5 2006/04/11 13:10:18 squareing Exp $
  * @package users
  * @subpackage functions
  *
@@ -10,7 +10,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: module_controls_inc.php,v 1.4 2005/11/22 07:28:24 squareing Exp $
+ * $Id: module_controls_inc.php,v 1.5 2006/04/11 13:10:18 squareing Exp $
  */
 
 /**
@@ -20,7 +20,7 @@ $check_req = (isset($_REQUEST["mc_unassign"])
            || isset($_REQUEST["mc_up"])
            || isset($_REQUEST["mc_down"])
            || isset($_REQUEST["mc_move"]));
-if (!$gBitUser->hasPermission( 'bit_p_configure_modules' ) && $check_req) {
+if (!$gBitUser->hasPermission( 'p_tidbits_configure_modules' ) && $check_req) {
 	$gBitSmarty->assign('msg', tra("You dont have permission to use this feature"));
 	$gBitSystem->display( 'error.tpl' );
 	die;

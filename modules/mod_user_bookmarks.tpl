@@ -1,5 +1,5 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_bookmarks.tpl,v 1.3 2006/02/06 22:56:52 squareing Exp $ *}
-{if $gBitSystem->isFeatureActive( 'user_bookmarks' ) and $gBitUser->isRegistered() and $gBitUser->hasPermission( 'bit_p_create_bookmarks' )}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_bookmarks.tpl,v 1.4 2006/04/11 13:10:19 squareing Exp $ *}
+{if $gBitSystem->isFeatureActive( 'user_bookmarks' ) and $gBitUser->isRegistered() and $gBitUser->hasPermission( 'p_tidbits_create_bookmarks' )}
 	{bitmodule title="$moduleTitle" name="user_bookmarks"}
 		<table class="module box">
 			{section name=ix loop=$modb_folders}
@@ -10,7 +10,7 @@
 			{section name=ix loop=$modb_urls}
 				<tr><td>
 					<a href="{$modb_urls[ix].url}">{$modb_urls[ix].name}</a>
-					{if $gBitUser->hasPermission( 'bit_p_cache_bookmarks' ) and $urls[ix].datalen > 0}
+					{if $gBitUser->hasPermission( 'p_tidbits_cache_bookmarks' ) and $urls[ix].datalen > 0}
 						(<a href="{$smarty.const.USERS_PKG_URL}cached_bookmark.php?urlid={$modb_urls[ix].url_id}">{tr}cache{/tr}</a>)
 					{/if}
 					<a href="{$ownurl}{$modb_sep}bookmark_removeurl={$modb_urls[ix].url_id}">{biticon ipackage=liberty iname="delete_small" iexplain="remove"}</a>

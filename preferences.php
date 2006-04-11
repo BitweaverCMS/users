@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.23 2006/03/01 18:35:20 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.24 2006/04/11 13:10:19 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.23 2006/03/01 18:35:20 spiderr Exp $
+ * $Id: preferences.php,v 1.24 2006/04/11 13:10:19 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -34,7 +34,7 @@ if( !$gBitUser->isRegistered() ) {
 }
 
 if( !empty( $_REQUEST["view_user"] ) && $_REQUEST["view_user"] <> $gBitUser->mUserId) {
-	$gBitSystem->verifyPermission( 'bit_p_admin_users' );
+	$gBitSystem->verifyPermission( 'p_users_admin' );
 	$editUser = new BitUser( $_REQUEST["view_user"] );
 	$editUser->load( TRUE );
 	$gBitSmarty->assign('view_user', $_REQUEST["view_user"]);
@@ -118,7 +118,7 @@ if (isset($_REQUEST["prefs"])) {
 }
 if (isset($_REQUEST['chgemail'])) {
 	// check user's password
-	if (!$gBitUser->hasPermission( 'bit_p_admin_users' ) && !$editUser->validate($editUser->mUsername, $_REQUEST['pass'], '', '')) {
+	if (!$gBitUser->hasPermission( 'p_users_admin' ) && !$editUser->validate($editUser->mUsername, $_REQUEST['pass'], '', '')) {
 		$gBitSmarty->assign('msg', tra("Invalid password.  Your current password is required to change your email address."));
 		$gBitSystem->display( 'error.tpl' );
 		die;
@@ -131,7 +131,7 @@ if (isset($_REQUEST["chgpswd"])) {
 	if( $_REQUEST["pass1"] != $_REQUEST["pass2"] ) {
 		$gBitSystem->fatalError( tra("The passwords didn't match") );
 	}
-	if( !$gBitUser->hasPermission( 'bit_p_admin_users' ) && !$editUser->validate( $editUser->mUsername, $_REQUEST["old"], '', '' ) ) {
+	if( !$gBitUser->hasPermission( 'p_users_admin' ) && !$editUser->validate( $editUser->mUsername, $_REQUEST["old"], '', '' ) ) {
 		$gBitSystem->fatalError( tra( "Invalid old password" ) );
 	}
 	//Validate password here

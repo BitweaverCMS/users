@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.8 2006/04/04 22:21:13 sylvieg Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.9 2006/04/11 13:10:19 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -64,7 +64,7 @@ function batchImportUsers() {
 	@$gBitSmarty->assign_by_ref('discardlist', $discarded);
 }
 
-$gBitSystem->verifyPermission( 'bit_p_admin_users' );
+$gBitSystem->verifyPermission( 'p_users_admin' );
 
 $feedback = array();
 
@@ -85,7 +85,7 @@ if (isset($_REQUEST["newuser"])) {
 	if( $_FILES['csvlist']['size'] && is_uploaded_file($_FILES['csvlist']['tmp_name'] ) ) {
 		batchImportUsers();
 	}
-} elseif( isset( $_REQUEST["assume_user"]) && $gBitUser->hasPermission( 'bit_p_admin_users' ) ) {
+} elseif( isset( $_REQUEST["assume_user"]) && $gBitUser->hasPermission( 'p_users_admin' ) ) {
 	$assume_user = (is_numeric( $_REQUEST["assume_user"] )) ? array( 'user_id' => $_REQUEST["assume_user"] ) : array('login' => $_REQUEST["assume_user"]) ;
 	$userInfo = $gBitUser->getUserInfo( $assume_user );
 	if( isset( $_REQUEST["confirm"] ) ) {

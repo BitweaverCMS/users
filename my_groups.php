@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.5 2006/02/22 23:00:32 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.6 2006/04/11 13:10:18 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.5 2006/02/22 23:00:32 spiderr Exp $
+ * $Id: my_groups.php,v 1.6 2006/04/11 13:10:18 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -19,7 +19,7 @@
 require_once( '../bit_setup_inc.php' );
 
 // PERMISSIONS: registered user required
-$gBitSystem->verifyPermission( 'bit_p_create_personal_groups' );
+$gBitSystem->verifyPermission( 'p_users_create_personal_groups' );
 
 $successMsg = NULL;
 $errorMsg = NULL;

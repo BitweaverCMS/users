@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.59 2006/03/06 21:29:30 bitweaver Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.60 2006/04/11 13:10:18 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.59 2006/03/06 21:29:30 bitweaver Exp $
+ * $Id: BitUser.php,v 1.60 2006/04/11 13:10:18 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.59 $
+ * @version  $Revision: 1.60 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -78,7 +78,7 @@ class BitUser extends LibertyAttachable {
 		global $gBitUser, $user_cookie_site;
 		$ret = FALSE;
 		// make double sure the current logged in user has permission
-		if( $gBitUser->hasPermission( 'bit_p_admin_users' ) ) {
+		if( $gBitUser->hasPermission( 'p_users_admin' ) ) {
 			$_SESSION[$user_cookie_site] = $pUserId;
 			$ret = TRUE;
 		}
@@ -1185,7 +1185,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 	function canCustomizeTheme() {
 		global $gBitSystem;
-		return( $this->hasPermission( 'bit_p_custom_home_theme' ) || $gBitSystem->getConfig('users_themes') == 'y' || $gBitSystem->getConfig('users_themes') == 'h' );
+		return( $this->hasPermission( 'p_tidbits_custom_home_theme' ) || $gBitSystem->getConfig('users_themes') == 'y' || $gBitSystem->getConfig('users_themes') == 'h' );
 
 	}
 
@@ -1193,7 +1193,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 	function canCustomizeLayout() {
 		global $gBitSystem;
-		return( $this->hasPermission( 'bit_p_custom_home_layout' ) || $gBitSystem->getConfig('users_layouts') == 'y' || $gBitSystem->getConfig('users_layouts') == 'h' );
+		return( $this->hasPermission( 'p_tidbits_custom_home_layout' ) || $gBitSystem->getConfig('users_layouts') == 'y' || $gBitSystem->getConfig('users_layouts') == 'h' );
 	}
 
 
@@ -1554,7 +1554,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			}
 
 			if( $pUseLink ) {
-				if( $gBitUser->hasPermission( 'bit_p_view_user_homepage' ) ) {
+				if( $gBitUser->hasPermission( 'p_users_view_user_homepage' ) ) {
 					$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName
 						.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'
 						. htmlspecialchars( ( ( isset( $pHash['link_label'] ) ) ? ( $pHash['link_label'] ) : ( $displayName ) ) )

@@ -17,7 +17,7 @@
 <ul class="clear data">
 	{section name=user loop=$users}
 		<li class="item {cycle values='even,odd'}">
-			{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
+			{if $gBitUser->hasPermission( 'p_users_admin' )}
 				<div class="floaticon">
 					<a href="{$smarty.const.USERS_PKG_URL}admin/index.php?assume_user={$users[user].user_id}" title="{tr}Assume User Identity{/tr}">{biticon ipackage=users iname="assume_user" iexplain="assume user identity" iforce="icon"}</a>
 					<a href="{$smarty.const.USERS_PKG_URL}preferences.php?view_user={$users[user].user_id}" title="{tr}Edit User Information{/tr}">{biticon ipackage=liberty iname="edit" iexplain="Edit User Information" iforce="icon"}</a>
@@ -38,7 +38,7 @@
 				<img alt="{tr}user portrait{/tr}" title="{$users[user].login} {tr}user portrait{/tr}" src="{$users[user].thumbnail_url}" class="thumb" />
 			{/if}
 
-			{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
+			{if $gBitUser->hasPermission( 'p_users_admin' )}
 				{mailto address=$users[user].email encode="javascript"} ({tr}User ID{/tr}: {$users[user].user_id})<br/>
 			{/if}
 

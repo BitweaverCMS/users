@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_tasks.php,v 1.5 2005/08/30 22:37:37 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/modules/Attic/mod_user_tasks.php,v 1.6 2006/04/11 13:10:19 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: mod_user_tasks.php,v 1.5 2005/08/30 22:37:37 squareing Exp $
+ * $Id: mod_user_tasks.php,v 1.6 2006/04/11 13:10:19 squareing Exp $
  * @package users
  * @subpackage modules
  */
@@ -19,7 +19,7 @@
 require_once(USERS_PKG_PATH."task_lib.php");
 global $gBitUser, $gBitSystem, $tasklib;
 
-if ($gBitUser->getUserId() > 0 && $gBitSystem->isFeatureActive('feature_tasks') && $gBitUser->hasPermission( 'bit_p_tasks' )) {
+if ($gBitUser->getUserId() > 0 && $gBitSystem->isFeatureActive('feature_tasks') && $gBitUser->hasPermission( 'p_tidbits_use_tasks' )) {
 	if (isset($_SESSION['thedate'])) {
 		$pdate = $_SESSION['thedate'];
 	} else {

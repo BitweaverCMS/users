@@ -1,10 +1,10 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.8 2006/02/05 21:31:59 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.9 2006/04/11 13:10:19 squareing Exp $ *}
 {strip}
 {bitmodule title="$moduleTitle" name="login_box"}
 	{if $gBitUser->IsRegistered()}
 		{tr}Logged in as{/tr}: <strong>{displayname}</strong><br />
 		<a href="{$smarty.const.USERS_PKG_URL}logout.php">{tr}Logout{/tr}</a>
-		{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
+		{if $gBitUser->hasPermission( 'p_users_admin' )}
 		<div class="row">
 			{form ipackage=users ifile="admin/index.php"}
 				<input type="text" name="assume_user" value="{tr}Username{/tr}" id="assume_user" size="15" onfocus="this.value=''" /> <input type="submit" name="confirm" value="{tr}Assume{/tr}" />

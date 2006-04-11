@@ -16,10 +16,10 @@
 					<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'group_name_desc'}group_name_asc{else}group_name_desc{/if}">{tr}Name{/tr}</a>, &amp; 
 					{tr}Description{/tr}</a> 
 				</th>
-			{if $gBitUser->hasPermission( 'bit_p_user_group_members' )}
+			{if $gBitUser->hasPermission( 'p_users_assign_group_members' )}
 				<th>{tr}Members{/tr}</th>
 			{/if}
-			{if $gBitUser->hasPermission( 'bit_p_user_group_perms' )}
+			{if $gBitUser->hasPermission( 'p_users_assign_group_perms' )}
 				<th>{tr}Permissions{/tr}</th>
 			{/if}
 				<th>{tr}Action{/tr}</th>
@@ -41,7 +41,7 @@
 						{/if}
 					</td>
 
-					{if $gBitUser->hasPermission( 'bit_p_user_group_members' )}
+					{if $gBitUser->hasPermission( 'p_users_assign_group_members' )}
 						<td>
 							{foreach from=$groupUsers key=userId item=user}
 								&nbsp;{displayname hash=$user}<br />
@@ -51,7 +51,7 @@
 						</td>
 					{/if}
 
-					{if $gBitUser->hasPermission( 'bit_p_user_group_perms' )}
+					{if $gBitUser->hasPermission( 'p_users_assign_group_perms' )}
 						<td>
 							{foreach from=$group.perms key=permName item=perm}
 								&nbsp;{$perm.perm_desc}<br />

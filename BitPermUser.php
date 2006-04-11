@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.32 2006/04/06 20:16:44 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.33 2006/04/11 13:10:18 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.32 2006/04/06 20:16:44 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.33 2006/04/11 13:10:18 squareing Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.32 $
+ * @version  $Revision: 1.33 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -562,7 +562,7 @@ class BitPermUser extends BitUser {
 
 	// If the request has a ticket, some form action is being processed, and we need to validate we have a matched ticket to avoid XSS
 	function isAdmin( $pCheckTicket=FALSE ) {
-		$ret = !empty( $this->mPerms['bit_p_admin'] );
+		$ret = !empty( $this->mPerms['p_admin'] );
 		return( $ret );
 	}
 

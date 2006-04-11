@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.16 2006/03/01 18:35:20 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.17 2006/04/11 13:10:18 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.16 2006/03/01 18:35:20 spiderr Exp $
+ * $Id: index.php,v 1.17 2006/04/11 13:10:18 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -33,8 +33,8 @@ $search_request = '';
 if (!empty($_REQUEST['home'])) {
 	$search_request = $_REQUEST['home'];
 }
-if( !empty( $_REQUEST['home'] ) && ($gBitUser->hasPermission( 'bit_p_view_user_homepage' ) || $gBitUser->hasPermission( 'bit_p_admin_users' ) ) ) {
-	$gBitSystem->verifyPermission( 'bit_p_view_user_homepage' );
+if( !empty( $_REQUEST['home'] ) && ($gBitUser->hasPermission( 'p_users_view_user_homepage' ) || $gBitUser->hasPermission( 'p_users_admin' ) ) ) {
+	$gBitSystem->verifyPermission( 'p_users_view_user_homepage' );
 	$gBitSmarty->assign( 'home', $_REQUEST['home'] );
 	$gQueryUserId = $_REQUEST['home'];
 	if( $gQueryUser->isValid() ) {
@@ -69,7 +69,7 @@ if( !empty( $_REQUEST['home'] ) && ($gBitUser->hasPermission( 'bit_p_view_user_h
 	global $gCenterPieces;
 	$centerDisplay = ( count( $gCenterPieces ) ? 'bitpackage:kernel/dynamic.tpl' : 'bitpackage:users/center_user_wiki_page.tpl' );
 } elseif( empty( $search_request ) ) {
-	$gBitSystem->verifyPermission( 'bit_p_view_user_list' );
+	$gBitSystem->verifyPermission( 'p_users_view_user_list' );
 	$gQueryUser->getList( $_REQUEST );
 	$gBitSmarty->assign('search_request',$search_request);
 	$gBitSmarty->assign_by_ref('users', $_REQUEST["data"]);
@@ -83,7 +83,7 @@ if( !empty( $_REQUEST['home'] ) && ($gBitUser->hasPermission( 'bit_p_view_user_h
 	$centerDisplay = 'bitpackage:users/index_list.tpl';
 	$browserTitle = $gBitSystem->getConfig( 'site_title' ).' '.tra( 'Members' );
 } elseif( !$gBitSystem->isFeatureActive( 'users_homepages' ) ) {
-	$gBitSystem->verifyPermission( 'bit_p_view_user_list' );
+	$gBitSystem->verifyPermission( 'p_users_view_user_list' );
 	$gQueryUser->getList( $_REQUEST );
 	$gBitSmarty->assign_by_ref('users', $_REQUEST["data"]);
 	$gBitSmarty->assign_by_ref('usercount', $_REQUEST["cant"]);

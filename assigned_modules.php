@@ -3,13 +3,13 @@
  * assigned_modules
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.6 $
+ * @version  $Revision: 1.7 $
  * @package  users
  * @subpackage  functions
  * @copyright Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
  * @license Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
  */
-// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.6 2006/02/03 17:23:55 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.7 2006/04/11 13:10:18 squareing Exp $
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Initialization
 
@@ -21,7 +21,7 @@ $gEditMode = 'layout';
  */
 require_once( '../bit_setup_inc.php' );
 
-$gBitSystem->verifyPermission('bit_p_configure_modules');
+$gBitSystem->verifyPermission('p_tidbits_configure_modules');
 
 if( !$gBitUser->canCustomizeLayout() && !$gBitUser->canCustomizeTheme() ) {
 	$gBitSmarty->assign('msg', tra("This feature is disabled").": user layout");

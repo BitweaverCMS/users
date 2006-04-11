@@ -6,14 +6,14 @@
 					{biticon ipackage=users iname=home iexplain="My Personal Homepage" iforce=icon}{if !$icons_only} {tr}My {$gBitSystem->getConfig('site_menu_title')|default:$gBitSystem->getConfig('site_title')}{/tr}{/if}
 				</a>
 			</li>
-		{if $gBitUser->hasPermission( 'bit_p_view_user_homepage' )}
+		{if $gBitUser->hasPermission( 'p_users_view_user_homepage' )}
 		<li>
 				<a class="item" href="{$smarty.const.USERS_PKG_URL}index.php?home={$gBitUser->mInfo.login}">
 					{biticon ipackage=users iname=home iexplain="Home" iforce=icon}{if !$icons_only} {tr}View My Homepage{/tr}{/if}
 				</a>
 			</li>
 		{/if}
-		{if $gBitUser->hasPermission( 'bit_p_edit_user_homepage' )}
+		{if $gBitUser->hasPermission( 'p_users_edit_user_homepage' )}
 			<li>
 				<a class="item" href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">
 					{biticon ipackage=liberty iname=edit iexplain="Edit My Homepage" iforce=icon}{if !$icons_only} {tr}Edit My Homepage{/tr}{/if}
@@ -39,7 +39,7 @@
 				</a>
 			</li>
 		{/if}
-		{if $gBitSystem->isPackageActive( 'tidbits' ) and $gBitSystem->isFeatureActive( 'user_bookmarks' ) and $gBitUser->hasPermission( 'bit_p_create_bookmarks' )}
+		{if $gBitSystem->isPackageActive( 'tidbits' ) and $gBitSystem->isFeatureActive( 'user_bookmarks' ) and $gBitUser->hasPermission( 'p_tidbits_create_bookmarks' )}
 			<li>
 				<a class="item" href="{$smarty.const.TIDBITS_PKG_URL}bookmarks.php">
 					{biticon ipackage=users iname=bookmarks iexplain="Links to my favourite pages" iforce=icon}{if !$icons_only} {tr}Bookmarks{/tr}{/if}
@@ -81,7 +81,7 @@
 				</a>
 			</li>
 		{/if}
-		{if $gBitSystem->isPackageActive( 'tidbits' ) and $gBitSystem->isFeatureActive( 'feature_tasks' ) and $gBitUser->hasPermission( 'bit_p_tasks' )}
+		{if $gBitSystem->isPackageActive( 'tidbits' ) and $gBitSystem->isFeatureActive( 'feature_tasks' ) and $gBitUser->hasPermission( 'p_tidbits_use_tasks' )}
 			<li>
 				<a class="item" href="{$smarty.const.TIDBITS_PKG_URL}tasks.php">
 					{biticon ipackage=users iname=tasks iexplain="Tasks" iforce=icon}{if !$icons_only} {tr}Tasks{/tr}{/if}
@@ -114,7 +114,7 @@
 				</a>
 			</li>
 		{/if}
-		{if $gBitUser->hasPermission( 'bit_p_create_personal_groups' )}
+		{if $gBitUser->hasPermission( 'p_users_create_personal_groups' )}
 		<li>
 			<a class="item" href="{$smarty.const.USERS_PKG_URL}my_groups.php">
 				{biticon ipackage=users iname=groups iexplain="My User Groups" iforce=icon}{if !$icons_only} {tr}My User Groups{/tr}{/if}

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_group_edit.tpl,v 1.3 2006/01/10 21:17:06 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_group_edit.tpl,v 1.4 2006/04/11 13:10:19 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -34,7 +34,7 @@
 						{/forminput}
 					</div>
 					
-					{if $groups && $gBitUser->hasPermission( 'bit_p_user_group_subgroups' )}
+					{if $groups && $gBitUser->hasPermission( 'p_users_group_subgroups' )}
 						<div class="row">
 							{formlabel label="Include" for="groups_inc"}
 							{forminput}
@@ -57,7 +57,7 @@
 				{/form}
 			{/jstab}
 
-			{if $gBitUser->hasPermission( 'bit_p_user_group_members' )}
+			{if $gBitUser->hasPermission( 'p_users_assign_group_members' )}
 				{jstab title="Members"}
 					<ul>
 						{foreach from=$groupUsers key=userId item=userHash}
@@ -106,7 +106,7 @@
 				{/jstab}
 			{/if}
 
-			{if $gBitUser->hasPermission( 'bit_p_user_group_perms' )}
+			{if $gBitUser->hasPermission( 'p_users_assign_group_perms' )}
 				{if $groupInfo.group_id}
 					{jstab title="Permissions"}
 						{form legend="Permissions currently assigned to `$groupInfo.group_name`"}

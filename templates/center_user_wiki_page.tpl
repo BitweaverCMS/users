@@ -7,9 +7,9 @@
 {/if}
 
 <div class="display wiki user">
-	{if $gBitUser->hasPermission( 'bit_p_admin_users' ) || $gBitUser->mUserId eq $gQueryUser->mUserId}
+	{if $gBitUser->hasPermission( 'p_users_admin' ) || $gBitUser->mUserId eq $gQueryUser->mUserId}
 		<div class="floaticon">
-			{if $gBitUser->hasPermission( 'bit_p_admin_users' )}
+			{if $gBitUser->hasPermission( 'p_users_admin' )}
 				{smartlink ipackage=users ifile="admin/index.php" assume_user=$userInfo.user_id ititle="Assume user identity" ibiticon="users/assume_user" iforce="icon"}
 				{smartlink ipackage=users ifile="preferences.php" view_user=$userInfo.user_id ititle="Edit User Information" ibiticon="liberty/edit" iforce="icon"}
 				{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userInfo.user_id ititle="Assign Group" ibiticon="liberty/permissions" iforce="icon"}
@@ -22,7 +22,7 @@
 				{if $gBitSystem->isFeatureActive('users_preferences')}
 					{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" ibiticon="liberty/config"}
 				{/if}
-				{if $gBitUser->hasPermission('bit_p_edit_user_homepage')}
+				{if $gBitUser->hasPermission('p_users_edit_user_homepage')}
 					{smartlink ipackage=users ifile="edit_personal_page.php" ititle="Edit personal wiki page" ibiticon="liberty/edit"}
 				{/if}
 			{/if}
@@ -47,7 +47,7 @@
 		{if !$parsed}
 			{if $gBitUser->mUserId ne $gQueryUser->mUserId}
 				<p>{tr}This user has not entered any information yet.{/tr}</p>
-			{elseif $gBitUser->hasPermission('bit_p_edit_user_homepage')}
+			{elseif $gBitUser->hasPermission('p_users_edit_user_homepage')}
 				<p>{tr}To enter some information here, please <a href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">edit your personal homepage</a>.{/tr}</p>
 			{/if}
 
