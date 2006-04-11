@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.7 2006/02/08 21:51:15 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.8 2006/04/11 17:52:11 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: theme.php,v 1.7 2006/02/08 21:51:15 squareing Exp $
+ * $Id: theme.php,v 1.8 2006/04/11 17:52:11 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -33,7 +33,7 @@ if (!$gBitUser->isRegistered()) {
 
 include_once(USERS_PKG_PATH.'lookup_user_inc.php');
 
-if ($gQueryUser->mUserId != $gBitUser->mUserId && !$gBitUser->object_has_permission($gBitUser->mUserId, $gQueryUser->mInfo['content_id'], 'bituser', 'bit_p_admin_user')) {
+if ($gQueryUser->mUserId != $gBitUser->mUserId && !$gBitUser->object_has_permission($gBitUser->mUserId, $gQueryUser->mInfo['content_id'], 'bituser', 'p_users_admin')) {
 	$gBitSmarty->assign('msg', tra('You do not have permission to edit this user\'s theme'));
 	$gBitSystem->display('error.tpl');
 	die;

@@ -3,13 +3,13 @@
  * assigned_modules
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.7 $
+ * @version  $Revision: 1.8 $
  * @package  users
  * @subpackage  functions
  * @copyright Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
  * @license Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
  */
-// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.7 2006/04/11 13:10:18 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.8 2006/04/11 17:52:11 squareing Exp $
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Initialization
 
@@ -37,7 +37,7 @@ if (!$gBitUser->isRegistered()) {
 
 include_once(USERS_PKG_PATH.'lookup_user_inc.php');
 
-if ($gQueryUser->mUserId != $gBitUser->mUserId && !$gBitUser->object_has_permission($gBitUser->mUserId, $gQueryUser->mInfo['content_id'], 'bituser', 'bit_p_admin_user')) {
+if ($gQueryUser->mUserId != $gBitUser->mUserId && !$gBitUser->object_has_permission($gBitUser->mUserId, $gQueryUser->mInfo['content_id'], 'bituser', 'p_users_admin')) {
 	$gBitSmarty->assign('msg', tra('You do not have permission to edit this user\'s theme'));
 	$gBitSystem->display('error.tpl');
 	die;
