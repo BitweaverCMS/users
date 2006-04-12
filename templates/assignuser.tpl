@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/assignuser.tpl,v 1.5 2005/11/22 07:28:24 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/assignuser.tpl,v 1.6 2006/04/12 21:31:05 sylvieg Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 <div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{biticon ipackage=liberty iname=back iexplain="back to users"}</a></div>
@@ -10,7 +10,7 @@
 	</div>
 
 	<div class="body">
-		{form legend="User Information" action="`$smarty.const.USERS_PKG_URL`admin/assign_user.php?assign_user=$assign_user"}
+		{form legend="User Information" action="`$smarty.const.USERS_PKG_URL`admin/assign_user.php"}
 			<input type="hidden" value="{$assignUser->mUserId}" name="assign_user" />
 
 			<div class="row">
