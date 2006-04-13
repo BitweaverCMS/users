@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.9 2006/03/29 17:04:32 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.10 2006/04/13 10:34:34 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: edit_personal_page.php,v 1.9 2006/03/29 17:04:32 sylvieg Exp $
+ * $Id: edit_personal_page.php,v 1.10 2006/04/13 10:34:34 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -54,14 +54,6 @@ if(isset($_REQUEST["preview"])) {
 	$gBitUser->mInfo['parsed_data'] = $parsed;
 	/* SPELLCHECKING INITIAL ATTEMPT */
 	//This nice function does all the job!
-	if ($gBitSystem->isFeatureActive( 'wiki_spellcheck' )) {
-		if (isset($_REQUEST["spellcheck"]) && $_REQUEST["spellcheck"] == 'on') {
-			$parsed = $gBitSystem->spellcheckreplace($edit_data, $parsed, $gBitLanguage->mLanguage, 'editwiki');
-			$gBitSmarty->assign('spellcheck', 'y');
-		} else {
-			$gBitSmarty->assign('spellcheck', 'n');
-		}
-	}
 	$gBitSmarty->assign_by_ref( 'pageInfo', $gBitUser->mInfo );
 }
 
