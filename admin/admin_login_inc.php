@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.13 2006/04/04 22:23:27 sylvieg Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.14 2006/04/13 15:24:39 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -115,6 +115,7 @@ if( !empty( $_REQUEST["loginprefs"] ) ) {
 		}
 	}
 	simple_set_value( 'remembertime', USERS_PKG_NAME );
+	simple_set_value( 'auth_method', USERS_PKG_NAME );
 
 	if ( isset( $_REQUEST['registration_group_choice'] ) ) {
 		$listHash = array();
