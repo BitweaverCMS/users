@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_bitweaver.tpl,v 1.7 2006/04/12 15:18:04 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_bitweaver.tpl,v 1.8 2006/04/17 15:43:32 spiderr Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
@@ -26,7 +26,7 @@
 						{foreach key=key item=menu from=$appMenu}
 							{if $menu.title && $menu.template && !$menu.disabled}
 								<td style="width:33%;vertical-align:top;">
-									{box class="`$key`menu menu box" ipackage=$key iname="pkg_`$key`" iexplain="$key" idiv="menuicon" title="`$gBitSystem->mPackages.$key.dir`"}
+									{box class="`$key`menu menu box" ipackage=$key iname="pkg_`$key`" iexplain="$key" idiv="menuicon" title=$menu.title}
 										{include file=$menu.template}
 									{/box}
 								</td>
