@@ -121,6 +121,8 @@
 					{forminput}
 						{if $output.type == 'text'}
 							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystemPrefs.$feature|escape}" />
+						{elseif $output.type == 'password'}
+							<input type="password" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystemPrefs.$feature|escape}" />
 						{else}
 							{html_checkboxes name="$feature" values="y" checked=`$gBitSystemPrefs.$feature` labels=false id=$feature}
 						{/if}
