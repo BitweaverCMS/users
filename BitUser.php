@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.63 2006/04/19 17:11:19 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.64 2006/04/19 18:26:41 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.63 2006/04/19 17:11:19 spiderr Exp $
+ * $Id: BitUser.php,v 1.64 2006/04/19 18:26:41 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.63 $
+ * @version  $Revision: 1.64 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -322,7 +322,7 @@ class BitUser extends LibertyAttachable {
 			if(empty($pParamHash['admin_add']) && $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 				$pParamHash['password'] = $this->genPass();
 				$pParamHash['user_store']['provpass'] = substr( md5( $pParamHash['password'] ), 0, 30 );
-				$pParamHash['users_pass_due'] = 0;
+				$pParamHash['pass_due'] = 0;
 			} elseif( empty( $pParamHash['password'] ) ) {
 				$this->mErrors['password'] = tra( 'Your password should be at least '.$gBitSystem->getConfig( 'users_min_pass_length', 4 ).' characters long' );
 			}
@@ -349,11 +349,11 @@ class BitUser extends LibertyAttachable {
 //				$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pParamHash['password'].$pParamHash['email'] );
 				$pParamHash['user_store']['hash'] = md5( $pParamHash['password'] );
 				$now = $gBitSystem->getUTCTime();
-				if( !isset( $pParamHash['users_pass_due'] ) && $gBitSystem->getConfig('users_pass_due') ) {
-					$pParamHash['user_store']['users_pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getConfig('users_pass_due') );
-				} elseif( isset( $pParamHash['users_pass_due'] ) ) {
+				if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getConfig('users_pass_due') ) {
+					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getConfig('users_pass_due') );
+				} elseif( isset( $pParamHash['pass_due'] ) ) {
 					// renew password only next half year ;)
-					$pParamHash['user_store']['users_pass_due'] = $now + (60 * 60 * 24 * $pParamHash['users_pass_due']);
+					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
 				}
 				if( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) || !empty( $pParamHash['user_store']['provpass'] ) ) {
 					$pParamHash['user_store']['password'] = $pParamHash['password'];
@@ -1100,13 +1100,13 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$ret = FALSE;
 		if( $this->isRegistered() ) {
 			// get user_id to avoid NULL and zero confusion
-			$query = "SELECT `user_id`, `users_pass_due`
+			$query = "SELECT `user_id`, `pass_due`
 					  FROM `".BIT_DB_PREFIX."users_users`
-					  WHERE `users_pass_due` IS NOT NULL AND `user_id`=? ";
+					  WHERE `pass_due` IS NOT NULL AND `user_id`=? ";
 			$due = $this->mDb->getAssoc( $query, array( $this->mUserId ) );
 			if( @$this->verifyId( $due['user_id'] ) ) {
 				global $gBitSystem;
-				$ret = $due['users_pass_due'] <= $gBitSystem->getUTCTime();
+				$ret = $due['pass_due'] <= $gBitSystem->getUTCTime();
 			}
 		}
 		return $ret;
@@ -1119,7 +1119,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$hash = md5(strtolower($user) . $pass . $email);
 		// Note that tiki-generated passwords are due inmediatley
 		$now = $gBitSystem->getUTCTime();
-		$query = "update `".BIT_DB_PREFIX."users_users` set `user_password` = ?, `hash` = ?, `users_pass_due` = ? where ".$this->mDb->convert_binary()." `login` = ?";
+		$query = "update `".BIT_DB_PREFIX."users_users` set `user_password` = ?, `hash` = ?, `pass_due` = ? where ".$this->mDb->convert_binary()." `login` = ?";
 		$result = $this->mDb->query($query, array($pass, $hash, $now, $user));
 		return $pass;
 	}
@@ -1135,7 +1135,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		if( !$gBitSystem->isFeatureActive( 'users_clear_passwords' ) ) {
 			$pass = '';
 		}
-		$query = "update `".BIT_DB_PREFIX."users_users` set `hash`=? ,`user_password`=? ,`users_pass_due`=? where " . $this->mDb->convert_binary(). " `login`=?";
+		$query = "update `".BIT_DB_PREFIX."users_users` set `hash`=? ,`user_password`=? ,`pass_due`=? where " . $this->mDb->convert_binary(). " `login`=?";
 		$result = $this->mDb->query($query, array($hash,$pass,$new_pass_due,$user));
 		return TRUE;
 	}

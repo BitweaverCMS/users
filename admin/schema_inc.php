@@ -15,7 +15,7 @@ $tables = array(
   current_login I8,
   registration_date I8 NOTNULL,
   challenge C(32),
-  users_pass_due I8,
+  pass_due I8,
   hash C(32),
   created I8,
   avatar_attachment_id I4,
