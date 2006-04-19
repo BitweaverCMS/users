@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.10 2006/04/19 13:48:40 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.11 2006/04/19 17:05:15 spiderr Exp $ *}
 {strip}
 {bitmodule title="$moduleTitle" name="login_box"}
 	{if $gBitUser->IsRegistered()}
@@ -22,25 +22,25 @@
 				<input type="password" name="pass" id="pass" value="password" size="15" onfocus="this.value=''" />
 			</div>
 
-			{if $gBitSystem->isFeatureActive('rememberme')}
+			{if $gBitSystem->isFeatureActive('users_remember_me')}
 				<div class="row">
 					<label><input type="checkbox" name="rme" id="rme" value="on" checked="checked" /> {tr}Remember me{/tr}</label>
 				</div>
 			{/if}
 
-			{if $http_login_url ne '' or $https_login_url ne ''}
+			{if $gBitSystem->getConfig('http_login_url') or $gBitSystem->getConfig('https_login_url')}
 				<div class="row">
-					<a href="{$http_login_url}" title="{tr}Click here to login using the default security protocol{/tr}">{tr}standard{/tr}</a> |
-					<a href="{$https_login_url}" title="{tr}Click here to login using a secure protocol{/tr}">{tr}secure{/tr}</a>
+					<a href="{$gBitSystem->getConfig('http_login_url')}" title="{tr}Click here to login using the default security protocol{/tr}">{tr}standard{/tr}</a> |
+					<a href="{$gBitSystem->getConfig('https_login_url')}" title="{tr}Click here to login using a secure protocol{/tr}">{tr}secure{/tr}</a>
 				</div>
 			{/if}
 
-			{if $show_stay_in_ssl_mode eq 'y'}
+			{if $gBitSystem->isFeatureActive('show_stay_in_ssl_mode')}
 				<div class="row">
-					<label>{tr}Stay in ssl mode{/tr} <input type="checkbox" name="stay_in_ssl_mode" id="stay_in_ssl_mode" {if $stay_in_ssl_mode eq 'y'}checked="checked"{/if} /></label>
+					<label>{tr}Stay in ssl mode{/tr} <input type="checkbox" name="stay_in_ssl_mode" id="stay_in_ssl_mode" {if $gBitSystem->isFeatureActive('stay_in_ssl_mode')}checked="checked"{/if} /></label>
 				</div>
 			{else}
-				<input type="hidden" name="stay_in_ssl_mode" value="{$stay_in_ssl_mode|escape}" />
+				<input type="hidden" name="stay_in_ssl_mode" value="{$gBitSystem->getConfig('stay_in_ssl_mode')|escape}" />
 			{/if}
 
 			<div class="row submit">
@@ -48,11 +48,11 @@
 			</div>
 
 			<div class="row">
-				{if $allow_register eq 'y'}
+				{if $gBitSystem->isFeatureActive('users_allow_register')}
 					<a href="{$smarty.const.USERS_PKG_URL}register.php">{tr}Register{/tr}</a>
 				{/if}
 
-				{if $forgot_pass eq 'y'}
+				{if $gBitSystem->isFeatureActive('users_forgot_pass')}
 					<br /><a href="{$smarty.const.USERS_PKG_URL}remind_password.php">{tr}I forgot my password{/tr}</a>
 				{/if}
 			</div>
