@@ -17,7 +17,7 @@
 		{/forminput}
 	</div>
 
-	{if $gBitSystem->isFeatureActive('rememberme')}
+	{if $gBitSystem->isFeatureActive('users_remember_me')}
 		<div class="row">
 			{formlabel label="Remember me" for="rme"}
 			{forminput}

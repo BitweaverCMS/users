@@ -60,7 +60,7 @@
 				</a>
 			</li>
 		{/if}
-		{if $gBitSystem->isFeatureActive('user_watches') }
+		{if $gBitSystem->isFeatureActive('users_watches') }
 			<li>
 				<a class="item" href="{$smarty.const.USERS_PKG_URL}watches.php">
 					{biticon ipackage=users iname=watch iexplain="My Watches" iforce=icon}{if !$icons_only} {tr}My watches{/tr}{/if}

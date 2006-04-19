@@ -7,9 +7,9 @@
 				{formlabel label="Authentication method" for="users_auth_method"}
 				{forminput}
 					<select name="users_auth_method" id="users_auth_method">
-						<option value="tiki" {if $users_auth_method eq 'tiki'} selected="selected"{/if}>{tr}Just bitweaver{/tr}</option>
-						<option value="ws" {if $users_auth_method eq 'ws'} selected="selected"{/if}>{tr}Web Server{/tr}</option>
-						<option value="auth" {if $users_auth_method eq 'auth'} selected="selected"{/if}>{tr}bitweaver and PEAR::Auth{/tr}</option>
+						<option value="tiki" {if $gBitSystem->getConfig('users_auth_method') eq 'tiki'} selected="selected"{/if}>{tr}Just bitweaver{/tr}</option>
+						<option value="ws" {if $gBitSystem->getConfig('users_auth_method') eq 'ws'} selected="selected"{/if}>{tr}Web Server{/tr}</option>
+						<option value="auth" {if $gBitSystem->getConfig('users_auth_method') eq 'auth'} selected="selected"{/if}>{tr}bitweaver and PEAR::Auth{/tr}</option>
 					</select>
 					{formhelp note=""}
 				{/forminput}
@@ -39,17 +39,17 @@
 				{formlabel label="Duration of 'Remember me' feature" for="users_remember_time"}
 				{forminput}
 					<select name="users_remember_time" id="users_remember_time">
-						<option value="300" {if $users_remember_time eq 300} selected="selected"{/if}>5 {tr}minutes{/tr}</option>
-						<option value="900" {if $users_remember_time eq 900} selected="selected"{/if}>15 {tr}minutes{/tr}</option>
-						<option value="1800" {if $users_remember_time eq 1800} selected="selected"{/if}>30 {tr}minutes{/tr}</option>
-						<option value="3600" {if $users_remember_time eq 3600} selected="selected"{/if}>1 {tr}hour{/tr}</option>
-						<option value="7200" {if $users_remember_time eq 7200} selected="selected"{/if}>2 {tr}hours{/tr}</option>
-						<option value="43200" {if $users_remember_time eq 43200} selected="selected"{/if}>12 {tr}hours{/tr}</option>
-						<option value="86400" {if $users_remember_time eq 86400} selected="selected"{/if}>1 {tr}day{/tr}</option>
-						<option value="604800" {if $users_remember_time eq 604800} selected="selected"{/if}>1 {tr}week{/tr}</option>
-						<option value="2592000" {if $users_remember_time eq 2592000} selected="selected"{/if}>1 {tr}month{/tr}</option>
-						<option value="15724800" {if $users_remember_time eq 15724800} selected="selected"{/if}>6 {tr}months{/tr}</option>
-						<option value="31449600" {if $users_remember_time eq 31449600} selected="selected"{/if}>1 {tr}year{/tr}</option>
+						<option value="300" {if $tSystem->getConfig('users_remember_time') eq 300} selected="selected"{/if}>5 {tr}minutes{/tr}</option>
+						<option value="900" {if $gBitSystem->getConfig('users_remember_time') eq 900} selected="selected"{/if}>15 {tr}minutes{/tr}</option>
+						<option value="1800" {if $gBitSystem->getConfig('users_remember_time') eq 1800} selected="selected"{/if}>30 {tr}minutes{/tr}</option>
+						<option value="3600" {if $gBitSystem->getConfig('users_remember_time') eq 3600} selected="selected"{/if}>1 {tr}hour{/tr}</option>
+						<option value="7200" {if $gBitSystem->getConfig('users_remember_time') eq 7200} selected="selected"{/if}>2 {tr}hours{/tr}</option>
+						<option value="43200" {if $gBitSystem->getConfig('users_remember_time') eq 43200} selected="selected"{/if}>12 {tr}hours{/tr}</option>
+						<option value="86400" {if $gBitSystem->getConfig('users_remember_time') eq 86400} selected="selected"{/if}>1 {tr}day{/tr}</option>
+						<option value="604800" {if $gBitSystem->getConfig('users_remember_time') eq 604800} selected="selected"{/if}>1 {tr}week{/tr}</option>
+						<option value="2592000" {if $gBitSystem->getConfig('users_remember_time') eq 2592000} selected="selected"{/if}>1 {tr}month{/tr}</option>
+						<option value="15724800" {if $gBitSystem->getConfig('users_remember_time') eq 15724800} selected="selected"{/if}>6 {tr}months{/tr}</option>
+						<option value="31449600" {if $gBitSystem->getConfig('users_remember_time') eq 31449600} selected="selected"{/if}>1 {tr}year{/tr}</option>
 					</select>
 					{formhelp note=""}
 				{/forminput}
@@ -148,9 +148,9 @@
 				{formlabel label="LDAP Scope" for="users_ldap_scope"}
 				{forminput}
 					<select name="users_ldap_scope" id="users_ldap_scope">
-						<option value="sub" {if $users_ldap_scope eq "sub"} selected="selected"{/if}>sub</option>
-						<option value="one" {if $users_ldap_scope eq "one"} selected="selected"{/if}>one</option>
-						<option value="base" {if $users_ldap_scope eq "base"} selected="selected"{/if}>base</option>
+						<option value="sub" {if $gBitSystem->getConfig('users_ldap_scope') eq "sub"} selected="selected"{/if}>sub</option>
+						<option value="one" {if $gBitSystem->getConfig('users_ldap_scope') eq "one"} selected="selected"{/if}>one</option>
+						<option value="base" {if $gBitSystem->getConfig('users_ldap_scope') eq "base"} selected="selected"{/if}>base</option>
 					</select>
 					{formhelp note=""}
 				{/forminput}
