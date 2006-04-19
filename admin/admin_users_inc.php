@@ -5,11 +5,11 @@ $formFeatures = array(
 			'note' => 'Users can view and modify their personal preferences.',
 			'page' => 'UserPreferences',
 	),
-	'change_language' => array(
+	'users_change_language' => array(
 			'label' => 'Registered users can change language',
 			'note' => 'Allows users to view a translated version of the site.'
 	),
-	'user_watches' => array(
+	'users_watches' => array(
 			'label' => 'User Watches',
 			'note' => 'Users can mark pages to be watched. If a watched page is modified, the user is informed.',
 			'page' => 'UserWatches',
@@ -50,10 +50,10 @@ if (isset($_REQUEST["newadminpass"]) ) {
 	}
 
 	// Validate password here
-	if (strlen($_REQUEST["adminpass"]) < $min_pass_length) {
+	if (strlen($_REQUEST["adminpass"]) < $users_min_pass_length) {
 		$text = tra("Password should be at least");
 
-		$text .= " " . $min_pass_length . " ";
+		$text .= " " . $users_min_pass_length . " ";
 		$text .= tra("characters long");
 		$gBitSmarty->assign("msg", $text);
 		$gBitSystem->display( 'error.tpl' );

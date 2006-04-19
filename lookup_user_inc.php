@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/lookup_user_inc.php,v 1.7 2006/03/01 18:35:20 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/lookup_user_inc.php,v 1.8 2006/04/19 17:11:19 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: lookup_user_inc.php,v 1.7 2006/03/01 18:35:20 spiderr Exp $
+ * $Id: lookup_user_inc.php,v 1.8 2006/04/19 17:11:19 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -33,7 +33,7 @@ if ( @BitBase::verifyId( $_REQUEST['content_id'] ) ) {
 
 if (isset($_REQUEST['home'])) {
 	// this allows for a numeric user_id or alpha_numeric user_id
-	$queryUserId = $gBitUser->lookupHomepage($_REQUEST['home'], $gBitSystem->getConfig('case_sensitive_login', 'y') == 'y');
+	$queryUserId = $gBitUser->lookupHomepage($_REQUEST['home'], $gBitSystem->getConfig('users_case_sensitive_login', 'y') == 'y');
 	$_REQUEST['home'] = $queryUserId;
 	$gQueryUser = new BitPermUser( $queryUserId );
 	$gQueryUser->load( TRUE );

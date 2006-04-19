@@ -4,12 +4,12 @@
 			<input type="hidden" name="page" value="{$page}" />
 
 			<div class="row">
-				{formlabel label="Authentication method" for="auth_method"}
+				{formlabel label="Authentication method" for="users_auth_method"}
 				{forminput}
-					<select name="auth_method" id="auth_method">
-						<option value="tiki" {if $auth_method eq 'tiki'} selected="selected"{/if}>{tr}Just bitweaver{/tr}</option>
-						<option value="ws" {if $auth_method eq 'ws'} selected="selected"{/if}>{tr}Web Server{/tr}</option>
-						<option value="auth" {if $auth_method eq 'auth'} selected="selected"{/if}>{tr}bitweaver and PEAR::Auth{/tr}</option>
+					<select name="users_auth_method" id="users_auth_method">
+						<option value="tiki" {if $users_auth_method eq 'tiki'} selected="selected"{/if}>{tr}Just bitweaver{/tr}</option>
+						<option value="ws" {if $users_auth_method eq 'ws'} selected="selected"{/if}>{tr}Web Server{/tr}</option>
+						<option value="auth" {if $users_auth_method eq 'auth'} selected="selected"{/if}>{tr}bitweaver and PEAR::Auth{/tr}</option>
 					</select>
 					{formhelp note=""}
 				{/forminput}
@@ -17,10 +17,10 @@
 
 			{foreach from=$loginSettings key=feature item=output}
 				<div class="row">
-					{if $feature == 'validate_email' && !$gBitSystem->hasValidSenderEmail()}
+					{if $feature == 'users_validate_email' && !$gBitSystem->hasValidSenderEmail()}
 						{formfeedback error="Site <a href=\"`$smarty.const.BIT_ROOT_URL`kernel/admin/index.php?page=server\">emailer return address</a> is not valid!"}
 					{/if}
-					{if $feature == 'rnd_num_reg'}
+					{if $feature == 'users_random_number_reg'}
 						{formfeedback warning=$warning}
 					{/if}
 					{formlabel label=`$output.label` for=$feature}
@@ -36,20 +36,20 @@
 			{/foreach}
 
 			<div class="row">
-				{formlabel label="Duration of 'Remember me' feature" for="remembertime"}
+				{formlabel label="Duration of 'Remember me' feature" for="users_remember_time"}
 				{forminput}
-					<select name="remembertime" id="remembertime">
-						<option value="300" {if $remembertime eq 300} selected="selected"{/if}>5 {tr}minutes{/tr}</option>
-						<option value="900" {if $remembertime eq 900} selected="selected"{/if}>15 {tr}minutes{/tr}</option>
-						<option value="1800" {if $remembertime eq 1800} selected="selected"{/if}>30 {tr}minutes{/tr}</option>
-						<option value="3600" {if $remembertime eq 3600} selected="selected"{/if}>1 {tr}hour{/tr}</option>
-						<option value="7200" {if $remembertime eq 7200} selected="selected"{/if}>2 {tr}hours{/tr}</option>
-						<option value="43200" {if $remembertime eq 43200} selected="selected"{/if}>12 {tr}hours{/tr}</option>
-						<option value="86400" {if $remembertime eq 86400} selected="selected"{/if}>1 {tr}day{/tr}</option>
-						<option value="604800" {if $remembertime eq 604800} selected="selected"{/if}>1 {tr}week{/tr}</option>
-						<option value="2592000" {if $remembertime eq 2592000} selected="selected"{/if}>1 {tr}month{/tr}</option>
-						<option value="15724800" {if $remembertime eq 15724800} selected="selected"{/if}>6 {tr}months{/tr}</option>
-						<option value="31449600" {if $remembertime eq 31449600} selected="selected"{/if}>1 {tr}year{/tr}</option>
+					<select name="users_remember_time" id="users_remember_time">
+						<option value="300" {if $users_remember_time eq 300} selected="selected"{/if}>5 {tr}minutes{/tr}</option>
+						<option value="900" {if $users_remember_time eq 900} selected="selected"{/if}>15 {tr}minutes{/tr}</option>
+						<option value="1800" {if $users_remember_time eq 1800} selected="selected"{/if}>30 {tr}minutes{/tr}</option>
+						<option value="3600" {if $users_remember_time eq 3600} selected="selected"{/if}>1 {tr}hour{/tr}</option>
+						<option value="7200" {if $users_remember_time eq 7200} selected="selected"{/if}>2 {tr}hours{/tr}</option>
+						<option value="43200" {if $users_remember_time eq 43200} selected="selected"{/if}>12 {tr}hours{/tr}</option>
+						<option value="86400" {if $users_remember_time eq 86400} selected="selected"{/if}>1 {tr}day{/tr}</option>
+						<option value="604800" {if $users_remember_time eq 604800} selected="selected"{/if}>1 {tr}week{/tr}</option>
+						<option value="2592000" {if $users_remember_time eq 2592000} selected="selected"{/if}>1 {tr}month{/tr}</option>
+						<option value="15724800" {if $users_remember_time eq 15724800} selected="selected"{/if}>6 {tr}months{/tr}</option>
+						<option value="31449600" {if $users_remember_time eq 31449600} selected="selected"{/if}>1 {tr}year{/tr}</option>
 					</select>
 					{formhelp note=""}
 				{/forminput}
@@ -145,12 +145,12 @@
 			{/foreach}
 
 			<div class="row">
-				{formlabel label="LDAP Scope" for="auth_ldap_scope"}
+				{formlabel label="LDAP Scope" for="users_ldap_scope"}
 				{forminput}
-					<select name="auth_ldap_scope" id="auth_ldap_scope">
-						<option value="sub" {if $auth_ldap_scope eq "sub"} selected="selected"{/if}>sub</option>
-						<option value="one" {if $auth_ldap_scope eq "one"} selected="selected"{/if}>one</option>
-						<option value="base" {if $auth_ldap_scope eq "base"} selected="selected"{/if}>base</option>
+					<select name="users_ldap_scope" id="users_ldap_scope">
+						<option value="sub" {if $users_ldap_scope eq "sub"} selected="selected"{/if}>sub</option>
+						<option value="one" {if $users_ldap_scope eq "one"} selected="selected"{/if}>one</option>
+						<option value="base" {if $users_ldap_scope eq "base"} selected="selected"{/if}>base</option>
 					</select>
 					{formhelp note=""}
 				{/forminput}

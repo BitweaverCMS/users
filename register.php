@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.13 2006/04/04 22:23:27 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.14 2006/04/19 17:11:19 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.13 2006/04/04 22:23:27 sylvieg Exp $
+ * $Id: register.php,v 1.14 2006/04/19 17:11:19 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -26,21 +26,21 @@ require_once( KERNEL_PKG_PATH.'BitBase.php' );
 include_once( KERNEL_PKG_PATH.'notification_lib.php' );
 
 // Permission: needs p_register
-$gBitSystem->verifyFeature( 'allow_register' );
+$gBitSystem->verifyFeature( 'users_allow_register' );
 
 if( isset( $_REQUEST["register"] ) ) {
 	$reg = $_REQUEST;
 	// novalidation is set to yes if a user confirms his email is correct after tiki fails to validate it
-	if( $gBitSystem->isFeatureActive( 'rnd_num_reg' ) ) {
+	if( $gBitSystem->isFeatureActive( 'users_random_number_reg' ) ) {
 		if( (empty( $reg['novalidation'] ) || $reg['novalidation'] != 'yes')
 			&& (!isset( $_SESSION['random_number'] ) || $_SESSION['random_number']!=$reg['regcode'])) {
-			$errors['rnd_num_reg'] = "Wrong registration code";
+			$errors['users_random_number_reg'] = "Wrong registration code";
 		}
 	}
 
 	// Check the mode
-	if( $gBitSystem->isFeatureActive( 'use_register_passcode' ) ) {
-		if( $reg["passcode"] != $gBitSystem->getConfig( "register_passcode",md5( $gBitUser->genPass() ) ) ) {
+	if( $gBitSystem->isFeatureActive( 'users_register_passcode' ) ) {
+		if( $reg["passcode"] != $gBitSystem->getConfig( "users_register_passcode",md5( $gBitUser->genPass() ) ) ) {
 			$errors['passcode'] = 'Wrong passcode! You need to know the passcode to register at this site';
 		}
 	}
@@ -59,7 +59,7 @@ if( isset( $_REQUEST["register"] ) ) {
 					$gBitUser->storeUserDefaultGroup( $userId, $_REQUEST['group'] );
 				}
 			}
-			if( $gBitSystem->isFeatureActive( 'validate_user' ) ) {
+			if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 				$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
 				$gBitSmarty->assign('showmsg','y');
 			} else {

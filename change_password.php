@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.4 2006/04/19 17:11:19 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: change_password.php,v 1.3 2005/08/01 18:42:02 squareing Exp $
+ * $Id: change_password.php,v 1.4 2006/04/19 17:11:19 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -35,11 +35,11 @@ if (isset($_REQUEST["change"])) {
 		$gBitSystem->fatalError( tra("Invalid old password") );
 	}
 	//Validate password here
-	if (strlen($_REQUEST["pass"]) < $min_pass_length) {
-		$gBitSystem->fatalError(  tra("Password should be at least"). ' ' . $min_pass_length . ' ' . tra("characters long") );
+	if (strlen($_REQUEST["pass"]) < $users_min_pass_length) {
+		$gBitSystem->fatalError(  tra("Password should be at least"). ' ' . $users_min_pass_length . ' ' . tra("characters long") );
 	}
 	// Check this code
-	if ($pass_chr_num == 'y') {
+	if ($users_pass_chr_num == 'y') {
 		if (!preg_match_all("/[0-9]+/", $_REQUEST["pass"], $foo) || !preg_match_all("/[A-Za-z]+/", $_REQUEST["pass"], $foo)) {
 			$gBitSmarty->assign('msg', tra("Password must contain both letters and numbers"));
 			$gBitSystem->display( 'error.tpl' );

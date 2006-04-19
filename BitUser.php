@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.62 2006/04/19 15:26:09 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.63 2006/04/19 17:11:19 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.62 2006/04/19 15:26:09 spiderr Exp $
+ * $Id: BitUser.php,v 1.63 2006/04/19 17:11:19 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.62 $
+ * @version  $Revision: 1.63 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -234,8 +234,8 @@ class BitUser extends LibertyAttachable {
 
 	function logout() {
 		global $user_cookie_site, $gBitSystem;
-		// Now if the remember me feature is on and the user checked the rememberme checkbox then ...
-		if ($gBitSystem->isFeatureActive( 'rememberme' )) {
+		// Now if the remember me feature is on and the user checked the users_remember_me checkbox then ...
+		if ($gBitSystem->isFeatureActive( 'users_remember_me' )) {
 			setcookie($user_cookie_site, '', time() - 3600, $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig('cookie_domain') );
 		} else {
 			setcookie($user_cookie_site, '', time() - 3600, BIT_ROOT_URL);
@@ -319,12 +319,12 @@ class BitUser extends LibertyAttachable {
 			}
 			// jht 2005-06-22_23:51:58 $pParamHash['admin_add'] is set on adds from admin page - a kludge
 			// that should be fixed in some better way.
-			if(empty($pParamHash['admin_add']) && $gBitSystem->isFeatureActive( 'validate_user' ) ) {
+			if(empty($pParamHash['admin_add']) && $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 				$pParamHash['password'] = $this->genPass();
 				$pParamHash['user_store']['provpass'] = substr( md5( $pParamHash['password'] ), 0, 30 );
-				$pParamHash['pass_due'] = 0;
+				$pParamHash['users_pass_due'] = 0;
 			} elseif( empty( $pParamHash['password'] ) ) {
-				$this->mErrors['password'] = tra( 'Your password should be at least '.$gBitSystem->getConfig( 'min_pass_length', 4 ).' characters long' );
+				$this->mErrors['password'] = tra( 'Your password should be at least '.$gBitSystem->getConfig( 'users_min_pass_length', 4 ).' characters long' );
 			}
 		} elseif( $this->isValid() ) {
 			// Prevent loosing user info on save
@@ -336,12 +336,12 @@ class BitUser extends LibertyAttachable {
 
 		//Validate password here
 		if( !empty( $pParamHash['password'] ) ) {
-			$minPassword = $gBitSystem->getConfig( 'min_pass_length', 4 );
+			$minPassword = $gBitSystem->getConfig( 'users_min_pass_length', 4 );
 			if(strlen( $pParamHash['password'] ) < $minPassword ) {
 				$this->mErrors['password'] = tra( 'Your password should be at least '.$minPassword.' characters long' );
 			} elseif( !empty( $pParamHash['password2'] ) && ($pParamHash['password'] != $pParamHash['password2']) ) {
 				$this->mErrors['password'] = tra( 'The passwords do not match' );
-			} elseif( $gBitSystem->isFeatureActive( 'pass_chr_num' ) &&
+			} elseif( $gBitSystem->isFeatureActive( 'users_pass_chr_num' ) &&
 				(!preg_match_all( "/[0-9]+/",$pParamHash["password"],$foo ) || !preg_match_all("/[A-Za-z]+/",$pParamHash["password"],$foo)) ) {
 				$this->mErrors['password'] = tra( 'Password must contain both letters and numbers' );
 			} else {
@@ -349,13 +349,13 @@ class BitUser extends LibertyAttachable {
 //				$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pParamHash['password'].$pParamHash['email'] );
 				$pParamHash['user_store']['hash'] = md5( $pParamHash['password'] );
 				$now = $gBitSystem->getUTCTime();
-				if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getConfig('pass_due') ) {
-					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getConfig('pass_due') );
-				} elseif( isset( $pParamHash['pass_due'] ) ) {
+				if( !isset( $pParamHash['users_pass_due'] ) && $gBitSystem->getConfig('users_pass_due') ) {
+					$pParamHash['user_store']['users_pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getConfig('users_pass_due') );
+				} elseif( isset( $pParamHash['users_pass_due'] ) ) {
 					// renew password only next half year ;)
-					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
+					$pParamHash['user_store']['users_pass_due'] = $now + (60 * 60 * 24 * $pParamHash['users_pass_due']);
 				}
-				if( $gBitSystem->isFeatureActive( 'clear_passwords' ) || !empty( $pParamHash['user_store']['provpass'] ) ) {
+				if( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) || !empty( $pParamHash['user_store']['provpass'] ) ) {
 					$pParamHash['user_store']['password'] = $pParamHash['password'];
 				}
 			}
@@ -393,7 +393,7 @@ class BitUser extends LibertyAttachable {
 			$errors['email'] = 'The email address "'.$pEmail.'" is invalid.';
 		} elseif( !empty( $this ) && is_object( $this ) && $this->userExists( array( 'email' => $pEmail ) ) ) {
 			$errors['email'] = 'The email address "'.$pEmail.'" has already been registered.';
-		} elseif( $gBitSystem->isFeatureActive( 'validate_user' ) ) {
+		} elseif( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 			list ( $Username, $domain ) = split ("@",$pEmail);
 			// That MX(mail exchanger) record exists in domain check .
 			// checkdnsrr function reference : http://www.php.net/manual/en/function.checkdnsrr.php
@@ -502,7 +502,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 			$gBitSmarty->assign('siteName',$_SERVER["SERVER_NAME"]);
 			$gBitSmarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
 			$gBitSmarty->assign('mail_user',$pParamHash['login']);
-			if( $gBitSystem->isFeatureActive( 'validate_user' ) ) {
+			if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 				// $apass = addslashes(substr(md5($gBitSystem->genPass()),0,25));
 				$apass = $pParamHash['user_store']['provpass'];
 				$foo = parse_url($_SERVER["REQUEST_URI"]);
@@ -622,12 +622,12 @@ if ($gDebug) echo "Run : QUIT<br>";
 	function genPass( $pLength=NULL ) {
 		global $gBitSystem;
 		// AWC: enable mixed case and digits, don't return too short password
-		global $min_pass_length;
+		global $users_min_pass_length;
 		$vocales = "AaEeIiOoUu13580";
 		$consonantes = "BbCcDdFfGgHhJjKkLlMmNnPpQqRrSsTtVvWwXxYyZz24679";
 		$r = '';
 		if( empty( $pLength ) || !is_numeric( $pLength ) ) {
-			$pLength = $gBitSystem->getConfig( 'min_pass_length', 4 );
+			$pLength = $gBitSystem->getConfig( 'users_min_pass_length', 4 );
 		}
 		for ($i = 0; $i < $pLength; $i++) {
 			if ($i % 2) {
@@ -673,9 +673,9 @@ if ($gDebug) echo "Run : QUIT<br>";
 				$url = isset($_SESSION['loginfrom']) ? $_SESSION['loginfrom'] : $gBitSystem->getDefaultPage();
 				//unset session variable in case user su's
 				unset($_SESSION['loginfrom']);
-				// Now if the remember me feature is on and the user checked the rememberme checkbox then ...
-				if ($gBitSystem->isFeatureActive( 'rememberme' )&& isset($_REQUEST['rme']) && $_REQUEST['rme'] == 'on') {
-					setcookie($user_cookie_site, $userInfo['hash'], (int)(time() + $gBitSystem->getConfig( 'remembertime' )), $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig('cookie_domain') );
+				// Now if the remember me feature is on and the user checked the users_remember_me checkbox then ...
+				if ($gBitSystem->isFeatureActive( 'users_remember_me' )&& isset($_REQUEST['rme']) && $_REQUEST['rme'] == 'on') {
+					setcookie($user_cookie_site, $userInfo['hash'], (int)(time() + $gBitSystem->getConfig( 'users_remember_time' )), $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig('cookie_domain') );
 				} else {
 					setcookie($user_cookie_site, $userInfo['hash'], 0, BIT_ROOT_URL);
 				}
@@ -713,10 +713,10 @@ if ($gDebug) echo "Run : QUIT<br>";
 		$userAuthValid = false;
 		$userAuthPresent = false;
 		// see if we are to use PEAR::Auth
-		$auth_pear = ($gBitSystem->getConfig("auth_method", "tiki") == "auth");
-		$create_tiki = ($gBitSystem->getConfig("auth_create_gBitDbUser", "n") == "y");
-		$create_auth = ($gBitSystem->getConfig("auth_create_user_auth", "n") == "y");
-		$skip_admin = ($gBitSystem->getConfig("auth_skip_admin", "n") == "y");
+		$auth_pear = ($gBitSystem->getConfig("users_auth_method", "tiki") == "auth");
+		$create_tiki = ($gBitSystem->getConfig("users_auth_create_gBitDbUser", "n") == "y");
+		$create_auth = ($gBitSystem->getConfig("users_auth_create_user_auth", "n") == "y");
+		$skip_admin = ($gBitSystem->getConfig("users_auth_skip_admin", "n") == "y");
 		// first attempt a login via the standard Tiki system
 		$userId = $this->validateBitUser($user, $pass, $challenge, $response);
 		if ($userId) {
@@ -827,23 +827,23 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		global $gBitSystem;
 		require_once (UTIL_PKG_PATH."pear/Auth/Auth.php");
 		// just make sure we're supposed to be here
-		if ($gBitSystem->getConfig("auth_method", "tiki") != "auth")
+		if ($gBitSystem->getConfig("users_auth_method", "tiki") != "auth")
 			return false;
 		// get all of the LDAP options from the database
-		$options["host"] = $gBitSystem->getConfig("auth_ldap_host", "localhost");
-		$options["port"] = $gBitSystem->getConfig("auth_ldap_port", "389");
-		$options["scope"] = $gBitSystem->getConfig("auth_ldap_scope", "sub");
-		$options["basedn"] = $gBitSystem->getConfig("auth_ldap_basedn", "");
-		$options["userdn"] = $gBitSystem->getConfig("auth_ldap_userdn", "");
-		$options["userattr"] = $gBitSystem->getConfig("auth_ldap_userattr", "uid");
-		$options["useroc"] = $gBitSystem->getConfig("auth_ldap_useroc", "posixAccount");
-		$options["groupdn"] = $gBitSystem->getConfig("auth_ldap_groupdn", "");
-		$options["groupattr"] = $gBitSystem->getConfig("auth_ldap_groupattr", "cn");
-		$options["groupoc"] = $gBitSystem->getConfig("auth_ldap_groupoc", "groupOfUniqueNames");
-		$options["memberattr"] = $gBitSystem->getConfig("auth_ldap_memberattr", "uniqueMember");
-		$options["memberisdn"] = ($gBitSystem->getConfig("auth_ldap_memberisdn", "y") == "y");
-		$options["adminuser"] = $gBitSystem->getConfig("auth_ldap_adminuser", "");
-		$options["adminpass"] = $gBitSystem->getConfig("auth_ldap_adminpass", "");
+		$options["host"] = $gBitSystem->getConfig("users_ldap_host", "localhost");
+		$options["port"] = $gBitSystem->getConfig("users_ldap_port", "389");
+		$options["scope"] = $gBitSystem->getConfig("users_ldap_scope", "sub");
+		$options["basedn"] = $gBitSystem->getConfig("users_ldap_basedn", "");
+		$options["userdn"] = $gBitSystem->getConfig("users_ldap_userdn", "");
+		$options["userattr"] = $gBitSystem->getConfig("users_ldap_userattr", "uid");
+		$options["useroc"] = $gBitSystem->getConfig("users_ldap_useroc", "posixAccount");
+		$options["groupdn"] = $gBitSystem->getConfig("users_ldap_groupdn", "");
+		$options["groupattr"] = $gBitSystem->getConfig("users_ldap_groupattr", "cn");
+		$options["groupoc"] = $gBitSystem->getConfig("users_ldap_groupoc", "groupOfUniqueNames");
+		$options["memberattr"] = $gBitSystem->getConfig("users_ldap_memberattr", "uniqueMember");
+		$options["memberisdn"] = ($gBitSystem->getConfig("users_ldap_memberisdn", "y") == "y");
+		$options["adminuser"] = $gBitSystem->getConfig("users_ldap_adminuser", "");
+		$options["adminpass"] = $gBitSystem->getConfig("users_ldap_adminpass", "");
 
 		// set the Auth options
 		$a = new Auth("LDAP", $options, "", false, $user, $pass);
@@ -949,20 +949,20 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	function create_user_auth($user, $pass) {
 		global $gBitSystem;
 		$options = array();
-		$options["host"] = $gBitSystem->getConfig("auth_ldap_host", "localhost");
-		$options["port"] = $gBitSystem->getConfig("auth_ldap_port", "389");
-		$options["scope"] = $gBitSystem->getConfig("auth_ldap_scope", "sub");
-		$options["basedn"] = $gBitSystem->getConfig("auth_ldap_basedn", "");
-		$options["userdn"] = $gBitSystem->getConfig("auth_ldap_userdn", "");
-		$options["userattr"] = $gBitSystem->getConfig("auth_ldap_userattr", "uid");
-		$options["useroc"] = $gBitSystem->getConfig("auth_ldap_useroc", "posixAccount");
-		$options["groupdn"] = $gBitSystem->getConfig("auth_ldap_groupdn", "");
-		$options["groupattr"] = $gBitSystem->getConfig("auth_ldap_groupattr", "cn");
-		$options["groupoc"] = $gBitSystem->getConfig("auth_ldap_groupoc", "groupOfUniqueNames");
-		$options["memberattr"] = $gBitSystem->getConfig("auth_ldap_memberattr", "uniqueMember");
-		$options["memberisdn"] = ($gBitSystem->getConfig("auth_ldap_memberisdn", "y") == "y");
-		$options["adminuser"] = $gBitSystem->getConfig("auth_ldap_adminuser", "");
-		$options["adminpass"] = $gBitSystem->getConfig("auth_ldap_adminpass", "");
+		$options["host"] = $gBitSystem->getConfig("users_ldap_host", "localhost");
+		$options["port"] = $gBitSystem->getConfig("users_ldap_port", "389");
+		$options["scope"] = $gBitSystem->getConfig("users_ldap_scope", "sub");
+		$options["basedn"] = $gBitSystem->getConfig("users_ldap_basedn", "");
+		$options["userdn"] = $gBitSystem->getConfig("users_ldap_userdn", "");
+		$options["userattr"] = $gBitSystem->getConfig("users_ldap_userattr", "uid");
+		$options["useroc"] = $gBitSystem->getConfig("users_ldap_useroc", "posixAccount");
+		$options["groupdn"] = $gBitSystem->getConfig("users_ldap_groupdn", "");
+		$options["groupattr"] = $gBitSystem->getConfig("users_ldap_groupattr", "cn");
+		$options["groupoc"] = $gBitSystem->getConfig("users_ldap_groupoc", "groupOfUniqueNames");
+		$options["memberattr"] = $gBitSystem->getConfig("users_ldap_memberattr", "uniqueMember");
+		$options["memberisdn"] = ($gBitSystem->getConfig("users_ldap_memberisdn", "y") == "y");
+		$options["adminuser"] = $gBitSystem->getConfig("users_ldap_adminuser", "");
+		$options["adminpass"] = $gBitSystem->getConfig("users_ldap_adminpass", "");
 		// set additional attributes here
 		$userattr = array();
 		$userattr["email"] = $this->mDb->getOne("select `email` from `".BIT_DB_PREFIX."users_users`
@@ -1100,13 +1100,13 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$ret = FALSE;
 		if( $this->isRegistered() ) {
 			// get user_id to avoid NULL and zero confusion
-			$query = "SELECT `user_id`, `pass_due`
+			$query = "SELECT `user_id`, `users_pass_due`
 					  FROM `".BIT_DB_PREFIX."users_users`
-					  WHERE `pass_due` IS NOT NULL AND `user_id`=? ";
+					  WHERE `users_pass_due` IS NOT NULL AND `user_id`=? ";
 			$due = $this->mDb->getAssoc( $query, array( $this->mUserId ) );
 			if( @$this->verifyId( $due['user_id'] ) ) {
 				global $gBitSystem;
-				$ret = $due['pass_due'] <= $gBitSystem->getUTCTime();
+				$ret = $due['users_pass_due'] <= $gBitSystem->getUTCTime();
 			}
 		}
 		return $ret;
@@ -1119,7 +1119,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$hash = md5(strtolower($user) . $pass . $email);
 		// Note that tiki-generated passwords are due inmediatley
 		$now = $gBitSystem->getUTCTime();
-		$query = "update `".BIT_DB_PREFIX."users_users` set `user_password` = ?, `hash` = ?, `pass_due` = ? where ".$this->mDb->convert_binary()." `login` = ?";
+		$query = "update `".BIT_DB_PREFIX."users_users` set `user_password` = ?, `hash` = ?, `users_pass_due` = ? where ".$this->mDb->convert_binary()." `login` = ?";
 		$result = $this->mDb->query($query, array($pass, $hash, $now, $user));
 		return $pass;
 	}
@@ -1131,11 +1131,11 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$email=trim($email);
 		$hash = md5(strtolower($user) . $pass . $email);
 		$now = $gBitSystem->getUTCTime();;
-		$new_pass_due = $now + (60 * 60 * 24 * $gBitSystem->getConfig( 'pass_due' ) );
-		if( !$gBitSystem->isFeatureActive( 'clear_passwords' ) ) {
+		$new_pass_due = $now + (60 * 60 * 24 * $gBitSystem->getConfig( 'users_pass_due' ) );
+		if( !$gBitSystem->isFeatureActive( 'users_clear_passwords' ) ) {
 			$pass = '';
 		}
-		$query = "update `".BIT_DB_PREFIX."users_users` set `hash`=? ,`user_password`=? ,`pass_due`=? where " . $this->mDb->convert_binary(). " `login`=?";
+		$query = "update `".BIT_DB_PREFIX."users_users` set `hash`=? ,`user_password`=? ,`users_pass_due`=? where " . $this->mDb->convert_binary(). " `login`=?";
 		$result = $this->mDb->query($query, array($hash,$pass,$new_pass_due,$user));
 		return TRUE;
 	}

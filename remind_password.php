@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.10 2006/04/19 13:48:40 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.11 2006/04/19 17:11:19 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: remind_password.php,v 1.10 2006/04/19 13:48:40 squareing Exp $
+ * $Id: remind_password.php,v 1.11 2006/04/19 17:11:19 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -18,7 +18,7 @@
  */
 require_once( '../bit_setup_inc.php' );
 
-$gBitSystem->verifyFeature( 'forgot_pass' );
+$gBitSystem->verifyFeature( 'users_forgot_pass' );
 
 if( $gBitUser->isRegistered() ) {
 	header( 'Location: '.BIT_ROOT_URL );
@@ -31,7 +31,7 @@ if( $gBitUser->isRegistered() ) {
 		$userInfo = $gBitUser->getUserInfo( array( $loginCol => $pLogin ) );
 	}
 	if( $userInfo ) {
-		if ( $gBitSystem->isFeatureActive( 'clear_passwords' ) && !empty($userInfo['password']) ) {
+		if ( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) && !empty($userInfo['password']) ) {
 			$pass = $userInfo['password'];
 			$tmp['success'] = tra("A password reminder email has been sent ");
 		} else {
@@ -42,7 +42,7 @@ if( $gBitUser->isRegistered() ) {
 
 		$gBitSmarty->assign('mail_site', $_SERVER["REMOTE_ADDR"]);
 		$gBitSmarty->assign('mail_user', $userInfo[$loginCol]);
-		$gBitSmarty->assign('mail_same', $gBitSystem->isFeatureActive( 'clear_passwords' ));
+		$gBitSmarty->assign('mail_same', $gBitSystem->isFeatureActive( 'users_clear_passwords' ));
 		$gBitSmarty->assign('mail_pass', $pass);
 		$mail_data = $gBitSmarty->fetch('bitpackage:users/password_reminder.tpl');
 		$subject = "Your password for ".$gBitSystem->getConfig( 'site_title', $_SERVER['HTTP_HOST'] );

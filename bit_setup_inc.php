@@ -55,7 +55,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	}
 
 	session_name( BIT_SESSION_NAME );
-	if ($gBitSystem->isFeatureActive('rememberme')) {
+	if ($gBitSystem->isFeatureActive('users_remember_me')) {
 		session_set_cookie_params($site_session_lifetime, $cookie_path, $gBitSystem->getConfig('cookie_domain'));
 	} else {
 		session_set_cookie_params($site_session_lifetime, BIT_ROOT_URL);
@@ -82,7 +82,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	} else {
 		// if remember me is enabled, check for cookie where auth hash is stored
 		// user gets logged in as the first user in the db with a matching hash
-		if ( $gBitSystem->isFeatureActive('rememberme') ) {
+		if ( $gBitSystem->isFeatureActive('users_remember_me') ) {
 			if (isset($_COOKIE[$user_cookie_site])) {
 				if ( !isset( $_SESSION[$user_cookie_site] ) ) {
 					$_SESSION[$user_cookie_site] = $gBitUser->getByHash( $_COOKIE[$user_cookie_site] );
@@ -90,9 +90,9 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 			}
 		}
 		// check what auth metod is selected. default is for the 'tiki' to auth users
-		$auth_method = $gBitSystem->getConfig('auth_method', 'tiki');
+		$users_auth_method = $gBitSystem->getConfig('users_auth_method', 'tiki');
 		// if the auth method is 'web site', look for the username in $_SERVER
-		if ($auth_method == 'ws') {
+		if ($users_auth_method == 'ws') {
 			if (isset($_SERVER['REMOTE_USER'])) {
 				if ($gBitUser->userExists($_SERVER['REMOTE_USER'])) {
 					$_SESSION[$user_cookie_site] = $_SERVER['REMOTE_USER'];
@@ -134,64 +134,68 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$gBitSmarty->assign_by_ref('gBitUser', $gBitUser);
 	$gBitSmarty->register_object('gBitUser', $gBitUser, array(), true, array('hasPermission'));
 
-	$allow_register = $gBitSystem->getConfig("allow_register", 'y');
-	$validate_user = $gBitSystem->getConfig("validate_user", 'n');
-	$forgot_pass = $gBitSystem->getConfig("forgot_pass", 'y');
-	$eponymous_groups = $gBitSystem->getConfig("eponymous_groups", 'n');
-	$use_register_passcode = $gBitSystem->getConfig("use_register_passcode", 'n');
-	$register_passcode = $gBitSystem->getConfig("register_passcode", '');
+	$users_allow_register = $gBitSystem->getConfig("users_allow_register", 'y');
+	$users_validate_user = $gBitSystem->getConfig("users_validate_user", 'n');
+	$users_forgot_pass = $gBitSystem->getConfig("users_forgot_pass", 'y');
+	$users_eponymous_groups = $gBitSystem->getConfig("users_eponymous_groups", 'n');
+	$users_register_passcode = $gBitSystem->getConfig("users_register_passcode", 'n');
+	$users_register_passcode = $gBitSystem->getConfig("users_register_passcode", '');
 	$site_url_index = $gBitSystem->getConfig("site_url_index", '');
 	$site_use_proxy = $gBitSystem->getConfig("site_use_proxy", 'n');
 	$site_proxy_host = $gBitSystem->getConfig("site_proxy_host", '');
 	$site_proxy_port = $gBitSystem->getConfig("site_proxy_port", '');
 	$site_store_session_db = $gBitSystem->getConfig("site_store_session_db", 'n');
 	$site_session_lifetime = $gBitSystem->getConfig("site_session_lifetime", 0);
-	$remembertime = $gBitSystem->getConfig('remembertime', 7200);
+	$users_remember_time = $gBitSystem->getConfig('users_remember_time', 7200);
 	$site_https_login = $gBitSystem->getConfig('site_https_login', 'n');
 	$site_https_login_required = $gBitSystem->getConfig('site_https_login_required', 'n');
-	$change_language = $gBitSystem->getConfig("change_language", 'y');
+	$users_change_language = $gBitSystem->getConfig("users_change_language", 'y');
 
-	$gBitSmarty->assign('allow_register', $allow_register);
+/*
+
+	All of this stuff should now be converted to gBitSystem->isFeatureActive or ->getConfig
+
+	$gBitSmarty->assign('users_allow_register', $users_allow_register);
 	$gBitSmarty->assign('site_url_index', $site_url_index);
 	$gBitSmarty->assign('site_use_proxy', $site_use_proxy);
 	$gBitSmarty->assign('site_proxy_host', $site_proxy_host);
 	$gBitSmarty->assign('site_proxy_port', $site_proxy_port);
-	$gBitSmarty->assign('change_language', $change_language);
-	$gBitSmarty->assign('eponymous_groups', $eponymous_groups);
+	$gBitSmarty->assign('users_change_language', $users_change_language);
+	$gBitSmarty->assign('users_eponymous_groups', $users_eponymous_groups);
 
 	$site_user_assigned_modules = 'n';
-	$gBitSmarty->assign('remembertime', $remembertime);
-	$gBitSmarty->assign('webserverauth', 'n');
-	$gBitSmarty->assign('uf_use_db', 'y');
+	$gBitSmarty->assign('users_remember_time', $users_remember_time);
+	$gBitSmarty->assign('users_webserverauth', 'n');
+	$gBitSmarty->assign('users_uf_use_db', 'y');
 	$gBitSmarty->assign('uf_use_dir', '');
-	$gBitSmarty->assign('userfiles_quota', 30);
-	$gBitSmarty->assign('register_passcode', $register_passcode);
-	$gBitSmarty->assign('use_register_passcode', $use_register_passcode);
-	$gBitSmarty->assign('min_pass_length', 1);
-	$gBitSmarty->assign('pass_chr_num', 'n');
-	$gBitSmarty->assign('pass_due', 999);
-	$gBitSmarty->assign('rnd_num_reg', 'n');
+	$gBitSmarty->assign('users_userfiles_quota', 30);
+	$gBitSmarty->assign('users_register_passcode', $users_register_passcode);
+	$gBitSmarty->assign('users_register_passcode', $users_register_passcode);
+	$gBitSmarty->assign('users_min_pass_length', 1);
+	$gBitSmarty->assign('users_pass_chr_num', 'n');
+	$gBitSmarty->assign('users_pass_due', 999);
+	$gBitSmarty->assign('users_random_number_reg', 'n');
 	// PEAR::Auth support
-	$gBitSmarty->assign('auth_method', "tiki");
+	$gBitSmarty->assign('users_auth_method', "tiki");
 	$gBitSmarty->assign('auth_pear', "tiki");
-	$gBitSmarty->assign('auth_create_gBitDbUser', 'n');
-	$gBitSmarty->assign('auth_create_user_auth', 'n');
-	$gBitSmarty->assign('auth_skip_admin', 'y');
-	$gBitSmarty->assign('auth_ldap_host', 'localhost');
-	$gBitSmarty->assign('auth_ldap_port', '389');
-	$gBitSmarty->assign('auth_ldap_scope', 'sub');
-	$gBitSmarty->assign('auth_ldap_basedn', '');
-	$gBitSmarty->assign('auth_ldap_userdn', '');
-	$gBitSmarty->assign('auth_ldap_userattr', 'uid');
-	$gBitSmarty->assign('auth_ldap_useroc', 'inetOrgPerson');
-	$gBitSmarty->assign('auth_ldap_groupdn', '');
-	$gBitSmarty->assign('auth_ldap_groupattr', 'cn');
-	$gBitSmarty->assign('auth_ldap_groupoc', 'groupOfUniqueNames');
-	$gBitSmarty->assign('auth_ldap_memberattr', 'uniqueMember');
-	$gBitSmarty->assign('auth_ldap_memberisdn', 'y');
-	$gBitSmarty->assign('auth_ldap_adminuser', '');
-	$gBitSmarty->assign('auth_ldap_adminpass', '');
-
+	$gBitSmarty->assign('users_auth_create_gBitDbUser', 'n');
+	$gBitSmarty->assign('users_auth_create_user_auth', 'n');
+	$gBitSmarty->assign('users_auth_skip_admin', 'y');
+	$gBitSmarty->assign('users_ldap_host', 'localhost');
+	$gBitSmarty->assign('users_ldap_port', '389');
+	$gBitSmarty->assign('users_ldap_scope', 'sub');
+	$gBitSmarty->assign('users_ldap_basedn', '');
+	$gBitSmarty->assign('users_ldap_userdn', '');
+	$gBitSmarty->assign('users_ldap_userattr', 'uid');
+	$gBitSmarty->assign('users_ldap_useroc', 'inetOrgPerson');
+	$gBitSmarty->assign('users_ldap_groupdn', '');
+	$gBitSmarty->assign('users_ldap_groupattr', 'cn');
+	$gBitSmarty->assign('users_ldap_groupoc', 'groupOfUniqueNames');
+	$gBitSmarty->assign('users_ldap_memberattr', 'uniqueMember');
+	$gBitSmarty->assign('users_ldap_memberisdn', 'y');
+	$gBitSmarty->assign('users_ldap_adminuser', '');
+	$gBitSmarty->assign('users_ldap_adminpass', '');
+*/
 	// Permissions
 	// Get group permissions here
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.25 2006/04/19 13:48:40 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.26 2006/04/19 17:11:19 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.25 2006/04/19 13:48:40 squareing Exp $
+ * $Id: preferences.php,v 1.26 2006/04/19 17:11:19 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -79,7 +79,7 @@ if (isset($_REQUEST["prefs"])) {
 		$editUser->storePreference( 'userbreadCrumb', $_REQUEST["userbreadCrumb"], 'users');
 	if (isset($_REQUEST["homePage"]))
 		$editUser->storePreference( 'homePage', $_REQUEST["homePage"], 'users');
-	if (isset($change_language) && $change_language == 'y') {
+	if (isset($users_change_language) && $users_change_language == 'y') {
 		if (isset($_REQUEST["language"])) {
 			$editUser->storePreference( 'bitlanguage', $_REQUEST["language"], 'languages');
 		}
@@ -135,11 +135,11 @@ if (isset($_REQUEST["chgpswd"])) {
 		$gBitSystem->fatalError( tra( "Invalid old password" ) );
 	}
 	//Validate password here
-	if (strlen($_REQUEST["pass1"]) < $gBitSystem->getConfig( 'min_pass_length', 4 ) ) {
-		$gBitSystem->fatalError( tra("Password should be at least"). ' ' . $min_pass_length . ' ' . tra("characters long") );
+	if (strlen($_REQUEST["pass1"]) < $gBitSystem->getConfig( 'users_min_pass_length', 4 ) ) {
+		$gBitSystem->fatalError( tra("Password should be at least"). ' ' . $users_min_pass_length . ' ' . tra("characters long") );
 	}
 	// Check this code
-	if( $gBitSystem->isFeatureActive( 'pass_chr_num' ) ) {
+	if( $gBitSystem->isFeatureActive( 'users_pass_chr_num' ) ) {
 		if (!preg_match_all("/[0-9]+/", $_REQUEST["pass1"], $foo) || !preg_match_all("/[A-Za-z]+/", $_REQUEST["pass1"], $foo)) {
 			$gBitSystem->fatalError(tra("Password must contain both letters and numbers") );
 		}

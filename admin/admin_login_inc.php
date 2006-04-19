@@ -1,11 +1,11 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.15 2006/04/19 13:48:40 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.16 2006/04/19 17:11:19 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 
 $loginSettings = array(
-	'allow_register' => array(
+	'users_allow_register' => array(
 		'label' => "Users can register",
 		'type' => "checkbox",
 		'note' => "",
@@ -15,53 +15,53 @@ $loginSettings = array(
 		'type' => "checkbox",
 		'note' => "Upon successful registration, this will send the user an email with login information, including their password.",
 	),
-	'eponymous_groups' => array(
+	'users_eponymous_groups' => array(
 		'label' => "Create a group for each user",
 		'type' => "checkbox",
 		'note' => "This will create a group for each user with the same name as the user. This might be useful if you want to assign different permission settings to every user.",
 	),
-	'use_register_passcode' => array(
+	'users_register_passcode' => array(
 		'label' => "Request passcode to register",
 		'type' => "checkbox",
 		'note' => "",
 	),
-	'register_passcode' => array(
+	'users_register_passcode' => array(
 		'label' => "Passcode",
 		'type' => "text",
 		'note' => "Enter the Passcode that is required for users to register with your site.",
 	),
-	'rnd_num_reg' => array(
+	'users_random_number_reg' => array(
 		'label' => "Prevent automatic/robot registration",
 		'type' => "checkbox",
 		'note' => "This will generate a random number as an image, the user has to confirm during the registration step.",
 	),
-	'validate_user' => array(
+	'users_validate_user' => array(
 		'label' => "Validate users by email",
 		'type' => "checkbox",
 		'note' => "Send an email to the user, to validate registration.",
 	),
-	'validate_email' => array(
+	'users_validate_email' => array(
 		'label' => "Validate email address",
 		'type' => "checkbox",
 		'link' => "kernel/admin/index.php?page=server/General Settings",
 		'note' => "This feature should be used only when you need the maximum security and should be used with discretion. If a visitor's email server is not responding, they will not be able to register. You also must have a valid sender email to use this feature.",
 	),
-	'forgot_pass' => array(
+	'users_forgot_pass' => array(
 		'label' => "Remind passwords by email",
 		'type' => "checkbox",
 		'note' => "This will display a 'forgot password' link on the login page and allow users to have their password sent to their registered email address.",
 	),
-	'pass_due' => array(
+	'users_pass_due' => array(
 		'label' => "Password invalid after days",
 		'type' => "text",
 		'note' => "",
 	),
-	'clear_passwords' => array(
+	'users_clear_passwords' => array(
 		'label' => "Store plaintext passwords",
 		'type' => "checkbox",
 		'note' => "Passwords will be visible in the database. If a user requests a password, their password will *not* be reset and simply emailed to them in plain text. This option is less secure, but better suited to sites with a wide variety of users.",
 	),
-	'case_sensitive_login' => array(
+	'users_case_sensitive_login' => array(
 		'label' => 'Case-Sensitive Login',
 		'type' => "checkbox",
 		'note' => 'This determines whether user login names are case-sensitive.'
@@ -71,17 +71,17 @@ $loginSettings = array(
 		'type' => "checkbox",
 		'note' => "Display password generator on registration page that creates secure passwords.",
 	),
-	'pass_chr_num' => array(
+	'users_pass_chr_num' => array(
 		'label' => "Force to use characters <strong>and</strong> numbers in passwords",
 		'type' => "checkbox",
 		'note' => "",
 	),
-	'min_pass_length' => array(
+	'users_min_pass_length' => array(
 		'label' => "Minimum password length",
 		'type' => "text",
 		'note' => "",
 	),
-	'rememberme' => array(
+	'users_remember_me' => array(
 		'label' => "Remember me feature",
 		'type' => "checkbox",
 		'note' => "Registered users will stay logged even if they close their browser.",
@@ -114,8 +114,8 @@ if( !empty( $_REQUEST["loginprefs"] ) ) {
 			simple_set_toggle( $feature, USERS_PKG_NAME );
 		}
 	}
-	simple_set_value( 'remembertime', USERS_PKG_NAME );
-	simple_set_value( 'auth_method', USERS_PKG_NAME );
+	simple_set_value( 'users_remember_time', USERS_PKG_NAME );
+	simple_set_value( 'users_auth_method', USERS_PKG_NAME );
 
 	if ( isset( $_REQUEST['registration_group_choice'] ) ) {
 		$listHash = array();
@@ -233,82 +233,82 @@ if( !empty( $_REQUEST["httpprefs"] ) ) {
 }
 
 $ldapSettings = array(
-	'auth_create_gBitDbUser' => array(
+	'users_auth_create_gBitDbUser' => array(
 		'label' => "Create user if not in bitweaver",
 		'type' => "checkbox",
 		'note' => "",
 	),
-	'auth_create_user_auth' => array(
+	'users_auth_create_user_auth' => array(
 		'label' => "Create user if not in Auth",
 		'type' => "checkbox",
 		'note' => "",
 	),
-	'auth_skip_admin' => array(
+	'users_auth_skip_admin' => array(
 		'label' => "Just use bitweaver auth for admin",
 		'type' => "checkbox",
 		'note' => "",
 	),
-	'auth_ldap_host' => array(
+	'users_ldap_host' => array(
 		'label' => "LDAP Host",
 		'type' => "text",
 		'note' => "",
 	),
-	'auth_ldap_port' => array(
+	'users_ldap_port' => array(
 		'label' => "LDAP Port",
 		'type' => "text",
 		'note' => "",
 	),
-	'auth_ldap_basedn' => array(
+	'users_ldap_basedn' => array(
 		'label' => "LDAP Base DN",
 		'type' => "text",
 		'note' => "",
 	),
-	'auth_ldap_userdn' => array(
+	'users_ldap_userdn' => array(
 		'label' => "LDAP User DN",
 		'type' => "text",
 		'note' => "",
 	),
-	'auth_ldap_userattr' => array(
+	'users_ldap_userattr' => array(
 		'label' => "LDAP User Attribute",
 		'type' => "text",
 		'note' => "",
 	),
-	'auth_ldap_useroc' => array(
+	'users_ldap_useroc' => array(
 		'label' => "LDAP User OC",
 		'type' => "text",
 		'note' => "",
 	),
-	'auth_ldap_groupdn' => array(
+	'users_ldap_groupdn' => array(
 		'label' => "LDAP Group DN",
 		'type' => "text",
 		'note' => "",
 	),
-	'auth_ldap_groupattr' => array(
+	'users_ldap_groupattr' => array(
 		'label' => "LDAP Group Atribute",
 		'type' => "text",
 		'note' => "",
 	),
-	'auth_ldap_groupoc' => array(
+	'users_ldap_groupoc' => array(
 		'label' => "LDAP Group OC",
 		'type' => "text",
 		'note' => "",
 	),
-	'auth_ldap_memberattr' => array(
+	'users_ldap_memberattr' => array(
 		'label' => "LDAP Member Attribute",
 		'type' => "text",
 		'note' => "",
 	),
-	'auth_ldap_memberisdn' => array(
+	'users_ldap_memberisdn' => array(
 		'label' => "LDAP Member Is DN",
 		'type' => "text",
 		'note' => "",
 	),
-	'auth_ldap_adminuser' => array(
+	'users_ldap_adminuser' => array(
 		'label' => "LDAP Admin User",
 		'type' => "text",
 		'note' => "",
 	),
-	'auth_ldap_adminpass' => array(
+	'users_ldap_adminpass' => array(
 		'label' => "LDAP Admin Pwd",
 		'type' => "password",
 		'note' => "",
