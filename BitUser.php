@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.68 2006/03/13 20:38:27 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.2.2.69 2006/04/19 22:19:31 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.2.2.68 2006/03/13 20:38:27 spiderr Exp $
+ * $Id: BitUser.php,v 1.2.2.69 2006/04/19 22:19:31 squareing Exp $
  * @package users
  */
 
@@ -41,7 +41,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.2.2.68 $
+ * @version  $Revision: 1.2.2.69 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -194,22 +194,21 @@ class BitUser extends LibertyAttachable {
 	function getPreference( $pPrefName, $pPrefDefault=NULL, $pUserId = NULL ) {
 	// ATS - Added ability to query a preference for any user
 		$ret = NULL;
-		if (!$pUserId) {
+		if( !$pUserId ) {
 			$pUserId = $this->mUserId;
 		}
 
-		if ($pUserId && ($pUserId != $this->mUserId) && !empty($pPrefName)) {
+		if( $pUserId && ( $pUserId != $this->mUserId ) && !empty( $pPrefName ) ) {
 			// Get a user preference for an arbitrary user
 			$sql = "SELECT `value` FROM `".BIT_DB_PREFIX."tiki_user_preferences` WHERE `pref_name` = ? and `user_id` = ?";
 			$ret = $this->mDb->getOne($sql, array($pPrefName, $pUserId));
 		} else {
 			if( isset( $this->mUserPrefs ) && isset( $this->mUserPrefs[$pPrefName] ) ) {
 				$ret = $this->mUserPrefs[$pPrefName];
-			} else {
-				$ret = $pPrefDefault;
 			}
 		}
-		return $ret;
+		// if we haven't got any data yet, set the default
+		return( !empty( $ret ) ? $ret : $pPrefDefault );
 	}
 
 
