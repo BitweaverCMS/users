@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.12 2006/03/23 19:17:10 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.13 2006/04/19 13:48:40 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: validate.php,v 1.12 2006/03/23 19:17:10 spiderr Exp $
+ * $Id: validate.php,v 1.13 2006/04/19 13:48:40 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -30,13 +30,13 @@ if( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], 'logi
 }
 
 $https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$https_login_required = $gBitSystem->getConfig('https_login_required', 'n');
-if ($gBitSystem->isFeatureActive( 'https_login_required' ) && !$https_mode) {
-	$url = $gBitSystem->getConfig( 'https_domain' );
-	$https_port = $gBitSystem->getConfig('https_port', $https_port);
-	if ($https_port != 443)
-		$url .= ':' . $https_port;
-	$url .= $gBitSystem->getConfig( 'https_prefix' ) . $gBitSystem->getDefaultPage();
+$site_https_login_required = $gBitSystem->getConfig('site_https_login_required', 'n');
+if ($gBitSystem->isFeatureActive( 'site_https_login_required' ) && !$https_mode) {
+	$url = $gBitSystem->getConfig( 'site_https_domain' );
+	$site_https_port = $gBitSystem->getConfig('site_https_port', $site_https_port);
+	if ($site_https_port != 443)
+		$url .= ':' . $site_https_port;
+	$url .= $gBitSystem->getConfig( 'site_https_prefix' ) . $gBitSystem->getDefaultPage();
 	if (SID)
 		$url .= '?' . SID;
 	$url = preg_replace('/\/+/', '/', $url);

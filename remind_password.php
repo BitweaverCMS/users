@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.9 2006/03/10 18:24:33 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.10 2006/04/19 13:48:40 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: remind_password.php,v 1.9 2006/03/10 18:24:33 spiderr Exp $
+ * $Id: remind_password.php,v 1.10 2006/04/19 13:48:40 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -46,7 +46,7 @@ if( $gBitUser->isRegistered() ) {
 		$gBitSmarty->assign('mail_pass', $pass);
 		$mail_data = $gBitSmarty->fetch('bitpackage:users/password_reminder.tpl');
 		$subject = "Your password for ".$gBitSystem->getConfig( 'site_title', $_SERVER['HTTP_HOST'] );
-		mail( $userInfo['email'], $subject, $mail_data, "From: ".$gBitSystem->getConfig( 'sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n");
+		mail( $userInfo['email'], $subject, $mail_data, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n");
 		// Just show "success" message and no form
 	} else {
 		// Show error message (and leave form visible so user can fix problem)

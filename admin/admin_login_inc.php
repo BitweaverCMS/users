@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.14 2006/04/13 15:24:39 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.15 2006/04/19 13:48:40 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -179,42 +179,42 @@ if( !empty( $_REQUEST["registerprefs"] ) ) {
 }
 
 $httpSettings = array(
-	'https_login' => array(
+	'site_https_login' => array(
 		'label' => "Allow secure (https) login",
 		'type' => "checkbox",
 		'note' => "",
 	),
-	'https_login_required' => array(
+	'site_https_login_required' => array(
 		'label' => "Require secure (https) login",
 		'type' => "checkbox",
 		'note' => "",
 	),
-	'http_domain' => array(
+	'site_http_domain' => array(
 		'label' => "HTTP server name",
 		'type' => "text",
 		'note' => "",
 	),
-	'http_port' => array(
+	'site_http_port' => array(
 		'label' => "HTTP port",
 		'type' => "text",
 		'note' => "",
 	),
-	'http_prefix' => array(
+	'site_http_prefix' => array(
 		'label' => "HTTP URL prefix",
 		'type' => "text",
 		'note' => "",
 	),
-	'https_domain' => array(
+	'site_https_domain' => array(
 		'label' => "HTTPS server name",
 		'type' => "text",
 		'note' => "",
 	),
-	'https_port' => array(
+	'site_https_port' => array(
 		'label' => "HTTPS port",
 		'type' => "text",
 		'note' => "",
 	),
-	'https_prefix' => array(
+	'site_https_prefix' => array(
 		'label' => "HTTPS URL prefix",
 		'type' => "text",
 		'note' => "",

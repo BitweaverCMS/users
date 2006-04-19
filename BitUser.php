@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.60 2006/04/11 13:10:18 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.61 2006/04/19 13:48:40 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.60 2006/04/11 13:10:18 squareing Exp $
+ * $Id: BitUser.php,v 1.61 2006/04/19 13:48:40 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.60 $
+ * @version  $Revision: 1.61 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -168,9 +168,9 @@ class BitUser extends LibertyAttachable {
 		global $gBitSystem;
 		if( !$this->getPreference( 'user_information' ) ) { $this->setPreference( 'user_information', 'public' ); }
 		if( !$this->getPreference( 'messages_allow_messages' ) ) { $this->setPreference( 'messages_allow_messages', 'y' ); }
-		if( !$this->getPreference( 'display_timezone' ) ) {
+		if( !$this->getPreference( 'site_display_timezone' ) ) {
 			$server_time = new BitDate();
-			$this->setPreference( 'display_timezone', $server_time->display_offset );
+			$this->setPreference( 'site_display_timezone', $server_time->display_offset );
 		}
 		if( !$this->getPreference( 'userbreadCrumb' ) ) {
 			$this->setPreference( 'userbreadCrumb', $gBitSystem->getConfig('userbreadCrumb',4) );
@@ -431,7 +431,7 @@ class BitUser extends LibertyAttachable {
 				if ( ereg ( "^220", $Out ) ) {
 						// Inform client's reaching to server who connect.
 						if( $gBitSystem->hasValidSenderEmail() ) {
-							$senderEmail = $gBitSystem->getConfig( 'sender_email' );
+							$senderEmail = $gBitSystem->getConfig( 'site_sender_email' );
 							fputs ( $Connect, "HELO $HTTP_HOST\r\n" );
 if ($gDebug) echo "Run : HELO $HTTP_HOST<br>";
 							$Out = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
@@ -483,7 +483,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 			$ret = TRUE;
 
 			// set local time zone as default when registering
-			$this->storePreference( 'display_timezone', 'Local' );
+			$this->storePreference( 'site_display_timezone', 'Local' );
 
 			if( !empty( $_REQUEST['CUSTOM'] ) ) {
 				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
@@ -514,7 +514,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 				$gBitSmarty->assign('mail_machine',$machine);
 				$gBitSmarty->assign('mail_apass',$apass);
 				$mail_data = $gBitSmarty->fetch('bitpackage:users/user_validation_mail.tpl');
-				mail($pParamHash["email"], $siteName.' - '.tra('Your registration information'),$mail_data,"From: ".$gBitSystem->getConfig('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+				mail($pParamHash["email"], $siteName.' - '.tra('Your registration information'),$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
 				$gBitSmarty->assign('showmsg','y');
 			}
 			if( $gBitSystem->isFeatureActive( 'send_welcome_email' ) ) {
@@ -522,7 +522,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 				$gBitSmarty->assign( 'mailPassword',$pParamHash['password'] );
 				$gBitSmarty->assign( 'mailEmail',$pParamHash['email'] );
 				$mail_data = $gBitSmarty->fetch('bitpackage:users/welcome_mail.tpl');
-				mail($pParamHash["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getConfig('sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+				mail($pParamHash["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
 			}
 		}
 		return( $ret );
@@ -688,14 +688,14 @@ if ($gDebug) echo "Run : QUIT<br>";
 			$stay_in_ssl_mode = ((isset($_SERVER['HTTP_REFERER']) && (substr($_SERVER['HTTP_REFERER'], 0, 5) == 'https'))
 				|| (isset($_REQUEST['stay_in_ssl_mode']) && $_REQUEST['stay_in_ssl_mode'] == 'on'));
 			if (!$stay_in_ssl_mode) {
-				$http_domain = $gBitSystem->getConfig('http_domain', false);
-				$http_port = $gBitSystem->getConfig('http_port', 80);
-				$http_prefix = $gBitSystem->getConfig('http_prefix', '/');
-				if ($http_domain) {
-					$prefix = 'http://' . $http_domain;
-					if ($http_port != 80)
-						$prefix .= ':' . $http_port;
-					$prefix .= $http_prefix;
+				$site_http_domain = $gBitSystem->getConfig('site_http_domain', false);
+				$site_http_port = $gBitSystem->getConfig('site_http_port', 80);
+				$site_http_prefix = $gBitSystem->getConfig('site_http_prefix', '/');
+				if ($site_http_domain) {
+					$prefix = 'http://' . $site_http_domain;
+					if ($site_http_port != 80)
+						$prefix .= ':' . $site_http_port;
+					$prefix .= $site_http_prefix;
 					$url = $prefix . $url;
 					if (SID)
 						$url .= '?' . SID;

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/module_controls_inc.php,v 1.5 2006/04/11 13:10:18 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/module_controls_inc.php,v 1.6 2006/04/19 13:48:40 squareing Exp $
  * @package users
  * @subpackage functions
  *
@@ -10,7 +10,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: module_controls_inc.php,v 1.5 2006/04/11 13:10:18 squareing Exp $
+ * $Id: module_controls_inc.php,v 1.6 2006/04/19 13:48:40 squareing Exp $
  */
 
 /**
@@ -25,8 +25,8 @@ if (!$gBitUser->hasPermission( 'p_tidbits_configure_modules' ) && $check_req) {
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
-if ($user_assigned_modules != 'y' && $check_req) {
-	$gBitSmarty->assign('msg', tra("This feature is disabled").": user_assigned_modules");
+if ($site_user_assigned_modules != 'y' && $check_req) {
+	$gBitSmarty->assign('msg', tra("This feature is disabled").": site_user_assigned_modules");
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }

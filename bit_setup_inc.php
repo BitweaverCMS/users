@@ -36,13 +36,13 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$gBitSystem->storeConfig( 'cookie_path', $cookie_path, KERNEL_PKG_NAME );
 
 	// set session lifetime
-	$session_lifetime = $gBitSystem->getConfig( 'session_lifetime', '0' );
-	if( $session_lifetime > 0 ) {
-		ini_set( 'session.gc_maxlifetime', $session_lifetime );
+	$site_session_lifetime = $gBitSystem->getConfig( 'site_session_lifetime', '0' );
+	if( $site_session_lifetime > 0 ) {
+		ini_set( 'session.gc_maxlifetime', $site_session_lifetime );
 	}
 
 	// is session data  stored in DB or in filesystem?
-	if( $gBitSystem->isFeatureActive( 'session_db' ) && !empty( $gBitDbType ) ) {
+	if( $gBitSystem->isFeatureActive( 'site_store_session_db' ) && !empty( $gBitDbType ) ) {
 		include(UTIL_PKG_PATH . 'adodb/session/adodb-session.php');
 		ADODB_Session::dataFieldName('session_data');
 		ADODB_Session::driver($gBitDbType);
@@ -56,9 +56,9 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 
 	session_name( BIT_SESSION_NAME );
 	if ($gBitSystem->isFeatureActive('rememberme')) {
-		session_set_cookie_params($session_lifetime, $cookie_path, $gBitSystem->getConfig('cookie_domain'));
+		session_set_cookie_params($site_session_lifetime, $cookie_path, $gBitSystem->getConfig('cookie_domain'));
 	} else {
-		session_set_cookie_params($session_lifetime, BIT_ROOT_URL);
+		session_set_cookie_params($site_session_lifetime, BIT_ROOT_URL);
 	}
 	if (ini_get('safe_mode') && ini_get('safe_mode_gid')) {
 		umask(0007);
@@ -140,26 +140,26 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$eponymous_groups = $gBitSystem->getConfig("eponymous_groups", 'n');
 	$use_register_passcode = $gBitSystem->getConfig("use_register_passcode", 'n');
 	$register_passcode = $gBitSystem->getConfig("register_passcode", '');
-	$url_index = $gBitSystem->getConfig("url_index", '');
-	$use_proxy = $gBitSystem->getConfig("use_proxy", 'n');
-	$proxy_host = $gBitSystem->getConfig("proxy_host", '');
-	$proxy_port = $gBitSystem->getConfig("proxy_port", '');
-	$session_db = $gBitSystem->getConfig("session_db", 'n');
-	$session_lifetime = $gBitSystem->getConfig("session_lifetime", 0);
+	$site_url_index = $gBitSystem->getConfig("site_url_index", '');
+	$site_use_proxy = $gBitSystem->getConfig("site_use_proxy", 'n');
+	$site_proxy_host = $gBitSystem->getConfig("site_proxy_host", '');
+	$site_proxy_port = $gBitSystem->getConfig("site_proxy_port", '');
+	$site_store_session_db = $gBitSystem->getConfig("site_store_session_db", 'n');
+	$site_session_lifetime = $gBitSystem->getConfig("site_session_lifetime", 0);
 	$remembertime = $gBitSystem->getConfig('remembertime', 7200);
-	$https_login = $gBitSystem->getConfig('https_login', 'n');
-	$https_login_required = $gBitSystem->getConfig('https_login_required', 'n');
+	$site_https_login = $gBitSystem->getConfig('site_https_login', 'n');
+	$site_https_login_required = $gBitSystem->getConfig('site_https_login_required', 'n');
 	$change_language = $gBitSystem->getConfig("change_language", 'y');
 
 	$gBitSmarty->assign('allow_register', $allow_register);
-	$gBitSmarty->assign('url_index', $url_index);
-	$gBitSmarty->assign('use_proxy', $use_proxy);
-	$gBitSmarty->assign('proxy_host', $proxy_host);
-	$gBitSmarty->assign('proxy_port', $proxy_port);
+	$gBitSmarty->assign('site_url_index', $site_url_index);
+	$gBitSmarty->assign('site_use_proxy', $site_use_proxy);
+	$gBitSmarty->assign('site_proxy_host', $site_proxy_host);
+	$gBitSmarty->assign('site_proxy_port', $site_proxy_port);
 	$gBitSmarty->assign('change_language', $change_language);
 	$gBitSmarty->assign('eponymous_groups', $eponymous_groups);
 
-	$user_assigned_modules = 'n';
+	$site_user_assigned_modules = 'n';
 	$gBitSmarty->assign('remembertime', $remembertime);
 	$gBitSmarty->assign('webserverauth', 'n');
 	$gBitSmarty->assign('uf_use_db', 'y');

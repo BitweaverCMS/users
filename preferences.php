@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.24 2006/04/11 13:10:19 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.25 2006/04/19 13:48:40 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.24 2006/04/11 13:10:19 squareing Exp $
+ * $Id: preferences.php,v 1.25 2006/04/19 13:48:40 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -86,9 +86,9 @@ if (isset($_REQUEST["prefs"])) {
 	}
 	if (isset($_REQUEST["style"]))
 		$gBitSmarty->assign('style', $_REQUEST["style"]);
-	if (isset($_REQUEST['display_timezone'])) {
-		$editUser->storePreference( 'display_timezone', $_REQUEST['display_timezone'], 'users');
-		$gBitSmarty->assign_by_ref('display_timezone', $_REQUEST['display_timezone'], 'users');
+	if (isset($_REQUEST['site_display_timezone'])) {
+		$editUser->storePreference( 'site_display_timezone', $_REQUEST['site_display_timezone'], 'users');
+		$gBitSmarty->assign_by_ref('site_display_timezone', $_REQUEST['site_display_timezone'], 'users');
 	}
 	$editUser->storePreference( 'country', $_REQUEST["country"], 'users' );
 	$editUser->storePreference( 'user_information', $_REQUEST['user_information'], 'users');
@@ -204,10 +204,10 @@ $gBitSmarty->assign('user_dbl', $user_dbl);
 //$timezone_options = $gBitSystem->get_timezone_list(true);
 //$gBitSmarty->assign_by_ref('timezone_options',$timezone_options);
 //$server_time = new Date();
-$display_timezone = $editUser->getPreference( 'display_timezone', "UTC");
-if ($display_timezone != "UTC")
-	$display_timezone = "Local";
-$gBitSmarty->assign_by_ref('display_timezone', $display_timezone);
+$site_display_timezone = $editUser->getPreference( 'site_display_timezone', "UTC");
+if ($site_display_timezone != "UTC")
+	$site_display_timezone = "Local";
+$gBitSmarty->assign_by_ref('site_display_timezone', $site_display_timezone);
 
 $gBitSystem->display( 'bitpackage:users/user_preferences.tpl', 'Edit User Preferences');
 ?>
