@@ -19,7 +19,7 @@
 						{formlabel label="Real Name" for="real_name"}
 						{forminput}
 							<input type="text" name="real_name" id="real_name" value="{$editUser.real_name|escape}" />
-							{if !$gBitSystem->getConfig('display_name') or $gBitSystem->getConfig('display_name') eq 'real_name'}
+							{if !$gBitSystem->getConfig('users_display_name') or $gBitSystem->getConfig('users_display_name') eq 'real_name'}
 								{formhelp note="This is the name that is visible to other users when viewing information added by you."}
 							{/if}
 						{/forminput}
@@ -29,7 +29,7 @@
 						{formlabel label="Username"}
 						{forminput}
 							{$editUser.login}
-							{if $gBitSystem->getConfig('display_name') eq 'login'}
+							{if $gBitSystem->getConfig('users_display_name') eq 'login'}
 								{formhelp note="This is the name that is visible to other users when viewing information added by you."}
 							{/if}
 						{/forminput}

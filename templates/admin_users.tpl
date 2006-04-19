@@ -1,11 +1,11 @@
 {strip}
 {form legend="User Settings"}
 	<div class="row">
-		{formlabel label="Display" for="display_name"}
+		{formlabel label="Display" for="users_display_name"}
 		{forminput}
-			<select name="settings[display_name]" id="display_name">
-				<option value="real_name" {if $gBitSystem->getConfig('display_name') eq 'real_name'}selected="selected"{/if}>{tr}Real Name{/tr}</option>
-				<option value="login" {if $gBitSystem->getConfig('display_name') eq 'login'}selected="selected"{/if}>{tr}Login / Nick Name{/tr}</option>
+			<select name="settings[users_display_name]" id="users_display_name">
+				<option value="real_name" {if $gBitSystem->getConfig('users_display_name') eq 'real_name'}selected="selected"{/if}>{tr}Real Name{/tr}</option>
+				<option value="login" {if $gBitSystem->getConfig('users_display_name') eq 'login'}selected="selected"{/if}>{tr}Login / Nick Name{/tr}</option>
 			</select>
 			{formhelp note="Decide what name should be displayed throughout your site, login name or real name"}
 		{/forminput}

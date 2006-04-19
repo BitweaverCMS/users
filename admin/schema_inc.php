@@ -203,7 +203,7 @@ $gBitInstaller->registerPreferences( USERS_PKG_NAME, array(
 	//array(USERS_PKG_NAME,'feature_tasks','n'),
 	//array(USERS_PKG_NAME,'usermenu','n'),
 	array(USERS_PKG_NAME,'users_preferences','y'),
-	array(USERS_PKG_NAME,'display_name','real_name'),
+	array(USERS_PKG_NAME,'users_display_name','real_name'),
 	array(USERS_PKG_NAME,'change_language','y'),
 	array(USERS_PKG_NAME,'case_sensitive_login','y'),
 	//array(USERS_PKG_NAME, 'user_watches','n'),

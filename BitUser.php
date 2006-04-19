@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.61 2006/04/19 13:48:40 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.62 2006/04/19 15:26:09 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.61 2006/04/19 13:48:40 squareing Exp $
+ * $Id: BitUser.php,v 1.62 2006/04/19 15:26:09 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.61 $
+ * @version  $Revision: 1.62 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1535,7 +1535,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$pHash = &$this->mInfo;
 		}
 		if( !empty( $pHash ) ) {
-			$displayName = (((!empty($pHash['real_name']) && $gBitSystem->getConfig( 'display_name', 'real_name' ) == 'real_name') ? $pHash['real_name'] :
+			$displayName = (((!empty($pHash['real_name']) && $gBitSystem->getConfig( 'users_display_name', 'real_name' ) == 'real_name') ? $pHash['real_name'] :
 							(!empty($pHash['user']) ? $pHash['user'] :
 							(!empty($pHash['login']) ? $pHash['login'] :
 							(!empty($pHash['email']) ? substr($pHash['email'],0, strpos($pHash['email'],'@')) : $pHash['user_id'])))));
