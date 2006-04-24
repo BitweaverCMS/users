@@ -39,7 +39,7 @@
 				{formlabel label="Duration of 'Remember me' feature" for="users_remember_time"}
 				{forminput}
 					<select name="users_remember_time" id="users_remember_time">
-						<option value="300" {if $tSystem->getConfig('users_remember_time') eq 300} selected="selected"{/if}>5 {tr}minutes{/tr}</option>
+						<option value="300" {if $gBitSystem->getConfig('users_remember_time') eq 300} selected="selected"{/if}>5 {tr}minutes{/tr}</option>
 						<option value="900" {if $gBitSystem->getConfig('users_remember_time') eq 900} selected="selected"{/if}>15 {tr}minutes{/tr}</option>
 						<option value="1800" {if $gBitSystem->getConfig('users_remember_time') eq 1800} selected="selected"{/if}>30 {tr}minutes{/tr}</option>
 						<option value="3600" {if $gBitSystem->getConfig('users_remember_time') eq 3600} selected="selected"{/if}>1 {tr}hour{/tr}</option>
