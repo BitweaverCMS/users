@@ -154,7 +154,7 @@
 					<div class="row">
 						{formlabel label="$customFields[f]}
 						{forminput}
-							<input type="text" name="CUSTOM[{$customFields[f]|escape}" />
+							<input type="text" name="CUSTOM[{$customFields[f]|escape}]" />
 						{/forminput}
 					</div>
 				{/section}
