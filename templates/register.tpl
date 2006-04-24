@@ -154,7 +154,7 @@
 					<div class="row">
 						{formlabel label="$customFields[f]}
 						{forminput}
-							<input type="text" name="CUSTOM[{$customFields[f]|escape}" value="{$smarty.request.CUSTOM.$customFields[f]}" />
+							<input type="text" name="CUSTOM[{$customFields[f]|escape}]" value="{$smarty.request.CUSTOM.$customFields[f]}" />
 						{/forminput}
 					</div>
 				{/section}
