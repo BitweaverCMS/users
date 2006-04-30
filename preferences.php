@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.29 2006/04/30 17:43:37 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.30 2006/04/30 18:07:05 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.29 2006/04/30 17:43:37 squareing Exp $
+ * $Id: preferences.php,v 1.30 2006/04/30 18:07:05 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -107,8 +107,8 @@ if (isset($_REQUEST["prefs"])) {
 		}
 	}
 
-	$email_isPublic = isset($_REQUEST['email_isPublic']) ? $_REQUEST['email_isPublic']: 'n';
-	$editUser->storePreference( 'email is public', $email_isPublic, 'users');
+	$users_email_display = isset($_REQUEST['users_email_display']) ? $_REQUEST['users_email_display']: 'n';
+	$editUser->storePreference( 'users_email_display', $users_email_display, 'users');
 	if (isset($_REQUEST['view_user'])) {
 		header ("location: ".USERS_PKG_URL."preferences.php?view_user=$editUser->mUserId");
 	} else {
@@ -195,8 +195,8 @@ $gBitSmarty->assign( 'editUser', $editUser->mInfo );
 //SPIDERKILL $style = $editUser->getPreference( 'theme', $style);
 //SPIDERKILL $gBitSmarty->assign_by_ref('style', $style);
 $real_name = $editUser->mInfo["real_name"];
-$gBitSmarty->assign('email_isPublic', $editUser->getPreference( 'email is public', 'n'));
-$scramblingMethods = array("n", "strtr", "unicode", "x"); // email_isPublic utilizes 'n'
+$gBitSmarty->assign('users_email_display', $editUser->getPreference( 'users_email_display', 'n'));
+$scramblingMethods = array("n", "strtr", "unicode", "x"); // users_email_display utilizes 'n'
 $gBitSmarty->assign_by_ref('scramblingMethods', $scramblingMethods);
 $scramblingEmails = array(tra("no"), scrambleEmail($editUser->mInfo['email'], 'strtr'), scrambleEmail($editUser->mInfo['email'], 'unicode')."-".tra("unicode"), scrambleEmail($editUser->mInfo['email'], 'x'));
 $gBitSmarty->assign_by_ref('scramblingEmails', $scramblingEmails);

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.65 2006/04/30 17:43:37 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.66 2006/04/30 18:07:04 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.65 2006/04/30 17:43:37 squareing Exp $
+ * $Id: BitUser.php,v 1.66 2006/04/30 18:07:04 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.65 $
+ * @version  $Revision: 1.66 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -154,7 +154,7 @@ class BitUser extends LibertyAttachable {
 															$this->mUserId))));
 					//print("displayName: ".$this->mInfo['display_name']);
 					$this->defaults();
-					$this->mInfo['publicEmail'] = scrambleEmail( $this->mInfo['email'], ($this->getPreference( 'email is public' ) ? $this->getPreference( 'email is public' ) : NULL) );
+					$this->mInfo['publicEmail'] = scrambleEmail( $this->mInfo['email'], ( $this->getPreference( 'users_email_display' ) ? $this->getPreference( 'users_email_display' ) : NULL ) );
 				}
 				$this->mTicket = substr( md5( session_id() . $this->mUserId ), 0, 20 );
 			} else {

@@ -44,11 +44,11 @@
 					</div>
 
 					<div class="row">
-						{formlabel label="Is email public?" for="email_isPublic"}
+						{formlabel label="Is email public?" for="users_email_display"}
 						{forminput}
-							<select name="email_isPublic" id="email_isPublic">
+							<select name="users_email_display" id="users_email_display">
 								{section name=ix loop=$scramblingMethods}
-									<option value="{$scramblingMethods[ix]|escape}" {if $email_isPublic eq $scramblingMethods[ix]}selected="selected"{/if}>{$scramblingEmails[ix]}</option>
+									<option value="{$scramblingMethods[ix]|escape}" {if $users_email_display eq $scramblingMethods[ix]}selected="selected"{/if}>{$scramblingEmails[ix]}</option>
 								{/section}
 							</select>
 							{formhelp note="Pick the scrambling method to prevent spam."}
