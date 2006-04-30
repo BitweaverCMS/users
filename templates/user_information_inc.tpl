@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.12 2006/04/19 15:26:09 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.13 2006/04/30 17:43:37 squareing Exp $ *}
 {strip}
-{if $userData->getPreference('user_information') eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
+{if $userData->getPreference('users_information') eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
 		{formlabel label="Login"}
 		{forminput}
@@ -19,11 +19,11 @@
 		{/forminput}
 	</div>
 
-	{if $userData->getPreference('country')}
+	{if $userData->getPreference('users_country')}
 		<div class="row">
 			{formlabel label="Country"}
 			{forminput}
-				{biticon ipackage="users" ipath="flags/" iname=$userData->getPreference('flag') iexplain=$userData->getPreference('flag')} {$userData->getPreference('country')}
+				{biticon ipackage="users" ipath="flags/" iname=$userData->getPreference('flag') iexplain=$userData->getPreference('flag')} {$userData->getPreference('users_country')}
 			{/forminput}
 		</div>
 

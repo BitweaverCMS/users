@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.64 2006/04/19 18:26:41 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.65 2006/04/30 17:43:37 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.64 2006/04/19 18:26:41 spiderr Exp $
+ * $Id: BitUser.php,v 1.65 2006/04/30 17:43:37 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.64 $
+ * @version  $Revision: 1.65 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -142,9 +142,9 @@ class BitUser extends LibertyAttachable {
 				unset( $this->mInfo['password'] );
 				unset( $this->mInfo['hash'] );
 				$this->loadPreferences();
-				if( $this->getPreference( 'country' ) ) {
-					$this->setPreference( 'flag', $this->getPreference( 'country' ) );
-					$this->setPreference( 'country', str_replace( '_', ' ', $this->getPreference( 'country' ) ) );
+				if( $this->getPreference( 'users_country' ) ) {
+					$this->setPreference( 'flag', $this->getPreference( 'users_country' ) );
+					$this->setPreference( 'users_country', str_replace( '_', ' ', $this->getPreference( 'users_country' ) ) );
 				}
 				if( $pFull ) {
 					$this->mInfo['real_name'] = trim($this->mInfo['real_name']);
@@ -166,14 +166,14 @@ class BitUser extends LibertyAttachable {
 
 	function defaults() {
 		global $gBitSystem;
-		if( !$this->getPreference( 'user_information' ) ) { $this->setPreference( 'user_information', 'public' ); }
+		if( !$this->getPreference( 'users_information' ) ) { $this->setPreference( 'users_information', 'public' ); }
 		if( !$this->getPreference( 'messages_allow_messages' ) ) { $this->setPreference( 'messages_allow_messages', 'y' ); }
 		if( !$this->getPreference( 'site_display_timezone' ) ) {
 			$server_time = new BitDate();
 			$this->setPreference( 'site_display_timezone', $server_time->display_offset );
 		}
-		if( !$this->getPreference( 'userbreadCrumb' ) ) {
-			$this->setPreference( 'userbreadCrumb', $gBitSystem->getConfig('userbreadCrumb',4) );
+		if( !$this->getPreference( 'users_bread_crumb' ) ) {
+			$this->setPreference( 'users_bread_crumb', $gBitSystem->getConfig('users_bread_crumb',4) );
 		}
 		if( !$this->getPreference( 'bitlanguage' ) ) {
 			global $gBitLanguage;
@@ -1175,7 +1175,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$result = $this->mDb->query($query, array( time() - 3600 ) );
 		$ret = array();
 		while ($res = $result->fetchRow()) {
-			$res['user_information'] = 	$this->getPreference( 'user_information', 'public', $res['user_id'] );
+			$res['users_information'] = 	$this->getPreference( 'users_information', 'public', $res['user_id'] );
 			$ret[] = $res;
 		}
 		return $ret;

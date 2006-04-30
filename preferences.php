@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.28 2006/04/28 08:50:42 jht001 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.29 2006/04/30 17:43:37 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.28 2006/04/28 08:50:42 jht001 Exp $
+ * $Id: preferences.php,v 1.29 2006/04/30 17:43:37 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -75,10 +75,10 @@ if (isset($_REQUEST["prefs"])) {
 	//  if (isset($_REQUEST["email"]))  $gBitUser->change_user_email($userwatch,$_REQUEST["email"]);
 	if (isset($_REQUEST["real_name"]))
 		$editUser->store( $_REQUEST );
-	if (isset($_REQUEST["userbreadCrumb"]))
-		$editUser->storePreference( 'userbreadCrumb', $_REQUEST["userbreadCrumb"], 'users');
-	if (isset($_REQUEST["homePage"]))
-		$editUser->storePreference( 'homePage', $_REQUEST["homePage"], 'users');
+	if (isset($_REQUEST["users_bread_crumb"]))
+		$editUser->storePreference( 'users_bread_crumb', $_REQUEST["users_bread_crumb"], 'users');
+	if (isset($_REQUEST["users_homepage"]))
+		$editUser->storePreference( 'users_homepage', $_REQUEST["users_homepage"], 'users');
 	if (isset($users_change_language) && $users_change_language == 'y') {
 		if (isset($_REQUEST["language"])) {
 			$editUser->storePreference( 'bitlanguage', $_REQUEST["language"], 'languages');
@@ -90,14 +90,14 @@ if (isset($_REQUEST["prefs"])) {
 		$editUser->storePreference( 'site_display_timezone', $_REQUEST['site_display_timezone'], 'users');
 		$gBitSmarty->assign_by_ref('site_display_timezone', $_REQUEST['site_display_timezone'], 'users');
 	}
-	$editUser->storePreference( 'country', $_REQUEST["country"], 'users' );
-	$editUser->storePreference( 'user_information', $_REQUEST['user_information'], 'users');
-	if (isset($_REQUEST['user_dbl']) && $_REQUEST['user_dbl'] == 'on') {
-		$editUser->storePreference( 'user_dbl', 'y', 'users');
-		$gBitSmarty->assign('user_dbl', 'y');
+	$editUser->storePreference( 'users_country', $_REQUEST["users_country"], 'users' );
+	$editUser->storePreference( 'users_information', $_REQUEST['users_information'], 'users');
+	if (isset($_REQUEST['users_double_click']) && $_REQUEST['users_double_click'] == 'on') {
+		$editUser->storePreference( 'users_double_click', 'y', 'users');
+		$gBitSmarty->assign('users_double_click', 'y');
 	} else {
-		$editUser->storePreference( 'user_dbl', 'n', 'users');
-		$gBitSmarty->assign('user_dbl', 'n');
+		$editUser->storePreference( 'users_double_click', 'n', 'users');
+		$gBitSmarty->assign('users_double_click', 'n');
 	}
 	if( isset( $customFields ) && is_array( $customFields ) ) {
 		foreach( $customFields as $f ) {
@@ -152,9 +152,9 @@ if (isset($_REQUEST["chgpswd"])) {
 	}
 }
 if (isset($_REQUEST['messprefs'])) {
-	$editUser->storePreference( 'mess_max_records', $_REQUEST['mess_max_records'], 'users' );
-	$editUser->storePreference( 'minPrio', $_REQUEST['minPrio'], 'users' );
-	$editUser->storePreference( 'message_alert', !empty( $_REQUEST['message_alert'] ) ? 'y' : 'n', 'users' );
+	$editUser->storePreference( 'messages_max_records', $_REQUEST['messages_max_records'], 'users' );
+	$editUser->storePreference( 'messages_min_priority', $_REQUEST['messages_min_priority'], 'users' );
+	$editUser->storePreference( 'messages_alert', !empty( $_REQUEST['messages_alert'] ) ? 'y' : 'n', 'users' );
 	$editUser->storePreference( 'messages_allow_messages', !empty( $_REQUEST['messages_allow_messages'] ) ? 'y' : 'n', 'users' );
 }
 
@@ -186,8 +186,8 @@ closedir ($h);
 sort ($flags);
 $gBitSmarty->assign('flags', $flags);
 
-$editUser->mInfo['userbreadCrumb'] = $editUser->getPreference( 'userbreadCrumb', $gBitSystem->getConfig('userbreadCrumb', 4) );
-$editUser->mInfo['homePage'] = $editUser->getPreference( 'homePage', '');
+$editUser->mInfo['users_bread_crumb'] = $editUser->getPreference( 'users_bread_crumb', $gBitSystem->getConfig('users_bread_crumb', 4) );
+$editUser->mInfo['users_homepage'] = $editUser->getPreference( 'users_homepage', '');
 
 $gBitSmarty->assign( 'editUser', $editUser->mInfo );
 
@@ -200,10 +200,6 @@ $scramblingMethods = array("n", "strtr", "unicode", "x"); // email_isPublic util
 $gBitSmarty->assign_by_ref('scramblingMethods', $scramblingMethods);
 $scramblingEmails = array(tra("no"), scrambleEmail($editUser->mInfo['email'], 'strtr'), scrambleEmail($editUser->mInfo['email'], 'unicode')."-".tra("unicode"), scrambleEmail($editUser->mInfo['email'], 'x'));
 $gBitSmarty->assign_by_ref('scramblingEmails', $scramblingEmails);
-$user_information = $editUser->getPreference( 'user_information', 'public');
-$gBitSmarty->assign('user_information', $user_information);
-$user_dbl = $editUser->getPreference( 'user_dbl', 'y');
-$gBitSmarty->assign('user_dbl', $user_dbl);
 //$timezone_options = $gBitSystem->get_timezone_list(true);
 //$gBitSmarty->assign_by_ref('timezone_options',$timezone_options);
 //$server_time = new Date();

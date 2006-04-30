@@ -97,9 +97,9 @@
 					{legend legend="Optional Details"}
 						{if $gBitSystem->isFeatureActive( 'reg_homepage' )}
 							<div class="row">
-								{formlabel label="HomePage" for="homePage"}
+								{formlabel label="HomePage" for="users_homepage"}
 								{forminput}
-									<input size="50" type="text" name="prefs[homePage]" id="homePage" value="{$smarty.request.prefs.homePage}" />
+									<input size="50" type="text" name="prefs[users_homepage]" id="users_homepage" value="{$smarty.request.prefs.users_homepage}" />
 									{formhelp note="If you have a personal or professional homepage, enter it here."}
 								{/forminput}
 							</div>
@@ -109,11 +109,11 @@
 							<div class="row">
 								{formlabel label="Country" for="country"}
 								{forminput}
-									<select name="prefs[country]" id="country">
+									<select name="prefs[users_country]" id="country">
 										<option value="" />
 										{sortlinks}
 											{section name=ix loop=$flags}
-												<option value="{$flags[ix]|escape}" {if $smarty.request.prefs.country eq $flags[ix]}selected="selected"{/if}>{tr}{$flags[ix]|replace:'_':' '}{/tr}</option>
+												<option value="{$flags[ix]|escape}" {if $smarty.request.prefs.users_country eq $flags[ix]}selected="selected"{/if}>{tr}{$flags[ix]|replace:'_':' '}{/tr}</option>
 											{/section}
 										{/sortlinks}
 									</select>

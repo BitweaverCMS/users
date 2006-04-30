@@ -59,7 +59,7 @@
 						{formlabel label="Country" for="country"}
 						{forminput}
 							{if $userPrefs.flag}{biticon iforce=icon ipackage="users" ipath="flags/" iname="`$userPrefs.flag`" iexplain="`$userPrefs.flag`"}{/if}
-							<select name="country" id="country">
+							<select name="users_country" id="country">
 								<option value="" />
 								{sortlinks}
 									{section name=ix loop=$flags}
@@ -97,35 +97,35 @@
 					{/foreach}
 
 					<div class="row">
-						{formlabel label="User information" for="user_information"}
+						{formlabel label="User information" for="users_information"}
 						{forminput}
-							<select name="user_information" id="user_information">
-								<option value="private" {if $user_information eq 'private'}selected="selected"{/if}>{tr}private{/tr}</option>
-								<option value="public" {if $user_information eq 'public'}selected="selected"{/if}>{tr}public{/tr}</option>
+							<select name="users_information" id="users_information">
+								<option value="public" {if $userPrefs.users_information eq 'public'}selected="selected"{/if}>{tr}public{/tr}</option>
+								<option value="private" {if $userPrefs.users_information eq 'private'}selected="selected"{/if}>{tr}private{/tr}</option>
 							</select>
 							{formhelp note=""}
 						{/forminput}
 					</div>
 
 					<div class="row">
-						{formlabel label="Number of visited pages to remember" for="userbreadCrumb"}
+						{formlabel label="Number of visited pages to remember" for="users_bread_crumb"}
 						{forminput}
-							<select name="userbreadCrumb" id="userbreadCrumb">
-								<option value="1" {if $editUser.userbreadCrumb eq 1}selected="selected"{/if}>{tr}1{/tr}</option>
-								<option value="2" {if $editUser.userbreadCrumb eq 2}selected="selected"{/if}>{tr}2{/tr}</option>
-								<option value="3" {if $editUser.userbreadCrumb eq 3}selected="selected"{/if}>{tr}3{/tr}</option>
-								<option value="4" {if $editUser.userbreadCrumb eq 4}selected="selected"{/if}>{tr}4{/tr}</option>
-								<option value="5" {if $editUser.userbreadCrumb eq 5}selected="selected"{/if}>{tr}5{/tr}</option>
-								<option value="10" {if $editUser.userbreadCrumb eq 10}selected="selected"{/if}>{tr}10{/tr}</option>
+							<select name="users_bread_crumb" id="users_bread_crumb">
+								<option value="1" {if $editUser.users_bread_crumb eq 1}selected="selected"{/if}>{tr}1{/tr}</option>
+								<option value="2" {if $editUser.users_bread_crumb eq 2}selected="selected"{/if}>{tr}2{/tr}</option>
+								<option value="3" {if $editUser.users_bread_crumb eq 3}selected="selected"{/if}>{tr}3{/tr}</option>
+								<option value="4" {if $editUser.users_bread_crumb eq 4}selected="selected"{/if}>{tr}4{/tr}</option>
+								<option value="5" {if $editUser.users_bread_crumb eq 5}selected="selected"{/if}>{tr}5{/tr}</option>
+								<option value="10" {if $editUser.users_bread_crumb eq 10}selected="selected"{/if}>{tr}10{/tr}</option>
 							</select>
 							{formhelp note=""}
 						{/forminput}
 					</div>
 
 					<div class="row">
-						{formlabel label="HomePage" for="homePage"}
+						{formlabel label="HomePage" for="users_homepage"}
 						{forminput}
-							<input size="50" type="text" name="homePage" id="homePage" value="{$editUser.homePage|escape}" />
+							<input size="50" type="text" name="users_homepage" id="users_homepage" value="{$editUser.users_homepage|escape}" />
 							{formhelp note="If you have a personal or professional homepage, enter it here."}
 						{/forminput}
 					</div>
@@ -141,9 +141,9 @@
 					</div>
 
 					<div class="row">
-						{formlabel label="Use double-click to edit pages" for="user_dbl"}
+						{formlabel label="Use double-click to edit pages" for="users_double_click"}
 						{forminput}
-							<input type="checkbox" name="user_dbl" id="user_dbl" {if $user_dbl eq 'y'}checked="checked"{/if} />
+							<input type="checkbox" name="users_double_click" id="users_double_click" {if $userPrefs.users_double_click eq 'y'}checked="checked"{/if} />
 							{formhelp note="Enabling this feature will allow you to double click on any wiki page and it will automatically take you to the edit page. Note that this does not work in all browsers."}
 						{/forminput}
 					</div>
