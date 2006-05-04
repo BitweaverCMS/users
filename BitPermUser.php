@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.34 2006/04/19 17:11:19 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.35 2006/05/04 15:54:52 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.34 2006/04/19 17:11:19 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.35 2006/05/04 15:54:52 squareing Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.34 $
+ * @version  $Revision: 1.35 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -566,16 +566,29 @@ class BitPermUser extends BitUser {
 		return( $ret );
 	}
 
-	function hasPermission( $perm ) {
+	function hasPermission( $pPerm ) {
 		$ret = FALSE;
 		if( $this->isAdmin() ) {
 			$ret = TRUE;
 		} elseif( $this->isValid() ) {
-			$ret = isset( $this->mPerms[$perm] );
+			$ret = isset( $this->mPerms[$pPerm] );
 		}
 		return ( $ret );
 	}
 
+	// temporarily set the permission for the active user
+	// does NOT store the permission
+	function setPermission( $pPerm, $pValue = NULL ) {
+		if( $this->isAdmin() ) {
+			$this->mPerms[$pPerm] = TRUE;
+		} elseif( $this->isValid() ) {
+			if( $pValue == 'y' || $pValue == TRUE ) {
+				$this->mPerms[$pPerm] = TRUE;
+			} else {
+				unset( $this->mPerms[$pPerm] );
+			}
+		}
+	}
 
 	function getGroupPermissions( $pGroupId=NULL, $pPackage = '', $find = '', $pSortMode = NULL ) {
 		$values = array();
