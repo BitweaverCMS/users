@@ -613,6 +613,11 @@ array( 'QUERY' =>
 		"UPDATE `".BIT_DB_PREFIX."users_group_permissions` SET `perm_name`='p_nexus_create_menus' WHERE `perm_name`='bit_p_create_nexus_menus'",
 	)
 )),
+array( 'ALTER' => array(
+	'users_groups' => array(
+		'is_public' => array( '`is_public`', 'VARCHAR(1)' ),
+	)
+)),
 	)
 )
 
