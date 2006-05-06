@@ -146,9 +146,6 @@ $gBitInstaller->registerSchemaIndexes( USERS_PKG_NAME, $indices );
 $gBitInstaller->registerPackageInfo( USERS_PKG_NAME, array(
 	'description' => "The users package contains all user information and gives you the possiblity to assign permissions to groups of users.",
 	'license' => '<a href="http://www.gnu.org/licenses/licenses.html#LGPL">LGPL</a>',
-	'version' => '0.1',
-	'state' => 'experimental',
-	'dependencies' => '',
 ) );
 
 // ### Sequences
