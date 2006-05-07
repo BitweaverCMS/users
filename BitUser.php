@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.66 2006/04/30 18:07:04 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.67 2006/05/07 16:28:40 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.66 2006/04/30 18:07:04 squareing Exp $
+ * $Id: BitUser.php,v 1.67 2006/05/07 16:28:40 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.66 $
+ * @version  $Revision: 1.67 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -234,8 +234,12 @@ class BitUser extends LibertyAttachable {
 
 	function logout() {
 		global $user_cookie_site, $gBitSystem;
-		// Now if the remember me feature is on and the user checked the users_remember_me checkbox then ...
-		if ($gBitSystem->isFeatureActive( 'users_remember_me' )) {
+
+		if( !empty( $_COOKIE[$user_cookie_site] ) ) {
+			$this->mDb->query( "UPDATE `".BIT_DB_PREFIX."users_cnxn` SET `cookie`=NULL WHERE `cookie`=?", array( $_COOKIE[$user_cookie_site] ) );
+		}
+		// Now if the remember me feature is on and the user checked the rememberme checkbox then ...
+		if ($gBitSystem->isFeatureActive( 'rememberme' )) {
 			setcookie($user_cookie_site, '', time() - 3600, $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig('cookie_domain') );
 		} else {
 			setcookie($user_cookie_site, '', time() - 3600, BIT_ROOT_URL);
@@ -673,11 +677,13 @@ if ($gDebug) echo "Run : QUIT<br>";
 				$url = isset($_SESSION['loginfrom']) ? $_SESSION['loginfrom'] : $gBitSystem->getDefaultPage();
 				//unset session variable in case user su's
 				unset($_SESSION['loginfrom']);
-				// Now if the remember me feature is on and the user checked the users_remember_me checkbox then ...
+
+				$userInfo['cookie'] = md5( time().$userInfo['email'] );
+				// Now if the remember me feature is on and the user checked the rememberme checkbox then ...
 				if ($gBitSystem->isFeatureActive( 'users_remember_me' )&& isset($_REQUEST['rme']) && $_REQUEST['rme'] == 'on') {
 					setcookie($user_cookie_site, $userInfo['hash'], (int)(time() + $gBitSystem->getConfig( 'users_remember_time' )), $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig('cookie_domain') );
 				} else {
-					setcookie($user_cookie_site, $userInfo['hash'], 0, BIT_ROOT_URL);
+					setcookie($user_cookie_site, $userInfo['cookie'], 0, BIT_ROOT_URL);
 				}
 			}
 		} else {
@@ -1091,7 +1097,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	}
 */
 	function getByHash( $hash ) {
-		$query = "select `user_id` from `".BIT_DB_PREFIX."users_users` where `hash`=?";
+		$query = "select `user_id` from `".BIT_DB_PREFIX."users_cnxn` where `cookie`=?";
 		return $this->mDb->getOne( $query, array($hash) );
 	}
 
