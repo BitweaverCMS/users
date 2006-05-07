@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.35 2006/05/04 15:54:52 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.36 2006/05/07 20:25:37 sylvieg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.35 2006/05/04 15:54:52 squareing Exp $
+ * $Id: BitPermUser.php,v 1.36 2006/05/07 20:25:37 sylvieg Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.35 $
+ * @version  $Revision: 1.36 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -132,7 +132,7 @@ class BitPermUser extends BitUser {
 				$query = "delete from `".BIT_DB_PREFIX.$table."` where `user_id` = ?";
 				$result = $this->mDb->query($query, array( $this->mUserId ) );
 			}
-			$ret = BitUser::expunge();
+			$ret = BitUser::expunge( $_REQUEST["user_id"] );
 		} else {
 			$this->mDb->RollbackTrans();
 			$gBitSystem->fatalError( tra( 'The anonymous user cannot be deleted' ) );
@@ -447,7 +447,6 @@ class BitPermUser extends BitUser {
 		$pParamHash['group_store']['group_home'] = !empty( $pParamHash["home"] ) ? $pParamHash["home"] : '';
 		$pParamHash['group_store']['is_default'] = !empty( $pParamHash["is_default"] ) ? $pParamHash["is_default"] : NULL;
 		$pParamHash['group_store']['user_id'] = @$this->verifyId( $pParamHash["user_id"] ) ? $pParamHash["user_id"] : $this->mUserId;
-
 		return( count( $this->mErrors ) == 0 );
 	}
 
