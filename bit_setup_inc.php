@@ -64,8 +64,8 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		umask(0007);
 	}
 	session_start();
-	// in the case of tikis on same domain we have to distinguish the realm
-	// changed cookie and session variable name by a name made with site_title
+	// just use a simple COOKIE (unique random string) that is linked to the users_cnxn table. 
+	// This way, nuking rows in the users_cnxn table can log people out and is much more reliable than SESSIONS
 	$cookie_site = strtolower( ereg_replace("[^a-zA-Z0-9]", "", $gBitSystem->getConfig('site_title', 'bitweaver')) );
 	global $user_cookie_site;
 	$user_cookie_site = 'bit-user-' . $cookie_site;
