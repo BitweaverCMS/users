@@ -68,8 +68,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	// changed cookie and session variable name by a name made with site_title
 	$cookie_site = strtolower( ereg_replace("[^a-zA-Z0-9]", "", $gBitSystem->getConfig('site_title', 'bitweaver')) );
 	global $user_cookie_site;
-	$user_cookie_site = 'tiki-user-' . $cookie_site;
-
+	$user_cookie_site = 'bit-user-' . $cookie_site;
 
 	global $gOverrideLoginFunction;
 	if( !empty( $gOverrideLoginFunction ) ) {
@@ -78,45 +77,20 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 			$gBitUser->load();
 			$gBitUser->loadPermissions();
 		}
-
+	} elseif( isset($_COOKIE[$user_cookie_site]) &&	($gBitUser->mUserId = $gBitUser->getByHash( $_COOKIE[$user_cookie_site] )) ) {
+		$gBitUser->load( TRUE );
 	} else {
-		// if remember me is enabled, check for cookie where auth hash is stored
-		// user gets logged in as the first user in the db with a matching hash
-		if ( $gBitSystem->isFeatureActive('users_remember_me') ) {
-			if (isset($_COOKIE[$user_cookie_site])) {
-				if ( !isset( $_SESSION[$user_cookie_site] ) ) {
-					$_SESSION[$user_cookie_site] = $gBitUser->getByHash( $_COOKIE[$user_cookie_site] );
-				}
-			}
-		}
+		$_COOKIE[$user_cookie_site] = session_id();
 		// check what auth metod is selected. default is for the 'tiki' to auth users
 		$users_auth_method = $gBitSystem->getConfig('users_auth_method', 'tiki');
 		// if the auth method is 'web site', look for the username in $_SERVER
 		if ($users_auth_method == 'ws') {
 			if (isset($_SERVER['REMOTE_USER'])) {
 				if ($gBitUser->userExists($_SERVER['REMOTE_USER'])) {
-					$_SESSION[$user_cookie_site] = $_SERVER['REMOTE_USER'];
+					$gBitUser->mUserId = $_SERVER['REMOTE_USER'];
+					$gBitUser->load( TRUE );
 				}
 			}
-		}
-		if (isset($_SESSION[$user_cookie_site])) {
-			$sessionUser = $_SESSION[$user_cookie_site];
-		}
-	}
-
-	$full = FALSE;
-	// if the username is already saved in the session, pull it from there
-	if ( isset( $_SESSION[$user_cookie_site] ) ) {
-		if( is_numeric( $_SESSION[$user_cookie_site] ) ) {
-			// For cases where a login override returns the userId and not the username
-			// We will load the BitUser using the user_id rather than their login
-			$gBitUser->mUserId = $_SESSION[$user_cookie_site];
-			$gBitUser->load( TRUE );
-			srand(time());
-			$gTicket = substr( md5(rand() . $gBitUser->mUserId ), 0, 20);
-		} else {
-			// old tiki session used username
-			$_SESSION[$user_cookie_site] = NULL;
 		}
 	}
 
@@ -125,14 +99,13 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		$gBitUser->load( TRUE );
 	}
 
-	if (isset($_REQUEST[BIT_SESSION_NAME])) {
-		$gBitUser->updateSession( $_REQUEST[BIT_SESSION_NAME] );
+	if (isset($_COOKIE[$user_cookie_site])) {
+		$gBitUser->updateSession( $_COOKIE[$user_cookie_site] );
 	} elseif (function_exists("session_id")) {
 		$gBitUser->updateSession(session_id());
 	}
 
 	$gBitSmarty->assign_by_ref('gBitUser', $gBitUser);
-	$gBitSmarty->register_object('gBitUser', $gBitUser, array(), true, array('hasPermission'));
 
 	$users_allow_register = $gBitSystem->getConfig("users_allow_register", 'y');
 	$users_validate_user = $gBitSystem->getConfig("users_validate_user", 'n');

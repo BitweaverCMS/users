@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.69 2006/05/07 21:18:31 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.70 2006/05/08 03:31:06 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.69 2006/05/07 21:18:31 sylvieg Exp $
+ * $Id: BitUser.php,v 1.70 2006/05/08 03:31:06 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.69 $
+ * @version  $Revision: 1.70 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -245,7 +245,6 @@ class BitUser extends LibertyAttachable {
 			setcookie($user_cookie_site, '', time() - 3600, BIT_ROOT_URL);
 		}
 		//session_unregister ('user');
-		unset ($_SESSION[$user_cookie_site]);
 		session_destroy();
 		$this->mUserId = NULL;
 		// ensure Guest default page is loaded if required
@@ -652,7 +651,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 		$isvalid = false;
 
 		// Make sure cookies are enabled
-		if ( !isset($_COOKIE[BIT_SESSION_NAME]) ) {
+		if ( !isset($_COOKIE[$user_cookie_site]) ) {
 			$url = USERS_PKG_URL.'login.php?error=' . urlencode(tra('no cookie found, please enable cookies and try again.'));
 			return ( $url );
 		}
@@ -673,7 +672,6 @@ if ($gDebug) echo "Run : QUIT<br>";
 			} elseif( $userInfo['user_id'] != ANONYMOUS_USER_ID ) {
 				// User is valid and not due to change pass.. start session
 				//session_register('user',$user);
-				$_SESSION[$user_cookie_site] = $userInfo['user_id'];	// ATS - It appears this should be user_id here (instead of $pUserName like it was)
 				$url = isset($_SESSION['loginfrom']) ? $_SESSION['loginfrom'] : $gBitSystem->getDefaultPage();
 				//unset session variable in case user su's
 				unset($_SESSION['loginfrom']);
@@ -681,10 +679,16 @@ if ($gDebug) echo "Run : QUIT<br>";
 				$userInfo['cookie'] = md5( time().$userInfo['email'] );
 				// Now if the remember me feature is on and the user checked the rememberme checkbox then ...
 				if ($gBitSystem->isFeatureActive( 'users_remember_me' )&& isset($_REQUEST['rme']) && $_REQUEST['rme'] == 'on') {
-					setcookie($user_cookie_site, $userInfo['hash'], (int)(time() + $gBitSystem->getConfig( 'users_remember_time' )), $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig('cookie_domain') );
+					$cookieTime = (int)(time() + $gBitSystem->getConfig( 'users_remember_time' ));
+					$cookiePath = $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL );
+					$cookieDomain = $gBitSystem->getConfig('cookie_domain');
 				} else {
-					setcookie($user_cookie_site, $userInfo['cookie'], 0, BIT_ROOT_URL);
+					$cookieTime = 0;
+					$cookiePath = BIT_ROOT_URL;
+					$cookieDomain = NULL;
 				}
+				setcookie( $user_cookie_site, session_id(), $cookieTime, $cookiePath, $cookieDomain );
+				$this->updateSession( $_COOKIE[$user_cookie_site] );
 			}
 		} else {
 			$url = USERS_PKG_URL.'login.php?error=' . urlencode(tra('Invalid username or password'));
