@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.9 2006/04/11 13:10:19 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.10 2006/05/08 03:37:23 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -116,7 +116,9 @@ if (isset($_REQUEST["action"])) {
 		$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST["user_id"] ) );
 		if( !empty( $userInfo['user_id'] ) ) {
 			if( isset( $_REQUEST["confirm"] ) ) {
-				if( $gBitUser->expunge( $_REQUEST["user_id"] ) ) {
+				$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+				$expungeUser = new $userClass( $_REQUEST["user_id"] );
+				if( $expungeUser->load() && $expungeUser->expunge() ) {
 					$feedback['success'][] = tra( 'User Deleted' )." <strong>$userInfo[real_name] ($userInfo[login])</strong>";
 				}
 			} else {
