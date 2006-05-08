@@ -12,7 +12,7 @@
 			{form legend="Please send me my password"}
 				<div class="row">
 					{formfeedback warning=$msg.error}
-					{formlabel label="Username" for="username"}
+					{formlabel label="Username or email" for="username"}
 					{forminput}
 						<input type="text" name="username" id="username" />
 					{/forminput}
