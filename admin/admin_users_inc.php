@@ -39,30 +39,4 @@ if( isset( $_REQUEST['settings'] ) ) {
 	$gBitSystem->storeConfig( 'users_layouts', (isset( $_REQUEST['settings']['users_layouts'][0] ) ? $_REQUEST['settings']['users_layouts'][0] : NULL), USERS_PKG_NAME );
 }
 
-// Handle Admin Password Change Request
-// doesn't seem to be working at the moment
-if (isset($_REQUEST["newadminpass"]) ) {
-	if ($_REQUEST["adminpass"] <> $_REQUEST["again"]) {
-		$gBitSmarty->assign("msg", tra("The passwords don't match"));
-
-		$gBitSystem->display( 'error.tpl' );
-		die;
-	}
-
-	// Validate password here
-	if (strlen($_REQUEST["adminpass"]) < $users_min_pass_length) {
-		$text = tra("Password should be at least");
-
-		$text .= " " . $users_min_pass_length . " ";
-		$text .= tra("characters long");
-		$gBitSmarty->assign("msg", $text);
-		$gBitSystem->display( 'error.tpl' );
-		die;
-	}
-
-	$gBitUser->change_user_password("admin", $_REQUEST["adminpass"]);
-	$gBitSmarty->assign('pagetop_msg', tra("Your admin password has been changed"));
-}
-
-
 ?>

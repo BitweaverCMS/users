@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.71 2006/05/08 03:37:23 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.72 2006/05/08 04:25:38 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.71 2006/05/08 03:37:23 spiderr Exp $
+ * $Id: BitUser.php,v 1.72 2006/05/08 04:25:38 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.71 $
+ * @version  $Revision: 1.72 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1018,10 +1018,9 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 
 	function change_user_email( $pUserId, $pUsername, $pEmail, $pPass ) {
-		$hash = md5( strtolower($pUsername) . $pPass . $pEmail );
-		$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `email`=?, `hash`=? WHERE " . $this->mDb->convert_binary(). " `user_id`=?";
-		$result = $this->mDb->query( $query, array( $pEmail, $hash, $pUserId ) );
-		$query = "UPDATE `".BIT_DB_PREFIX."users_watches` SET `email`=? WHERE " . $this->mDb->convert_binary(). " `user_id`=?";
+		$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `email`=? WHERE `user_id`=?";
+		$result = $this->mDb->query( $query, array( $pEmail, $pUserId ) );
+		$query = "UPDATE `".BIT_DB_PREFIX."users_watches` SET `email`=? WHERE `user_id`=?";
 		$result = $this->mDb->query( $query, array( $pEmail, $pUserId ) );
 		return TRUE;
 	}
@@ -1123,32 +1122,29 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		}
 		return $ret;
 	}
-	function renew_user_password($user) {
+	function renewPassword( $pLogin ) {
 		global $gBitSystem;
 		$pass = BitSystem::genPass();
-		$query = "select `email` from `".BIT_DB_PREFIX."users_users` where `login` = ?";
-		$email = $this->mDb->getOne($query, array($user));
-		$hash = md5(strtolower($user) . $pass . $email);
-		// Note that tiki-generated passwords are due inmediatley
-		$now = $gBitSystem->getUTCTime();
-		$query = "update `".BIT_DB_PREFIX."users_users` set `user_password` = ?, `hash` = ?, `pass_due` = ? where ".$this->mDb->convert_binary()." `login` = ?";
-		$result = $this->mDb->query($query, array($pass, $hash, $now, $user));
+		$this->storePassword( $pass, $pLogin );
 		return $pass;
 	}
 
-	function change_user_password( $user, $pass ) {
+	function storePassword( $pPass, $pLogin=NULL ) {
 		global $gBitSystem;
-		$query = "select `email` from `".BIT_DB_PREFIX."users_users` where `login` = ?";
-		$email = $this->mDb->getOne($query, array($user));
-		$email=trim($email);
-		$hash = md5(strtolower($user) . $pass . $email);
-		$now = $gBitSystem->getUTCTime();;
-		$new_pass_due = $now + (60 * 60 * 24 * $gBitSystem->getConfig( 'users_pass_due' ) );
-		if( !$gBitSystem->isFeatureActive( 'users_clear_passwords' ) ) {
-			$pass = '';
+		if( empty( $pLogin ) ) {
+			$pLogin = $this->getField( 'login' );
 		}
-		$query = "update `".BIT_DB_PREFIX."users_users` set `hash`=? ,`user_password`=? ,`pass_due`=? where " . $this->mDb->convert_binary(). " `login`=?";
-		$result = $this->mDb->query($query, array($hash,$pass,$new_pass_due,$user));
+		if( $pLogin ) {
+			$hash = md5( $pPass );
+			$now = $gBitSystem->getUTCTime();;
+			$passDue = $now + (60 * 60 * 24 * $gBitSystem->getConfig( 'users_pass_due' ) );
+			if( !$gBitSystem->isFeatureActive( 'users_clear_passwords' ) ) {
+				$pPass = NULL;
+			}
+			$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
+			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `hash`=? ,`user_password`=? ,`pass_due`=? WHERE `".$loginCol."`=?";
+			$result = $this->mDb->query($query, array( $hash, $pPass, $passDue, $pLogin ) );
+		}
 		return TRUE;
 	}
 

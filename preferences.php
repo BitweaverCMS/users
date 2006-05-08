@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.30 2006/04/30 18:07:05 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.31 2006/05/08 04:25:38 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.30 2006/04/30 18:07:05 squareing Exp $
+ * $Id: preferences.php,v 1.31 2006/05/08 04:25:38 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -71,8 +71,6 @@ if( $gBitSystem->isPackageActive( 'calendar' ) && $gBitSystem->isFeatureActive('
 $gBitLanguage->mLanguage = $editUser->getPreference( 'bitlanguage', $gBitLanguage->mLanguage);
 $gBitSmarty->assign( 'gBitLanguage', $gBitLanguage );
 if (isset($_REQUEST["prefs"])) {
-	// setting preferences
-	//  if (isset($_REQUEST["email"]))  $gBitUser->change_user_email($userwatch,$_REQUEST["email"]);
 	if (isset($_REQUEST["real_name"]))
 		$editUser->store( $_REQUEST );
 	if (isset($_REQUEST["users_bread_crumb"]))
@@ -147,7 +145,7 @@ if (isset($_REQUEST["chgpswd"])) {
 			$gBitSystem->fatalError(tra("Password must contain both letters and numbers") );
 		}
 	}
-	if( $gBitUser->change_user_password($editUser->mUsername, $_REQUEST["pass1"]) ) {
+	if( $editUser->storePassword( $_REQUEST["pass1"] ) ) {
 		$gBitSmarty->assign( 'successMsg', tra( 'The password was updated successfully' ) );
 	}
 }
