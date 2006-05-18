@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.17 2006/05/18 03:42:29 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.18 2006/05/18 17:49:08 sylvieg Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.17 2006/05/18 03:42:29 spiderr Exp $
+ * $Id: register.php,v 1.18 2006/05/18 17:49:08 sylvieg Exp $
  * @package users
  * @subpackage functions
  */
@@ -63,6 +63,7 @@ if( isset( $_REQUEST["register"] ) ) {
 					$userId = $newUser->getUserId();
 					$gBitUser->addUserToGroup( $userId, $_REQUEST['group'] );
 					$gBitUser->storeUserDefaultGroup( $userId, $_REQUEST['group'] );
+					$gBitUser->loadPermissions();
 				}
 			}
 			if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
@@ -73,6 +74,16 @@ if( isset( $_REQUEST["register"] ) ) {
 					unset( $_SESSION['loginfrom'] );
 				}
 				$url = $newUser->login( $reg['login'], $reg['password'], FALSE, FALSE );
+				if ( !empty( $_REQUEST['group'] ) && !empty( $groupInfo['after_registration_page'] ) ) {
+					if ( $newUser->verifyId( $groupInfo['after_registration_page'] ) ) {
+						$url = BIT_ROOT_URL."index.php?content_id=".$groupInfo['after_registration_page'];
+					} elseif( strpos( $groupInfo['after_registration_page'], '/' ) === FALSE ) {
+						$url = BitPage::getDisplayUrl( $groupInfo['after_registration_page'] );
+					} else {
+						$url = $groupInfo['after_registration_page'];
+					}
+				}
+
 				header( 'Location: '.$url );
 				exit;
 			}

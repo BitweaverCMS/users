@@ -51,7 +51,8 @@ $tables = array(
   is_default C(1),
   group_desc C(255),
   group_home C(255),
-  is_public C(1)
+  is_public C(1),
+  after_registration_page C(255)
   CONSTRAINT ', CONSTRAINT `users_groups_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 

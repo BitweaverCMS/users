@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.74 2006/05/18 03:33:24 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.75 2006/05/18 17:49:08 sylvieg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.74 2006/05/18 03:33:24 spiderr Exp $
+ * $Id: BitUser.php,v 1.75 2006/05/18 17:49:08 sylvieg Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.74 $
+ * @version  $Revision: 1.75 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -650,7 +650,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 	}
 
 	function login( $pLogin, $pPassword, $pChallenge=NULL, $pResponse=NULL ) {
-		global $gBitSystem, $user_cookie_site;
+	  global $gBitSystem, $user_cookie_site,$gBitUser;
 		$isvalid = false;
 
 		// Make sure cookies are enabled
@@ -675,8 +675,11 @@ if ($gDebug) echo "Run : QUIT<br>";
 			} elseif( $userInfo['user_id'] != ANONYMOUS_USER_ID ) {
 				// User is valid and not due to change pass.. start session
 				//session_register('user',$user);
-				$url = isset($_SESSION['loginfrom']) ? $_SESSION['loginfrom'] : $gBitSystem->getDefaultPage();
 				//unset session variable in case user su's
+				$gBitUser->mUserId = $userInfo['user_id'];
+				$gBitUser->load();
+				$gBitUser->loadPermissions();
+				$url = isset($_SESSION['loginfrom']) ? $_SESSION['loginfrom'] : $gBitSystem->getDefaultPage();
 				unset($_SESSION['loginfrom']);
 
 				$userInfo['cookie'] = md5( time().$userInfo['email'] );

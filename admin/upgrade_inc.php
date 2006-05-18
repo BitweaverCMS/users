@@ -618,6 +618,12 @@ array( 'ALTER' => array(
 		'is_public' => array( '`is_public`', 'VARCHAR(1)' ),
 	)
 )),
+array( 'ALTER' => array(
+	'users_groups' => array(
+			'after_registration_page' => array( '`after_registration_page`', 'VARCHAR(255)' ),
+	)
+)),
+
 	)
 )
 

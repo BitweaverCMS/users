@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.9 2006/04/10 21:16:34 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.10 2006/05/18 17:49:08 sylvieg Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -85,6 +85,14 @@
 					</div>
 
 					<div class="row">
+						{formlabel label="After registration page" for="after_registration_page"}
+						{forminput}
+							<input type="text" name="after_registration_page" id="after_registration_page" value="{$groupInfo.after_registration_page|escape}" />
+							{formhelp note="The same format than the Group home page. Used to redirect a user after his registration if other that the default after login page."}
+						{/forminput}
+					</div>
+
+					<div class="row">
 					{formlabel label="Default home page" for="default_home"}
 						{forminput}
 							<input type="checkbox" id="default_home" name="default_home_group" {if $groupInfo.group_id eq $defaultGroupId}checked="checked"{/if} value="y" />
@@ -97,6 +105,14 @@
 						{forminput}
 							<input type="checkbox" name="is_default" value="y" {if $groupInfo.is_default eq 'y'}checked="checked"{/if} id="is_default" />
 							{formhelp note="Users are automatically added to this group when registering at your site."}
+						{/forminput}
+					</div>
+
+					<div class="row">
+						{formlabel label="Is public" for="is_public"}
+						{forminput}
+							<input type="checkbox" name="is_public" value="y" {if $groupInfo.is_public eq 'y'}checked="checked"{/if} id="is_public" />
+							{formhelp note="A user will be able to select this group at registration."}
 						{/forminput}
 					</div>
 
