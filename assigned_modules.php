@@ -3,13 +3,13 @@
  * assigned_modules
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.9 $
+ * @version  $Revision: 1.10 $
  * @package  users
  * @subpackage  functions
  * @copyright Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
  * @license Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
  */
-// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.9 2006/04/19 13:48:40 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.10 2006/05/18 13:59:34 sylvieg Exp $
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Initialization
 
@@ -112,6 +112,6 @@ $gBitSmarty->assign_by_ref( 'layoutAreas', $layoutAreas );
 $gBitSmarty->assign_by_ref('modules', $modules);
 //print_r($modules);
 
-$gBitSystem->display( 'bitpackage:users/site_user_assigned_modules.tpl', 'Edit Layout');
+$gBitSystem->display( 'bitpackage:users/user_assigned_modules.tpl', 'Edit Layout');
 
 ?>
