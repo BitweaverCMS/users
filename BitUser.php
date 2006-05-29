@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.76 2006/05/22 16:14:31 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.77 2006/05/29 18:41:03 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.76 2006/05/22 16:14:31 sylvieg Exp $
+ * $Id: BitUser.php,v 1.77 2006/05/29 18:41:03 lsces Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.76 $
+ * @version  $Revision: 1.77 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -139,7 +139,7 @@ class BitUser extends LibertyAttachable {
 				$this->mInfo['avatar_path'] = (!empty($this->mInfo['portrait_storage_path']) ? BIT_ROOT_PATH.$this->mInfo['portrait_storage_path']: NULL);
 				$this->mInfo['avatar_path'] = (!empty($this->mInfo['logo_storage_path']) ? BIT_ROOT_PATH.$this->mInfo['logo_storage_path'] : NULL);
 				// a few random security conscious unset's - SPIDER
-				unset( $this->mInfo['password'] );
+				unset( $this->mInfo['user_password'] );
 				unset( $this->mInfo['hash'] );
 				$this->loadPreferences();
 				if( $this->getPreference( 'users_country' ) ) {
@@ -360,7 +360,7 @@ class BitUser extends LibertyAttachable {
 					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
 				}
 				if( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) || !empty( $pParamHash['user_store']['provpass'] ) ) {
-					$pParamHash['user_store']['password'] = $pParamHash['password'];
+					$pParamHash['user_store']['user_password'] = $pParamHash['password'];
 				}
 			}
 		}
@@ -401,7 +401,7 @@ class BitUser extends LibertyAttachable {
 			list ( $Username, $domain ) = split ("@",$pEmail);
 			// That MX(mail exchanger) record exists in domain check .
 			// checkdnsrr function reference : http://www.php.net/manual/en/function.checkdnsrr.php
-			if ( checkdnsrr ( $domain, "MX" ) )  {
+			if ( !isWindows()and checkdnsrr ( $domain, "MX" ) )  {
 				if($gDebug) echo "Confirmation : MX record about {$domain} exists.<br>";
 				// If MX record exists, save MX record address.
 				// getmxrr function reference : http://www.php.net/manual/en/function.getmxrr.php
@@ -1182,7 +1182,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	/*shared*/
 	function get_online_users() {
 		global $gBitSystem;
-		$query = "select DISTINCT ls.`user_id`, `login` AS `user`, `real_name` ,`connect_time`
+		$query = "select DISTINCT ls.`user_id`, `login`, `real_name` ,`connect_time`
 				  FROM `".BIT_DB_PREFIX."users_cnxn` ls INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (ls.`user_id`=uu.`user_id`)
 				  WHERE ls.`user_id` IS NOT NULL AND `last_get` > ? ORDER BY `connect_time` DESC";
 		$result = $this->mDb->query($query, array( time() - 3600 ) );

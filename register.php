@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.18 2006/05/18 17:49:08 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.19 2006/05/29 18:41:04 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.18 2006/05/18 17:49:08 sylvieg Exp $
+ * $Id: register.php,v 1.19 2006/05/29 18:41:04 lsces Exp $
  * @package users
  * @subpackage functions
  */
@@ -73,7 +73,7 @@ if( isset( $_REQUEST["register"] ) ) {
 				if( !empty( $_SESSION['loginfrom'] ) ) {
 					unset( $_SESSION['loginfrom'] );
 				}
-				$url = $newUser->login( $reg['login'], $reg['password'], FALSE, FALSE );
+				$url = $newUser->login( $reg['login'], $reg['user_password'], FALSE, FALSE );
 				if ( !empty( $_REQUEST['group'] ) && !empty( $groupInfo['after_registration_page'] ) ) {
 					if ( $newUser->verifyId( $groupInfo['after_registration_page'] ) ) {
 						$url = BIT_ROOT_URL."index.php?content_id=".$groupInfo['after_registration_page'];

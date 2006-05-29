@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.38 2006/05/12 19:59:43 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.39 2006/05/29 18:41:04 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.38 2006/05/12 19:59:43 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.39 2006/05/29 18:41:04 lsces Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.38 $
+ * @version  $Revision: 1.39 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -65,8 +65,8 @@ class BitPermUser extends BitUser {
 			if (!empty($this->mInfo['challenge'])) {
 				unset($this->mInfo['challenge']);
 			}
-			if (!empty($this->mInfo['password'])) {
-				unset($this->mInfo['password']);
+			if (!empty($this->mInfo['user_password'])) {
+				unset($this->mInfo['user_password']);
 			}
 		}
 	}
@@ -347,7 +347,7 @@ class BitPermUser extends BitUser {
 	}
 
 	function get_group_users( $pGroupId ) {
-		$query = "select uu.`user_id` AS uid, uu.`login` AS `user`, uu.`real_name`, uu.`user_id`  from `".BIT_DB_PREFIX."users_users` uu, `".BIT_DB_PREFIX."users_groups_map` ug where uu.`user_id`=ug.`user_id` and `group_id`=?";
+		$query = "select uu.`user_id` AS uid, uu.`login`, uu.`real_name`, uu.`user_id`  from `".BIT_DB_PREFIX."users_users` uu, `".BIT_DB_PREFIX."users_groups_map` ug where uu.`user_id`=ug.`user_id` and `group_id`=?";
 		return( $this->mDb->getAssoc($query,array($pGroupId)) );
 	}
 

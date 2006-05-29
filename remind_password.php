@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.12 2006/05/08 04:25:38 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.13 2006/05/29 18:41:04 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: remind_password.php,v 1.12 2006/05/08 04:25:38 spiderr Exp $
+ * $Id: remind_password.php,v 1.13 2006/05/29 18:41:04 lsces Exp $
  * @package users
  * @subpackage functions
  */
@@ -31,8 +31,8 @@ if( $gBitUser->isRegistered() ) {
 		$userInfo = $gBitUser->getUserInfo( array( $loginCol => $pLogin ) );
 	}
 	if( $userInfo ) {
-		if ( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) && !empty($userInfo['password']) ) {
-			$pass = $userInfo['password'];
+		if ( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) && !empty($userInfo['user_password']) ) {
+			$pass = $userInfo['user_password'];
 			$tmp['success'] = tra("A password reminder email has been sent ");
 		} else {
 			$pass = $gBitUser->renewPassword( $_REQUEST["username"] );
