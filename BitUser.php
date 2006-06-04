@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.78 2006/06/01 13:56:04 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.79 2006/06/04 17:15:31 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.78 2006/06/01 13:56:04 lsces Exp $
+ * $Id: BitUser.php,v 1.79 2006/06/04 17:15:31 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.78 $
+ * @version  $Revision: 1.79 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -920,11 +920,18 @@ echo "userAuthPresent: $userAuthPresent<br>";
 				// next verify the password with 2 hashes methods, the old one (pass)) and the new one (login.pass;email)
 				// TODO - this needs cleaning up - wolff_borg
 				if( !$gBitSystem->isFeatureActive( 'feature_challenge' ) || empty($response) ) {
-					$query = "select `user_id` from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " $loginCol = ? and (`hash`=? or `hash`=?)";
-					$result = $this->mDb->query( $query, array( $loginVal, $hash, $hash2 ) );
-					if ($result->numRows()) {
-						$query = "update `".BIT_DB_PREFIX."users_users` set `last_login`=`current_login`, `current_login`=? where `user_id`=?";
-						$result = $this->mDb->query($query, array( $gBitSystem->getUTCTime(), $userId ));
+					$query = "select `user_id`, `hash` from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " $loginCol = ? and (`hash`=? or `hash`=?)";
+					if ( $row = $this->mDb->getRow( $query, array( $loginVal, $hash, $hash2 ) ) ) {
+						// auto-update old hashes with simple and standard md5( password )
+						$hashUpdate = '';
+						if( $row['hash'] == $hash ) {
+							$hashUpdate = 'hash=?, ';
+							$bindVars[] = $hash2;
+						}
+						$bindVars[] = $gBitSystem->getUTCTime();
+						$bindVars[] = $userId;
+						$query = "update `".BIT_DB_PREFIX."users_users` set  $hashUpdate `last_login`=`current_login`, `current_login`=? where `user_id`=?";
+						$result = $this->mDb->query($query, $bindVars );
 						$ret = $userId;
 					} else {
 						$this->mErrors['login'] = 'Password incorrect';
