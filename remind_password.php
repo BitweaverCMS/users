@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.13 2006/05/29 18:41:04 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.14 2006/06/04 20:32:45 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: remind_password.php,v 1.13 2006/05/29 18:41:04 lsces Exp $
+ * $Id: remind_password.php,v 1.14 2006/06/04 20:32:45 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -40,7 +40,6 @@ if( $gBitUser->isRegistered() ) {
 		}
 		$tmp['success'] .= tra("to the registered email address for")." " . $_REQUEST["username"] . ".";
 
-		$gBitSmarty->assign('mail_site', $_SERVER["REMOTE_ADDR"]);
 		$gBitSmarty->assign('mail_user', $userInfo[$loginCol]);
 		$gBitSmarty->assign('mail_same', $gBitSystem->isFeatureActive( 'users_clear_passwords' ));
 		$gBitSmarty->assign('mail_pass', $pass);
