@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.80 2006/06/05 03:13:31 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.81 2006/06/05 22:11:55 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.80 2006/06/05 03:13:31 spiderr Exp $
+ * $Id: BitUser.php,v 1.81 2006/06/05 22:11:55 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.80 $
+ * @version  $Revision: 1.81 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -194,7 +194,6 @@ class BitUser extends LibertyAttachable {
 		global $gBitSystem, $gBitUser;
 		$update['last_get'] = $gBitSystem->getUTCTime();
 		$update['current_view'] = $_SERVER['PHP_SELF'];
-		$oldy = $update['last_get'] - (7 * 24 * 60);
 
 		$this->mDb->StartTrans();
 		$row = $this->mDb->getRow( "SELECT `last_get`, `connect_time`, `get_count`, `user_agent`, `current_view` FROM `".BIT_DB_PREFIX."users_cnxn` WHERE `cookie`=? ", array( $pSessionId ) );
@@ -220,8 +219,13 @@ class BitUser extends LibertyAttachable {
 				$result = $this->mDb->associateInsert( BIT_DB_PREFIX.'users_cnxn', $update );
 			}
 		}
-		$query = "DELETE from `".BIT_DB_PREFIX."users_cnxn` where `connect_time`<?";
-		$result = $this->mDb->query($query, array($oldy));
+		// Delete old connections nightly during the hour of 3 am
+		if( date( 'H' ) == '03' ) {
+			// Default to 30 days history
+			$oldy = $update['last_get'] - ($gBitSystem->getConfig( 'users_cnxn_history_days', 30 ) * 24 * 60);
+			$query = "DELETE from `".BIT_DB_PREFIX."users_cnxn` where `connect_time`<?";
+			$result = $this->mDb->query($query, array($oldy));
+		}
 		$this->mDb->CompleteTrans();
 
 		return true;
