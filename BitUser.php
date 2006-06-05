@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.79 2006/06/04 17:15:31 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.80 2006/06/05 03:13:31 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.79 2006/06/04 17:15:31 spiderr Exp $
+ * $Id: BitUser.php,v 1.80 2006/06/05 03:13:31 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.79 $
+ * @version  $Revision: 1.80 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -597,9 +597,9 @@ if ($gDebug) echo "Run : QUIT<br>";
 			$this->purgeImage( 'portrait' );
 			$this->purgeImage( 'logo' );
 			$userTables = array(
-				'stars_history',
 				'users_semaphores',
-				// this has to be dealt with by a function in tidbits
+				// these have to be dealt with functions in there own packages
+				//'stars_history',
 				//'tidbits_user_bookmarks_urls',
 				//'tidbits_user_bookmarks_folders',
 				//'tidbits_user_menus',
