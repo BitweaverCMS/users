@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_profile.php,v 1.2.2.3 2006/06/07 23:20:25 hash9 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_profile.php,v 1.2.2.4 2006/06/08 20:10:06 hash9 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,18 +8,20 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: mod_user_profile.php,v 1.2.2.3 2006/06/07 23:20:25 hash9 Exp $
+ * $Id: mod_user_profile.php,v 1.2.2.4 2006/06/08 20:10:06 hash9 Exp $
  * @package users
  * @subpackage modules
  */
 global $gQueryUser, $gBitUser, $gBitSmarty;
 
-if ( isset($module_params['user_id']) && !empty($module_params['user_id'])) {
-	$info = $gBitUser->getUserInfo(array("user_id"=>$module_params['user_id']));
-	$gBitSmarty->assign_by_ref('userInfo', $info);
-} elseif ( isset($module_params['login']) && !empty($module_params['login']) ) {
-	$info = $gBitUser->getUserInfo(array("login"=>$module_params['login']));
-	$gBitSmarty->assign_by_ref('userInfo', $info);
+if ( !empty($module_params['user_id'])) {
+	$user = new BitUser($module_params['user_id']);
+	$user->load();
+	$gBitSmarty->assign_by_ref('userInfo', $user->mInfo);
+} elseif ( !empty($module_params['login']) ) {
+	$user = new BitUser();
+	$user->load(null,$module_params['login']);
+	$gBitSmarty->assign_by_ref('userInfo', $user->mInfo);
 } elseif ( !empty( $gQueryUser->mInfo ) ) {
 	$gBitSmarty->assign_by_ref('userInfo', $gQueryUser->mInfo );
 } elseif( !empty( $gBitUser->mInfo ) ) {
