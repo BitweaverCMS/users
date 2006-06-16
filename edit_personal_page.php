@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.10 2006/04/13 10:34:34 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.11 2006/06/16 20:59:43 sylvieg Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: edit_personal_page.php,v 1.10 2006/04/13 10:34:34 squareing Exp $
+ * $Id: edit_personal_page.php,v 1.11 2006/06/16 20:59:43 sylvieg Exp $
  * @package users
  * @subpackage functions
  */
@@ -60,6 +60,7 @@ if(isset($_REQUEST["preview"])) {
 $gBitSmarty->assign_by_ref( 'pageInfo', $gBitUser->mInfo );
 $gBitSmarty->assign_by_ref( 'gContent', $gBitUser );
 
+$gBitSmarty->assign( 'textarea_id', 'editpage' );
 $gBitSmarty->assign('show_page_bar', 'y');
 $gBitSystem->setPreference( 'wiki_description', 'n' );
 
