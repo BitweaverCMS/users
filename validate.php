@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.13 2006/04/19 13:48:40 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.14 2006/06/17 11:38:35 sylvieg Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: validate.php,v 1.13 2006/04/19 13:48:40 squareing Exp $
+ * $Id: validate.php,v 1.14 2006/06/17 11:38:35 sylvieg Exp $
  * @package users
  * @subpackage functions
  */
@@ -24,7 +24,7 @@ global $gBitSystem;
 //do not use session loginfrom with login.php or register.php - only "inline" login forms display in perm denied fatals, etc.
 if( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], 'login.php' ) === FALSE && strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) === FALSE ) {
 	$from = parse_url( $_SERVER['HTTP_REFERER'] );
-	$_SESSION['loginfrom'] = $from['path'];
+	$_SESSION['loginfrom'] = $from['path'].( !empty( $from['query'] ) ? '?'.$from['query'] : '' );
 } elseif( !empty( $_SESSION['loginfrom'] ) ) {
 	unset( $_SESSION['loginfrom'] );
 }
