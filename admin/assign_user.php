@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.5 2006/04/11 13:10:19 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.6 2006/06/24 19:25:42 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -8,7 +8,7 @@
 // Initialization
 require_once( '../../bit_setup_inc.php' );
 
-$gBitSystem->verifyPermission( 'p_admin' );
+$gBitSystem->verifyPermission( 'p_users_admin' );
 
 if (!$gBitUser->userExists( array( 'user_id' => $_REQUEST["assign_user"] ) ) ) {
 	$gBitSystem->fatalError( "User doesnt exist" );

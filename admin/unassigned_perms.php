@@ -1,9 +1,9 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/unassigned_perms.php,v 1.5 2006/04/11 13:10:19 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/unassigned_perms.php,v 1.6 2006/06/24 19:25:42 spiderr Exp $
 // Initialization
 require_once( '../../bit_setup_inc.php' );
 
-$gBitSystem->verifyPermission( 'p_admin' );
+$gBitSystem->verifyPermission( 'p_users_admin' );
 $gBitSmarty->assign_by_ref( 'feedback', $feedback = array() );
 
 $listHash = array( 'sort_mode' => 'group_id_asc' );
