@@ -4,12 +4,15 @@
 			<input type="hidden" name="page" value="{$page}" />
 
 			<div class="row">
+				{if ! $ldapEnabled}
+					{formfeedback error="PHP LDAP Extention not loaded; LDAP Authentication not available."}
+				{/if}
 				{formlabel label="Authentication method" for="users_auth_method"}
 				{forminput}
 					<select name="users_auth_method" id="users_auth_method">
 						<option value="tiki" {if $gBitSystem->getConfig('users_auth_method') eq 'tiki'} selected="selected"{/if}>{tr}Just bitweaver{/tr}</option>
 						<option value="ws" {if $gBitSystem->getConfig('users_auth_method') eq 'ws'} selected="selected"{/if}>{tr}Web Server{/tr}</option>
-						<option value="auth" {if $gBitSystem->getConfig('users_auth_method') eq 'auth'} selected="selected"{/if}>{tr}bitweaver and PEAR::Auth{/tr}</option>
+						{if $ldapEnabled}<option value="auth" {if $gBitSystem->getConfig('users_auth_method') eq 'auth'} selected="selected"{/if}>{tr}bitweaver and PEAR::Auth{/tr}</option>{/if}
 					</select>
 					{formhelp note=""}
 				{/forminput}
@@ -126,39 +129,41 @@
 		{/form}
 	{/jstab}
 
-	{jstab title="PEAR::Auth"}
-		{form legend="PEAR::Auth"}
-			<input type="hidden" name="page" value="{$page}" />
+	{if $ldapEnabled}
+		{jstab title="PEAR::Auth"}
+			{form legend="PEAR::Auth"}
+				<input type="hidden" name="page" value="{$page}" />
+	
+				{foreach from=$ldapSettings key=feature item=output}
+					<div class="row">
+						{formlabel label=`$output.label` for=$feature}
+						{forminput}
+							{if $output.type == 'text'}
+								<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
+							{else}
+								{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
+							{/if}
+							{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
+						{/forminput}
+					</div>
+				{/foreach}
 
-			{foreach from=$ldapSettings key=feature item=output}
 				<div class="row">
-					{formlabel label=`$output.label` for=$feature}
+					{formlabel label="LDAP Scope" for="users_ldap_scope"}
 					{forminput}
-						{if $output.type == 'text'}
-							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
-						{else}
-							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
-						{/if}
-						{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
+						<select name="users_ldap_scope" id="users_ldap_scope">
+							<option value="sub" {if $gBitSystem->getConfig('users_ldap_scope') eq "sub"} selected="selected"{/if}>sub</option>
+							<option value="one" {if $gBitSystem->getConfig('users_ldap_scope') eq "one"} selected="selected"{/if}>one</option>
+							<option value="base" {if $gBitSystem->getConfig('users_ldap_scope') eq "base"} selected="selected"{/if}>base</option>
+						</select>
+						{formhelp note=""}
 					{/forminput}
 				</div>
-			{/foreach}
 
-			<div class="row">
-				{formlabel label="LDAP Scope" for="users_ldap_scope"}
-				{forminput}
-					<select name="users_ldap_scope" id="users_ldap_scope">
-						<option value="sub" {if $gBitSystem->getConfig('users_ldap_scope') eq "sub"} selected="selected"{/if}>sub</option>
-						<option value="one" {if $gBitSystem->getConfig('users_ldap_scope') eq "one"} selected="selected"{/if}>one</option>
-						<option value="base" {if $gBitSystem->getConfig('users_ldap_scope') eq "base"} selected="selected"{/if}>base</option>
-					</select>
-					{formhelp note=""}
-				{/forminput}
-			</div>
-
-			<div class="row submit">
-				<input type="submit" name="auth_pear" value="{tr}Change preferences{/tr}" />
-			</div>
-		{/form}
-	{/jstab}
+				<div class="row submit">
+					<input type="submit" name="auth_pear" value="{tr}Change preferences{/tr}" />
+				</div>
+			{/form}
+		{/jstab}
+	{/if}
 {/jstabs}

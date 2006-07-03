@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.16 2006/04/19 17:11:19 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.17 2006/07/03 21:22:38 hash9 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -316,7 +316,10 @@ $ldapSettings = array(
 );
 $gBitSmarty->assign( 'ldapSettings', $ldapSettings );
 
-if( !empty( $_REQUEST["auth_pear"] ) ) {
+$ldapEnabled= function_exists('ldap_connect');
+$gBitSmarty->assign( 'ldapEnabled', $ldapEnabled );
+
+if( $ldapEnabled && !empty( $_REQUEST["auth_pear"] ) ) {
 	foreach( array_keys( $ldapSettings ) as $feature ) {
 		if( $ldapSettings[$feature]['type'] == 'text' ) {
 			simple_set_value( $feature, USERS_PKG_NAME );

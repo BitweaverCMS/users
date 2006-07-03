@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.82 2006/06/09 17:24:22 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.83 2006/07/03 21:22:38 hash9 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.82 2006/06/09 17:24:22 sylvieg Exp $
+ * $Id: BitUser.php,v 1.83 2006/07/03 21:22:38 hash9 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.82 $
+ * @version  $Revision: 1.83 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -850,6 +850,11 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		// just make sure we're supposed to be here
 		if ($gBitSystem->getConfig("users_auth_method", "tiki") != "auth")
 			return false;
+		// make sure that we can actually attempt this
+		if (!function_exists('ldap_connect')) {
+			$this->mErrors['login']=tra("LDAP Authentication requested but PHP LDAP Extention not loaded."). " (".$this->mErrors['login'].")";
+			return false;
+		}
 		// get all of the LDAP options from the database
 		$options["host"] = $gBitSystem->getConfig("users_ldap_host", "localhost");
 		$options["port"] = $gBitSystem->getConfig("users_ldap_port", "389");
