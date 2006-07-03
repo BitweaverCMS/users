@@ -285,18 +285,13 @@
 					</div>
 				{/legend}
 			{/jstab}
-
-			{if $gBitSystem->isPackageActive( 'messages' )}
-				{jstab title="User Messages"}
-					{include file='bitpackage:messages/messages_preferences_inc.tpl'}
+			
+			{foreach item=package from=$packages}
+				{jstab title=$package.name}
+					{include file=$package.template settings=$userPrefs}
 				{/jstab}
-			{/if}
-
-			{if $gBitSystem->isPackageActive( 'calendar' ) and $gBitSystem->isFeatureActive('calendar_user_prefs') }
-				{jstab title="Calendar"}
-					{include file='bitpackage:calendar/calendar_preferences_inc.tpl' settings=$userPrefs}
-				{/jstab}
-			{/if}
+			{/foreach}
+			
 		{/jstabs}
 	</div><!-- end .body -->
 </div><!-- end .userpreferences -->

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.31 2006/05/08 04:25:38 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.32 2006/07/03 21:27:26 hash9 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.31 2006/05/08 04:25:38 spiderr Exp $
+ * $Id: preferences.php,v 1.32 2006/07/03 21:27:26 hash9 Exp $
  * @package users
  * @subpackage functions
  */
@@ -57,33 +57,41 @@ if( $gBitSystem->isFeatureActive( 'custom_user_fields' ) ) {
 	$gBitSmarty->assign('customFields', $customFields);
 }
 
-if( $gBitSystem->isPackageActive( 'calendar' ) && $gBitSystem->isFeatureActive('calendar_user_prefs') ) {
-	include_once( CALENDAR_PKG_PATH.'admin/admin_calendar_inc.php' );
-	if( !empty( $_REQUEST['calendar_submit'] ) ) {
-		foreach( $calendarValues as $item ) {
-			if( !empty( $_REQUEST[$item] ) ) {
-				$editUser->storePreference( $item, $_REQUEST[$item], 'calendar' );
+$packages = array();
+foreach ($gBitSystem->mPackages as $package) {
+	if ($gBitSystem->isPackageActive( $package['name'] )) {
+		$php_file = $package['path'].'modules/userprefs.php';
+		$tpl_file = $package['path'].'modules/userprefs.tpl';
+		$title = ucwords(strtolower($package['name']));
+		if (file_exists($tpl_file)) {
+			if (file_exists($php_file))  {
+				require($php_file);
 			}
+			$p=array();
+			$p['name']=$title;
+			$p['template']=$tpl_file;
+			$packages[]=$p;
 		}
 	}
 }
+$gBitSmarty->assign_by_ref('packages',$packages);
 
 $gBitLanguage->mLanguage = $editUser->getPreference( 'bitlanguage', $gBitLanguage->mLanguage);
 $gBitSmarty->assign( 'gBitLanguage', $gBitLanguage );
 if (isset($_REQUEST["prefs"])) {
 	if (isset($_REQUEST["real_name"]))
-		$editUser->store( $_REQUEST );
+	$editUser->store( $_REQUEST );
 	if (isset($_REQUEST["users_bread_crumb"]))
-		$editUser->storePreference( 'users_bread_crumb', $_REQUEST["users_bread_crumb"], 'users');
+	$editUser->storePreference( 'users_bread_crumb', $_REQUEST["users_bread_crumb"], 'users');
 	if (isset($_REQUEST["users_homepage"]))
-		$editUser->storePreference( 'users_homepage', $_REQUEST["users_homepage"], 'users');
+	$editUser->storePreference( 'users_homepage', $_REQUEST["users_homepage"], 'users');
 	if (isset($users_change_language) && $users_change_language == 'y') {
 		if (isset($_REQUEST["language"])) {
 			$editUser->storePreference( 'bitlanguage', $_REQUEST["language"], 'languages');
 		}
 	}
 	if (isset($_REQUEST["style"]))
-		$gBitSmarty->assign('style', $_REQUEST["style"]);
+	$gBitSmarty->assign('style', $_REQUEST["style"]);
 	if (isset($_REQUEST['site_display_timezone'])) {
 		$editUser->storePreference( 'site_display_timezone', $_REQUEST['site_display_timezone'], 'users');
 		$gBitSmarty->assign_by_ref('site_display_timezone', $_REQUEST['site_display_timezone'], 'users');
@@ -149,12 +157,7 @@ if (isset($_REQUEST["chgpswd"])) {
 		$gBitSmarty->assign( 'successMsg', tra( 'The password was updated successfully' ) );
 	}
 }
-if (isset($_REQUEST['messprefs'])) {
-	$editUser->storePreference( 'messages_max_records', $_REQUEST['messages_max_records'], 'users' );
-	$editUser->storePreference( 'messages_min_priority', $_REQUEST['messages_min_priority'], 'users' );
-	$editUser->storePreference( 'messages_alert', !empty( $_REQUEST['messages_alert'] ) ? 'y' : 'n', 'users' );
-	$editUser->storePreference( 'messages_allow_messages', !empty( $_REQUEST['messages_allow_messages'] ) ? 'y' : 'n', 'users' );
-}
+
 
 if (isset($_REQUEST['tasksprefs'])) {
 	$editUser->storePreference( 'tasks_max_records', $_REQUEST['tasks_max_records'], 'users');
@@ -203,7 +206,7 @@ $gBitSmarty->assign_by_ref('scramblingEmails', $scramblingEmails);
 //$server_time = new Date();
 $site_display_timezone = $editUser->getPreference( 'site_display_timezone', "UTC");
 if ($site_display_timezone != "UTC")
-	$site_display_timezone = "Local";
+$site_display_timezone = "Local";
 $gBitSmarty->assign_by_ref('site_display_timezone', $site_display_timezone);
 
 $gBitSystem->display( 'bitpackage:users/user_preferences.tpl', 'Edit User Preferences');
