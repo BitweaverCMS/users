@@ -23,6 +23,6 @@
 				<li>{tr}The group has no members.{/tr}</li>
 			{/foreach}
 		</ol>
-	</div>
+	</div><!-- end .body -->
 </div>
 {/strip}

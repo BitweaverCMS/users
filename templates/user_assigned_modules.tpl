@@ -174,8 +174,8 @@
 				{/jstab}
 			{/if}
 		{/jstabs}
-	</div> {* end .body *}
-</div> {* end .usermodules *}
+	</div><!-- end .body -->
+</div><!-- end .usermodules -->
 
 {/strip}
 
