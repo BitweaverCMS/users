@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/assignuser.tpl,v 1.6 2006/04/12 21:31:05 sylvieg Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_assign_user.tpl,v 1.1 2006/07/06 23:56:43 spiderr Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 <div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{biticon ipackage=liberty iname=back iexplain="back to users"}</a></div>
@@ -33,6 +33,16 @@
 					{$assignUser->mUserId}
 				{/forminput}
 			</div>
+
+			{if $gBitSystem->isPackageActive('quota')}
+			{include_php file="`$smarty.const.QUOTA_PKG_PATH`quota_inc.php"}
+			<div class="row">
+				{formlabel label="Quota"}
+				{forminput}
+					{$usage} / {$quota}MB ( {$quotaPercent}% )
+				{/forminput}
+			</div>
+			{/if}
 
 			<div class="row">
 				{formlabel label="Groups"}

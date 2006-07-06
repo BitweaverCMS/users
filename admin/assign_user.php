@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.6 2006/06/24 19:25:42 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.7 2006/07/06 23:56:43 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -16,6 +16,10 @@ if (!$gBitUser->userExists( array( 'user_id' => $_REQUEST["assign_user"] ) ) ) {
 
 $assignUser = new BitPermUser( $_REQUEST["assign_user"] );
 $assignUser->load( TRUE );
+
+if( $assignUser->isAdmin() && $assignUser->mUserId != $gBitUser->mUserId ) {
+	$gBitSystem->fatalError( 'You cannot modify a system administrator.' );
+}
 
 if( isset( $_REQUEST["action"] ) ) {
 	$gBitUser->verifyTicket();
@@ -78,5 +82,5 @@ $gBitSmarty->assign('groups', $groupList['data']);
 $gBitSystem->setBrowserTitle( 'Edit User: '.$assignUser->mUsername );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:users/assignuser.tpl');
+$gBitSystem->display( 'bitpackage:users/admin_assign_user.tpl');
 ?>
