@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.32 2006/07/03 21:27:26 hash9 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.33 2006/07/06 23:55:33 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.32 2006/07/03 21:27:26 hash9 Exp $
+ * $Id: preferences.php,v 1.33 2006/07/06 23:55:33 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -60,8 +60,8 @@ if( $gBitSystem->isFeatureActive( 'custom_user_fields' ) ) {
 $packages = array();
 foreach ($gBitSystem->mPackages as $package) {
 	if ($gBitSystem->isPackageActive( $package['name'] )) {
-		$php_file = $package['path'].'modules/userprefs.php';
-		$tpl_file = $package['path'].'modules/userprefs.tpl';
+		$php_file = $package['path'].'templates/user_prefs.php';
+		$tpl_file = $package['path'].'templates/user_prefs.tpl';
 		$title = ucwords(strtolower($package['name']));
 		if (file_exists($tpl_file)) {
 			if (file_exists($php_file))  {
@@ -79,26 +79,30 @@ $gBitSmarty->assign_by_ref('packages',$packages);
 $gBitLanguage->mLanguage = $editUser->getPreference( 'bitlanguage', $gBitLanguage->mLanguage);
 $gBitSmarty->assign( 'gBitLanguage', $gBitLanguage );
 if (isset($_REQUEST["prefs"])) {
-	if (isset($_REQUEST["real_name"]))
-	$editUser->store( $_REQUEST );
-	if (isset($_REQUEST["users_bread_crumb"]))
-	$editUser->storePreference( 'users_bread_crumb', $_REQUEST["users_bread_crumb"], 'users');
-	if (isset($_REQUEST["users_homepage"]))
-	$editUser->storePreference( 'users_homepage', $_REQUEST["users_homepage"], 'users');
-	if (isset($users_change_language) && $users_change_language == 'y') {
+	if (isset($_REQUEST["real_name"])) {
+		$editUser->store( $_REQUEST );
+	}
+	if (isset($_REQUEST["users_bread_crumb"])) {
+		$editUser->storePreference( 'users_bread_crumb', $_REQUEST["users_bread_crumb"], 'users');
+	}
+	if (isset($_REQUEST["users_homepage"])) {
+		$editUser->storePreference( 'users_homepage', $_REQUEST["users_homepage"], 'users');
+	}
+	if( $gBitSystem->isFeatureActive( 'users_change_language' ) ) {
 		if (isset($_REQUEST["language"])) {
 			$editUser->storePreference( 'bitlanguage', $_REQUEST["language"], 'languages');
 		}
 	}
-	if (isset($_REQUEST["style"]))
-	$gBitSmarty->assign('style', $_REQUEST["style"]);
-	if (isset($_REQUEST['site_display_timezone'])) {
+	if( isset( $_REQUEST["style"] ) ) {
+		$gBitSmarty->assign('style', $_REQUEST["style"]);
+	}
+	if( isset( $_REQUEST['site_display_timezone'] ) ) {
 		$editUser->storePreference( 'site_display_timezone', $_REQUEST['site_display_timezone'], 'users');
 		$gBitSmarty->assign_by_ref('site_display_timezone', $_REQUEST['site_display_timezone'], 'users');
 	}
 	$editUser->storePreference( 'users_country', $_REQUEST["users_country"], 'users' );
 	$editUser->storePreference( 'users_information', $_REQUEST['users_information'], 'users');
-	if (isset($_REQUEST['users_double_click']) && $_REQUEST['users_double_click'] == 'on') {
+	if( isset($_REQUEST['users_double_click']) && $_REQUEST['users_double_click'] == 'on' ) {
 		$editUser->storePreference( 'users_double_click', 'y', 'users');
 		$gBitSmarty->assign('users_double_click', 'y');
 	} else {
@@ -122,9 +126,10 @@ if (isset($_REQUEST["prefs"])) {
 	}
 	die;
 }
+
 if (isset($_REQUEST['chgemail'])) {
 	// check user's password
-	if (!$gBitUser->hasPermission( 'p_users_admin' ) && !$editUser->validate($editUser->mUsername, $_REQUEST['pass'], '', '')) {
+	if( !$gBitUser->hasPermission( 'p_users_admin' ) && !$editUser->validate( $editUser->mUsername, $_REQUEST['pass'], '', '' ) ) {
 		$gBitSmarty->assign('msg', tra("Invalid password.  Your current password is required to change your email address."));
 		$gBitSystem->display( 'error.tpl' );
 		die;
@@ -204,9 +209,12 @@ $gBitSmarty->assign_by_ref('scramblingEmails', $scramblingEmails);
 //$timezone_options = $gBitSystem->get_timezone_list(true);
 //$gBitSmarty->assign_by_ref('timezone_options',$timezone_options);
 //$server_time = new Date();
+
 $site_display_timezone = $editUser->getPreference( 'site_display_timezone', "UTC");
-if ($site_display_timezone != "UTC")
-$site_display_timezone = "Local";
+if ($site_display_timezone != "UTC") {
+	$site_display_timezone = "Local";
+}
+
 $gBitSmarty->assign_by_ref('site_display_timezone', $site_display_timezone);
 
 $gBitSystem->display( 'bitpackage:users/user_preferences.tpl', 'Edit User Preferences');
