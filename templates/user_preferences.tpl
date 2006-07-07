@@ -285,13 +285,11 @@
 					</div>
 				{/legend}
 			{/jstab}
-			
+
 			{foreach item=package from=$packages}
-				{jstab title=$package.name}
-					{include file=$package.template settings=$userPrefs}
-				{/jstab}
+				{include file=$package.template settings=$userPrefs}
 			{/foreach}
-			
+
 		{/jstabs}
 	</div><!-- end .body -->
 </div><!-- end .userpreferences -->
