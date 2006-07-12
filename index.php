@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.17 2006/04/11 13:10:18 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.18 2006/07/12 23:40:51 hash9 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.17 2006/04/11 13:10:18 squareing Exp $
+ * $Id: index.php,v 1.18 2006/07/12 23:40:51 hash9 Exp $
  * @package users
  * @subpackage functions
  */
@@ -82,6 +82,7 @@ if( !empty( $_REQUEST['home'] ) && ($gBitUser->hasPermission( 'p_users_view_user
 	$gBitSmarty->assign_by_ref('control', $_REQUEST['listInfo']);
 	$centerDisplay = 'bitpackage:users/index_list.tpl';
 	$browserTitle = $gBitSystem->getConfig( 'site_title' ).' '.tra( 'Members' );
+	$gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
 } elseif( !$gBitSystem->isFeatureActive( 'users_homepages' ) ) {
 	$gBitSystem->verifyPermission( 'p_users_view_user_list' );
 	$gQueryUser->getList( $_REQUEST );
