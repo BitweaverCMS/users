@@ -64,7 +64,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		umask(0007);
 	}
 	session_start();
-	// just use a simple COOKIE (unique random string) that is linked to the users_cnxn table. 
+	// just use a simple COOKIE (unique random string) that is linked to the users_cnxn table.
 	// This way, nuking rows in the users_cnxn table can log people out and is much more reliable than SESSIONS
 	$cookie_site = strtolower( ereg_replace("[^a-zA-Z0-9]", "", $gBitSystem->getConfig('site_title', 'bitweaver')) );
 	global $user_cookie_site;
@@ -124,51 +124,6 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$site_https_login_required = $gBitSystem->getConfig('site_https_login_required', 'n');
 	$users_change_language = $gBitSystem->getConfig("users_change_language", 'y');
 
-/*
-
-	All of this stuff should now be converted to gBitSystem->isFeatureActive or ->getConfig
-
-	$gBitSmarty->assign('users_allow_register', $users_allow_register);
-	$gBitSmarty->assign('site_url_index', $site_url_index);
-	$gBitSmarty->assign('site_use_proxy', $site_use_proxy);
-	$gBitSmarty->assign('site_proxy_host', $site_proxy_host);
-	$gBitSmarty->assign('site_proxy_port', $site_proxy_port);
-	$gBitSmarty->assign('users_change_language', $users_change_language);
-	$gBitSmarty->assign('users_eponymous_groups', $users_eponymous_groups);
-
-	$site_user_assigned_modules = 'n';
-	$gBitSmarty->assign('users_remember_time', $users_remember_time);
-	$gBitSmarty->assign('users_webserverauth', 'n');
-	$gBitSmarty->assign('users_uf_use_db', 'y');
-	$gBitSmarty->assign('uf_use_dir', '');
-	$gBitSmarty->assign('users_userfiles_quota', 30);
-	$gBitSmarty->assign('users_register_passcode', $users_register_passcode);
-	$gBitSmarty->assign('users_register_passcode', $users_register_passcode);
-	$gBitSmarty->assign('users_min_pass_length', 1);
-	$gBitSmarty->assign('users_pass_chr_num', 'n');
-	$gBitSmarty->assign('users_pass_due', 999);
-	$gBitSmarty->assign('users_random_number_reg', 'n');
-	// PEAR::Auth support
-	$gBitSmarty->assign('users_auth_method', "tiki");
-	$gBitSmarty->assign('auth_pear', "tiki");
-	$gBitSmarty->assign('users_auth_create_gBitDbUser', 'n');
-	$gBitSmarty->assign('users_auth_create_user_auth', 'n');
-	$gBitSmarty->assign('users_auth_skip_admin', 'y');
-	$gBitSmarty->assign('users_ldap_host', 'localhost');
-	$gBitSmarty->assign('users_ldap_port', '389');
-	$gBitSmarty->assign('users_ldap_scope', 'sub');
-	$gBitSmarty->assign('users_ldap_basedn', '');
-	$gBitSmarty->assign('users_ldap_userdn', '');
-	$gBitSmarty->assign('users_ldap_userattr', 'uid');
-	$gBitSmarty->assign('users_ldap_useroc', 'inetOrgPerson');
-	$gBitSmarty->assign('users_ldap_groupdn', '');
-	$gBitSmarty->assign('users_ldap_groupattr', 'cn');
-	$gBitSmarty->assign('users_ldap_groupoc', 'groupOfUniqueNames');
-	$gBitSmarty->assign('users_ldap_memberattr', 'uniqueMember');
-	$gBitSmarty->assign('users_ldap_memberisdn', 'y');
-	$gBitSmarty->assign('users_ldap_adminuser', '');
-	$gBitSmarty->assign('users_ldap_adminpass', '');
-*/
 	// Permissions
 	// Get group permissions here
 
@@ -210,4 +165,25 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		$displayTitle = !empty( $site_menu_title ) ? $site_menu_title : $gBitSystem->getConfig( 'site_title', 'Site' );
 		$gBitSystem->registerAppMenu( USERS_PKG_NAME, 'My '.$displayTitle, ($gBitSystem->getConfig('users_preferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
 	}
+
+require_once(USERS_PKG_PATH.'BaseAuth.php');
+
+BaseAuth::register('imap',array(
+	'name' => 'IMAP Auth',
+	'file' => USERS_PKG_PATH.'auth/imap_auth.php',
+	'class' => 'IMAPAuth',
+));
+
+BaseAuth::register('ldap',array(
+	'name' => 'LDAP Auth',
+	'file' => USERS_PKG_PATH.'auth/ldap_auth.php',
+	'class' => 'LDAPAuth',
+));
+
+BaseAuth::register('bit',array(
+	'name' => 'Bitweaver Auth',
+	'file' => USERS_PKG_PATH.'auth/bit_auth.php',
+	'class' => 'BitAuth',
+));
+
 ?>

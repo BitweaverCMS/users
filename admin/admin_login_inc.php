@@ -1,14 +1,19 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.17 2006/07/03 21:22:38 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.18 2006/07/12 22:03:03 hash9 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 
 $loginSettings = array(
+	'users_create_user_auth' => array(
+		'label' => "Propgate Users",
+		'type' => "checkbox",
+		'note' => "Create a User in all lower Authentication Methods.<br />This won't work for methods in Method 1.",
+	),
 	'users_allow_register' => array(
 		'label' => "Users can register",
 		'type' => "checkbox",
-		'note' => "",
+		'note' => "Registration is attempted for the lowest level supporting the creation of new users.",
 	),
 	'send_welcome_email' => array(
 		'label' => "Send registration welcome email",
@@ -232,104 +237,10 @@ if( !empty( $_REQUEST["httpprefs"] ) ) {
 	}
 }
 
-$ldapSettings = array(
-	'users_auth_create_gBitDbUser' => array(
-		'label' => "Create user if not in bitweaver",
-		'type' => "checkbox",
-		'note' => "",
-	),
-	'users_auth_create_user_auth' => array(
-		'label' => "Create user if not in Auth",
-		'type' => "checkbox",
-		'note' => "",
-	),
-	'users_auth_skip_admin' => array(
-		'label' => "Just use bitweaver auth for admin",
-		'type' => "checkbox",
-		'note' => "",
-	),
-	'users_ldap_host' => array(
-		'label' => "LDAP Host",
-		'type' => "text",
-		'note' => "",
-	),
-	'users_ldap_port' => array(
-		'label' => "LDAP Port",
-		'type' => "text",
-		'note' => "",
-	),
-	'users_ldap_basedn' => array(
-		'label' => "LDAP Base DN",
-		'type' => "text",
-		'note' => "",
-	),
-	'users_ldap_userdn' => array(
-		'label' => "LDAP User DN",
-		'type' => "text",
-		'note' => "",
-	),
-	'users_ldap_userattr' => array(
-		'label' => "LDAP User Attribute",
-		'type' => "text",
-		'note' => "",
-	),
-	'users_ldap_useroc' => array(
-		'label' => "LDAP User OC",
-		'type' => "text",
-		'note' => "",
-	),
-	'users_ldap_groupdn' => array(
-		'label' => "LDAP Group DN",
-		'type' => "text",
-		'note' => "",
-	),
-	'users_ldap_groupattr' => array(
-		'label' => "LDAP Group Atribute",
-		'type' => "text",
-		'note' => "",
-	),
-	'users_ldap_groupoc' => array(
-		'label' => "LDAP Group OC",
-		'type' => "text",
-		'note' => "",
-	),
-	'users_ldap_memberattr' => array(
-		'label' => "LDAP Member Attribute",
-		'type' => "text",
-		'note' => "",
-	),
-	'users_ldap_memberisdn' => array(
-		'label' => "LDAP Member Is DN",
-		'type' => "text",
-		'note' => "",
-	),
-	'users_ldap_adminuser' => array(
-		'label' => "LDAP Admin User",
-		'type' => "text",
-		'note' => "",
-	),
-	'users_ldap_adminpass' => array(
-		'label' => "LDAP Admin Pwd",
-		'type' => "password",
-		'note' => "",
-	),
-);
-$gBitSmarty->assign( 'ldapSettings', $ldapSettings );
-
-$ldapEnabled= function_exists('ldap_connect');
-$gBitSmarty->assign( 'ldapEnabled', $ldapEnabled );
-
-if( $ldapEnabled && !empty( $_REQUEST["auth_pear"] ) ) {
-	foreach( array_keys( $ldapSettings ) as $feature ) {
-		if( $ldapSettings[$feature]['type'] == 'text' ) {
-			simple_set_value( $feature, USERS_PKG_NAME );
-		} else {
-			simple_set_toggle( $feature, USERS_PKG_NAME );
-		}
-	}
-}
 $listHash = array();
 $groupList = $gBitUser->getAllGroups($listHash);
 $gBitSmarty->assign_by_ref('groupList', $groupList['data']);
 
+require_once(USERS_PKG_PATH.'auth/auth.php');
+BaseAuth::settings();
 ?>

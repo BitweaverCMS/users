@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.84 2006/07/04 15:06:06 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.85 2006/07/12 22:03:02 hash9 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.84 2006/07/04 15:06:06 squareing Exp $
+ * $Id: BitUser.php,v 1.85 2006/07/12 22:03:02 hash9 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.84 $
+ * @version  $Revision: 1.85 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -50,10 +50,9 @@ class BitUser extends LibertyAttachable {
 	var $mGroups;
 	var $mInfo;
 	var $mTicket;
-	// used by LDAP to hold email and real_name temporarily
-	var $mTmpStore;
+	var $mAuth;
 
-/**
+	/**
 * Constructor - will automatically load all relevant data if passed a user string
 *
 * @access public
@@ -63,13 +62,13 @@ class BitUser extends LibertyAttachable {
 	function BitUser( $pUserId=NULL, $pContentId=NULL ) {
 		LibertyAttachable::LibertyAttachable();
 		$this->registerContentType( BITUSER_CONTENT_TYPE_GUID, array(
-				'content_type_guid' => BITUSER_CONTENT_TYPE_GUID,
-				'content_description' => 'User Information',
-				'handler_class' => 'BitUser',
-				'handler_package' => 'users',
-				'handler_file' => 'BitUser.php',
-				'maintainer_url' => 'http://www.bitweaver.org'
-			) );
+		'content_type_guid' => BITUSER_CONTENT_TYPE_GUID,
+		'content_description' => 'User Information',
+		'handler_class' => 'BitUser',
+		'handler_package' => 'users',
+		'handler_file' => 'BitUser.php',
+		'maintainer_url' => 'http://www.bitweaver.org'
+		) );
 		$this->mUserId = ( @$this->verifyId( $pUserId ) ? $pUserId : NULL);
 		$this->mContentId = $pContentId;
 	}
@@ -85,7 +84,7 @@ class BitUser extends LibertyAttachable {
 		return $ret;
 	}
 
-/**
+	/**
 * load - loads all settings & preferences for this user
 *
 * @access public
@@ -149,9 +148,9 @@ class BitUser extends LibertyAttachable {
 				if( $pFull ) {
 					$this->mInfo['real_name'] = trim($this->mInfo['real_name']);
 					$this->mInfo['display_name'] = ((!empty($this->mInfo['real_name']) ? $this->mInfo['real_name'] :
-													(!empty($this->mUsername) ? $this->mUsername :
-														(!empty($this->mInfo['email']) ? substr($this->mInfo['email'],0, strpos($this->mInfo['email'],'@')) :
-															$this->mUserId))));
+					(!empty($this->mUsername) ? $this->mUsername :
+					(!empty($this->mInfo['email']) ? substr($this->mInfo['email'],0, strpos($this->mInfo['email'],'@')) :
+					$this->mUserId))));
 					//print("displayName: ".$this->mInfo['display_name']);
 					$this->defaults();
 					$this->mInfo['publicEmail'] = scrambleEmail( $this->mInfo['email'], ( $this->getPreference( 'users_email_display' ) ? $this->getPreference( 'users_email_display' ) : NULL ) );
@@ -265,8 +264,8 @@ class BitUser extends LibertyAttachable {
 	}
 
 	function isAdmin() {
-//		print "PURE VIRTUAL BASE FUNCTION";
-//		die;
+		//	print "PURE VIRTUAL BASE FUNCTION";
+		//	die;
 		return FALSE;
 	}
 
@@ -274,11 +273,11 @@ class BitUser extends LibertyAttachable {
 		global $gBitSystem, $gBitUser;
 		$ret = FALSE;
 		if( !empty( $_REQUEST['tk'] ) ) {
-            if( !($ret = $_REQUEST['tk'] == $this->mTicket ) && $pFatalOnError ) {
+			if( !($ret = $_REQUEST['tk'] == $this->mTicket ) && $pFatalOnError ) {
 				$userString = $gBitUser->isRegistered() ? "\nUSER ID: ".$gBitUser->mUserId.' ( '.$gBitUser->getField( 'email' ).' ) ' : '';
 				error_log( tra( "Security Violation" )."$userString ".$_SERVER['REMOTE_ADDR']."\nURI: $_SERVER[REQUEST_URI] \nREFERER: $_SERVER[HTTP_REFERER] " );
 				$gBitSystem->fatalError( "Security Violation" );
-            }
+			}
 		}
 		return $ret;
 	}
@@ -316,7 +315,7 @@ class BitUser extends LibertyAttachable {
 		// check some new user requirements
 		if( !$this->isRegistered() ) {
 			/*if( empty( $pParamHash['login'] ) ) {
-				$this->mErrors['login'] = 'You must enter a username';
+			$this->mErrors['login'] = 'You must enter a username';
 			}*/
 			if( empty( $pParamHash['registration_date'] ) ) {
 				$pParamHash['registration_date'] = date( "U" );
@@ -350,11 +349,11 @@ class BitUser extends LibertyAttachable {
 			} elseif( !empty( $pParamHash['password2'] ) && ($pParamHash['password'] != $pParamHash['password2']) ) {
 				$this->mErrors['password'] = tra( 'The passwords do not match' );
 			} elseif( $gBitSystem->isFeatureActive( 'users_pass_chr_num' ) &&
-				(!preg_match_all( "/[0-9]+/",$pParamHash["password"],$foo ) || !preg_match_all("/[A-Za-z]+/",$pParamHash["password"],$foo)) ) {
+			(!preg_match_all( "/[0-9]+/",$pParamHash["password"],$foo ) || !preg_match_all("/[A-Za-z]+/",$pParamHash["password"],$foo)) ) {
 				$this->mErrors['password'] = tra( 'Password must contain both letters and numbers' );
 			} else {
 				// Generate a unique hash
-//				$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pParamHash['password'].$pParamHash['email'] );
+				//				$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pParamHash['password'].$pParamHash['email'] );
 				$pParamHash['user_store']['hash'] = md5( $pParamHash['password'] );
 				$now = $gBitSystem->getUTCTime();
 				if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getConfig('users_pass_due') ) {
@@ -394,10 +393,10 @@ class BitUser extends LibertyAttachable {
 			$errors = array();
 		}
 		if( !eregi (
-			  '^[-!#$%&\`*+\\./0-9=?A-Z^_`a-z{|}~]+'.'@'.
-			   '(localhost|[-!$%&\'*+\\/0-9=?A-Z^_`a-z{|}~]+\.'.
-			   '[-!$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+)$'
-				, $pEmail ) ) {
+		'^[-!#$%&\`*+\\./0-9=?A-Z^_`a-z{|}~]+'.'@'.
+		'(localhost|[-!$%&\'*+\\/0-9=?A-Z^_`a-z{|}~]+\.'.
+		'[-!$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+)$'
+		, $pEmail ) ) {
 			$errors['email'] = 'The email address "'.$pEmail.'" is invalid.';
 		} elseif( !empty( $this ) && is_object( $this ) && $this->userExists( array( 'email' => $pEmail ) ) ) {
 			$errors['email'] = 'The email address "'.$pEmail.'" has already been registered.';
@@ -435,25 +434,25 @@ class BitUser extends LibertyAttachable {
 					// fgets function reference : http://www.php.net/manual/en/function.fgets.php
 					// A "Real domain name required for sender address"
 
-				$Out = $this->get_SMTP_response( $Connect );
-				if ( ereg ( "^220", $Out ) ) {
+					$Out = $this->get_SMTP_response( $Connect );
+					if ( ereg ( "^220", $Out ) ) {
 						// Inform client's reaching to server who connect.
 						if( $gBitSystem->hasValidSenderEmail() ) {
 							$senderEmail = $gBitSystem->getConfig( 'site_sender_email' );
 							fputs ( $Connect, "HELO $HTTP_HOST\r\n" );
-if ($gDebug) echo "Run : HELO $HTTP_HOST<br>";
+							if ($gDebug) echo "Run : HELO $HTTP_HOST<br>";
 							$Out = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
 							// Inform sender's address to server.
 							fputs ( $Connect, "MAIL FROM: <{$senderEmail}>\r\n" );
-if ($gDebug) echo "Run : MAIL FROM: &lt;{$senderEmail}&gt;<br>";
+							if ($gDebug) echo "Run : MAIL FROM: &lt;{$senderEmail}&gt;<br>";
 							$From = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
 							// Inform listener's address to server.
 							fputs ( $Connect, "RCPT TO: <{$pEmail}>\r\n" );
-if ($gDebug) echo "Run : RCPT TO: &lt;{$pEmail}&gt;<br>";
+							if ($gDebug) echo "Run : RCPT TO: &lt;{$pEmail}&gt;<br>";
 							$To = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
 							// Finish connection.
 							fputs ( $Connect, "QUIT\r\n");
-if ($gDebug) echo "Run : QUIT<br>";
+							if ($gDebug) echo "Run : QUIT<br>";
 							fclose($Connect);
 							// Server's answering cord about MAIL and TO command checks.
 							// Server about listener's address reacts to 550 codes if there does not exist
@@ -472,7 +471,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 	}
 
 
-/**
+	/**
 * register - will handle everything necessary for registering a user and sending appropriate emails, etc.
 *
 * @access public
@@ -480,57 +479,71 @@ if ($gDebug) echo "Run : QUIT<br>";
 * @return returnString
 */
 	function register( &$pParamHash ) {
-		global $notificationlib, $gBitSmarty, $gBitSystem;
+		global $notificationlib, $gBitSmarty, $gBitSystem, $gBitUser;
 		$ret = FALSE;
 		if( !empty( $_FILES['fPortraitFile'] ) && empty( $_FILES['fAvatarFile'] ) ) {
 			$pParamHash['fAutoAvatar'] = TRUE;
 		}
-		if( $this->store( $pParamHash ) ) {
-			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
-			$notificationlib->post_new_user_event( $pParamHash['login'] );
-			$ret = TRUE;
-
-			// set local time zone as default when registering
-			$this->storePreference( 'site_display_timezone', 'Local' );
-
-			if( !empty( $_REQUEST['CUSTOM'] ) ) {
-				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
-					$this->storePreference( $field, $value );
+		if ($this->verify($pParamHash)) {
+			for ($i=0;$i<BaseAuth::getAuthMethodCount();$i++) {
+				$instance = BaseAuth::init($i);
+				if ($instance && $instance->canManageAuth()) {
+					$res = $instance->createUser($pParamHash);
+					$this->mErrors = array_merge($this->mErrors,$instance->mErrors);
+					if ($res) {
+						break;
+					} else {
+						return false;
+					}
 				}
 			}
+			if( $this->store( $pParamHash ) ) {
+				require_once( KERNEL_PKG_PATH.'notification_lib.php' );
+				$notificationlib->post_new_user_event( $pParamHash['login'] );
+				$ret = TRUE;
 
-			// Handle optional user preferences that may be collected during registration
-			if( !empty( $pParamHash['prefs'] ) ) {
-				foreach( array_keys( $pParamHash['prefs'] ) as $key ) {
-					$this->storePreference( $key, $pParamHash['prefs'][$key] );
+				// set local time zone as default when registering
+				$this->storePreference( 'site_display_timezone', 'Local' );
+
+				if( !empty( $_REQUEST['CUSTOM'] ) ) {
+					foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
+						$this->storePreference( $field, $value );
+					}
 				}
-			}
 
-			$siteName = $gBitSystem->getConfig('site_title', $_SERVER['HTTP_HOST'] );
-			$gBitSmarty->assign('siteName',$_SERVER["SERVER_NAME"]);
-			$gBitSmarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
-			$gBitSmarty->assign('mail_user',$pParamHash['login']);
-			if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
-				// $apass = addslashes(substr(md5($gBitSystem->genPass()),0,25));
-				$apass = $pParamHash['user_store']['provpass'];
-				$foo = parse_url($_SERVER["REQUEST_URI"]);
-				$foo1=str_replace("register","confirm",$foo["path"]);
-				$machine = httpPrefix().$foo1;
+				// Handle optional user preferences that may be collected during registration
+				if( !empty( $pParamHash['prefs'] ) ) {
+					foreach( array_keys( $pParamHash['prefs'] ) as $key ) {
+						$this->storePreference( $key, $pParamHash['prefs'][$key] );
+					}
+				}
 
-				// Send the mail
-				$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
-				$gBitSmarty->assign('mail_machine',$machine);
-				$gBitSmarty->assign('mail_apass',$apass);
-				$mail_data = $gBitSmarty->fetch('bitpackage:users/user_validation_mail.tpl');
-				mail($pParamHash["email"], $siteName.' - '.tra('Your registration information'),$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
-				$gBitSmarty->assign('showmsg','y');
-			}
-			if( $gBitSystem->isFeatureActive( 'send_welcome_email' ) ) {
-				// Send the welcome mail
-				$gBitSmarty->assign( 'mailPassword',$pParamHash['password'] );
-				$gBitSmarty->assign( 'mailEmail',$pParamHash['email'] );
-				$mail_data = $gBitSmarty->fetch('bitpackage:users/welcome_mail.tpl');
-				mail($pParamHash["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+				$siteName = $gBitSystem->getConfig('site_title', $_SERVER['HTTP_HOST'] );
+				$gBitSmarty->assign('siteName',$_SERVER["SERVER_NAME"]);
+				$gBitSmarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
+				$gBitSmarty->assign('mail_user',$pParamHash['login']);
+				if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
+					// $apass = addslashes(substr(md5($gBitSystem->genPass()),0,25));
+					$apass = $pParamHash['user_store']['provpass'];
+					$foo = parse_url($_SERVER["REQUEST_URI"]);
+					$foo1=str_replace("register","confirm",$foo["path"]);
+					$machine = httpPrefix().$foo1;
+
+					// Send the mail
+					$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
+					$gBitSmarty->assign('mail_machine',$machine);
+					$gBitSmarty->assign('mail_apass',$apass);
+					$mail_data = $gBitSmarty->fetch('bitpackage:users/user_validation_mail.tpl');
+					mail($pParamHash["email"], $siteName.' - '.tra('Your registration information'),$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+					$gBitSmarty->assign('showmsg','y');
+				}
+				if( $gBitSystem->isFeatureActive( 'send_welcome_email' ) ) {
+					// Send the welcome mail
+					$gBitSmarty->assign( 'mailPassword',$pParamHash['password'] );
+					$gBitSmarty->assign( 'mailEmail',$pParamHash['email'] );
+					$mail_data = $gBitSmarty->fetch('bitpackage:users/welcome_mail.tpl');
+					mail($pParamHash["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+				}
 			}
 		}
 		return( $ret );
@@ -601,18 +614,18 @@ if ($gDebug) echo "Run : QUIT<br>";
 			$this->purgeImage( 'portrait' );
 			$this->purgeImage( 'logo' );
 			$userTables = array(
-				'users_semaphores',
-				// these have to be dealt with functions in there own packages
-				//'stars_history',
-				//'tidbits_user_bookmarks_urls',
-				//'tidbits_user_bookmarks_folders',
-				//'tidbits_user_menus',
-				//'tidbits_user_tasks',
-				'users_cnxn',
-				'users_watches',
-				'users_favorites_map',
-				'users_users',
-				//'liberty_content', you can't delete a content without deleting the associated object - and it is not because a user dissapears that all his production must dissapear - other users can have work on it
+			'users_semaphores',
+			// these have to be dealt with functions in there own packages
+			//'stars_history',
+			//'tidbits_user_bookmarks_urls',
+			//'tidbits_user_bookmarks_folders',
+			//'tidbits_user_menus',
+			//'tidbits_user_tasks',
+			'users_cnxn',
+			'users_watches',
+			'users_favorites_map',
+			'users_users',
+			//'liberty_content', you can't delete a content without deleting the associated object - and it is not because a user dissapears that all his production must dissapear - other users can have work on it
 			);
 			foreach( $userTables as $table ) {
 				$query = "DELETE FROM `".BIT_DB_PREFIX.$table."` WHERE `user_id` = ?";
@@ -655,7 +668,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 	}
 
 	function login( $pLogin, $pPassword, $pChallenge=NULL, $pResponse=NULL ) {
-	  global $gBitSystem, $user_cookie_site,$gBitUser;
+		global $gBitSystem, $user_cookie_site,$gBitUser;
 		$isvalid = false;
 
 		// Make sure cookies are enabled
@@ -707,7 +720,7 @@ if ($gDebug) echo "Run : QUIT<br>";
 		$https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
 		if ($https_mode) {
 			$stay_in_ssl_mode = ((isset($_SERVER['HTTP_REFERER']) && (substr($_SERVER['HTTP_REFERER'], 0, 5) == 'https'))
-				|| (isset($_REQUEST['stay_in_ssl_mode']) && $_REQUEST['stay_in_ssl_mode'] == 'on'));
+			|| (isset($_REQUEST['stay_in_ssl_mode']) && $_REQUEST['stay_in_ssl_mode'] == 'on'));
 			if (!$stay_in_ssl_mode) {
 				$site_http_domain = $gBitSystem->getConfig('site_http_domain', false);
 				$site_http_port = $gBitSystem->getConfig('site_http_port', 80);
@@ -715,11 +728,11 @@ if ($gDebug) echo "Run : QUIT<br>";
 				if ($site_http_domain) {
 					$prefix = 'http://' . $site_http_domain;
 					if ($site_http_port != 80)
-						$prefix .= ':' . $site_http_port;
+					$prefix .= ':' . $site_http_port;
 					$prefix .= $site_http_prefix;
 					$url = $prefix . $url;
 					if (SID)
-						$url .= '?' . SID;
+					$url .= '?' . SID;
 				}
 			}
 		}
@@ -729,243 +742,98 @@ if ($gDebug) echo "Run : QUIT<br>";
 	function validate($user, $pass, $challenge, $response) {
 		global $gBitSystem;
 		// these will help us keep tabs of what is going on
-		$userTikiValid = false;
-		$userTikiPresent = false;
-		$userAuthValid = false;
-		$userAuthPresent = false;
-		// see if we are to use PEAR::Auth
-		$auth_pear = ($gBitSystem->getConfig("users_auth_method", "tiki") == "auth");
-		$create_tiki = ($gBitSystem->getConfig("users_auth_create_gBitDbUser", "n") == "y");
-		$create_auth = ($gBitSystem->getConfig("users_auth_create_user_auth", "n") == "y");
-		$skip_admin = ($gBitSystem->getConfig("users_auth_skip_admin", "n") == "y");
-		// first attempt a login via the standard Tiki system
-		$userId = $this->validateBitUser($user, $pass, $challenge, $response);
-		if ($userId) {
-			$userTikiValid = true;
-			$userTikiPresent = true;
-		// silence mErrors check since it's not always set.
-		} elseif (@$this->mErrors['login'] == 'Password incorrect') {
-			$userTikiPresent = true;
-		} elseif (@$this->mErrors['login'] == 'User not found') {
-		}
-		// if we aren't using LDAP this will be quick
-		if ( !$auth_pear || ($user == "admin" && $skip_admin) ) {
-			// TODO nothing here yet, as skip_admin is broken - wolff_borg
-		} elseif ( $auth_pear ) {
-			// next see if we need to check LDAP
-			// check the user account
-			$result = $this->validateAuth($user, $pass);
-			switch ($result) {
-				case USER_VALID:
-					unset($this->mErrors['login']);
-					$userAuthValid = true;
-					$userAuthPresent = true;
-					break;
-				case PASSWORD_INCORRECT:
-					$this->mErrors['login'] = 'Password incorrect';
-					$userAuthPresent = true;
-					break;
-				case USER_NOT_FOUND:
-					// disable this error as user may have an account in Tiki only - wolff_borg
-					//$this->mErrors['login'] = 'User not found';
-					break;
+		$userId=ANONYMOUS_USER_ID;
+		$authValid = false;
+		$authPresent = false;
 
-			}
-		}
-/*
-echo "userId: $userId<br>";
-echo "auth_pear: $auth_pear<br>";
-echo "create_tiki: $create_tiki<br>";
-echo "create_auth: $create_auth<br>";
-echo "skip_admin: $skip_admin<br>";
-echo "userTikiValid: $userTikiValid<br>";
-echo "userAuthValid: $userAuthValid<br>";
-echo "userTikiPresent: $userTikiPresent<br>";
-echo "userAuthPresent: $userAuthPresent<br>";
-*/
-		// start off easy
-		// if the user verified in Tiki and Auth, or
-		// was not present in either, than skip all this
-		if ( $auth_pear ) {
-//echo "1<br>";
-			// if the user was logged into Tiki but not found in Auth
-			// see if we can create a new account
-			if ( $create_auth && $userTikiPresent && !$userAuthPresent ) {
-//echo "2<br>";
-				// need to make this better! *********************************************************
-				$result = $this->create_user_auth($user, $pass);
-				// if the server didn't work, do something!
-				if ($result == SERVER_ERROR || $result != USER_VALID) {
-					$this->mErrors['login'] = 'Auth server error creating user';
+		$create_auth = ($gBitSystem->getConfig("users_create_user_auth", "n") == "y");
+
+		for ($i=0;$i<BaseAuth::getAuthMethodCount();$i++) {
+			$instance = BaseAuth::init($i);
+			if ($instance) {
+				$result = $instance->validate($user, $pass, $challenge, $response);
+				switch ($result) {
+					case USER_VALID:
+						unset($this->mErrors['login']);
+						$authPresent = true;
+						$authValid = true;
+						break;
+					case PASSWORD_INCORRECT:
+						//$this->mErrors['login'] = 'Password incorrect';
+						$authPresent = true;
+						break;
+					case USER_NOT_FOUND:
+						break;
+				}
+				if ($authPresent) {
+					if (empty($instance->mInfo['email'])) {
+						$instance->mInfo['email']=$user;
+					}
+					//If we're given a user_id then the user is already in the tiki list:
+					if(!empty($instance->mInfo['user_id'])) {
+						$this->mUserId = $instance->mInfo['user_id'];
+						//Is the user already in the tiki list:
+					} elseif ($this->mDb->getOne("SELECT COUNT(*) FROM `".BIT_DB_PREFIX."users_users` WHERE `login`=?", array($instance->mLogin))>0) {
+						// Update Details
+						$authUserInfo = array( 'login' => $instance->mInfo['login'], 'password' => $instance->mInfo['password'], 'real_name' => $instance->mInfo['real_name'], 'email' => $instance->mInfo['email'] );
+						$userInfo = $this->getUserInfo(array('login' => $user ));
+						$this->mUserId = $userInfo['user_id'];
+						$this->store( $authUserInfo );
+						# TODO: Fix this - if user is an LDAP user, with a TIKI user already created,
+						# storing user info causes errors. NEED TO FIX - wolff_borg
+						$this->mErrors = array();
+					} else {
+						//Add the user to the tiki list:
+						// need to make this better! *********************************************************
+						// if it worked ok, just log in
+						$authUserInfo = array( 'login' => $instance->mInfo['login'], 'password' => $instance->mInfo['password'], 'real_name' => $instance->mInfo['real_name'], 'email' => $instance->mInfo['email'] );
+						// TODO somehow, mUserId gets set to -1 at this point - no idea how
+						// set to NULL to prevent overwriting Guest user - wolff_borg
+						$this->mUserId = NULL;
+						//echo "mUserId: ".$this->mUserId."<br>";
+						if ( $this->store( $authUserInfo ) ) {
+							$userId = $this->mUserId;
+						}
+					}
+					if ($create_auth&&$i>0) {
+						// if the user was logged into this system and we should progate users down other auth methods
+						for ($j=$i;$i>=0;$j--) {
+							$prob_method_name=$gBitSystem->getConfig("users_auth_method_$j",$default);
+							if (! empty($prob_method_name)) {
+								$p_instance = BaseAuth::init($prob_method_name);
+								if ($p_instance && $p_instance->canManageAuth()) {
+									$result = $p_instance->validate($user, $pass, $challenge, $response);
+									if ($result == USER_VALID || $result ==PASSWORD_INCORRECT) {
+										// see if we can create a new account
+										$userattr = $instance->getUserData();
+										if (empty($userattr['login'])) {
+											$userattr['login'] = $user;
+										}
+										if (empty($userattr['password'])) {
+											$userattr['password'] = $pass;
+										}
+										$p_instance->createUser($userattr);
+									}
+								}
+								$this->mErrors = array_merge($this->mErrors,$p_instance->mErrors);
+							}
+						}
+					}
+					$this->mAuth = $instance;
+					break;
 				}
 			}
-			// if the user was logged into Auth but not found in Tiki
-			// see if we can create a new account
-			elseif( $create_tiki && $userAuthValid && !$userTikiPresent ) {
-//echo "3<br>";
-//echo "user: $user<br>";
-//echo "pass: $pass<br>";
-				// need to make this better! *********************************************************
-				// if it worked ok, just log in
-				$authUserInfo = array( 'login' => $user, 'password' => $pass, 'real_name' => $this->mTmpStore['real_name'], 'email' => $this->mTmpStore['email'] );
-				// TODO somehow, mUserId gets set to -1 at this point - no idea how
-				// set to NULL to prevent overwriting Guest user - wolff_borg
-				$this->mUserId = NULL;
-//echo "mUserId: ".$this->mUserId."<br>";
-				if ( $this->store( $authUserInfo ) ) {
-					$userId = $this->mUserId;
-				}
-			}
-			// if the user was logged into Auth but not found in Tiki
-			// see if we can create a new account
-			elseif( $userAuthValid && $userTikiPresent ) {
-//echo "4<br>";
-//echo "user: $user<br>";
-				$real_name = $this->mTmpStore['real_name'];
-				$email = $this->mTmpStore['email'];
-				$userInfo = $this->getUserInfo(array('login' => $user ));
-//vd($userInfo);
-				$this->mUserId = $userInfo['user_id'];
-				$authUserInfo = array( 'login' => $user, 'password' => $pass, 'real_name' => $real_name, 'email' => $email );
-				$this->store( $authUserInfo );
-				# TODO: Fix this - if user is an LDAP user, with a TIKI user already created,
-				# storing user info causes errors. NEED TO FIX - wolff_borg
-				$this->mErrors = array();
-			}
+			$this->mErrors = array_merge($this->mErrors,$instance->mErrors);
 		}
-		if( $userId ) {
-//echo "5<br>";
+		if( $authValid && $userId ) {
+			//echo "5<br>";
 			$this->update_lastlogin( $userId );
 			$this->mUserId = $userId;
 			$this->load();
 		}
-//echo "6<br>";
-//vd($this->mErrors);
 		return( count( $this->mErrors ) == 0 );
 	}
-	// validate the user in the PEAR::Auth system
-	function validateAuth($user, $pass) {
-		global $gBitSystem;
-		require_once (UTIL_PKG_PATH."pear/Auth/Auth.php");
-		// just make sure we're supposed to be here
-		if ($gBitSystem->getConfig("users_auth_method", "tiki") != "auth")
-			return false;
-		// make sure that we can actually attempt this
-		if (!function_exists('ldap_connect')) {
-			$this->mErrors['login']=tra("LDAP Authentication requested but PHP LDAP Extention not loaded."). " (".$this->mErrors['login'].")";
-			return false;
-		}
-		// get all of the LDAP options from the database
-		$options["host"] = $gBitSystem->getConfig("users_ldap_host", "localhost");
-		$options["port"] = $gBitSystem->getConfig("users_ldap_port", "389");
-		$options["scope"] = $gBitSystem->getConfig("users_ldap_scope", "sub");
-		$options["basedn"] = $gBitSystem->getConfig("users_ldap_basedn", "");
-		$options["userdn"] = $gBitSystem->getConfig("users_ldap_userdn", "");
-		$options["userattr"] = $gBitSystem->getConfig("users_ldap_userattr", "uid");
-		$options["useroc"] = $gBitSystem->getConfig("users_ldap_useroc", "posixAccount");
-		$options["groupdn"] = $gBitSystem->getConfig("users_ldap_groupdn", "");
-		$options["groupattr"] = $gBitSystem->getConfig("users_ldap_groupattr", "cn");
-		$options["groupoc"] = $gBitSystem->getConfig("users_ldap_groupoc", "groupOfUniqueNames");
-		$options["memberattr"] = $gBitSystem->getConfig("users_ldap_memberattr", "uniqueMember");
-		$options["memberisdn"] = ($gBitSystem->getConfig("users_ldap_memberisdn", "y") == "y");
-		$options["adminuser"] = $gBitSystem->getConfig("users_ldap_adminuser", "");
-		$options["adminpass"] = $gBitSystem->getConfig("users_ldap_adminpass", "");
 
-		// set the Auth options
-		$a = new Auth("LDAP", $options, "", false, $user, $pass);
-		// check if the login correct
-		$a->login();
-		$ret = '';
-		switch ($a->getStatus()) {
-			case AUTH_LOGIN_OK:
-				$ret=USER_VALID;
-				$ds=ldap_connect($options["host"], $options["port"]);  // Connects to LDAP Server
-				if ($ds) {
-					$r=ldap_bind($ds, $options["adminuser"], $options["adminpass"]);
-					$attrs = array("cn", "mail");
-					$sr=ldap_search($ds, $options["basedn"], "(".$options["userattr"]."=".$user.")", $attrs);  // Search
-					$info = ldap_get_entries($ds, $sr);
-					$this->mTmpStore["real_name"] = $info[0]["cn"][0];
-					$this->mTmpStore["email"] = $info[0]["mail"][0];
-					ldap_close($ds);
-				}
-				break;
-			case AUTH_USER_NOT_FOUND:
-				$ret=USER_NOT_FOUND;
-				break;
-			case AUTH_WRONG_LOGIN:
-				$ret=PASSWORD_INCORRECT;
-				break;
-			default:
-				$ret=SERVER_ERROR;
-				break;
-		}
-		return $ret;
-	}
-
-	// validate the user in the bitweaver database - validation is case insensitive, and we like it that way!
-	function validateBitUser( $pLogin, $pass, $challenge, $response ) {
-		global $gBitSystem;
-		$ret = NULL;
-		if( empty( $pLogin ) ) {
-			$this->mErrors['login'] = 'User not found';
-		} elseif( empty( $pass ) ) {
-			$this->mErrors['login'] = 'Password incorrect';
-		} else {
-			$loginVal = strtoupper( $pLogin ); // case insensitive login
-			$loginCol = ' UPPER(`'.(strpos( $pLogin, '@' ) ? 'email' : 'login').'`)';
-			// first verify that the user exists
-			$query = "select `email`, `login`, `user_id`, `user_password` from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " $loginCol = ?";
-			$result = $this->mDb->query( $query, array( $loginVal ) );
-			if( !$result->numRows() ) {
-				$this->mErrors['login'] = 'User not found';
-			} else {
-				$res = $result->fetchRow();
-				$userId = $res['user_id'];
-				$user = $res['login'];
-				// TikiWiki 1.8+ uses this bizarro conglomeration of fields to get the hash. this sucks for many reasons
-				$hash = md5( strtolower($user) . $pass . $res['email']);
-				$hash2 = md5($pass);
-				// next verify the password with 2 hashes methods, the old one (pass)) and the new one (login.pass;email)
-				// TODO - this needs cleaning up - wolff_borg
-				if( !$gBitSystem->isFeatureActive( 'feature_challenge' ) || empty($response) ) {
-					$query = "select `user_id`, `hash` from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " $loginCol = ? and (`hash`=? or `hash`=?)";
-					if ( $row = $this->mDb->getRow( $query, array( $loginVal, $hash, $hash2 ) ) ) {
-						// auto-update old hashes with simple and standard md5( password )
-						$hashUpdate = '';
-						if( $row['hash'] == $hash ) {
-							$hashUpdate = 'hash=?, ';
-							$bindVars[] = $hash2;
-						}
-						$bindVars[] = $gBitSystem->getUTCTime();
-						$bindVars[] = $userId;
-						$query = "update `".BIT_DB_PREFIX."users_users` set  $hashUpdate `last_login`=`current_login`, `current_login`=? where `user_id`=?";
-						$result = $this->mDb->query($query, $bindVars );
-						$ret = $userId;
-					} else {
-						$this->mErrors['login'] = 'Password incorrect';
-					}
-				} else {
-					// Use challenge-reponse method
-					// Compare pass against md5(user,challenge,hash)
-					$hash = $this->mDb->getOne("select `hash`  from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " $loginCol = ?", array( $pLogin ) );
-					if (!isset($_SESSION["challenge"])) {
-						$this->mErrors['login'] = 'Invalid challenge';
-					}
-					//print("pass: $pass user: $user hash: $hash <br/>");
-					//print("challenge: ".$_SESSION["challenge"]." challenge: $challenge<br/>");
-					//print("response : $response<br/>");
-					if ($response == md5( strtolower($user) . $hash . $_SESSION["challenge"]) ) {
-						$ret = $userId;
-						$this->update_lastlogin( $userId );
-					} else {
-						$this->mErrors['login'] = 'Invalid challenge';
-					}
-				}
-			}
-		}
-		return( $ret );
-	}
 	// update the lastlogin status on this user
 	function update_lastlogin( $pUserId ) {
 		$ret = FALSE;
@@ -977,38 +845,6 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$ret = TRUE;
 		}
 		return $ret;
-	}
-	// create a new user in the Auth directory
-	function create_user_auth($user, $pass) {
-		global $gBitSystem;
-		$options = array();
-		$options["host"] = $gBitSystem->getConfig("users_ldap_host", "localhost");
-		$options["port"] = $gBitSystem->getConfig("users_ldap_port", "389");
-		$options["scope"] = $gBitSystem->getConfig("users_ldap_scope", "sub");
-		$options["basedn"] = $gBitSystem->getConfig("users_ldap_basedn", "");
-		$options["userdn"] = $gBitSystem->getConfig("users_ldap_userdn", "");
-		$options["userattr"] = $gBitSystem->getConfig("users_ldap_userattr", "uid");
-		$options["useroc"] = $gBitSystem->getConfig("users_ldap_useroc", "posixAccount");
-		$options["groupdn"] = $gBitSystem->getConfig("users_ldap_groupdn", "");
-		$options["groupattr"] = $gBitSystem->getConfig("users_ldap_groupattr", "cn");
-		$options["groupoc"] = $gBitSystem->getConfig("users_ldap_groupoc", "groupOfUniqueNames");
-		$options["memberattr"] = $gBitSystem->getConfig("users_ldap_memberattr", "uniqueMember");
-		$options["memberisdn"] = ($gBitSystem->getConfig("users_ldap_memberisdn", "y") == "y");
-		$options["adminuser"] = $gBitSystem->getConfig("users_ldap_adminuser", "");
-		$options["adminpass"] = $gBitSystem->getConfig("users_ldap_adminpass", "");
-		// set additional attributes here
-		$userattr = array();
-		$userattr["email"] = $this->mDb->getOne("select `email` from `".BIT_DB_PREFIX."users_users`
-				where `login`=?", array($user));
-		// set the Auth options
-		$a = new Auth("LDAP", $options);
-		// check if the login correct
-		if ($a->addUser($user, $pass, $userattr) === true)
-			$status = USER_VALID;
-		// otherwise use the error status given back
-		else
-			$status = $a->getStatus();
-		return $status;
 	}
 
 	function get_users_names($offset = 0, $max_records = -1, $sort_mode = 'login_desc', $find = '') {
@@ -1050,7 +886,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 	function lookupHomepage( $iHomepage ) {
 		$ret = NULL;
 		if ( @$this->verifyId($iHomepage)) {
-		   	// iHomepage is the user_id for the user...
+			// iHomepage is the user_id for the user...
 			$key = 'user_id';
 		} elseif (substr($iHomepage,0,7) == 'mailto:') {
 			// iHomepage is the email address of the user...
@@ -1090,38 +926,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		}
 		return $ret;
 	}
-/*
-	// all of these methods have been replaced by the single getUserInfo method
-	function get_user_info($user, $iCaseSensitive = TRUE) {
-		if (!$iCaseSensitive) {
-			$query = "SELECT * FROM `".BIT_DB_PREFIX."users_users` where LOWER(`login`) = ?";
-		} else {
-			$query = "select * from `".BIT_DB_PREFIX."users_users` where `login`=?";
-		}
-		$result = $this->mDb->query($query,array($iCaseSensitive ? $user : strtolower($user)));
-		$res = $result->fetchRow();
-		$groups = $this->getGroups( $res['user_id'] );
-		$res["groups"] = $groups;
-		return $res;
-	}
-	function get_user_info_from_email($email) {
-		$query = "select * from `".BIT_DB_PREFIX."users_users` where `email`=?";
-		$result = $this->mDb->query($query,array($email));
-		$res = $result->fetchRow();
-		return $res;
-	}
-	function get_user_password($user) {
-		$query = "select `user_password`  from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convert_binary(). " `login`=?";
-		$pass = $this->mDb->getOne($query, array($user));
-		return $pass;
-	}
-	function get_user_hash($user) {
-		$query = "select `hash`  from `".BIT_DB_PREFIX."users_users` where " .
-		$this->mDb->convert_binary(). " `login` = ?";
-		$pass = $this->mDb->getOne($query, array($user));
-		return $pass;
-	}
-*/
+
 	function getByHash( $hash ) {
 		$query = "select `user_id` from `".BIT_DB_PREFIX."users_cnxn` where `cookie`=?";
 		return $this->mDb->getOne( $query, array($hash) );
@@ -1234,7 +1039,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			// setup the hash for central storage functions
 			$pStorageHash['upload']['max_width'] = PORTRAIT_MAX_DIM;
 			$pStorageHash['upload']['max_height'] = PORTRAIT_MAX_DIM;
-//			$pStorageHash['upload']['dest_base_name'] = 'portrait';
+			//			$pStorageHash['upload']['dest_base_name'] = 'portrait';
 			$pStorageHash['upload']['dest_path'] = $this->getStorageBranch( 'self',$this->mUserId );
 			$pStorageHash['storage_type'] = STORAGE_IMAGE;
 			$pStorageHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
@@ -1268,7 +1073,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			// setup the hash for central storage functions
 			$pStorageHash['upload']['max_width'] = AVATAR_MAX_DIM;
 			$pStorageHash['upload']['max_height'] = AVATAR_MAX_DIM;
-//			$pStorageHash['upload']['dest_base_name'] = 'avatar';
+			//			$pStorageHash['upload']['dest_base_name'] = 'avatar';
 			$pStorageHash['upload']['dest_path'] = $this->getStorageBranch( 'self',$this->mUserId );
 			$pStorageHash['storage_type'] = STORAGE_IMAGE;
 			$pStorageHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
@@ -1290,7 +1095,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 
 	function storeLogo( &$pStorageHash ) {
-	if( $this->isValid() && count( $pStorageHash ) ) {
+		if( $this->isValid() && count( $pStorageHash ) ) {
 			// setup the hash for central storage functions
 			$pStorageHash['upload']['max_width'] = LOGO_MAX_DIM;
 			$pStorageHash['upload']['max_height'] = LOGO_MAX_DIM;
@@ -1484,7 +1289,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		return $ret;
 
 		while ($res = $result->fetchRow()) {
-		$ret[] = $res;
+			$ret[] = $res;
 		}
 
 		return $ret;
@@ -1510,7 +1315,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		$result = $this->mDb->query($query,array());
 		$ret = array();
 		while ($res = $result->fetchRow()) {
-		$ret[] = $res['event'];
+			$ret[] = $res['event'];
 		}
 		return $ret;
 	}
@@ -1525,7 +1330,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			$pUserName = $this->mUsername;
 		}
 		if( function_exists( 'override_user_url' ) ) {
-		    $ret = override_user_url( $pUserName );
+			$ret = override_user_url( $pUserName );
 		} else {
 			global $gBitSystem;
 
@@ -1567,9 +1372,9 @@ echo "userAuthPresent: $userAuthPresent<br>";
 		}
 		if( !empty( $pHash ) ) {
 			$displayName = (((!empty($pHash['real_name']) && $gBitSystem->getConfig( 'users_display_name', 'real_name' ) == 'real_name') ? $pHash['real_name'] :
-							(!empty($pHash['user']) ? $pHash['user'] :
-							(!empty($pHash['login']) ? $pHash['login'] :
-							(!empty($pHash['email']) ? substr($pHash['email'],0, strpos($pHash['email'],'@')) : $pHash['user_id'])))));
+			(!empty($pHash['user']) ? $pHash['user'] :
+			(!empty($pHash['login']) ? $pHash['login'] :
+			(!empty($pHash['email']) ? substr($pHash['email'],0, strpos($pHash['email'],'@')) : $pHash['user_id'])))));
 			if (!empty($pHash['user'])) {
 				$iHomepage = $pHash['user'];
 			} elseif (!empty($pHash['login'])) {
@@ -1587,14 +1392,14 @@ echo "userAuthPresent: $userAuthPresent<br>";
 			if( $pUseLink ) {
 				if( $gBitUser->hasPermission( 'p_users_view_user_homepage' ) ) {
 					$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName
-						.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'
-						. htmlspecialchars( ( ( isset( $pHash['link_label'] ) ) ? ( $pHash['link_label'] ) : ( $displayName ) ) )
-						.'</a>';
+					.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'
+					. htmlspecialchars( ( ( isset( $pHash['link_label'] ) ) ? ( $pHash['link_label'] ) : ( $displayName ) ) )
+					.'</a>';
 				} else {
 					$ret = '<a class="username" title="'.tra( 'Visit the userpage of' ).': '.$displayName
-						.'" href="'.USERS_PKG_URL.'my.php">'
-						. htmlspecialchars( ( ( isset( $pHash['link_label'] ) ) ? ( $pHash['link_label'] ) : ( $displayName ) ) )
-						.'</a>';
+					.'" href="'.USERS_PKG_URL.'my.php">'
+					. htmlspecialchars( ( ( isset( $pHash['link_label'] ) ) ? ( $pHash['link_label'] ) : ( $displayName ) ) )
+					.'</a>';
 				}
 			} else {
 				$ret = $displayName;
@@ -1606,7 +1411,7 @@ echo "userAuthPresent: $userAuthPresent<br>";
 
 	}
 
-    /**
+	/**
     * Returns include file that will
     * @return the fully specified path to file to be included
     */
@@ -1742,7 +1547,7 @@ function scrambleEmail($email, $method='unicode') {
 	switch ($method) {
 		case 'strtr':
 			$trans = array(	"@" => tra(" AT "),
-							"." => tra(" DOT ")
+			"." => tra(" DOT ")
 			);
 			$ret = strtr($email, $trans);
 			break;
@@ -1755,12 +1560,12 @@ function scrambleEmail($email, $method='unicode') {
 			break;
 		case 'unicode':
 		case 'y':// for previous compatibility
-			$encoded = '';
-			for ($i = 0; $i < strlen($email); $i++) {
-				$encoded .= '&#' . ord($email[$i]). ';';
-			}
-			$ret = $encoded;
-			break;
+		$encoded = '';
+		for ($i = 0; $i < strlen($email); $i++) {
+			$encoded .= '&#' . ord($email[$i]). ';';
+		}
+		$ret = $encoded;
+		break;
 		default:
 			$ret = NULL;
 			break;

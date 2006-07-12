@@ -4,17 +4,29 @@
 			<input type="hidden" name="page" value="{$page}" />
 
 			<div class="row">
-				{if ! $ldapEnabled}
-					{formfeedback error="PHP LDAP Extention not loaded; LDAP Authentication not available."}
-				{/if}
+				{foreach from=$authSettings.err item='auth_error' key='auth_type'}
+					{formfeedback error=$auth_error}
+				{/foreach}
 				{formlabel label="Authentication method" for="users_auth_method"}
 				{forminput}
+					{foreach from=$authSettings.avail_method item='auth_method' key='iter'}
+						<label>Method {$iter+1}</label>
+						<select name="users_auth_method_{$iter}">
+							<option value="" disabled {if $auth_method.value eq ''} selected="selected"{/if}>-</option>
+							{foreach from=$authSettings.avail item='method' key='meth_name'}
+								<option value="{$meth_name}" {if $auth_method.value eq $meth_name} selected="selected"{/if}>{$method.name}</option>
+							{/foreach}
+						</select><br />
+					{/foreach}
+					{*
+					{if $gBitSystem->getConfig("users_auth_method_`$smarty.section.auth_select_outer.iteration-1`") eq 'tiki'} selected="selected"{/if}
 					<select name="users_auth_method" id="users_auth_method">
 						<option value="tiki" {if $gBitSystem->getConfig('users_auth_method') eq 'tiki'} selected="selected"{/if}>{tr}Just bitweaver{/tr}</option>
 						<option value="ws" {if $gBitSystem->getConfig('users_auth_method') eq 'ws'} selected="selected"{/if}>{tr}Web Server{/tr}</option>
 						{if $ldapEnabled}<option value="auth" {if $gBitSystem->getConfig('users_auth_method') eq 'auth'} selected="selected"{/if}>{tr}bitweaver and PEAR::Auth{/tr}</option>{/if}
 					</select>
-					{formhelp note=""}
+					*}
+					{*formhelp note="Registration requrires that Bitweaver Auth be in the Method List"*}
 				{/forminput}
 			</div>
 
@@ -64,7 +76,7 @@
 					<select name="registration_group_choice[]" multiple="multiple" size="5">
 						<option value="">&nbsp;</option>
 						{foreach key=g item=gr from=$groupList}
-							{if $gr.group_id ne -1} 
+							{if $gr.group_id ne -1}
 								<option value="{$gr.group_id}" {if $gr.is_public eq 'y'} selected="selected"{/if}>{$gr.group_name|truncate:"52":" ..."}</option>
 							{/if}
 						{/foreach}
@@ -128,42 +140,36 @@
 			</div>
 		{/form}
 	{/jstab}
-
-	{if $ldapEnabled}
-		{jstab title="PEAR::Auth"}
-			{form legend="PEAR::Auth"}
-				<input type="hidden" name="page" value="{$page}" />
-	
-				{foreach from=$ldapSettings key=feature item=output}
-					<div class="row">
-						{formlabel label=`$output.label` for=$feature}
-						{forminput}
-							{if $output.type == 'text'}
-								<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
-							{else}
-								{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
-							{/if}
-							{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
-						{/forminput}
+	{foreach from=$authSettings.avail item='method' key='meth_name'}
+		{if count($method.options)>0}
+			{jstab title=$method.name}
+				{form legend=$method.name}
+					<input type="hidden" name="page" value="{$page}" />
+					{foreach from=$method.options item='output' key='op_id'}
+						<div class="row">
+							{formlabel label=$output.label for=$op_id}
+							{forminput}
+								{if $output.type == 'checkbox'}
+									{html_checkboxes name="$op_id" values="y" selected=$output.value labels=false id=$op_id}
+								{elseif $output.type == 'option'}
+									<select name="{$op_id}" id="{$op_id}">
+										{foreach from=$output.options item='op_text' key='op_value'}
+											<option value="{$op_value}" {if $output.value eq $op_value} selected="selected"{/if}>{$op_text}</option>
+										{/foreach}
+									</select>
+								{else}
+									<input type="text" size="50" name="{$op_id}" id="{$op_id}" value="{$output.value|escape}" />
+								{/if}
+								{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
+							{/forminput}
+						</div>
+					{/foreach}
+					<div class="row submit">
+						<input type="submit" name="auth_{$meth_name}" value="{tr}Change {$method.name} preferences{/tr}" />
 					</div>
-				{/foreach}
+				{/form}
+			{/jstab}
+		{/if}
+	{/foreach}
 
-				<div class="row">
-					{formlabel label="LDAP Scope" for="users_ldap_scope"}
-					{forminput}
-						<select name="users_ldap_scope" id="users_ldap_scope">
-							<option value="sub" {if $gBitSystem->getConfig('users_ldap_scope') eq "sub"} selected="selected"{/if}>sub</option>
-							<option value="one" {if $gBitSystem->getConfig('users_ldap_scope') eq "one"} selected="selected"{/if}>one</option>
-							<option value="base" {if $gBitSystem->getConfig('users_ldap_scope') eq "base"} selected="selected"{/if}>base</option>
-						</select>
-						{formhelp note=""}
-					{/forminput}
-				</div>
-
-				<div class="row submit">
-					<input type="submit" name="auth_pear" value="{tr}Change preferences{/tr}" />
-				</div>
-			{/form}
-		{/jstab}
-	{/if}
 {/jstabs}

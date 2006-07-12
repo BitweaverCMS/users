@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.20 2006/06/05 03:13:32 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.21 2006/07/12 22:03:03 hash9 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.20 2006/06/05 03:13:32 spiderr Exp $
+ * $Id: register.php,v 1.21 2006/07/12 22:03:03 hash9 Exp $
  * @package users
  * @subpackage functions
  */
@@ -39,7 +39,7 @@ if( isset( $_REQUEST["register"] ) ) {
 	// novalidation is set to yes if a user confirms his email is correct after tiki fails to validate it
 	if( $gBitSystem->isFeatureActive( 'users_random_number_reg' ) ) {
 		if( (empty( $reg['novalidation'] ) || $reg['novalidation'] != 'yes')
-			&& (!isset( $_SESSION['random_number'] ) || $_SESSION['random_number']!=$reg['regcode'])) {
+		&& (!isset( $_SESSION['random_number'] ) || $_SESSION['random_number']!=$reg['regcode'])) {
 			$errors['users_random_number_reg'] = "Wrong registration code";
 		}
 	}
@@ -50,7 +50,6 @@ if( isset( $_REQUEST["register"] ) ) {
 			$errors['passcode'] = 'Wrong passcode! You need to know the passcode to register at this site';
 		}
 	}
-
 	if( empty( $errors ) ) {
 		$newUser = new BitPermUser();
 		if( $newUser->register( $reg ) ) {
@@ -100,6 +99,17 @@ if( isset( $_REQUEST["register"] ) ) {
 		$fields= explode( ',', $gBitSystem->getConfig( 'custom_user_fields' )  );
 		trim_array( $fields );
 		$gBitSmarty->assign('customFields', $fields);
+	}
+	for ($i=0;$i<BaseAuth::getAuthMethodCount();$i++) {
+		$instance = BaseAuth::init($i);
+		if ($instance && $instance->canManageAuth()) {
+			$auth_reg_fields = $instance->getRegistrationFields();
+			foreach (array_keys($auth_reg_fields) as $auth_field) {
+				$auth_reg_fields[$auth_field]['value'] = $auth_reg_fields[$auth_field]['default'];
+			}
+			$gBitSmarty->assign('auth_reg_fields', $auth_reg_fields);
+			break;
+		}
 	}
 }
 

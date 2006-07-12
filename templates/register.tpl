@@ -9,6 +9,13 @@
 	<div class="body">
 		<p>{tr}If you are already registered, please{/tr} <a href="{$smarty.const.USERS_PKG_URL}login.php">{tr}login{/tr}</a></p>
 		{form enctype="multipart/form-data" legend="Please fill in the following details"}
+			{foreach from=$reg.CUSTOM item='custom' key='custom_name'}
+				<input type="hidden" name="CUSTOM[{$custom_name}]" value="{$custom}"/>
+			{/foreach}
+			{foreach from=$reg.auth item='auth' key='auth_name'}
+				<input type="hidden" name="auth[{$auth_name}]" value="{$auth}"/>
+			{/foreach}
+			{formfeedback error=$errors.create}
 			{if $notrecognized eq 'y'}
 				<input type="hidden" name="login" value="{$reg.login}"/>
 				<input type="hidden" name="password" value="{$reg.password}"/>
@@ -158,6 +165,27 @@
 						{/forminput}
 					</div>
 				{/section}
+
+				{foreach from=$auth_reg_fields item='output' key='op_id'}
+				{assign var=op_name value="auth[$op_id]"}
+					<div class="row">
+						{formlabel label=$output.label for=$op_id}
+						{forminput}
+							{if $output.type == 'checkbox'}
+								{html_checkboxes name="$op_name" values="y" selected=$output.value labels=false id=$op_id}
+							{elseif $output.type == 'option'}
+								<select name="{$op_name}" id="{$op_id}">
+									{foreach from=$output.options item='op_text' key='op_value'}
+										<option value="{$op_value}" {if $output.value eq $op_value} selected="selected"{/if}>{$op_text}</option>
+									{/foreach}
+								</select>
+							{else}
+								<input type="text" size="50" name="{$op_name}" id="{$op_id}" value="{$output.value|escape}" />
+							{/if}
+							{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
+						{/forminput}
+					</div>
+				{/foreach}
 
 				{if $gBitSystem->isFeatureActive('users_random_number_reg')}
 					<hr />
