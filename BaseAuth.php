@@ -129,7 +129,7 @@ class BaseAuth {
 		if (is_numeric($authId)) {
 			$default="";
 			if ($authId==0) {
-				$default="tiki";
+				$default="bit";
 			}
 			$method_name=$gBitSystem->getConfig("users_auth_method_$authId",$default);
 			if (!empty($method_name)) {
