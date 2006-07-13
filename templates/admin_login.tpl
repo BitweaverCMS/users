@@ -7,16 +7,18 @@
 				{foreach from=$authSettings.err item='auth_error' key='auth_type'}
 					{formfeedback error=$auth_error}
 				{/foreach}
-				{formlabel label="Authentication method" for="users_auth_method"}
+				{formlabel label="Authentication method"}
 				{forminput}
 					{foreach from=$authSettings.avail_method item='auth_method' key='iter'}
-						<label>Method {$iter+1}</label>
-						<select name="users_auth_method_{$iter}">
-							<option value="" disabled {if $auth_method.value eq ''} selected="selected"{/if}>-</option>
-							{foreach from=$authSettings.avail item='method' key='meth_name'}
-								<option value="{$meth_name}" {if $auth_method.value eq $meth_name} selected="selected"{/if}>{$method.name}</option>
-							{/foreach}
-						</select><br />
+						<label>Method {$iter+1}
+							<select name="users_auth_method_{$iter}">
+								<option value="" disabled {if $auth_method.value eq ''} selected="selected"{/if}>-</option>
+								{foreach from=$authSettings.avail item='method' key='meth_name'}
+									<option value="{$meth_name}" {if $auth_method.value eq $meth_name} selected="selected"{/if}>{$method.name}</option>
+								{/foreach}
+							</select>
+						</label>
+						<br />
 					{/foreach}
 					{*
 					{if $gBitSystem->getConfig("users_auth_method_`$smarty.section.auth_select_outer.iteration-1`") eq 'tiki'} selected="selected"{/if}
