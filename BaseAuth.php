@@ -39,6 +39,7 @@ class BaseAuth {
 		}
 		global $gBitSystem;
 		$err = false;
+
 		if (! empty(BaseAuth::$mAuthMethod[$id])) {
 			preFlightWarning("Auth Registration Failed: $id already registered");
 			$err = true;
@@ -58,6 +59,7 @@ class BaseAuth {
 			preFlightWarning("Auth Registration Failed: $id: No class given");
 			$err = true;
 		}
+
 		if (!$err) {
 			BaseAuth::$mAuthMethod[$id]=$hash;
 		}
@@ -107,13 +109,15 @@ class BaseAuth {
 		if (empty($package) && !empty($this->mCfg['auth_id'])) {
 			$package = $this->mCfg['auth_id'];
 		}
-		for ($i=0;$i<count($gBitUser->mAuthMethod);$i++) {
-			$default="";
-			if ($i==0) {
-				$default="bit";
-			}
-			if ($gBitSystem->getConfig("users_auth_method_$i",$default)== $package) {
-				return true;
+		if( !empty( $gBitUser->mAuthMethod ) ) {
+			for ($i=0;$i<count($gBitUser->mAuthMethod);$i++) {
+				$default="";
+				if ($i==0) {
+					$default="bit";
+				}
+				if ($gBitSystem->getConfig("users_auth_method_$i",$default)== $package) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -133,11 +137,13 @@ class BaseAuth {
 			}
 		} elseif (!empty($authId)) {
 			$method=BaseAuth::$mAuthMethod[$authId];
-			require_once($method['file']);
-			$cl = $method['class'];
-			$instance = new $cl();
-			if ($instance->isSupported()) {
-				return $instance;
+			if( file_exists( $method['file'] ) ) {
+				require_once($method['file']);
+				$cl = $method['class'];
+				$instance = new $cl();
+				if ($instance->isSupported()) {
+					return $instance;
+				}
 			}
 		}
 		return false;
@@ -165,7 +171,7 @@ class BaseAuth {
 				}
 				$method['canManageAuth'] = $instance->canManageAuth();
 				$authSettings['avail'][$meth_name]=$method;
-			} else {
+			} elseif( is_object( $instance ) ) {
 				$authSettings['err'][$meth_name]=implode("<br />",$instance->mErrors);
 			}
 		}

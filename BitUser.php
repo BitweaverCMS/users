@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.86 2006/07/13 12:18:11 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.87 2006/07/13 15:48:07 wakeworks Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.86 2006/07/13 12:18:11 squareing Exp $
+ * $Id: BitUser.php,v 1.87 2006/07/13 15:48:07 wakeworks Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.86 $
+ * @version  $Revision: 1.87 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -746,7 +746,7 @@ class BitUser extends LibertyAttachable {
 		$authValid = false;
 		$authPresent = false;
 
-		$create_auth = ($gBitSystem->getConfig("users_create_user_auth", "n") == "y");
+		$createAuth = ($gBitSystem->getConfig("users_create_user_auth", "n") == "y");
 
 		for ($i=0;$i<BaseAuth::getAuthMethodCount();$i++) {
 			$instance = BaseAuth::init($i);
@@ -795,14 +795,14 @@ class BitUser extends LibertyAttachable {
 							$userId = $this->mUserId;
 						}
 					}
-					if ($create_auth&&$i>0) {
+					if ( $createAuth && $i > 0 ) {
 						// if the user was logged into this system and we should progate users down other auth methods
-						for ($j=$i;$i>=0;$j--) {
-							$prob_method_name=$gBitSystem->getConfig("users_auth_method_$j",$default);
+						for ( $j=$i; $i>=0; $j-- ) {
+							$probMethodName=$gBitSystem->getConfig("users_auth_method_$j",$default);
 							if (! empty($prob_method_name)) {
-								$p_instance = BaseAuth::init($prob_method_name);
-								if ($p_instance && $p_instance->canManageAuth()) {
-									$result = $p_instance->validate($user, $pass, $challenge, $response);
+								$pInstance = BaseAuth::init( $probMethodName );
+								if ($pInstance && $pInstance->canManageAuth()) {
+									$result = $pInstance->validate($user, $pass, $challenge, $response);
 									if ($result == USER_VALID || $result ==PASSWORD_INCORRECT) {
 										// see if we can create a new account
 										$userattr = $instance->getUserData();
@@ -812,10 +812,10 @@ class BitUser extends LibertyAttachable {
 										if (empty($userattr['password'])) {
 											$userattr['password'] = $pass;
 										}
-										$p_instance->createUser($userattr);
+										$pInstance->createUser($userattr);
 									}
 								}
-								$this->mErrors = array_merge($this->mErrors,$p_instance->mErrors);
+								$this->mErrors = array_merge($this->mErrors,$pInstance->mErrors);
 							}
 						}
 					}
