@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.85 2006/07/12 22:03:02 hash9 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.86 2006/07/13 12:18:11 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.85 2006/07/12 22:03:02 hash9 Exp $
+ * $Id: BitUser.php,v 1.86 2006/07/13 12:18:11 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.85 $
+ * @version  $Revision: 1.86 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1444,9 +1444,8 @@ class BitUser extends LibertyAttachable {
 	}
 
 	function getList( &$pParamHash ) {
-
 		if ( !isset( $pParamHash['sort_mode']) or $pParamHash['sort_mode'] == '' ) $pParamHash['sort_mode'] = 'registration_date_desc';
-		$pParamHash['max_records'] = 20;
+
 		LibertyContent::prepGetList( $pParamHash );
 		$sort_mode = $this->mDb->convert_sortmode($pParamHash['sort_mode']);
 		// Return an array of users indicating name, email, last changed pages, versions, last_login
@@ -1458,10 +1457,10 @@ class BitUser extends LibertyAttachable {
 			$bindvars = array();
 		}
 		$query = "SELECT uu.*, tf_ava.`storage_path` AS `avatar_storage_path`
-				  FROM `".BIT_DB_PREFIX."users_users` uu
-					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
-					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
-				 $mid order by $sort_mode";
+			FROM `".BIT_DB_PREFIX."users_users` uu
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
+			$mid order by $sort_mode";
 		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_users` uu $mid";
 		$result = $this->mDb->query($query, $bindvars, $pParamHash['max_records'], $pParamHash['offset']);
 

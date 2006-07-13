@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.10 2006/05/08 03:37:23 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.11 2006/07/13 12:18:12 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -144,7 +144,8 @@ foreach( $gBitUser->getDefaultGroup() as $defaultGroupId => $defaultGroupName ) 
 	$gBitSmarty->assign('defaultGroupName', $defaultGroupName );
 }
 
-$_REQUEST['max_records'] = 20;
+// override default max_records
+$_REQUEST['max_records'] = !empty( $_REQUEST['max_records'] ) ? $_REQUEST['max_records'] : 20;
 $gBitUser->getList( $_REQUEST );
 $gBitSmarty->assign_by_ref('users', $_REQUEST["data"]);
 $gBitSmarty->assign_by_ref('usercount', $_REQUEST["cant"]);
@@ -153,7 +154,7 @@ if (isset($_REQUEST["numrows"]))
 else
 	$_REQUEST['listInfo']["numrows"] = 10;
 $_REQUEST['listInfo']["URL"] = USERS_PKG_URL."admin/index.php";
-$gBitSmarty->assign_by_ref('control', $_REQUEST['listInfo']);
+$gBitSmarty->assign_by_ref('listInfo', $_REQUEST['listInfo']);
 
 $gBitUser->invokeServices( 'content_edit_function' );
 
