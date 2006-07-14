@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.87 2006/07/13 15:48:07 wakeworks Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.88 2006/07/14 16:16:42 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.87 2006/07/13 15:48:07 wakeworks Exp $
+ * $Id: BitUser.php,v 1.88 2006/07/14 16:16:42 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.87 $
+ * @version  $Revision: 1.88 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1001,12 +1001,24 @@ class BitUser extends LibertyAttachable {
 		return $retval;
 	}
 	/*shared*/
-	function get_online_users() {
-		global $gBitSystem;
-		$query = "select DISTINCT ls.`user_id`, `login`, `real_name` ,`connect_time`
+	function getUserActivity( $pListHash=NULL ) {
+		$bindVars = array();
+		if( empty( $pListHash['sort_mode'] ) ) {
+			$pListHash['sort_mode'] = 'last_get_desc';
+		}
+		LibertyContent::prepGetList( $pListHash );
+
+		$whereSql = '';
+		if( !empty( $pListHash['last_get'] ) ) {
+			$whereSql .= ' AND `last_get` > ? ';
+			$bindVars[] = time() - 3600;
+		}
+		
+		$query = "select DISTINCT ls.`user_id`, `login`, `real_name` ,`connect_time`, `ip`, `user_agent`, `last_get`
 				  FROM `".BIT_DB_PREFIX."users_cnxn` ls INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (ls.`user_id`=uu.`user_id`)
-				  WHERE ls.`user_id` IS NOT NULL AND `last_get` > ? ORDER BY `connect_time` DESC";
-		$result = $this->mDb->query($query, array( time() - 3600 ) );
+				  WHERE ls.`user_id` IS NOT NULL $whereSql
+				  ORDER BY ".$this->mDb->convert_sortmode( $pListHash['sort_mode'] );
+		$result = $this->mDb->query($query, $bindVars );
 		$ret = array();
 		while ($res = $result->fetchRow()) {
 			$res['users_information'] = 	$this->getPreference( 'users_information', 'public', $res['user_id'] );

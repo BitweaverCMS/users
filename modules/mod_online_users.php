@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/modules/mod_online_users.php,v 1.3 2005/08/01 18:42:03 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/modules/mod_online_users.php,v 1.4 2006/07/14 16:16:42 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,12 +8,12 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: mod_online_users.php,v 1.3 2005/08/01 18:42:03 squareing Exp $
+ * $Id: mod_online_users.php,v 1.4 2006/07/14 16:16:42 spiderr Exp $
  * @package users
  * @subpackage modules
  */
 global $gBitUser;
-$online_users = $gBitUser->get_online_users();
+$online_users = $gBitUser->getUserActivity();
 $gBitSmarty->assign('online_users', $online_users);
 $gBitSmarty->assign('logged_users', count( $online_users ) );
 ?>
