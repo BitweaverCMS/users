@@ -3,13 +3,13 @@
  * assigned_modules
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.1.1.1.2.3 $
+ * @version  $Revision: 1.1.1.1.2.4 $
  * @package  users
  * @subpackage  functions
  * @copyright Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
  * @license Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
  */
-// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.1.1.1.2.3 2005/10/01 13:09:34 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.1.1.1.2.4 2006/07/14 14:52:21 hash9 Exp $
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Initialization
 
@@ -92,7 +92,7 @@ $gBitSmarty->assign( 'homeHeaderData', $gQueryUser->getPreference( 'homepage_hea
 // get styles
 if( $gBitUser->canCustomizeTheme() ) {
 	include_once( THEMES_PKG_PATH.'theme_control_lib.php' );
-	$styles = &$tcontrollib->getStyles( NULL, TRUE, TRUE );
+	$styles = $tcontrollib->getStyles( NULL, TRUE, TRUE );
 	$gBitSmarty->assign_by_ref( 'styles', $styles );
 	if(!isset($_REQUEST["style"])){
 		$assignStyle = $gQueryUser->getPreference( 'theme' );
