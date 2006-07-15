@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.19 2006/07/13 15:48:08 wakeworks Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.20 2006/07/15 09:13:14 hash9 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -241,6 +241,5 @@ $listHash = array();
 $groupList = $gBitUser->getAllGroups($listHash);
 $gBitSmarty->assign_by_ref('groupList', $groupList['data']);
 
-require_once(USERS_PKG_PATH.'BaseAuth.php');
 BaseAuth::settings();
 ?>

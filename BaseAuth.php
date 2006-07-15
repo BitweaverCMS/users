@@ -8,12 +8,26 @@ class BaseAuth {
 	var $mCfg;
 	var $mErrors =array();
 
-	static $mAuthMethod;
+	function &getAuthMethods() {
+		static $authMethod = array();
+		return $authMethod;
+	}
+
+	function getAuthMethod($authId) {
+		$authMethod =& BaseAuth::getAuthMethods();
+		if (empty($authMethod[$authId])) return null;
+		return $authMethod[$authId];
+	}
+
+	function setAuthMethod($authId,&$method) {
+		$authMethod =& BaseAuth::getAuthMethods();
+		$authMethod[$authId]=$method;
+	}
 
 	function BaseAuth($authId) {
 		global $gBitSystem;
 		global $gBitUser;
-		$this->mCfg = BaseAuth::$mAuthMethod[$authId];
+		$this->mCfg = BaseAuth::getAuthMethod($authId);
 		$this->mCfg['auth_id'] = $authId;
 		foreach ($this->getSettings() as $op_id => $op) {
 			$var_id = substr($op_id,strrpos($op_id,"_")+1);
@@ -39,8 +53,8 @@ class BaseAuth {
 		}
 		global $gBitSystem;
 		$err = false;
-
-		if (! empty(BaseAuth::$mAuthMethod[$id])) {
+		$method = BaseAuth::getAuthMethod($id);
+		if (! empty($method)) {
 			preFlightWarning("Auth Registration Failed: $id already registered");
 			$err = true;
 		}
@@ -61,12 +75,14 @@ class BaseAuth {
 		}
 
 		if (!$err) {
-			BaseAuth::$mAuthMethod[$id]=$hash;
+			BaseAuth::setAuthMethod($id,$hash);
 		}
 	}
 
 	function getAuthMethodCount() {
-		return count(BaseAuth::$mAuthMethod);
+		$methods = BaseAuth::getAuthMethods();
+		if (empty($methods)) return 0;
+		return count($methods);
 	}
 
 	function validate($user,$pass,$challenge,$response) {
@@ -109,15 +125,13 @@ class BaseAuth {
 		if (empty($package) && !empty($this->mCfg['auth_id'])) {
 			$package = $this->mCfg['auth_id'];
 		}
-		if( !empty( $gBitUser->mAuthMethod ) ) {
-			for ($i=0;$i<count($gBitUser->mAuthMethod);$i++) {
-				$default="";
-				if ($i==0) {
-					$default="bit";
-				}
-				if ($gBitSystem->getConfig("users_auth_method_$i",$default)== $package) {
-					return true;
-				}
+		for ($i=0;$i<BaseAuth::getAuthMethodCount();$i++) {
+			$default="";
+			if ($i==0) {
+				$default="bit";
+			}
+			if ($gBitSystem->getConfig("users_auth_method_$i",$default)== $package) {
+				return true;
 			}
 		}
 		return false;
@@ -136,8 +150,8 @@ class BaseAuth {
 				return BaseAuth::init($method_name);
 			}
 		} elseif (!empty($authId)) {
-			$method=BaseAuth::$mAuthMethod[$authId];
-			if( file_exists( $method['file'] ) ) {
+			$method=BaseAuth::getAuthMethod($authId);
+			if (file_exists($method['file'])) {
 				require_once($method['file']);
 				$cl = $method['class'];
 				$instance = new $cl();
@@ -154,7 +168,7 @@ class BaseAuth {
 		global $gBitUser;
 		global $gBitSmarty;
 		$authSettings = array();
-		foreach( BaseAuth::$mAuthMethod as $meth_name => $method ) {
+		foreach( BaseAuth::getAuthMethods() as $meth_name => $method ) {
 			$instance = BaseAuth::init($meth_name) ;
 			if ($instance) {
 				foreach ($instance->getSettings() as $op_id => $op) {
