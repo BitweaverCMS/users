@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.88 2006/07/14 16:16:42 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.89 2006/07/17 22:42:20 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.88 2006/07/14 16:16:42 spiderr Exp $
+ * $Id: BitUser.php,v 1.89 2006/07/17 22:42:20 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.88 $
+ * @version  $Revision: 1.89 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -78,7 +78,7 @@ class BitUser extends LibertyAttachable {
 		$ret = FALSE;
 		// make double sure the current logged in user has permission
 		if( $gBitUser->hasPermission( 'p_users_admin' ) ) {
-			$this->mDb->query( "UPDATE `".BIT_DB_PREFIX."users_cnxn` SET `user_id`=? WHERE `cookie`=?", array( $pUserId, $_COOKIE[$user_cookie_site] ) );
+			$this->mDb->query( "UPDATE `".BIT_DB_PREFIX."users_cnxn` SET `user_id`=?, `assume_from_user_id`=? WHERE `cookie`=?", array( $pUserId, $gBitUser->mUserId, $_COOKIE[$user_cookie_site] ) );
 			$ret = TRUE;
 		}
 		return $ret;

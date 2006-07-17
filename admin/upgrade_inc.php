@@ -617,6 +617,9 @@ array( 'ALTER' => array(
 	'users_groups' => array(
 		'is_public' => array( '`is_public`', 'VARCHAR(1)' ),
 	)
+	'users_cnxn' => array(
+		'assume_from_user_id' => array( '`assume_from_user_id`', 'INT' ),
+	)
 )),
 array( 'ALTER' => array(
 	'users_groups' => array(
