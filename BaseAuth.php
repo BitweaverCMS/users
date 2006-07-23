@@ -1,5 +1,4 @@
 <?php
-global $gBitUser;
 
 class BaseAuth {
 	var $mLogin;
@@ -13,22 +12,21 @@ class BaseAuth {
 		return $authMethod;
 	}
 
-	function getAuthMethod($authId) {
+	function getAuthMethod( $pAuthId ) {
 		$authMethod =& BaseAuth::getAuthMethods();
-		if (empty($authMethod[$authId])) return null;
-		return $authMethod[$authId];
+		if (empty($authMethod[$pAuthId])) return null;
+		return $authMethod[$pAuthId];
 	}
 
-	function setAuthMethod($authId,&$method) {
+	function setAuthMethod($pAuthId,&$method) {
 		$authMethod =& BaseAuth::getAuthMethods();
-		$authMethod[$authId]=$method;
+		$authMethod[$pAuthId]=$method;
 	}
 
-	function BaseAuth($authId) {
+	function BaseAuth($pAuthId) {
 		global $gBitSystem;
-		global $gBitUser;
-		$this->mCfg = BaseAuth::getAuthMethod($authId);
-		$this->mCfg['auth_id'] = $authId;
+		$this->mCfg = BaseAuth::getAuthMethod($pAuthId);
+		$this->mCfg['auth_id'] = $pAuthId;
 		foreach ($this->getSettings() as $op_id => $op) {
 			$var_id = substr($op_id,strrpos($op_id,"_")+1);
 			$var = $gBitSystem->getConfig($op_id, $op['default']);
@@ -39,44 +37,55 @@ class BaseAuth {
 		}
 	}
 
-	function register($id,$hash) {
-		if (!function_exists('preFlightWarning')) {
-			function preFlightWarning($str) {
-				?><div style="background: white; z-index: 50000; margin: 0em; padding: 1px; color: red; text-align: center;"">
-				<h1>
-					<img src="<?php echo LIBERTY_PKG_URL; ?>/icons/warning.png" alt="Warning" />
-					<?php echo $str; ?>
-					<img src="<?php echo LIBERTY_PKG_URL; ?>/icons/warning.png" alt="Warning" />
-				</h1>
-				</div><?php
+	function scanAuthPlugins() {
+		global $gBitSystem;
+		
+		$authDir = $gBitSystem->getConfig( 'users_auth_plugins_dir', USERS_PKG_PATH.'auth/' );
+		if( is_dir( $authDir ) && $authScan = scandir( $authDir ) ) {
+			foreach( $authScan as $plugDir ) {
+				if( $plugDir != 'CVS' && $plugDir != '.' && $plugDir != '..' && is_dir( $authDir.$plugDir ) ) {
+					BaseAuth::register( $plugDir,array(
+						'name' => strtoupper( $plugDir ).' Auth',
+						'file' => $authDir.$plugDir.'/auth.php',
+						'class' => ucfirst( $plugDir ).'Auth',
+					) );
+				}
 			}
 		}
+	}
+
+	function register($id,$hash) {
 		global $gBitSystem;
 		$err = false;
 		$method = BaseAuth::getAuthMethod($id);
 		if (! empty($method)) {
-			preFlightWarning("Auth Registration Failed: $id already registered");
+			BaseAuth::authError("Auth Registration Failed: $id already registered");
 			$err = true;
 		}
 		if (empty($hash['name'])) {
-			preFlightWarning("Auth Registration Failed: $id: No Name given");
+			BaseAuth::authError("Auth Registration Failed: $id: No Name given");
 			$err = true;
 		}
 		if (empty($hash['file'])) {
-			preFlightWarning("Auth Registration Failed: $id: No file given");
+			BaseAuth::authError("Auth Registration Failed: $id: No file given");
 			$err = true;
-		}elseif(!file_exists($hash['file'])) {
-			preFlightWarning("Auth Registration Failed: $id: File (".basename($hash['file']).") doesn't exist");
+		} elseif(!file_exists($hash['file'])) {
+			BaseAuth::authError("Auth Registration Failed: $id: File (".basename($hash['file']).") doesn't exist");
 			$err = true;
 		}
 		if (empty($hash['class'])) {
-			preFlightWarning("Auth Registration Failed: $id: No class given");
+			BaseAuth::authError("Auth Registration Failed: $id: No class given");
 			$err = true;
 		}
 
 		if (!$err) {
 			BaseAuth::setAuthMethod($id,$hash);
 		}
+	}
+
+	function authError($str) {
+		$warning = '<div class="error">'.$str.'</div>';
+		print( $warning );
 	}
 
 	function getAuthMethodCount() {
@@ -121,13 +130,12 @@ class BaseAuth {
 
 	function isActive($package = '') {
 		global $gBitSystem;
-		global $gBitUser;
 		if (empty($package) && !empty($this->mCfg['auth_id'])) {
 			$package = $this->mCfg['auth_id'];
 		}
 		for ($i=0;$i<BaseAuth::getAuthMethodCount();$i++) {
 			$default="";
-			if ($i==0) {
+			if ( $i==0 ) {
 				$default="bit";
 			}
 			if ($gBitSystem->getConfig("users_auth_method_$i",$default)== $package) {
@@ -137,25 +145,24 @@ class BaseAuth {
 		return false;
 	}
 
-	function init($authId) {
-		global $gBitUser;
+	function init( $pAuthMixed ) {
 		global $gBitSystem;
-		if (is_numeric($authId)) {
+		if( is_numeric( $pAuthMixed ) ) {
 			$default="";
-			if ($authId==0) {
+			if ($pAuthMixed==0) {
 				$default="bit";
 			}
-			$method_name=$gBitSystem->getConfig("users_auth_method_$authId",$default);
-			if (!empty($method_name)) {
-				return BaseAuth::init($method_name);
+			$authPlugin = $gBitSystem->getConfig("users_auth_method_$pAuthMixed",$default);			
+			if (!empty( $authPlugin ) ) {
+				return BaseAuth::init( $authPlugin );
 			}
-		} elseif (!empty($authId)) {
-			$method=BaseAuth::getAuthMethod($authId);
-			if (file_exists($method['file'])) {
-				require_once($method['file']);
-				$cl = $method['class'];
+		} elseif (!empty($pAuthMixed)) {
+			$authPlugin=BaseAuth::getAuthMethod( $pAuthMixed );
+			if (file_exists( $authPlugin['file'] )) {
+				require_once( $authPlugin['file'] );
+				$cl = $authPlugin['class'];
 				$instance = new $cl();
-				if ($instance->isSupported()) {
+				if( $instance->isSupported() ) {
 					return $instance;
 				}
 			}
@@ -163,10 +170,8 @@ class BaseAuth {
 		return false;
 	}
 
-	function settings() {
+	function getConfig() {
 		global $gBitSystem;
-		global $gBitUser;
-		global $gBitSmarty;
 		$authSettings = array();
 		foreach( BaseAuth::getAuthMethods() as $meth_name => $method ) {
 			$instance = BaseAuth::init($meth_name) ;
@@ -218,7 +223,7 @@ class BaseAuth {
 			$authSettings['err']['bit_reg']="Registration is enabled but there are no Auth Methods that support this, Registration won't work!";
 		}
 		$method['active']=BaseAuth::isActive($meth_name);
-		$gBitSmarty->assign_by_ref( 'authSettings',  $authSettings);
+		return $authSettings;
 	}
 }
 ?>

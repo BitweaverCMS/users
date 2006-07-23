@@ -1,8 +1,11 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.20 2006/07/15 09:13:14 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.21 2006/07/23 04:44:05 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
+
+require_once( USERS_PKG_PATH.'BaseAuth.php' );
+BaseAuth::scanAuthPlugins();
 
 $loginSettings = array(
 	'users_create_user_auth' => array(
@@ -241,5 +244,6 @@ $listHash = array();
 $groupList = $gBitUser->getAllGroups($listHash);
 $gBitSmarty->assign_by_ref('groupList', $groupList['data']);
 
-BaseAuth::settings();
+$gBitSmarty->assign_by_ref( 'authSettings', BaseAuth::getConfig() );
+
 ?>

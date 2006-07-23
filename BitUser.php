@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.89 2006/07/17 22:42:20 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.90 2006/07/23 04:44:05 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.89 2006/07/17 22:42:20 spiderr Exp $
+ * $Id: BitUser.php,v 1.90 2006/07/23 04:44:05 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.89 $
+ * @version  $Revision: 1.90 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -73,24 +73,13 @@ class BitUser extends LibertyAttachable {
 		$this->mContentId = $pContentId;
 	}
 
-	function assumeUser( $pUserId ) {
-		global $gBitUser, $user_cookie_site;
-		$ret = FALSE;
-		// make double sure the current logged in user has permission
-		if( $gBitUser->hasPermission( 'p_users_admin' ) ) {
-			$this->mDb->query( "UPDATE `".BIT_DB_PREFIX."users_cnxn` SET `user_id`=?, `assume_from_user_id`=? WHERE `cookie`=?", array( $pUserId, $gBitUser->mUserId, $_COOKIE[$user_cookie_site] ) );
-			$ret = TRUE;
-		}
-		return $ret;
-	}
-
 	/**
-* load - loads all settings & preferences for this user
-*
-* @access public
-* @author Chrstian Fowler <spider@steelsun.com>
-* @return returnString
-*/
+	* load - loads all settings & preferences for this user
+	*
+	* @access public
+	* @author Chrstian Fowler <spider@steelsun.com>
+	* @return returnString
+	*/
 	function load( $pFull=FALSE, $pUserName=NULL ) {
 		$this->mInfo = NULL;
 		if( isset( $this->mUserId ) ) {
@@ -226,7 +215,7 @@ class BitUser extends LibertyAttachable {
 			$result = $this->mDb->query($query, array($oldy));
 		}
 		$this->mDb->CompleteTrans();
-
+//die;
 		return true;
 	}
 
@@ -472,12 +461,12 @@ class BitUser extends LibertyAttachable {
 
 
 	/**
-* register - will handle everything necessary for registering a user and sending appropriate emails, etc.
-*
-* @access public
-* @author Christian Fowler<spider@viovio.com>
-* @return returnString
-*/
+	* register - will handle everything necessary for registering a user and sending appropriate emails, etc.
+	*
+	* @access public
+	* @author Christian Fowler<spider@viovio.com>
+	* @return returnString
+	*/
 	function register( &$pParamHash ) {
 		global $notificationlib, $gBitSmarty, $gBitSystem, $gBitUser;
 		$ret = FALSE;
@@ -485,65 +474,64 @@ class BitUser extends LibertyAttachable {
 			$pParamHash['fAutoAvatar'] = TRUE;
 		}
 		if ($this->verify($pParamHash)) {
-			for ($i=0;$i<BaseAuth::getAuthMethodCount();$i++) {
+			for ( $i=0; $i<BaseAuth::getAuthMethodCount(); $i++ ) {
 				$instance = BaseAuth::init($i);
 				if ($instance && $instance->canManageAuth()) {
-					$res = $instance->createUser($pParamHash);
-					$this->mErrors = array_merge($this->mErrors,$instance->mErrors);
-					if ($res) {
+					if( $userId = $instance->createUser($pParamHash) ) {
+						$this->mUserId = $userId;
 						break;
 					} else {
-						return false;
+						$this->mErrors = array_merge($this->mErrors,$instance->mErrors);
+return false;
 					}
 				}
 			}
-			if( $this->store( $pParamHash ) ) {
-				require_once( KERNEL_PKG_PATH.'notification_lib.php' );
-				$notificationlib->post_new_user_event( $pParamHash['login'] );
-				$ret = TRUE;
+			
+			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
+			$notificationlib->post_new_user_event( $pParamHash['login'] );
+			$ret = TRUE;
 
-				// set local time zone as default when registering
-				$this->storePreference( 'site_display_timezone', 'Local' );
+			// set local time zone as default when registering
+			$this->storePreference( 'site_display_timezone', 'Local' );
 
-				if( !empty( $_REQUEST['CUSTOM'] ) ) {
-					foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
-						$this->storePreference( $field, $value );
-					}
+			if( !empty( $_REQUEST['CUSTOM'] ) ) {
+				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
+					$this->storePreference( $field, $value );
 				}
+			}
 
-				// Handle optional user preferences that may be collected during registration
-				if( !empty( $pParamHash['prefs'] ) ) {
-					foreach( array_keys( $pParamHash['prefs'] ) as $key ) {
-						$this->storePreference( $key, $pParamHash['prefs'][$key] );
-					}
+			// Handle optional user preferences that may be collected during registration
+			if( !empty( $pParamHash['prefs'] ) ) {
+				foreach( array_keys( $pParamHash['prefs'] ) as $key ) {
+					$this->storePreference( $key, $pParamHash['prefs'][$key] );
 				}
+			}
 
-				$siteName = $gBitSystem->getConfig('site_title', $_SERVER['HTTP_HOST'] );
-				$gBitSmarty->assign('siteName',$_SERVER["SERVER_NAME"]);
-				$gBitSmarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
-				$gBitSmarty->assign('mail_user',$pParamHash['login']);
-				if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
-					// $apass = addslashes(substr(md5($gBitSystem->genPass()),0,25));
-					$apass = $pParamHash['user_store']['provpass'];
-					$foo = parse_url($_SERVER["REQUEST_URI"]);
-					$foo1=str_replace("register","confirm",$foo["path"]);
-					$machine = httpPrefix().$foo1;
+			$siteName = $gBitSystem->getConfig('site_title', $_SERVER['HTTP_HOST'] );
+			$gBitSmarty->assign('siteName',$_SERVER["SERVER_NAME"]);
+			$gBitSmarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
+			$gBitSmarty->assign('mail_user',$pParamHash['login']);
+			if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
+				// $apass = addslashes(substr(md5($gBitSystem->genPass()),0,25));
+				$apass = $pParamHash['user_store']['provpass'];
+				$foo = parse_url($_SERVER["REQUEST_URI"]);
+				$foo1=str_replace("register","confirm",$foo["path"]);
+				$machine = httpPrefix().$foo1;
 
-					// Send the mail
-					$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
-					$gBitSmarty->assign('mail_machine',$machine);
-					$gBitSmarty->assign('mail_apass',$apass);
-					$mail_data = $gBitSmarty->fetch('bitpackage:users/user_validation_mail.tpl');
-					mail($pParamHash["email"], $siteName.' - '.tra('Your registration information'),$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
-					$gBitSmarty->assign('showmsg','y');
-				}
-				if( $gBitSystem->isFeatureActive( 'send_welcome_email' ) ) {
-					// Send the welcome mail
-					$gBitSmarty->assign( 'mailPassword',$pParamHash['password'] );
-					$gBitSmarty->assign( 'mailEmail',$pParamHash['email'] );
-					$mail_data = $gBitSmarty->fetch('bitpackage:users/welcome_mail.tpl');
-					mail($pParamHash["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
-				}
+				// Send the mail
+				$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
+				$gBitSmarty->assign('mail_machine',$machine);
+				$gBitSmarty->assign('mail_apass',$apass);
+				$mail_data = $gBitSmarty->fetch('bitpackage:users/user_validation_mail.tpl');
+				mail($pParamHash["email"], $siteName.' - '.tra('Your registration information'),$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+				$gBitSmarty->assign('showmsg','y');
+			}
+			if( $gBitSystem->isFeatureActive( 'send_welcome_email' ) ) {
+				// Send the welcome mail
+				$gBitSmarty->assign( 'mailPassword',$pParamHash['password'] );
+				$gBitSmarty->assign( 'mailEmail',$pParamHash['email'] );
+				$mail_data = $gBitSmarty->fetch('bitpackage:users/welcome_mail.tpl');
+				mail($pParamHash["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
 			}
 		}
 		return( $ret );
@@ -668,7 +656,7 @@ class BitUser extends LibertyAttachable {
 	}
 
 	function login( $pLogin, $pPassword, $pChallenge=NULL, $pResponse=NULL ) {
-		global $gBitSystem, $user_cookie_site,$gBitUser;
+		global $gBitSystem, $user_cookie_site;
 		$isvalid = false;
 
 		// Make sure cookies are enabled
@@ -694,21 +682,20 @@ class BitUser extends LibertyAttachable {
 				// User is valid and not due to change pass.. start session
 				//session_register('user',$user);
 				//unset session variable in case user su's
-				$gBitUser->mUserId = $userInfo['user_id'];
-				$gBitUser->load();
-				$gBitUser->loadPermissions();
+				$this->mUserId = $userInfo['user_id'];
+				$this->load();
+				$this->loadPermissions();
 				$url = isset($_SESSION['loginfrom']) ? $_SESSION['loginfrom'] : $gBitSystem->getDefaultPage();
 				unset($_SESSION['loginfrom']);
 
 				$userInfo['cookie'] = md5( time().$userInfo['email'] );
+				$cookiePath = $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL );
 				// Now if the remember me feature is on and the user checked the rememberme checkbox then ...
-				if ($gBitSystem->isFeatureActive( 'users_remember_me' )&& isset($_REQUEST['rme']) && $_REQUEST['rme'] == 'on') {
-					$cookieTime = (int)(time() + $gBitSystem->getConfig( 'users_remember_time' ));
-					$cookiePath = $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL );
+				if ($gBitSystem->isFeatureActive( 'users_remember_me' ) && isset($_REQUEST['rme']) && $_REQUEST['rme'] == 'on') {
+					$cookieTime = (int)(time() + $gBitSystem->getConfig( 'users_remember_time', 86400 ));
 					$cookieDomain = $gBitSystem->getConfig('cookie_domain');
 				} else {
-					$cookieTime = 0;
-					$cookiePath = BIT_ROOT_URL;
+					$cookieTime = NULL;
 					$cookieDomain = NULL;
 				}
 				setcookie( $user_cookie_site, session_id(), $cookieTime, $cookiePath, $cookieDomain );
@@ -745,6 +732,8 @@ class BitUser extends LibertyAttachable {
 		$userId=ANONYMOUS_USER_ID;
 		$authValid = false;
 		$authPresent = false;
+
+		require_once( USERS_PKG_PATH.'BaseAuth.php' );
 
 		$createAuth = ($gBitSystem->getConfig("users_create_user_auth", "n") == "y");
 

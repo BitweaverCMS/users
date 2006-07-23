@@ -84,14 +84,13 @@ class BitAuth extends BaseAuth {
 		return true;
 	}
 
-	function createUser(&$userattr) {
+	function createUser( &$pUserHash ) {
 		//$authUserInfo = array( 'login' => $instance->mInfo['login'], 'password' => $instance->mInfo['password'], 'real_name' => $instance->mInfo['real_name'], 'email' => $instance->mInfo['email'] );
-		if (empty($userattr["email"])) {
-			$userattr["email"] = $userattr["login"];
+		$u = new BitPermUser();
+//vd( $pUserHash ); die;		
+		if( $u->store( $pUserHash ) ) {
+			$this->mErrors = array_merge($this->mErrors,$u->mErrors);
 		}
-		$u = new BitUser();
-		$res = $u->store( $userattr );
-		$this->mErrors = array_merge($this->mErrors,$u->mErrors);
-		return $res;
+		return $u->mUserId;
 	}
 }

@@ -167,24 +167,5 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		$gBitSystem->registerAppMenu( USERS_PKG_NAME, 'My '.$displayTitle, ($gBitSystem->getConfig('users_preferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
 	}
 
-require_once(USERS_PKG_PATH.'BaseAuth.php');
-
-BaseAuth::register('imap',array(
-	'name' => 'IMAP Auth',
-	'file' => USERS_PKG_PATH.'auth/imap_auth.php',
-	'class' => 'IMAPAuth',
-));
-
-BaseAuth::register('ldap',array(
-	'name' => 'LDAP Auth',
-	'file' => USERS_PKG_PATH.'auth/ldap_auth.php',
-	'class' => 'LDAPAuth',
-));
-
-BaseAuth::register('bit',array(
-	'name' => 'Bitweaver Auth',
-	'file' => USERS_PKG_PATH.'auth/bit_auth.php',
-	'class' => 'BitAuth',
-));
 
 ?>

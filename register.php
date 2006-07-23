@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.21 2006/07/12 22:03:03 hash9 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.22 2006/07/23 04:44:05 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.21 2006/07/12 22:03:03 hash9 Exp $
+ * $Id: register.php,v 1.22 2006/07/23 04:44:05 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -27,6 +27,9 @@ include_once( KERNEL_PKG_PATH.'notification_lib.php' );
 
 // Permission: needs p_register
 $gBitSystem->verifyFeature( 'users_allow_register' );
+
+require_once( USERS_PKG_PATH.'BaseAuth.php' );
+BaseAuth::scanAuthPlugins();
 
 if( $gBitUser->isRegistered() ) {
 	$url = $gBitSystem->getDefaultPage();
@@ -53,6 +56,8 @@ if( isset( $_REQUEST["register"] ) ) {
 	if( empty( $errors ) ) {
 		$newUser = new BitPermUser();
 		if( $newUser->register( $reg ) ) {
+			$gBitUser->mUserId = $newUser->mUserId;
+		
 			if ( !empty( $_REQUEST['group'] ) ) {
 				$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group'] );
 				if ( empty($groupInfo) || $groupInfo['is_public'] != 'y' ) {
@@ -65,12 +70,17 @@ if( isset( $_REQUEST["register"] ) ) {
 					$gBitUser->loadPermissions();
 				}
 			}
+
 			if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 				$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
 				$gBitSmarty->assign('showmsg','y');
 			} else {
 				if( !empty( $_SESSION['loginfrom'] ) ) {
 					unset( $_SESSION['loginfrom'] );
+				}
+				// registration login, fake the cookie so the session gets updated properly.
+				if( empty($_COOKIE[$user_cookie_site] ) ) {
+					$_COOKIE[$user_cookie_site] = session_id();
 				}
 				$url = $newUser->login( $reg['login'], $reg['password'], FALSE, FALSE );
 				if ( !empty( $_REQUEST['group'] ) && !empty( $groupInfo['after_registration_page'] ) ) {
@@ -82,7 +92,6 @@ if( isset( $_REQUEST["register"] ) ) {
 						$url = $groupInfo['after_registration_page'];
 					}
 				}
-
 				header( 'Location: '.$url );
 				exit;
 			}
