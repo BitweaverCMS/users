@@ -12,7 +12,7 @@
 					{foreach from=$authSettings.avail_method item='auth_method' key='iter'}
 						<label>Method {$iter+1}
 							<select name="users_auth_method_{$iter}">
-								<option value="" disabled {if $auth_method.value eq ''} selected="selected"{/if}>-</option>
+								<option value="" {if $auth_method.value eq ''} selected="selected"{/if}>-</option>
 								{foreach from=$authSettings.avail item='method' key='meth_name'}
 									<option value="{$meth_name}" {if $auth_method.value eq $meth_name} selected="selected"{/if}>{$method.name}</option>
 								{/foreach}

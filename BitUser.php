@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.90 2006/07/23 04:44:05 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.91 2006/07/23 13:34:39 hash9 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.90 2006/07/23 04:44:05 spiderr Exp $
+ * $Id: BitUser.php,v 1.91 2006/07/23 13:34:39 hash9 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.90 $
+ * @version  $Revision: 1.91 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -733,8 +733,6 @@ return false;
 		$authValid = false;
 		$authPresent = false;
 
-		require_once( USERS_PKG_PATH.'BaseAuth.php' );
-
 		$createAuth = ($gBitSystem->getConfig("users_create_user_auth", "n") == "y");
 
 		for ($i=0;$i<BaseAuth::getAuthMethodCount();$i++) {
@@ -811,16 +809,17 @@ return false;
 					$this->mAuth = $instance;
 					break;
 				}
+				$this->mErrors = array_merge($this->mErrors,$instance->mErrors);
 			}
-			$this->mErrors = array_merge($this->mErrors,$instance->mErrors);
 		}
 		if( $authValid && $userId ) {
 			//echo "5<br>";
 			$this->update_lastlogin( $userId );
 			$this->mUserId = $userId;
 			$this->load();
+			return true;
 		}
-		return( count( $this->mErrors ) == 0 );
+		return false;
 	}
 
 	// update the lastlogin status on this user

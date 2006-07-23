@@ -9,6 +9,11 @@ class BaseAuth {
 
 	function &getAuthMethods() {
 		static $authMethod = array();
+		static $scaned = false;
+		if (!$scaned) {
+			$scaned = true;
+			BaseAuth::scanAuthPlugins();
+		}
 		return $authMethod;
 	}
 

@@ -167,5 +167,6 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		$gBitSystem->registerAppMenu( USERS_PKG_NAME, 'My '.$displayTitle, ($gBitSystem->getConfig('users_preferences') == 'y' ? USERS_PKG_URL.'my.php':''), 'bitpackage:users/menu_users.tpl' );
 	}
 
+require_once( USERS_PKG_PATH.'BaseAuth.php' );
 
 ?>
