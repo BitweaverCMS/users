@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.42 2006/07/23 16:35:14 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.43 2006/07/25 16:26:53 sylvieg Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.42 2006/07/23 16:35:14 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.43 2006/07/25 16:26:53 sylvieg Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.42 $
+ * @version  $Revision: 1.43 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -309,7 +309,11 @@ class BitPermUser extends BitUser {
 			$ret = $this->mDb->getAssoc($query, array((int)$pUserId));
 			if( $ret ) {
 				foreach( array_keys( $ret ) as $groupId ) {
-					$this->getIncludedGroups( $groupId, $ret );
+					$res = array();
+					$this->getIncludedGroups( $groupId, $res );
+					foreach( $res as $key=>$val) {
+						$ret[$key] = array('group_name' => $val);
+					}
 				}
 			}
 			// cache it
