@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.34 2006/07/07 07:28:00 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.35 2006/07/26 18:04:06 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.34 2006/07/07 07:28:00 squareing Exp $
+ * $Id: preferences.php,v 1.35 2006/07/26 18:04:06 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -35,7 +35,8 @@ if( !$gBitUser->isRegistered() ) {
 
 if( !empty( $_REQUEST["view_user"] ) && $_REQUEST["view_user"] <> $gBitUser->mUserId) {
 	$gBitSystem->verifyPermission( 'p_users_admin' );
-	$editUser = new BitUser( $_REQUEST["view_user"] );
+	$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+	$editUser = new $userClass( $_REQUEST["view_user"] );
 	$editUser->load( TRUE );
 	$gBitSmarty->assign('view_user', $_REQUEST["view_user"]);
 } else {

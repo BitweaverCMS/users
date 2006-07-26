@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.43 2006/07/25 16:26:53 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.44 2006/07/26 18:04:06 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.43 2006/07/25 16:26:53 sylvieg Exp $
+ * $Id: BitPermUser.php,v 1.44 2006/07/26 18:04:06 spiderr Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.43 $
+ * @version  $Revision: 1.44 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -147,7 +147,7 @@ class BitPermUser extends BitUser {
 				'users_groups_map',
 			);
 			foreach( $userTables as $table ) {
-				$query = "delete from `".BIT_DB_PREFIX.$table."` where `user_id` = ?";
+				$query = "DELETE FROM `".BIT_DB_PREFIX.$table."` WHERE `user_id` = ?";
 				$result = $this->mDb->query($query, array( $_REQUEST['user_id'] ) );
 			}
 			$ret = BitUser::expunge( $_REQUEST["user_id"] );

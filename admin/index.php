@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.11 2006/07/13 12:18:12 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.12 2006/07/26 18:04:06 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -70,7 +70,8 @@ $feedback = array();
 
 // Process the form to add a user here
 if (isset($_REQUEST["newuser"])) {
-	$newUser = new BitPermUser();
+	$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+	$newUser = new $userClass();
 	// Check if the user already exists
 	// jht 2005-06-22_23:51:58 flag this user store as coming from admin page -- a kludge
 	$_REQUEST['admin_add'] = 1;
