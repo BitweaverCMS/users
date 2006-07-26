@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.22 2006/07/23 04:44:05 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.23 2006/07/26 00:08:36 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.22 2006/07/23 04:44:05 spiderr Exp $
+ * $Id: register.php,v 1.23 2006/07/26 00:08:36 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -29,7 +29,6 @@ include_once( KERNEL_PKG_PATH.'notification_lib.php' );
 $gBitSystem->verifyFeature( 'users_allow_register' );
 
 require_once( USERS_PKG_PATH.'BaseAuth.php' );
-BaseAuth::scanAuthPlugins();
 
 if( $gBitUser->isRegistered() ) {
 	$url = $gBitSystem->getDefaultPage();
