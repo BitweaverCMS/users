@@ -1,5 +1,7 @@
 <?php
 
+require_once(UTIL_PKG_PATH . "PHP_Compat/Compat/Function/scandir.php");
+
 class BaseAuth {
 	var $mLogin;
 	var $mConfig;
