@@ -50,7 +50,7 @@ class BaseAuth {
 		$authDir = $gBitSystem->getConfig( 'users_auth_plugins_dir', USERS_PKG_PATH.'auth/' );
 		if( is_dir( $authDir ) && $authScan = scandir( $authDir ) ) {
 			foreach( $authScan as $plugDir ) {
-				if( $plugDir != 'CVS' && $plugDir != '.' && $plugDir != '..' && is_dir( $authDir.$plugDir ) ) {
+				if( $plugDir != 'CVS' && substr($plugDir,0,1)!='.' && is_dir( $authDir.$plugDir ) ) {
 					BaseAuth::register( $plugDir,array(
 						'name' => strtoupper( $plugDir ).' Auth',
 						'file' => $authDir.$plugDir.'/auth.php',
