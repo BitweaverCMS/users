@@ -39,6 +39,13 @@
 				</a>
 			</li>
 		{/if}
+		{if $gBitUser->hasPermission('p_users_create_personal_groups' )}
+			<li>
+				<a class="item" href="{$smarty.const.USERS_PKG_URL}my_groups.php">
+					{biticon ipackage=users iname=groups iexplain="My Groups" iforce=icon}{if !$icons_only} {tr}My Groups{/tr}{/if}
+				</a>
+			</li>
+		{/if}
 		{if $gBitSystem->isPackageActive( 'tidbits' ) and $gBitSystem->isFeatureActive( 'user_bookmarks' ) and $gBitUser->hasPermission( 'p_tidbits_create_bookmarks' )}
 			<li>
 				<a class="item" href="{$smarty.const.TIDBITS_PKG_URL}bookmarks.php">
@@ -50,13 +57,6 @@
 			<li>
 				<a class="item" href="{$smarty.const.MINICAL_PKG_URL}index.php">
 					{biticon ipackage=liberty iname=spacer iexplain="Mini Calendar" iforce=icon}{if !$icons_only} {tr}Mini calendar{/tr}{/if}
-				</a>
-			</li>
-		{/if}
-		{if $gBitSystem->isPackageActive( 'quota' )}
-			<li>
-				<a class="item" href="{$smarty.const.QUOTA_PKG_URL}">
-					{biticon ipackage=quota iname=quota iexplain="My quota and usage" iforce=icon}{if !$icons_only} {tr}My Quota and Usage{/tr}{/if}
 				</a>
 			</li>
 		{/if}
@@ -114,15 +114,17 @@
 				</a>
 			</li>
 		{/if}
-		<li>
-			<a class="item" href="{$smarty.const.USERS_PKG_URL}my_groups.php">
-				{biticon ipackage=users iname=groups iexplain="My Groups" iforce=icon}{if !$icons_only} {tr}My Groups{/tr}{/if}
-			</a>
-		</li>
 		{if $gBitSystem->isPackageActive('gatekeeper')}
 			<li>
 				<a class="item" href="{$smarty.const.GATEKEEPER_PKG_URL}">
 					{biticon ipackage=liberty iname=security iexplain="Administer personal security settings" iforce=icon}{if !$icons_only} {tr}Security{/tr}{/if}
+				</a>
+			</li>
+		{/if}
+		{if $gBitSystem->isPackageActive( 'quota' )}
+			<li>
+				<a class="item" href="{$smarty.const.QUOTA_PKG_URL}">
+					{biticon ipackage=quota iname=quota iexplain="My quota and usage" iforce=icon}{if !$icons_only} {tr}My Quota and Usage{/tr}{/if}
 				</a>
 			</li>
 		{/if}
