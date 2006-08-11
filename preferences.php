@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.35 2006/07/26 18:04:06 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.36 2006/08/11 19:24:42 hash9 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.35 2006/07/26 18:04:06 spiderr Exp $
+ * $Id: preferences.php,v 1.36 2006/08/11 19:24:42 hash9 Exp $
  * @package users
  * @subpackage functions
  */
@@ -40,6 +40,7 @@ if( !empty( $_REQUEST["view_user"] ) && $_REQUEST["view_user"] <> $gBitUser->mUs
 	$editUser->load( TRUE );
 	$gBitSmarty->assign('view_user', $_REQUEST["view_user"]);
 } else {
+	$gBitUser->load( TRUE );
 	$editUser = &$gBitUser;
 }
 
