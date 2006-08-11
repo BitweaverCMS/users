@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.93 2006/07/29 13:56:40 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.94 2006/08/11 16:41:23 hash9 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.93 2006/07/29 13:56:40 spiderr Exp $
+ * $Id: BitUser.php,v 1.94 2006/08/11 16:41:23 hash9 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.93 $
+ * @version  $Revision: 1.94 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -98,6 +98,7 @@ class BitUser extends LibertyAttachable {
 			if( $pFull ) {
 				$fullSelect = ' , lc.* ';
 				$fullJoin = " LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON ( uu.`content_id`=lc.`content_id` )";
+				$this->getServicesSql( 'content_load_sql_function', $fullSelect, $fullJoin, $whereSql, $bindVars );
 			}
 			// uu.`user_id` AS `uu_user_id` is last and aliases to avoid possible column name collisions
 			$query = "select uu.*, tf_ava.`storage_path` AS `avatar_storage_path`, tf_por.`storage_path` AS `portrait_storage_path`, tf_logo.`storage_path` AS `logo_storage_path`  $fullSelect, uu.`user_id` AS `uu_user_id`
@@ -488,7 +489,7 @@ return false;
 					}
 				}
 			}
-			
+
 			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
 			$notificationlib->post_new_user_event( $pParamHash['login'] );
 			$ret = TRUE;
