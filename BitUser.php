@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.94 2006/08/11 16:41:23 hash9 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.95 2006/08/14 23:25:31 hash9 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.94 2006/08/11 16:41:23 hash9 Exp $
+ * $Id: BitUser.php,v 1.95 2006/08/14 23:25:31 hash9 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.94 $
+ * @version  $Revision: 1.95 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -489,6 +489,8 @@ return false;
 					}
 				}
 			}
+
+			$this->load(false,$pParamHash['login']);		
 
 			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
 			$notificationlib->post_new_user_event( $pParamHash['login'] );
