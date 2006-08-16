@@ -333,6 +333,7 @@ array( 'CREATEINDEX' => array(
 		'users_groupperms_group_idx' => array( 'users_grouppermissions', '`group_id`,`perm_name`', array( 'UNIQUE' ) ),
 		'users_groups_inc_group_idx' => array( 'users_groups_inclusion', '`group_id`', array() ),
 		'users_groups_inc_gi_idx' => array( 'users_groups_inclusion', '`group_id`,`include_group_id`', array( 'UNIQUE' ) ),
+		'users_groups_gi_idx'  => array( 'users_groups', '`group_id`', array('UNIQUE') ),
 	)),
 )),
 
