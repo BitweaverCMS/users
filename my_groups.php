@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.7 2006/07/25 18:11:39 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.8 2006/08/17 21:54:56 sylvieg Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.7 2006/07/25 18:11:39 sylvieg Exp $
+ * $Id: my_groups.php,v 1.8 2006/08/17 21:54:56 sylvieg Exp $
  * @package users
  * @subpackage functions
  */
@@ -27,6 +27,9 @@ if ( !$gBitUser->isRegistered() ) {
 
 $successMsg = NULL;
 $errorMsg = NULL;
+if (! empty( $_REQUEST['errorMsg'] ) ) {
+	$errorMsg[] = $_REQUEST['errorMsg'];
+}
 
 // We need to scan for defaults
 global $gBitInstaller;
