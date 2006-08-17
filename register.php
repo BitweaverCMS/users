@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.23 2006/07/26 00:08:36 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.24 2006/08/17 22:22:22 sylvieg Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.23 2006/07/26 00:08:36 spiderr Exp $
+ * $Id: register.php,v 1.24 2006/08/17 22:22:22 sylvieg Exp $
  * @package users
  * @subpackage functions
  */
@@ -66,7 +66,6 @@ if( isset( $_REQUEST["register"] ) ) {
 					$userId = $newUser->getUserId();
 					$gBitUser->addUserToGroup( $userId, $_REQUEST['group'] );
 					$gBitUser->storeUserDefaultGroup( $userId, $_REQUEST['group'] );
-					$gBitUser->loadPermissions();
 				}
 			}
 
