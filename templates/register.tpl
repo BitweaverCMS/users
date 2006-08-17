@@ -6,6 +6,7 @@
 		{if $showmsg eq 'y'}<h2>{$msg}</h2>{/if}
 	</div>
 
+{if $showmsg ne 'y'}
 	<div class="body">
 		<p>{tr}If you are already registered, please{/tr} <a href="{$smarty.const.USERS_PKG_URL}login.php">{tr}login{/tr}</a></p>
 		{form enctype="multipart/form-data" legend="Please fill in the following details"}
@@ -233,6 +234,9 @@
 			{/if}
 		{/form}
 	</div><!-- end .body -->
+
+{/if}
+
 </div><!-- end .login -->
 
 {/strip}

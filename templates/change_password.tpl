@@ -1,12 +1,13 @@
 <h1>{tr}Change password enforced{/tr}</h1>
 <form method="post" action="{$smarty.const.USERS_PKG_URL}change_password.php">
+<input type="hidden" name="login" value="{$userInfo.login}" />
 <table class="panel">
 <tr>
   <td>{tr}User{/tr}:</td>
-  <td><input type="text" name="login" value="{$userInfo.login}" /></td>
+  <td><b>{$userInfo.login}</b></td>
 </tr>
-{if $userInfo.password}
-  <input type="hidden" name="oldpass" value="{$userInfo.password|escape}" /></td>
+{if $userInfo.user_password}
+  <input type="hidden" name="oldpass" value="{$userInfo.user_password|escape}" /></td>
 {else}
 <tr>
   <td>{tr}Old password{/tr}:</td>

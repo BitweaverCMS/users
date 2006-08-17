@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.95 2006/08/14 23:25:31 hash9 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.96 2006/08/17 06:28:44 jht001 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.95 2006/08/14 23:25:31 hash9 Exp $
+ * $Id: BitUser.php,v 1.96 2006/08/17 06:28:44 jht001 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.95 $
+ * @version  $Revision: 1.96 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -300,7 +300,8 @@ class BitUser extends LibertyAttachable {
 		if( !empty( $pParamHash['email'] ) ) {
 			// LOWER CASE all emails
 			$pParamHash['email'] = strtolower( $pParamHash['email'] );
-			if( $this->verifyEmail( $pParamHash['email'] ) ) {
+			// jht 2006-08-05 08:32:28 -1000 allow override from admin add
+			if( ( !empty($pParamHash['admin_add']) && $pParamHash['admin_add'] ) || $this->verifyEmail( $pParamHash['email'] ) ) {
 				$pParamHash['user_store']['email'] = strtolower( substr( $pParamHash['email'], 0, 200 ) );
 			}
 		}
@@ -332,34 +333,44 @@ class BitUser extends LibertyAttachable {
 			}
 		}
 
-
-		//Validate password here
-		if( !empty( $pParamHash['password'] ) ) {
-			$minPassword = $gBitSystem->getConfig( 'users_min_pass_length', 4 );
-			if(strlen( $pParamHash['password'] ) < $minPassword ) {
-				$this->mErrors['password'] = tra( 'Your password should be at least '.$minPassword.' characters long' );
-			} elseif( !empty( $pParamHash['password2'] ) && ($pParamHash['password'] != $pParamHash['password2']) ) {
-				$this->mErrors['password'] = tra( 'The passwords do not match' );
-			} elseif( $gBitSystem->isFeatureActive( 'users_pass_chr_num' ) &&
-			(!preg_match_all( "/[0-9]+/",$pParamHash["password"],$foo ) || !preg_match_all("/[A-Za-z]+/",$pParamHash["password"],$foo)) ) {
-				$this->mErrors['password'] = tra( 'Password must contain both letters and numbers' );
-			} else {
-				// Generate a unique hash
-				//				$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pParamHash['password'].$pParamHash['email'] );
-				$pParamHash['user_store']['hash'] = md5( $pParamHash['password'] );
-				$now = $gBitSystem->getUTCTime();
-				if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getConfig('users_pass_due') ) {
-					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getConfig('users_pass_due') );
-				} elseif( isset( $pParamHash['pass_due'] ) ) {
-					// renew password only next half year ;)
-					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
-				}
-				if( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) || !empty( $pParamHash['user_store']['provpass'] ) ) {
-					$pParamHash['user_store']['user_password'] = $pParamHash['password'];
-				}
+		$passsword_error_msg = verifyPasswordFormat( $pParamHash['password'] );
+		if (strlen($passsword_error_msg)) {
+			$this->mErrors['password'] = $passsword_error_msg;
+			}
+		else {	
+			// Generate a unique hash
+			//				$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pPassword.$pParamHash['email'] );
+			$pParamHash['user_store']['hash'] = md5( $pPassword );
+			$now = $gBitSystem->getUTCTime();
+			if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getConfig('users_pass_due') ) {
+				$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getConfig('users_pass_due') );
+			} elseif( isset( $pParamHash['pass_due'] ) ) {
+				// renew password only next half year ;)
+				$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
+			}
+			if( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) || !empty( $pParamHash['user_store']['provpass'] ) ) {
+				$pParamHash['user_store']['user_password'] = $pPassword;
 			}
 		}
-		return( count( $this->mErrors ) == 0 );
+		return ( count($this->mErrors) == 0 );
+	}
+
+	function verifyPasswordFormat( $pPassword ) {
+		global $gBitSystem;
+
+		$minPassword = $gBitSystem->getConfig( 'users_min_pass_length', 4 );
+		if( strlen( $pPassword ) < $minPassword ) {
+			return ( tra( 'Your password should be at least '.$minPassword.' characters long' ) );
+			}
+		if( !empty( $pParamHash['password2'] ) && ($pPassword != $pParamHash['password2']) ) {
+			return( tra( 'The passwords do not match' ) );
+			}
+		if( $gBitSystem->isFeatureActive( 'users_pass_chr_num' ) &&
+		(!preg_match_all( "/[0-9]+/",$pParamHash["password"],$foo ) || !preg_match_all("/[A-Za-z]+/",$pParamHash["password"],$foo)) ) {
+			return ( tra( 'Password must contain both letters and numbers' ) );
+			}
+			
+		return '';
 	}
 
 	function get_SMTP_response ( &$pConnect ) {
@@ -400,7 +411,18 @@ class BitUser extends LibertyAttachable {
 				if($gDebug) echo "Confirmation : MX record about {$domain} exists.<br>";
 				// If MX record exists, save MX record address.
 				// getmxrr function reference : http://www.php.net/manual/en/function.getmxrr.php
-				if ( getmxrr ($domain, $MXHost))  {
+
+				// Sometimes only the highest priority MX are active
+				$MXWeights = array();
+				$lowest_weight = 99999;
+				$lowest_weight_index = 0;
+				if ( getmxrr ($domain, $MXHost, $MXWeights) )  {
+					for ($i = 0; $i < count( $MXHost ); $i++ ) {
+						if ( $MXWeights[$i] < $lowest_weight ) {
+							$lowest_weight = $MXWeights[$i];
+							$lowest_weight_index = $i;
+						}
+					}
 					if($gDebug) {
 						echo "Confirmation : Is confirming address by MX LOOKUP.<br>";
 						for ( $i = 0,$j = 1; $i < count ( $MXHost ); $i++,$j++ ) {
@@ -410,7 +432,7 @@ class BitUser extends LibertyAttachable {
 				}
 				// Getmxrr function does to store MX record address about $domain in arrangement form to $MXHost.
 				// $ConnectAddress socket connection address.
-				$ConnectAddress = $MXHost[0];
+				$ConnectAddress = $MXHost[$lowest_weight_index];
 			} else {
 				// If there is no MX record simply @ to next time address socket connection do .
 				$ConnectAddress = $domain;
@@ -425,7 +447,7 @@ class BitUser extends LibertyAttachable {
 					// Judgment is that service is preparing though begin by 220 getting string after connection .
 					// fgets function reference : http://www.php.net/manual/en/function.fgets.php
 					// A "Real domain name required for sender address"
-
+					stream_set_timeout($Connect, 90);
 					$Out = $this->get_SMTP_response( $Connect );
 					if ( ereg ( "^220", $Out ) ) {
 						// Inform client's reaching to server who connect.
@@ -449,13 +471,18 @@ class BitUser extends LibertyAttachable {
 							// Server's answering cord about MAIL and TO command checks.
 							// Server about listener's address reacts to 550 codes if there does not exist
 							// checking that mailbox is in own E-Mail account.
-							if ( !ereg ( "^250", $From ) || !ereg ( "^250", $To )) {
-								$errors['email'] = $pEmail." is not recognized by the mail server";
+							if ( !ereg ( "^250", $From ) 
+							|| ( !ereg ( "^250", $To )
+								&& !ereg( "Please use your ISP relay", $To) )
+							
+							) {
+								$errors['email'] = $pEmail." is not recognized by the mail server to=$To= from=$From= out=$Out=";
 							}
 						}
 					}
 				} else {
-					$errors['email'] = "Cannot connect to mail server ({$ConnectAddress}).";
+					if (!defined($Out)) { $Out = 'n/a'; }
+					$errors['email'] = "Cannot connect to mail server ({$ConnectAddress}). response='$Out'";
 				}
 			}
 		}
