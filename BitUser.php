@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.98 2006/08/17 20:15:28 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.99 2006/08/23 08:29:29 jht001 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.98 2006/08/17 20:15:28 sylvieg Exp $
+ * $Id: BitUser.php,v 1.99 2006/08/23 08:29:29 jht001 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.98 $
+ * @version  $Revision: 1.99 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -321,7 +321,7 @@ class BitUser extends LibertyAttachable {
 			// that should be fixed in some better way.
 			if(empty($pParamHash['admin_add']) && $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 				$pParamHash['password'] = $this->genPass();
-				$pParamHash['user_store']['provpass'] = substr( md5( $pParamHash['password'] ), 0, 30 );
+				$pParamHash['user_store']['provpass'] = md5(BitSystem::genPass());
 				$pParamHash['pass_due'] = 0;
 			} elseif( empty( $pParamHash['password'] ) ) {
 				$this->mErrors['password'] = tra( 'Your password should be at least '.$gBitSystem->getConfig( 'users_min_pass_length', 4 ).' characters long' );
@@ -349,7 +349,7 @@ class BitUser extends LibertyAttachable {
 				$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
 			}
 			if( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) || !empty( $pParamHash['user_store']['provpass'] ) ) {
-				$pParamHash['user_store']['user_password'] = $pPassword;
+				$pParamHash['user_store']['user_password'] = $pParamHash['password'];
 			}
 		}
 		return ( count($this->mErrors) == 0 );
@@ -887,9 +887,12 @@ return false;
 	}
 
 	function confirmRegistration( $pUser, $pProvpass ) {
+		global $gBitSystem;
+		$now = $gBitSystem->getUTCTime();
 		$query = "select `user_id`, `provpass`, `user_password`, `login`, `email` FROM `".BIT_DB_PREFIX."users_users`
-				  WHERE `login`=? AND `provpass`=?";
-		return( $this->mDb->getRow($query, array( $pUser, $pProvpass ) ) );
+				  WHERE `login`=? AND `provpass`=? AND ( `provpass_expires` is NULL or `provpass_expires` > ?)";
+		$user_found = $this->mDb->getRow($query, array( $pUser, $pProvpass, $now ) ) ;
+		return ($user_found);		
 	}
 
 
@@ -975,6 +978,26 @@ return false;
 		return $pass;
 	}
 
+	function createTempPassword( $pLogin, $pPass ) {
+		global $gBitSystem;
+		if( empty( $pLogin ) ) {
+			$pLogin = $this->getField( 'login' );
+		}
+		if( $pLogin ) {
+			$pass = BitSystem::genPass();
+			$provpass = md5( $pass );
+			$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
+			$now = $gBitSystem->getUTCTime();;
+			#temp passwords good for 3 days -- prob should be an config option
+			$passDue = $now + (60 * 60 * 24 * 3 );
+			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `provpass`= ?, `provpass_expires`=? WHERE `".$loginCol."`=?";
+			$result = $this->mDb->query($query, array( $provpass, $passDue, $pLogin ) );
+			return array($pass,$provpass);
+		}
+		return array('','');
+	}
+
+
 	function storePassword( $pPass, $pLogin=NULL ) {
 		global $gBitSystem;
 		if( empty( $pLogin ) ) {
@@ -988,7 +1011,7 @@ return false;
 				$pPass = NULL;
 			}
 			$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
-			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `hash`=? ,`user_password`=? ,`pass_due`=? WHERE `".$loginCol."`=?";
+			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `provpass`= NULL, `provpass_expires` = NULL,`hash`=? ,`user_password`=? ,`pass_due`=? WHERE `".$loginCol."`=?";
 			$result = $this->mDb->query($query, array( $hash, $pPass, $passDue, $pLogin ) );
 		}
 		return TRUE;

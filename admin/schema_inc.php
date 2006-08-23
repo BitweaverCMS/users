@@ -10,6 +10,7 @@ $tables = array(
   real_name C(64),
   user_password C(32),
   provpass C(32),
+  provpass_expires I8,
   default_group_id I4,
   last_login I8,
   current_login I8,

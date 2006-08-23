@@ -157,57 +157,59 @@ array( 'RENAMECOLUMN' => array(
 
 array( 'ALTER' => array(
 	'users_users' => array(
-		'content_id' => array( '`content_id`', 'I4' ), // , 'NOTNULL' ),
-		'default_group_id' => array( '`default_group_id`', 'I4' ), // , 'NOTNULL' ),
+		'content_id' => array( '`content_id`', 'I4' ), 
+		'default_group_id' => array( '`default_group_id`', 'I4' ), 
 		'real_name' => array( '`real_name`', 'VARCHAR(64)'),
-		'avatar_attachment_id' => array( '`avatar_attachment_id`', 'I4' ), // , 'NOTNULL' ),
-		'portrait_attachment_id' => array( '`portrait_attachment_id`', 'I4' ), // , 'NOTNULL' ),
-		'logo_attachment_id' => array( '`logo_attachment_id`', 'I4' ), // , 'NOTNULL' ),
+		'avatar_attachment_id' => array( '`avatar_attachment_id`', 'I4' ), 
+		'portrait_attachment_id' => array( '`portrait_attachment_id`', 'I4' ), 
+		'logo_attachment_id' => array( '`logo_attachment_id`', 'I4' ), 
+
 	),
 	'tiki_semaphores' => array(
-		'user_id' => array( '`user_id`', 'I4' ), // , 'NOTNULL' ),
+		'user_id' => array( '`user_id`', 'I4' ), 
 	),
 	'tiki_sessions' => array(
-		'user_id' => array( '`user_id`', 'I4' ), // , 'NOTNULL' ),
-		'session_id' => array( '`session_id`', 'VARCHAR(32)' ), // , 'NOTNULL' ),
+		'user_id' => array( '`user_id`', 'I4' ), 
+		'session_id' => array( '`session_id`', 'VARCHAR(32)' ), 
 	),
 	'tiki_user_bookmarks_folders' => array(
-		'user_id' => array( '`user_id`', 'I4' ), // , 'NOTNULL' ),
+		'user_id' => array( '`user_id`', 'I4' ), 
 	),
 	'tiki_user_bookmarks_urls' => array(
-		'user_id' => array( '`user_id`', 'I4' ), // , 'NOTNULL' ),
+		'user_id' => array( '`user_id`', 'I4' ), 
 	),
 	'tiki_user_menus' => array(
-		'user_id' => array( '`user_id`', 'I4' ), // , 'NOTNULL' ),
+		'user_id' => array( '`user_id`', 'I4' ), 
 	),
 	'tiki_user_preferences' => array(
-		'user_id' => array( '`user_id`', 'I4' ), // , 'NOTNULL' ),
+		'user_id' => array( '`user_id`', 'I4' ), 
 	),
 	'tiki_user_tasks' => array(
-		'user_id' => array( '`user_id`', 'I4' ), // , 'NOTNULL' ),
+		'user_id' => array( '`user_id`', 'I4' ), 
 	),
 	'tiki_user_watches' => array(
-		'user_id' => array( '`user_id`', 'I4' ), // , 'NOTNULL' ),
+		'user_id' => array( '`user_id`', 'I4' ), 
 	),
 	'users_groups' => array(
-		'group_id' => array( '`group_id`', 'I4' ), // , 'NOTNULL' ),
-		'user_id' => array( '`user_id`', 'I4' ), // , 'NOTNULL' ),
+		'group_id' => array( '`group_id`', 'I4' ), 
+		'user_id' => array( '`user_id`', 'I4' ), 
 	),
 	'users_grouppermissions' => array(
-		'group_id' => array( '`group_id`', 'I4' ), // , 'NOTNULL' ),
+		'group_id' => array( '`group_id`', 'I4' ), 
 	),
 	'users_objectpermissions' => array(
-		'group_id' => array( '`group_id`', 'I4' ), // , 'NOTNULL' ),
-		'object_id' => array( '`object_id`', 'I4' ), // , 'NOTNULL' ),
+		'group_id' => array( '`group_id`', 'I4' ), 
+		'object_id' => array( '`object_id`', 'I4' ), 
 	),
 	'users_groups_map' => array(
-		'group_id' => array( '`group_id`', 'I4' ), // , 'NOTNULL' ),
+		'group_id' => array( '`group_id`', 'I4' ), 
 	),
 	'users_groups_inclusion' => array(
-		'group_id' => array( '`group_id`', 'I4' ), // , 'NOTNULL' ),
-		'include_group_id' => array( '`include_group_id`', 'I4' ), // , 'NOTNULL' ),
+		'group_id' => array( '`group_id`', 'I4' ), 
+		'include_group_id' => array( '`include_group_id`', 'I4' ), 
 	),
 )),
+
 
 array( 'CREATE' => array (
 'users_cnxn' => "
@@ -614,22 +616,24 @@ array( 'QUERY' =>
 		"UPDATE `".BIT_DB_PREFIX."users_group_permissions` SET `perm_name`='p_nexus_create_menus' WHERE `perm_name`='bit_p_create_nexus_menus'",
 	)
 )),
-array( 'ALTER' => array(
-	'users_groups' => array(
-		'is_public' => array( '`is_public`', 'VARCHAR(1)' ),
-	),
-	'users_cnxn' => array(
-		'assume_from_user_id' => array( '`assume_from_user_id`', 'INT' ),
-	),
-)),
-array( 'ALTER' => array(
-	'users_groups' => array(
-			'after_registration_page' => array( '`after_registration_page`', 'VARCHAR(255)' ),
-	),
-)),
 
+array( 'DATADICT' => array(
+	array('ALTER' => array(
+		'users_users' => array(	
+			'provpass_expires' => array( '`provpass_expires`', 'I8' ),
+		),
+		'users_groups' => array(
+			'is_public' => '`is_public` C(1)'  ,
+			'after_registration_page' => '`after_registration_page` C(255)' ,
+		),
+		'users_cnxn' => array(
+			'assume_from_user_id' => array( '`assume_from_user_id`', 'I4' ),
+		),
+	)),
 	)
-)
+),
+
+)),
 
 );
 
