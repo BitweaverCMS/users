@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.99 2006/08/23 08:29:29 jht001 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.100 2006/08/25 16:06:35 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.99 2006/08/23 08:29:29 jht001 Exp $
+ * $Id: BitUser.php,v 1.100 2006/08/25 16:06:35 wjames5 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.99 $
+ * @version  $Revision: 1.100 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -333,7 +333,9 @@ class BitUser extends LibertyAttachable {
 			}
 		}
 
-		$passsword_error_msg = $this->verifyPasswordFormat( $pParamHash['password'] );
+		if (!$this->isValid() || isset($pParamHash['password']) ) {
+			$passsword_error_msg = $this->verifyPasswordFormat( $pParamHash['password'] );
+		}
 		if (strlen($passsword_error_msg)) {
 			$this->mErrors['password'] = $passsword_error_msg;
 			}
