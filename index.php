@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.18 2006/07/12 23:40:51 hash9 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.19 2006/08/29 16:43:24 hash9 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.18 2006/07/12 23:40:51 hash9 Exp $
+ * $Id: index.php,v 1.19 2006/08/29 16:43:24 hash9 Exp $
  * @package users
  * @subpackage functions
  */
@@ -39,6 +39,9 @@ if( !empty( $_REQUEST['home'] ) && ($gBitUser->hasPermission( 'p_users_view_user
 	$gQueryUserId = $_REQUEST['home'];
 	if( $gQueryUser->isValid() ) {
 		$gBitSmarty->assign( 'gQueryUserId', $gQueryUserId );
+	}
+	if ($gBitSystem->isPackageActive('stars') && $gBitSystem->isFeatureActive('stars_user_ratings')) {
+		require(STARS_PKG_PATH."templates/user_ratings.php");
 	}
 
 	if( $gQueryUser->canCustomizeTheme() ) {
