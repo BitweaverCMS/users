@@ -41,6 +41,7 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	}
 
 	// is session data  stored in DB or in filesystem?
+	global $gBitDbType, $gBitDbHost, $gBitDbUser, $gBitDbPassword, $gBitDbName;
 	if( $gBitSystem->isFeatureActive( 'site_store_session_db' ) && !empty( $gBitDbType ) ) {
 		include(UTIL_PKG_PATH . 'adodb/session/adodb-session.php');
 		ADODB_Session::dataFieldName('session_data');
