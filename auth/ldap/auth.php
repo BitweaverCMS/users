@@ -139,7 +139,7 @@ class LDAPAuth extends BaseAuth {
 		'users_ldap_email' => array(
 			'label' => "LDAP User E-Mail Address",
 			'type' => "text",
-			'note' => "If empty the attribute \"mail\" is used, if it not set for a user, <em>LDAP User Attribute</em> is used instead.<br />Otherwise all %<em>feilds</em>% are replaced with the first value from the ldap attribute of the same name, and the result used as the email address.<br />Please remember to include the @ sign",
+			'note' => "If empty the attribute \"mail\" is used, if it not set for a user, <em>LDAP User Attribute</em> is used instead.<br />Otherwise all %<em>fields</em>% are replaced with the first value from the ldap attribute of the same name, and the result used as the email address.<br />Please remember to include the @ sign",
 			'default' => '',
 		),
 		'users_ldap_useroc' => array(
