@@ -187,7 +187,7 @@ $gBitInstaller->registerPreferences( USERS_PKG_NAME, array(
 	//array(USERS_PKG_NAME,'users_pass_chr_num','n'),
 	array(USERS_PKG_NAME,'users_pass_due','999'),
 	//array(USERS_PKG_NAME,'users_register_passcode',''),
-	array(USERS_PKG_NAME,'users_remember_me','disabled'),
+	array(USERS_PKG_NAME,'users_remember_me','n'),
 	array(USERS_PKG_NAME,'users_remember_time','7200'),
 	//array(USERS_PKG_NAME,'users_random_number_reg','n'),
 	array(USERS_PKG_NAME,'users_userfiles_quota','30'),
