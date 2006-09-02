@@ -43,7 +43,13 @@
 					{formlabel label=`$output.label` for=$feature}
 					{forminput}
 						{if $output.type == 'text'}
-							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
+							{if $feature eq 'cookie_domain' && $gBitSystem->getConfig($feature) eq ''}
+								<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$smarty.server.SERVER_NAME}" />
+							{elseif $feature eq 'cookie_path' && $gBitSystem->getConfig($feature) eq ''}
+								<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$smarty.const.BIT_ROOT_URL}" />
+							{else}
+								<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
+							{/if}
 						{else}
 							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
 						{/if}

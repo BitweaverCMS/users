@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.22 2006/07/26 00:25:31 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.23 2006/09/02 10:00:19 wolff_borg Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -112,8 +112,15 @@ if( !function_exists("gd_info" ) ) {
 
 if( !empty( $_REQUEST["loginprefs"] ) ) {
 	if( !preg_match( "#^/#", $_REQUEST['cookie_path'] ) ) {
-		$_REQUEST['cookie_path'] = BIT_ROOT_URL;
+		$_REQUEST['cookie_path'] = '/'.$_REQUEST['cookie_path'];
+	} elseif( $_REQUEST['cookie_path'] == BIT_ROOT_URL ) {
+		$_REQUEST['cookie_path'] = '';
 	}
+
+	if( $_REQUEST['cookie_domain'] == $_SERVER["SERVER_NAME"] ) {
+		$_REQUEST['cookie_domain'] = '';
+	}
+
 	foreach( array_keys( $loginSettings ) as $feature ) {
 		if( $loginSettings[$feature]['type'] == 'text' ) {
 			simple_set_value( $feature, USERS_PKG_NAME );
