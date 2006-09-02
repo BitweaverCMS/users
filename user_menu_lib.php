@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/Attic/user_menu_lib.php,v 1.1.1.1.2.4 2005/08/25 21:10:31 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/Attic/user_menu_lib.php,v 1.1.1.1.2.5 2006/09/02 12:34:31 wolff_borg Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: user_menu_lib.php,v 1.1.1.1.2.4 2005/08/25 21:10:31 lsces Exp $
+ * $Id: user_menu_lib.php,v 1.1.1.1.2.5 2006/09/02 12:34:31 wolff_borg Exp $
  * @package users
  */
 
@@ -94,5 +94,6 @@ class UserMenuLib extends BitBase {
 		$this->mDb->query($query,array($user,$menu_id));
 	}
 }
+global $usermenulib;
 $usermenulib = new UserMenuLib();
 ?>
