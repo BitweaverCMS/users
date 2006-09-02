@@ -30,9 +30,6 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
 	$gBitUser = new $userClass();
 
-	$cookie_path = $gBitSystem->getConfig('cookie_path', BIT_ROOT_URL);
-	$cookie_path = !empty($cookie_path) ? $cookie_path : BIT_ROOT_URL;
-	$gBitSystem->storeConfig( 'cookie_path', $cookie_path, KERNEL_PKG_NAME );
 
 	// set session lifetime
 	$site_session_lifetime = $gBitSystem->getConfig( 'site_session_lifetime', '0' );
@@ -54,12 +51,15 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		ini_set( 'session.save_handler', 'user' );
 	}
 
+	$cookie_path = BIT_ROOT_URL;
+	$cookie_domain = "";
 	session_name( BIT_SESSION_NAME );
 	if ($gBitSystem->isFeatureActive('users_remember_me')) {
-		session_set_cookie_params($site_session_lifetime, $cookie_path, $gBitSystem->getConfig('cookie_domain'));
-	} else {
-		session_set_cookie_params($site_session_lifetime, BIT_ROOT_URL);
+		$cookie_path = $gBitSystem->getConfig('cookie_path', $cookie_path);
+		$cookie_domain = $gBitSystem->getConfig('cookie_domain', $cookie_domain);
 	}
+	session_set_cookie_params($site_session_lifetime, $cookie_path, $cookie_domain);
+
 	if (ini_get('safe_mode') && ini_get('safe_mode_gid')) {
 		umask(0007);
 	}
@@ -80,7 +80,13 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	} elseif( isset($_COOKIE[$user_cookie_site]) &&	($gBitUser->mUserId = $gBitUser->getByHash( $_COOKIE[$user_cookie_site] )) ) {
 		$gBitUser->load( TRUE );
 	} else {
-		$_COOKIE[$user_cookie_site] = session_id();
+		// Now if the remember me feature is on and the user checked the user_remember_me checkbox then ...
+		if ($gBitSystem->isFeatureActive( 'users_remember_me' ) && isset($_REQUEST['rme']) && $_REQUEST['rme'] == 'on') {
+			$cookie_time = (int)(time() + $gBitSystem->getConfig( 'users_remember_time', 86400 ));
+		} else {
+			$cookie_time = 0;
+		}
+		setcookie($user_cookie_site, session_id(), $cookie_time, $cookie_path, $cookie_domain);
 		// check what auth metod is selected. default is for the 'tiki' to auth users
 		$users_auth_method = $gBitSystem->getConfig('users_auth_method', 'tiki');
 		// if the auth method is 'web site', look for the username in $_SERVER
