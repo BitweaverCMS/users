@@ -285,18 +285,21 @@
 					</div>
 				{/legend}
 			{/jstab}
-			
+
 			{if $watches}
 				{jstab title="Watches"}
-					<table border=1>
-					<tr><th>Event</th>
-					<th>Title</th>
-					</tr>
-					{foreach item=watch from=$watches}
-						<tr><td>{$watch.event}</td>
-						<td>{$watch.title}</td>
+					<table class="data">
+						<caption>{tr}Watches{tr}</caption>
+						<tr>
+							<th>Event</th>
+							<th>Title</th>
 						</tr>
-					{/foreach}
+						{foreach item=watch from=$watches}
+							<tr class="{cycle vlaues="odd,even"}">
+								<td>{$watch.event}</td>
+								<td>{$watch.title}</td>
+							</tr>
+						{/foreach}
 					</table>
 				{/jstab}
 			{/if}
