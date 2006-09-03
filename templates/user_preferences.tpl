@@ -285,6 +285,21 @@
 					</div>
 				{/legend}
 			{/jstab}
+			
+			{if $watches}
+				{jstab title="Watches"}
+					<table border=1>
+					<tr><th>Event</th>
+					<th>Title</th>
+					</tr>
+					{foreach item=watch from=$watches}
+						<tr><td>{$watch.event}</td>
+						<td>{$watch.title}</td>
+						</tr>
+					{/foreach}
+					</table>
+				{/jstab}
+			{/if}
 
 			{foreach item=package from=$packages}
 				{include file=$package.template settings=$userPrefs}
