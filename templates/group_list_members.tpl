@@ -16,7 +16,7 @@
 			{foreach from=$groupMembers key=userId item=member}
 				<li>{displayname hash=$member}
 					{if $groupId != -1}
-						&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupInfo.group_id}&amp;assign_user={$member.user_id}">{biticon ipackage="liberty" iname="delete_small" iexplain="remove from group"}</a>
+						&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupInfo.group_id}&amp;assign_user={$member.user_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="remove from group"}</a>
 					{/if}
 				</li>
 			{foreachelse}

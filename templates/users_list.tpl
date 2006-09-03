@@ -4,7 +4,7 @@
 
 <div class="navbar">
 	<ul>
-		<li>{biticon ipackage=liberty iname=sort iexplain="sort by"}</li>
+		<li>{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="sort by"}</li>
 		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Username" isort="login"}</li>
 		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Real name" isort="real_name"}</li>
 		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Registration Date" isort="registration_date"}</li>
@@ -20,10 +20,10 @@
 			{if $gBitUser->hasPermission( 'p_users_admin' )}
 				<div class="floaticon">
 					<a href="{$smarty.const.USERS_PKG_URL}admin/index.php?assume_user={$users[user].user_id}" title="{tr}Assume User Identity{/tr}">{biticon ipackage=users iname="assume_user" iexplain="assume user identity" iforce="icon"}</a>
-					<a href="{$smarty.const.USERS_PKG_URL}preferences.php?view_user={$users[user].user_id}" title="{tr}Edit User Information{/tr}">{biticon ipackage=liberty iname="edit" iexplain="Edit User Information" iforce="icon"}</a>
-					<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?assign_user={$users[user].user_id}" title="{tr}Assign Group{/tr}">{biticon ipackage=liberty iname="permissions" iexplain="assign group" iforce="icon"}</a>
+					<a href="{$smarty.const.USERS_PKG_URL}preferences.php?view_user={$users[user].user_id}" title="{tr}Edit User Information{/tr}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit User Information" iforce="icon"}</a>
+					<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?assign_user={$users[user].user_id}" title="{tr}Assign Group{/tr}">{biticon ipackage="icons" iname="emblem-shared" iexplain="assign group" iforce="icon"}</a>
 					{if $users[user].user_id != -1}{* TODO: evil hardcoding *}
-						<a href="{$smarty.const.USERS_PKG_URL}admin/index.php?offset={$control.offset}&amp;numrows={$control.numrows}&amp;sort_mode={$control.sort_mode}&amp;action=delete&amp;user_id={$users[user].user_id}"  title="{tr}Remove{/tr}">{biticon ipackage=liberty iname="delete" iexplain="remove user" iforce="icon"}</a>
+						<a href="{$smarty.const.USERS_PKG_URL}admin/index.php?offset={$control.offset}&amp;numrows={$control.numrows}&amp;sort_mode={$control.sort_mode}&amp;action=delete&amp;user_id={$users[user].user_id}"  title="{tr}Remove{/tr}">{biticon ipackage="icons" iname="edit-delete" iexplain="remove user" iforce="icon"}</a>
 					{/if}
 				</div>
 			{/if}

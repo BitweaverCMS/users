@@ -27,7 +27,7 @@
 								<td>
 									{if $group.public eq 'y'}
 										<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?remove_public_group=y&amp;public_group_id={$groupId}" 
-											onclick="return confirm('{tr}Are you sure you want to delete this group?{/tr}')">{biticon ipackage=liberty iname="delete" iexplain="remove"}</a>
+											onclick="return confirm('{tr}Are you sure you want to delete this group?{/tr}')">{biticon ipackage="icons" iname="edit-delete" iexplain="remove"}</a>
 									{else}
 										&nbsp;
 									{/if}
@@ -50,7 +50,7 @@
 								<tr class="{cycle values="odd,even"}">
 									<td>{$group.group_name}</td>
 									<td>{$group.group_desc}</td>
-									<td><a href="{$smarty.const.USERS_PKG_URL}my_groups.php?add_public_group=y&amp;public_group_id={$group.group_id}"  title="{tr}Assign Group{/tr}">{biticon ipackage=liberty iname="permissions" iexplain="assign group"}</a></td>								
+									<td><a href="{$smarty.const.USERS_PKG_URL}my_groups.php?add_public_group=y&amp;public_group_id={$group.group_id}"  title="{tr}Assign Group{/tr}">{biticon ipackage="icons" iname="emblem-shared" iexplain="assign group"}</a></td>								
 								</tr>
 							{/if}
 						{/foreach}
@@ -115,10 +115,10 @@
 								{/if}
 
 								<td class="actionicon">
-									<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?group_id={$groupId}">{biticon ipackage=liberty iname="edit" iexplain="edit"}</a>
+									<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?group_id={$groupId}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="edit"}</a>
 									{if $groupId ne -1}{* sorry for hardcoding, really need php define ANONYMOUS_GROUP_ID - spiderr *}
 										<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=delete&amp;group_id={$groupId}" 
-										onclick="return confirm('{tr}Are you sure you want to delete this group?{/tr}')">{biticon ipackage=liberty iname="delete" iexplain="remove"}</a>
+										onclick="return confirm('{tr}Are you sure you want to delete this group?{/tr}')">{biticon ipackage="icons" iname="edit-delete" iexplain="remove"}</a>
 									{/if}
 								</td>
 							</tr>

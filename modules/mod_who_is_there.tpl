@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_who_is_there.tpl,v 1.7 2006/04/30 17:43:37 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_who_is_there.tpl,v 1.8 2006/09/03 20:14:58 squareing Exp $ *}
 {bitmodule title="$moduleTitle" name="who_is_there"}
 	<div>
 		{if $logged_users eq 0}
@@ -14,7 +14,7 @@
 	</div>
 	{section name=ix loop=$online_users}
 		{if $user and $gBitSystem->isFeatureActive( 'feature_messages' ) and $gBitUser->hasPermission( 'p_messages_send' )}
-			<a href="{$smarty.const.MESSAGES_PKG_URL}compose.php?to={$online_users[ix].user}" title="{tr}Send a message to{/tr} {$online_users[ix].user}">{biticon ipackage="users" iname="send_msg_small" iexplain="send message"}</a>
+			<a href="{$smarty.const.MESSAGES_PKG_URL}compose.php?to={$online_users[ix].user}" title="{tr}Send a message to{/tr} {$online_users[ix].user}">{biticon ipackage="icons" iname="mail-forward style="width:8px;height:8px;"" iexplain="send message"}</a>
 		{/if}
 		{if $online_users[ix].users_information eq 'public'}
 			{math equation="x - y" x=$smarty.now y=$online_users[ix].timestamp assign=idle}

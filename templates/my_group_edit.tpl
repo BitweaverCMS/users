@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_group_edit.tpl,v 1.4 2006/04/11 13:10:19 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_group_edit.tpl,v 1.5 2006/09/03 20:14:58 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -118,7 +118,7 @@
 								{foreach from=$groupInfo.perms key=permName item=perm}
 								<tr class="{cycle values="odd,even"}">
 									<td>
-										{smartlink ititle="Remove" ibiticon="liberty/delete_small" package=$package group_id=$groupInfo.group_id action=remove permission=$permName}
+										{smartlink ititle="Remove" ibiticon="icons/edit-delete" package=$package group_id=$groupInfo.group_id action=remove permission=$permName}
 										&nbsp;{$permName}
 									</td>
 									<td>{$perm.perm_desc}</td>

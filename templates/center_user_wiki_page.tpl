@@ -11,19 +11,19 @@
 		<div class="floaticon">
 			{if $gBitUser->hasPermission( 'p_users_admin' )}
 				{smartlink ipackage=users ifile="admin/index.php" assume_user=$userInfo.user_id ititle="Assume user identity" ibiticon="users/assume_user" iforce="icon"}
-				{smartlink ipackage=users ifile="preferences.php" view_user=$userInfo.user_id ititle="Edit User Information" ibiticon="liberty/edit" iforce="icon"}
-				{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userInfo.user_id ititle="Assign Group" ibiticon="liberty/permissions" iforce="icon"}
+				{smartlink ipackage=users ifile="preferences.php" view_user=$userInfo.user_id ititle="Edit User Information" ibiticon="icons/accessories-text-editor" iforce="icon"}
+				{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userInfo.user_id ititle="Assign Group" ibiticon="icons/emblem-shared" iforce="icon"}
 				{if $users[user].user_id != -1}{* TODO: evil hardcoding *}
-					{smartlink ipackage=users ifile="admin/index.php" action=delete user_id=$userInfo.user_id ititle="Remove" ibiticon="liberty/delete" iforce="icon"}
+					{smartlink ipackage=users ifile="admin/index.php" action=delete user_id=$userInfo.user_id ititle="Remove" ibiticon="icons/edit-delete" iforce="icon"}
 				{/if}
 			{/if}
 
 			{if $gBitUser->mUserId eq $gQueryUser->mUserId}
 				{if $gBitSystem->isFeatureActive('users_preferences')}
-					{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" ibiticon="liberty/config"}
+					{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" ibiticon="icons/document-properties"}
 				{/if}
 				{if $gBitUser->hasPermission('p_users_edit_user_homepage')}
-					{smartlink ipackage=users ifile="edit_personal_page.php" ititle="Edit personal wiki page" ibiticon="liberty/edit"}
+					{smartlink ipackage=users ifile="edit_personal_page.php" ititle="Edit personal wiki page" ibiticon="icons/accessories-text-editor"}
 				{/if}
 			{/if}
 		</div>

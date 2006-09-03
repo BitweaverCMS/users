@@ -46,7 +46,7 @@
 
 				{if $watches}
 					<tr>
-						<td><input src="{biticon ipackage=liberty iname=delete iexplain=remove url=TRUE}" type="image" name="delete" value="{tr}delete{/tr}" /></td>
+						<td><input src="{biticon ipackage="icons" iname="edit-delete" iexplain=remove url=TRUE}" type="image" name="delete" value="{tr}delete{/tr}" /></td>
 					</tr>
 				{/if}
 			</table>

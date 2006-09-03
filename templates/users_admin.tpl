@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.5 2006/02/14 20:59:08 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.6 2006/09/03 20:14:58 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -79,7 +79,7 @@
 						{/if}
 						{formlabel label="User will be added to the following group" for=""}
 						{forminput}
-							{$defaultGroupName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$defaultGroupId}">{biticon ipackage=liberty iname="edit" iexplain="change settings"}</a>
+							{$defaultGroupName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$defaultGroupId}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="change settings"}</a>
 							{formhelp note="This is the group that is selected as the default group. If you would like to change the default group, please click on the edit icon and set a different group as default group."}
 						{/forminput}
 					</div>

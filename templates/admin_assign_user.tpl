@@ -1,7 +1,7 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_assign_user.tpl,v 1.1 2006/07/06 23:56:43 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_assign_user.tpl,v 1.2 2006/09/03 20:14:58 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
-<div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{biticon ipackage=liberty iname=back iexplain="back to users"}</a></div>
+<div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{biticon ipackage="icons" iname="go-previous" iexplain="back to users"}</a></div>
 
 <div class="admin users">
 	<div class="header">
@@ -52,7 +52,7 @@
 						<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$groupId}">{$group.group_name}
 						{if $groupId eq $assignUser->mInfo.default_group_id}</strong>{/if}
 						{if $groupId != -1}
-							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="liberty" iname="delete_small" iexplain="remove from group" iforce="icon"}</a>
+							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="icons" iname="edit-delete" iexplain="remove from group" iforce="icon"}</a>
 						{/if}
 						<br />
 					{/foreach}
@@ -90,7 +90,7 @@
 						<td>{$group.group_name}</td>
 						<td>{$group.group_desc}</td>
 						<td class="actionicon">
-							<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="liberty" iname="assign" iexplain="assign" iforce="icon"}</a>
+							<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="icons" iname="mail-attachment" iexplain="assign" iforce="icon"}</a>
 						</td>
 					</tr>
 				{/if}
