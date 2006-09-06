@@ -18,7 +18,7 @@
 				{/if}
 			{/if}
 
-			{if $gBitUser->mUserId eq $gQueryUser->mUserId}
+			{if $gBitUser->isRegistered() && $gBitUser->mUserId eq $gQueryUser->mUserId}
 				{if $gBitSystem->isFeatureActive('users_preferences')}
 					{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" ibiticon="icons/document-properties"}
 				{/if}
