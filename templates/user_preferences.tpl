@@ -289,7 +289,7 @@
 			{if $watches}
 				{jstab title="Watches"}
 					<table class="data">
-						<caption>{tr}Watches{tr}</caption>
+						<caption>{tr}Watches{/tr}</caption>
 						<tr>
 							<th>Event</th>
 							<th>Title</th>
