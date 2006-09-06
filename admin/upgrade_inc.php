@@ -272,7 +272,6 @@ array( 'QUERY' =>
 		"UPDATE `".BIT_DB_PREFIX."users_groups_inclusion` SET `include_group_id`=(SELECT `group_id` FROM `".BIT_DB_PREFIX."users_groups` WHERE `group_name`=`includeGroup`)",
 		"UPDATE `".BIT_DB_PREFIX."users_groups` SET `user_id`=1",
 		"UPDATE `".BIT_DB_PREFIX."users_groups` SET `is_default`='y' WHERE `group_name`='Registered'",
-		"alter table `".BIT_DB_PREFIX."tiki_user_watches` add index `user_id` (`user_id`)",
 		"update `".BIT_DB_PREFIX."tiki_user_watches` set `type` = 'bitpage' where `type` = 'Wiki page'",
 		"update `".BIT_DB_PREFIX."tiki_user_watches` set `type` = 'bitpage' where `type` = 'Wiki-Seite'",
 
@@ -326,6 +325,7 @@ array( 'CREATEINDEX' => array(
 		'tiki_sema_user_idx' => array( 'tiki_semaphores', '`user_id`', array() ),
 		'tiki_user_prefs_idx' => array( 'tiki_user_preferences', '`user_id`', array() ),
 		'tiki_user_prefs_un_idx' => array( 'tiki_user_preferences', '`user_id`,`pref_name`', array( 'UNIQUE' ) ),
+		'tiki_user_watches_idx' => array( 'tiki_user_watches', '`user_id`', array() ),
 		'users_groups_map_user_idx' => array( 'users_groups_map', '`user_id`', array() ),
 		'users_groups_map_group_idx' => array( 'users_groups_map', '`group_id`', array() ),
 		'users_groups_map_ug_idx' => array( 'users_groups_map', '`user_id`,`group_id`', array( 'UNIQUE' ) ),
