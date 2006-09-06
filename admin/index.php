@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.12 2006/07/26 18:04:06 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.13 2006/09/06 08:02:02 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -96,7 +96,7 @@ if (isset($_REQUEST["newuser"])) {
 			die;
 		}
 	} else {
-		$gBitSystem->setBrowserTitle( 'Assumer User Identity' );
+		$gBitSystem->setBrowserTitle( 'Assume User Identity' );
 		$formHash['assume_user'] = $_REQUEST['assume_user'];
 		$msgHash = array(
 			'confirm_item' => tra( 'This will log you in as the user' )." <strong>$userInfo[real_name] ($userInfo[login])</strong>",
