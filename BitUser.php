@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.102 2006/09/02 10:21:11 wolff_borg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.103 2006/09/06 12:32:24 fmathias Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.102 2006/09/02 10:21:11 wolff_borg Exp $
+ * $Id: BitUser.php,v 1.103 2006/09/06 12:32:24 fmathias Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.102 $
+ * @version  $Revision: 1.103 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -337,25 +337,27 @@ class BitUser extends LibertyAttachable {
 			}
 		}
 
-		if (!$this->isValid() || isset($pParamHash['password']) ) {
-			$passsword_error_msg = $this->verifyPasswordFormat( $pParamHash['password'] );
-		}
-		if (strlen($passsword_error_msg)) {
-			$this->mErrors['password'] = $passsword_error_msg;
+		if (isset($pParmHash['password'])) {
+			if (!$this->isValid() || isset($pParamHash['password']) ) {
+				$passsword_error_msg = $this->verifyPasswordFormat( $pParamHash['password'] );
 			}
-		else {	
-			// Generate a unique hash
-			//				$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pPassword.$pParamHash['email'] );
-			$pParamHash['user_store']['hash'] = md5( $pParamHash['password'] );
-			$now = $gBitSystem->getUTCTime();
-			if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getConfig('users_pass_due') ) {
-				$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getConfig('users_pass_due') );
-			} elseif( isset( $pParamHash['pass_due'] ) ) {
-				// renew password only next half year ;)
-				$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
+			if (strlen($passsword_error_msg)) {
+				$this->mErrors['password'] = $passsword_error_msg;
 			}
-			if( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) || !empty( $pParamHash['user_store']['provpass'] ) ) {
-				$pParamHash['user_store']['user_password'] = $pParamHash['password'];
+			else {
+				// Generate a unique hash
+				//$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pPassword.$pParamHash['email'] );
+				$pParamHash['user_store']['hash'] = md5( $pParamHash['password'] );
+				$now = $gBitSystem->getUTCTime();
+				if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getConfig('users_pass_due') ) {
+					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getConfig('users_pass_due') );
+				} elseif( isset( $pParamHash['pass_due'] ) ) {
+					// renew password only next half year ;)
+					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
+				}
+				if( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) || !empty( $pParamHash['user_store']['provpass'] ) ) {
+					$pParamHash['user_store']['user_password'] = $pParamHash['password'];
+				}
 			}
 		}
 		return ( count($this->mErrors) == 0 );
@@ -375,7 +377,7 @@ class BitUser extends LibertyAttachable {
 		(!preg_match_all( "/[0-9]+/",$pParamHash["password"],$foo ) || !preg_match_all("/[A-Za-z]+/",$pParamHash["password"],$foo)) ) {
 			return ( tra( 'Password must contain both letters and numbers' ) );
 			}
-			
+
 		return '';
 	}
 
@@ -477,10 +479,10 @@ class BitUser extends LibertyAttachable {
 							// Server's answering cord about MAIL and TO command checks.
 							// Server about listener's address reacts to 550 codes if there does not exist
 							// checking that mailbox is in own E-Mail account.
-							if ( !ereg ( "^250", $From ) 
+							if ( !ereg ( "^250", $From )
 							|| ( !ereg ( "^250", $To )
 								&& !ereg( "Please use your ISP relay", $To) )
-							
+
 							) {
 								$errors['email'] = $pEmail." is not recognized by the mail server to=$To= from=$From= out=$Out=";
 							}
@@ -523,7 +525,7 @@ return false;
 				}
 			}
 
-			$this->load(false,$pParamHash['login']);		
+			$this->load(false,$pParamHash['login']);
 
 			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
 			$notificationlib->post_new_user_event( $pParamHash['login'] );
@@ -892,7 +894,7 @@ return false;
 		$query = "select `user_id`, `provpass`, `user_password`, `login`, `email` FROM `".BIT_DB_PREFIX."users_users`
 				  WHERE `login`=? AND `provpass`=? AND ( `provpass_expires` is NULL or `provpass_expires` > ?)";
 		$user_found = $this->mDb->getRow($query, array( $pUser, $pProvpass, $now ) ) ;
-		return ($user_found);		
+		return ($user_found);
 	}
 
 
