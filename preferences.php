@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.37 2006/09/03 08:36:04 jht001 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.38 2006/09/12 19:26:48 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.37 2006/09/03 08:36:04 jht001 Exp $
+ * $Id: preferences.php,v 1.38 2006/09/12 19:26:48 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -33,6 +33,8 @@ if( !$gBitUser->isRegistered() ) {
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
+
+//vd( $_REQUEST ); die;
 
 if( !empty( $_REQUEST["view_user"] ) && $_REQUEST["view_user"] <> $gBitUser->mUserId) {
 	$gBitSystem->verifyPermission( 'p_users_admin' );
@@ -133,9 +135,7 @@ if (isset($_REQUEST["prefs"])) {
 if (isset($_REQUEST['chgemail'])) {
 	// check user's password
 	if( !$gBitUser->hasPermission( 'p_users_admin' ) && !$editUser->validate( $editUser->mUsername, $_REQUEST['pass'], '', '' ) ) {
-		$gBitSmarty->assign('msg', tra("Invalid password.  Your current password is required to change your email address."));
-		$gBitSystem->display( 'error.tpl' );
-		die;
+		$gBitSystem->fatalError( tra("Invalid password.  Your current password is required to change your email address.") );
 	}
 	if( $editUser->change_user_email( $editUser->mUserId, $editUser->mUsername, $_REQUEST['email'], $_REQUEST['pass'] ) ) {
 		$gBitSmarty->assign( 'successMsg', tra( 'Your email address was updated successfully' ) );

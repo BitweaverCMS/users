@@ -1,6 +1,6 @@
 <h1>{tr}Change password enforced{/tr}</h1>
 <form method="post" action="{$smarty.const.USERS_PKG_URL}change_password.php">
-<input type="hidden" name="login" value="{$userInfo.login}" />
+<input type="hidden" name="user_id" value="{$userInfo.user_id}" />
 {if $userInfo.provpass}
   <input type="hidden" name="provpass" value="{$userInfo.provpass|escape}" />
 {/if}

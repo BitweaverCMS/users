@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/confirm.php,v 1.4 2006/08/23 08:43:51 jht001 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/confirm.php,v 1.5 2006/09/12 19:26:48 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: confirm.php,v 1.4 2006/08/23 08:43:51 jht001 Exp $
+ * $Id: confirm.php,v 1.5 2006/09/12 19:26:48 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -18,11 +18,14 @@
  */
 require_once( '../bit_setup_inc.php' );
 
-if( $userInfo = $gBitUser->confirmRegistration( $_REQUEST["user"], $_REQUEST["pass"] ) ) {
+if( !empty( $_REQUEST["v"] ) && strpos( $_REQUEST["v"], ':' ) ) {
+	list( $userId, $provPass ) = split( ':', $_REQUEST["v"] );
+}
+
+if( !empty( $userId ) && !empty( $provPass ) && $userInfo = $gBitUser->confirmRegistration( $userId, $provPass ) ) {
 	$gBitSmarty->assign_by_ref( 'userInfo', $userInfo );
-	$gBitSystem->display( 'bitpackage:users/change_password.tpl' );
+	$gBitSystem->display( 'bitpackage:users/change_password.tpl', 'Confrim Password Change' );
 } else {
-	$gBitSmarty->assign('msg', tra("This confirmation link is no longer valid.  Please Login."));
-	$gBitSystem->display( 'error.tpl' );
+	$gBitSystem->fatalError( tra("This confirmation link is no longer valid.  Please Login or <a href=\"".USERS_PKG_URL."remind_password.php\">request a new password change</a>") );
 }
 ?>

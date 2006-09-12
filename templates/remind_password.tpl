@@ -7,7 +7,7 @@
 	<div class="body">
 		{if $msg}
 			{formfeedback hash=$msg}
-			{include file="bitpackage:users/login.tpl"}
+			{tr}Please follow the instructions in the email.{/tr}
 		{else}
 			{form legend="Please send me my password"}
 				<div class="row">

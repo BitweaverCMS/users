@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.104 2006/09/12 03:00:23 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.105 2006/09/12 19:26:48 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.104 2006/09/12 03:00:23 spiderr Exp $
+ * $Id: BitUser.php,v 1.105 2006/09/12 19:26:48 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.104 $
+ * @version  $Revision: 1.105 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -363,18 +363,18 @@ class BitUser extends LibertyAttachable {
 		return ( count($this->mErrors) == 0 );
 	}
 
-	function verifyPasswordFormat( $pPassword ) {
+	function verifyPasswordFormat( $pPassword, $pPassword2=NULL ) {
 		global $gBitSystem;
 
 		$minPassword = $gBitSystem->getConfig( 'users_min_pass_length', 4 );
 		if( strlen( $pPassword ) < $minPassword ) {
 			return ( tra( 'Your password should be at least '.$minPassword.' characters long' ) );
 			}
-		if( !empty( $pParamHash['password2'] ) && ($pPassword != $pParamHash['password2']) ) {
+		if( !empty( $pPassword2 ) && ($pPassword != $pPassword2) ) {
 			return( tra( 'The passwords do not match' ) );
 			}
 		if( $gBitSystem->isFeatureActive( 'users_pass_chr_num' ) &&
-		(!preg_match_all( "/[0-9]+/",$pParamHash["password"],$foo ) || !preg_match_all("/[A-Za-z]+/",$pParamHash["password"],$foo)) ) {
+		(!preg_match_all( "/[0-9]+/",$pPassword,$foo ) || !preg_match_all("/[A-Za-z]+/",$pPassword,$foo)) ) {
 			return ( tra( 'Password must contain both letters and numbers' ) );
 			}
 
@@ -706,8 +706,7 @@ return false;
 		}
 
 		// Verify user is valid
-		$validate_result = $this->validate($pLogin, $pPassword, $pChallenge, $pResponse);
-		if( $validate_result ) {
+		if( $this->validate($pLogin, $pPassword, $pChallenge, $pResponse) ) {
 			$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
 			$userInfo = $this->getUserInfo( array( $loginCol => $pLogin ) );
 			// If the password is valid but it is due then force the user to change the password by
@@ -717,11 +716,9 @@ return false;
 				// Redirect the user to the screen where he must change his password.
 				// Note that the user is not logged in he's just validated to change his password
 				// The user must re-enter his old password so no secutiry risk involved
-				$url = USERS_PKG_URL.'change_password.php?user_id='.$userInfo['user_id']. '&oldpass=' . urlencode($pPassword);
+				$url = USERS_PKG_URL.'change_password.php?user_id='.$userInfo['user_id'];
 			} elseif( $userInfo['user_id'] != ANONYMOUS_USER_ID ) {
-				// User is valid and not due to change pass.. start session
-				//session_register('user',$user);
-				//unset session variable in case user su's
+				// User is valid and not due to change pass.. 
 				$this->mUserId = $userInfo['user_id'];
 				$this->load();
 				$this->loadPermissions();
@@ -742,6 +739,7 @@ return false;
 				$this->updateSession( $_COOKIE[$user_cookie_site] );
 			}
 		} else {
+vd( $this->mErrors );		
 			$url = USERS_PKG_URL.'login.php?error=' . urlencode(tra('Invalid username or password'));
 		}
 		$https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
@@ -890,16 +888,14 @@ return false;
 		return ($ret);
 	}
 
-	function confirmRegistration( $pUser, $pProvpass ) {
+	function confirmRegistration( $pUserId, $pProvpass ) {
 		global $gBitSystem;
 		$now = $gBitSystem->getUTCTime();
 		$query = "select `user_id`, `provpass`, `user_password`, `login`, `email` FROM `".BIT_DB_PREFIX."users_users`
-				  WHERE `login`=? AND `provpass`=? AND ( `provpass_expires` is NULL or `provpass_expires` > ?)";
-		$user_found = $this->mDb->getRow($query, array( $pUser, $pProvpass, $now ) ) ;
+				  WHERE `user_id`=? AND `provpass`=? AND ( `provpass_expires` is NULL or `provpass_expires` > ?)";
+		$user_found = $this->mDb->getRow($query, array( $pUserId, $pProvpass, $now ) ) ;
 		return ($user_found);
 	}
-
-
 
 	function change_user_email( $pUserId, $pUsername, $pEmail, $pPass ) {
 		$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `email`=? WHERE `user_id`=?";
@@ -1047,6 +1043,7 @@ return false;
 		$retval["cant"] = $cant;
 		return $retval;
 	}
+
 	/*shared*/
 	function getUserActivity( $pListHash=NULL ) {
 		$bindVars = array();
@@ -1057,13 +1054,23 @@ return false;
 
 		$whereSql = '';
 		if( !empty( $pListHash['last_get'] ) ) {
-			$whereSql .= ' AND `last_get` > ? ';
+			$whereSql .= ' AND uc.`last_get` > ? ';
 			$bindVars[] = time() - $pListHash['last_get'];
 		}
 
-		$query = "select DISTINCT ls.`user_id`, `login`, `real_name` ,`connect_time`, `ip`, `user_agent`, `last_get`
-				  FROM `".BIT_DB_PREFIX."users_cnxn` ls INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (ls.`user_id`=uu.`user_id`)
-				  WHERE ls.`user_id` IS NOT NULL $whereSql
+		if( @BitBase::verifyId( $pListHash['user_id'] ) ) {
+			$whereSql .= ' AND uc.`user_id` = ? ';
+			$bindVars[] = $pListHash['user_id'];
+		}
+
+		if( !empty( $pListHash['ip'] ) ) {
+			$whereSql .= ' AND uc.`ip` = ? ';
+			$bindVars[] = $pListHash['ip'];
+		}
+
+		$query = "select DISTINCT uc.`user_id`, `login`, `real_name` ,`connect_time`, `ip`, `user_agent`, `last_get`
+				  FROM `".BIT_DB_PREFIX."users_cnxn` uc INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (uc.`user_id`=uu.`user_id`)
+				  WHERE uc.`user_id` IS NOT NULL $whereSql
 				  ORDER BY ".$this->mDb->convert_sortmode( $pListHash['sort_mode'] );
 		$result = $this->mDb->query($query, $bindVars, $pListHash['max_records']  );
 		$ret = array();
