@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.103 2006/09/06 12:32:24 fmathias Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.104 2006/09/12 03:00:23 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.103 2006/09/06 12:32:24 fmathias Exp $
+ * $Id: BitUser.php,v 1.104 2006/09/12 03:00:23 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.103 $
+ * @version  $Revision: 1.104 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -785,7 +785,9 @@ return false;
 						$authValid = true;
 						break;
 					case PASSWORD_INCORRECT:
-						//$this->mErrors['login'] = 'Password incorrect';
+						// this mErrors assignment is CRUCIAL so that bit auth fails properly. DO NOT FUCK WITH THIS unless you know what you are doing and have checked with me first. XOXOX - spiderr
+						// This might have broken other auth, but at this point, bw auth was TOTALLY busted. If you need to fix, please come find me.
+						$this->mErrors['login'] = 'Password incorrect';
 						$authPresent = true;
 						break;
 					case USER_NOT_FOUND:
