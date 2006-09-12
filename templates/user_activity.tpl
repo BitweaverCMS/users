@@ -7,21 +7,19 @@
 
 	<div class="body">
 		{form}
-			<table class="panel">
+			<table class="data">
 				<caption>{tr}Active users{/tr}</caption>
 				<tr>
-					<th>{tr}Name{/tr} ({tr}ID{/tr})</th>
-					<th>{tr}IP{/tr}</th>
-					<th>{tr}Last Access{/tr}</th>
-					<th>{tr}Browser{/tr}</th>
+					<th class="item">{tr}Name{/tr} ({tr}ID{/tr})</th>
+					<th class="item">{tr}Last Access{/tr} / {tr}IP{/tr}</th>
+					<th class="item">{tr}Browser{/tr}</th>
 				</tr>
 
 				{section name=ix loop=$userActivity}
 					<tr class="{cycle values="odd,even"}">
-						<td>{displayname hash=$userActivity[ix]} (<a href="{$smarty.server.PHP_SELF}?user_id={$userActivity[ix].user_id}">{$userActivity[ix].user_id}</a>)</td>
-						<td><a href="{$smarty.server.PHP_SELF}?ip={$userActivity[ix].ip}">{$userActivity[ix].ip|escape}</a></td>
-						<td>{$userActivity[ix].last_get|bit_short_datetime}</td>
-						<td>{$userActivity[ix].user_agent|escape}</td>
+						<td class="item" style="width:150px;">{displayname hash=$userActivity[ix] nolink=1}<br/>(<a href="{$smarty.server.PHP_SELF}?user_id={$userActivity[ix].user_id}">{$userActivity[ix].user_id}</a>)</td>
+						<td class="item" style="width:150px;">{$userActivity[ix].last_get|bit_short_datetime}<br/><a href="{$smarty.server.PHP_SELF}?ip={$userActivity[ix].ip}">{$userActivity[ix].ip|escape}</a></td>
+						<td class="item">{$userActivity[ix].user_agent|escape}</td>
 					</tr>
 				{sectionelse}
 					<tr>
