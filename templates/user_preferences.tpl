@@ -177,7 +177,7 @@
 				{/form}
 
 				{form legend="Change your password"}
-					<input type="hidden" uname="view_user" value="{$editUser.user_id}" />
+					<input type="hidden" name="view_user" value="{$editUser.user_id}" />
 					{* Users with admin priv can change password without knowing the old one *}
 					{if !$view_user or ( !$gBitUser->hasPermission('p_users_admin') and $view_user )}
 						<div class="row">
