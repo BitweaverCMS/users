@@ -33,6 +33,7 @@
 					</tr>
 				{/if}
 			</table>
+			{pagination}
 		{/form}
 	</div><!-- end .body -->
 </div><!-- end .userwatches -->

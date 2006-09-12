@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.105 2006/09/12 19:26:48 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.106 2006/09/12 20:20:26 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.105 2006/09/12 19:26:48 spiderr Exp $
+ * $Id: BitUser.php,v 1.106 2006/09/12 20:20:26 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.105 $
+ * @version  $Revision: 1.106 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1045,7 +1045,7 @@ vd( $this->mErrors );
 	}
 
 	/*shared*/
-	function getUserActivity( $pListHash=NULL ) {
+	function getUserActivity( &$pListHash ) {
 		$bindVars = array();
 		if( empty( $pListHash['sort_mode'] ) ) {
 			$pListHash['sort_mode'] = 'last_get_desc';
@@ -1072,12 +1072,18 @@ vd( $this->mErrors );
 				  FROM `".BIT_DB_PREFIX."users_cnxn` uc INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (uc.`user_id`=uu.`user_id`)
 				  WHERE uc.`user_id` IS NOT NULL $whereSql
 				  ORDER BY ".$this->mDb->convert_sortmode( $pListHash['sort_mode'] );
-		$result = $this->mDb->query($query, $bindVars, $pListHash['max_records']  );
+		$result = $this->mDb->query($query, $bindVars, $pListHash['max_records'], $pListHash['offset'] );
 		$ret = array();
 		while ($res = $result->fetchRow()) {
 			$res['users_information'] = 	$this->getPreference( 'users_information', 'public', $res['user_id'] );
 			$ret[] = $res;
 		}
+		
+		$countSql = "SELECT COUNT( DISTINCT uc.`user_id` )
+				     FROM `".BIT_DB_PREFIX."users_cnxn` uc INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (uc.`user_id`=uu.`user_id`)
+				     WHERE uc.`user_id` IS NOT NULL $whereSql";
+		$pListHash['cant'] = $this->mDb->GetOne( $countSql, $bindVars );
+		$this->postGetList( $pListHash );
 		return $ret;
 	}
 

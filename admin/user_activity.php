@@ -21,7 +21,9 @@
 	}
 
 	$gBitSmarty->assign_by_ref( 'userActivity', $gBitUser->getUserActivity( $listHash ) );
-	
+
+	$gBitSmarty->assign_by_ref( 'listInfo', $listHash['listInfo'] );
+
 	$gBitSystem->display( 'bitpackage:users/user_activity.tpl', 'User Activity' );
 
 ?>
