@@ -18,8 +18,8 @@
 
 				{section name=ix loop=$userActivity}
 					<tr class="{cycle values="odd,even"}">
-						<td>{displayname hash=$userActivity[ix]} ({$userActivity[ix].user_id})</td>
-						<td>{$userActivity[ix].ip|escape}</td>
+						<td>{displayname hash=$userActivity[ix]} (<a href="{$smarty.server.PHP_SELF}?user_id={$userActivity[ix].user_id}">{$userActivity[ix].user_id}</a>)</td>
+						<td><a href="{$smarty.server.PHP_SELF}?ip={$userActivity[ix].ip}">{$userActivity[ix].ip|escape}</a></td>
 						<td>{$userActivity[ix].last_get|bit_short_datetime}</td>
 						<td>{$userActivity[ix].user_agent|escape}</td>
 					</tr>
