@@ -89,6 +89,7 @@ class BitAuth extends BaseAuth {
 		$u = new BitPermUser();
 //vd( $pUserHash ); die;		
 		if( $u->store( $pUserHash ) ) {
+			$this
 			$this->mErrors = array_merge($this->mErrors,$u->mErrors);
 		}
 		return $u->mUserId;

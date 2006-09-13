@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.106 2006/09/12 20:20:26 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.107 2006/09/13 00:25:31 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.106 2006/09/12 20:20:26 spiderr Exp $
+ * $Id: BitUser.php,v 1.107 2006/09/13 00:25:31 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.106 $
+ * @version  $Revision: 1.107 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -261,7 +261,6 @@ class BitUser extends LibertyAttachable {
 
 	function isAdmin() {
 		//	print "PURE VIRTUAL BASE FUNCTION";
-		//	die;
 		return FALSE;
 	}
 
@@ -337,14 +336,13 @@ class BitUser extends LibertyAttachable {
 			}
 		}
 
-		if (isset($pParmHash['password'])) {
+		if( isset( $pParamHash['password'] ) ) {
 			if (!$this->isValid() || isset($pParamHash['password']) ) {
-				$passsword_error_msg = $this->verifyPasswordFormat( $pParamHash['password'] );
+				$passswordError = $this->verifyPasswordFormat( $pParamHash['password'] );
 			}
-			if (strlen($passsword_error_msg)) {
-				$this->mErrors['password'] = $passsword_error_msg;
-			}
-			else {
+			if( !empty( $passswordError ) ) {
+				$this->mErrors['password'] = $passswordError;
+			} else {
 				// Generate a unique hash
 				//$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pPassword.$pParamHash['email'] );
 				$pParamHash['user_store']['hash'] = md5( $pParamHash['password'] );
@@ -378,7 +376,7 @@ class BitUser extends LibertyAttachable {
 			return ( tra( 'Password must contain both letters and numbers' ) );
 			}
 
-		return '';
+		return FALSE;
 	}
 
 	function get_SMTP_response ( &$pConnect ) {
