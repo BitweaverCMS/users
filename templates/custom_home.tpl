@@ -14,9 +14,9 @@
 <tr>
 <td style="width: 50%; vertical-align: top;">
 	<div class="box">
-		<div class="boxtitle">
+		<h3 class="boxtitle">
 			What is bitweaver?
-		</div>
+		</h3>
 		<div class="boxcontent">
 			bitweaver is a powerful Content Management System easy to customize and
 			configure designed to create Portals, community sites, intranets,
@@ -26,7 +26,7 @@
 </td>
 <td style="width: 50%; vertical-align: top;">
 	<div class="box">
-		<div class="boxtitle">News</div>
+		<h3 class="boxtitle">News</h3>
 		<div class="boxcontent">
 			{content id=1}
 		</div>
@@ -36,27 +36,27 @@
 </table>
 
 <div class="box">
-<div class="boxtitle">
+<h3 class="boxtitle">
 Download!
-</div>
+</h3>
 <div class="boxcontent">
 Our last stable release of bitweaver is 1.2 - Bonnie - you can download bitweaver from <a href="http://www.sourceforge.net/projects/bitweaver/">Sourceforge</a>
 </div>
 </div>
 
 <div class="box">
-<div class="boxtitle">
+<h3 class="boxtitle">
 Join us!
-</div>
+</h3>
 <div class="boxcontent">
 bitweaver is a fairly young project and needs all the help we can get. 
 There are many ways of contributing - the first step is to learn more. Our site is located at <a href="http://www.bitweaver.org/wiki/index.php"> bitweaver CMS Home</a> or join our projects <a href="http://sourceforge.net/mail/?group_id=64258">mailing list</a>
 </div>
 </div>
 <div class="box">
-<div class="boxtitle">
+<h3 class="boxtitle">
 Some of the many features in bitweaver
-</div>
+</h3>
 <div class="boxcontent">
 <ul>
 <li>A wiki system where users can edit pages using a powerful syntax</li>
@@ -75,9 +75,9 @@ Some of the many features in bitweaver
 </div>
 
 <div class="box">
-<div class="boxtitle">
+<h3 class="boxtitle">
 Testing bitweaver
-</div>
+</h3>
 <div class="boxcontent">
 <ol>
 <li>May be you want to start reading the bitweaver <a href="{$smarty.const.FAQS_PKG_URL}index.php">FAQ</a></li>
