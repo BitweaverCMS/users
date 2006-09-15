@@ -14,7 +14,7 @@
 <tr>
 <td style="width: 50%; vertical-align: top;">
 	<div class="box">
-		<h3 class="boxtitle">
+		<h3>
 			What is bitweaver?
 		</h3>
 		<div class="boxcontent">
@@ -26,7 +26,7 @@
 </td>
 <td style="width: 50%; vertical-align: top;">
 	<div class="box">
-		<h3 class="boxtitle">News</h3>
+		<h3>News</h3>
 		<div class="boxcontent">
 			{content id=1}
 		</div>
@@ -36,7 +36,7 @@
 </table>
 
 <div class="box">
-<h3 class="boxtitle">
+<h3>
 Download!
 </h3>
 <div class="boxcontent">
@@ -45,7 +45,7 @@ Our last stable release of bitweaver is 1.2 - Bonnie - you can download bitweave
 </div>
 
 <div class="box">
-<h3 class="boxtitle">
+<h3>
 Join us!
 </h3>
 <div class="boxcontent">
@@ -54,7 +54,7 @@ There are many ways of contributing - the first step is to learn more. Our site 
 </div>
 </div>
 <div class="box">
-<h3 class="boxtitle">
+<h3>
 Some of the many features in bitweaver
 </h3>
 <div class="boxcontent">
@@ -75,7 +75,7 @@ Some of the many features in bitweaver
 </div>
 
 <div class="box">
-<h3 class="boxtitle">
+<h3>
 Testing bitweaver
 </h3>
 <div class="boxcontent">
