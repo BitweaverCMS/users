@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/captcha_image.php,v 1.2 2006/09/15 21:07:42 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/captcha_image.php,v 1.3 2006/09/15 21:16:56 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: captcha_image.php,v 1.2 2006/09/15 21:07:42 spiderr Exp $
+ * $Id: captcha_image.php,v 1.3 2006/09/15 21:16:56 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -20,8 +20,8 @@
 require_once( '../bit_setup_inc.php' );
 
 // dimensions
-$width  = 140;
-$height = 35;
+$width  = @BitBase::verifyId( $_REQUEST['width'] ) ? $_REQUEST['width'] : 140;
+$height = @BitBase::verifyId( $_REQUEST['height'] ) ? $_REQUEST['height'] : 35;
 
 $img = @imagecreate( $width, $height ) or die( "The GD image library doesn't seem to be available or doesn't have JPG support." );
 
