@@ -195,7 +195,7 @@
 						{formfeedback error=$errors.users_random_number_reg}
 						{formlabel label="Your registration code"}
 						{forminput}
-							<img src="{$smarty.const.USERS_PKG_URL}random_num_img.php" alt="{tr}Random Image{/tr}"/>
+							<img src="{$smarty.const.USERS_PKG_URL}captcha_image.php" alt="{tr}Random Image{/tr}"/>
 						{/forminput}
 					</div>
 
