@@ -192,7 +192,7 @@
 					<hr />
 
 					<div class="row">
-						{formfeedback error=$errors.users_random_number_reg}
+						{formfeedback error=$errors.captcha}
 						{formlabel label="Your registration code"}
 						{forminput}
 							<img src="{$smarty.const.USERS_PKG_URL}captcha_image.php" alt="{tr}Random Image{/tr}"/>
@@ -202,7 +202,7 @@
 					<div class="row">
 						{formlabel label="Registration code" for="regcode"}
 						{forminput}
-							<input type="text" maxlength="8" size="8" name="regcode" id="regcode" /> <acronym title="{tr}Required{/tr}">*</acronym>
+							<input type="text" maxlength="8" size="8" name="captcha" id="captcha" /> <acronym title="{tr}Required{/tr}">*</acronym>
 							{formhelp note="Please copy the code above into this field. This is a security feature to avoid automatic registration by bots."}
 						{/forminput}
 					</div>

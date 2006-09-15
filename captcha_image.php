@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/captcha_image.php,v 1.1 2006/09/15 20:39:14 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/captcha_image.php,v 1.2 2006/09/15 21:07:42 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: captcha_image.php,v 1.1 2006/09/15 20:39:14 spiderr Exp $
+ * $Id: captcha_image.php,v 1.2 2006/09/15 21:07:42 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -39,7 +39,7 @@ imagefill( $img, 0, 0, $bg );
 imagerectangle( $img, 1, 1, $width - 1, $height - 1, $border );
 srand( time() );
 $number = rand( 10000, 99999 );
-$_SESSION['random_number'] = $number;
+$_SESSION['captcha'] = $number;
 for( $i = 0; $i < 5; $i++ ) {
 	imagestring( $img, 10, ( $width / 6 ) - 5 + ( $width / 6 ) * $i + rand( 0, 2 ), 2 + rand( 0, $height - 22 ), substr( $number, $i, 1 ), $text[rand( 0, count( $text ) - 1 )] );
 }
