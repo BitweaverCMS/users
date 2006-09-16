@@ -190,16 +190,7 @@
 
 				{if $gBitSystem->isFeatureActive('users_random_number_reg')}
 					<hr />
-
-					{captcha variant=row}
-
-					<div class="row">
-						{formlabel label="Registration code" for="regcode"}
-						{forminput}
-							<input type="text" maxlength="8" size="8" name="captcha" id="captcha" /> <acronym title="{tr}Required{/tr}">*</acronym>
-							{formhelp note="Please copy the code above into this field. This is a security feature to avoid automatic registration by bots."}
-						{/forminput}
-					</div>
+					{captcha force=true variant=row}
 				{/if}
 
 				{if $groupList}
