@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.107 2006/09/13 00:25:31 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.108 2006/09/16 09:52:01 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.107 2006/09/13 00:25:31 spiderr Exp $
+ * $Id: BitUser.php,v 1.108 2006/09/16 09:52:01 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.107 $
+ * @version  $Revision: 1.108 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -573,6 +573,19 @@ return false;
 			}
 		}
 		return( $ret );
+	}
+
+	function verifyCaptcha( $pCaptcha = NULL ) {
+		if( $this->hasPermission( 'p_users_bypass_captcha' ) || ( !empty( $_SESSION['captcha_verified'] ) && $_SESSION['captcha_verified'] === TRUE ) ) {
+			return TRUE;
+		} else {
+			if( empty( $pCaptcha ) || $_SESSION['captcha'] != md5( $pCaptcha ) ) {
+				return FALSE;
+			} else {
+				$_SESSION['captcha_verified'] = TRUE;
+				return TRUE;
+			}
+		}
 	}
 
 

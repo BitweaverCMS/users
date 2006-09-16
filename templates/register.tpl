@@ -191,13 +191,7 @@
 				{if $gBitSystem->isFeatureActive('users_random_number_reg')}
 					<hr />
 
-					<div class="row">
-						{formfeedback error=$errors.captcha}
-						{formlabel label="Your registration code"}
-						{forminput}
-							<img src="{$smarty.const.USERS_PKG_URL}captcha_image.php" alt="{tr}Random Image{/tr}"/>
-						{/forminput}
-					</div>
+					{captcha variant=row}
 
 					<div class="row">
 						{formlabel label="Registration code" for="regcode"}

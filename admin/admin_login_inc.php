@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.23 2006/09/02 10:00:19 wolff_borg Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.24 2006/09/16 09:52:01 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -8,7 +8,7 @@ require_once( USERS_PKG_PATH.'BaseAuth.php' );
 
 $loginSettings = array(
 	'users_create_user_auth' => array(
-		'label' => "Propgate Users",
+		'label' => "Propagate Users",
 		'type' => "checkbox",
 		'note' => "Create a User in all lower Authentication Methods.<br />This won't work for methods in Method 1.",
 	),

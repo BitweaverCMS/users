@@ -4,10 +4,10 @@
 			<input type="hidden" name="page" value="{$page}" />
 
 			<div class="row">
-				{foreach from=$authSettings.err item='auth_error' key='auth_type'}
-					{formfeedback error=$auth_error}
-				{/foreach}
+				{formfeedback hash=$authSettings.err}
+
 				{formlabel label="Authentication method"}
+
 				{forminput}
 					{foreach from=$authSettings.avail_method item='auth_method' key='iter'}
 						<label>Method {$iter+1}
