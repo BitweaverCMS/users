@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.14 2006/09/12 19:26:48 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.15 2006/09/17 07:18:11 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -76,12 +76,10 @@ if (isset($_REQUEST["newuser"])) {
 	// jht 2005-06-22_23:51:58 flag this user store as coming from admin page -- a kludge
 	$_REQUEST['admin_add'] = 1;
 	if( $newUser->store( $_REQUEST ) ) {
-vd( 'yoyoyoyo' );	
 		$gBitSmarty->assign( 'addSuccess', "User Added Successfully" );
 	} else {
 		$gBitSmarty->assign_by_ref( 'newUser', $_REQUEST );
 		$gBitSmarty->assign( 'errors', $newUser->mErrors );
-vd( $newUser->mErrors );	
 	}
 	// if no user data entered, check if it's a batch upload
 } elseif( isset( $_REQUEST["batchimport"]) ) {
