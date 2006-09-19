@@ -105,7 +105,7 @@
 		{if $gBitSystem->isPackageActive( 'messages' )}
 			<li>
 				<a class="item" {if $unreadMsgs}title="{tr}You have unread messages{/tr}"{/if} href="{$smarty.const.MESSAGES_PKG_URL}message_box.php">
-					{biticon ipackage="icons" iname="mail-send-receive" iexplain="Send and recieve personal messages" iforce=icon}{if !$icons_only} {tr}Message Box{/tr} {/if}{if $unreadMsgs}<strong>[ {$unreadMsgs} ]</strong>{/if}
+					{biticon ipackage="icons" iname="emblem-mail" iexplain="Send and recieve personal messages" iforce=icon}{if !$icons_only} {tr}Message Box{/tr} {/if}{if $unreadMsgs}<strong>[ {$unreadMsgs} ]</strong>{/if}
 				</a>
 			</li>
 			<li>
