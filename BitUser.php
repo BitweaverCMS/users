@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.108 2006/09/16 09:52:01 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.109 2006/09/20 02:03:54 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.108 2006/09/16 09:52:01 squareing Exp $
+ * $Id: BitUser.php,v 1.109 2006/09/20 02:03:54 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.108 $
+ * @version  $Revision: 1.109 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -270,7 +270,7 @@ class BitUser extends LibertyAttachable {
 		if( !empty( $_REQUEST['tk'] ) ) {
 			if( !($ret = $_REQUEST['tk'] == $this->mTicket ) && $pFatalOnError ) {
 				$userString = $gBitUser->isRegistered() ? "\nUSER ID: ".$gBitUser->mUserId.' ( '.$gBitUser->getField( 'email' ).' ) ' : '';
-				error_log( tra( "Security Violation" )."$userString ".$_SERVER['REMOTE_ADDR']."\nURI: $_SERVER[REQUEST_URI] \nREFERER: $_SERVER[HTTP_REFERER] " );
+				@error_log( tra( "Security Violation" )."$userString ".$_SERVER['REMOTE_ADDR']."\nURI: $_SERVER[REQUEST_URI] \nREFERER: $_SERVER[HTTP_REFERER] " );
 				$gBitSystem->fatalError( "Security Violation" );
 			}
 		}
