@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.13 2006/04/30 17:43:37 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.14 2006/09/20 02:04:09 spiderr Exp $ *}
 {strip}
 {if $userData->getPreference('users_information') eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
@@ -23,7 +23,7 @@
 		<div class="row">
 			{formlabel label="Country"}
 			{forminput}
-				{biticon ipackage="users" ipath="flags/" iname=$userData->getPreference('flag') iexplain=$userData->getPreference('flag')} {$userData->getPreference('users_country')}
+				{biticon ipackage="users" ipath="flags/" iname=$userData->getPreference('flag') iexplain=$userData->getPreference('flag') iforce="icon"} {$userData->getPreference('users_country')}
 			{/forminput}
 		</div>
 
