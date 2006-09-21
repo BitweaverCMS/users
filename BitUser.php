@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.109 2006/09/20 02:03:54 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.110 2006/09/21 14:18:34 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.109 2006/09/20 02:03:54 spiderr Exp $
+ * $Id: BitUser.php,v 1.110 2006/09/21 14:18:34 wjames5 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.109 $
+ * @version  $Revision: 1.110 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -750,7 +750,7 @@ return false;
 				$this->updateSession( $_COOKIE[$user_cookie_site] );
 			}
 		} else {
-vd( $this->mErrors );		
+			//vd( $this->mErrors );		
 			$url = USERS_PKG_URL.'login.php?error=' . urlencode(tra('Invalid username or password'));
 		}
 		$https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
