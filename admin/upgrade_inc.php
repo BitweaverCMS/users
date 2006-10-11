@@ -348,6 +348,14 @@ array( 'CREATEINDEX' => array(
 	'BWR2' => array(
 // STEP 1
 array( 'DATADICT' => array(
+	array( 'CREATE' => array (
+		'users_favorites_map' => "
+		  favorite_content_id I4 PRIMARY,
+		  user_id I4 PRIMARY,
+		  map_position I4
+		  CONSTRAINT ', CONSTRAINT `users_fav_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
+		",
+	)),
 	array( 'RENAMETABLE' => array(
 		'tiki_semaphores'             => 'users_semaphores',
 		'users_objectpermissions'     => 'users_object_permissions',
