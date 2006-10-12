@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.27 2006/09/16 09:52:01 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.28 2006/10/12 06:01:50 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.27 2006/09/16 09:52:01 squareing Exp $
+ * $Id: register.php,v 1.28 2006/10/12 06:01:50 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -48,7 +48,7 @@ if( isset( $_REQUEST["register"] ) ) {
 	}
 
 	// Check the mode
-	if( $gBitSystem->isFeatureActive( 'users_register_passcode' ) ) {
+	if( $gBitSystem->isFeatureActive( 'users_register_require_passcode' ) ) {
 		if( $reg["passcode"] != $gBitSystem->getConfig( "users_register_passcode",md5( $gBitUser->genPass() ) ) ) {
 			$errors['passcode'] = 'Wrong passcode! You need to know the passcode to register at this site';
 		}

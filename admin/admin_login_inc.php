@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.24 2006/09/16 09:52:01 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.25 2006/10/12 06:01:51 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -27,7 +27,7 @@ $loginSettings = array(
 		'type' => "checkbox",
 		'note' => "This will create a group for each user with the same name as the user. This might be useful if you want to assign different permission settings to every user.",
 	),
-	'users_register_passcode' => array(
+	'users_register_require_passcode' => array(
 		'label' => "Request passcode to register",
 		'type' => "checkbox",
 		'note' => "",
