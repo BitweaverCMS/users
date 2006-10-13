@@ -1,10 +1,25 @@
 <?php
+/**
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.3 2006/10/13 12:47:40 lsces Exp $
+ *
+ * @package users
+ */
+
+/**
+ * required setup
+ */
 if (file_exists(UTIL_PKG_PATH."pear/Auth/Auth.php")) {
 	require_once (UTIL_PKG_PATH."pear/Auth/Auth.php");
 } else {
 	@include_once("Auth.php");
 }
 
+/**
+ * Class that manages the PEAR:ldap autentication method
+ *
+ * @package users
+ * @subpackage auth
+ */
 class LDAPAuth extends BaseAuth {
 	function LDAPAuth() {
 		parent::BaseAuth('ldap');

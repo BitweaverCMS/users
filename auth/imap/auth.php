@@ -1,4 +1,16 @@
 <?php
+/**
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/imap/auth.php,v 1.2 2006/10/13 12:47:40 lsces Exp $
+ *
+ * @package users
+ */
+
+/**
+ * Class that manages the imap autentication method
+ *
+ * @package users
+ * @subpackage auth
+ */
 class IMAPAuth extends BaseAuth {
 
 	function IMAPAuth() {

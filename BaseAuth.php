@@ -1,7 +1,21 @@
 <?php
+/**
+ * $Header: /cvsroot/bitweaver/_bit_users/BaseAuth.php,v 1.10 2006/10/13 12:47:40 lsces Exp $
+ *
+ * @package users
+ */
 
+/**
+ * required setup
+ */
 require_once(UTIL_PKG_PATH . "PHP_Compat/Compat/Function/scandir.php");
 
+/**
+ * Class that manages the base autentication method
+ *
+ * @package users
+ * @subpackage auth
+ */
 class BaseAuth {
 	var $mLogin;
 	var $mConfig;

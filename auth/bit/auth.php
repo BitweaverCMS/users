@@ -1,4 +1,16 @@
 <?php
+/**
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/bit/auth.php,v 1.4 2006/10/13 12:47:40 lsces Exp $
+ *
+ * @package users
+ */
+
+/**
+ * Class that manages the bitweaver autentication method
+ *
+ * @package users
+ * @subpackage auth
+ */
 class BitAuth extends BaseAuth {
 
 	function BitAuth() {
