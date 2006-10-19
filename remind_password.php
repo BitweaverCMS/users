@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.16 2006/09/12 19:26:48 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.17 2006/10/19 17:40:54 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: remind_password.php,v 1.16 2006/09/12 19:26:48 spiderr Exp $
+ * $Id: remind_password.php,v 1.17 2006/10/19 17:40:54 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -31,16 +31,16 @@ if( $gBitUser->isRegistered() ) {
 		$userInfo = $gBitUser->getUserInfo( array( $loginCol => $pLogin ) );
 	}
 	if( $userInfo ) {
+		$machine = httpPrefix().$foo1;
+		$gBitSmarty->assign( 'mail_machine', $machine );
 		if ( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) && !empty($userInfo['user_password']) ) {
-			$pass = $userInfo['user_password'];
+			$gBitSmarty->assign( 'userPass', $userInfo['user_password'] );
 			$tmp['success'] = tra("A password reminder email has been sent ");
 		} else {
 			$pass = $gBitUser->genPass();
 			list($pass,$provpass) = $gBitUser->createTempPassword( $_REQUEST["username"], $pass );
 			$foo = parse_url($_SERVER["REQUEST_URI"]);
 			$foo1=str_replace("remind_password","confirm",$foo["path"]);
-			$machine = httpPrefix().$foo1;
-			$gBitSmarty->assign( 'mail_machine', $machine );
 			$gBitSmarty->assign( 'mailProvPass', $provpass );
 			$gBitSmarty->assign( 'mailUserId', $userInfo['user_id'] );
 			$tmp['success'] = tra("Information to reset your password has been sent ");
@@ -53,6 +53,7 @@ if( $gBitUser->isRegistered() ) {
 		$mail_data = $gBitSmarty->fetch('bitpackage:users/password_reminder.tpl');
 		$subject = "Your password for ".$gBitSystem->getConfig( 'site_title', $_SERVER['HTTP_HOST'] );
 		mail( $userInfo['email'], $subject, $mail_data, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n");
+vd(		$userInfo['email'].', '.$subject.', '.$mail_data.', "From: "'.$gBitSystem->getConfig( 'site_sender_email' ).'"\r\nContent-type: text/plain;charset=utf-8\r\n"' ); die;
 		// Just show "success" message and no form
 	} else {
 		// Show error message (and leave form visible so user can fix problem)
