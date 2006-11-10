@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.11 2006/09/03 20:14:58 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.12 2006/11/10 21:57:29 spiderr Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -156,7 +156,7 @@
 							{forminput}
 								{smartlink ititle="All packages" group_id=$groupInfo.group_id}
 								{foreach from=$permPackages key=i item=packageKey}
-									&nbsp;&bull; {smartlink ititle=$gBitSystem->mPackages.$packageKey.name group_id=$groupInfo.group_id package=$packageKey}
+									&nbsp;&bull; {smartlink ititle=$gBitSystem->mPackages.$packageKey.name|default:$packageKey group_id=$groupInfo.group_id package=$packageKey}
 								{/foreach}
 							{/forminput}
 						</div>
