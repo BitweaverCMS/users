@@ -1,7 +1,13 @@
 {strip}
+
+{if $gBitSystem->isFeatureActive('users_clear_passwords')}
+	{assign var=passVerb value='Send me'}
+{else}
+	{assign var=passVerb value='Reset'}
+{/if}
 <div class="display login">
 	<div class="header">
-		<h1>{tr}Retrieve Password{/tr}</h1>
+		<h1>{tr}Forgot Password{/tr}</h1>
 	</div>
 
 	<div class="body">
@@ -9,7 +15,7 @@
 			{formfeedback hash=$msg}
 			{tr}Please follow the instructions in the email.{/tr}
 		{else}
-			{form legend="Please send me my password"}
+			{form legend="`$passVerb` my password"}
 				<div class="row">
 					{formfeedback warning=$msg.error}
 					{formlabel label="Username or email" for="username"}
@@ -19,7 +25,7 @@
 				</div>
 
 				<div class="row submit">
-					<input type="submit" name="remind" id="remind" value="{tr}Send me my password{/tr}" />
+					<input type="submit" name="remind" id="remind" value="{tr}{$passVerb}{/tr} {tr}my password{/tr}" />
 				</div>
 			{/form}
 		{/if}
