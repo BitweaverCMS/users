@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.110 2006/09/21 14:18:34 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.111 2006/11/10 16:51:46 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.110 2006/09/21 14:18:34 wjames5 Exp $
+ * $Id: BitUser.php,v 1.111 2006/11/10 16:51:46 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.110 $
+ * @version  $Revision: 1.111 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -992,7 +992,7 @@ return false;
 	function createTempPassword( $pLogin, $pPass ) {
 		global $gBitSystem;
 		if( empty( $pLogin ) ) {
-			$pLogin = $this->getField( 'login' );
+			$pLogin = $this->getField( 'email' );
 		}
 		if( $pLogin ) {
 			$pass = BitSystem::genPass();
@@ -1011,10 +1011,12 @@ return false;
 
 	function storePassword( $pPass, $pLogin=NULL ) {
 		global $gBitSystem;
+		$ret = FALSE;
 		if( empty( $pLogin ) ) {
-			$pLogin = $this->getField( 'login' );
+			$pLogin = $this->getField( 'email' );
 		}
 		if( $pLogin ) {
+			$ret = TRUE;
 			$hash = md5( $pPass );
 			$now = $gBitSystem->getUTCTime();;
 			$passDue = $now + (60 * 60 * 24 * $gBitSystem->getConfig( 'users_pass_due' ) );
@@ -1025,7 +1027,7 @@ return false;
 			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `provpass`= NULL, `provpass_expires` = NULL,`hash`=? ,`user_password`=? ,`pass_due`=? WHERE `".$loginCol."`=?";
 			$result = $this->mDb->query($query, array( $hash, $pPass, $passDue, $pLogin ) );
 		}
-		return TRUE;
+		return $ret;
 	}
 
 	function get_users($offset = 0, $max_records = -1, $sort_mode = 'login_desc', $find = '') {

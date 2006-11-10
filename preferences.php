@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.38 2006/09/12 19:26:48 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.39 2006/11/10 16:51:46 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.38 2006/09/12 19:26:48 spiderr Exp $
+ * $Id: preferences.php,v 1.39 2006/11/10 16:51:46 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -33,8 +33,6 @@ if( !$gBitUser->isRegistered() ) {
 	$gBitSystem->display( 'error.tpl' );
 	die;
 }
-
-//vd( $_REQUEST ); die;
 
 if( !empty( $_REQUEST["view_user"] ) && $_REQUEST["view_user"] <> $gBitUser->mUserId) {
 	$gBitSystem->verifyPermission( 'p_users_admin' );
