@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.113 2006/11/15 16:33:07 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.114 2006/11/15 18:25:48 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.113 2006/11/15 16:33:07 spiderr Exp $
+ * $Id: BitUser.php,v 1.114 2006/11/15 18:25:48 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.113 $
+ * @version  $Revision: 1.114 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -323,7 +323,6 @@ class BitUser extends LibertyAttachable {
 			// jht 2005-06-22_23:51:58 $pParamHash['admin_add'] is set on adds from admin page - a kludge
 			// that should be fixed in some better way.
 			if(empty($pParamHash['admin_add']) && $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
-				$pParamHash['password'] = $this->genPass();
 				$pParamHash['user_store']['provpass'] = md5(BitSystem::genPass());
 				$pParamHash['pass_due'] = 0;
 			} elseif( empty( $pParamHash['password'] ) ) {
@@ -559,7 +558,8 @@ return false;
 				// Send the mail
 				$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
 				$gBitSmarty->assign('mail_machine',$machine);
-				$gBitSmarty->assign('mail_apass',$apass);
+				$gBitSmarty->assign('mailUserId',$this->mUserId);
+				$gBitSmarty->assign('mailProvPass',$apass);
 				$mail_data = $gBitSmarty->fetch('bitpackage:users/user_validation_mail.tpl');
 				mail($pParamHash["email"], $siteName.' - '.tra('Your registration information'),$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
 				$gBitSmarty->assign('showmsg','y');

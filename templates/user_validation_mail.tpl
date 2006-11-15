@@ -4,6 +4,6 @@
 
 {tr}If you want to be a registered user in this site you will have to use the following link to login for the first time:{/tr}
 
-{$mail_machine}?user={$mail_user}&pass={$mail_apass}
+{$mail_machine}?v={$mailUserId}:{$mailProvPass}
 
 {tr}Enjoy the site!{/tr}
