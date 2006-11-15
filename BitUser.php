@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.112 2006/11/15 15:58:02 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.113 2006/11/15 16:33:07 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.112 2006/11/15 15:58:02 squareing Exp $
+ * $Id: BitUser.php,v 1.113 2006/11/15 16:33:07 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.112 $
+ * @version  $Revision: 1.113 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -409,7 +409,7 @@ class BitUser extends LibertyAttachable {
 			$errors['email'] = 'The email address "'.$pEmail.'" is invalid.';
 		} elseif( !empty( $this ) && is_object( $this ) && $this->userExists( array( 'email' => $pEmail ) ) ) {
 			$errors['email'] = 'The email address "'.$pEmail.'" has already been registered.';
-		} elseif( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
+		} elseif( $gBitSystem->isFeatureActive( 'users_validate_email' ) ) {
 			list ( $Username, $domain ) = split ("@",$pEmail);
 			// That MX(mail exchanger) record exists in domain check .
 			// checkdnsrr function reference : http://www.php.net/manual/en/function.checkdnsrr.php
