@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.111 2006/11/10 16:51:46 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.112 2006/11/15 15:58:02 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.111 2006/11/10 16:51:46 spiderr Exp $
+ * $Id: BitUser.php,v 1.112 2006/11/15 15:58:02 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.111 $
+ * @version  $Revision: 1.112 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -289,8 +289,8 @@ class BitUser extends LibertyAttachable {
 		if( !empty( $pParamHash['login'] ) ) {
 			if( $this->userExists( array( 'login' => $pParamHash['login'] ) ) ) {
 				$this->mErrors['login'] = 'The username "'.$pParamHash['login'].'" is already in use';
-			} elseif( preg_match( '/[^A-Za-z0-9_.]/', $pParamHash["login"] ) ) {
-				$this->mErrors['login'] = tra( "Your username can only contain numbers, characters, and underscores." );
+			} elseif( preg_match( '/[^A-Za-z0-9_.-]/', $pParamHash["login"] ) ) {
+				$this->mErrors['login'] = tra( "Your username can only contain numbers, characters, underscores and hyphens." );
 			} else {
 				// LOWER CASE all logins
 				$pParamHash['login'] = $pParamHash['login'];
@@ -311,7 +311,7 @@ class BitUser extends LibertyAttachable {
 		// check some new user requirements
 		if( !$this->isRegistered() ) {
 			/*if( empty( $pParamHash['login'] ) ) {
-			$this->mErrors['login'] = 'You must enter a username';
+				$this->mErrors['login'] = 'You must enter a username';
 			}*/
 			if( empty( $pParamHash['registration_date'] ) ) {
 				$pParamHash['registration_date'] = date( "U" );
