@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.6 2006/09/03 20:14:58 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.7 2006/11/16 15:11:08 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -105,9 +105,24 @@
 					<div class="row">
 						{formlabel label="Batch upload (CSV file)" for="csvlist"}
 						{forminput}
-							<input type="file" name="csvlist" id="csvlist" /><br />
-							<label><input type="checkbox" name="overwrite" checked="checked" /> {tr}Overwrite existing users{/tr}</label>
+							<input type="file" name="csvlist" id="csvlist" />
 							{formhelp note="You can batch import users by uploading a CSV (comma-separated values) file. The CSV file needs to have the column names in the first record. The column titles must match with fields in 'users_users' table. Login, password and email are required fields. If an unexistant field is specified, it's ignored."}
+						{/forminput}
+					</div>
+
+					<div class="row">
+						{formlabel label="Delimiter" for="delimiter"}
+						{forminput}
+							<input type="text" size="3" name="delimiter" id="delimiter" value="," />
+							{formhelp note="Set the delimiter of the file. You can not use tab as delimiter."}
+						{/forminput}
+					</div>
+
+					<div class="row">
+						{formlabel label="Overwrite existing users" for="overwrite"}
+						{forminput}
+							<input type="checkbox" name="overwrite" id="overwrite" checked="checked" />
+							{formhelp note=""}
 						{/forminput}
 					</div>
 

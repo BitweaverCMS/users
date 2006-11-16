@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.15 2006/09/17 07:18:11 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.16 2006/11/16 15:11:08 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -8,43 +8,52 @@ require_once( '../../bit_setup_inc.php' );
 
 function batchImportUsers() {
 	global $gBitSmarty, $gBitUser;
+
+	// get the delimiter if it's set - use comma if it not
+	$delimiter = !empty( $_REQUEST['delimiter'] ) ? $_REQUEST['delimiter'] : ",";
 	$fname = $_FILES['csvlist']['tmp_name'];
-	$fhandle = fopen($fname, "r");
+	$fhandle = fopen( $fname, "r" );
+
 	//Get the field names
-	$fields = fgetcsv($fhandle, 1000);
-	//any?
-	if (!$fields[0]) {
-		$gBitSmarty->assign('msg', tra("The file is not a CSV file or has not a correct syntax"));
+	$fields = fgetcsv( $fhandle, 1000, $delimiter );
+
+	// is the file a valid CSV file?
+	if( empty( $fields[0] ) ) {
+		$gBitSmarty->assign( 'msg', tra( "The file is not a CSV file or has not a correct syntax" ) );
 		$gBitSystem->display( 'error.tpl' );
 		die;
 	}
+
 	//now load the users in a table
-	while (!feof($fhandle)) {
-		if( $data = fgetcsv($fhandle, 1000) ) {
-			for ($i = 0; $i < count($fields); $i++) {
+	while( !feof( $fhandle ) ) {
+		if( $data = fgetcsv( $fhandle, 1000, $delimiter ) ) {
+			for( $i = 0; $i < count( $fields ); $i++ ) {
 				@$ar[$fields[$i]] = $data[$i];
 			}
-			$userrecs[] = $ar;
+			$userRecords[] = $ar;
 		}
 	}
-	fclose ($fhandle);
-	// any?
-	if (!is_array($userrecs)) {
-		$gBitSmarty->assign('msg', tra("No records were found. Check the file please!"));
+	fclose( $fhandle );
+
+	// were there any users in the list?
+	if( !is_array( $userRecords ) ) {
+		$gBitSmarty->assign( 'msg', tra( "No records were found. Check the file please!" ) );
 		$gBitSystem->display( 'error.tpl' );
 		die;
 	}
+
 	// Process user array
 	$added = 0;
 	$i = 1;
-	foreach ($userrecs as $u) {
+	foreach( $userRecords as $userRecord ) {
 		$newUser = new BitUser();
 		//untested - spiderr
-		if( $newUser->store( $u ) ) {
-			if( !empty( $u['groups'] ) ) {
-				$grps = explode(",", $u['groups']);
-				foreach ($grps as $grp) {
-					if( $groupId = $gBitUser->groupExists( $grp, ROOT_USER_ID ) ) {
+		if( $newUser->store( $userRecord ) ) {
+			if( !empty( $userRecord['groups'] ) ) {
+				// groups need to be seperated by spaces since this is a csv file
+				$groups = explode( " ", $userRecord['groups'] );
+				foreach( $groups as $group ) {
+					if( $groupId = $gBitUser->groupExists( $group, ROOT_USER_ID ) ) {
 						$newUser->addUserToGroup( $newUser->mUserId, $groupId );
 					}
 				}
@@ -57,11 +66,11 @@ function batchImportUsers() {
 		$i++;
 	}
 
-	$gBitSmarty->assign('added', $added);
-	if (@is_array($discarded)) {
-		$gBitSmarty->assign('discarded', count($discarded));
+	$gBitSmarty->assign( 'added', $added );
+	if( @is_array( $discarded ) ) {
+		$gBitSmarty->assign( 'discarded', count( $discarded ) );
+		$gBitSmarty->assign_by_ref( 'discardlist', $discarded );
 	}
-	@$gBitSmarty->assign_by_ref('discardlist', $discarded);
 }
 
 $gBitSystem->verifyPermission( 'p_users_admin' );
