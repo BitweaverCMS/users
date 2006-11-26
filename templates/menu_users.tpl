@@ -128,6 +128,11 @@
 				</a>
 			</li>
 		{/if}
+		<li>
+			<a class="item" href="{$smarty.const.LIBERTY_PKG_URL}attachments.php">
+				{biticon ipackage="icons" iname="mail-attachment" iexplain="Attachments" iforce=icon}{if !$icons_only} {tr}Attachments{/tr}{/if}
+			</a>
+		</li>
 	{else}
 		<li>
 			<a class="item" href="{$smarty.const.USERS_PKG_URL}login.php">
