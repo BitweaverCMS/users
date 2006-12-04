@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.45 2006/11/17 19:54:22 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.46 2006/12/04 22:36:54 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.45 2006/11/17 19:54:22 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.46 2006/12/04 22:36:54 squareing Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.45 $
+ * @version  $Revision: 1.46 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -392,7 +392,7 @@ class BitPermUser extends BitUser {
 
 	function batchAssignUsersToGroup( $pGroupId ) {
 		$users = $this->get_group_users($pGroupId);
-		$rs = $this->getCol( "select uu.`user_id` FROM `".BIT_DB_PREFIX."users_users` uu" );
+		$rs = $this->mDb->getCol( "SELECT uu.`user_id` FROM `".BIT_DB_PREFIX."users_users` uu" );
 		foreach( $rs as $userId ) {
 			if( empty( $users[$userId] ) && ($userId != ANONYMOUS_USER_ID) ) {
 				$this->addUserToGroup( $userId, $pGroupId );
