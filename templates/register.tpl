@@ -190,6 +190,7 @@
 
 				{if $gBitSystem->isFeatureActive('users_random_number_reg')}
 					<hr />
+					{formfeedback error=$errors.captcha}
 					{captcha force=true variant=row}
 				{/if}
 
