@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.117 2006/11/29 19:32:17 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.118 2006/12/07 21:24:41 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.117 2006/11/29 19:32:17 spiderr Exp $
+ * $Id: BitUser.php,v 1.118 2006/12/07 21:24:41 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.117 $
+ * @version  $Revision: 1.118 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -516,16 +516,17 @@ class BitUser extends LibertyAttachable {
 						$this->mUserId = $userId;
 						break;
 					} else {
-						$this->mErrors = array_merge($this->mErrors,$instance->mErrors);
-return false;
+						$this->mErrors = array_merge( $this->mErrors, $instance->mErrors);
+						return FALSE;
 					}
 				}
 			}
 
-			$this->load(false,$pParamHash['login']);
+			$this->load( FALSE, $pParamHash['login'] );
 
 			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
 			$notificationlib->post_new_user_event( $pParamHash['login'] );
+			$this->mLogs['register'] = 'New user registered.';
 			$ret = TRUE;
 
 			// set local time zone as default when registering
@@ -563,6 +564,8 @@ return false;
 				$mail_data = $gBitSmarty->fetch('bitpackage:users/user_validation_mail.tpl');
 				mail($pParamHash["email"], $siteName.' - '.tra('Your registration information'),$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
 				$gBitSmarty->assign('showmsg','y');
+
+				$this->mLogs['confirm'] = 'Validation email sent.';
 			}
 			if( $gBitSystem->isFeatureActive( 'send_welcome_email' ) ) {
 				// Send the welcome mail
@@ -570,7 +573,11 @@ return false;
 				$gBitSmarty->assign( 'mailEmail',$pParamHash['email'] );
 				$mail_data = $gBitSmarty->fetch('bitpackage:users/welcome_mail.tpl');
 				mail($pParamHash["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+
+				$this->mLogs['welcome'] = 'Welcome email sent.';
 			}
+			$logHash['action_log']['title'] = $pParamHash['login'];
+			$this->storeActionLog( $logHash );
 		}
 		return( $ret );
 	}
