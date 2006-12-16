@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.16 2006/11/16 15:11:08 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.17 2006/12/16 13:13:39 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -118,9 +118,41 @@ if (isset($_REQUEST["newuser"])) {
 
 // Process actions here
 // Remove user or remove user from group
-if (isset($_REQUEST["action"])) {
+if( isset( $_REQUEST["action"] ) ) {
 	$formHash['action'] = $_REQUEST['action'];
-	if ($_REQUEST["action"] == 'delete') {
+	if( !empty( $_REQUEST['batch_user_ids'] ) && is_array( $_REQUEST['batch_user_ids'] ) ) {
+		$gBitUser->verifyTicket();
+		if( isset( $_REQUEST["confirm"] ) ) {
+			$delUsers = $errDelUsers = "";
+			$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+			foreach( $_REQUEST['batch_user_ids'] as $uid ) {
+				$expungeUser = new $userClass( $uid );
+				$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $uid ) );
+				if( $expungeUser->load() && $expungeUser->expunge() ) {
+					$delUsers .= "<li>{$userInfo['real_name']} ({$userInfo['login']})</li>";
+				} else {
+					$errDelUsers .= "<li>{$userInfo['real_name']} ({$userInfo['login']})</li>";
+				}
+			}
+
+			if( !empty( $delUsers ) ) {
+				$feedback['success'][] = tra( 'Users deleted' ).": <ul>$delUsers</ul>";
+			} elseif( !empty( $errDelUsers ) ) {
+				$feedback['error'][] = tra( 'Users not deleted' ).": <ul>$errDelUsers</ul>";
+			}
+		} else {
+			foreach( $_REQUEST['batch_user_ids'] as $uid ) {
+				$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $uid ) );
+				$formHash['input'][] = '<input type="hidden" name="batch_user_ids[]" value="'.$uid.'"/>'."{$userInfo['real_name']} ({$userInfo['login']})";
+			}
+			$gBitSystem->setBrowserTitle( 'Delete users' );
+			$msgHash = array(
+				'confirm_item' => tra( 'Are you sure you want to remove these users?' ),
+				'warning' => tra( 'This will permentally delete these users' ),
+			);
+			$gBitSystem->confirmDialog( $formHash, $msgHash );
+		}
+	} elseif( $_REQUEST["action"] == 'delete' ) {
 		$gBitUser->verifyTicket();
 		$formHash['user_id'] = $_REQUEST['user_id'];
 		$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST["user_id"] ) );
@@ -129,7 +161,7 @@ if (isset($_REQUEST["action"])) {
 				$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
 				$expungeUser = new $userClass( $_REQUEST["user_id"] );
 				if( $expungeUser->load() && $expungeUser->expunge() ) {
-					$feedback['success'][] = tra( 'User Deleted' )." <strong>$userInfo[real_name] ($userInfo[login])</strong>";
+					$feedback['success'][] = tra( 'User deleted' )." <strong>{$userInfo['real_name']} ({$userInfo['login']})</strong>";
 				}
 			} else {
 				$gBitSystem->setBrowserTitle( 'Delete user' );
@@ -159,10 +191,11 @@ $_REQUEST['max_records'] = !empty( $_REQUEST['max_records'] ) ? $_REQUEST['max_r
 $gBitUser->getList( $_REQUEST );
 $gBitSmarty->assign_by_ref('users', $_REQUEST["data"]);
 $gBitSmarty->assign_by_ref('usercount', $_REQUEST["cant"]);
-if (isset($_REQUEST["numrows"]))
+if (isset($_REQUEST["numrows"])) {
 	$_REQUEST['listInfo']["numrows"] = $_REQUEST["numrows"];
-else
+} else {
 	$_REQUEST['listInfo']["numrows"] = 10;
+}
 $_REQUEST['listInfo']["URL"] = USERS_PKG_URL."admin/index.php";
 $gBitSmarty->assign_by_ref('listInfo', $_REQUEST['listInfo']);
 

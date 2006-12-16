@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.46 2006/12/04 22:36:54 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.47 2006/12/16 13:13:39 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.46 2006/12/04 22:36:54 squareing Exp $
+ * $Id: BitPermUser.php,v 1.47 2006/12/16 13:13:39 squareing Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.46 $
+ * @version  $Revision: 1.47 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -139,30 +139,47 @@ class BitPermUser extends BitUser {
 		return( $rv[$pUserId][$pGroupName]['group_id'] );
 	}
 
-	// removes user and associated private data
+	/**
+	 * removes user and associated private data
+	 *
+	 * @access public
+	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
+	 */
 	function expunge() {
-		global $gBitSystem;
-		$this->mDb->StartTrans();
-		if( $_REQUEST["user_id"] != ANONYMOUS_USER_ID ) {
-			$userTables = array(
-				'users_groups_map',
-			);
-			foreach( $userTables as $table ) {
-				$query = "DELETE FROM `".BIT_DB_PREFIX.$table."` WHERE `user_id` = ?";
-				$result = $this->mDb->query($query, array( $_REQUEST['user_id'] ) );
+		global $gBitSystem, $gBitUser;
+		if( $this->isValid() ) {
+			$this->mDb->StartTrans();
+			if( $this->mUserId == $gBitUser->mUserId ) {
+				$this->mDb->RollbackTrans();
+				$gBitSystem->fatalError( tra( 'You cannot delete yourself' ) );
+			} elseif( $this->mUserId != ANONYMOUS_USER_ID ) {
+				$userTables = array(
+					'users_groups_map',
+				);
+
+				foreach( $userTables as $table ) {
+					$query = "DELETE FROM `".BIT_DB_PREFIX.$table."` WHERE `user_id` = ?";
+					$result = $this->mDb->query( $query, array( $this->mUserId ) );
+				}
+
+				if( BitUser::expunge( $this->mUserId ) ) {
+					$this->mDb->CompleteTrans();
+					return TRUE;
+				} else {
+					$this->mDb->RollbackTrans();
+				}
+			} else {
+				$this->mDb->RollbackTrans();
+				$gBitSystem->fatalError( tra( 'The anonymous user cannot be deleted' ) );
 			}
-			$ret = BitUser::expunge( $_REQUEST["user_id"] );
-		} else {
-			$this->mDb->RollbackTrans();
-			$gBitSystem->fatalError( tra( 'The anonymous user cannot be deleted' ) );
 		}
-		$this->mDb->CompleteTrans();
+		return FALSE;
 	}
 	// =-=-=-=-=-=-=-=-=-=-=-= GROUP FUNCTIONS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-	function loadGroups($pForceRefresh = FALSE) {
+	function loadGroups( $pForceRefresh = FALSE ) {
 		if( $this->isValid() ) {
-			$this->mGroups = $this->getGroups(NULL, $pForceRefresh);
+			$this->mGroups = $this->getGroups( NULL, $pForceRefresh );
 		}
 	}
 
