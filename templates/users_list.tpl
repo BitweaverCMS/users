@@ -31,7 +31,11 @@
 				{/if}
 
 				{if $users[user].real_name}
-					<h2>{displayname hash=$users[user]} <small>{$users[user].login}</small></h2>
+					{if $gBitSystem->getConfig('users_display_name') == 'login'}
+						<h2>{$users[user].real_name} <small>[ {displayname hash=$users[user]} ]</small></h2>
+					{else}
+						<h2>{displayname hash=$users[user]} <small>[ {$users[user].login} ]</small></h2>
+					{/if}
 				{else}
 					<h2>{displayname hash=$users[user]}</h2>
 				{/if}
