@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.11 2006/04/19 17:05:15 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.12 2006/12/19 16:20:01 squareing Exp $ *}
 {strip}
 {bitmodule title="$moduleTitle" name="login_box"}
 	{if $gBitUser->IsRegistered()}
@@ -57,6 +57,12 @@
 				{/if}
 			</div>
 		{/form}
+	{/if}
+
+	{if $gBitSystem->isPackageActive( 'messages' ) && $unreadMsgs}
+		<div class="row">
+			<a href="{$smarty.const.MESSAGES_PKG_URL}message_box.php">{biticon ipackage=icons iname="mail-unread" iexplain="Unread Messages"} {$unreadMsgs}</a>
+		</div>
 	{/if}
 {/bitmodule}
 {/strip}
