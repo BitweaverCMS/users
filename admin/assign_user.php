@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.8 2006/12/19 12:40:08 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.9 2006/12/20 14:59:57 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -17,10 +17,9 @@ if (!$gBitUser->userExists( array( 'user_id' => $_REQUEST["assign_user"] ) ) ) {
 $assignUser = new BitPermUser( $_REQUEST["assign_user"] );
 $assignUser->load( TRUE );
 
-// why can't we edit an admin? - xing
-//if( $assignUser->isAdmin() && $assignUser->mUserId != $gBitUser->mUserId ) {
-//	$gBitSystem->fatalError( 'You cannot modify a system administrator.' );
-//}
+if( $assignUser->isAdmin() && !$gBitUser->isAdmin() ) {
+	$gBitSystem->fatalError( 'You cannot modify a system administrator.' );
+}
 
 if( isset( $_REQUEST["action"] ) ) {
 	$gBitUser->verifyTicket();
