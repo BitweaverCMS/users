@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.47 2006/12/16 13:13:39 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.48 2006/12/22 20:29:56 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.47 2006/12/16 13:13:39 squareing Exp $
+ * $Id: BitPermUser.php,v 1.48 2006/12/22 20:29:56 squareing Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.47 $
+ * @version  $Revision: 1.48 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -631,32 +631,45 @@ class BitPermUser extends BitUser {
 		}
 	}
 
+	/**
+	 * getGroupPermissions 
+	 * 
+	 * @param array $pGroupId Group id, if unset, all groups are returned
+	 * @param string $pPackage permissions to give group, if unset, all permissions are returned
+	 * @param string $find search for a particular permission
+	 * @param array $pSortMode sort mode of return hash
+	 * @access public
+	 * @return TRUE on success, FALSE on failure
+	 */
 	function getGroupPermissions( $pGroupId=NULL, $pPackage = '', $find = '', $pSortMode = NULL ) {
+		global $gBitSystem;
 		$values = array();
-		$mid = NULL;
-		$selectSql = '';
-		$fromSql = '';
+		$mid = $selectSql = $fromSql = '';
+
 		if( !empty( $pSortMode ) ) {
 			$sortMode = $this->mDb->convert_sortmode( $pSortMode );
 		} else {
 			$sortMode = 'up.`package`, up.`perm_name` ASC';
 		}
-		if ($pPackage) {
+
+		if( $pPackage ) {
 			$mid = ' WHERE `package`= ? ';
 			$values[] = $pPackage;
 		}
+
 		if( @$this->verifyId( $pGroupId ) ) {
 			$selectSql = ', ugp.`perm_value` AS `hasPerm` ';
 			$fromSql = ' INNER JOIN `'.BIT_DB_PREFIX.'users_group_permissions` ugp ON ( ugp.`perm_name`=up.`perm_name` ) ';
-			if ($mid) {
+			if( $mid ) {
 				$mid .= " AND  ugp.`group_id`=?";
 			} else {
 				$mid .= " WHERE ugp.`group_id`=?";
 			}
 			$values[] = $pGroupId;
 		}
-		if ($find) {
-			if ($mid) {
+
+		if( $find ) {
+			if( $mid ) {
 				$mid .= " AND `perm_name` like ?";
 			} else {
 				$mid .= " WHERE `perm_name` like ?";
@@ -667,7 +680,16 @@ class BitPermUser extends BitUser {
 		$query = "SELECT up.`perm_name` AS `hash_key`, up.`perm_name`, up.`perm_desc`, up.`perm_level`, up.`package` $selectSql
 				  FROM `".BIT_DB_PREFIX."users_permissions` up $fromSql $mid
 				  ORDER BY $sortMode";
-		return( $this->mDb->getAssoc( $query, $values ) );
+		$perms = $this->mDb->getAssoc( $query, $values );
+
+		// weed out permissions of inactive packages
+		$ret = array();
+		foreach( $perms as $key => $perm ) {
+			if( $gBitSystem->isPackageActive( $perm['package'] ) ) {
+				$ret[$key] = $perm;
+			}
+		}
+		return $ret;
 	}
 
 

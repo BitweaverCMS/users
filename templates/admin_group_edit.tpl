@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.12 2006/11/10 21:57:29 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.13 2006/12/22 20:29:56 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -132,13 +132,13 @@
 								<th>{tr}Description{/tr}</th>
 							</tr>
 							{foreach from=$groupInfo.perms key=permName item=perm}
-							<tr class="{cycle values="odd,even"}">
-								<td>
-									{smartlink ititle="Remove" ibiticon="icons/edit-delete" package=$package group_id=$groupInfo.group_id action=remove permission=$permName}
-									&nbsp;{$permName}
-								</td>
-								<td>{$perm.perm_desc}</td>
-							</tr>
+								<tr class="{cycle values="odd,even"}">
+									<td>
+										{smartlink ititle="Remove" ibiticon="icons/edit-delete" package=$package group_id=$groupInfo.group_id action=remove permission=$permName}
+										&nbsp;{$permName}
+									</td>
+									<td>{$perm.perm_desc}</td>
+								</tr>
 							{/foreach}
 						</table>
 					{/form}
@@ -156,7 +156,9 @@
 							{forminput}
 								{smartlink ititle="All packages" group_id=$groupInfo.group_id}
 								{foreach from=$permPackages key=i item=packageKey}
-									&nbsp;&bull; {smartlink ititle=$gBitSystem->mPackages.$packageKey.name|default:$packageKey group_id=$groupInfo.group_id package=$packageKey}
+									{if $gBitSystem->isPackageActive($packageKey)}
+										&nbsp;&bull; {smartlink ititle=$gBitSystem->mPackages.$packageKey.name|default:$packageKey group_id=$groupInfo.group_id package=$packageKey}
+									{/if}
 								{/foreach}
 							{/forminput}
 						</div>
