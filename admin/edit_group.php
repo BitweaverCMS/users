@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.20 2006/06/24 19:25:42 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.21 2006/12/23 09:29:05 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -14,7 +14,7 @@ $errorMsg = NULL;
 
 $gBitUser->getUnassignedPerms();
 
-$gBitSmarty->assign( 'loadAjax', TRUE );
+$gBitSmarty->assign( 'loadAjax', 'prototype' );
 if ( !empty( $gBodyOnload ) ) {
 	array_push( $gBodyOnload, 'injectSuggestBehavior();' );
 } else {
