@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.11 2006/06/16 20:59:43 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.12 2006/12/25 08:01:31 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: edit_personal_page.php,v 1.11 2006/06/16 20:59:43 sylvieg Exp $
+ * $Id: edit_personal_page.php,v 1.12 2006/12/25 08:01:31 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -28,7 +28,7 @@ if (isset($_REQUEST["fSavePage"])) {
 	die;
 }
 
-if ($gBitSystem->getConfig('package_quicktags','n') == 'y') {
+if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
 	include_once( QUICKTAGS_PKG_PATH.'quicktags_inc.php' );
 }
 
