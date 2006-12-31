@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.13 2006/12/19 16:24:52 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.14 2006/12/31 13:12:02 squareing Exp $ *}
 {strip}
 {bitmodule title="$moduleTitle" name="login_box"}
 	{if $gBitUser->IsRegistered()}
@@ -7,7 +7,7 @@
 		{if $gBitUser->hasPermission( 'p_users_admin' )}
 		<div class="row">
 			{form ipackage=users ifile="admin/index.php"}
-				<input type="text" name="assume_user" value="{tr}Username{/tr}" id="assume_user" size="15" onfocus="this.value=''" /> <input type="submit" name="confirm" value="{tr}Assume{/tr}" />
+				<input type="text" name="assume_user" value="{tr}Username{/tr}" id="assume_user" size="15" onblur="if (this.value == '') {ldelim}this.value = '{tr}Username{/tr}';{rdelim}" onfocus="if (this.value == '{tr}Username{/tr}') {ldelim}this.value = '';{rdelim}" /> <input type="submit" name="confirm" value="{tr}Assume{/tr}" />
 			{/form}
 		</div>
 		{/if}
@@ -15,11 +15,11 @@
 		{assign var=force_secure value=$gBitSystem->isFeatureActive("site_https_login_required")}
 		{form ipackage=users ifile='validate.php' secure=$force_secure}
 			<div class="row">
-				<input type="text" name="user" id="user" value="{tr}Username{/tr}" size="15" onfocus="this.value=''" />
+				<input type="text" name="user" id="user" value="{tr}Username{/tr}" size="15" onblur="if (this.value == '') {ldelim}this.value = '{tr}Username{/tr}';{rdelim}" onfocus="if (this.value == '{tr}Username{/tr}') {ldelim}this.value = '';{rdelim}" />
 			</div>
 
 			<div class="row">
-				<input type="password" name="pass" id="pass" value="password" size="15" onfocus="this.value=''" />
+				<input type="password" name="pass" id="pass" value="password" size="15" onblur="if (this.value == '') {ldelim}this.value = 'password';{rdelim}" onfocus="if (this.value == 'password') {ldelim}this.value = '';{rdelim}" />
 			</div>
 
 			{if $gBitSystem->isFeatureActive('users_remember_me')}
