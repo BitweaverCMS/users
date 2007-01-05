@@ -296,8 +296,8 @@
 						</tr>
 						{foreach item=watch from=$watches}
 							<tr class="{cycle vlaues="odd,even"}">
-								<td>{$watch.event}</td>
-								<td>{$watch.title}</td>
+								<td>{$watch.event|escape}</td>
+								<td>{$watch.title|escape}</td>
 							</tr>
 						{/foreach}
 					</table>
