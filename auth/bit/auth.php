@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/bit/auth.php,v 1.4 2006/10/13 12:47:40 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/bit/auth.php,v 1.5 2007/01/06 09:46:27 squareing Exp $
  *
  * @package users
  */
@@ -30,7 +30,7 @@ class BitAuth extends BaseAuth {
 			$loginVal = strtoupper( $user ); // case insensitive login
 			$loginCol = ' UPPER(`'.(strpos( $user, '@' ) ? 'email' : 'login').'`)';
 			// first verify that the user exists
-			$query = "select `email`, `login`, `user_id`, `user_password` from `".BIT_DB_PREFIX."users_users` where " . $gBitDb->convert_binary(). " $loginCol = ?";
+			$query = "select `email`, `login`, `user_id`, `user_password` from `".BIT_DB_PREFIX."users_users` where " . $gBitDb->convertBinary(). " $loginCol = ?";
 			$result = $gBitDb->query( $query, array( $loginVal ) );
 			if( !$result->numRows() ) {
 				$this->mErrors['login'] = 'User not found';
@@ -44,7 +44,7 @@ class BitAuth extends BaseAuth {
 				// next verify the password with 2 hashes methods, the old one (pass)) and the new one (login.pass;email)
 				// TODO - this needs cleaning up - wolff_borg
 				if( !$gBitSystem->isFeatureActive( 'feature_challenge' ) || empty($response) ) {
-					$query = "select `user_id`, `hash` from `".BIT_DB_PREFIX."users_users` where " . $gBitDb->convert_binary(). " $loginCol = ? and (`hash`=? or `hash`=?)";
+					$query = "select `user_id`, `hash` from `".BIT_DB_PREFIX."users_users` where " . $gBitDb->convertBinary(). " $loginCol = ? and (`hash`=? or `hash`=?)";
 					if ( $row = $gBitDb->getRow( $query, array( $loginVal, $hash, $hash2 ) ) ) {
 						// auto-update old hashes with simple and standard md5( password )
 						$hashUpdate = '';
@@ -64,7 +64,7 @@ class BitAuth extends BaseAuth {
 				} else {
 					// Use challenge-reponse method
 					// Compare pass against md5(user,challenge,hash)
-					$hash = $gBitDb->getOne("select `hash`  from `".BIT_DB_PREFIX."users_users` where " . $gBitDb->convert_binary(). " $loginCol = ?", array( $user ) );
+					$hash = $gBitDb->getOne("select `hash`  from `".BIT_DB_PREFIX."users_users` where " . $gBitDb->convertBinary(). " $loginCol = ?", array( $user ) );
 					if (!isset($_SESSION["challenge"])) {
 						$this->mErrors[] = 'Invalid challenge';
 						$ret=PASSWORD_INCORRECT;

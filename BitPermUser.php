@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.49 2006/12/29 12:40:38 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.50 2007/01/06 09:46:27 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.49 2006/12/29 12:40:38 squareing Exp $
+ * $Id: BitPermUser.php,v 1.50 2007/01/06 09:46:27 squareing Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.49 $
+ * @version  $Revision: 1.50 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -207,7 +207,7 @@ class BitPermUser extends BitUser {
 		}
 		$this->prepGetList( $pListHash );
 
-		$sortMode = $this->mDb->convert_sortmode( $pListHash['sort_mode'] );
+		$sortMode = $this->mDb->convertSortmode( $pListHash['sort_mode'] );
 		if( !empty( $pListHash['find_groups'] ) ) {
 			$mid = " WHERE UPPER(`group_name`) like ?";
 			$bindvars[] = "%".strtoupper( $pListHash['find_groups'] )."%";
@@ -647,7 +647,7 @@ class BitPermUser extends BitUser {
 		$mid = $selectSql = $fromSql = '';
 
 		if( !empty( $pSortMode ) ) {
-			$sortMode = $this->mDb->convert_sortmode( $pSortMode );
+			$sortMode = $this->mDb->convertSortmode( $pSortMode );
 		} else {
 			$sortMode = 'up.`package`, up.`perm_name` ASC';
 		}

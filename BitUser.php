@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.120 2007/01/06 06:23:11 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.121 2007/01/06 09:46:27 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.120 2007/01/06 06:23:11 spiderr Exp $
+ * $Id: BitUser.php,v 1.121 2007/01/06 09:46:27 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.120 $
+ * @version  $Revision: 1.121 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -904,7 +904,7 @@ class BitUser extends LibertyAttachable {
 			$mid = '';
 			$bindvars=array();
 		}
-		$query = "select `login` from `".BIT_DB_PREFIX."users_users` $mid order by ".$this->mDb->convert_sortmode($sort_mode);
+		$query = "select `login` from `".BIT_DB_PREFIX."users_users` $mid order by ".$this->mDb->convertSortmode($sort_mode);
 		$result = $this->mDb->query($query,$bindvars,$max_records,$offset);
 		$ret = array();
 		while ($res = $result->fetchRow()) {
@@ -1045,7 +1045,7 @@ class BitUser extends LibertyAttachable {
 	}
 
 	function get_users($offset = 0, $max_records = -1, $sort_mode = 'login_desc', $find = '') {
-		$sort_mode = $this->mDb->convert_sortmode($sort_mode);
+		$sort_mode = $this->mDb->convertSortmode($sort_mode);
 		// Return an array of users indicating name, email, last changed pages, versions, last_login
 		if ($find) {
 			$findesc = '%' . strtoupper( $find ) . '%';
@@ -1098,7 +1098,7 @@ class BitUser extends LibertyAttachable {
 		$query = "select DISTINCT uc.`user_id`, `login`, `real_name` ,`connect_time`, `ip`, `user_agent`, `last_get`
 				  FROM `".BIT_DB_PREFIX."users_cnxn` uc INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (uc.`user_id`=uu.`user_id`)
 				  WHERE uc.`user_id` IS NOT NULL $whereSql
-				  ORDER BY ".$this->mDb->convert_sortmode( $pListHash['sort_mode'] );
+				  ORDER BY ".$this->mDb->convertSortmode( $pListHash['sort_mode'] );
 		$result = $this->mDb->query($query, $bindVars, $pListHash['max_records'], $pListHash['offset'] );
 		$ret = array();
 		while ($res = $result->fetchRow()) {
@@ -1518,7 +1518,7 @@ class BitUser extends LibertyAttachable {
 		if ( !isset( $pParamHash['sort_mode']) or $pParamHash['sort_mode'] == '' ) $pParamHash['sort_mode'] = 'registration_date_desc';
 
 		LibertyContent::prepGetList( $pParamHash );
-		$sort_mode = $this->mDb->convert_sortmode($pParamHash['sort_mode']);
+		$sort_mode = $this->mDb->convertSortmode($pParamHash['sort_mode']);
 		// Return an array of users indicating name, email, last changed pages, versions, last_login
 		if ( $pParamHash['find'] ) {
 			$mid = " where UPPER(uu.`login`) LIKE ? OR UPPER(uu.real_name) LIKE ? OR UPPER(uu.email) LIKE ? ";
