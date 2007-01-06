@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.119 2006/12/08 08:43:29 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.120 2007/01/06 06:23:11 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.119 2006/12/08 08:43:29 squareing Exp $
+ * $Id: BitUser.php,v 1.120 2007/01/06 06:23:11 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.119 $
+ * @version  $Revision: 1.120 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -724,7 +724,7 @@ class BitUser extends LibertyAttachable {
 
 		// Make sure cookies are enabled
 		if ( !isset($_COOKIE[$user_cookie_site]) ) {
-			$url = USERS_PKG_URL.'login.php?error=' . urlencode(tra('no cookie found, please enable cookies and try again.'));
+			$url = USERS_PKG_URL.'login.php?error=' . urlencode(tra('No cookie found. Please enable cookies and try again.'));
 			return ( $url );
 		}
 
