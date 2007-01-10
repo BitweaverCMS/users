@@ -13,7 +13,8 @@
 				{smartlink ipackage=users ifile="admin/index.php" assume_user=$userInfo.user_id ititle="Assume user identity" ibiticon="users/assume_user" iforce="icon"}
 				{smartlink ipackage=users ifile="preferences.php" view_user=$userInfo.user_id ititle="Edit User Information" ibiticon="icons/accessories-text-editor" iforce="icon"}
 				{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userInfo.user_id ititle="Assign Group" ibiticon="icons/emblem-shared" iforce="icon"}
-				{if $users[user].user_id != -1}{* TODO: evil hardcoding *}
+				{if $users[user].user_id != $smarty.const.ANONYMOUS_USER_ID}
+					{smartlink ipackage=liberty ifile="list_content.php" user_id=$userInfo.user_id ititle="User Content" ibiticon="icons/format-justify-fill" iforce="icon"}
 					{smartlink ipackage=users ifile="admin/index.php" action=delete user_id=$userInfo.user_id ititle="Remove" ibiticon="icons/edit-delete" iforce="icon"}
 				{/if}
 			{/if}
