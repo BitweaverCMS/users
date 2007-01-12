@@ -51,7 +51,7 @@
 	{/if}
 
 	<div class="row submit">
-		<input type="submit" name="login" value="{tr}Log in to {$siteName|default:"this site"}{/tr}" />
+		<input type="submit" name="login" value="{tr}Log in to {$gBitSystem->getConfig('site_title')|default:"this site"}{/tr}" />
 	</div>
 {/form}
 {/strip}
