@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.50 2007/01/06 09:46:27 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.51 2007/01/14 23:26:01 hiranchaudhuri Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.50 2007/01/06 09:46:27 squareing Exp $
+ * $Id: BitPermUser.php,v 1.51 2007/01/14 23:26:01 hiranchaudhuri Exp $
  * @package users
  */
 
@@ -25,7 +25,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.50 $
+ * @version  $Revision: 1.51 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -434,6 +434,12 @@ class BitPermUser extends BitUser {
 		$res["perms"] = $perms;
 		return $res;
 	}
+	
+	/** Adds user pUserId to group(s) pGroupMixed.
+	 * @param pUserId numerical user id
+	 * @param pGroupMixed either a numerical group id or an array of group ids.
+	 * @return Either an ADO RecordSet (success) or false (failure).
+	 */
 	function addUserToGroup( $pUserId, $pGroupMixed ) {
 		$result = TRUE;
 		$addGroups = array();
