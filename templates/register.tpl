@@ -3,7 +3,7 @@
 <div class="display login">
 	<div class="header">
 		<h1>{tr}Register as a new user{/tr}</h1>
-		{if $showmsg eq 'y'}<h2>{$msg}</h2>{/if}
+		{if $showmsg eq 'y'}<p>{$msg}</p>{/if}
 	</div>
 
 {if $showmsg ne 'y'}

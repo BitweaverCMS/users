@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/admin_permission.tpl,v 1.2 2005/08/07 17:46:48 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/Attic/admin_permission.tpl,v 1.3 2007/01/14 13:10:09 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
@@ -8,7 +8,7 @@
 		<h1>{tr}Assign permissions{/tr}</h1>
 	</div>
 
-	<h2>{tr}{$group} permissions{/tr}</h2>
+	<p>{tr}{$group} permissions{/tr}</p>
 
 	<div class="navbar">
 	  <a href="{$smarty.const.USERS_PKG_URL}admin/admin_groups.php">{tr}Back to groups{/tr}</a>

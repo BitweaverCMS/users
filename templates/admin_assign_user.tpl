@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_assign_user.tpl,v 1.2 2006/09/03 20:14:58 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_assign_user.tpl,v 1.3 2007/01/14 13:10:04 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 <div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{biticon ipackage="icons" iname="go-previous" iexplain="back to users"}</a></div>
@@ -6,7 +6,7 @@
 <div class="admin users">
 	<div class="header">
 		<h1>{tr}Assign user to groups{/tr}</h1>
-		<h2>Assign and remove groups for user {$assignUser->mInfo.login}</h2>
+		<p>Assign and remove groups for user {$assignUser->mInfo.login}</p>
 	</div>
 
 	<div class="body">
