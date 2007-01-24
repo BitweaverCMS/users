@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.14 2006/09/20 02:04:09 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.15 2007/01/24 09:46:34 squareing Exp $ *}
 {strip}
 {if $userData->getPreference('users_information') eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
@@ -30,7 +30,8 @@
 		<div class="row">
 			{formlabel label="Language"}
 			{forminput}
-				{$userData->getPreference('bitlanguage')}
+				{assign var=langcode value=$userData->getPreference('bitlanguage')}
+				{$gBitLanguage->mLanguageList.$langcode.full_name}
 			{/forminput}
 		</div>
 	{/if}
