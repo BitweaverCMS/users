@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_assign_user.tpl,v 1.3 2007/01/14 13:10:04 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_assign_user.tpl,v 1.4 2007/01/24 18:26:47 squareing Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 <div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{biticon ipackage="icons" iname="go-previous" iexplain="back to users"}</a></div>
@@ -6,7 +6,7 @@
 <div class="admin users">
 	<div class="header">
 		<h1>{tr}Assign user to groups{/tr}</h1>
-		<p>Assign and remove groups for user {$assignUser->mInfo.login}</p>
+		<p>{tr}Assign and remove groups for user {$assignUser->mInfo.login}{/tr}</p>
 	</div>
 
 	<div class="body">
@@ -49,7 +49,7 @@
 				{forminput}
 					{foreach from=$assignUser->mGroups key=groupId item=group}
 						{if $groupId eq $assignUser->mInfo.default_group_id}<strong>{/if}
-						<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$groupId}">{$group.group_name}
+						<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$groupId}">{$group.group_name}</a>
 						{if $groupId eq $assignUser->mInfo.default_group_id}</strong>{/if}
 						{if $groupId != -1}
 							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="icons" iname="edit-delete" iexplain="remove from group" iforce="icon"}</a>
