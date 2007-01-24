@@ -39,7 +39,7 @@
 						{if $grp.group_home}{tr}Home Page{/tr}:<strong> {$grp.group_home}</strong><br />{/if}
 						{if $grp.included}
 							<br />{tr}Included Groups{/tr}
-							<ul class="data small">
+							<ul class="small">
 								{foreach from=$grp.included key=incGroupId item=incGroupName}
 									<li class="{cycle values="odd,even"} item">{$incGroupName}</li>
 								{/foreach}
