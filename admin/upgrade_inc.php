@@ -635,7 +635,7 @@ array( 'DATADICT' => array(
 			'after_registration_page' => '`after_registration_page` C(255)' ,
 		),
 		'users_cnxn' => array(
-			'assume_from_user_id' => array( '`assume_from_user_id`', 'I4' ),
+			'assume_user_id' => array( '`assume_user_id`', 'I4' ),
 		),
 	)),
 	)
