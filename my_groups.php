@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.9 2006/08/25 10:58:13 sylvieg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.10 2007/02/02 20:51:17 nickpalmer Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.9 2006/08/25 10:58:13 sylvieg Exp $
+ * $Id: my_groups.php,v 1.10 2007/02/02 20:51:17 nickpalmer Exp $
  * @package users
  * @subpackage functions
  */
@@ -186,6 +186,7 @@ if ( ( !empty( $_REQUEST['add_public_group'] ) || !empty( $_REQUEST['remove_publ
 	}
 }
 $systemGroups = $gBitUser->getGroups( $gBitUser->mUserId, TRUE );
+$gBitSmarty->assign_by_ref( 'systemGroups', $systemGroups);
 $listHash = array( 'is_public'=>'y', 'sort_mode'=>array('is_default_asc' , 'group_desc_asc') );
 $publicGroups = $gBitUser->getAllGroups( $listHash );	
 if ( $publicGroups['cant'] ) {
@@ -207,7 +208,6 @@ if ( $publicGroups['cant'] ) {
 			break;
 		}
 	}
-	$gBitSmarty->assign_by_ref( 'systemGroups', $systemGroups);
 	$gBitSmarty->assign_by_ref( 'publicGroups', $publicGroups['data'] );
 	if (isset($canRemovePublic)) {
 		$gBitSmarty->assign( 'canRemovePublic' , 'y');
