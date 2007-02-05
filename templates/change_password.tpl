@@ -1,34 +1,51 @@
-<h1>{tr}Change password enforced{/tr}</h1>
-<form method="post" action="{$smarty.const.USERS_PKG_URL}change_password.php">
-<input type="hidden" name="user_id" value="{$userInfo.user_id}" />
-{if $userInfo.provpass}
-  <input type="hidden" name="provpass" value="{$userInfo.provpass|escape}" />
-{/if}
+{strip}
 
-<table class="panel">
-<tr>
-  <td>{tr}User{/tr}:</td>
-  <td><b>{$userInfo.login}</b></td>
-</tr>
+<div class="display login">
+	<div class="header">
+		<h1>{tr}Change password enforced{/tr}</h1>
+	</div>
 
-{if !$userInfo.provpass}
-<tr>
-  <td>{tr}Old password{/tr}:</td>
-  <td><input type="password" name="oldpass" /></td>
-</tr>     
-{/if}
+	<div class="body">
+		{form ipackage=users ifile="change_password.php"}
+			<input type="hidden" name="user_id" value="{$userInfo.user_id}" />
+			{if $userInfo.provpass}
+				<input type="hidden" name="provpass" value="{$userInfo.provpass|escape}" />
+			{/if}
 
-<tr>
-  <td>{tr}New password{/tr}:</td>
-  <td><input type="password" name="pass" /></td>
-</tr>  
-<tr>
-  <td>{tr}Again please{/tr}:</td>
-  <td><input type="password" name="pass2" /></td>
-</tr>  
-<tr>
-  <td>&nbsp;</td>
-  <td><input type="submit" name="change" value="{tr}change{/tr}" /></td>
-</tr>  
-</table>
-</form>
+			<div class="row">
+				{formlabel label="User" for="user"}
+				{forminput}
+					{$userInfo.login}
+				{/forminput}
+			</div>
+
+			{if !$userInfo.provpass}
+				<div class="row">
+					{formlabel label="Old Password" for="oldpass"}
+					{forminput}
+						<input type="password" name="oldpass" id="oldpass" />
+					{/forminput}
+				</div>
+			{/if}
+
+			<div class="row">
+				{formlabel label="New Password" for="pass"}
+				{forminput}
+					<input type="password" name="pass" id="pass" />
+				{/forminput}
+			</div>
+
+			<div class="row">
+				{formlabel label="Again Please" for="pass2"}
+				{forminput}
+					<input type="password" name="pass2" id="pass2" />
+				{/forminput}
+			</div>
+
+			<div class="submit">
+				<input type="submit" name="change" value="{tr}Change Password{/tr}" />
+			</div>
+		{/form}
+	</div><!-- end .body -->
+</div><!-- end .login -->
+{/strip}
