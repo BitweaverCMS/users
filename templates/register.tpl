@@ -52,6 +52,10 @@
 					{/forminput}
 				</div>
 
+				{if $gBitSystem->isFeatureActive( 'users_validate_user' )}
+					{formfeedback warning="{tr}A confirmation email will be sent to you with instructions on how to login{/tr}"}
+				{/if}
+
 				<div class="row">
 					{formfeedback error=$errors.email}
 					{formlabel label="Email" for="email"}
@@ -70,11 +74,7 @@
 					</div>
 				{/if}
 
-				{if $gBitSystem->isFeatureActive( 'users_validate_user' )}
-					<div class="row">
-						{formfeedback warning="A confirmation email will be sent to you with instructions how to login"}
-					</div>
-				{else}
+				{if !$gBitSystem->isFeatureActive( 'users_validate_user' )}
 					<div class="row">
 						{formfeedback error=$errors.password}
 						{formlabel label="Password" for="pass"}
