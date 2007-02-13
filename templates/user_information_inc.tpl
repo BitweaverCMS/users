@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.15 2007/01/24 09:46:34 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.16 2007/02/13 14:33:58 squareing Exp $ *}
 {strip}
 {if $userData->getPreference('users_information') eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
@@ -91,6 +91,10 @@
 				{tr}Send a <a href="{$smarty.const.MESSAGES_PKG_URL}compose.php?to={$userInfo.login}">personal message</a> to this user{/tr}
 			{/forminput}
 		</div>
+	{/if}
+
+	{if $gBitSystem->isPackageActive('stars') && $gBitSystem->isFeatureActive('stars_user_ratings')}
+		{include file="bitpackage:stars/user_ratings.tpl"}
 	{/if}
 {else}
 	<div class="norecords">

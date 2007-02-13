@@ -32,9 +32,6 @@
 
 	<div class="header">
 		<h1 >{displayname hash=$userInfo nolink=true}</h1>
-		{if $gBitSystem->isPackageActive('stars') && $gBitSystem->isFeatureActive('stars_user_ratings')}
-			{include file="bitpackage:stars/user_ratings.tpl"}
-		{/if}
 	</div>
 
 	{if $userInfo.last_modified ne $userInfo.last_modified}
