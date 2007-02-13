@@ -71,7 +71,7 @@
 						{/forminput}
 					</div>
 
-					{if $users_change_language eq 'y'}
+					{if $gBitSystem->getConfig('users_change_language') eq 'y'}
 						<div class="row">
 							{formlabel label="Language" for="language"}
 							{forminput}
