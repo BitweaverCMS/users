@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.17 2006/12/16 13:13:39 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.18 2007/02/24 08:51:09 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -50,7 +50,7 @@ function batchImportUsers() {
 		//untested - spiderr
 		if( $newUser->store( $userRecord ) ) {
 			if( !empty( $userRecord['groups'] ) ) {
-				// groups need to be seperated by spaces since this is a csv file
+				// groups need to be separated by spaces since this is a csv file
 				$groups = explode( " ", $userRecord['groups'] );
 				foreach( $groups as $group ) {
 					if( $groupId = $gBitUser->groupExists( $group, ROOT_USER_ID ) ) {

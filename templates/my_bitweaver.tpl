@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_bitweaver.tpl,v 1.9 2006/09/15 07:54:59 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_bitweaver.tpl,v 1.10 2007/02/24 08:51:09 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
@@ -14,7 +14,7 @@
 {*
 	this is where we should add the following tabs:
 	file manager
-	quota manager - currently on seperate page, but i believe this would be good in here.
+	quota manager - currently on separate page, but i believe this would be good in here.
 	listing of submitted / edited stuff - similar to the old tiki personal tiki stuff.
 *}
 
