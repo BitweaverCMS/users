@@ -154,9 +154,9 @@
 						<div class="row">
 							{formlabel label="Displayed time zone"}
 							{forminput}
-								<label><input type="radio" name="site_display_timezone" value="UTC" {if $editUser->mInfo.site_display_timezone eq 'UTC'}checked="checked"{/if} />{tr}UTC{/tr}</label>
+								<label><input type="radio" name="site_display_timezone" value="UTC" {if $editUser->mPrefs.site_display_timezone eq 'UTC'}checked="checked"{/if} />{tr}UTC{/tr}</label>
 								<br />
-								<label><input type="radio" name="site_display_timezone" value="Local" {if $editUser->mInfo.site_display_timezone ne 'UTC'}checked="checked"{/if} />{tr}Local{/tr}</label>
+								<label><input type="radio" name="site_display_timezone" value="Local" {if $editUser->mPrefs.site_display_timezone ne 'UTC'}checked="checked"{/if} />{tr}Local{/tr}</label>
 								{formhelp note=""}
 							{/forminput}
 						</div>
