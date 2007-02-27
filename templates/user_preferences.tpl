@@ -154,10 +154,26 @@
 						<div class="row">
 							{formlabel label="Displayed time zone"}
 							{forminput}
-								<label><input type="radio" name="site_display_timezone" value="UTC" {if $editUser->mPrefs.site_display_timezone eq 'UTC'}checked="checked"{/if} />{tr}UTC{/tr}</label>
+								<label><input type="radio" name="site_display_utc" value="UTC" {if $editUser->mPrefs.site_display_utc eq 'UTC'}checked="checked"{/if} />{tr}UTC{/tr}</label>
 								<br />
-								<label><input type="radio" name="site_display_timezone" value="Local" {if $editUser->mPrefs.site_display_timezone ne 'UTC'}checked="checked"{/if} />{tr}Local{/tr}</label>
-								{formhelp note=""}
+								<label><input type="radio" name="site_display_utc" value="Local" {if $editUser->mPrefs.site_display_utc eq 'Local'}checked="checked"{/if} />{tr}Local{/tr}</label>
+								<br />
+								<label><input type="radio" name="site_display_utc" value="Fixed" {if $editUser->mPrefs.site_display_utc eq 'Fixed'}checked="checked"{/if} />{tr}Fixed{/tr}</label>
+								<br />
+								<select name="site_display_timezone" id="site_display_timezone">
+									<option value="-5"  {if $editUser->mPrefs.site_display_timezone eq -5}selected="selected"{/if}>{tr}-5{/tr}</option>
+									<option value="-4"  {if $editUser->mPrefs.site_display_timezone eq -4}selected="selected"{/if}>{tr}-4{/tr}</option>
+									<option value="-3" {if $editUser->mPrefs.site_display_timezone eq -3}selected="selected"{/if}>{tr}-3{/tr}</option>
+									<option value="-2" {if $editUser->mPrefs.site_display_timezone eq -2}selected="selected"{/if}>{tr}-2{/tr}</option>
+									<option value="-1" {if $editUser->mPrefs.site_display_timezone eq -1}selected="selected"{/if}>{tr}-1{/tr}</option>
+									<option value="0" {if $editUser->mPrefs.site_display_timezone eq 0}selected="selected"{/if}>{tr}0{/tr}</option>
+									<option value="1" {if $editUser->mPrefs.site_display_timezone eq 1}selected="selected"{/if}>{tr}1{/tr}</option>
+									<option value="2" {if $editUser->mPrefs.site_display_timezone eq 1}selected="selected"{/if}>{tr}2{/tr}</option>
+									<option value="3" {if $editUser->mPrefs.site_display_timezone eq 1}selected="selected"{/if}>{tr}3{/tr}</option>
+									<option value="4" {if $editUser->mPrefs.site_display_timezone eq 1}selected="selected"{/if}>{tr}4{/tr}</option>
+									<option value="5" {if $editUser->mPrefs.site_display_timezone eq 1}selected="selected"{/if}>{tr}5{/tr}</option>
+								</select>
+								{formhelp note="Internal data is stored using UTC time stamps, these can then be displayed using your browser timezone offset, or a fixed timezone which will also manage the correct daylight saving"}
 							{/forminput}
 						</div>
 

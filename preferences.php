@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.40 2007/02/23 15:36:41 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.41 2007/02/27 17:28:42 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.40 2007/02/23 15:36:41 squareing Exp $
+ * $Id: preferences.php,v 1.41 2007/02/27 17:28:42 lsces Exp $
  * @package users
  * @subpackage functions
  */
@@ -106,6 +106,7 @@ if( isset( $_REQUEST["prefs"] )) {
 	$prefs = array(
 		'users_bread_crumb'     => USERS_PKG_NAME,
 		'users_homepage'        => USERS_PKG_NAME,
+		'site_display_utc'		=> USERS_PKG_NAME,
 		'site_display_timezone' => USERS_PKG_NAME,
 		'users_country'         => USERS_PKG_NAME,
 		'users_information'     => USERS_PKG_NAME,

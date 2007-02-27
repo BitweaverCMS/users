@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.121 2007/01/06 09:46:27 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.122 2007/02/27 17:28:42 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.121 2007/01/06 09:46:27 squareing Exp $
+ * $Id: BitUser.php,v 1.122 2007/02/27 17:28:42 lsces Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.121 $
+ * @version  $Revision: 1.122 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -157,6 +157,9 @@ class BitUser extends LibertyAttachable {
 		global $gBitSystem;
 		if( !$this->getPreference( 'users_information' ) ) { $this->setPreference( 'users_information', 'public' ); }
 		if( !$this->getPreference( 'messages_allow_messages' ) ) { $this->setPreference( 'messages_allow_messages', 'y' ); }
+		if( !$this->getPreference( 'site_display_utc' ) ) {
+			$this->setPreference( 'site_display_utc', 'Local' );
+		}
 		if( !$this->getPreference( 'site_display_timezone' ) ) {
 			$server_time = new BitDate();
 			$this->setPreference( 'site_display_timezone', $server_time->display_offset );
@@ -530,7 +533,7 @@ class BitUser extends LibertyAttachable {
 			$ret = TRUE;
 
 			// set local time zone as default when registering
-			$this->storePreference( 'site_display_timezone', 'Local' );
+			$this->storePreference( 'site_display_utc', 'Local' );
 
 			if( !empty( $_REQUEST['CUSTOM'] ) ) {
 				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
