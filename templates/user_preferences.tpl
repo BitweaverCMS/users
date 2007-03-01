@@ -111,7 +111,7 @@
 						<div class="row">
 							{formlabel label="HomePage" for="users_homepage"}
 							{forminput}
-								<input size="50" type="text" name="users_homepage" id="users_homepage" value="{$editUser->mInfo.users_homepage|escape}" />
+								<input size="50" type="text" name="users_homepage" id="users_homepage" value="{$editUser->mInfo.users_homepage|escape|default:'http://'}" />
 								{formhelp note="If you have a personal or professional homepage, enter it here."}
 							{/forminput}
 						</div>
