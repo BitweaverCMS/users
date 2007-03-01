@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.122 2007/02/27 17:28:42 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.123 2007/03/01 15:11:44 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.122 2007/02/27 17:28:42 lsces Exp $
+ * $Id: BitUser.php,v 1.123 2007/03/01 15:11:44 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.122 $
+ * @version  $Revision: 1.123 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -415,7 +415,7 @@ class BitUser extends LibertyAttachable {
 			list ( $Username, $domain ) = split ("@",$pEmail);
 			// That MX(mail exchanger) record exists in domain check .
 			// checkdnsrr function reference : http://www.php.net/manual/en/function.checkdnsrr.php
-			if ( !isWindows() and checkdnsrr ( $domain, "MX" ) )  {
+			if ( !is_windows() and checkdnsrr ( $domain, "MX" ) )  {
 				if($gDebug) echo "Confirmation : MX record about {$domain} exists.<br>";
 				// If MX record exists, save MX record address.
 				// getmxrr function reference : http://www.php.net/manual/en/function.getmxrr.php
