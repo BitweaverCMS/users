@@ -344,7 +344,7 @@
 			{/if}
 
 			{foreach item=package from=$packages}
-				{include file=$package.template settings=$editUser->mPrefs}
+				{include file=$package.template userPrefs=$editUser->mPrefs}
 			{/foreach}
 
 		{/jstabs}
