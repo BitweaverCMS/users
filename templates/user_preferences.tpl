@@ -137,7 +137,7 @@
 							{/forminput}
 						</div>
 
-						{if $gBitUser->canCustomizeTheme()}
+						{if $gBitSystem->getConfig('users_themes') == 'y'}
 							<div class="row">
 								{formlabel label="Theme" for="style"}
 								{forminput}
