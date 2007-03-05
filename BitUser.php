@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.123 2007/03/01 15:11:44 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.124 2007/03/05 00:52:52 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.123 2007/03/01 15:11:44 squareing Exp $
+ * $Id: BitUser.php,v 1.124 2007/03/05 00:52:52 wjames5 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.123 $
+ * @version  $Revision: 1.124 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -524,7 +524,7 @@ class BitUser extends LibertyAttachable {
 					}
 				}
 			}
-
+			
 			$this->load( FALSE, $pParamHash['login'] );
 
 			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
@@ -878,8 +878,12 @@ class BitUser extends LibertyAttachable {
 			}
 		}
 		if( $this->mUserId != ANONYMOUS_USER_ID ) {
-			$this->update_lastlogin( $this->mUserId );
 			$this->load();
+			//on first time login we run the users registation service
+			if ($this->mInfo['last_login'] == NULL){
+				$this->invokeServices( 'users_register_function' );
+			}
+			$this->update_lastlogin( $this->mUserId );
 		}
 		return( count( $this->mErrors ) == 0 );
 	}
