@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.42 2007/03/01 09:44:56 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.43 2007/03/08 07:10:34 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.42 2007/03/01 09:44:56 squareing Exp $
+ * $Id: preferences.php,v 1.43 2007/03/08 07:10:34 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -84,7 +84,11 @@ $gBitSmarty->assign( 'gBitLanguage', $gBitLanguage );
 // allow users to set their preferred site style - this option is only available when users can set the site-wide theme
 if( $gBitSystem->getConfig( 'users_themes' ) == 'y' ) {
 	if( !empty( $_REQUEST['prefs'] )) {
-		$editUser->storePreference( 'theme', !empty( $_REQUEST["style"] ) ? $_REQUEST["style"] : NULL );
+		if( !empty( $_REQUEST['style'] ) && $_REQUEST['style'] != $gBitSystem->getConfig( 'style' ) ) {
+			$editUser->storePreference( 'theme', $_REQUEST["style"] );
+		} else {
+			$editUser->storePreference( 'theme', NULL );
+		}
 		$assignStyle = $_REQUEST["style"];
 	}
 	$styles = $gBitThemes->getStyles( NULL, TRUE, TRUE );
