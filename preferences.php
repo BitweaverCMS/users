@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.43 2007/03/08 07:10:34 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.44 2007/03/09 07:56:24 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.43 2007/03/08 07:10:34 squareing Exp $
+ * $Id: preferences.php,v 1.44 2007/03/09 07:56:24 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -118,7 +118,11 @@ if( isset( $_REQUEST["prefs"] )) {
 	);
 
 	if( $gBitSystem->isFeatureActive( 'users_change_language' )) {
-		$prefs['bitlanguage'] = LANGUAGES_PKG_NAME;
+		if( $_REQUEST['bitlanguage'] != $gBitLanguage->mLanguage ) {
+			$prefs['bitlanguage'] = LANGUAGES_PKG_NAME;
+		} else {
+			unset( $prefs['bitlanguage'] );
+		}
 	}
 
 	// we don't have to store http:// in the db
@@ -129,7 +133,7 @@ if( isset( $_REQUEST["prefs"] )) {
 	}
 
 	foreach( $prefs as $pref => $package ) {
-		if( isset( $_REQUEST[$pref] )) {
+		if( !empty( $_REQUEST[$pref] )) {
 			$editUser->storePreference( $pref, $_REQUEST[$pref], $package );
 		} else {
 			$editUser->storePreference( $pref, NULL, $package );
