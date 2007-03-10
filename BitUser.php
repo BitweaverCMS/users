@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.124 2007/03/05 00:52:52 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.125 2007/03/10 16:07:02 nickpalmer Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.124 2007/03/05 00:52:52 wjames5 Exp $
+ * $Id: BitUser.php,v 1.125 2007/03/10 16:07:02 nickpalmer Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.124 $
+ * @version  $Revision: 1.125 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1519,6 +1519,20 @@ class BitUser extends LibertyAttachable {
 		}
 
 		return (count($this->mErrors) == 0);
+	}
+
+  	function getSelectionList() {
+		$query = "SELECT uu.`user_id`, uu.`login`, uu.`real_name`
+				FROM `".BIT_DB_PREFIX."users_users` uu
+				ORDER BY uu.`login`";
+		
+		$result = $this->mDb->query($query);
+		$ret = array();
+		while( $res = $result->fetchRow()) {
+			$ret[$res['user_id']] = $res['login'] .' - '. $res['real_name'];
+		}
+		
+		return $ret;
 	}
 
 	function getList( &$pParamHash ) {
