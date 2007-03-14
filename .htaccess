@@ -1,5 +1,6 @@
 <IfModule mod_rewrite.c>
 	RewriteEngine on
-	RewriteBase		/users/
+#	Uncomment this if mod_rewrites are not working for you. some hosting services have cranky mod_rewrite
+#	RewriteBase		/users/
 	RewriteRule		^([A-Za-z0-9_]+)$		index.php?home=$1 [L,QSA]
 </IfModule>
