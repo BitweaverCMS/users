@@ -70,15 +70,6 @@ $tables = array(
  				, CONSTRAINT `users_group_perm_perm_ref` FOREIGN KEY (`perm_name`) REFERENCES `".BIT_DB_PREFIX."users_permissions` (`perm_name`)'
 ",
 
-'users_object_permissions' => "
-  group_id I4 PRIMARY,
-  perm_name C(30) PRIMARY,
-  object_type C(20) PRIMARY,
-  object_id I4 PRIMARY
-  CONSTRAINT   ', CONSTRAINT `users_object_perm_group_ref` FOREIGN KEY (`group_id`) REFERENCES `".BIT_DB_PREFIX."users_groups` (`group_id`)
-                , CONSTRAINT `users_object_perm_perm_ref` FOREIGN KEY (`perm_name`) REFERENCES `".BIT_DB_PREFIX."users_permissions` (`perm_name`)'
-",
-
 'users_groups_map' => "
   user_id I4 PRIMARY,
   group_id I4 PRIMARY
@@ -133,9 +124,6 @@ $indices = array (
 	'users_groups_user_name_idx' => array( 'table' => 'users_groups', 'cols' => 'user_id,group_name', 'opts' => array('UNIQUE') ),
 	'users_group_perm_group_idx' => array( 'table' => 'users_group_permissions', 'cols' => 'group_id', 'opts' => NULL ),
 	'users_group_perm_perm_idx' => array( 'table' => 'users_group_permissions', 'cols' => 'perm_name', 'opts' => NULL ),
-	'users_object_perm_group_idx' =>  array( 'table' => 'users_object_permissions', 'cols' => 'group_id', 'opts' => NULL ),
-	'users_object_perm_perm_idx' => array( 'table' => 'users_object_permissions', 'cols' => 'perm_name', 'opts' => NULL ),
-	'users_object_perm_object_idx' => array( 'table' => 'users_object_permissions', 'cols' => 'object_id', 'opts' => NULL ),
 	'users_groups_map_user_idx' => array( 'table' => 'users_groups_map', 'cols' => 'user_id', 'opts' => NULL ),
 	'users_groups_map_group_idx' => array( 'table' => 'users_groups_map', 'cols' => 'group_id', 'opts' => NULL ),
 	'users_fav_con_idx' => array( 'table' => 'users_favorites_map', 'cols' => 'favorite_content_id', 'opts' => NULL ),

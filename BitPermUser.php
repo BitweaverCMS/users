@@ -1,10 +1,9 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.51 2007/01/14 23:26:01 hiranchaudhuri Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.52 2007/03/19 00:14:39 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
- * a pear DB object
 
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -12,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.51 2007/01/14 23:26:01 hiranchaudhuri Exp $
+ * $Id: BitPermUser.php,v 1.52 2007/03/19 00:14:39 spiderr Exp $
  * @package users
  */
 
@@ -25,12 +24,11 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.51 $
+ * @version  $Revision: 1.52 $
  * @package  users
  * @subpackage  BitPermUser
  */
 class BitPermUser extends BitUser {
-# var $db;  // The PEAR db object used to access the database
 	// change this to an email address to receive debug emails from the LDAP code
 	var $debug = false;
 	var $usergroups_cache;
@@ -578,21 +576,6 @@ class BitPermUser extends BitUser {
 					    LEFT OUTER JOIN `".BIT_DB_PREFIX."users_groups_map` ugm ON ( ugm.`group_id`=ugp.`group_id` AND ugm.`user_id` = ?)
 					  WHERE ug.`group_id`= ".ANONYMOUS_GROUP_ID." OR ugm.`group_id`=ug.`group_id`";
 			$this->mPerms = $this->mDb->getAssoc( $query, array( $this->mUserId ) );
-/*
-			// This is uglier, but much faster!
-			$this->loadGroups();
-			$groupIdsString = '';
-			$groupCount = 1;
-			foreach ($this->mGroups as $groupId => $groupName) {
-				$groupIdsString .= $groupId.($groupCount++ >= count($this->mGroups) ? '' : ', ');
-			}
-			if ( $groupCount > 1)
-			{	$sql = "SELECT up.`perm_name`, up.`perm_desc`, up.`perm_level`, up.`package` FROM `".BIT_DB_PREFIX."users_permissions` up
-						INNER JOIN `".BIT_DB_PREFIX."users_group_permissions` ugp ON (ugp.`perm_name` = up.`perm_name`)
-						WHERE ugp.`group_id` IN ($groupIdsString)";
-				$this->mPerms = $this->mDb->getAssoc( $sql );
-			}
-*/
 		}
 		return( count( $this->mPerms ) );
 	}
@@ -694,90 +677,6 @@ class BitPermUser extends BitUser {
 			if( $gBitSystem->isPackageActive( $perm['package'] ) ) {
 				$ret[$key] = $perm;
 			}
-		}
-		return $ret;
-	}
-
-
-	function assign_object_permission($pGroupId, $object_id, $object_type, $perm_name) {
-		//$object_id = md5($object_type . $object_id);
-		$query = "DELETE FROM `".BIT_DB_PREFIX."users_object_permissions`
-				  WHERE `group_id` = ? AND `perm_name` = ? AND `object_id` = ?";
-		$result = $this->mDb->query($query, array($pGroupId, $perm_name, $object_id), -1, -1);
-		$query = "insert into `".BIT_DB_PREFIX."users_object_permissions`
-				  (`group_id`,`object_id`, `object_type`, `perm_name`)
-				  VALUES ( ?, ?, ?, ? )";
-		$result = $this->mDb->query($query, array($pGroupId, $object_id,$object_type, $perm_name));
-		return true;
-	}
-
-	function object_has_permission( $pUserId = NULL, $object_id, $object_type, $perm_name, $pForceRefresh = FALSE ) {
-		$ret = FALSE;
-		$groups = $this->getGroups($pUserId, $pForceRefresh);
-
-		foreach ( $groups as $groupId => $group_name ) {
-			$query = "SELECT count(*)
-					  FROM `".BIT_DB_PREFIX."users_object_permissions`
-					  WHERE `group_id` = ? and `object_id` = ? and `object_type` = ? and `perm_name` = ?";
-					  //pvd($query);pvd($sd="groupid: $groupId | object_id: $object_id | object_type: $object_type | permname: $perm_name");
-			$bindvars = array($groupId, $object_id, $object_type, $perm_name);
-			$result = $this->mDb->getOne( $query, $bindvars );
-			if ($result>0) {
-				$ret = true;
-			}
-		}
-		return $ret;
-	}
-
-
-	function remove_object_permission($pGroupId, $object_id, $object_type, $perm_name) {
-		//$object_id = md5($object_type . $object_id);
-		$query = "delete from `".BIT_DB_PREFIX."users_object_permissions`
-			where `group_id` = ? and `object_id` = ?
-			and `object_type` = ? and `perm_name` = ?";
-		$bindvars = array($pGroupId, $object_id, $object_type, $perm_name);
-		$result = $this->mDb->query($query, $bindvars);
-		return true;
-	}
-
-
-	function copy_object_permissions($object_id,$destinationObjectId,$object_type) {
-		//$object_id = md5($object_type.$object_id);
-		$query = "select `perm_name`, `group_name`
-			from `".BIT_DB_PREFIX."users_object_permissions`
-			where `object_id` =? and
-			`object_type` = ?";
-		$bindvars = array($object_id, $object_type);
-		$result = $this->mDb->query($query, $bindvars);
-		while($res = $result->fetchRow()) {
-			$this->assign_object_permission($res["group_name"],$destinationObjectId,$object_type,$res["perm_name"]);
-		}
-		return true;
-	}
-
-
-	function get_object_permissions($object_id, $object_type) {
-		//$object_id = md5($object_type . $object_id);
-		$query = "select ug.`group_id`, ug.`group_name`, uop.`perm_name`
-				  FROM `".BIT_DB_PREFIX."users_object_permissions` uop
-					INNER JOIN `".BIT_DB_PREFIX."users_groups` ug ON( uop.`group_id`=ug.`group_id` )
-				  WHERE uop.`object_id` = ? AND uop.`object_type` = ?";
-		$bindvars = array($object_id, $object_type);
-		$result = $this->mDb->query($query, $bindvars);
-		$ret = array();
-		while ($res = $result->fetchRow()) {
-			$ret[] = $res;
-		}
-		return $ret;
-	}
-
-
-	function object_has_one_permission( $object_id, $object_type ) {
-		$ret = NULL;
-		if( @$this->verifyId( $object_id ) && !empty( $object_type )  ) {
-			//$object_id = md5($object_type . $object_id);
-			$query = "select count(*) from `".BIT_DB_PREFIX."users_object_permissions` where `object_id`=? and `object_type`=?";
-			$ret = $this->mDb->getOne($query, array( $object_id, $object_type	));
 		}
 		return $ret;
 	}
