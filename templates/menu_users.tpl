@@ -140,5 +140,12 @@
 			</a>
 		</li>
 	{/if}
+	{if !$gBitUser->isRegistered() && $gBitSystem->getConfig('users_allow_register') == 'y'}
+		<li>
+			<a class="item" href="{$smarty.const.USERS_PKG_URL}register.php">
+				{biticon ipackage=icons iname=contact-new iexplain="Register" iforce=icon}{if !$icons_only} {tr}Register{/tr}{/if}
+			</a>
+		</li>
+	{/if}
 </ul>
 {/strip}
