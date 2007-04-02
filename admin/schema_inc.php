@@ -171,7 +171,7 @@ $gBitInstaller->registerPreferences( USERS_PKG_NAME, array(
 	//array(USERS_PKG_NAME,'user_files','n'),
 	array(USERS_PKG_NAME,'users_forgot_pass','y'),
 	//array(USERS_PKG_NAME,'users_eponymous_groups','n'),
-	array(USERS_PKG_NAME,'site_show_all_modules_always','y'),
+	//array(USERS_PKG_NAME,'site_show_all_modules_always','y'),
 	//array(USERS_PKG_NAME,'users_pass_chr_num','n'),
 	array(USERS_PKG_NAME,'users_pass_due','999'),
 	//array(USERS_PKG_NAME,'users_register_passcode',''),

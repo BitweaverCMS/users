@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.20 2007/01/24 09:46:34 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.21 2007/04/02 18:55:02 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: index.php,v 1.20 2007/01/24 09:46:34 squareing Exp $
+ * $Id: index.php,v 1.21 2007/04/02 18:55:02 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -65,10 +65,10 @@ if( !empty( $_REQUEST['home'] ) && ($gBitUser->hasPermission( 'p_users_view_user
 	} else {
 		$homeName = ROOT_USER_ID;
 	}
-	$layout = HOMEPAGE_LAYOUT;
-	if( isset( $layout ) ) {
-		$gBitSystem->loadLayout( $homeName, $layout, ACTIVE_PACKAGE, TRUE );
-	}
+//	$layout = HOMEPAGE_LAYOUT;
+//	if( isset( $layout ) ) {
+//		$gBitThemes->loadLayout( $homeName, $layout, ACTIVE_PACKAGE, TRUE );
+//	}
 	global $gCenterPieces;
 	$centerDisplay = ( count( $gCenterPieces ) ? 'bitpackage:kernel/dynamic.tpl' : 'bitpackage:users/center_user_wiki_page.tpl' );
 } elseif( empty( $search_request ) ) {
