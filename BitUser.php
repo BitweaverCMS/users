@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.125 2007/03/10 16:07:02 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.126 2007/04/04 14:31:32 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.125 2007/03/10 16:07:02 nickpalmer Exp $
+ * $Id: BitUser.php,v 1.126 2007/04/04 14:31:32 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.125 $
+ * @version  $Revision: 1.126 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -154,7 +154,7 @@ class BitUser extends LibertyAttachable {
 	}
 
 	function defaults() {
-		global $gBitSystem;
+		global $gBitSystem, $gBitThemes;
 		if( !$this->getPreference( 'users_information' ) ) { $this->setPreference( 'users_information', 'public' ); }
 		if( !$this->getPreference( 'messages_allow_messages' ) ) { $this->setPreference( 'messages_allow_messages', 'y' ); }
 		if( !$this->getPreference( 'site_display_utc' ) ) {
@@ -173,7 +173,7 @@ class BitUser extends LibertyAttachable {
 		}
 		if( !$this->getPreference( 'theme' ) ) {
 			global $site_style;
-			$this->setPreference( 'theme', $gBitSystem->getStyle() );
+			$this->setPreference( 'theme', $gBitThemes->getStyle() );
 		}
 	}
 

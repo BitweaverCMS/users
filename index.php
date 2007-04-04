@@ -1,8 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.22 2007/04/04 06:48:55 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.23 2007/04/04 14:31:32 squareing Exp $
  *
- * $Id: index.php,v 1.22 2007/04/04 06:48:55 squareing Exp $
+ * $Id: index.php,v 1.23 2007/04/04 14:31:32 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -29,7 +29,7 @@ if( $gBitSystem->getConfig( 'custom_user_fields' )) {
 require_once( USERS_PKG_PATH.'lookup_user_inc.php' );
 
 // i think we should always allow looking at yourself - regardless of permissions
-if( $gQueryUser->isValid() && (( $gBitUser->hasPermission( 'p_users_view_user_homepage' ) || $gBitUser->hasPermission( 'p_users_admin' )) || $gQueryUser->mUserId == $gBitUser->mUserId )) {
+if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPermission( 'p_users_view_user_homepage' ) || $gBitUser->hasPermission( 'p_users_admin' )) || $gQueryUser->mUserId == $gBitUser->mUserId )) {
 	$gQueryUserId = $gQueryUser->mUserId;
 	if( $gQueryUser->isValid() ) {
 		$gBitSmarty->assign( 'gQueryUserId', $gQueryUserId );
@@ -42,8 +42,8 @@ if( $gQueryUser->isValid() && (( $gBitUser->hasPermission( 'p_users_view_user_ho
 	if( $gQueryUser->canCustomizeTheme() ) {
 		$userHomeStyle = $gQueryUser->getPreference( 'theme' );
 		if( !empty( $userHomeStyle )) {
-			$gBitSystem->setStyle( $userHomeStyle );
-			$gBitSystem->mStyles['styleSheet'] = $gBitSystem->getStyleCss( $userHomeStyle, $gQueryUser->mUserId );
+			$gBitThemes->setStyle( $userHomeStyle );
+			$gBitThemes->mStyles['styleSheet'] = $gBitThemes->getStyleCss( $userHomeStyle, $gQueryUser->mUserId );
 			$gBitSmarty->assign( 'userStyle', $userHomeStyle );
 		}
 	}
@@ -58,25 +58,21 @@ if( $gQueryUser->isValid() && (( $gBitUser->hasPermission( 'p_users_view_user_ho
 	$gBitThemes->loadLayout();
 	$centerDisplay = ( count( $gCenterPieces ) ? 'bitpackage:kernel/dynamic.tpl' : 'bitpackage:users/center_user_wiki_page.tpl' );
 
-} elseif( !empty( $_REQUEST['home'] )) {
+} else {
 	$gBitSystem->verifyPermission( 'p_users_view_user_list' );
 	$gQueryUser->getList( $_REQUEST );
 	$gBitSmarty->assign_by_ref( 'users', $_REQUEST["data"] );
 	$gBitSmarty->assign_by_ref( 'usercount', $_REQUEST["cant"] );
 	// display an error message
-	$feedback['error'] = tra( 'The following user could not be found' ).': '.$_REQUEST['home'];
-	$gBitSmarty->assign( 'feedback', $feedback );
+	if( !empty( $_REQUEST['home'] )) {
+		$feedback['error'] = tra( 'The following user could not be found' ).': '.$_REQUEST['home'];
+		$gBitSmarty->assign( 'feedback', $feedback );
+	}
 	$_REQUEST['listInfo']["URL"] = USERS_PKG_URL."index.php";
 	$gBitSmarty->assign_by_ref( 'control', $_REQUEST['listInfo'] );
 	$gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
 	$browserTitle = $gBitSystem->getConfig( 'site_title' ).' '.tra( 'Members' );
 	$centerDisplay = 'bitpackage:users/index_list.tpl';
-
-} else {
-	// not sure when this would occur... either home is populated or we're looking at ourself.
-	$gBitSmarty->assign('msg', tra( 'User not found' ));
-	$centerDisplay = 'bitpackage:kernel/error.tpl';
-	$browserTitle = $gBitSystem->getConfig( 'site_title' ).' '.tra( 'Members' );
 }
 
 $gBitSmarty->assign( 'gBitLanguage', $gBitLanguage );
