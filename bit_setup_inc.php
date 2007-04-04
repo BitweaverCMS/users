@@ -130,19 +130,6 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	$site_https_login_required = $gBitSystem->getConfig('site_https_login_required', 'n');
 	$users_change_language = $gBitSystem->getConfig("users_change_language", 'y');
 
-	// Permissions
-	// Get group permissions here
-
-//	======================= HOPEFULLY WE CAN SURVIVE WITHOUT THIS PREFERENCE ASSIGNEMENT STUFF =================
-//	if (is_array($gBitUser->mPerms)) {	// This avoids php warning during install
-//		foreach( array_keys( $gBitUser->mPerms ) as $perm ) {
-//			// print("Asignando permiso global : $perm<br/>");
-//			$gBitSmarty->assign("$perm", 'y');
-//			$$perm = 'y';
-//		}
-//	}
-//	============================================================================================================
-
 	// If we are processing a login then do not generate the challenge
 	// if we are in any other case then yes.
 	if( !empty( $_SERVER["REQUEST_URI"] ) && !strstr($_SERVER["REQUEST_URI"], USERS_PKG_URL . 'validate')) {
