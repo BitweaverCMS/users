@@ -1,40 +1,31 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/lookup_user_inc.php,v 1.10 2006/05/08 03:37:23 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/lookup_user_inc.php,v 1.11 2007/04/04 06:48:55 squareing Exp $
  *
- * Copyright (c) 2004 bitweaver.org
- * Copyright (c) 2003 tikwiki.org
- * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * All Rights Reserved. See copyright.txt for details and a complete list of authors.
- * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
- *
- * $Id: lookup_user_inc.php,v 1.10 2006/05/08 03:37:23 spiderr Exp $
  * @package users
  * @subpackage functions
  */
 global $gQueryUser;
 
 /**
- * This is a centralized include file to setup $gQueryUser var if you need to display detailed information about any arbitrary user.
+ * This is a centralized include file to setup $gQueryUser var if you need to display detailed information about an arbitrary user.
  */
-// Keep backward compatability
-if (isset($_REQUEST['fHomepage'])) {
+// fHomepage stuff is for backwards comability
+if( isset( $_REQUEST['fHomepage'] )) {
 	$_REQUEST['home'] = $_REQUEST['fHomepage'];
-}
-if (isset($_REQUEST['home'])) {
+} elseif( isset( $_REQUEST['home'] )) {
 	$_REQUEST['fHomepage'] = $_REQUEST['home'];
+} elseif( @BitBase::verifyId( $_REQUEST['content_id'] )) {
+	// This identifies the user_id associated with the content_id
+	$_REQUEST['home'] = $gBitUser->getUserFromContentId( $_REQUEST['content_id'] );
+} elseif( @BitBase::verifyId( $_REQUEST['user_id'] )) {
+	$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST['user_id'] ));
+	$_REQUEST['home'] = !empty( $userInfo['login'] ) ? $userInfo['login'] : NULL;
 }
 
-if ( @BitBase::verifyId( $_REQUEST['content_id'] ) ) {
-	// This identifies the user_id associated with the contact_id of a record
-	// Used to allow access to user records via the generic index.php?content_id=x
-	$_REQUEST['home'] = $gBitUser->getUserFromContentId($_REQUEST['content_id']);
-}
-
-if (isset($_REQUEST['home'])) {
+if( isset( $_REQUEST['home'] )) {
 	// this allows for a numeric user_id or alpha_numeric user_id
-	$queryUserId = $gBitUser->lookupHomepage($_REQUEST['home'], $gBitSystem->getConfig('users_case_sensitive_login', 'y') == 'y');
-	$_REQUEST['home'] = $queryUserId;
+	$queryUserId = $gBitUser->lookupHomepage( $_REQUEST['home'], $gBitSystem->getConfig( 'users_case_sensitive_login', 'y' ) == 'y' );
 	$gQueryUser = new BitPermUser( $queryUserId );
 	$gQueryUser->load( TRUE );
 } elseif( $gBitUser->isValid() ) {
@@ -43,17 +34,15 @@ if (isset($_REQUEST['home'])) {
 	$gQueryUser = &$gBitUser;
 }
 
-if (!$gBitUser->isAdmin()) {
-	if( $gQueryUser->mUserId != $gBitUser->mUserId && $gQueryUser->getPreference( 'users_information' ) == 'private') {
-		$gBitSystem->fatalError( tra("The user has choosen to make his information private") );
-		die;
+if( !$gBitUser->isAdmin() ) {
+	if( $gQueryUser->mUserId != $gBitUser->mUserId && $gQueryUser->getPreference( 'users_information' ) == 'private' ) {
+		$gBitSystem->fatalError( tra( "The user has choosen to make his information private" ));
 	}
 }
 
-$gQueryUser->sanitizeUserInfo();
-$gBitSmarty->assign_by_ref('gQueryUser', $gQueryUser);
-
 if( $gQueryUser->isValid() ) {
+	$gQueryUser->sanitizeUserInfo();
+	$gBitSmarty->assign_by_ref( 'gQueryUser', $gQueryUser );
 	$gBitSmarty->assign_by_ref( 'userInfo', $gQueryUser->mInfo );
 	$gBitSmarty->assign_by_ref( 'userPrefs', $gQueryUser->mPrefs );
 	$gBitSmarty->assign( 'homepage_header', $gQueryUser->getPreference( 'homepage_header' ) );

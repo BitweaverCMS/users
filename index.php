@@ -1,14 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.21 2007/04/02 18:55:02 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.22 2007/04/04 06:48:55 squareing Exp $
  *
- * Copyright (c) 2004 bitweaver.org
- * Copyright (c) 2003 tikwiki.org
- * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * All Rights Reserved. See copyright.txt for details and a complete list of authors.
- * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
- *
- * $Id: index.php,v 1.21 2007/04/02 18:55:02 squareing Exp $
+ * $Id: index.php,v 1.22 2007/04/04 06:48:55 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -17,95 +11,74 @@ global $gQueryUserId, $gBitSystem;
 /**
  * required setup
  */
-define('ACTIVE_PACKAGE', 'users');	// Todo: use a different $_SERVER variable to properly determine the active package
+// Todo: use a different $_SERVER variable to properly determine the active package
+if( !defined( 'ACTIVE_PACKAGE' )) {
+	define( 'ACTIVE_PACKAGE', 'users' );
+}
+
 require_once( '../bit_setup_inc.php' );
-global $gBitSystem;
 require_once( LIBERTY_PKG_PATH."LibertyStructure.php" );
 
 // custom userfields
-if( $gBitSystem->getConfig( 'custom_user_fields' ) ) {
-	$customFields= explode( ',', $gBitSystem->getConfig( 'custom_user_fields' )  );
-	$gBitSmarty->assign('customFields', $customFields);
+if( $gBitSystem->getConfig( 'custom_user_fields' )) {
+	$customFields= explode( ',', $gBitSystem->getConfig( 'custom_user_fields' ));
+	$gBitSmarty->assign( 'customFields', $customFields );
 }
+
 // lookup may be via content_id which will then return user_id for search request
 require_once( USERS_PKG_PATH.'lookup_user_inc.php' );
-$search_request = '';
-if (!empty($_REQUEST['home'])) {
-	$search_request = $_REQUEST['home'];
-}
-if( !empty( $_REQUEST['home'] ) && ($gBitUser->hasPermission( 'p_users_view_user_homepage' ) || $gBitUser->hasPermission( 'p_users_admin' ) ) ) {
-	$gBitSystem->verifyPermission( 'p_users_view_user_homepage' );
-	$gBitSmarty->assign( 'home', $_REQUEST['home'] );
-	$gQueryUserId = $_REQUEST['home'];
+
+// i think we should always allow looking at yourself - regardless of permissions
+if( $gQueryUser->isValid() && (( $gBitUser->hasPermission( 'p_users_view_user_homepage' ) || $gBitUser->hasPermission( 'p_users_admin' )) || $gQueryUser->mUserId == $gBitUser->mUserId )) {
+	$gQueryUserId = $gQueryUser->mUserId;
 	if( $gQueryUser->isValid() ) {
 		$gBitSmarty->assign( 'gQueryUserId', $gQueryUserId );
 	}
-	if ($gBitSystem->isPackageActive('stars') && $gBitSystem->isFeatureActive('stars_user_ratings')) {
-		require(STARS_PKG_PATH."templates/user_ratings.php");
+
+	if( $gBitSystem->isPackageActive('stars') && $gBitSystem->isFeatureActive('stars_user_ratings')) {
+		require( STARS_PKG_PATH."templates/user_ratings.php" );
 	}
 
 	if( $gQueryUser->canCustomizeTheme() ) {
 		$userHomeStyle = $gQueryUser->getPreference( 'theme' );
-		if( isset( $userHomeStyle ) ) {
-			$gBitSystem->setStyle($userHomeStyle );
-			$gBitSystem->mStyles['styleSheet'] = $gBitSystem->getStyleCss( $userHomeStyle, $_REQUEST['home'] );
+		if( !empty( $userHomeStyle )) {
+			$gBitSystem->setStyle( $userHomeStyle );
+			$gBitSystem->mStyles['styleSheet'] = $gBitSystem->getStyleCss( $userHomeStyle, $gQueryUser->mUserId );
 			$gBitSmarty->assign( 'userStyle', $userHomeStyle );
 		}
 	}
+
 	$userHomeTitle = $gQueryUser->getPreference( 'homepage_title' );
-	if (!$userHomeTitle) {
+	if( empty( $userHomeTitle )) {
 		$userHomeTitle = $gQueryUser->getDisplayName()."'s Homepage";
 	}
 	$browserTitle = $userHomeTitle;
-	//$_REQUEST['page'] = $userHomeTitle; // $_REQUEST['page'] should be used for requesting a page #! - drewslater
 
-// need to loadLayout prematurely (usually happens in modules_inc.php) so we can see if we have any center pieces
-	if( $gQueryUser->canCustomizeLayout() ) {
-		$homeName = $_REQUEST['home'];
-	} else {
-		$homeName = ROOT_USER_ID;
-	}
-//	$layout = HOMEPAGE_LAYOUT;
-//	if( isset( $layout ) ) {
-//		$gBitThemes->loadLayout( $homeName, $layout, ACTIVE_PACKAGE, TRUE );
-//	}
-	global $gCenterPieces;
+	// need to load layout now that we can check for center pieces
+	$gBitThemes->loadLayout();
 	$centerDisplay = ( count( $gCenterPieces ) ? 'bitpackage:kernel/dynamic.tpl' : 'bitpackage:users/center_user_wiki_page.tpl' );
-} elseif( empty( $search_request ) ) {
+
+} elseif( !empty( $_REQUEST['home'] )) {
 	$gBitSystem->verifyPermission( 'p_users_view_user_list' );
 	$gQueryUser->getList( $_REQUEST );
-	$gBitSmarty->assign('search_request',$search_request);
-	$gBitSmarty->assign_by_ref('users', $_REQUEST["data"]);
-	$gBitSmarty->assign_by_ref('usercount', $_REQUEST["cant"]);
-	if (isset($_REQUEST["numrows"]))
-		$_REQUEST['listInfo']["numrows"] = $_REQUEST["numrows"];
-	else
-		$_REQUEST['listInfo']["numrows"] = 50;
+	$gBitSmarty->assign_by_ref( 'users', $_REQUEST["data"] );
+	$gBitSmarty->assign_by_ref( 'usercount', $_REQUEST["cant"] );
+	// display an error message
+	$feedback['error'] = tra( 'The following user could not be found' ).': '.$_REQUEST['home'];
+	$gBitSmarty->assign( 'feedback', $feedback );
 	$_REQUEST['listInfo']["URL"] = USERS_PKG_URL."index.php";
-	$gBitSmarty->assign_by_ref('control', $_REQUEST['listInfo']);
-	$centerDisplay = 'bitpackage:users/index_list.tpl';
-	$browserTitle = $gBitSystem->getConfig( 'site_title' ).' '.tra( 'Members' );
+	$gBitSmarty->assign_by_ref( 'control', $_REQUEST['listInfo'] );
 	$gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
-} elseif( !$gBitSystem->isFeatureActive( 'users_homepages' ) ) {
-	$gBitSystem->verifyPermission( 'p_users_view_user_list' );
-	$gQueryUser->getList( $_REQUEST );
-	$gBitSmarty->assign_by_ref('users', $_REQUEST["data"]);
-	$gBitSmarty->assign_by_ref('usercount', $_REQUEST["cant"]);
-	if (isset($_REQUEST["numrows"]))
-		$_REQUEST['listInfo']["numrows"] = $_REQUEST["numrows"];
-	else
-		$_REQUEST['listInfo']["numrows"] = 50;
-	$_REQUEST['listInfo']["URL"] = USERS_PKG_URL."index.php";
-	$gBitSmarty->assign_by_ref('control', $_REQUEST['listInfo']);
-	$centerDisplay = 'bitpackage:users/index_list.tpl';
 	$browserTitle = $gBitSystem->getConfig( 'site_title' ).' '.tra( 'Members' );
+	$centerDisplay = 'bitpackage:users/index_list.tpl';
+
 } else {
-	$gBitSmarty->assign('msg',tra('User not found'));
+	// not sure when this would occur... either home is populated or we're looking at ourself.
+	$gBitSmarty->assign('msg', tra( 'User not found' ));
 	$centerDisplay = 'bitpackage:kernel/error.tpl';
 	$browserTitle = $gBitSystem->getConfig( 'site_title' ).' '.tra( 'Members' );
 }
 
 $gBitSmarty->assign( 'gBitLanguage', $gBitLanguage );
-
 $gBitSystem->display( $centerDisplay, $browserTitle );
 ?>
