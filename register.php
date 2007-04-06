@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.29 2007/03/05 00:52:52 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.30 2007/04/06 22:10:20 wjames5 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.29 2007/03/05 00:52:52 wjames5 Exp $
+ * $Id: register.php,v 1.30 2007/04/06 22:10:20 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -109,23 +109,7 @@ if( isset( $_REQUEST["register"] ) ) {
 		$gBitSmarty->assign('customFields', $fields);
 	}
 
-	// include preferences settings from other packages - these will be included as individual tabs
-	$packages = array();
-	foreach( $gBitSystem->mPackages as $package ) {
-		if( $gBitSystem->isPackageActive( $package['name'] )) {
-			$php_file = $package['path'].'user_register_inc.php';
-			$tpl_file = $package['path'].'templates/user_register_inc.tpl';
-			if( file_exists( $tpl_file )) {
-				if( file_exists( $php_file ))  {
-					require( $php_file );
-				}
-				$p=array();
-				$p['template'] = $tpl_file;
-				$packages[] = $p;
-			}
-		}
-	}
-	$gBitSmarty->assign_by_ref('packages',$packages );
+
 
 	for ($i=0;$i<BaseAuth::getAuthMethodCount();$i++) {
 		$instance = BaseAuth::init($i);
@@ -164,6 +148,25 @@ if ( $groupList['cant'] ) {
 	$gBitSmarty->assign_by_ref( 'groupList', $groupList['data'] );
 }
 
+
+	// include preferences settings from other packages - these will be included as individual tabs
+	$packages = array();
+	foreach( $gBitSystem->mPackages as $package ) {
+		if( $gBitSystem->isPackageActive( $package['name'] )) {
+			$php_file = $package['path'].'user_register_inc.php';
+			$tpl_file = $package['path'].'templates/user_register_inc.tpl';
+			if( file_exists( $tpl_file )) {
+				if( file_exists( $php_file ))  {
+					require( $php_file );
+				}
+				$p=array();
+				$p['template'] = $tpl_file;
+				$packages[] = $p;
+			}
+		}
+	}
+	$gBitSmarty->assign_by_ref('packages',$packages );
+	
 $gBitSystem->display('bitpackage:users/register.tpl', 'Register' );
 
 ?>
