@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.30 2007/04/06 22:10:20 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.31 2007/04/06 22:56:21 wjames5 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.30 2007/04/06 22:10:20 wjames5 Exp $
+ * $Id: register.php,v 1.31 2007/04/06 22:56:21 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -81,7 +81,8 @@ if( isset( $_REQUEST["register"] ) ) {
 				if( empty($_COOKIE[$user_cookie_site] ) ) {
 					$_COOKIE[$user_cookie_site] = session_id();
 				}
-				$url = $newUser->login( $reg['login'], $reg['password'], FALSE, FALSE );
+				$afterRegDefault = $newUser->login( $reg['login'], $reg['password'], FALSE, FALSE );
+				$url = $gBitSystem->getConfig( 'after_reg_url' )?BIT_ROOT_URL.$gBitSystem->getConfig( 'after_reg_url' ):$afterRegDefault;
 				if ( !empty( $_REQUEST['group'] ) && !empty( $groupInfo['after_registration_page'] ) ) {
 					if ( $newUser->verifyId( $groupInfo['after_registration_page'] ) ) {
 						$url = BIT_ROOT_URL."index.php?content_id=".$groupInfo['after_registration_page'];

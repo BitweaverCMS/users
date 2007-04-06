@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.25 2006/10/12 06:01:51 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.26 2007/04/06 22:56:21 wjames5 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -21,6 +21,11 @@ $loginSettings = array(
 		'label' => "Send registration welcome email",
 		'type' => "checkbox",
 		'note' => "Upon successful registration, this will send the user an email with login information, including their password.",
+	),
+	'after_reg_url' => array(
+		'label' => "After registration url",
+		'type' => "text",
+		'note' => "Set a url users will be directed to after registration. Default is your site's home page.",
 	),
 	'users_eponymous_groups' => array(
 		'label' => "Create a group for each user",
