@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.13 2006/12/22 20:29:56 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.14 2007/04/11 17:15:58 threna Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -50,7 +50,7 @@
 						{formlabel label="Group home page" for="group_home"}
 						{forminput}
 							<input type="text" name="home" id="group_home" value="{$groupInfo.group_home|escape}" />
-							{formhelp note="Here you can enter the content id of any page, the wiki page name or the absolute path of any page you wish to use as a group home page. For this to work set the site homepage to <strong>Group Home</strong>" link="kernel/admin/index.php?page=general/General Settings"}
+							{formhelp note="Here you can enter the content id of any page, the wiki page name or the absolute path of any page you wish to use as a group home page. For this to work set the site homepage to <strong>Group Home</strong>" link="kernel/admin/index.php?page=features/General Settings"}
 
 							Search for Content:<br/>
 							{html_options options=$contentTypes name=content_type_guid selected=$contentSelect}
