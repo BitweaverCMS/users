@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.126 2007/04/04 14:31:32 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.127 2007/04/15 22:15:50 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.126 2007/04/04 14:31:32 squareing Exp $
+ * $Id: BitUser.php,v 1.127 2007/04/15 22:15:50 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.126 $
+ * @version  $Revision: 1.127 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1442,25 +1442,34 @@ class BitUser extends LibertyAttachable {
 	* @param pHash todo - need explanation on how to use this...
 	* @return display name or link to user information page
 	**/
-	function getDisplayName($pUseLink = FALSE, $pHash=NULL) {
+	function getDisplayName( $pUseLink = FALSE, $pHash=NULL ) {
 		global $gBitSystem, $gBitUser;
 		$ret = NULL;
-		if( empty( $pHash ) && !empty($this) && !empty( $this->mInfo ) ) {
+		if( empty( $pHash ) && !empty( $this ) && !empty( $this->mInfo )) {
 			$pHash = &$this->mInfo;
 		}
-		if( !empty( $pHash ) ) {
-			$displayName = (((!empty($pHash['real_name']) && $gBitSystem->getConfig( 'users_display_name', 'real_name' ) == 'real_name') ? $pHash['real_name'] :
-			(!empty($pHash['user']) ? $pHash['user'] :
-			(!empty($pHash['login']) ? $pHash['login'] :
-			(!empty($pHash['email']) ? substr($pHash['email'],0, strpos($pHash['email'],'@')) : $pHash['user_id'])))));
-			if (!empty($pHash['user'])) {
+
+		if( !empty( $pHash )) {
+			if( !empty( $pHash['real_name'] ) && $gBitSystem->getConfig( 'users_display_name', 'real_name' ) == 'real_name' ) {
+				$displayName = $pHash['real_name'];
+			} elseif( !empty( $pHash['user'] )) {
+				$displayName = $pHash['user'];
+			} elseif( !empty( $pHash['login'] )) {
+				$displayName = $pHash['login'];
+			} elseif( !empty( $pHash['email'] )) {
+				$displayName = substr( $pHash['email'], 0, strpos( $pHash['email'], '@' ));
+			} else {
+				$displayName = $pHash['user_id'];
+			}
+
+			if( !empty( $pHash['user'] )) {
 				$iHomepage = $pHash['user'];
-			} elseif (!empty($pHash['login'])) {
+			} elseif( !empty( $pHash['login'] )) {
 				// user of 'login' is deprecated and eventually should go away!
 				$iHomepage = $pHash['login'];
-			} elseif( BitBase::verifyId( $pHash['user_id'] ) ) {
+			} elseif( BitBase::verifyId( $pHash['user_id'] )) {
 				$iHomepage = $pHash['user_id'];
-			} elseif (!empty($pHash['email'])) {
+			} elseif( !empty( $pHash['email'] )) {
 				$iHomepage = $pHash['email'];
 			} else {
 				// this won't work right now, we need to alter userslib::interpret_home() to interpret a real name
