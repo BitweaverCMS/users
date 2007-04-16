@@ -217,10 +217,12 @@
 				{foreach item=package from=$packages}
 					{include file=$package.template }
 				{/foreach}
-			
+
 				<div class="row submit">
 					<input type="submit" name="register" value="{tr}Register{/tr}" />
 				</div>
+
+				{required legend=1}
 			{/if}
 		{/form}
 	</div><!-- end .body -->
