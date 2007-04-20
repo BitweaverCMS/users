@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.14 2007/02/16 21:16:57 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.15 2007/04/20 13:54:10 nickpalmer Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: edit_personal_page.php,v 1.14 2007/02/16 21:16:57 spiderr Exp $
+ * $Id: edit_personal_page.php,v 1.15 2007/04/20 13:54:10 nickpalmer Exp $
  * @package users
  * @subpackage functions
  */
@@ -26,10 +26,6 @@ if (isset($_REQUEST["fSavePage"])) {
 	$gBitUser->store( $_REQUEST );
 	header( "Location:".USERS_PKG_URL."index.php?home=".$gBitUser->mUsername );
 	die;
-}
-
-if( $gBitSystem->isPackageActive( 'quicktags' ) ) {
-	include_once( QUICKTAGS_PKG_PATH.'quicktags_inc.php' );
 }
 
 // see if we should show the attachments tab at all
@@ -62,7 +58,6 @@ $gBitSmarty->assign_by_ref( 'gContent', $gBitUser );
 
 // load the ajax library for this page
 $gBitSmarty->assign( 'loadAjax', 'prototype' );
-$gBitSmarty->assign( 'textarea_id', 'editpage' );
 $gBitSmarty->assign( 'show_page_bar', 'y' );
 $gBitSystem->setConfig( 'wiki_description', 'n' );
 
