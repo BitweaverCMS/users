@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.7 2006/09/12 19:26:48 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.8 2007/04/23 09:36:32 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: change_password.php,v 1.7 2006/09/12 19:26:48 spiderr Exp $
+ * $Id: change_password.php,v 1.8 2007/04/23 09:36:32 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -36,7 +36,7 @@ if (isset($_REQUEST["change"])) {
 	}
 	
     if( $passswordError = $gBitUser->verifyPasswordFormat( $_REQUEST["pass"], $_REQUEST["pass2"] ) ) {
-		$gBitSystem->fatalError( $passswordError );
+		$gBitSystem->fatalError( tra( $passswordError ));
 	}
 
 	$validated = FALSE;
