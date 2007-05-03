@@ -1,6 +1,8 @@
 {strip}
 <div class="floaticon">
-	<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php">{tr}&laquo; Group List{/tr}</a>
+	<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php">
+		{biticon ipackage="icons" iname="system-users" iexplain="Group List"}
+	</a>
 	{bithelp}
 </div>
 

@@ -1,8 +1,10 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.14 2007/04/11 17:15:58 threna Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.15 2007/05/03 22:25:39 laetzer Exp $ *}
 {strip}
 
 <div class="floaticon">
-	<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php">{tr}&laquo; Group List{/tr}</a>
+	<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php">
+		{biticon ipackage="icons" iname="system-users" iexplain="Group List"}
+	</a>
 	{bithelp}
 </div>
 
