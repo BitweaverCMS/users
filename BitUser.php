@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.131 2007/05/03 06:51:35 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.132 2007/05/05 04:58:47 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.131 2007/05/03 06:51:35 squareing Exp $
+ * $Id: BitUser.php,v 1.132 2007/05/05 04:58:47 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.131 $
+ * @version  $Revision: 1.132 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -214,7 +214,7 @@ class BitUser extends LibertyAttachable {
 				}
 			}
 			// Delete old connections nightly during the hour of 3 am
-			if( date( 'H' ) == '03' ) {
+			if( date( 'H' ) == '03' && date( 'i' ) > 0 &&  date( 'i' ) < 2 ) {
 				// Default to 30 days history
 				$oldy = $update['last_get'] - ($gBitSystem->getConfig( 'users_cnxn_history_days', 30 ) * 24 * 60);
 				$query = "DELETE from `".BIT_DB_PREFIX."users_cnxn` where `connect_time`<?";
@@ -589,7 +589,7 @@ class BitUser extends LibertyAttachable {
 		if( $this->hasPermission( 'p_users_bypass_captcha' ) || ( !empty( $_SESSION['captcha_verified'] ) && $_SESSION['captcha_verified'] === TRUE ) ) {
 			return TRUE;
 		} else {
-			if( empty( $pCaptcha ) || $_SESSION['captcha'] != md5( $pCaptcha ) ) {
+			if( empty( $pCaptcha ) || empty( $_SESSION['captcha'] ) || $_SESSION['captcha'] != md5( $pCaptcha ) ) {
 				return FALSE;
 			} else {
 				$_SESSION['captcha_verified'] = TRUE;
