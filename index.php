@@ -1,8 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.23 2007/04/04 14:31:32 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.24 2007/05/05 08:46:51 spiderr Exp $
  *
- * $Id: index.php,v 1.23 2007/04/04 14:31:32 squareing Exp $
+ * $Id: index.php,v 1.24 2007/05/05 08:46:51 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -55,7 +55,8 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 	$browserTitle = $userHomeTitle;
 
 	// need to load layout now that we can check for center pieces
-	$gBitThemes->loadLayout();
+	$layoutHash['layout'] = 'home';
+	$gBitThemes->loadLayout( $layoutHash );
 	$centerDisplay = ( count( $gCenterPieces ) ? 'bitpackage:kernel/dynamic.tpl' : 'bitpackage:users/center_user_wiki_page.tpl' );
 
 } else {
