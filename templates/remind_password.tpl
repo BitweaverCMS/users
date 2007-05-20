@@ -25,7 +25,7 @@
 				</div>
 
 				<div class="row submit">
-					<input type="submit" name="remind" id="remind" value="{tr}{$passVerb}{/tr} {tr}my password{/tr}" />
+					<input type="submit" name="remind" id="remind" value="{tr}{$passVerb}{/tr} ({tr}password{/tr})" />
 				</div>
 			{/form}
 		{/if}
