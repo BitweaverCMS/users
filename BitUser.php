@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.133 2007/05/05 06:42:51 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.134 2007/05/20 01:15:47 laetzer Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.133 2007/05/05 06:42:51 spiderr Exp $
+ * $Id: BitUser.php,v 1.134 2007/05/20 01:15:47 laetzer Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.133 $
+ * @version  $Revision: 1.134 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1498,18 +1498,19 @@ class BitUser extends LibertyAttachable {
 			}
 
 			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' )) {
-				$ret = '<a class="username" title="'.( !empty( $pHash['link_title'] ) ? $pHash['link_title'] : tra( 'Visit the userpage of' ).': '.$displayName )
+				$ret = '<a class="username" title="'.( !empty( $pHash['link_title'] ) ? $pHash['link_title'] : tra( 'Visit the userpage of' ).': '.htmlspecialchars($displayName) )
 					.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'
 					. htmlspecialchars((( isset( $pHash['link_label'] )) ? ( $pHash['link_label'] ) : ( $displayName )))
 					.'</a>';
 			} else {
-				$ret = $displayName;
+				$ret = htmlspecialchars($displayName);
 			}
 		} else {
 			$ret = tra( "Anonymous" );
 		}
-		return $ret;
 
+		return $ret;
+	
 	}
 
 	/**
