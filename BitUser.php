@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.136 2007/05/22 08:48:26 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.137 2007/05/30 21:32:50 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.136 2007/05/22 08:48:26 lsces Exp $
+ * $Id: BitUser.php,v 1.137 2007/05/30 21:32:50 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.136 $
+ * @version  $Revision: 1.137 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1170,6 +1170,16 @@ class BitUser extends LibertyAttachable {
 
 
 	// ============= image and file functions
+	function getThumbnailUrl( $pSize='small', $pInfoHash=NULL ) {
+		$ret = '';
+		if( $pInfoHash ) {
+			// do some stuff if we are passed a hash-o-crap, not implemented currently
+		} elseif( $this->isValid() ) {
+			$ret = $this->getField( 'avatar_url' );
+		}
+		return $ret;
+	}
+
 
 	function storePortrait( &$pStorageHash, $pGenerateAvatar=FALSE ) {
 		if( $this->isValid() && count( $pStorageHash ) ) {
