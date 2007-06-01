@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.44 2007/03/09 07:56:24 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.45 2007/06/01 15:16:48 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.44 2007/03/09 07:56:24 squareing Exp $
+ * $Id: preferences.php,v 1.45 2007/06/01 15:16:48 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -108,7 +108,6 @@ if( isset( $_REQUEST["prefs"] )) {
 
 	// preferences
 	$prefs = array(
-		'users_bread_crumb'     => USERS_PKG_NAME,
 		'users_homepage'        => USERS_PKG_NAME,
 		'site_display_utc'		=> USERS_PKG_NAME,
 		'site_display_timezone' => USERS_PKG_NAME,
@@ -237,7 +236,6 @@ closedir( $h );
 sort( $flags );
 $gBitSmarty->assign( 'flags', $flags );
 
-$editUser->mInfo['users_bread_crumb'] = $editUser->getPreference( 'users_bread_crumb', $gBitSystem->getConfig('users_bread_crumb', 4 ));
 $editUser->mInfo['users_homepage'] = $editUser->getPreference( 'users_homepage', '' );
 
 $gBitSmarty->assign( 'editUser', $editUser );

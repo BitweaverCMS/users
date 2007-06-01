@@ -122,21 +122,6 @@
 					{/legend}
 
 					{legend legend="User Preferences"}
-						<div class="row">
-							{formlabel label="Number of visited pages to remember" for="users_bread_crumb"}
-							{forminput}
-								<select name="users_bread_crumb" id="users_bread_crumb">
-									<option value="1" {if $editUser->mInfo.users_bread_crumb eq 1}selected="selected"{/if}>{tr}1{/tr}</option>
-									<option value="2" {if $editUser->mInfo.users_bread_crumb eq 2}selected="selected"{/if}>{tr}2{/tr}</option>
-									<option value="3" {if $editUser->mInfo.users_bread_crumb eq 3}selected="selected"{/if}>{tr}3{/tr}</option>
-									<option value="4" {if $editUser->mInfo.users_bread_crumb eq 4}selected="selected"{/if}>{tr}4{/tr}</option>
-									<option value="5" {if $editUser->mInfo.users_bread_crumb eq 5}selected="selected"{/if}>{tr}5{/tr}</option>
-									<option value="10" {if $editUser->mInfo.users_bread_crumb eq 10}selected="selected"{/if}>{tr}10{/tr}</option>
-								</select>
-								{formhelp note=""}
-							{/forminput}
-						</div>
-
 						{if $gBitSystem->getConfig('users_themes') == 'y'}
 							<div class="row">
 								{formlabel label="Theme" for="style"}

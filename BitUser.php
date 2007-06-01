@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.137 2007/05/30 21:32:50 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.138 2007/06/01 15:16:47 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.137 2007/05/30 21:32:50 spiderr Exp $
+ * $Id: BitUser.php,v 1.138 2007/06/01 15:16:47 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.137 $
+ * @version  $Revision: 1.138 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -173,9 +173,6 @@ class BitUser extends LibertyAttachable {
 		if( !$this->getPreference( 'site_display_timezone' ) ) {
 			$server_time = new BitDate();
 			$this->setPreference( 'site_display_timezone', $server_time->display_offset );
-		}
-		if( !$this->getPreference( 'users_bread_crumb' ) ) {
-			$this->setPreference( 'users_bread_crumb', $gBitSystem->getConfig('users_bread_crumb',4) );
 		}
 		if( !$this->getPreference( 'bitlanguage' ) ) {
 			global $gBitLanguage;
