@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.18 2007/02/24 08:51:09 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.19 2007/06/13 21:39:37 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -84,7 +84,9 @@ if (isset($_REQUEST["newuser"])) {
 	// Check if the user already exists
 	// jht 2005-06-22_23:51:58 flag this user store as coming from admin page -- a kludge
 	$_REQUEST['admin_add'] = 1;
-	if( $newUser->store( $_REQUEST ) ) {
+	if( $gBitUser->userExists( array( 'email' => $_REQUEST['email'] ))) {
+		$feedback['error'] = 'The email address "'.$_REQUEST['email'].'" has already been registered.';
+	} elseif( $newUser->store( $_REQUEST ) ) {
 		$gBitSmarty->assign( 'addSuccess', "User Added Successfully" );
 	} else {
 		$gBitSmarty->assign_by_ref( 'newUser', $_REQUEST );
