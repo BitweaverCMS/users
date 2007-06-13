@@ -25,13 +25,6 @@
 	{else if $gBitSystem->isFeatureActive( 'users_layouts' )}
 		{assign var="myLayoutConfig" value="My Site Layout"}
 	{/if}
-	{if $gBitUser->canCustomizeTheme() || $gBitUser->canCustomizeLayout() }
-		<li>
-			<a class="item" href="{$smarty.const.USERS_PKG_URL}assigned_modules.php">
-				{biticon ipackage="icons" iname="document-properties" iexplain=Configure iforce=icon}{if !$icons_only} {tr}Configure {$myLayoutConfig}{/tr}{/if}
-			</a>
-		</li>
-	{/if}
 	{if $gBitSystem->isFeatureActive( 'users_preferences' )}
 		<li>
 			<a class="item" href="{$smarty.const.USERS_PKG_URL}preferences.php">
