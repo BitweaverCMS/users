@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_bitweaver.tpl,v 1.10 2007/02/24 08:51:09 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_bitweaver.tpl,v 1.11 2007/06/13 15:02:39 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>
@@ -23,11 +23,11 @@
 				<table width="100%" class="menutable">
 					<tr>
 						{assign var="i" value="1"}
-						{foreach key=key item=menu from=$appMenu}
-							{if $menu.title && $menu.template && !$menu.disabled}
+						{foreach key=key item=menu from=$gBitSystem->mAppMenu}
+							{if $menu.menu_title && $menu.index_url && $menu.menu_template && !$menu.is_disabled}
 								<td style="width:33%;vertical-align:top;">
-									{box class="`$key`menu menu box" ipackage=$key iname="pkg_`$key`" iexplain="$key" iclass="menuicon" title=$menu.title}
-										{include file=$menu.template}
+									{box class="`$key`menu menu box" ipackage=$key iname="pkg_`$key`" iexplain="$key" iclass="menuicon" title=$menu.menu_title}
+										{include file=$menu.menu_template}
 									{/box}
 								</td>
 								{if not ($i++ mod 3)}
