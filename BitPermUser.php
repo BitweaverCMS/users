@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.52 2007/03/19 00:14:39 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.53 2007/06/14 08:04:48 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.52 2007/03/19 00:14:39 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.53 2007/06/14 08:04:48 squareing Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.52 $
+ * @version  $Revision: 1.53 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -486,7 +486,7 @@ class BitPermUser extends BitUser {
 			$pParamHash['group_store']['group_name'] = substr( $pParamHash["name"], 0, 30 );
 		}
 		if( !empty( $pParamHash["desc"] ) ) {
-			$pParamHash['group_store']['group_desc'] = $pParamHash["desc"];
+			$pParamHash['group_store']['group_desc'] = substr( $pParamHash["desc"], 0, 255 );;
 		}
 		$pParamHash['group_store']['group_home'] = !empty( $pParamHash["home"] ) ? $pParamHash["home"] : '';
 		$pParamHash['group_store']['is_default'] = !empty( $pParamHash["is_default"] ) ? $pParamHash["is_default"] : NULL;
