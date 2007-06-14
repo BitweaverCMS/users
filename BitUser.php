@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.139 2007/06/13 19:29:14 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.140 2007/06/14 08:24:25 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.139 2007/06/13 19:29:14 spiderr Exp $
+ * $Id: BitUser.php,v 1.140 2007/06/14 08:24:25 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.139 $
+ * @version  $Revision: 1.140 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -936,12 +936,19 @@ class BitUser extends LibertyAttachable {
 		return ($user_found);
 	}
 
-	function change_user_email( $pUserId, $pUsername, $pEmail, $pPass ) {
-		$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `email`=? WHERE `user_id`=?";
-		$result = $this->mDb->query( $query, array( $pEmail, $pUserId ) );
-		$query = "UPDATE `".BIT_DB_PREFIX."users_watches` SET `email`=? WHERE `user_id`=?";
-		$result = $this->mDb->query( $query, array( $pEmail, $pUserId ) );
-		return TRUE;
+	function changeUserEmail( $pUserId, $pEmail ) {
+		if( $this->userExists( array( 'email' => $pEmail ))) {
+			$this->mErrors['duplicate_mail'] = tra( "The email address you selected already exists." );
+		} else {
+			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `email`=? WHERE `user_id`=?";
+			$result = $this->mDb->query( $query, array( $pEmail, $pUserId ) );
+			$query = "UPDATE `".BIT_DB_PREFIX."users_watches` SET `email`=? WHERE `user_id`=?";
+			$result = $this->mDb->query( $query, array( $pEmail, $pUserId ) );
+
+			// update value in hash
+			$this->mInfo['email'] = $_REQUEST['email'];
+		}
+		return( count( $this->mErrors ) == 0 );
 	}
 
 

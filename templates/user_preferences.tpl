@@ -9,7 +9,7 @@
 	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
 
 	<div class="body">
-		{formfeedback warning=$warningMsg success=$successMsg error=$errorMsg}
+		{formfeedback hash=$feedback}
 		{jstabs}
 			{jstab title="User Information"}
 				{form}
