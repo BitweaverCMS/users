@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.10 2007/02/02 20:51:17 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.11 2007/06/14 11:26:43 nickpalmer Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.10 2007/02/02 20:51:17 nickpalmer Exp $
+ * $Id: my_groups.php,v 1.11 2007/06/14 11:26:43 nickpalmer Exp $
  * @package users
  * @subpackage functions
  */
@@ -18,25 +18,17 @@
  */
 require_once( '../bit_setup_inc.php' );
 
+global $gBitUser, $gBitSystem;
+
 // PERMISSIONS: registered user required
 if ( !$gBitUser->isRegistered() ) {
-	$gBitSmarty->assign('msg', tra("You are not logged in"));
-	$gBitSystem->display( 'error.tpl' );
+	$gBitSystem->fatalError( tra( "You are not logged in." ));	
+}
+
+if( !empty( $_REQUEST["cancel"] ) ) {
+	header( 'Location: '.USERS_PKG_URL.'my_groups.php' );
 	die;
 }
-
-$successMsg = NULL;
-$errorMsg = NULL;
-if (! empty( $_REQUEST['errorMsg'] ) ) {
-	$errorMsg[] = $_REQUEST['errorMsg'];
-}
-
-// We need to scan for defaults
-global $gBitInstaller;
-$gBitInstaller = &$gBitSystem;
-$gBitSystem->verifyInstalledPackages();
-
-$mid = 'bitpackage:users/my_groups_list.tpl';
 
 if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 	if( !empty( $_REQUEST['group_id'] ) ) {
@@ -49,34 +41,35 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 		$listHash = array( 'sort_mode' => !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : 'group_name_asc' );
 		$groupList = $gBitUser->getAllGroups( $listHash );
 	}
-
+	
+	// Remember a package limit if it is set.
 	$gBitSmarty->assign( 'package',isset( $_REQUEST['package'] ) ? $_REQUEST['package'] : 'all' );
 
-	if( !empty( $_REQUEST["cancel"] ) ) {
-		header( 'Location: '.USERS_PKG_URL.'my_groups.php' );
-		die;
-	} elseif( isset($_REQUEST["save"] ) ) {
+	// Save the join
+	if( isset($_REQUEST["save"] ) ) {
 		if( empty($_REQUEST["name"] ) ) {
 			$_REQUEST["name"] = $_REQUEST["olgroup"];
 		}
 		if( $gBitUser->storeGroup( $_REQUEST ) ) {
-			$successMsg = "Group changes were saved sucessfully.";
+			$successMsg = tra("Group changes were saved sucessfully.");
 		} else {
 			$errorMsg = $gBitUser->mErrors['groups'];
 		}
+	// Save a level join
 	} elseif (isset($_REQUEST['allper'])) {
 		if ($_REQUEST['oper'] == 'assign') {
 			$gBitUser->assign_level_permissions($_REQUEST['group_id'], $_REQUEST['level']);
 		} else {
 			$gBitUser->remove_level_permissions($_REQUEST['group_id'], $_REQUEST['level']);
 		}
+	// Create a level
 	} elseif (isset($_REQUEST["createlevel"])) {
 		$gBitUser->create_dummy_level($_REQUEST['level']);
+	// Update Permissions
 	} elseif (isset($_REQUEST['updateperms'])) {
-
 		$updatePerms = $gBitUser->getgroupPermissions( $_REQUEST['group_id'] );
 		foreach (array_keys($_REQUEST['level'])as $per) {
-			if( $allPerms[$per]['level'] != $_REQUEST['level'][$per] ) {
+			if( $allPerms[$per]['perm_level'] != $_REQUEST['level'][$per] ) {
 				// we changed level. perm[] checkbox is not taken into account
 				$gBitUser->change_permission_level($per, $_REQUEST['level'][$per]);
 			}
@@ -90,83 +83,91 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 		}
 		// let's reload just to be safe.
 		$allPerms = $gBitUser->getGroupPermissions();
+	// Do some action
 	} elseif (isset($_REQUEST["action"])) {
-	// Process a form to remove a group
+		// Process a form to remove a group
 		if( $_REQUEST["action"] == 'delete' ) {
 			if( $gBitUser->getDefaultGroup( $_REQUEST['group_id'] ) ) {
-				$errorMsg = "You cannot remove this Group, as it is currently set as your 'Default' group";
+				$errorMsg = tra("You cannot remove this group, as it is currently set as your 'Default' group");
 			} else {
 				$gBitUser->remove_group($_REQUEST['group_id']);
-				$successMsg = "The group ".$_REQUEST['group_id']." was deleted.";
+				$successMsg = tra("The group was deleted.");
 				unset( $_REQUEST['group_id'] );
 			}
+		// remove a permission from a group
 		} elseif ($_REQUEST["action"] == 'remove') {
 			$gBitUser->remove_permission_from_group( $_REQUEST["permission"], $_REQUEST['group_id'] );
-			$successMsg = "Permission Removed";
-		} elseif( $_REQUEST["action"] == 'create' ) {
+			$successMsg = tra("Permission Removed");
 			$mid = 'bitpackage:users/my_group_edit.tpl';
-			$gBitSystem->setBrowserTitle( 'Create New Group' );
+		// Create a new group
+		} elseif( $_REQUEST["action"] == 'create' ) {
+			$gBitSystem->setBrowserTitle( tra('Create New Group') );
+			$mid = 'bitpackage:users/my_group_edit.tpl';
+		// Assign a permission to a group
 		} elseif ($_REQUEST["action"] == 'assign') {
 			$gBitUser->assignPermissionToGroup($_REQUEST["perm"], $_REQUEST['group_id']);
+			$successMsg = tra("Permission Assigned");
+			$mid = 'bitpackage:users/my_group_edit.tpl';
 		}
+	// Search for users to add
 	} elseif (!empty($_REQUEST['submitUserSearch'])) {
 		$searchParams = array('find' => $_REQUEST['find']);
 		$gBitUser->getList($searchParams);
 		$foundUsers = $searchParams['data'];
+		$mid = 'bitpackage:users/my_group_edit.tpl';
 		$gBitSmarty->assign_by_ref('foundUsers', $foundUsers);
 	} elseif (!empty($_REQUEST['assignuser'])) {
 		if( !empty($_REQUEST['group_id'] ) ) {
-			// need some security here people!
-			$gBitUser->addUserToGroup( $_REQUEST['assignuser'], $_REQUEST['group_id'] );
+			if ($_REQUEST['group_id'] != -1 && $groupList['data'][$_REQUEST['group_id']]['user_id'] == $gBitUser->mUserId) {
+				$gBitUser->addUserToGroup( $_REQUEST['assignuser'], $_REQUEST['group_id'] );
+			}
+			else {
+				$errorMsg = tra("You can not assign users to this group.");
+			}
 		}
-	//	$mid = 'bitpackage:users/my_group_edit.tpl';
+		$mid = 'bitpackage:users/my_group_edit.tpl';
 	}
 
 	// get pagination url
 	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
 	$listHash = array( 'sort_mode' => 'group_name_asc' );
 	$groupList = $gBitUser->getAllUserGroups();
-
-	if( empty( $groupList ) ) {
-		$mid = 'bitpackage:users/my_groups_list.tpl';
-	} else {
-		$inc = array();
-		if( empty( $mid ) ) {
-			if( !empty( $_REQUEST['group_id'] ) ) {
-				// we don't want our own group listed when editing
-				if( !empty( $groupList[$_REQUEST['group_id']] ) ) {
-					unset( $groupList[$_REQUEST['group_id']] );
-				}
-				$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group_id'] );
-				$rs = array();
-				$gBitUser->getIncludedGroups( $_REQUEST['group_id'], $rs );
-				foreach( array_keys( $groupList ) as $groupId ) {
-					$groupList["data"][$groupId]['included'] = isset( $rs[$groupId] ) ? 'y' : 'n';
-				}
-				$levels = $gBitUser->getPermissionLevels();
-				$gBitSmarty->assign('levels', $levels);
-				$groupUsers = $gBitUser->get_group_users( $_REQUEST['group_id'] );
-				$gBitSmarty->assign_by_ref('groupUsers', $groupUsers);
-				$gBitSmarty->assign_by_ref('groupInfo', $groupInfo);
-				$gBitSmarty->assign_by_ref( 'allPerms', $allPerms );
-				$gBitSystem->setBrowserTitle( 'Admininster Group: '.$groupInfo['group_name'].' '.(isset( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : '') );
-				$mid = 'bitpackage:users/my_group_edit.tpl';
-			} else {
-				$gBitSystem->setBrowserTitle( 'Edit User Groups' );
-				$_REQUEST['group_id'] = 0;
-				$mid = 'bitpackage:users/my_groups_list.tpl';
-			}
+	
+	if( !empty( $_REQUEST['group_id'] ) ) {
+		// we don't want our own group listed when editing
+		if( !empty( $groupList[$_REQUEST['group_id']] ) ) {
+			unset( $groupList[$_REQUEST['group_id']] );
 		}
-		$gBitSmarty->assign('groups', $groupList);
-	}
-	$gBitSmarty->assign('successMsg',$successMsg);
-	$gBitSmarty->assign( (!empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'edit').'TabSelect', 'tdefault' );
+		$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group_id'] );
+		$rs = array();
+		$gBitUser->getIncludedGroups( $_REQUEST['group_id'], $rs );
+		foreach( array_keys( $groupList ) as $groupId ) {
+			$groupList["data"][$groupId]['included'] = isset( $rs[$groupId] ) ? 'y' : 'n';
+		}
+		$levels = $gBitUser->getPermissionLevels();
+		$gBitSmarty->assign('levels', $levels);
+		$groupUsers = $gBitUser->get_group_users( $_REQUEST['group_id'] );
+		$gBitSmarty->assign_by_ref('groupUsers', $groupUsers);
+		$gBitSmarty->assign_by_ref('groupInfo', $groupInfo);
+		$gBitSmarty->assign_by_ref( 'allPerms', $allPerms );
+		$gBitSystem->setBrowserTitle( 'Admininster Group: '.$groupInfo['group_name'].' '.(isset( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : '') );
+		$mid = 'bitpackage:users/my_group_edit.tpl';
+	} 
+
+	$gBitSmarty->assign('groups', $groupList);
+	//	$gBitSmarty->assign( (!empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'edit').'TabSelect', 'tdefault' );
 }
 
+/* join or leave a public group. */
 if ( ( !empty( $_REQUEST['add_public_group'] ) || !empty( $_REQUEST['remove_public_group'] ) ) && !empty( $_REQUEST['public_group_id'] ) ) {
 	$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['public_group_id'] );
 	if ( empty($groupInfo) || $groupInfo['is_public'] != 'y' ) {
-		$errorMsg[] = "You can't use this group";
+		if (empty($_REQUEST['add_public_group'])) {
+			$errorMsg[] = tra("You can't join this group.");
+		}
+		else {
+			$errorMsg[] = tra("You can't leave this group.");
+		}			
 	} elseif ( !empty( $_REQUEST['add_public_group'] ) ) {
 		$gBitUser->addUserToGroup( $gBitUser->mUserId, $_REQUEST['public_group_id'] );
 	} elseif ( !empty( $_REQUEST['remove_public_group'] ) ) {
@@ -185,6 +186,8 @@ if ( ( !empty( $_REQUEST['add_public_group'] ) || !empty( $_REQUEST['remove_publ
 		exit;
 	}
 }
+
+/* Load up public groups and check if the user can join or leave them */
 $systemGroups = $gBitUser->getGroups( $gBitUser->mUserId, TRUE );
 $gBitSmarty->assign_by_ref( 'systemGroups', $systemGroups);
 $listHash = array( 'is_public'=>'y', 'sort_mode'=>array('is_default_asc' , 'group_desc_asc') );
@@ -213,8 +216,19 @@ if ( $publicGroups['cant'] ) {
 		$gBitSmarty->assign( 'canRemovePublic' , 'y');
 	}
 }
-	
-$gBitSmarty->assign('errorMsg',$errorMsg);
+
+// Remember error and success messages.	
+if (!empty($errorMsg)) {
+	$gBitSmarty->assign('errorMsg',$errorMsg);
+}
+if (!empty($successMsg)) {
+	$gBitSmarty->assign('successMsg',$successMsg);
+}
+
+// Default the template if we aren't doing an edit.
+if (empty($mid)) {
+	$mid = 'bitpackage:users/my_groups_list.tpl';
+}
 
 // Display the template for group administration
 $gBitSystem->display( $mid );

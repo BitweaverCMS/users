@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_group_edit.tpl,v 1.5 2006/09/03 20:14:58 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_group_edit.tpl,v 1.6 2007/06/14 11:26:44 nickpalmer Exp $ *}
 {strip}
-
+{debug}
 <div class="floaticon">
 	<a href="{$smarty.const.USERS_PKG_URL}my_groups.php">{tr}&laquo; Group List{/tr}</a> 
 	{bithelp}
@@ -57,7 +57,7 @@
 				{/form}
 			{/jstab}
 
-			{if $gBitUser->hasPermission( 'p_users_assign_group_members' )}
+			{if $gBitUser->hasPermission( 'p_users_assign_group_members' ) && !empty($groupInfo.group_id)}
 				{jstab title="Members"}
 					<ul>
 						{foreach from=$groupUsers key=userId item=userHash}
@@ -140,7 +140,7 @@
 								{forminput}
 									{smartlink ititle="All packages" group_id=$groupInfo.group_id}
 									{foreach from=$gBitSystem->mPackages key=packageKey item=packageItem}
-										{if $packageItem.installed and $packageItem.defaults} 
+										{if $packageItem.installed} 
 											&nbsp;&bull; {smartlink ititle=$gBitSystem->mPackages.$packageKey.name group_id=$groupInfo.group_id package=$packageKey}
 										{/if}
 									{/foreach}
@@ -162,7 +162,7 @@
 											<tr class="{cycle values="even,odd"}">
 												<td><input type="checkbox" id="{$permName}" name="perm[{$permName}]"{if $groupInfo.perms.$permName} checked="checked"{/if} /></td>
 												<td><label for="{$permName}">{$permName}</label></td>
-												<td><select name="level[{$permName}]">{html_options output=$levels values=$levels selected=$perm.level}</select></td>
+												<td><select name="level[{$permName}]">{html_options output=$levels values=$levels selected=$perm.perm_level}</select></td>
 												<td>{tr}{$perm.package}{/tr}</td>
 												<td>{tr}{$perm.perm_desc}{/tr}</td>
 											</tr>
