@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.141 2007/06/15 20:33:00 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.142 2007/06/15 21:08:05 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.141 2007/06/15 20:33:00 lsces Exp $
+ * $Id: BitUser.php,v 1.142 2007/06/15 21:08:05 lsces Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.141 $
+ * @version  $Revision: 1.142 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -81,6 +81,7 @@ class BitUser extends LibertyAttachable {
 	* @return returnString
 	*/
 	function load( $pFull=FALSE, $pUserName=NULL ) {
+		global $gBitSystem;
 		$this->mInfo = NULL;
 		if( isset( $this->mUserId ) ) {
 			$whereSql = "WHERE uu.`user_id`=?";
@@ -112,7 +113,9 @@ class BitUser extends LibertyAttachable {
 						$fullJoin
 					  $whereSql";
 
-			if( ($result = $this->mDb->query( $query, $bindVars )) && $result->numRows() ) {
+				if( $gBitSystem->isFeatureActive( 'liberty_png_thumbnails' )) { $ext = '.png'; } else { $ext = '.jpg'; }
+
+				if( ($result = $this->mDb->query( $query, $bindVars )) && $result->numRows() ) {
 				$this->mInfo = $result->fetchRow();
 				$this->mInfo['user'] = $this->mInfo['login'];
 				$this->mInfo['valid'] = @$this->verifyId( $this->mInfo['uu_user_id'] );
@@ -121,8 +124,8 @@ class BitUser extends LibertyAttachable {
 				$this->mContentId = $this->mInfo['content_id'];
 				$this->mUsername = $this->mInfo['login'];
 				$this->mInfo['is_registered'] = $this->isRegistered();
-				$this->mInfo['avatar_url'] = (!empty($this->mInfo['avatar_storage_path']) ? BIT_ROOT_URL . dirname( $this->mInfo['avatar_storage_path'] ).'/avatar.jpg' : NULL);
-				$this->mInfo['portrait_url'] = (!empty($this->mInfo['portrait_storage_path']) ? BIT_ROOT_URL . dirname( $this->mInfo['portrait_storage_path'] ).'/medium.jpg' : NULL);
+				$this->mInfo['avatar_url'] = (!empty($this->mInfo['avatar_storage_path']) ? BIT_ROOT_URL . dirname( $this->mInfo['avatar_storage_path'] ).'/avatar'.$ext : NULL);
+				$this->mInfo['portrait_url'] = (!empty($this->mInfo['portrait_storage_path']) ? BIT_ROOT_URL . dirname( $this->mInfo['portrait_storage_path'] ).'/medium'.$ext : NULL);
 				$this->mInfo['logo_url'] = (!empty($this->mInfo['logo_storage_path']) ? BIT_ROOT_URL.$this->mInfo['logo_storage_path'] : NULL);
 				$this->mInfo['avatar_path'] = (!empty($this->mInfo['avatar_storage_path']) ? BIT_ROOT_PATH.$this->mInfo['avatar_storage_path'] : NULL);
 				$this->mInfo['avatar_path'] = (!empty($this->mInfo['portrait_storage_path']) ? BIT_ROOT_PATH.$this->mInfo['portrait_storage_path']: NULL);
@@ -150,7 +153,6 @@ class BitUser extends LibertyAttachable {
 				$this->mUserId = NULL;
 			}
 		}
-		global $gBitSystem;
 		if ( !$gBitSystem->isFeatureActive( 'i18n_browser_languages' ) ) {
 			global $gBitLanguage;
 			if ( $this->mUserId && $this->mUserId != -1 )
@@ -1608,10 +1610,12 @@ class BitUser extends LibertyAttachable {
 		$result = $this->mDb->query($query, $bindvars, $pParamHash['max_records'], $pParamHash['offset']);
 
 		$ret = array();
+		global $gBitSystem;
+		if( $gBitSystem->isFeatureActive( 'liberty_png_thumbnails' )) { $ext = '.png'; } else { $ext = '.jpg'; }
 		while( $res = $result->fetchRow() ) {
 			if( !empty($res['avatar_storage_path'] ) ) {
 				$res['avatar_url'] = BIT_ROOT_URL.$res['avatar_storage_path'];
-				$res['thumbnail_url'] = dirname( $res['avatar_url'] ).'/small.jpg';
+				$res['thumbnail_url'] = dirname( $res['avatar_url'] ).'/small'.$ext;
 			}
 			$res["groups"] = $this->getGroups( $res['user_id'] );
 			array_push( $ret, $res );
