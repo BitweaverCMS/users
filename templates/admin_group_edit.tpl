@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.15 2007/05/03 22:25:39 laetzer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.16 2007/06/15 18:27:35 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -35,20 +35,6 @@
 					</div>
 
 					<div class="row">
-						{formlabel label="Include" for="groups_inc"}
-						{forminput}
-							<select name="include_groups[]" id="groups_inc" multiple="multiple" size="4">
-							{foreach from=$groupList key=groupId item=group}
-								{if $groupId != $groupInfo.group_id}
-									<option value="{$groupId}" {if $group.included eq 'y'} selected="selected"{/if}>{$group.group_name}</option>
-								{/if}
-							{/foreach}
-							</select>
-							{formhelp note="If you include a group, this group will inherit all permissions of the included group."}
-						{/forminput}
-					</div>
-
-					<div class="row">
 						{formlabel label="Group home page" for="group_home"}
 						{forminput}
 							<input type="text" name="home" id="group_home" value="{$groupInfo.group_home|escape}" />
@@ -59,25 +45,25 @@
 <script type="text/javascript" src="{$smarty.const.UTIL_PKG_URL}javascript/libs/suggest/suggest.js"></script>
 <script type="text/javascript" src="{$smarty.const.UTIL_PKG_URL}javascript/libs/rico.js"></script>
 <script type="text/javascript">
-{literal}   
-      var suggestOptions = { 
+{literal}
+      var suggestOptions = {
         matchAnywhere      : true,
         ignoreCase         : true
       };
 
-      function injectSuggestBehavior() {                          
-         suggest = new TextSuggest( 
-			'group_home_lookup', 
-			'/liberty/list_content.php', 
+      function injectSuggestBehavior() {
+         suggest = new TextSuggest(
+			'group_home_lookup',
+			'/liberty/list_content.php',
 			suggestOptions
 	 );
-      } 
-{/literal}	  
+      }
+{/literal}
 </script>
 					<input type="hidden" name="group_home_lookup_hidden" id="group_home_lookup_hidden" value="{$groupInfo.group_home|escape}" />
 					<input type="text" id="group_home_lookup" name="group_home_name">
-					{formhelp note="Enter the title of the content you are looking for to receive an auto-suggest list of possibilities."}
-{*						
+						{formhelp note="Enter the title of the content you are looking for to receive an auto-suggest list of possibilities."}
+{*
 							{html_options name="dummy" id="content-list" values=$contentList options=$contentList onchange="$('group_home').value=options[selectedIndex].value;"}
 							<input type="text" size="30" name="find_objects" value="{$smarty.request.find_objects}" />
 							<input type="submit" value="{tr}Apply filter{/tr}" name="search_objects" />
@@ -126,31 +112,10 @@
 			{/jstab}
 
 			{if $groupInfo.group_id}
-				{*jstab title="Current Permissions"}
-					{form legend="Permissions currently assigned to this group"}
-						<table class="data">
-							<tr>
-								<th>{tr}Permission{/tr}</th>
-								<th>{tr}Description{/tr}</th>
-							</tr>
-							{foreach from=$groupInfo.perms key=permName item=perm}
-								<tr class="{cycle values="odd,even"}">
-									<td>
-										{smartlink ititle="Remove" ibiticon="icons/edit-delete" package=$package group_id=$groupInfo.group_id action=remove permission=$permName}
-										&nbsp;{$permName}
-									</td>
-									<td>{$perm.perm_desc}</td>
-								</tr>
-							{/foreach}
-						</table>
-					{/form}
-				{/jstab*}
-
 				{jstab title="Assign Permissions"}
-					{form legend="Assign permissions and / or set level"}
+					{form legend="Assign permissions"}
 						<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
 						<input type="hidden" name="package" value="{$package|escape}" />
-						<input type="hidden" name="tab" value="assign" />
 						<input type="hidden" name="perm_name[{$perms[user].perm_name}]" />
 
 						<div class="row">
@@ -169,11 +134,7 @@
 							<table class="data">
 								<tr>
 									<th>&nbsp;</th>
-									{if $incPerms}
-										<th><abbr title="{tr}Inherited permissions{/tr}">*</abbr></th>
-									{/if}
 									<th>{smartlink ititle="Name" isort="up.perm_name" group_id=$groupInfo.group_id offset=$offset package=$package}</th>
-									<th>{tr}Level{/tr}</th>
 									<th>{smartlink ititle="Package" isort=package group_id=$groupInfo.group_id offset=$offset package=$package}</th>
 									<th>{smartlink ititle="Description" isort="up.perm_desc" group_id=$groupInfo.group_id offset=$offset package=$package}</th>
 								</tr>
@@ -181,73 +142,17 @@
 									{if $package eq $perm.package or $package eq 'all'}
 										<tr class="{cycle values="even,odd"}">
 											<td><input type="checkbox" id="{$permName}" name="perm[{$permName}]" {if $groupInfo.perms.$permName} checked="checked"{/if} /></td>
-											{if $incPerms}
-												<td>
-													{if $incPerms.$permName}
-														<input type="checkbox" id="{$permName}" name="inherited[{$permName}]" checked="checked" disabled="disabled" title="{tr}Inherited from{/tr}: {$incPerms.$permName.group_name}" />
-													{/if}
-												</td>
-											{/if}
 											<td><label for="{$permName}">{$permName}</label></td>
-											<td>{html_options name="perm_level[$permName]" output=$levels values=$levels selected=$perm.perm_level}</td>
 											<td>{tr}{$perm.package}{/tr}</td>
 											<td>{tr}{$perm.perm_desc}{/tr}</td>
 										</tr>
 									{/if}
 								{/foreach}
 							</table>
-							{if $incPerms}
-								* {formhelp note="Inherited permissions. Hover over the checkboxes to find out what group they are inherited from. Assigning them to a new level will remove them from the original group and insert them here."}
-							{/if}
 						</div>
 
 						<div class="row submit">
 							<input type="submit" name="updateperms" value="{tr}Update{/tr}" />
-						</div>
-					{/form}
-				{/jstab}
-
-				{jstab title="Advanced"}
-					{form legend="Batch assign permissions"}
-						<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
-						<input type="hidden" name="package" value="{$package|escape}" />
-
-						<div class="row">
-							{formlabel label="Assign or Remove" for="oper"}
-							{forminput}
-								<select name="oper" id="oper">
-									<option value="assign">{tr}Assign{/tr}</option>
-									<option value="remove">{tr}Remove{/tr}</option>
-								</select>
-								<br />
-								{tr}all permissions in level{/tr}
-								<br />
-								<select name="perm_level">
-									{html_options output=$levels values=$levels selected=$perms[user].perm_level}
-								</select>
-								<br />
-								{tr}to / from {$groupInfo.group_name}{/tr}
-							{/forminput}
-						</div>
-
-						<div class="row submit">
-							<input type="submit" name="allper" value="{tr}Update{/tr}" />
-						</div>
-					{/form}
-
-					{form legend="Create a new level"}
-						<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
-						<input type="hidden" name="package" value="{$package|escape}" />
-						<div class="row">
-							{formlabel label="Level" for="level"}
-							{forminput}
-								<input type="text" name="perm_level" id="level" />
-								{formhelp note="Levels can be used to group certain permissions and thus easily assign a set of permissions to a group. Assinging a permission to a level has no outcome on the users or groups. It's merely a way to organise permissions."}
-							{/forminput}
-						</div>
-
-						<div class="row submit">
-							<input type="submit" name="createlevel" value="{tr}Create{/tr}" />
 						</div>
 					{/form}
 				{/jstab}

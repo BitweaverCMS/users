@@ -377,7 +377,8 @@ array( 'DATADICT' => array(
 		),
 	)),
 	array( 'DROPTABLE' => array(
-		'tiki_sessions'
+		'tiki_sessions',
+		'users_groups_inclusion'
 	)),
 )),
 

@@ -35,16 +35,8 @@
 					<h2>{$grp.group_name}</h2>
 					<div style="float:left;width:30%;">
 						{$grp.group_desc}<br />
-						{if $grp.is_default eq 'y'}<small class="warning"> *{tr}Default group{/tr}*</small><br/>{/if}
+						{if $grp.is_default eq 'y'}<small class="warning">*{tr}Default group{/tr}*</small><br/>{/if}
 						{if $grp.group_home}{tr}Home Page{/tr}:<strong> {$grp.group_home}</strong><br />{/if}
-						{if $grp.included}
-							<br />{tr}Included Groups{/tr}
-							<ul class="small">
-								{foreach from=$grp.included key=incGroupId item=incGroupName}
-									<li class="{cycle values="odd,even"} item">{$incGroupName}</li>
-								{/foreach}
-							</ul>
-						{/if}
 					</div>
 
 					<div style="float:right;width:70%;">

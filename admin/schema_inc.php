@@ -57,11 +57,6 @@ $tables = array(
   CONSTRAINT ', CONSTRAINT `users_groups_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
-'users_groups_inclusion' => "
-  group_id I4 PRIMARY,
-  include_group_id I4 PRIMARY
-",
-
 'users_group_permissions' => "
   group_id I4 PRIMARY,
   perm_name C(30) PRIMARY,

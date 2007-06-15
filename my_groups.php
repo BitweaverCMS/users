@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.11 2007/06/14 11:26:43 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.12 2007/06/15 18:27:35 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.11 2007/06/14 11:26:43 nickpalmer Exp $
+ * $Id: my_groups.php,v 1.12 2007/06/15 18:27:35 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -139,13 +139,6 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 			unset( $groupList[$_REQUEST['group_id']] );
 		}
 		$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group_id'] );
-		$rs = array();
-		$gBitUser->getIncludedGroups( $_REQUEST['group_id'], $rs );
-		foreach( array_keys( $groupList ) as $groupId ) {
-			$groupList["data"][$groupId]['included'] = isset( $rs[$groupId] ) ? 'y' : 'n';
-		}
-		$levels = $gBitUser->getPermissionLevels();
-		$gBitSmarty->assign('levels', $levels);
 		$groupUsers = $gBitUser->get_group_users( $_REQUEST['group_id'] );
 		$gBitSmarty->assign_by_ref('groupUsers', $groupUsers);
 		$gBitSmarty->assign_by_ref('groupInfo', $groupInfo);
