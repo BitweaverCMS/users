@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/unassigned_perms.php,v 1.6 2006/06/24 19:25:42 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/unassigned_perms.php,v 1.7 2007/06/15 22:07:52 squareing Exp $
 // Initialization
 require_once( '../../bit_setup_inc.php' );
 
@@ -16,8 +16,10 @@ $gBitSmarty->assign( 'groupDrop', $groupDrop );
 if( !empty( $_REQUEST['assign_permissions'] ) && !empty( $_REQUEST['assign'] ) ) {
 	$feedback['success'] = tra( "The permissions were successfully added to the requested groups." );
 	foreach( $_REQUEST['assign'] as $p => $group_id ) {
-		$gBitUser->assignPermissionToGroup( $p, $group_id );
-		$assignedPerms[$p] = $groupDrop[$group_id];
+		if( !empty( $p )) {
+			$gBitUser->assignPermissionToGroup( $p, $group_id );
+			$assignedPerms[$p] = $groupDrop[$group_id];
+		}
 	}
 	$gBitSmarty->assign( 'assignedPerms', $assignedPerms );
 }
