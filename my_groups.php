@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.12 2007/06/15 18:27:35 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.13 2007/06/16 14:25:42 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.12 2007/06/15 18:27:35 squareing Exp $
+ * $Id: my_groups.php,v 1.13 2007/06/16 14:25:42 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -58,9 +58,9 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 	// Save a level join
 	} elseif (isset($_REQUEST['allper'])) {
 		if ($_REQUEST['oper'] == 'assign') {
-			$gBitUser->assign_level_permissions($_REQUEST['group_id'], $_REQUEST['level']);
+			$gBitUser->assignLevelPermissions($_REQUEST['group_id'], $_REQUEST['level']);
 		} else {
-			$gBitUser->remove_level_permissions($_REQUEST['group_id'], $_REQUEST['level']);
+			$gBitUser->removeLevelPermissions($_REQUEST['group_id'], $_REQUEST['level']);
 		}
 	// Create a level
 	} elseif (isset($_REQUEST["createlevel"])) {
