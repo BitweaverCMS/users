@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/admin_levels.php,v 1.1 2007/06/15 18:27:35 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/admin_levels.php,v 1.2 2007/06/16 14:41:23 squareing Exp $
  * @package users
  */
 require_once( '../../bit_setup_inc.php' );
@@ -10,7 +10,7 @@ $allPerms = $gBitUser->getGroupPermissions( NULL, NULL, NULL, !empty( $_REQUEST[
 
 if( !empty( $_REQUEST['allper'] )) {
 	if( $_REQUEST['oper'] == 'assign' ) {
-		$gBitUser->assignLevelPermission( $_REQUEST['group_id'], $_REQUEST['perm_level'] );
+		$gBitUser->assignLevelPermissions( $_REQUEST['group_id'], $_REQUEST['perm_level'] );
 	} else {
 		$gBitUser->removeLevelPermissions( $_REQUEST['group_id'], $_REQUEST['perm_level'] );
 	}
