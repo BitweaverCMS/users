@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.60 2007/06/17 13:27:52 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.61 2007/06/17 13:47:50 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.60 2007/06/17 13:27:52 squareing Exp $
+ * $Id: BitPermUser.php,v 1.61 2007/06/17 13:47:50 squareing Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.60 $
+ * @version  $Revision: 1.61 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -246,12 +246,10 @@ class BitPermUser extends BitUser {
 				$ret[$groupId]['perms'] = $this->getGroupPermissions( array( 'group_id' => $groupId ));
 			}
 		}
-		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_groups` $mid";
-		$cant = $this->mDb->getOne($query_cant, $bindvars);
-		$retval = array();
-		$retval["data"] = $ret;
-		$retval["cant"] = $cant;
-		return $retval;
+
+		$pListHash['cant'] = $this->mDb->getOne( "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."users_groups` $mid", $bindvars );
+
+		return $ret;
 	}
 
 	function getAllUserGroups( $pUserId=NULL ) {
