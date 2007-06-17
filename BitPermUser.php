@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.58 2007/06/17 12:42:47 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.59 2007/06/17 13:20:25 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.58 2007/06/17 12:42:47 squareing Exp $
+ * $Id: BitPermUser.php,v 1.59 2007/06/17 13:20:25 squareing Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.58 $
+ * @version  $Revision: 1.59 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -554,7 +554,6 @@ class BitPermUser extends BitUser {
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
-	//function getGroupPermissions( $pGroupId=NULL, $pPackage = '', $find = '', $pSortMode = NULL ) {
 	function getGroupPermissions( $pParamHash = NULL ) {
 		global $gBitSystem;
 		$ret = $bindVars = array();
@@ -566,12 +565,12 @@ class BitPermUser extends BitUser {
 			$sortMode = 'up.`package`, up.`perm_name` ASC';
 		}
 
-		if( $pParamHash['package'] ) {
+		if( !empty( $pParamHash['package'] )) {
 			$whereSql = ' WHERE `package`= ? ';
 			$bindVars[] = $pParamHash['package'];
 		}
 
-		if( @$this->verifyId( $pParamHash['group_id'] )) {
+		if( @BitBase::verifyId( $pParamHash['group_id'] )) {
 			$selectSql = ', ugp.`perm_value` AS `hasPerm` ';
 			$fromSql = ' INNER JOIN `'.BIT_DB_PREFIX.'users_group_permissions` ugp ON ( ugp.`perm_name`=up.`perm_name` ) ';
 			if( $whereSql ) {
@@ -583,7 +582,7 @@ class BitPermUser extends BitUser {
 			$bindVars[] = $pParamHash['group_id'];
 		}
 
-		if( $pParamHash['find'] ) {
+		if( !empty( $pParamHash['find'] )) {
 			if( $whereSql ) {
 				$whereSql .= " AND `perm_name` like ?";
 			} else {
