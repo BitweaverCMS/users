@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.59 2007/06/17 13:20:25 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.60 2007/06/17 13:27:52 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.59 2007/06/17 13:20:25 squareing Exp $
+ * $Id: BitPermUser.php,v 1.60 2007/06/17 13:27:52 squareing Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.59 $
+ * @version  $Revision: 1.60 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -217,14 +217,15 @@ class BitPermUser extends BitUser {
 			$bindvars = array();
 		}
 
-		if (!empty($pListHash['hide_root_groups'])) {
-			if (strlen($mid) > 0) {
-				$mid .= ' AND `user_id` <> '.ROOT_USER_ID;
-			} else {
-				$mid = " WHERE `user_id` <> ".ROOT_USER_ID;
-			}
+		if( !empty( $pListHash['hide_root_groups'] )) {
+			$mid .= !empty( $mid ) ? ' AND ' : ' WHERE ';
+			$mid .= '`user_id` <> '.ROOT_USER_ID;
+		} elseif( !empty( $pListHash['only_root_groups'] )) {
+			$mid .= !empty( $mid ) ? ' AND ' : ' WHERE ';
+			$mid .= '`user_id` = '.ROOT_USER_ID;
 		}
-		if ( !empty( $pListHash['is_public'] ) ) {
+
+		if( !empty( $pListHash['is_public'] ) ) {
 			if (strlen($mid) > 0) {
 				$mid .= ' AND ';
 			} else {
