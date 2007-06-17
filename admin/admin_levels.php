@@ -1,12 +1,12 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/admin_levels.php,v 1.2 2007/06/16 14:41:23 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/admin_levels.php,v 1.3 2007/06/17 12:42:48 squareing Exp $
  * @package users
  */
 require_once( '../../bit_setup_inc.php' );
 
 $gBitSystem->verifyPermission( 'p_users_admin' );
-$allPerms = $gBitUser->getGroupPermissions( NULL, NULL, NULL, !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : NULL );
+$allPerms = $gBitUser->getGroupPermissions( array( 'sort_mode' => !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : NULL ));
 
 if( !empty( $_REQUEST['allper'] )) {
 	if( $_REQUEST['oper'] == 'assign' ) {
@@ -27,7 +27,7 @@ if( !empty( $_REQUEST['allper'] )) {
 		}
 	}
 	// get up to date version of levels
-	$allPerms = $gBitUser->getGroupPermissions( NULL, NULL, NULL, !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : NULL );
+	$allPerms = $gBitUser->getGroupPermissions( array( 'sort_mode' => !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : NULL ));
 }
 
 $gBitSmarty->assign_by_ref( 'allPerms', $allPerms );

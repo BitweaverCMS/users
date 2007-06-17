@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.57 2007/06/17 08:19:31 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.58 2007/06/17 12:42:47 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.57 2007/06/17 08:19:31 squareing Exp $
+ * $Id: BitPermUser.php,v 1.58 2007/06/17 12:42:47 squareing Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.57 $
+ * @version  $Revision: 1.58 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -242,7 +242,7 @@ class BitPermUser extends BitUser {
 			while( $row = $rs->fetchRow() ) {
 				$groupId = $row['group_id'];
 				$ret[$groupId] = $row;
-				$ret[$groupId]['perms'] = $this->getGroupPermissions( $groupId );
+				$ret[$groupId]['perms'] = $this->getGroupPermissions( array( 'group_id' => $groupId ));
 			}
 		}
 		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_groups` $mid";
@@ -359,7 +359,11 @@ class BitPermUser extends BitUser {
 		$query = "select * from `".BIT_DB_PREFIX."users_groups` where `group_id`=?";
 		$result = $this->mDb->query($query, array($pGroupId));
 		$res = $result->fetchRow();
-		$perms = $this->getGroupPermissions($pGroupId, NULL, NULL, 'up.perm_name_asc');
+		$listHash = array(
+			'group_id' => $pGroupId,
+			'sort_mode' => 'up.perm_name_asc',
+		);
+		$perms = $this->getGroupPermissions( $listHash );
 		$sql = "SELECT COUNT(*) FROM `".BIT_DB_PREFIX."users_groups_map` WHERE `group_id` = ?";
 		$res['num_members'] = $this->mDb->getOne($sql, array($pGroupId));
 		$res["perms"] = $perms;
@@ -550,57 +554,61 @@ class BitPermUser extends BitUser {
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
-	function getGroupPermissions( $pGroupId=NULL, $pPackage = '', $find = '', $pSortMode = NULL ) {
+	//function getGroupPermissions( $pGroupId=NULL, $pPackage = '', $find = '', $pSortMode = NULL ) {
+	function getGroupPermissions( $pParamHash = NULL ) {
 		global $gBitSystem;
-		$values = array();
-		$mid = $selectSql = $fromSql = '';
+		$ret = $bindVars = array();
+		$whereSql = $selectSql = $fromSql = '';
 
-		if( !empty( $pSortMode ) ) {
-			$sortMode = $this->mDb->convertSortmode( $pSortMode );
+		if( !empty( $pParamHash['sort_mode'] )) {
+			$sortMode = $this->mDb->convertSortmode( $pParamHash['sort_mode'] );
 		} else {
 			$sortMode = 'up.`package`, up.`perm_name` ASC';
 		}
 
-		if( $pPackage ) {
-			$mid = ' WHERE `package`= ? ';
-			$values[] = $pPackage;
+		if( $pParamHash['package'] ) {
+			$whereSql = ' WHERE `package`= ? ';
+			$bindVars[] = $pParamHash['package'];
 		}
 
-		if( @$this->verifyId( $pGroupId ) ) {
+		if( @$this->verifyId( $pParamHash['group_id'] )) {
 			$selectSql = ', ugp.`perm_value` AS `hasPerm` ';
 			$fromSql = ' INNER JOIN `'.BIT_DB_PREFIX.'users_group_permissions` ugp ON ( ugp.`perm_name`=up.`perm_name` ) ';
-			if( $mid ) {
-				$mid .= " AND  ugp.`group_id`=?";
+			if( $whereSql ) {
+				$whereSql .= " AND  ugp.`group_id`=?";
 			} else {
-				$mid .= " WHERE ugp.`group_id`=?";
+				$whereSql .= " WHERE ugp.`group_id`=?";
 			}
-			$values[] = $pGroupId;
+
+			$bindVars[] = $pParamHash['group_id'];
 		}
 
-		if( $find ) {
-			if( $mid ) {
-				$mid .= " AND `perm_name` like ?";
+		if( $pParamHash['find'] ) {
+			if( $whereSql ) {
+				$whereSql .= " AND `perm_name` like ?";
 			} else {
-				$mid .= " WHERE `perm_name` like ?";
+				$whereSql .= " WHERE `perm_name` like ?";
 			}
-			$values[] = '%'.$find.'%';
+			$bindVars[] = '%'.$pParamHash['find'].'%';
 		}
+
 		// the double up.`perm_name` is intentional - the first is for hash key, the second is for hash value
-		$query = "SELECT up.`perm_name` AS `hash_key`, up.`perm_name`, up.`perm_desc`, up.`perm_level`, up.`package` $selectSql
-				  FROM `".BIT_DB_PREFIX."users_permissions` up $fromSql $mid
-				  ORDER BY $sortMode";
-		$perms = $this->mDb->getAssoc( $query, $values );
+		$query = "
+			SELECT up.`perm_name` AS `hash_key`, up.`perm_name`, up.`perm_desc`, up.`perm_level`, up.`package` $selectSql
+			FROM `".BIT_DB_PREFIX."users_permissions` up $fromSql $whereSql
+			ORDER BY $sortMode";
+		$perms = $this->mDb->getAssoc( $query, $bindVars );
 
 		// weed out permissions of inactive packages
 		$ret = array();
 		foreach( $perms as $key => $perm ) {
-			if( $gBitSystem->isPackageActive( $perm['package'] ) ) {
+			if( $gBitSystem->isPackageActive( $perm['package'] )) {
 				$ret[$key] = $perm;
 			}
 		}
+
 		return $ret;
 	}
-
 
 	function changePermissionLevel($perm, $level) {
 		$query = "update `".BIT_DB_PREFIX."users_permissions` set `perm_level` = ?

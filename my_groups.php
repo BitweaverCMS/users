@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.13 2007/06/16 14:25:42 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.14 2007/06/17 12:42:47 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.13 2007/06/16 14:25:42 squareing Exp $
+ * $Id: my_groups.php,v 1.14 2007/06/17 12:42:47 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -32,7 +32,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 
 if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 	if( !empty( $_REQUEST['group_id'] ) ) {
-		$allPerms = $gBitUser->getGroupPermissions( NULL, NULL, NULL, !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : NULL );
+		$allPerms = $gBitUser->getGroupPermissions( array( 'sort_mode' => !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : NULL ));
 		// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
 		$listHash = array( 'sort_mode' => 'group_name_asc' );
 		$groupList = $gBitUser->getAllGroups( $listHash );
