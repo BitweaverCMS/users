@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.56 2007/06/16 14:40:24 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.57 2007/06/17 08:19:31 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.56 2007/06/16 14:40:24 squareing Exp $
+ * $Id: BitPermUser.php,v 1.57 2007/06/17 08:19:31 squareing Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.56 $
+ * @version  $Revision: 1.57 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -603,8 +603,6 @@ class BitPermUser extends BitUser {
 
 
 	function changePermissionLevel($perm, $level) {
-		$gBitCache = new BitCache();
-		$gBitCache->removeCached("allperms");
 		$query = "update `".BIT_DB_PREFIX."users_permissions` set `perm_level` = ?
 			where `perm_name` = ?";
 		$this->mDb->query($query, array($level, $perm));
@@ -612,8 +610,6 @@ class BitPermUser extends BitUser {
 
 
 	function assignLevelPermissions( $pGroupId, $level, $pPackage=NULL) {
-		$gBitCache = new BitCache();
-		$gBitCache->removeCached("allperms");
 		$bindvars = array($level);
 		$whereSql = '';
 		if( !empty( $pPackage ) ) {
@@ -632,8 +628,6 @@ class BitPermUser extends BitUser {
 
 
 	function removeLevelPermissions($group, $level) {
-		$gBitCache = new BitCache();
-		$gBitCache->removeCached("allperms");
 		$query = "select `perm_name` from `".BIT_DB_PREFIX."users_permissions` where `perm_level` = ?";
 		$result = $this->mDb->query($query, array($level));
 		$ret = array();
@@ -644,8 +638,6 @@ class BitPermUser extends BitUser {
 
 
 	function createDummyLevel($level) {
-		$gBitCache = new BitCache();
-		$gBitCache->removeCached("allperms");
 		$query = "delete from `".BIT_DB_PREFIX."users_permissions` where `perm_name` = ?";
 		$result = $this->mDb->query($query, array(''));
 		$query = "insert into `".BIT_DB_PREFIX."users_permissions` (`perm_name`, `perm_desc`,
@@ -665,8 +657,6 @@ class BitPermUser extends BitUser {
 
 
 	function assignPermissionToGroup( $perm, $pGroupId ) {
-		$gBitCache = new BitCache();
-		$gBitCache->removeCached("allperms");
 		$query = "DELETE FROM `".BIT_DB_PREFIX."users_group_permissions` WHERE `group_id` = ? AND `perm_name` = ?";
 		$result = $this->mDb->query($query, array($pGroupId, $perm));
 		$query = "INSERT INTO `".BIT_DB_PREFIX."users_group_permissions`(`group_id`, `perm_name`) VALUES(?, ?)";
@@ -690,8 +680,6 @@ class BitPermUser extends BitUser {
 
 
 	function remove_permission_from_group($perm, $pGroupId) {
-		$gBitCache = new BitCache();
-		$gBitCache->removeCached("allperms");
 		$query = "delete from `".BIT_DB_PREFIX."users_group_permissions` where `perm_name` = ?	and `group_id` = ?";
 		$result = $this->mDb->query($query, array($perm, $pGroupId));
 		return true;
