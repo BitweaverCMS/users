@@ -6,7 +6,7 @@
 	{/if}
 	<li><a class="item" href="{$smarty.const.KERNEL_PKG_URL}admin/index.php?page=login">{tr}Login Settings{/tr}</a></li>
 	<li><a class="item" href="{$smarty.const.USERS_PKG_URL}admin/index.php">{tr}Edit Users{/tr}</a></li>
-	<li><a class="item" href="{$smarty.const.USERS_PKG_URL}admin/unassigned_perms.php">{tr}Unassigned Permissions{/tr}</a></li>
 	<li><a class="item" href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php">{tr}Groups &amp; Permissions{/tr}</a></li>
+	<li><a class="item" href="{$smarty.const.USERS_PKG_URL}admin/permissions.php">{tr}Permission Maintenance{/tr}</a></li>
 </ul>
 {/strip}
