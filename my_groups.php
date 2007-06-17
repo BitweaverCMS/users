@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.14 2007/06/17 12:42:47 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.15 2007/06/17 13:53:04 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.14 2007/06/17 12:42:47 squareing Exp $
+ * $Id: my_groups.php,v 1.15 2007/06/17 13:53:04 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -118,7 +118,7 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 		$gBitSmarty->assign_by_ref('foundUsers', $foundUsers);
 	} elseif (!empty($_REQUEST['assignuser'])) {
 		if( !empty($_REQUEST['group_id'] ) ) {
-			if ($_REQUEST['group_id'] != -1 && $groupList['data'][$_REQUEST['group_id']]['user_id'] == $gBitUser->mUserId) {
+			if ($_REQUEST['group_id'] != -1 && $groupList[$_REQUEST['group_id']]['user_id'] == $gBitUser->mUserId) {
 				$gBitUser->addUserToGroup( $_REQUEST['assignuser'], $_REQUEST['group_id'] );
 			}
 			else {
@@ -183,28 +183,31 @@ if ( ( !empty( $_REQUEST['add_public_group'] ) || !empty( $_REQUEST['remove_publ
 /* Load up public groups and check if the user can join or leave them */
 $systemGroups = $gBitUser->getGroups( $gBitUser->mUserId, TRUE );
 $gBitSmarty->assign_by_ref( 'systemGroups', $systemGroups);
-$listHash = array( 'is_public'=>'y', 'sort_mode'=>array('is_default_asc' , 'group_desc_asc') );
+$listHash = array(
+	'is_public'=>'y',
+	'sort_mode' => array( 'is_default_asc', 'group_desc_asc' ),
+);
 $publicGroups = $gBitUser->getAllGroups( $listHash );	
-if ( $publicGroups['cant'] ) {
+if( count( $publicGroups )) {
 	foreach ( $systemGroups as $groupId=>$groupInfo ) {
-		foreach ( $publicGroups['data'] as $key=>$publicGroup) {
-			if ( $publicGroups['data'][$key]['group_id'] == $groupId) {
-				if ($publicGroups['data'][$key]['is_default'] != 'y' ) {
+		foreach ( $publicGroups as $key=>$publicGroup) {
+			if ( $publicGroups[$key]['group_id'] == $groupId) {
+				if ($publicGroups[$key]['is_default'] != 'y' ) {
 					$systemGroups[$groupId]['public'] = 'y';
 					$canRemovePublic = 'y';
 				}
-				$publicGroups['data'][$key]['used'] = 'y';
+				$publicGroups[$key]['used'] = 'y';
 				break;
 			}
 		}
 	}
-	foreach ( $publicGroups['data'] as $groupInfo) {
+	foreach ( $publicGroups as $groupInfo) {
 		if ( empty($groupInfo['used'] ) && $groupInfo['is_default'] != 'y' ) {
 			$gBitSmarty->assign( 'canAddPublic' , 'y');
 			break;
 		}
 	}
-	$gBitSmarty->assign_by_ref( 'publicGroups', $publicGroups['data'] );
+	$gBitSmarty->assign_by_ref( 'publicGroups', $publicGroups );
 	if (isset($canRemovePublic)) {
 		$gBitSmarty->assign( 'canRemovePublic' , 'y');
 	}

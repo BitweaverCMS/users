@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.10 2007/04/23 09:36:32 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.11 2007/06/17 13:53:04 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -38,10 +38,7 @@ if( isset( $_REQUEST["action"] ) ) {
 $gBitSmarty->assign_by_ref( 'assignUser', $assignUser );
 
 $listHash = array( 'sort_mode' => 'group_name_asc' );
-$groupList = $gBitUser->getAllGroups( $listHash );
-
-// Get users (list of users)
-$gBitSmarty->assign('groups', $groupList['data']);
+$gBitSmarty->assign('groups', $gBitUser->getAllGroups( $listHash ));
 
 $gBitSystem->setBrowserTitle( 'Edit User: '.$assignUser->mUsername );
 

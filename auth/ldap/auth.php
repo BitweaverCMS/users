@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.3 2006/10/13 12:47:40 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.4 2007/06/17 13:53:05 squareing Exp $
  *
  * @package users
  */
@@ -114,7 +114,6 @@ class LDAPAuth extends BaseAuth {
 		global $gBitUser;
 		$listHash = array();
 		$groups = $gBitUser->getAllGroups($listHash);
-		$groups=$groups['data'];
 		$groupsD =array();
 		foreach ($groups as $g) {
 			$groupsD[$g['group_id']]= "{$g['group_name']} ( {$g['group_desc']} )";

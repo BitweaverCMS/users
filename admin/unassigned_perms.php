@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/unassigned_perms.php,v 1.7 2007/06/15 22:07:52 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/unassigned_perms.php,v 1.8 2007/06/17 13:53:04 squareing Exp $
 // Initialization
 require_once( '../../bit_setup_inc.php' );
 
@@ -8,7 +8,7 @@ $gBitSmarty->assign_by_ref( 'feedback', $feedback = array() );
 
 $listHash = array( 'sort_mode' => 'group_id_asc' );
 $groupList = $gBitUser->getAllGroups( $listHash );
-foreach( $groupList['data'] as $group ) {
+foreach( $groupList as $group ) {
 	$groupDrop[$group['group_id']] = $group['group_name'];
 }
 $gBitSmarty->assign( 'groupDrop', $groupDrop );

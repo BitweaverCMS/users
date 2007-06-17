@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.31 2007/04/06 22:56:21 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.32 2007/06/17 13:53:04 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.31 2007/04/06 22:56:21 wjames5 Exp $
+ * $Id: register.php,v 1.32 2007/06/17 13:53:04 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -143,11 +143,12 @@ closedir ($h);
 sort ($flags);
 $gBitSmarty->assign('flags', $flags);
 
-$listHash = array( 'is_public'=>'y', 'sort_mode'=>array('is_default_asc' , 'group_desc_asc') );
+$listHash = array(
+	'is_public' => 'y',
+	'sort_mode' => array( 'is_default_asc', 'group_desc_asc' ),
+);
 $groupList = $gBitUser->getAllGroups( $listHash );
-if ( $groupList['cant'] ) {
-	$gBitSmarty->assign_by_ref( 'groupList', $groupList['data'] );
-}
+$gBitSmarty->assign_by_ref( 'groupList', $groupList );
 
 
 	// include preferences settings from other packages - these will be included as individual tabs

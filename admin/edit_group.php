@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.25 2007/06/17 12:42:48 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.26 2007/06/17 13:53:04 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -144,7 +144,7 @@ if( !empty( $_REQUEST['group_id'] ) || (!empty( $_REQUEST["action"] ) && $_REQUE
 	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
 	$listHash = array( 'sort_mode' => !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : 'group_name_asc' );
 }
-$groupList = $gBitUser->getAllGroups( $listHash );
+$gBitSmarty->assign('groupList', $gBitUser->getAllGroups( $listHash ));
 
 $inc = array();
 if( empty( $mid ) ) {
@@ -167,7 +167,6 @@ if( empty( $mid ) ) {
 
 // $gBitSmarty->assign( 'loadDebug', TRUE ); // Ajax / prototype debug
 
-$gBitSmarty->assign('groupList', $groupList['data']);
 $gBitSmarty->assign('successMsg',$successMsg);
 $gBitSmarty->assign('errorMsg',$errorMsg);
 
