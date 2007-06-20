@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.15 2007/06/17 13:53:04 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.16 2007/06/20 16:36:10 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.15 2007/06/17 13:53:04 squareing Exp $
+ * $Id: my_groups.php,v 1.16 2007/06/20 16:36:10 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -67,7 +67,8 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 		$gBitUser->create_dummy_level($_REQUEST['level']);
 	// Update Permissions
 	} elseif (isset($_REQUEST['updateperms'])) {
-		$updatePerms = $gBitUser->getgroupPermissions( $_REQUEST['group_id'] );
+		$listHash = array( 'group_id' => $_REQUEST['group_id'] );
+		$updatePerms = $gBitUser->getgroupPermissions( $listHash );
 		foreach (array_keys($_REQUEST['level'])as $per) {
 			if( $allPerms[$per]['perm_level'] != $_REQUEST['level'][$per] ) {
 				// we changed level. perm[] checkbox is not taken into account
