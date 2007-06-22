@@ -328,8 +328,8 @@
 				{/jstab}
 			{/if}
 
-			{foreach item=package from=$packages}
-				{include file=$package.template userPrefs=$editUser->mPrefs}
+			{foreach item=file from=$includFiles}
+				{include file=$file.tpl userPrefs=$editUser->mPrefs}
 			{/foreach}
 
 		{/jstabs}
