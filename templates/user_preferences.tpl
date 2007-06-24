@@ -146,7 +146,7 @@
 								<label><input type="radio" name="site_display_utc" value="Fixed" {if $editUser->mPrefs.site_display_utc eq 'Fixed'}checked="checked"{/if} />{tr}Fixed{/tr}</label>
 								<br />
 								<select name="site_display_timezone" id="site_display_timezone">
-									{html_options options=$userTimezones selected=`$editUser->mPrefs.site_display_timezone`|default:0}
+									{html_options options=$userTimezones selected=`$editUser->mPrefs.site_display_timezone`}
 								</select>
 								{formhelp note="Internal data is stored using UTC time stamps, these can then be displayed using your browser timezone offset, or a fixed timezone which will also manage the correct daylight saving"}
 							{/forminput}
