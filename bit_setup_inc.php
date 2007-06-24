@@ -144,12 +144,15 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 	if( $gBitSystem->isFeatureActive( 'users_domains' ) ) {
 		$domain = substr( $_SERVER['HTTP_HOST'], 0, strpos( $_SERVER['HTTP_HOST'], '.' ) );
 		if( $domain && $domain != $gBitSystem->getConfig( 'users_default_domain', 'www' ) ) {
-			$gBitSystem->mDomainInfo = $gBitUser->getUserDomain( $domain );
-			if( !empty( $gBitSystem->mDomainInfo['style'] ) ) {
-				$gBitSystem->setStyle( $gBitSystem->mDomainInfo['style'] );
-			}
-			if( !empty( $_REQUEST['lookup_user_id'] ) ) {
-				$_REQUEST['lookup_user_id'] = $gBitSystem->mDomainInfo['user_id'];
+			if( $gBitSystem->mDomainInfo = $gBitUser->getUserDomain( $domain ) ) {
+				if( empty( $_REQUEST['user_id'] ) ) {
+					$_REQUEST['user_id'] = $gBitSystem->mDomainInfo['user_id'];
+				} elseif( empty( $_REQUEST['home'] ) ) {
+					$_REQUEST['home'] = $gBitSystem->mDomainInfo['login'];
+				}
+				if( !empty( $_REQUEST['lookup_user_id'] ) ) {
+					$_REQUEST['lookup_user_id'] = $gBitSystem->mDomainInfo['user_id'];
+				}
 			}
 		}
 	}
