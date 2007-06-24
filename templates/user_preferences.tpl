@@ -329,7 +329,7 @@
 			{/if}
 
 			{foreach item=file from=$includFiles}
-				{include file=$file.tpl userPrefs=$editUser->mPrefs}
+			{include file=$file.tpl userPrefs=$editUser->mPrefs view_user=$editUser->mUserId}
 			{/foreach}
 
 		{/jstabs}
