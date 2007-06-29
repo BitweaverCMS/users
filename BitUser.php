@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.146 2007/06/24 03:48:57 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.147 2007/06/29 09:37:07 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.146 2007/06/24 03:48:57 spiderr Exp $
+ * $Id: BitUser.php,v 1.147 2007/06/29 09:37:07 lsces Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.146 $
+ * @version  $Revision: 1.147 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -691,7 +691,6 @@ class BitUser extends LibertyAttachable {
 			// we need to get the content_id of the user to nuke all the prefs that have been stored
 			$query = "DELETE FROM `".BIT_DB_PREFIX."liberty_content_prefs` WHERE `content_id` = ?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
-bt(); die;
 			$this->mDb->CompleteTrans();
 
 			$logHash['action_log']['title'] = $this->mInfo['login'];
