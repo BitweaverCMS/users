@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/bit/auth.php,v 1.5 2007/01/06 09:46:27 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/bit/auth.php,v 1.6 2007/06/30 02:34:53 spiderr Exp $
  *
  * @package users
  */
@@ -99,7 +99,8 @@ class BitAuth extends BaseAuth {
 	function createUser( &$pUserHash ) {
 		//$authUserInfo = array( 'login' => $instance->mInfo['login'], 'password' => $instance->mInfo['password'], 'real_name' => $instance->mInfo['real_name'], 'email' => $instance->mInfo['email'] );
 		$u = new BitPermUser();
-		if( $u->store( $pUserHash ) ) {
+
+		if( !$u->store( $pUserHash ) ) {
 			$this->mErrors = array_merge($this->mErrors,$u->mErrors);
 		}
 		return $u->mUserId;
