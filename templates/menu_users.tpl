@@ -3,7 +3,7 @@
 	{if $gBitUser->isRegistered()}
 		<li>
 			<a class="item" href="{$smarty.const.USERS_PKG_URL}my.php">
-				{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="My Personal Homepage" iforce=icon}{if !$icons_only} {tr}My {$gBitSystem->getConfig('site_menu_title')|default:"$gBitSystem->getConfig('site_title')"}{/tr}{/if}
+				{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="My Personal Homepage" iforce=icon}{if !$icons_only} {tr}My {$gBitSystem->getConfig('site_menu_title')|default:$gBitSystem->getConfig('site_title')}{/tr}{/if}
 			</a>
 		</li>
 	{if $gBitUser->hasPermission( 'p_users_view_user_homepage' )}
