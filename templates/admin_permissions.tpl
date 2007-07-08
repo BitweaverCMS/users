@@ -5,6 +5,7 @@
 	</div>
 
 	<div class="body">
+		<p class="help">{tr}Hover your mouse over the permissions and a descirption of the permission will appear{/tr}</p>
 		{formfeedback hash=$feedback}
 
 		{form}
@@ -58,6 +59,33 @@
 					<dd>{$group.group_name}: {$group.group_desc}</dd>
 				{/foreach}
 			</dl>
+		{/if}
+
+		{if $contentWithPermissions}
+			<h2>{tr}Content with individual Permissions{/tr}</h2>
+			<ul>
+				{foreach from=$contentWithPermissions item=content key=content_type_guid}
+					<li><em>{$gLibertySystem->getContentTypeDescription($content_type_guid)}</em>
+						<ul>
+							{foreach from=$content item=perms key=content_id}
+								<li><a href="{$smarty.const.LIBERTY_PKG_URL}content_permissions.php?content_id={$content_id}">{$perms.0.title}</a>
+									<ul>
+										{foreach from=$perms item=perm}
+											<li>
+												{$perm.group_name}: {if $perm.is_excluded}
+													{biticon iname=list-remove iexplain="Removed Permission"}
+												{else}
+													{biticon iname=list-add iexplain="Added Permission"}
+												{/if} {$perm.perm_name}
+											</li>
+										{/foreach}
+									</ul>
+								</li>
+							{/foreach}
+						</ul>
+					</li>
+				{/foreach}
+			</ul>
 		{/if}
 	</div><!-- end .body -->
 </div><!-- end .users -->
