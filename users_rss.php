@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/users_rss.php,v 1.3 2007/01/07 10:48:33 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/users_rss.php,v 1.4 2007/07/08 07:56:40 squareing Exp $
  * @package wiki
  * @subpackage functions
  */
@@ -23,7 +23,7 @@ if( !$gBitUser->hasPermission( 'p_users_view_user_list' ) ) {
 	require_once( RSS_PKG_PATH."rss_error.php" );
 } else {
 	// check if we want to use the cache file - users with users_admin permission use a different cache file
-	$cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.USERS_PKG_NAME.'_'.( $gBitUser->hasPermission( 'p_users_admin' ) ? 'admin_' : '' ).$rss_version_name.'.xml';
+	$cacheFile = TEMP_PKG_PATH.RSS_PKG_NAME.'/'.USERS_PKG_NAME.'/'.$cacheFileTail;
 	$rss->useCached( $rss_version_name, $cacheFile, $gBitSystem->getConfig( 'rssfeed_cache_time' ));
 
 	$listHash = array(
