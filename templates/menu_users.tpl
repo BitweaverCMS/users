@@ -32,10 +32,10 @@
 		{/if}
 		<li><a class="item" href="{$smarty.const.LIBERTY_PKG_URL}attachments.php">{biticon iname="mail-attachment" iexplain="My Files" ilocation=$location}</a></li>
 	{else}
-		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}login.php">{biticon ipackage=liberty iname=spacer iexplain="Login" ilocation=$location}</a></li>
-	{/if}
-	{if !$gBitUser->isRegistered() && $gBitSystem->isFeatureActive('users_allow_register')}
-		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}register.php">{biticon iname=contact-new iexplain="Register" ilocation=$location}</a></li>
+		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}login.php">{biticon iname=go-next iexplain="Login" ilocation=$location}</a></li>
+		{if $gBitSystem->isFeatureActive('users_allow_register')}
+			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}register.php">{biticon iname=contact-new iexplain="Register" ilocation=$location}</a></li>
+		{/if}
 	{/if}
 </ul>
 {/strip}
