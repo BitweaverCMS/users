@@ -30,7 +30,10 @@
 		{if $gBitSystem->isPackageActive( 'quota' )}
 			<li><a class="item" href="{$smarty.const.QUOTA_PKG_URL}">{biticon iname="drive-harddisk" iexplain="My quota and usage" ilocation=$location}</a></li>
 		{/if}
-		<li><a class="item" href="{$smarty.const.LIBERTY_PKG_URL}attachments.php">{biticon iname="mail-attachment" iexplain="My Files" ilocation=$location}</a></li>
+		{if $gBitUser->hasPermission( 'p_liberty_attach_attachments' )}
+			<li><a class="item" href="{$smarty.const.LIBERTY_PKG_URL}attachments.php">{biticon iname="mail-attachment" iexplain="My Files" ilocation=$location}</a></li>
+		{/if}
+		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}logout.php">{biticon iname=system-log-out iexplain="Log out" ilocation=$location}</a></li>
 	{else}
 		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}login.php">{biticon iname=go-next iexplain="Login" ilocation=$location}</a></li>
 		{if $gBitSystem->isFeatureActive('users_allow_register')}
