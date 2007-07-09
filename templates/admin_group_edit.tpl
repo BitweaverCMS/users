@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.16 2007/06/15 18:27:35 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.17 2007/07/09 22:03:22 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -42,26 +42,21 @@
 
 							Search for Content:<br/>
 							{html_options options=$contentTypes name=content_type_guid selected=$contentSelect}
-<script type="text/javascript" src="{$smarty.const.UTIL_PKG_URL}javascript/libs/suggest/suggest.js"></script>
-<script type="text/javascript" src="{$smarty.const.UTIL_PKG_URL}javascript/libs/rico.js"></script>
-<script type="text/javascript">
-{literal}
-      var suggestOptions = {
-        matchAnywhere      : true,
-        ignoreCase         : true
-      };
-
-      function injectSuggestBehavior() {
-         suggest = new TextSuggest(
-			'group_home_lookup',
-			'/liberty/list_content.php',
-			suggestOptions
-	 );
-      }
-{/literal}
-</script>
-					<input type="hidden" name="group_home_lookup_hidden" id="group_home_lookup_hidden" value="{$groupInfo.group_home|escape}" />
-					<input type="text" id="group_home_lookup" name="group_home_name">
+							{literal}<script type="text/javascript">/* <![CDATA[ */
+								var suggestOptions = {
+									matchAnywhere: true,
+									ignoreCase: true
+								};
+								function injectSuggestBehavior() {
+									suggest = new TextSuggest(
+										'group_home_lookup',
+										'/liberty/list_content.php',
+										suggestOptions
+									);
+								}
+							/* ]]> */</script>{/literal}
+							<input type="hidden" name="group_home_lookup_hidden" id="group_home_lookup_hidden" value="{$groupInfo.group_home|escape}" />
+							<input type="text" id="group_home_lookup" name="group_home_name">
 						{formhelp note="Enter the title of the content you are looking for to receive an auto-suggest list of possibilities."}
 {*
 							{html_options name="dummy" id="content-list" values=$contentList options=$contentList onchange="$('group_home').value=options[selectedIndex].value;"}
