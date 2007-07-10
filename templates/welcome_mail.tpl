@@ -1,10 +1,10 @@
-{tr}Hi {$mail_user},
+{tr}Hi{/tr} {$mail_user},
 
-Weclome to {$siteName}!
+{tr}Welcome to{/tr} {$siteName}!
 
-To login, visit http://{$mail_site}{$smarty.const.USERS_PKG_URL}login.php
+{tr}To login, visit{/tr} http://{$mail_site}{$smarty.const.USERS_PKG_URL}login.php
 
-Your login email is: {$mailEmail}
-Your password is: {$mailPassword}
+{tr}Your login email is:{/tr} {$mailEmail}
+{tr}Your password is:{/tr} {$mailPassword}
 
-Enjoy the site!{/tr}
+{tr}Enjoy the site!{/tr}
