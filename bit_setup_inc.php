@@ -157,6 +157,22 @@ if( !defined( 'LOGO_MAX_DIM' ) ) {
 		}
 	}
 
+	// users_themes='y' is for the entire site, 'h' is just for users homepage and is dealt with on users/index.php
+	if( !empty( $gBitSystem->mDomainInfo['style'] ) ) {
+		$theme = $gBitSystem->mDomainInfo['style'];
+	} elseif( $gBitSystem->getConfig('users_themes') == 'y' ) {
+		if ( $gBitUser->isRegistered() && $gBitSystem->isFeatureActive( 'users_preferences' ) ) {
+			if( $userStyle = $gBitUser->getPreference('theme') ) {
+				$theme = $userStyle;
+			}
+		}
+		if( isset( $_COOKIE['tiki-theme'] )) {
+			$theme = $_COOKIE['tiki-theme'];
+		}
+	}
+	if( !empty( $theme ) ) {
+		$gBitThemes->setStyle( $theme );
+	}
 
 	$messages_allow_messages = 'n';
 	if( $gBitUser->isRegistered() ) {
