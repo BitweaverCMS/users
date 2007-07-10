@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.29 2007/07/09 22:03:22 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.30 2007/07/10 19:02:59 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -12,8 +12,8 @@ $gBitSystem->verifyPermission( 'p_users_admin' );
 $successMsg = NULL;
 $errorMsg = NULL;
 
-$gBitSystem->loadAjax( 'prototype', array( 'libs/suggest/suggest.js', 'libs/rico.js' ));
-//$gBitSystem->loadAjax( 'prototype', array( 'debugger.js' )); // prototype debugger
+$gBitThemes->loadAjax( 'prototype', array( 'libs/suggest/suggest.js', 'libs/rico.js' ));
+//$gBitThemes->loadAjax( 'prototype', array( 'debugger.js' )); // prototype debugger
 $gBitSystem->setOnloadScript( 'injectSuggestBehavior();' );
 
 if( count( $_GET ) > 2 || count( $_POST ) > 2 ) {
