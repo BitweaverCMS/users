@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.42 2007/07/10 21:52:59 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.43 2007/07/11 06:51:34 squareing Exp $
  * @package users
  */
 global $gBitDbType, $gBitDbHost, $gBitDbUser, $gBitDbPassword, $gBitDbName, $gBitThemes;
@@ -59,9 +59,30 @@ if( $gBitSystem->isFeatureActive( 'users_remember_me' )) {
 // just use a simple COOKIE (unique random string) that is linked to the users_cnxn table.
 // This way, nuking rows in the users_cnxn table can log people out and is much more reliable than SESSIONS
 session_start();
-$cookie_site = strtolower( ereg_replace("[^a-zA-Z0-9]", "", $gBitSystem->getConfig( 'site_title', 'bitweaver' )));
+$cookie_site = strtolower( ereg_replace( "[^a-zA-Z0-9]", "", $gBitSystem->getConfig( 'site_title', 'bitweaver' )));
 global $user_cookie_site;
 $user_cookie_site = 'bit-user-'.$cookie_site;
+
+
+// TODO: Remove this cookie munging business. This is a temporary fix that users don't have to log in again when they visit
+// first we check to see if the 'bit' and the 'tiki' version of the cookie are present
+if( !empty( $_COOKIE['tiki-user-'.$cookie_site] ) && !empty( $_COOKIE[$user_cookie_site] )) {
+	setcookie( 'tiki-user-'.$cookie_site, $_COOKIE['tiki-user-'.$cookie_site], 1, $gBitSystem->getConfig( 'cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig( 'cookie_domain', '' ));
+	unset( $_COOKIE['tiki-user-'.$cookie_site] );
+}
+// if the 'tiki' version is still set, we make sure that it's copied to the 'bit' version of the cookie
+if( !empty( $_COOKIE['tiki-user-'.$cookie_site] )) {
+	// here we can't check to see if a user has checked the rme button. this doesn't really matter since there's only _very_ few users who will be logging in exactly now
+	if( $gBitSystem->isFeatureActive( 'users_remember_me' )) {
+		$cookie_time = (int)(time() + $gBitSystem->getConfig( 'users_remember_time', 86400 ));
+	} else {
+		$cookie_time = 0;
+	}
+	// we copy the existing cookie accross
+	setcookie( $user_cookie_site, $_COOKIE['tiki-user-'.$cookie_site], $cookie_time, $gBitSystem->getConfig( 'cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig( 'cookie_domain', '' ));
+	$_COOKIE[$user_cookie_site] = $_COOKIE['tiki-user-'.$cookie_site];
+}
+
 
 // load the user
 global $gOverrideLoginFunction;
@@ -82,11 +103,8 @@ if( !empty( $gOverrideLoginFunction )) {
 	}
 	setcookie( $user_cookie_site, session_id(), $cookie_time, $gBitSystem->getConfig( 'cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig( 'cookie_domain', '' ));
 
-	// check what auth metod is selected. default is for the 'tiki' to auth users
-	$users_auth_method = $gBitSystem->getConfig('users_auth_method', 'tiki');
-
 	// if the auth method is 'web site', look for the username in $_SERVER
-	if( $users_auth_method == 'ws' ) {
+	if( $gBitSystem->getConfig( 'users_auth_method', 'tiki' ) == 'ws' ) {
 		if( isset( $_SERVER['REMOTE_USER'] )) {
 			if( $gBitUser->userExists( $_SERVER['REMOTE_USER'] )) {
 				$gBitUser->mUserId = $_SERVER['REMOTE_USER'];
