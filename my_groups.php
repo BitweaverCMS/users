@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.16 2007/06/20 16:36:10 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.17 2007/07/11 19:26:24 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.16 2007/06/20 16:36:10 squareing Exp $
+ * $Id: my_groups.php,v 1.17 2007/07/11 19:26:24 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -79,7 +79,7 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 				$gBitUser->assignPermissionToGroup($per, $_REQUEST['group_id']);
 			} elseif( empty($_REQUEST['perm'][$per]) && isset($updatePerms[$per]) ) {
 				// we have a selected perm that is now UNselected
-				$gBitUser->remove_permission_from_group($per, $_REQUEST['group_id']);
+				$gBitUser->removePermissionFromGroup($per, $_REQUEST['group_id']);
 			}
 		}
 		// let's reload just to be safe.
@@ -97,7 +97,7 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 			}
 		// remove a permission from a group
 		} elseif ($_REQUEST["action"] == 'remove') {
-			$gBitUser->remove_permission_from_group( $_REQUEST["permission"], $_REQUEST['group_id'] );
+			$gBitUser->removePermissionFromGroup( $_REQUEST["permission"], $_REQUEST['group_id'] );
 			$successMsg = tra("Permission Removed");
 			$mid = 'bitpackage:users/my_group_edit.tpl';
 		// Create a new group

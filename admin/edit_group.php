@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.30 2007/07/10 19:02:59 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.31 2007/07/11 19:26:24 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -76,7 +76,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 				$gBitUser->assignPermissionToGroup( $perm, $_REQUEST['group_id'] );
 			} else {
 				// we have a selected perm that is now UNselected
-				$gBitUser->remove_permission_from_group( $perm, $_REQUEST['group_id'] );
+				$gBitUser->removePermissionFromGroup( $perm, $_REQUEST['group_id'] );
 			}
 		}
 	}
@@ -105,7 +105,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 			$gBitSystem->confirmDialog( $formHash,$msgHash );
 		}
 	} elseif ($_REQUEST["action"] == 'remove') {
-		$gBitUser->remove_permission_from_group( $_REQUEST["permission"], $_REQUEST['group_id'] );
+		$gBitUser->removePermissionFromGroup( $_REQUEST["permission"], $_REQUEST['group_id'] );
 		$successMsg = 'The permission '.$_REQUEST['permission'].' was removed successflly. <a href="'.USERS_PKG_URL.'admin/edit_group.php?action=assign&amp;perm='.$_REQUEST['permission'].'&amp;group_id='.$_REQUEST['group_id'].'&amp;pacakge='.$_REQUEST['package'].'">Undo last action.</a>';
 	} elseif( $_REQUEST["action"] == 'create' ) {
 		$mid = 'bitpackage:users/admin_group_edit.tpl';

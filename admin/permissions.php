@@ -20,7 +20,7 @@ if( !empty( $_REQUEST['save'] )) {
 			if( !empty( $_REQUEST['perms'][$groupId][$perm] )) {
 				$gBitUser->assignPermissionToGroup( $perm, $groupId );
 			} else {
-				$gBitUser->remove_permission_from_group( $perm, $groupId );
+				$gBitUser->removePermissionFromGroup( $perm, $groupId );
 			}
 		}
 	}
