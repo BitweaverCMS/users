@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.31 2007/07/11 19:26:24 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.32 2007/07/12 07:51:11 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -12,6 +12,7 @@ $gBitSystem->verifyPermission( 'p_users_admin' );
 $successMsg = NULL;
 $errorMsg = NULL;
 
+// TODO: this isn't working fully yet
 $gBitThemes->loadAjax( 'prototype', array( 'libs/suggest/suggest.js', 'libs/rico.js' ));
 //$gBitThemes->loadAjax( 'prototype', array( 'debugger.js' )); // prototype debugger
 $gBitSystem->setOnloadScript( 'injectSuggestBehavior();' );
@@ -21,10 +22,14 @@ if( count( $_GET ) > 2 || count( $_POST ) > 2 ) {
 }
 
 if( !empty( $_REQUEST['group_id'] ) ) {
-	$allPerms = $gBitUser->getGroupPermissions( array( 'sort_mode' => !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : NULL ));
+	$permListHash = array(
+		'sort_mode' => !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : NULL,
+		'package' => !empty( $_REQUEST['package'] ) ? $_REQUEST['package'] : NULL,
+	);
+	$allPerms = $gBitUser->getGroupPermissions( $permListHash );
 }
 
-$gBitSmarty->assign( 'package',isset( $_REQUEST['package'] ) ? $_REQUEST['package'] : 'all' );
+$gBitSmarty->assign( 'package', !empty( $_REQUEST['package'] ) ? $_REQUEST['package'] : 'all' );
 
 if( !empty( $_REQUEST["cancel"] ) ) {
 	bit_redirect( USERS_PKG_URL.'admin/edit_group.php' );
@@ -81,7 +86,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 		}
 	}
 	// let's reload just to be safe.
-	$allPerms = $gBitUser->getGroupPermissions();
+	$allPerms = $gBitUser->getGroupPermissions( $permListHash );
 } elseif( isset( $_REQUEST["action"] )) {
 	$formHash['action'] = $_REQUEST['action'];
 // Process a form to remove a group

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.17 2007/07/09 22:03:22 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.18 2007/07/12 07:51:11 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -134,14 +134,12 @@
 									<th>{smartlink ititle="Description" isort="up.perm_desc" group_id=$groupInfo.group_id offset=$offset package=$package}</th>
 								</tr>
 								{foreach key=permName item=perm from=$allPerms}
-									{if $package eq $perm.package or $package eq 'all'}
-										<tr class="{cycle values="even,odd"}">
-											<td><input type="checkbox" id="{$permName}" name="perm[{$permName}]" {if $groupInfo.perms.$permName} checked="checked"{/if} /></td>
-											<td><label for="{$permName}">{$permName}</label></td>
-											<td>{tr}{$perm.package}{/tr}</td>
-											<td>{tr}{$perm.perm_desc}{/tr}</td>
-										</tr>
-									{/if}
+									<tr class="{cycle values="even,odd"}">
+										<td><input type="checkbox" id="{$permName}" name="perm[{$permName}]" {if $groupInfo.perms.$permName} checked="checked"{/if} /></td>
+										<td><label for="{$permName}">{$permName}</label></td>
+										<td>{tr}{$perm.package}{/tr}</td>
+										<td>{tr}{$perm.perm_desc}{/tr}</td>
+									</tr>
 								{/foreach}
 							</table>
 						</div>
