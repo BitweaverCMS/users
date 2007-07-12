@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.18 2007/07/12 07:51:11 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.19 2007/07/12 09:30:19 squareing Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -110,7 +110,7 @@
 				{jstab title="Assign Permissions"}
 					{form legend="Assign permissions"}
 						<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
-						<input type="hidden" name="package" value="{$package|escape}" />
+						<input type="hidden" name="package" value="{$smarty.request.package|escape}" />
 						<input type="hidden" name="perm_name[{$perms[user].perm_name}]" />
 
 						<div class="row">
@@ -129,9 +129,9 @@
 							<table class="data">
 								<tr>
 									<th>&nbsp;</th>
-									<th>{smartlink ititle="Name" isort="up.perm_name" group_id=$groupInfo.group_id offset=$offset package=$package}</th>
-									<th>{smartlink ititle="Package" isort=package group_id=$groupInfo.group_id offset=$offset package=$package}</th>
-									<th>{smartlink ititle="Description" isort="up.perm_desc" group_id=$groupInfo.group_id offset=$offset package=$package}</th>
+									<th>{smartlink ititle="Name" isort="up.perm_name" group_id=$groupInfo.group_id offset=$offset package=$smarty.request.package}</th>
+									<th>{smartlink ititle="Package" isort=package group_id=$groupInfo.group_id offset=$offset package=$smarty.request.package}</th>
+									<th>{smartlink ititle="Description" isort="up.perm_desc" group_id=$groupInfo.group_id offset=$offset package=$smarty.request.package}</th>
 								</tr>
 								{foreach key=permName item=perm from=$allPerms}
 									<tr class="{cycle values="even,odd"}">
