@@ -27,27 +27,27 @@
 		</div>
 	{/if}
 
-	{if $http_login_url ne '' or $https_login_url ne ''}
+	{if $gBitSystem->isFeatureActive('http_login_url') or $gBitSystem->isFeatureActive('https_login_url')}
 		<div class="row">
 			{formlabel label="" for=""}
 			{forminput}
-				<a href="{$http_login_url}" title="{tr}Click here to login using the default security protocol{/tr}">{tr}standard{/tr}</a> |
-				<a href="{$https_login_url}" title="{tr}Click here to login using a secure protocol{/tr}">{tr}secure{/tr}</a>
+				<a href="{$gBitSystem->getConfig('http_login_url')}" title="{tr}Click here to login using the default security protocol{/tr}">{tr}Standard{/tr}</a> |
+				<a href="{$gBitSystem->getConfig('https_login_url')}" title="{tr}Click here to login using a secure protocol{/tr}">{tr}Secure{/tr}</a>
 				{formhelp note=""}
 			{/forminput}
 		</div>
 	{/if}
 
-	{if $show_stay_in_ssl_mode eq 'y'}
+	{if $smarty.server.HTTPS == 'on'}
 		<div class="row">
 			{formlabel label="stay in ssl mode" for="stay_in_ssl_mode"}
 			{forminput}
-				<input type="checkbox" name="stay_in_ssl_mode" id="stay_in_ssl_mode" {if $stay_in_ssl_mode eq 'y'}checked="checked"{/if} />
+				<input type="checkbox" name="stay_in_ssl_mode" id="stay_in_ssl_mode" {if $smarty.server.HTTPS == 'on'}checked="checked"{/if} />
 				{formhelp note=""}
 			{/forminput}
 		</div>
 	{else}
-		<input type="hidden" name="stay_in_ssl_mode" value="{$stay_in_ssl_mode|escape}" />
+		<input type="hidden" name="stay_in_ssl_mode" value="on" />
 	{/if}
 
 	<div class="row submit">

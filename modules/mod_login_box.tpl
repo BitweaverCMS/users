@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.14 2006/12/31 13:12:02 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.15 2007/07/13 23:18:55 squareing Exp $ *}
 {strip}
 {bitmodule title="$moduleTitle" name="login_box"}
 	{if $gBitUser->IsRegistered()}
@@ -28,19 +28,19 @@
 				</div>
 			{/if}
 
-			{if $gBitSystem->getConfig('http_login_url') or $gBitSystem->getConfig('https_login_url')}
+			{if $gBitSystem->isFeatureActive('http_login_url') or $gBitSystem->isFeatureActive('https_login_url')}
 				<div class="row">
 					<a href="{$gBitSystem->getConfig('http_login_url')}" title="{tr}Click here to login using the default security protocol{/tr}">{tr}standard{/tr}</a> |
 					<a href="{$gBitSystem->getConfig('https_login_url')}" title="{tr}Click here to login using a secure protocol{/tr}">{tr}secure{/tr}</a>
 				</div>
 			{/if}
 
-			{if $gBitSystem->isFeatureActive('show_stay_in_ssl_mode')}
+			{if $smarty.server.HTTPS == 'on'}
 				<div class="row">
-					<label>{tr}Stay in ssl mode{/tr} <input type="checkbox" name="stay_in_ssl_mode" id="stay_in_ssl_mode" {if $gBitSystem->isFeatureActive('stay_in_ssl_mode')}checked="checked"{/if} /></label>
+					<label>{tr}Stay in ssl mode{/tr} <input type="checkbox" name="stay_in_ssl_mode" id="stay_in_ssl_mode" {if $smarty.server.HTTPS == 'on'}checked="checked"{/if} /></label>
 				</div>
 			{else}
-				<input type="hidden" name="stay_in_ssl_mode" value="{$gBitSystem->getConfig('stay_in_ssl_mode')|escape}" />
+				<input type="hidden" name="stay_in_ssl_mode" value="on" />
 			{/if}
 
 			<div class="row submit">
