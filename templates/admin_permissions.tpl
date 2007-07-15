@@ -26,14 +26,13 @@
 						<th>{tr}Permission{/tr}</th>
 						<th>{tr}Package{/tr}</th>
 						{foreach from=$allGroups item=group name=groups}
-							<th><abbr title="{$group.group_name}">{if $smarty.foreach.groups.total > 10}{$group.group_id}{else}{$group.group_name}{/if}</abbr></th>
+							<th><abbr title="{$group.group_name}">{if $smarty.foreach.groups.total > 8}{$group.group_id}{else}{$group.group_name}{/if}</abbr></th>
 						{/foreach}
 					</tr>
 				{/capture}
 				{$th}
 				{foreach from=$allPerms item=perm key=p name=perms}
-					{* insert headers every 20 lines *}
-					{if ($smarty.foreach.perms.iteration % 20) eq 0 and ($smarty.foreach.perms.total - $smarty.foreach.perms.iteration) gt 15}{$th}{/if}
+					{if ($smarty.foreach.perms.iteration % 10) eq 0 and ($smarty.foreach.perms.total - $smarty.foreach.perms.iteration) gt 5}{$th}{/if}
 					<tr class="{cycle values="odd,even"}{if $unassignedPerms.$p} warning{/if}">
 						<td>{if $unassignedPerms.$p}{biticon iname=dialog-warning iexplian="Unassigned Permission"}{/if}</td>
 						<td><span title="{$perm.perm_desc}">{$p}</span></td>
@@ -52,7 +51,7 @@
 			</div>
 		{/form}
 
-		{if $smarty.foreach.groups.total > 10}
+		{if $smarty.foreach.groups.total > 8}
 			<dl>
 				{foreach from=$allGroups item=group}
 					<dt>{$group.group_id}</dt>
