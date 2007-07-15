@@ -71,7 +71,7 @@
 									<ul>
 										{foreach from=$perms item=perm}
 											<li>
-												{$perm.group_name}: {if $perm.is_excluded}
+												{$perm.group_name}: {if $perm.is_revoked}
 													{biticon iname=list-remove iexplain="Removed Permission"}
 												{else}
 													{biticon iname=list-add iexplain="Added Permission"}
