@@ -26,7 +26,7 @@
 						<th>{tr}Permission{/tr}</th>
 						<th>{tr}Package{/tr}</th>
 						{foreach from=$allGroups item=group name=groups}
-							<th><abbr title="{$group.group_name}">{if $smarty.foreach.groups.total > 5}{$group.group_id}{else}{$group.group_name}{/if}</abbr></th>
+							<th><abbr title="{$group.group_name}">{if $smarty.foreach.groups.total > 10}{$group.group_id}{else}{$group.group_name}{/if}</abbr></th>
 						{/foreach}
 					</tr>
 				{/capture}
@@ -52,7 +52,7 @@
 			</div>
 		{/form}
 
-		{if $smarty.foreach.groups.total > 5}
+		{if $smarty.foreach.groups.total > 10}
 			<dl>
 				{foreach from=$allGroups item=group}
 					<dt>{$group.group_id}</dt>
