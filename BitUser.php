@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.148 2007/07/01 21:25:09 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.149 2007/07/16 21:30:54 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.148 2007/07/01 21:25:09 lsces Exp $
+ * $Id: BitUser.php,v 1.149 2007/07/16 21:30:54 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.148 $
+ * @version  $Revision: 1.149 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -971,6 +971,21 @@ class BitUser extends LibertyAttachable {
 		return $ret;
 	}
 
+	// Alternate to LibertyContent::getPreference when all you have is a user_id and a pref_name, and you need a value...
+	function getUserPreference( $pPrefName, $pPrefDefault, $pUserId ) {
+		global $gBitDb;
+		$ret = NULL;
+
+		if( BitBase::verifyId( $pUserId ) ) {
+			$query = "SELECT lcp.`pref_value` FROM `".BIT_DB_PREFIX."liberty_content_prefs` lcp INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (lcp.`content_id`=uu.`content_id`)
+					  WHERE uu.`user_id`=? AND lcp.`pref_name` = ?";
+			if( !$ret = $gBitDb->getOne( $query, array( $pUserId, $pPrefName ) ) ) {
+				$ret = $pPrefDefault;
+			}
+		}
+		return $ret;
+	}
+
 	// specify lookup where by hash key lik 'login' or 'user_id' or 'email'
 	function getUserInfo( $pUserMixed ) {
 		$ret = NULL;
@@ -1116,14 +1131,14 @@ class BitUser extends LibertyAttachable {
 			$bindVars[] = $pListHash['ip'];
 		}
 
-		$query = "select DISTINCT uc.`user_id`, `login`, `real_name` ,`connect_time`, `ip`, `user_agent`, `last_get`
+		$query = "select DISTINCT uc.`user_id`, `login`, `real_name` ,`connect_time`, `ip`, `user_agent`, `last_get`, uc.`content_id`
 				  FROM `".BIT_DB_PREFIX."users_cnxn` uc INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (uc.`user_id`=uu.`user_id`)
 				  WHERE uc.`user_id` IS NOT NULL $whereSql
 				  ORDER BY ".$this->mDb->convertSortmode( $pListHash['sort_mode'] );
 		$result = $this->mDb->query($query, $bindVars, $pListHash['max_records'], $pListHash['offset'] );
 		$ret = array();
 		while ($res = $result->fetchRow()) {
-			$res['users_information'] = 	$this->getPreference( 'users_information', 'public', $res['user_id'] );
+			$res['users_information'] = 	$this->getPreference( 'users_information', 'public', $res['content_id'] );
 			$ret[] = $res;
 		}
 		
@@ -1161,7 +1176,7 @@ class BitUser extends LibertyAttachable {
 
 	function canCustomizeTheme() {
 		global $gBitSystem;
-		return( $this->hasPermission( 'p_tidbits_custom_home_theme' ) || $gBitSystem->getConfig('users_themes') == 'y' || $gBitSystem->getConfig('users_themes') == 'h' );
+		return( $this->hasPermission( 'p_tidbits_custom_home_theme' ) || $gBitSystem->getConfig('users_themes') == 'y' || $gBitSystem->getConfig('users_themes') == 'h' || $gBitSystem->getConfig('users_themes') == 'u' );
 
 	}
 
@@ -1169,7 +1184,7 @@ class BitUser extends LibertyAttachable {
 
 	function canCustomizeLayout() {
 		global $gBitSystem;
-		return( $this->hasPermission( 'p_tidbits_custom_home_layout' ) || $gBitSystem->getConfig('users_layouts') == 'y' || $gBitSystem->getConfig('users_layouts') == 'h' );
+		return( $this->hasPermission( 'p_tidbits_custom_home_layout' ) || $gBitSystem->getConfig('users_layouts') == 'y' || $gBitSystem->getConfig('users_layouts') == 'h' || $gBitSystem->getConfig('users_layouts') == 'u' );
 	}
 
 
