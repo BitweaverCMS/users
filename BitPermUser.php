@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.64 2007/07/11 19:26:24 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.65 2007/07/16 15:27:21 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.64 2007/07/11 19:26:24 squareing Exp $
+ * $Id: BitPermUser.php,v 1.65 2007/07/16 15:27:21 squareing Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.64 $
+ * @version  $Revision: 1.65 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -39,6 +39,9 @@ class BitPermUser extends BitUser {
 		// Initialize caches
 		$this->usergroups_cache = array();
 		$this->groupperm_cache = array(array());
+
+		// Permission setup
+		$this->mAdminContentPerm = 'p_users_admin';
 	}
 
 	function assumeUser( $pUserId ) {
