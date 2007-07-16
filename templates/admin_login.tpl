@@ -129,6 +129,8 @@
 		{form legend="HTTP Settings"}
 			<input type="hidden" name="page" value="{$page}" />
 
+			<div class="row warning">{tr}If you turn on any secure login features you must set the HTTP and HTTPS server name.{/tr}</div>
+
 			{foreach from=$httpSettings key=feature item=output}
 				<div class="row">
 					{formlabel label=`$output.label` for=$feature}

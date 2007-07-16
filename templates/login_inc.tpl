@@ -31,7 +31,9 @@
 		<div class="row">
 			{formlabel label="" for=""}
 			{forminput}
-				<a href="{$gBitSystem->getConfig('http_login_url')}" title="{tr}Click here to login using the default security protocol{/tr}">{tr}Standard{/tr}</a> |
+				{if !$force_secure}
+					<a href="{$gBitSystem->getConfig('http_login_url')}" title="{tr}Click here to login using the default security protocol{/tr}">{tr}Standard{/tr}</a> |
+				{/if}
 				<a href="{$gBitSystem->getConfig('https_login_url')}" title="{tr}Click here to login using a secure protocol{/tr}">{tr}Secure{/tr}</a>
 				{formhelp note=""}
 			{/forminput}
