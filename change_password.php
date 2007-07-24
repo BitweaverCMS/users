@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.9 2007/07/24 08:02:57 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.10 2007/07/24 08:05:26 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: change_password.php,v 1.9 2007/07/24 08:02:57 lsces Exp $
+ * $Id: change_password.php,v 1.10 2007/07/24 08:05:26 lsces Exp $
  * @package users
  * @subpackage functions
  */
@@ -48,9 +48,9 @@ if (isset($_REQUEST["change"])) {
 				$gBitSmarty->assign( 'mailEmail',$validated['email'] );
 				$mail_data = $gBitSmarty->fetch('bitpackage:users/welcome_mail.tpl');
 				mail($validated["email"], tra( 'Welcome to' ).' '.$gBitSystem->getConfig('site_title', $_SERVER['HTTP_HOST'] ),$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
- 			} else	{
+ 			}
+		} else	{
 				$gBitSystem->fatalError( tra("Password reset request is invalid or has expired") );
-			}
 		}
 	} elseif( $gBitUser->isRegistered() ) {
 		if( !( $validated = $gBitUser->validate( $userInfo['login'], $_REQUEST["oldpass"], '', '' )) ) {
