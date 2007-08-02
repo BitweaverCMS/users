@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.151 2007/07/26 10:47:13 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.152 2007/08/02 14:36:15 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.151 2007/07/26 10:47:13 lsces Exp $
+ * $Id: BitUser.php,v 1.152 2007/08/02 14:36:15 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.151 $
+ * @version  $Revision: 1.152 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1135,7 +1135,7 @@ class BitUser extends LibertyAttachable {
 			$bindVars[] = $pListHash['ip'];
 		}
 
-		$query = "select DISTINCT uc.`user_id`, `login`, `real_name` ,`connect_time`, `ip`, `user_agent`, `last_get`, uc.`content_id`
+		$query = "select DISTINCT uc.`user_id`, `login`, `real_name` ,`connect_time`, `ip`, `user_agent`, `last_get`, uu.`content_id`
 				  FROM `".BIT_DB_PREFIX."users_cnxn` uc INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (uc.`user_id`=uu.`user_id`)
 				  WHERE uc.`user_id` IS NOT NULL $whereSql
 				  ORDER BY ".$this->mDb->convertSortmode( $pListHash['sort_mode'] );
