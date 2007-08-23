@@ -5,19 +5,20 @@
 	</div>
 
 	<div class="body">
-		<p class="help">{tr}Hover your mouse over the permissions and a descirption of the permission will appear{/tr}</p>
 		{formfeedback hash=$feedback}
 
 		{form}
 			<input type="hidden" name="package" value="{$smarty.request.package}" />
 
+			<p>
 			{smartlink ititle=All package=$packageKey}
 			{foreach from=$permPackages key=i item=packageKey}
 				{if $gBitSystem->isPackageActive($packageKey)}
 					&nbsp;&bull; {smartlink ititle=$gBitSystem->mPackages.$packageKey.name|default:$packageKey package=$packageKey}
 				{/if}
 			{/foreach}
-
+			</p>
+			
 			<table class="data">
 				<caption>{tr}Available Permissions{/tr}</caption>
 				{capture assign=th}
@@ -35,7 +36,7 @@
 					{if ($smarty.foreach.perms.iteration % 10) eq 0 and ($smarty.foreach.perms.total - $smarty.foreach.perms.iteration) gt 5}{$th}{/if}
 					<tr class="{cycle values="odd,even"}{if $unassignedPerms.$p} warning{/if}">
 						<td>{if $unassignedPerms.$p}{biticon iname=dialog-warning iexplian="Unassigned Permission"}{/if}</td>
-						<td><span title="{$perm.perm_desc}">{$p}</span></td>
+						<td title="{$perm.perm_desc}"><abbr title="{$perm.perm_desc}">{$p}</abbr></td>
 						<td>{$perm.package}</td>
 						{foreach from=$allGroups item=group}
 							<td style="text-align:center;">
