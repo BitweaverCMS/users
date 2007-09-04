@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.152 2007/08/02 14:36:15 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.153 2007/09/04 16:30:06 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.152 2007/08/02 14:36:15 spiderr Exp $
+ * $Id: BitUser.php,v 1.153 2007/09/04 16:30:06 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.152 $
+ * @version  $Revision: 1.153 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1619,11 +1619,12 @@ class BitUser extends LibertyAttachable {
 			$bindvars = array();
 		}
 		$query = "SELECT uu.*, tf_ava.`storage_path` AS `avatar_storage_path`
-			FROM `".BIT_DB_PREFIX."users_users` uu
-				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (uu.`content_id`=lc.`content_id`)
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
-			$mid order by $sort_mode";
+				FROM `".BIT_DB_PREFIX."users_users` uu
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (uu.`content_id`=lc.`content_id`)
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON ( lc.`content_id` = lch.`content_id` )
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
+				$mid ORDER BY $sort_mode";
 		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_users` uu $mid";
 		$result = $this->mDb->query($query, $bindvars, $pParamHash['max_records'], $pParamHash['offset']);
 
