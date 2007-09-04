@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.65 2007/07/16 15:27:21 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.66 2007/09/04 02:17:27 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.65 2007/07/16 15:27:21 squareing Exp $
+ * $Id: BitPermUser.php,v 1.66 2007/09/04 02:17:27 spiderr Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.65 $
+ * @version  $Revision: 1.66 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -277,6 +277,8 @@ class BitPermUser extends BitUser {
 	// we cannot remove the anonymous group
 	function remove_group($pGroupId) {
 		if( $pGroupId != ANONYMOUS_GROUP_ID ) {
+			$query = "delete from `".BIT_DB_PREFIX."users_groups_map` where `group_id` = ?";
+			$result = $this->mDb->query($query, array($pGroupId));
 			$query = "delete from `".BIT_DB_PREFIX."users_group_permissions` where `group_id` = ?";
 			$result = $this->mDb->query($query, array($pGroupId));
 			$query = "delete from `".BIT_DB_PREFIX."users_groups` where `group_id` = ?";
