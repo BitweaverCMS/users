@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.154 2007/09/21 01:58:16 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.155 2007/09/21 03:50:27 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.154 2007/09/21 01:58:16 spiderr Exp $
+ * $Id: BitUser.php,v 1.155 2007/09/21 03:50:27 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.154 $
+ * @version  $Revision: 1.155 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -634,22 +634,25 @@ class BitUser extends LibertyAttachable {
 			}
 			$pParamHash['upload']['thumbnail'] = FALSE;
 			if( isset($_FILES['fPortraitFile']) && is_uploaded_file( $_FILES['fPortraitFile']['tmp_name'] ) ) {
-				$pParamHash['upload'] = $_FILES['fPortraitFile'];
-				if( !$this->storePortrait( $pParamHash, (!empty( $pParamHash['fAutoAvatar'] ) ? TRUE : FALSE) ) ) {
+				$portraitHash = $pParamHash;
+				$portraitHash['upload'] = $_FILES['fPortraitFile'];
+				if( !$this->storePortrait( $portraitHash, (!empty( $portraitHash['fAutoAvatar'] ) ? TRUE : FALSE) ) ) {
 				}
 			}
 
 			if( isset($_FILES['fAvatarFile']) && is_uploaded_file($_FILES['fAvatarFile']['tmp_name']) && $_FILES['fAvatarFile']['size'] > 0 ) {
-				$pParamHash['upload'] = $_FILES['fAvatarFile'];
-				$pParamHash['upload']['source_file'] = $_FILES['fAvatarFile']['tmp_name'];
-				if( !$this->storeAvatar( $pParamHash ) ) {
+				$avatarHash = $pParamHash;
+				$avatarHash['upload'] = $_FILES['fAvatarFile'];
+				$avatarHash['upload']['source_file'] = $_FILES['fAvatarFile']['tmp_name'];
+				if( !$this->storeAvatar( $avatarHash ) ) {
 				}
 			}
 
 			if( isset($_FILES['fLogoFile']) && is_uploaded_file($_FILES['fLogoFile']['tmp_name']) && $_FILES['fLogoFile']['size'] > 0 ) {
-				$pParamHash['upload'] = $_FILES['fLogoFile'];
-				$pParamHash['upload']['source_file'] = $_FILES['fLogoFile']['tmp_name'];
-				if( !$this->storeLogo( $pParamHash ) ) {
+				$logoHash = $pParamHash;
+				$logoHash['upload'] = $_FILES['fLogoFile'];
+				$logoHash['upload']['source_file'] = $_FILES['fLogoFile']['tmp_name'];
+				if( !$this->storeLogo( $logoHash ) ) {
 				}
 			}
 
@@ -778,7 +781,6 @@ class BitUser extends LibertyAttachable {
 		} else {
 			$this->mUserId = ANONYMOUS_USER_ID;
 			unset( $this->mInfo );
-			//vd( $this->mErrors );		
 			$url = USERS_PKG_URL.'login.php?error=' . urlencode(tra('Invalid username or password'));
 		}
 		$https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
@@ -1217,19 +1219,21 @@ class BitUser extends LibertyAttachable {
 			$pStorageHash['attachment_id'] = !empty( $this->mInfo['portrait_attachment_id'] ) ? $this->mInfo['portrait_attachment_id'] : NULL;
 			if( $pGenerateAvatar ) {
 				copy($pStorageHash['upload']['tmp_name'],$pStorageHash['upload']['tmp_name'].'.av');
+				$avatarHash = $pStorageHash;
 			}
 
-			$pStorageHash['_files_override'] = array( $pStorageHash['upload'] );
+			$pStorageHash['_files_override']['portrait'] = $pStorageHash['upload'];
 			if( LibertyAttachable::store( $pStorageHash ) ) {
-				if( empty( $this->mInfo['portrait_attachment_id'] ) || $this->mInfo['portrait_attachment_id'] != $pStorageHash['attachment_id'] ) {
+				$attachmentId = $pStorageHash['STORAGE']['bitfile']['portrait']['upload']['attachment_id'];
+				if( empty( $this->mInfo['portrait_attachment_id'] ) || $this->mInfo['portrait_attachment_id'] != $attachmentId ) {
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `portrait_attachment_id` = ? WHERE `user_id`=?";
-					$result = $this->mDb->query( $query, array( $pStorageHash['attachment_id'], $this->mUserId ) );
-					$this->mInfo['portrait_attachment_id'] = $pStorageHash['attachment_id'];
+					$result = $this->mDb->query( $query, array( $attachmentId, $this->mUserId ) );
+					$this->mInfo['portrait_attachment_id'] = $attachmentId;
 					$pStorageHash['portrait_storage_path'] = $pStorageHash['upload']['dest_path'];
 				}
 				if( $pGenerateAvatar ) {
-					$pStorageHash['upload']['tmp_name'] = $pStorageHash['upload']['tmp_name'].'.av';
-					$this->storeAvatar( $pStorageHash );
+					$avatarHash['upload']['tmp_name'] = $pStorageHash['upload']['tmp_name'].'.av';
+					$this->storeAvatar( $avatarHash );
 				}
 			} else {
 				$this->mErrors['file'] = 'File '.$pStorageHash['upload']['name'].' could not be stored.';
@@ -1249,17 +1253,17 @@ class BitUser extends LibertyAttachable {
 			$pStorageHash['storage_type'] = STORAGE_IMAGE;
 			$pStorageHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
 			$pStorageHash['attachment_id'] = !empty( $this->mInfo['avatar_attachment_id'] ) ? $this->mInfo['avatar_attachment_id'] : NULL;
-
-			$pStorageHash['_files_override'] = array( $pStorageHash['upload'] );
+			$pStorageHash['_files_override']['avatar'] = $pStorageHash['upload'];
 			if( LibertyAttachable::store( $pStorageHash ) ) {
-				if( empty( $this->mInfo['avatar_attachment_id'] ) || $this->mInfo['avatar_attachment_id'] != $pStorageHash['attachment_id'] ) {
+				$attachmentId = $pStorageHash['STORAGE']['bitfile']['avatar']['upload']['attachment_id'];
+				if( empty( $this->mInfo['avatar_attachment_id'] ) || $this->mInfo['avatar_attachment_id'] != $attachmentId ) {
 					$this->mInfo['avatar_storage_path'] = $pStorageHash['upload']['dest_path'];
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `avatar_attachment_id` = ? WHERE `user_id`=?";
-					$result = $this->mDb->query( $query, array( $pStorageHash['attachment_id'], $this->mUserId ) );
-					$this->mInfo['avatar_attachment_id'] = $pStorageHash['attachment_id'];
+					$result = $this->mDb->query( $query, array( $attachmentId, $this->mUserId ) );
+					$this->mInfo['avatar_attachment_id'] = $attachmentId;
 				}
 			} else {
-				$this->mErrors['file'] = 'File '.$pStorageHash['upload']['name'].' could not be stored.';
+				$this->mErrors['avatar'] = 'File '.$pStorageHash['upload']['name'].' could not be stored.';
 			}
 		}
 		return( count( $this->mErrors ) == 0 );
@@ -1276,12 +1280,13 @@ class BitUser extends LibertyAttachable {
 			$pStorageHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
 			$pStorageHash['attachment_id'] = $this->mInfo['logo_attachment_id'];
 
-			$pStorageHash['_files_override'] = array( $pStorageHash['upload'] );
+			$pStorageHash['_files_override']['logo'] = $pStorageHash['upload'];
 			if( LibertyAttachable::store( $pStorageHash ) ) {
-				if($this->mInfo['logo_attachment_id'] != $pStorageHash['attachment_id'] ) {
+				$attachmentId = $pStorageHash['STORAGE']['bitfile']['logo']['upload']['attachment_id'];
+				if($this->mInfo['logo_attachment_id'] != $attachmentId ) {
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `logo_attachment_id` = ? WHERE `user_id`=?";
-					$result = $this->mDb->query( $query, array( $pStorageHash['attachment_id'], $this->mUserId ) );
-					$this->mInfo['logo_attachment_id'] = $pStorageHash['attachment_id'];
+					$result = $this->mDb->query( $query, array( $attachmentId, $this->mUserId ) );
+					$this->mInfo['logo_attachment_id'] = $attachmentId;
 				}
 			} else {
 				$this->mErrors['file'] = 'File '.$pStorageHash['name'].' could not be stored.';

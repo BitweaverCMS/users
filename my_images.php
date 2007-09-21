@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_images.php,v 1.9 2006/04/11 17:52:11 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_images.php,v 1.10 2007/09/21 03:50:27 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_images.php,v 1.9 2006/04/11 17:52:11 squareing Exp $
+ * $Id: my_images.php,v 1.10 2007/09/21 03:50:27 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -53,10 +53,13 @@ if( !empty( $_REQUEST['fSubmitBio'] ) ) {
 	header( "Location: ".$url );
 } elseif( isset( $_REQUEST['fSubmitDeletePortait'] ) ) {
 	$gQueryUser->purgePortrait();
+	$gQueryUser->load();
 } elseif( isset( $_REQUEST['fSubmitDeleteAvatar'] ) ) {
 	$gQueryUser->purgeAvatar();
+	$gQueryUser->load();
 } elseif( isset( $_REQUEST['fSubmitDeleteLogo'] ) ) {
 	$gQueryUser->purgeLogo();
+	$gQueryUser->load();
 }
 
 if (isset($_REQUEST["uselib"])) {
