@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.155 2007/09/21 03:50:27 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.156 2007/09/26 09:24:22 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.155 2007/09/21 03:50:27 spiderr Exp $
+ * $Id: BitUser.php,v 1.156 2007/09/26 09:24:22 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.155 $
+ * @version  $Revision: 1.156 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -632,36 +632,17 @@ class BitUser extends LibertyAttachable {
 					$this->mInfo['content_id'] = $pParamHash['content_id'];
 				}
 			}
-			$pParamHash['upload']['thumbnail'] = FALSE;
-			if( isset($_FILES['fPortraitFile']) && is_uploaded_file( $_FILES['fPortraitFile']['tmp_name'] ) ) {
-				$portraitHash = $pParamHash;
-				$portraitHash['upload'] = $_FILES['fPortraitFile'];
-				if( !$this->storePortrait( $portraitHash, (!empty( $portraitHash['fAutoAvatar'] ) ? TRUE : FALSE) ) ) {
-				}
-			}
-
-			if( isset($_FILES['fAvatarFile']) && is_uploaded_file($_FILES['fAvatarFile']['tmp_name']) && $_FILES['fAvatarFile']['size'] > 0 ) {
-				$avatarHash = $pParamHash;
-				$avatarHash['upload'] = $_FILES['fAvatarFile'];
-				$avatarHash['upload']['source_file'] = $_FILES['fAvatarFile']['tmp_name'];
-				if( !$this->storeAvatar( $avatarHash ) ) {
-				}
-			}
-
-			if( isset($_FILES['fLogoFile']) && is_uploaded_file($_FILES['fLogoFile']['tmp_name']) && $_FILES['fLogoFile']['size'] > 0 ) {
-				$logoHash = $pParamHash;
-				$logoHash['upload'] = $_FILES['fLogoFile'];
-				$logoHash['upload']['source_file'] = $_FILES['fLogoFile']['tmp_name'];
-				if( !$this->storeLogo( $logoHash ) ) {
-				}
-			}
 
 			$this->mDb->CompleteTrans();
+
+			// store any uploaded images
+			$pParamHash['upload']['thumbnail'] = FALSE;   // i don't think this does anything - perhaps replace it by setting thumbnail_sizes
+			$this->storeImages( $pParamHash );
+
 			$this->load( TRUE );
 		}
 		return( count( $this->mErrors ) == 0 );
 	}
-
 
 
 	// removes user and associated private data
@@ -1196,6 +1177,14 @@ class BitUser extends LibertyAttachable {
 
 
 	// ============= image and file functions
+	/**
+	 * getThumbnailUrl 
+	 * 
+	 * @param string $pSize 
+	 * @param array $pInfoHash 
+	 * @access public
+	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
+	 */
 	function getThumbnailUrl( $pSize='small', $pInfoHash=NULL ) {
 		$ret = '';
 		if( $pInfoHash ) {
@@ -1206,23 +1195,69 @@ class BitUser extends LibertyAttachable {
 		return $ret;
 	}
 
+	/**
+	 * storeImages will store any user images - please note that uploaded files have to be in predefined keys in $_FILES
+	 *     $_FILES['fPortraitFile']
+	 *     $_FILES['fAutoAvatar']
+	 *     $_FILES['fLogoFile']
+	 * 
+	 * @param array $pParamHash array of options
+	 * @param boolean $pParamHash['fAutoAvatar'] automatically create avatar from portrait
+	 * @access public
+	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
+	 */
+	function storeImages( $pParamHash ) {
+		if( isset( $_FILES['fPortraitFile'] ) && is_uploaded_file( $_FILES['fPortraitFile']['tmp_name'] ) && $_FILES['fPortraitFile']['size'] > 0 ) {
+			$portraitHash = $pParamHash;
+			$portraitHash['upload'] = $_FILES['fPortraitFile'];
+			if( !$this->storePortrait( $portraitHash, ( !empty( $portraitHash['fAutoAvatar'] ) ? TRUE : FALSE ))) {
+			}
+		}
 
-	function storePortrait( &$pStorageHash, $pGenerateAvatar=FALSE ) {
+		if( isset( $_FILES['fAvatarFile'] ) && is_uploaded_file( $_FILES['fAvatarFile']['tmp_name'] ) && $_FILES['fAvatarFile']['size'] > 0 ) {
+			$avatarHash = $pParamHash;
+			$avatarHash['upload'] = $_FILES['fAvatarFile'];
+			$avatarHash['upload']['source_file'] = $_FILES['fAvatarFile']['tmp_name'];
+			if( !$this->storeAvatar( $avatarHash )) {
+			}
+		}
+
+		if( isset( $_FILES['fLogoFile'] ) && is_uploaded_file( $_FILES['fLogoFile']['tmp_name'] ) && $_FILES['fLogoFile']['size'] > 0 ) {
+			$logoHash = $pParamHash;
+			$logoHash['upload'] = $_FILES['fLogoFile'];
+			$logoHash['upload']['source_file'] = $_FILES['fLogoFile']['tmp_name'];
+			if( !$this->storeLogo( $logoHash )) {
+			}
+		}
+	}
+
+	/**
+	 * storePortrait 
+	 * 
+	 * @param array $pStorageHash 
+	 * @param array $pGenerateAvatar 
+	 * @access public
+	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
+	 */
+	function storePortrait( &$pStorageHash, $pGenerateAvatar = FALSE ) {
 		if( $this->isValid() && count( $pStorageHash ) ) {
+			// make a copy before the uploaded file disappears
+			if( $pGenerateAvatar ) {
+				$avatarHash = $pStorageHash;
+				$avatarHash['upload']['tmp_name'] = $pStorageHash['upload']['tmp_name'].'.av';
+				copy( $pStorageHash['upload']['tmp_name'], $pStorageHash['upload']['tmp_name'].'.av' );
+			}
+
 			// setup the hash for central storage functions
 			$pStorageHash['upload']['max_width'] = PORTRAIT_MAX_DIM;
 			$pStorageHash['upload']['max_height'] = PORTRAIT_MAX_DIM;
-			//			$pStorageHash['upload']['dest_base_name'] = 'portrait';
 			$pStorageHash['upload']['dest_path'] = $this->getStorageBranch( 'self',$this->mUserId );
 			$pStorageHash['storage_type'] = STORAGE_IMAGE;
 			$pStorageHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
 			$pStorageHash['attachment_id'] = !empty( $this->mInfo['portrait_attachment_id'] ) ? $this->mInfo['portrait_attachment_id'] : NULL;
-			if( $pGenerateAvatar ) {
-				copy($pStorageHash['upload']['tmp_name'],$pStorageHash['upload']['tmp_name'].'.av');
-				$avatarHash = $pStorageHash;
-			}
-
 			$pStorageHash['_files_override']['portrait'] = $pStorageHash['upload'];
+			// don't do the content thing
+			$pStorageHash['skip_content_store'] = TRUE;
 			if( LibertyAttachable::store( $pStorageHash ) ) {
 				$attachmentId = $pStorageHash['STORAGE']['bitfile']['portrait']['upload']['attachment_id'];
 				if( empty( $this->mInfo['portrait_attachment_id'] ) || $this->mInfo['portrait_attachment_id'] != $attachmentId ) {
@@ -1231,8 +1266,8 @@ class BitUser extends LibertyAttachable {
 					$this->mInfo['portrait_attachment_id'] = $attachmentId;
 					$pStorageHash['portrait_storage_path'] = $pStorageHash['upload']['dest_path'];
 				}
+
 				if( $pGenerateAvatar ) {
-					$avatarHash['upload']['tmp_name'] = $pStorageHash['upload']['tmp_name'].'.av';
 					$this->storeAvatar( $avatarHash );
 				}
 			} else {
@@ -1242,18 +1277,25 @@ class BitUser extends LibertyAttachable {
 		return( count( $this->mErrors ) == 0 );
 	}
 
-
+	/**
+	 * storeAvatar 
+	 * 
+	 * @param array $pStorageHash 
+	 * @access public
+	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
+	 */
 	function storeAvatar( &$pStorageHash ) {
 		if( $this->isValid() && count( $pStorageHash ) ) {
 			// setup the hash for central storage functions
 			$pStorageHash['upload']['max_width'] = AVATAR_MAX_DIM;
 			$pStorageHash['upload']['max_height'] = AVATAR_MAX_DIM;
-			//			$pStorageHash['upload']['dest_base_name'] = 'avatar';
 			$pStorageHash['upload']['dest_path'] = $this->getStorageBranch( 'self',$this->mUserId );
 			$pStorageHash['storage_type'] = STORAGE_IMAGE;
 			$pStorageHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
 			$pStorageHash['attachment_id'] = !empty( $this->mInfo['avatar_attachment_id'] ) ? $this->mInfo['avatar_attachment_id'] : NULL;
 			$pStorageHash['_files_override']['avatar'] = $pStorageHash['upload'];
+			// don't do the content thing
+			$pStorageHash['skip_content_store'] = TRUE;
 			if( LibertyAttachable::store( $pStorageHash ) ) {
 				$attachmentId = $pStorageHash['STORAGE']['bitfile']['avatar']['upload']['attachment_id'];
 				if( empty( $this->mInfo['avatar_attachment_id'] ) || $this->mInfo['avatar_attachment_id'] != $attachmentId ) {
@@ -1269,7 +1311,13 @@ class BitUser extends LibertyAttachable {
 		return( count( $this->mErrors ) == 0 );
 	}
 
-
+	/**
+	 * storeLogo 
+	 * 
+	 * @param array $pStorageHash 
+	 * @access public
+	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
+	 */
 	function storeLogo( &$pStorageHash ) {
 		if( $this->isValid() && count( $pStorageHash ) ) {
 			// setup the hash for central storage functions
@@ -1279,8 +1327,9 @@ class BitUser extends LibertyAttachable {
 			$pStorageHash['storage_type'] = STORAGE_IMAGE;
 			$pStorageHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
 			$pStorageHash['attachment_id'] = $this->mInfo['logo_attachment_id'];
-
 			$pStorageHash['_files_override']['logo'] = $pStorageHash['upload'];
+			// don't do the content thing
+			$pStorageHash['skip_content_store'] = TRUE;
 			if( LibertyAttachable::store( $pStorageHash ) ) {
 				$attachmentId = $pStorageHash['STORAGE']['bitfile']['logo']['upload']['attachment_id'];
 				if($this->mInfo['logo_attachment_id'] != $attachmentId ) {
@@ -1295,6 +1344,13 @@ class BitUser extends LibertyAttachable {
 		return( count( $this->mErrors ) == 0 );
 	}
 
+	/**
+	 * purgeImage 
+	 * 
+	 * @param array $pType 
+	 * @access public
+	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
+	 */
 	function purgeImage( $pType ) {
 		if( $this->isValid() && @$this->verifyId( $this->mInfo[$pType.'_attachment_id'] ) ) {
 			$this->mDb->StartTrans();

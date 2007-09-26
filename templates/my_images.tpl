@@ -8,7 +8,7 @@
 	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
 
 	<div class="body">
-		{form enctype="multipart/form-data" method="post" legend="Upload personal Portrait, Avatar and Logo"}
+		{form enctype="multipart/form-data" legend="Upload personal Portrait, Avatar and Logo"}
 			{if $fHomepage}
 				<input type="hidden" name="fHomepage" value="{$fHomepage}"/>
 			{/if}
