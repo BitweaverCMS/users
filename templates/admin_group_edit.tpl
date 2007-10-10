@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.19 2007/07/12 09:30:19 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.20 2007/10/10 18:07:19 wjames5 Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -42,19 +42,6 @@
 
 							Search for Content:<br/>
 							{html_options options=$contentTypes name=content_type_guid selected=$contentSelect}
-							{literal}<script type="text/javascript">/* <![CDATA[ */
-								var suggestOptions = {
-									matchAnywhere: true,
-									ignoreCase: true
-								};
-								function injectSuggestBehavior() {
-									suggest = new TextSuggest(
-										'group_home_lookup',
-										'/liberty/list_content.php',
-										suggestOptions
-									);
-								}
-							/* ]]> */</script>{/literal}
 							<input type="hidden" name="group_home_lookup_hidden" id="group_home_lookup_hidden" value="{$groupInfo.group_home|escape}" />
 							<input type="text" id="group_home_lookup" name="group_home_name">
 						{formhelp note="Enter the title of the content you are looking for to receive an auto-suggest list of possibilities."}
