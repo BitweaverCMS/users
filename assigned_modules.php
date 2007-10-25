@@ -3,13 +3,13 @@
  * assigned_modules
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.12 $
+ * @version  $Revision: 1.13 $
  * @package  users
  * @subpackage  functions
  * @copyright Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
  * @license Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
  */
-// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.12 2007/10/25 17:14:15 nickpalmer Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.13 2007/10/25 20:43:02 squareing Exp $
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Initialization
 
@@ -21,7 +21,7 @@ $gEditMode = 'layout';
  */
 require_once( '../bit_setup_inc.php' );
 
-$gBitSystem->fatalError( "Page Not Functional", 'This page is not functional and will be fixed asap.' );
+$gBitSystem->fatalError( 'This page is not functional and will be fixed asap.' );
 
 $gBitSystem->verifyPermission('p_tidbits_configure_modules');
 
