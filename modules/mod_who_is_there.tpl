@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_who_is_there.tpl,v 1.8 2006/09/03 20:14:58 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_who_is_there.tpl,v 1.9 2007/10/26 13:26:51 nickpalmer Exp $ *}
 {bitmodule title="$moduleTitle" name="who_is_there"}
 	<div>
 		{if $logged_users eq 0}
@@ -17,10 +17,10 @@
 			<a href="{$smarty.const.MESSAGES_PKG_URL}compose.php?to={$online_users[ix].user}" title="{tr}Send a message to{/tr} {$online_users[ix].user}">{biticon ipackage="icons" iname="mail-forward style="width:8px;height:8px;"" iexplain="send message"}</a>
 		{/if}
 		{if $online_users[ix].users_information eq 'public'}
-			{math equation="x - y" x=$smarty.now y=$online_users[ix].timestamp assign=idle}
-			<a href="{$smarty.const.USERS_PKG_URL}index.php?home={$online_users[ix].user}" title="{tr}More info about{/tr} {$online_users[ix].user} ({tr}idle{/tr} {$idle} {tr}seconds{/tr})">{$online_users[ix].user}</a><br />
+			{math equation="x - y" x=$smarty.now y=$online_users[ix].last_get assign=idle}
+			<a href="{$smarty.const.USERS_PKG_URL}index.php?home={$online_users[ix].user_id}" title="{tr}More info about{/tr} {$online_users[ix].login} ({tr}idle{/tr} {$idle} {tr}seconds{/tr})">{$online_users[ix].login}</a><br />
 		{else}
-			{$online_users[ix].user}<br />
+			{$online_users[ix].login}<br />
 		{/if}
 	{/section}
 {/bitmodule}

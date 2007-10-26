@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.157 2007/09/27 08:41:36 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.158 2007/10/26 13:26:50 nickpalmer Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.157 2007/09/27 08:41:36 squareing Exp $
+ * $Id: BitUser.php,v 1.158 2007/10/26 13:26:50 nickpalmer Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.157 $
+ * @version  $Revision: 1.158 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -232,8 +232,11 @@ class BitUser extends LibertyAttachable {
 		return true;
 	}
 
-	function count_sessions() {
+	function count_sessions($pActive = FALSE) {
 		$query = "select count(*) from `".BIT_DB_PREFIX."users_cnxn`";
+		if ($pActive) {
+			$query .=" WHERE `cookie` IS NOT NULL";
+		}
 		$cant = $this->mDb->getOne($query,array());
 		return $cant;
 	}
@@ -1118,7 +1121,11 @@ class BitUser extends LibertyAttachable {
 			$bindVars[] = $pListHash['ip'];
 		}
 
-		$query = "select DISTINCT uc.`user_id`, `login`, `real_name` ,`connect_time`, `ip`, `user_agent`, `last_get`, uu.`content_id`
+		if( !empty( $pListHash['online'] ) ) {
+			$whereSql .= ' AND uc.`cookie` IS NOT NULL ';
+		}
+
+		$query = "select DISTINCT uc.`user_id`, `login`, `real_name`,`connect_time`, `ip`, `user_agent`, `last_get`, uu.`content_id`
 				  FROM `".BIT_DB_PREFIX."users_cnxn` uc INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (uc.`user_id`=uu.`user_id`)
 				  WHERE uc.`user_id` IS NOT NULL $whereSql
 				  ORDER BY ".$this->mDb->convertSortmode( $pListHash['sort_mode'] );
