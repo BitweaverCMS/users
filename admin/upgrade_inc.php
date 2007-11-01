@@ -21,8 +21,8 @@ array( 'RENAMECOLUMN' => array(
 
 array( 'QUERY' =>
 	array( 'SQL92' => array(
-		"UPDATE `tiki_user_tasks` SET `title`= (SELECT `title` FROM `tiki_user_tasks_history` WHERE `tiki_user_tasks`.`taskId`=`belongs_to`)",
-		"UPDATE `tiki_user_tasks` SET `description`= (SELECT `description` FROM `tiki_user_tasks_history` WHERE `tiki_user_tasks`.`taskId`=`belongs_to`)",
+		"UPDATE `".BIT_DB_PREFIX."tiki_user_tasks` SET `title`= (SELECT `title` FROM `".BIT_DB_PREFIX."tiki_user_tasks_history` WHERE `".BIT_DB_PREFIX."tiki_user_tasks`.`taskId`=`belongs_to`)",
+		"UPDATE `".BIT_DB_PREFIX."tiki_user_tasks` SET `description`= (SELECT `description` FROM `".BIT_DB_PREFIX."tiki_user_tasks_history` WHERE `".BIT_DB_PREFIX."tiki_user_tasks`.`taskId`=`belongs_to`)",
 	)
 )),
 
