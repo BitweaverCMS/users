@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.158 2007/10/26 13:26:50 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.159 2007/11/01 11:05:32 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.158 2007/10/26 13:26:50 nickpalmer Exp $
+ * $Id: BitUser.php,v 1.159 2007/11/01 11:05:32 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.158 $
+ * @version  $Revision: 1.159 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -759,8 +759,9 @@ class BitUser extends LibertyAttachable {
 					$cookie_path = $gBitSystem->getConfig('cookie_path', $cookie_path);
 					$cookie_domain = $gBitSystem->getConfig('cookie_domain', $cookie_domain);
 				}
-				setcookie( $user_cookie_site, session_id(), $cookie_time, $cookie_path, $cookie_domain );
-				$this->updateSession( $_COOKIE[$user_cookie_site] );
+				$session_id = session_id();
+				setcookie( $user_cookie_site, $session_id, $cookie_time, $cookie_path, $cookie_domain );
+				$this->updateSession( $session_id );
 			}
 		} else {
 			$this->mUserId = ANONYMOUS_USER_ID;
