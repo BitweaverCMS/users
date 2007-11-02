@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.50 2007/06/25 00:34:27 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.51 2007/11/02 16:10:20 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.50 2007/06/25 00:34:27 nickpalmer Exp $
+ * $Id: preferences.php,v 1.51 2007/11/02 16:10:20 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -99,20 +99,16 @@ if( isset( $_REQUEST["prefs"] )) {
 
 	// preferences
 	$prefs = array(
-		'users_homepage'        => USERS_PKG_NAME,
-		'site_display_utc'		=> USERS_PKG_NAME,
-		'site_display_timezone' => USERS_PKG_NAME,
-		'users_country'         => USERS_PKG_NAME,
-		'users_information'     => USERS_PKG_NAME,
-		'users_email_display'   => USERS_PKG_NAME,
+		'users_homepage'        => NULL,
+		'site_display_utc'		=> 'Local',
+		'site_display_timezone' => 'Local',
+		'users_country'         => NULL,
+		'users_information'     => 'public',
+		'users_email_display'   => 'n',
 	);
 
-	if( $gBitSystem->isFeatureActive( 'users_change_language' )) {
-		if( $_REQUEST['bitlanguage'] != $gBitLanguage->mLanguage ) {
-			$prefs['bitlanguage'] = LANGUAGES_PKG_NAME;
-		} else {
-			unset( $prefs['bitlanguage'] );
-		}
+	if( $_REQUEST['site_display_utc'] != 'Fixed' ) {
+		unset( $_REQUEST['site_display_timezone'] );
 	}
 
 	// we don't have to store http:// in the db
@@ -122,12 +118,17 @@ if( isset( $_REQUEST["prefs"] )) {
 		$_REQUEST['users_homepage'] = 'http://'.$_REQUEST['users_homepage'];
 	}
 
-	foreach( $prefs as $pref => $package ) {
-		if( !empty( $_REQUEST[$pref] )) {
-			$editUser->storePreference( $pref, $_REQUEST[$pref], $package );
+	foreach( $prefs as $pref => $default ) {
+		if( !empty( $_REQUEST[$pref] ) && $_REQUEST[$pref] != $default ) {
+			vd( "storePreference( $pref, $_REQUEST[$pref], USERS_PKG_NAME )" );
+			$editUser->storePreference( $pref, $_REQUEST[$pref], USERS_PKG_NAME );
 		} else {
-			$editUser->storePreference( $pref, NULL, $package );
+			$editUser->storePreference( $pref, NULL, USERS_PKG_NAME );
 		}
+	}
+
+	if( $gBitSystem->isFeatureActive( 'users_change_language' )) {
+		$editUser->storePreference( 'bitlanguage', ($_REQUEST['bitlanguage'] != $gBitLanguage->mLanguage) ? $prefs['bitlanguage'] : NULL, LANGUAGES_PKG_NAME);
 	}
 
 	// toggles
