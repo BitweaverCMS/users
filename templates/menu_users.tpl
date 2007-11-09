@@ -20,7 +20,7 @@
 		{if $gBitSystem->isFeatureActive( 'users_watches' )}
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}watches.php">{biticon iname="weather-clear" iexplain="My Watches" ilocation=$location}</a></li>
 		{/if}
-		{if $gBitUser->hasPermission( 'p_messages_send' )}
+		{if $gBitSystem->isPackageActive( 'messages' ) && $gBitUser->hasPermission( 'p_messages_send' )}
 			<li><a class="item" {if $unreadMsgs}title="{tr}You have unread messages{/tr}"{/if} href="{$smarty.const.MESSAGES_PKG_URL}message_box.php">{biticon iname="emblem-mail" iexplain="Message Box" ilocation=$location}{if $unreadMsgs}<strong> [{$unreadMsgs}]</strong>{/if}</a></li>
 			<li><a class="item" href="{$smarty.const.MESSAGES_PKG_URL}compose.php">{biticon iname="mail-send-receive" iexplain="Compose Message" ilocation=$location}</a></li>
 		{/if}
