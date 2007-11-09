@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.32 2007/06/17 13:53:04 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.33 2007/11/09 13:42:24 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.32 2007/06/17 13:53:04 squareing Exp $
+ * $Id: register.php,v 1.33 2007/11/09 13:42:24 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -29,6 +29,10 @@ include_once( KERNEL_PKG_PATH.'notification_lib.php' );
 $gBitSystem->verifyFeature( 'users_allow_register' );
 
 require_once( USERS_PKG_PATH.'BaseAuth.php' );
+
+if( isset( $_REQUEST['returnto'] ) ) {
+	$_SESSION['returnto'] = $_REQUEST['returnto']; 
+}
 
 if( $gBitUser->isRegistered() ) {
 	$url = $gBitSystem->getDefaultPage();
@@ -83,7 +87,9 @@ if( isset( $_REQUEST["register"] ) ) {
 				}
 				$afterRegDefault = $newUser->login( $reg['login'], $reg['password'], FALSE, FALSE );
 				$url = $gBitSystem->getConfig( 'after_reg_url' )?BIT_ROOT_URL.$gBitSystem->getConfig( 'after_reg_url' ):$afterRegDefault;
-				if ( !empty( $_REQUEST['group'] ) && !empty( $groupInfo['after_registration_page'] ) ) {
+				if( !empty( $_SESSION['returnto'] ) ) {
+					$url = $_SESSION['returnto'];
+				} elseif ( !empty( $_REQUEST['group'] ) && !empty( $groupInfo['after_registration_page'] ) ) {
 					if ( $newUser->verifyId( $groupInfo['after_registration_page'] ) ) {
 						$url = BIT_ROOT_URL."index.php?content_id=".$groupInfo['after_registration_page'];
 					} elseif( strpos( $groupInfo['after_registration_page'], '/' ) === FALSE ) {
