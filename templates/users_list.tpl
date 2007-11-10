@@ -52,7 +52,7 @@
 				{tr}Member since{/tr}: {$users[user].registration_date|bit_short_date}<br/>
 
 				{if $users[user].current_login }
-					{tr}Last seen: {$users[user].current_login|bit_short_date}{/tr}<br/>
+					{tr}Last seen{/tr}: {$users[user].current_login|bit_short_date}<br/>
 				{/if}
 
 				<div class="clear"></div>
