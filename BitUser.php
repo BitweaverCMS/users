@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.159 2007/11/01 11:05:32 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.160 2007/11/13 19:01:45 joasch Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.159 2007/11/01 11:05:32 squareing Exp $
+ * $Id: BitUser.php,v 1.160 2007/11/13 19:01:45 joasch Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.159 $
+ * @version  $Revision: 1.160 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -406,107 +406,117 @@ class BitUser extends LibertyAttachable {
 
 	function verifyEmail( $pEmail, $pValidate = FALSE ) {
 		global $gBitSystem, $gDebug;
-		$HTTP_HOST=$_SERVER['SERVER_NAME'];
-		$ret = FALSE;
+
 		if( !empty( $this ) ) {
 			$errors = &$this->mErrors;
 		} else {
 			$errors = array();
 		}
-		if( !eregi (
-		'^[-!#$%&\`*+\\./0-9=?A-Z^_`a-z{|}~]+'.'@'.
-		'(localhost|[-!$%&\'*+\\/0-9=?A-Z^_`a-z{|}~]+\.'.
-		'[-!$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+)$'
-		, $pEmail ) ) {
+		if( !validate_email_syntax ( $pEmail ) ) {
 			$errors['email'] = 'The email address "'.$pEmail.'" is invalid.';
 		} elseif( !empty( $this ) && is_object( $this ) && $this->userExists( array( 'email' => $pEmail ) ) ) {
 			$errors['email'] = 'The email address "'.$pEmail.'" has already been registered.';
 		} elseif( $gBitSystem->isFeatureActive( 'users_validate_email' ) ) {
-			list ( $Username, $domain ) = split ("@",$pEmail);
-			// That MX(mail exchanger) record exists in domain check .
-			// checkdnsrr function reference : http://www.php.net/manual/en/function.checkdnsrr.php
-			if ( !is_windows() and checkdnsrr ( $domain, "MX" ) )  {
-				if($gDebug) echo "Confirmation : MX record about {$domain} exists.<br>";
-				// If MX record exists, save MX record address.
-				// getmxrr function reference : http://www.php.net/manual/en/function.getmxrr.php
-
-				// Sometimes only the highest priority MX are active
-				$MXWeights = array();
-				$lowest_weight = 99999;
-				$lowest_weight_index = 0;
-				if ( getmxrr ($domain, $MXHost, $MXWeights) )  {
-					for ($i = 0; $i < count( $MXHost ); $i++ ) {
-						if ( $MXWeights[$i] < $lowest_weight ) {
-							$lowest_weight = $MXWeights[$i];
-							$lowest_weight_index = $i;
-						}
-					}
-					if($gDebug) {
-						echo "Confirmation : Is confirming address by MX LOOKUP.<br>";
-						for ( $i = 0,$j = 1; $i < count ( $MXHost ); $i++,$j++ ) {
-							echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Result($j) - $MXHost[$i]<BR>";
-						}
-					}
-				}
-				// Getmxrr function does to store MX record address about $domain in arrangement form to $MXHost.
-				// $ConnectAddress socket connection address.
-				$ConnectAddress = $MXHost[$lowest_weight_index];
-			} else {
-				// If there is no MX record simply @ to next time address socket connection do .
-				$ConnectAddress = $domain;
-				if ($gDebug) echo "Confirmation : MX record about {$domain} does not exist.<br>";
-			}
-			if( !$pValidate ) {	// Skip the connecting test if it didn't work the first time
-				// fsockopen function reference : http://www.php.net/manual/en/function.fsockopen.php
-				$Connect = @fsockopen ( $ConnectAddress, 25 );
-				// Success in socket connection
-				if ($Connect) {
-					if ($gDebug) echo "Connection succeeded to {$ConnectAddress} SMTP.<br>";
-					// Judgment is that service is preparing though begin by 220 getting string after connection .
-					// fgets function reference : http://www.php.net/manual/en/function.fgets.php
-					// A "Real domain name required for sender address"
-					stream_set_timeout($Connect, 90);
-					$Out = $this->get_SMTP_response( $Connect );
-					if ( ereg ( "^220", $Out ) ) {
-						// Inform client's reaching to server who connect.
-						if( $gBitSystem->hasValidSenderEmail() ) {
-							$senderEmail = $gBitSystem->getConfig( 'site_sender_email' );
-							fputs ( $Connect, "HELO $HTTP_HOST\r\n" );
-							if ($gDebug) echo "Run : HELO $HTTP_HOST<br>";
-							$Out = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
-							// Inform sender's address to server.
-							fputs ( $Connect, "MAIL FROM: <{$senderEmail}>\r\n" );
-							if ($gDebug) echo "Run : MAIL FROM: &lt;{$senderEmail}&gt;<br>";
-							$From = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
-							// Inform listener's address to server.
-							fputs ( $Connect, "RCPT TO: <{$pEmail}>\r\n" );
-							if ($gDebug) echo "Run : RCPT TO: &lt;{$pEmail}&gt;<br>";
-							$To = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
-							// Finish connection.
-							fputs ( $Connect, "QUIT\r\n");
-							if ($gDebug) echo "Run : QUIT<br>";
-							fclose($Connect);
-							// Server's answering cord about MAIL and TO command checks.
-							// Server about listener's address reacts to 550 codes if there does not exist
-							// checking that mailbox is in own E-Mail account.
-							if ( !ereg ( "^250", $From )
-							|| ( !ereg ( "^250", $To )
-								&& !ereg( "Please use your ISP relay", $To) )
-
-							) {
-								$errors['email'] = $pEmail." is not recognized by the mail server to=$To= from=$From= out=$Out=";
-							}
-						}
-					}
-				} else {
-					if (!defined($Out)) { $Out = 'n/a'; }
-					$errors['email'] = "Cannot connect to mail server ({$ConnectAddress}). response='$Out'";
-				}
+			if( !$this->verifyMX( $pEmail, $pValidate ) ) {
+				$errors['email'] = 'Cannot find a valid MX host';
 			}
 		}
 		return( count( $errors ) == 0 );
 	}
 
+	function verifyMX( $pEmail, $pValidate = FALSE ) {
+		global $gBitSystem, $gDebug;
+		$HTTP_HOST=$_SERVER['SERVER_NAME'];
+
+		if( !empty( $this ) ) {
+			$errors = &$this->mErrors;
+		} else {
+			$errors = array();
+		}
+
+		list ( $Username, $domain ) = split ("@",$pEmail);
+		// That MX(mail exchanger) record exists in domain check .
+		// checkdnsrr function reference : http://www.php.net/manual/en/function.checkdnsrr.php
+		if ( !is_windows() and checkdnsrr ( $domain, "MX" ) )  {
+			if($gDebug) echo "Confirmation : MX record about {$domain} exists.<br>";
+			// If MX record exists, save MX record address.
+			// getmxrr function reference : http://www.php.net/manual/en/function.getmxrr.php
+
+			// Sometimes only the highest priority MX are active
+			$MXWeights = array();
+			$lowest_weight = 99999;
+			$lowest_weight_index = 0;
+			if ( getmxrr ($domain, $MXHost, $MXWeights) )  {
+				for ($i = 0; $i < count( $MXHost ); $i++ ) {
+					if ( $MXWeights[$i] < $lowest_weight ) {
+						$lowest_weight = $MXWeights[$i];
+						$lowest_weight_index = $i;
+					}
+				}
+				if($gDebug) {
+					echo "Confirmation : Is confirming address by MX LOOKUP.<br>";
+					for ( $i = 0,$j = 1; $i < count ( $MXHost ); $i++,$j++ ) {
+						echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Result($j) - $MXHost[$i]<BR>";
+					}
+				}
+			}
+			// Getmxrr function does to store MX record address about $domain in arrangement form to $MXHost.
+			// $ConnectAddress socket connection address.
+			$ConnectAddress = $MXHost[$lowest_weight_index];
+		} else {
+			// If there is no MX record simply @ to next time address socket connection do .
+			$ConnectAddress = $domain;
+			if ($gDebug) echo "Confirmation : MX record about {$domain} does not exist.<br>";
+		}
+		if( !$pValidate ) {	// Skip the connecting test if it didn't work the first time
+			// fsockopen function reference : http://www.php.net/manual/en/function.fsockopen.php
+			$Connect = @fsockopen ( $ConnectAddress, 25 );
+			// Success in socket connection
+			if ($Connect) {
+				if ($gDebug) echo "Connection succeeded to {$ConnectAddress} SMTP.<br>";
+				// Judgment is that service is preparing though begin by 220 getting string after connection .
+				// fgets function reference : http://www.php.net/manual/en/function.fgets.php
+				// A "Real domain name required for sender address"
+				stream_set_timeout($Connect, 90);
+				$Out = $this->get_SMTP_response( $Connect );
+				if ( ereg ( "^220", $Out ) ) {
+					// Inform client's reaching to server who connect.
+					if( $gBitSystem->hasValidSenderEmail() ) {
+						$senderEmail = $gBitSystem->getConfig( 'site_sender_email' );
+						fputs ( $Connect, "HELO $HTTP_HOST\r\n" );
+						if ($gDebug) echo "Run : HELO $HTTP_HOST<br>";
+						$Out = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
+						// Inform sender's address to server.
+						fputs ( $Connect, "MAIL FROM: <{$senderEmail}>\r\n" );
+						if ($gDebug) echo "Run : MAIL FROM: &lt;{$senderEmail}&gt;<br>";
+						$From = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
+						// Inform listener's address to server.
+						fputs ( $Connect, "RCPT TO: <{$pEmail}>\r\n" );
+						if ($gDebug) echo "Run : RCPT TO: &lt;{$pEmail}&gt;<br>";
+						$To = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
+						// Finish connection.
+						fputs ( $Connect, "QUIT\r\n");
+						if ($gDebug) echo "Run : QUIT<br>";
+						fclose($Connect);
+						// Server's answering cord about MAIL and TO command checks.
+						// Server about listener's address reacts to 550 codes if there does not exist
+						// checking that mailbox is in own E-Mail account.
+						if ( !ereg ( "^250", $From )
+						|| ( !ereg ( "^250", $To )
+							&& !ereg( "Please use your ISP relay", $To) )
+
+						) {
+							$errors['email'] = $pEmail." is not recognized by the mail server to=$To= from=$From= out=$Out=";
+						}
+					}
+				}
+			} else {
+				if (!defined($Out)) { $Out = 'n/a'; }
+				$errors['email'] = "Cannot connect to mail server ({$ConnectAddress}). response='$Out'";
+			}
+		}
+		return( count( $errors ) == 0 );
+	}
 
 	/**
 	* register - will handle everything necessary for registering a user and sending appropriate emails, etc.
@@ -645,6 +655,212 @@ class BitUser extends LibertyAttachable {
 			$this->load( TRUE );
 		}
 		return( count( $this->mErrors ) == 0 );
+	}
+
+	/**
+	 * Imports a user record from csv file
+	 * This is a admin specific function
+	 *
+	 * @param $pParamHash an array with user data
+	 * @return true if import succeed
+	 **/
+	function importUser( &$pParamHash ) {
+		global $gBitUser;
+
+		if( ! $gBitUser->hasPermission( 'p_users_admin' ) ) {
+			return FALSE;
+		}
+		if( $this->verifyUserImport( $pParamHash ) ) {
+			$this->mDb->StartTrans();
+			$pParamHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
+			if( !empty( $pParamHash['user_store'] ) && count( $pParamHash['user_store'] ) ) {
+				// lookup and set the default group for user
+				$defaultGroups = BitPermUser::getDefaultGroup();
+				if( !empty( $defaultGroups ) ) {
+					$pParamHash['user_store']['default_group_id'] = key( $defaultGroups );
+				}
+				if( $this->isValid() ) {
+					$userId = array ( "user_id" => $this->mUserId );
+					$result = $this->mDb->associateUpdate( BIT_DB_PREFIX.'users_users', $pParamHash['user_store'], $userId );
+				} else {
+					if( empty( $pParamHash['user_store']['user_id'] ) ) {
+						$pParamHash['user_store']['user_id'] = $this->mDb->GenID( 'users_users_user_id_seq' );
+					}
+					$this->mUserId = $pParamHash['user_store']['user_id'];
+					$result = $this->mDb->associateInsert( BIT_DB_PREFIX.'users_users', $pParamHash['user_store'] );
+				}
+			}
+			// Prevent liberty from assuming ANONYMOUS_USER_ID while storing
+			$pParamHash['user_id'] = $this->mUserId;
+			if( LibertyContent::store( $pParamHash ) ) {
+				if( empty( $this->mInfo['content_id'] ) || ($pParamHash['content_id'] != $this->mInfo['content_id']) ) {
+					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `content_id`=? WHERE `user_id`=?";
+					$result = $this->mDb->query( $query, array( $pParamHash['content_id'], $this->mUserId ) );
+					$this->mInfo['content_id'] = $pParamHash['content_id'];
+				}
+			}
+
+			$this->mDb->CompleteTrans();
+
+			// store any uploaded images
+			$pParamHash['upload']['thumbnail'] = FALSE;   // i don't think this does anything - perhaps replace it by setting thumbnail_sizes
+			$this->storeImages( $pParamHash );
+
+			$this->load( TRUE );
+		}
+		return( count( $this->mErrors ) == 0 );
+	}
+
+	/**
+	 * Verify and validate the data when 
+	 * importing a user record from csv file
+	 * This is a admin specific function
+	 *
+	 * @param $pParamHash an array with user data
+	 * @return true if validation succeed
+	 **/
+	function verifyUserImport( &$pParamHash ) {
+		global $gBitSystem, $gBitUser;
+
+		if( ! $gBitUser->hasPermission( 'p_users_admin' ) ) {
+			return FALSE;
+		}
+
+		trim_array( $pParamHash );
+        
+		// perhaps someone is importing users and *knows* what they are doing
+		if( @$this->verifyId( $pParamHash['user_id'] ) ) {
+			// only import user_id if it doesn't exist or overwrite is set.
+			if( !$this->userExists( array( 'user_id' => $pParamHash['user_id'] ) ) || !empty( $_REQUEST['overwrite'] ) ) {
+				$pParamHash['user_store']['user_id'] = $pParamHash['user_id'];
+			} else {
+				unset( $pParamHash['user_id'] );
+			}
+		}
+		if( !empty( $pParamHash['login'] ) ) {
+			$ret = $this->userExists( array( 'login' => $pParamHash['login'] ) );
+			if( !empty( $ret ) ) {
+				// On batch import admin can overwrite existing user, so don't error if set
+				// however, prevent overwrite of a mix of user records
+				if( !empty( $_REQUEST['overwrite'] ) && (!isset($pParamHash['user_store']['user_id']) || $pParamHash['user_store']['user_id'] == $ret ) ) {
+					$pParamHash['user_id'] = $ret;
+					$pParamHash['user_store']['user_id'] = $pParamHash['user_id'];
+				} else {
+				    $this->mErrors['login'] = 'The username "'.$pParamHash['login'].'" is already in use';
+				}
+			} elseif( preg_match( '/[^A-Za-z0-9_.-]/', $pParamHash["login"] ) ) {
+				$this->mErrors['login'] = tra( "Your username can only contain numbers, characters, underscores and hyphens." );
+			} 
+			
+			if( !isset($this->mErrors['login']) ) {
+				// LOWER CASE all logins
+				$pParamHash['login'] = strtolower($pParamHash['login']);
+				$pParamHash['user_store']['login'] = $pParamHash['login'];
+			}
+		} else {
+            $this->mErrors['login'] = 'Value for username is missing';
+		}
+		if( !empty( $pParamHash['real_name'] ) ) {
+			$pParamHash['user_store']['real_name'] = substr( $pParamHash['real_name'], 0, 64 );
+		}
+		if( !empty( $pParamHash['email'] ) ) {
+			// LOWER CASE all emails admin_verify_email
+			$pParamHash['email'] = strtolower( $pParamHash['email'] );
+			if( validate_email_syntax( $pParamHash['email'] ) ) {
+				$ret = $this->userExists( array( 'email' => $pParamHash['email'] ) );
+				if( !empty($ret) ) {
+					if( !empty( $_REQUEST['overwrite'] ) && (!isset($pParamHash['user_store']['user_id']) || $pParamHash['user_store']['user_id'] == $ret ) ) {
+						$pParamHash['user_id'] = $ret;
+						$pParamHash['user_store']['user_id'] = $pParamHash['user_id'];
+					} else {
+						$this->mErrors['email'] = 'The email address "'.$pParamHash['email'].'" has already been registered.';
+					}
+				}
+				if( !empty( $_REQUEST['admin_verify_email'] ) ) {
+					if( !$this->verifyMX( $pParamHash['email'] ) ) {
+						$this->mErrors['email'] = 'Cannot find a valid MX host';
+					}
+				}
+				if( !isset($this->mErrors['email']) ) {
+					$pParamHash['user_store']['email'] = strtolower( substr( $pParamHash['email'], 0, 200 ) );
+				}
+			} else {
+				$this->mErrors['email'] = 'The email address "'.$pParamHash['email'].'" has an invalid syntax.';
+			}
+		} else {
+		    $this->mErrors['email'] = tra( 'You must enter your email address' );
+		}
+		
+		// check some new user requirements
+		if( !$this->isRegistered() ) {
+			if( isset($pParamHash['user_store']['user_id']) && !empty( $_REQUEST['overwrite'] ) ) {
+				$this->mUserId = $this->userExists( array( 'user_id' => $pParamHash['user_store']['user_id'] ) );
+			}
+			if( empty( $pParamHash['registration_date'] ) ) {
+				$pParamHash['registration_date'] = date( "U" );
+			}
+			$pParamHash['user_store']['registration_date'] = $pParamHash['registration_date'];
+
+            if( !empty($pParamHash['hash'] ) ) {
+                unset( $pParamHash['password'] );
+				if($gBitSystem->isFeatureActive( 'users_clear_passwords' ) ) {
+                    $this->mErrors['password'] = tra( 'You cannot import a password hash when setting to stor password in plan text is set.' );
+				} 
+				elseif( strlen( $pParamHash['hash'] ) <> 32 ) {
+                    $this->mErrors['password'] = tra( 'When importing a MD5 password hash it needto have a length of 32 bytes.' );
+				}
+            } else {
+			    if( !empty( $_REQUEST['admin_verify_user'] ) ) {
+                    $pParamHash['user_store']['provpass'] = md5(BitSystem::genPass());
+					$pParamHash['user_store']['hash'] = '';
+                    $pParamHash['pass_due'] = 0;
+					unset( $pParamHash['password'] );
+				} elseif( empty($pParamHash['password'] ) ) {
+				   $pParamHash['password'] = $gBitSystem->genPass();
+				}
+			}
+		} elseif( $this->isValid() ) {
+			// Prevent loosing user info on save
+			if( empty( $pParamHash['edit'] ) ) {
+				$pParamHash['edit'] = $this->mInfo['data'];
+			}
+		}
+
+		if( isset( $pParamHash['password'] ) ) {
+			if (!$this->isValid() || isset($pParamHash['password']) ) {
+				$passswordError = $this->verifyPasswordFormat( $pParamHash['password'] );
+			}
+			if( !empty( $passswordError ) ) {
+				$this->mErrors['password'] = $passswordError;
+			} else {
+				// Generate a unique hash
+				//$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pPassword.$pParamHash['email'] );
+				$pParamHash['user_store']['hash'] = md5( $pParamHash['password'] );
+				$now = $gBitSystem->getUTCTime();
+				if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getConfig('users_pass_due') ) {
+					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getConfig('users_pass_due') );
+				} elseif( isset( $pParamHash['pass_due'] ) ) {
+					// renew password only next half year ;)
+					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
+				}
+				if( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) ) {
+					$pParamHash['user_store']['user_password'] = $pParamHash['password'];
+				} else {
+					$pParamHash['user_store']['user_password'] = '';
+				}
+			}
+		}
+		elseif( !empty($pParamHash['hash']) ) {
+            $pParamHash['user_store']['hash'] = $pParamHash['hash'];
+            $now = $gBitSystem->getUTCTime();
+            if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getConfig('users_pass_due') ) {
+                $pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getConfig('users_pass_due') );
+            } elseif( isset( $pParamHash['pass_due'] ) ) {
+                // renew password only next half year ;)
+                $pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
+            }
+		}
+		return ( count($this->mErrors) == 0 );
 	}
 
 

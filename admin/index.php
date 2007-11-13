@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.20 2007/10/27 16:24:25 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.21 2007/11/13 19:01:46 joasch Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -7,7 +7,7 @@
 require_once( '../../bit_setup_inc.php' );
 
 function batchImportUsers() {
-	global $gBitSmarty, $gBitUser;
+	global $gBitSmarty, $gBitUser, $gBitSystem;
 
 	// get the delimiter if it's set - use comma if it not
 	$delimiter = !empty( $_REQUEST['delimiter'] ) ? $_REQUEST['delimiter'] : ",";
@@ -37,14 +37,19 @@ function batchImportUsers() {
 	if( !is_array( $userRecords ) ) {
 		$gBitSystem->fatalError( tra( "No records were found. Check the file please!" ));
 	}
-
+	// If we are going to email users, set static values only once
+	if( empty( $_REQUEST['admin_noemail_user'] ) ) {
+		$siteName = $gBitSystem->getConfig('site_title', $_SERVER['HTTP_HOST'] );
+		$gBitSmarty->assign('siteName',$_SERVER["SERVER_NAME"]);
+		$gBitSmarty->assign('mail_site',$_SERVER["SERVER_NAME"]);
+	}
 	// Process user array
 	$added = 0;
 	$i = 1;
 	foreach( $userRecords as $userRecord ) {
 		$newUser = new BitUser();
 		//untested - spiderr
-		if( $newUser->store( $userRecord ) ) {
+		if( $newUser->importUser( $userRecord ) ) {
 			if( !empty( $userRecord['groups'] ) ) {
 				// groups need to be separated by spaces since this is a csv file
 				$groups = explode( " ", $userRecord['groups'] );
@@ -54,6 +59,34 @@ function batchImportUsers() {
 					}
 				}
 			}
+			if( empty( $_REQUEST['admin_noemail_user'] ) ) {
+				$gBitSmarty->assign('mail_user',$userRecord['login']);
+				if( !empty( $_REQUEST['admin_verify_user'] ) && !empty($userRecord['user_store']['provpass']) ) {
+					$apass = addslashes(substr(md5($gBitSystem->genPass()),0,25));
+					$apass = $userRecord['user_store']['provpass'];
+					$machine = httpPrefix().USERS_PKG_URL.'confirm.php';
+					// Send the mail
+					$gBitSmarty->assign('mail_machine',$machine);
+					$gBitSmarty->assign('mailUserId',$newUser->mUserId);
+					$gBitSmarty->assign('mailProvPass',$apass);
+					$mail_data = $gBitSmarty->fetch('bitpackage:users/admin_validation_mail.tpl');
+					mail($userRecord["email"], $siteName.' - '.tra('Your registration information'),$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+					$gBitSmarty->assign('showmsg','n');
+					
+					$newUser->mLogs['confirm'] = 'Validation email sent to ' . $userRecord['email'] . '.';
+				} elseif( !empty( $userRecord['password'] ) ) {
+					// Send the welcome mail
+					$gBitSmarty->assign( 'mailPassword',$userRecord['password'] );
+					$gBitSmarty->assign( 'mailEmail',$userRecord['email'] );
+					$mail_data = $gBitSmarty->fetch('bitpackage:users/admin_welcome_mail.tpl');
+					mail($userRecord["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+					
+					$newUser->mLogs['welcome'] = 'Welcome email sent to ' . $userRecord['email'] . '.';
+				}
+				$logHash['action_log']['title'] = $userRecord['login'];
+				$newUser->storeActionLog( $logHash );
+			}
+
 			$added++;
 		} else {
 			$discarded[$i] = implode( ',', $newUser->mErrors );
@@ -78,8 +111,6 @@ if (isset($_REQUEST["newuser"])) {
 	$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
 	$newUser = new $userClass();
 	// Check if the user already exists
-	// jht 2005-06-22_23:51:58 flag this user store as coming from admin page -- a kludge
-	$_REQUEST['admin_add'] = 1;
 	if( $gBitUser->userExists( array( 'email' => $_REQUEST['email'] ))) {
 		$feedback['error'] = 'The email address "'.$_REQUEST['email'].'" has already been registered.';
 	} elseif( $newUser->store( $_REQUEST ) ) {
