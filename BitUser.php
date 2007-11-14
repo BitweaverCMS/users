@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.160 2007/11/13 19:01:45 joasch Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.161 2007/11/14 15:30:34 joasch Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.160 2007/11/13 19:01:45 joasch Exp $
+ * $Id: BitUser.php,v 1.161 2007/11/14 15:30:34 joasch Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.160 $
+ * @version  $Revision: 1.161 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -674,7 +674,7 @@ class BitUser extends LibertyAttachable {
 			$this->mDb->StartTrans();
 			$pParamHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
 			if( !empty( $pParamHash['user_store'] ) && count( $pParamHash['user_store'] ) ) {
-				// lookup and set the default group for user
+				// lookup and asign the default group for user
 				$defaultGroups = BitPermUser::getDefaultGroup();
 				if( !empty( $defaultGroups ) ) {
 					$pParamHash['user_store']['default_group_id'] = key( $defaultGroups );
@@ -689,6 +689,11 @@ class BitUser extends LibertyAttachable {
 					$this->mUserId = $pParamHash['user_store']['user_id'];
 					$result = $this->mDb->associateInsert( BIT_DB_PREFIX.'users_users', $pParamHash['user_store'] );
 				}
+				// make sure user is added into the default group map
+				if( !empty( $pParamHash['user_store']['default_group_id'] ) ) {
+					BitPermUser::addUserToGroup( $pParamHash['user_store']['user_id'],$pParamHash['user_store']['default_group_id'] );
+				}
+
 			}
 			// Prevent liberty from assuming ANONYMOUS_USER_ID while storing
 			$pParamHash['user_id'] = $this->mUserId;

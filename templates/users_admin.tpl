@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.8 2007/11/13 19:01:45 joasch Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.9 2007/11/14 15:30:34 joasch Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -89,6 +89,30 @@
 						{forminput}
 							<input id="genepass" type="text" />
 							{formhelp note="You can use this link to create a random password. Make sure you pass the information on to the user."}
+						{/forminput}
+					</div>
+
+					<div class="row">
+						{formlabel label="Validate user by email" for="admin_verify_user"}
+						{forminput}
+							<input type="checkbox" name="admin_verify_user" id="admin_verify_user" />
+							{formhelp note="This will email the user a validation url with a temporary one time password. On validation the user is forced to choose a new password."}
+						{/forminput}
+					</div>
+
+					<div class="row">
+						{formlabel label="Validate email address" for="admin_verify_email"}
+						{forminput}
+							<input type="checkbox" name="admin_verify_email" id="admin_verify_email" />
+							{formhelp note="This feature should be used only when you need the maximum security and should be used with discretion. If a visitor's email server is not responding, they will not be able to register. You also must have a valid sender email to use this feature."}
+						{/forminput}
+					</div>
+
+					<div class="row">
+						{formlabel label="Don't email added user" for="admin_noemail_user"}
+						{forminput}
+							<input type="checkbox" name="admin_noemail_user" id="admin_noemail_user" />
+							{formhelp note="If you for some reason don't want to email the added user the login and password, or validation url."}
 						{/forminput}
 					</div>
 
