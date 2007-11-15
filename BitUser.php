@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.161 2007/11/14 15:30:34 joasch Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.162 2007/11/15 21:01:43 joasch Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.161 2007/11/14 15:30:34 joasch Exp $
+ * $Id: BitUser.php,v 1.162 2007/11/15 21:01:43 joasch Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.161 $
+ * @version  $Revision: 1.162 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -291,7 +291,7 @@ class BitUser extends LibertyAttachable {
 	}
 
 	function verify( &$pParamHash ) {
-		global $gBitSystem;
+		global $gBitSystem, $gBitUser;
 
 		trim_array( $pParamHash );
 
@@ -317,7 +317,8 @@ class BitUser extends LibertyAttachable {
 			// LOWER CASE all emails
 			$pParamHash['email'] = strtolower( $pParamHash['email'] );
 			// jht 2006-08-05 08:32:28 -1000 allow override from admin add
-			if( ( !empty($pParamHash['admin_add']) && $pParamHash['admin_add'] ) || $this->verifyEmail( $pParamHash['email'] ) ) {
+			// yettyn 2007-11-15 updated to use class call for permission check.
+			if( $gBitUser->hasPermission( 'p_users_admin' ) || $this->verifyEmail( $pParamHash['email'] ) ) {
 				$pParamHash['user_store']['email'] = strtolower( substr( $pParamHash['email'], 0, 200 ) );
 			}
 		}
@@ -333,9 +334,7 @@ class BitUser extends LibertyAttachable {
 			if( empty( $pParamHash['email'] ) ) {
 				$this->mErrors['email'] = tra( 'You must enter your email address' );
 			}
-			// jht 2005-06-22_23:51:58 $pParamHash['admin_add'] is set on adds from admin page - a kludge
-			// that should be fixed in some better way.
-			if(empty($pParamHash['admin_add']) && $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
+			if( !$gBitUser->hasPermission( 'p_users_admin' ) && $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 				$pParamHash['user_store']['provpass'] = md5(BitSystem::genPass());
 				$pParamHash['pass_due'] = 0;
 			} elseif( empty( $pParamHash['password'] ) ) {
