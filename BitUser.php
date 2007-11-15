@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.162 2007/11/15 21:01:43 joasch Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.163 2007/11/15 21:12:01 joasch Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.162 2007/11/15 21:01:43 joasch Exp $
+ * $Id: BitUser.php,v 1.163 2007/11/15 21:12:01 joasch Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.162 $
+ * @version  $Revision: 1.163 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -306,7 +306,7 @@ class BitUser extends LibertyAttachable {
 				$this->mErrors['login'] = tra( "Your username can only contain numbers, characters, underscores and hyphens." );
 			} else {
 				// LOWER CASE all logins
-				$pParamHash['login'] = $pParamHash['login'];
+				$pParamHash['login'] = strtolower( $pParamHash['login'] );
 				$pParamHash['user_store']['login'] = $pParamHash['login'];
 			}
 		}
