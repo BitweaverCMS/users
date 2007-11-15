@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.163 2007/11/15 21:12:01 joasch Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.164 2007/11/15 22:56:11 joasch Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.163 2007/11/15 21:12:01 joasch Exp $
+ * $Id: BitUser.php,v 1.164 2007/11/15 22:56:11 joasch Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.163 $
+ * @version  $Revision: 1.164 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -291,14 +291,10 @@ class BitUser extends LibertyAttachable {
 	}
 
 	function verify( &$pParamHash ) {
-		global $gBitSystem, $gBitUser;
+		global $gBitSystem;
 
 		trim_array( $pParamHash );
 
-		// perhaps someone is importing users and *knows* what they are doing
-		if( @$this->verifyId( $pParamHash['user_id'] ) ) {
-			$pParamHash['user_store']['user_id'] = $pParamHash['user_id'];
-		}
 		if( !empty( $pParamHash['login'] ) ) {
 			if( $this->userExists( array( 'login' => $pParamHash['login'] ) ) ) {
 				$this->mErrors['login'] = 'The username "'.$pParamHash['login'].'" is already in use';
@@ -316,9 +312,7 @@ class BitUser extends LibertyAttachable {
 		if( !empty( $pParamHash['email'] ) ) {
 			// LOWER CASE all emails
 			$pParamHash['email'] = strtolower( $pParamHash['email'] );
-			// jht 2006-08-05 08:32:28 -1000 allow override from admin add
-			// yettyn 2007-11-15 updated to use class call for permission check.
-			if( $gBitUser->hasPermission( 'p_users_admin' ) || $this->verifyEmail( $pParamHash['email'] ) ) {
+			if( $this->verifyEmail( $pParamHash['email'] ) ) {
 				$pParamHash['user_store']['email'] = strtolower( substr( $pParamHash['email'], 0, 200 ) );
 			}
 		}
@@ -334,7 +328,7 @@ class BitUser extends LibertyAttachable {
 			if( empty( $pParamHash['email'] ) ) {
 				$this->mErrors['email'] = tra( 'You must enter your email address' );
 			}
-			if( !$gBitUser->hasPermission( 'p_users_admin' ) && $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
+			if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 				$pParamHash['user_store']['provpass'] = md5(BitSystem::genPass());
 				$pParamHash['pass_due'] = 0;
 			} elseif( empty( $pParamHash['password'] ) ) {
