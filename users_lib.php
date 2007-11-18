@@ -1,5 +1,13 @@
 <?php
+/**
+ * @version $Header: /cvsroot/bitweaver/_bit_users/users_lib.php,v 1.2 2007/11/18 12:00:19 lsces Exp $
+ * @package users
+ * @subpackage functions
+ */
 
+/**
+ * users_admin_email_user
+ */
 function users_admin_email_user( &$pParamHash ) {
 	global $gBitSmarty, $gBitSystem;
 
