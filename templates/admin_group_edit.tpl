@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.20 2007/10/10 18:07:19 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.21 2007/11/18 05:43:25 spiderr Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -118,6 +118,7 @@
 									<th>&nbsp;</th>
 									<th>{smartlink ititle="Name" isort="up.perm_name" group_id=$groupInfo.group_id offset=$offset package=$smarty.request.package}</th>
 									<th>{smartlink ititle="Package" isort=package group_id=$groupInfo.group_id offset=$offset package=$smarty.request.package}</th>
+									<th>{smartlink ititle="User Class" isort=perm_level group_id=$groupInfo.level offset=$offset package=$smarty.request.level}</th>
 									<th>{smartlink ititle="Description" isort="up.perm_desc" group_id=$groupInfo.group_id offset=$offset package=$smarty.request.package}</th>
 								</tr>
 								{foreach key=permName item=perm from=$allPerms}
@@ -125,6 +126,7 @@
 										<td><input type="checkbox" id="{$permName}" name="perm[{$permName}]" {if $groupInfo.perms.$permName} checked="checked"{/if} /></td>
 										<td><label for="{$permName}">{$permName}</label></td>
 										<td>{tr}{$perm.package}{/tr}</td>
+										<td>{tr}{$perm.perm_level}{/tr}</td>
 										<td>{tr}{$perm.perm_desc}{/tr}</td>
 									</tr>
 								{/foreach}
