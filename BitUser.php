@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.164 2007/11/15 22:56:11 joasch Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.165 2007/11/28 19:14:42 joasch Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.164 2007/11/15 22:56:11 joasch Exp $
+ * $Id: BitUser.php,v 1.165 2007/11/28 19:14:42 joasch Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.164 $
+ * @version  $Revision: 1.165 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -295,6 +295,11 @@ class BitUser extends LibertyAttachable {
 
 		trim_array( $pParamHash );
 
+		// DO NOT REMOVE - to allow specific setting of the user_id during the first store.
+		// used by ROOT_USER_ID or ANONYMOUS_USER_ID during install. 	 
+		if( @$this->verifyId( $pParamHash['user_id'] ) ) { 	 
+			$pParamHash['user_store']['user_id'] = $pParamHash['user_id']; 	 
+		} 	 
 		if( !empty( $pParamHash['login'] ) ) {
 			if( $this->userExists( array( 'login' => $pParamHash['login'] ) ) ) {
 				$this->mErrors['login'] = 'The username "'.$pParamHash['login'].'" is already in use';
