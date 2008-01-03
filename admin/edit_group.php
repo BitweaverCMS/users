@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.34 2007/10/10 18:07:19 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.35 2008/01/03 17:43:08 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -68,14 +68,12 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 
 //	$mid = 'bitpackage:users/admin_groups_list.tpl';
 } elseif( isset( $_REQUEST['updateperms'] )) {
-	if( !empty( $_REQUEST['perm'] )) {
-		foreach( array_keys( $allPerms ) as $perm ) {
-			if( !empty( $_REQUEST['perm'][$perm] )) {
-				$gBitUser->assignPermissionToGroup( $perm, $_REQUEST['group_id'] );
-			} else {
-				// we have a selected perm that is now UNselected
-				$gBitUser->removePermissionFromGroup( $perm, $_REQUEST['group_id'] );
-			}
+	foreach( array_keys( $allPerms ) as $perm ) {
+		if( !empty( $_REQUEST['perm'][$perm] )) {
+			$gBitUser->assignPermissionToGroup( $perm, $_REQUEST['group_id'] );
+		} else {
+			// we have a selected perm that is now UNselected
+			$gBitUser->removePermissionFromGroup( $perm, $_REQUEST['group_id'] );
 		}
 	}
 	// let's reload just to be safe.
