@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/edit_personal_page.tpl,v 1.3 2007/07/14 14:52:16 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/edit_personal_page.tpl,v 1.4 2008/01/31 19:38:56 nickpalmer Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -136,7 +136,7 @@
 						</div>
 
 						{if $gBitSystem->isFeatureActive( 'wiki_attachments' )}
-							{include file="bitpackage:liberty/edit_storage_list.tpl"}
+							{include file="bitpackage:liberty/edit_storage_list.tpl" primary_label=Avatar}
 						{/if}
 					{/legend}
 				{/jstab}
@@ -146,7 +146,7 @@
 				{if $gBitSystem->isFeatureActive( 'wiki_attachments' ) && $show_attachments eq 'y' && $gBitUser->hasPermission('p_liberty_attach_attachments')}
 					{jstab title="Attachments"}
 						{legend legend="Attachments"}
-							{include file="bitpackage:liberty/edit_storage.tpl"}
+							{include file="bitpackage:liberty/edit_storage.tpl" primary_label=Avatar}
 						{/legend}
 					{/jstab}
 				{/if}

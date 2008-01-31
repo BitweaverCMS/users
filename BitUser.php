@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.165 2007/11/28 19:14:42 joasch Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.166 2008/01/31 19:38:56 nickpalmer Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.165 2007/11/28 19:14:42 joasch Exp $
+ * $Id: BitUser.php,v 1.166 2008/01/31 19:38:56 nickpalmer Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.165 $
+ * @version  $Revision: 1.166 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -132,6 +132,8 @@ class BitUser extends LibertyAttachable {
 				unset( $this->mInfo['user_password'] );
 				unset( $this->mInfo['hash'] );
 				$this->loadPreferences();
+				// Load attachments
+				LibertyAttachable::load();
 				if( $this->getPreference( 'users_country' ) ) {
 					$this->setPreference( 'flag', $this->getPreference( 'users_country' ) );
 					$this->setPreference( 'users_country', str_replace( '_', ' ', $this->getPreference( 'users_country' ) ) );
@@ -636,7 +638,7 @@ class BitUser extends LibertyAttachable {
 			}
 			// Prevent liberty from assuming ANONYMOUS_USER_ID while storing
 			$pParamHash['user_id'] = $this->mUserId;
-			if( LibertyContent::store( $pParamHash ) ) {
+			if( LibertyAttachable::store( $pParamHash ) ) {
 				if( empty( $this->mInfo['content_id'] ) || ($pParamHash['content_id'] != $this->mInfo['content_id']) ) {
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `content_id`=? WHERE `user_id`=?";
 					$result = $this->mDb->query( $query, array( $pParamHash['content_id'], $this->mUserId ) );
@@ -695,7 +697,7 @@ class BitUser extends LibertyAttachable {
 			}
 			// Prevent liberty from assuming ANONYMOUS_USER_ID while storing
 			$pParamHash['user_id'] = $this->mUserId;
-			if( LibertyContent::store( $pParamHash ) ) {
+			if( LibertyAttachable::store( $pParamHash ) ) {
 				if( empty( $this->mInfo['content_id'] ) || ($pParamHash['content_id'] != $this->mInfo['content_id']) ) {
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `content_id`=? WHERE `user_id`=?";
 					$result = $this->mDb->query( $query, array( $pParamHash['content_id'], $this->mUserId ) );
