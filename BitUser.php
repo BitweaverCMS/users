@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.166 2008/01/31 19:38:56 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.167 2008/02/02 19:44:16 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.166 2008/01/31 19:38:56 nickpalmer Exp $
+ * $Id: BitUser.php,v 1.167 2008/02/02 19:44:16 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.166 $
+ * @version  $Revision: 1.167 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -896,14 +896,7 @@ class BitUser extends LibertyAttachable {
 				$result = $this->mDb->query( $query, array( $this->mUserId ) );
 			}
 
-			// we need to get the content_id of the user to nuke all the prefs that have been stored
-			$query = "DELETE FROM `".BIT_DB_PREFIX."liberty_content_prefs` WHERE `content_id` = ?";
-			$result = $this->mDb->query( $query, array( $this->mContentId ) );
-
-			// we need to nuke the content record that relies on users_users table for secondary content
-			$query = "DELETE FROM `".BIT_DB_PREFIX."liberty_content` WHERE `content_id` = ?";
-			$result = $this->mDb->query( $query, array( $this->mContentId ) );
-			$this->mDb->CompleteTrans();
+			parent::expunge();
 
 			$logHash['action_log']['title'] = $this->mInfo['login'];
 			$this->mLogs['user_del'] = 'User deleted';
