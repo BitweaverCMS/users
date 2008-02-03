@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.167 2008/02/02 19:44:16 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.168 2008/02/03 14:22:36 nickpalmer Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.167 2008/02/02 19:44:16 spiderr Exp $
+ * $Id: BitUser.php,v 1.168 2008/02/03 14:22:36 nickpalmer Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.167 $
+ * @version  $Revision: 1.168 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1920,7 +1920,8 @@ class BitUser extends LibertyAttachable {
 		while( $res = $result->fetchRow() ) {
 			if( !empty($res['avatar_storage_path'] ) ) {
 				$res['avatar_url'] = $res['avatar_storage_path'];
-				$res['thumbnail_url'] = liberty_fetch_thumbnail_url( $res['avatar_url'], 'small' );
+				/* TODO: Make this a preference in the package */
+				$res['thumbnail_url'] = liberty_fetch_thumbnail_url( $res['avatar_url'], 'avatar' );
 			}
 			$res["groups"] = $this->getGroups( $res['user_id'] );
 			array_push( $ret, $res );
@@ -1931,6 +1932,8 @@ class BitUser extends LibertyAttachable {
 		$pParamHash["cant"] = $this->mDb->getOne($query_cant,$bindvars);
 
 		LibertyContent::postGetList( $pParamHash );
+
+		return $ret;
 	}
 
 	function isSemaphoreSet( $pSemName, $pLimit ) {
