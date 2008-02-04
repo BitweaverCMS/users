@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.168 2008/02/03 14:22:36 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.169 2008/02/04 21:50:39 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.168 2008/02/03 14:22:36 nickpalmer Exp $
+ * $Id: BitUser.php,v 1.169 2008/02/04 21:50:39 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.168 $
+ * @version  $Revision: 1.169 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -901,7 +901,7 @@ class BitUser extends LibertyAttachable {
 			$logHash['action_log']['title'] = $this->mInfo['login'];
 			$this->mLogs['user_del'] = 'User deleted';
 			$this->storeActionLog( $logHash );
-
+			$this->mDb->CompleteTrans();
 			return TRUE;
 		} else {
 			$this->mDb->RollbackTrans();
