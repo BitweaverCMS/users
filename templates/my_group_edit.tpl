@@ -1,6 +1,5 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_group_edit.tpl,v 1.6 2007/06/14 11:26:44 nickpalmer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_group_edit.tpl,v 1.7 2008/02/09 23:44:00 wjames5 Exp $ *}
 {strip}
-{debug}
 <div class="floaticon">
 	<a href="{$smarty.const.USERS_PKG_URL}my_groups.php">{tr}&laquo; Group List{/tr}</a> 
 	{bithelp}
