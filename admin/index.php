@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.23 2007/11/15 19:27:20 joasch Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.24 2008/02/14 18:49:49 wjames5 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -89,23 +89,55 @@ if( isset( $_REQUEST["action"] ) ) {
 			);
 			$gBitSystem->confirmDialog( $formHash, $msgHash );
 		}
-	} elseif( $_REQUEST["action"] == 'delete' ) {
+	} elseif( $_REQUEST["action"] == 'delete' ||  $_REQUEST["action"] == 'ban' ||  $_REQUEST["action"] == 'unban'  ) {
 		$gBitUser->verifyTicket();
 		$formHash['user_id'] = $_REQUEST['user_id'];
 		$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST["user_id"] ) );
 		if( !empty( $userInfo['user_id'] ) ) {
 			if( isset( $_REQUEST["confirm"] ) ) {
 				$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
-				$expungeUser = new $userClass( $_REQUEST["user_id"] );
-				if( $expungeUser->load() && $expungeUser->expunge() ) {
-					$feedback['success'][] = tra( 'User deleted' )." <strong>{$userInfo['real_name']} ({$userInfo['login']})</strong>";
+				$reqUser = new $userClass( $_REQUEST["user_id"] );
+				switch(  $_REQUEST["action"] ){
+					case 'delete':
+						if( $reqUser->load() && $reqUser->expunge() ) {
+							$feedback['success'][] = tra( 'User deleted' )." <strong>{$userInfo['real_name']} ({$userInfo['login']})</strong>";
+						}
+						break;
+					case 'ban':
+						if( $reqUser->load() && $reqUser->ban() ) {
+							$feedback['success'][] = tra( 'User banned' )." <strong>{$userInfo['real_name']} ({$userInfo['login']})</strong>";
+						}
+						break;
+					case 'unban':
+						if( $reqUser->load() && $reqUser->unban() ) {
+							$feedback['success'][] = tra( 'User restored' )." <strong>{$userInfo['real_name']} ({$userInfo['login']})</strong>";
+						}
+						break;
 				}
 			} else {
-				$gBitSystem->setBrowserTitle( 'Delete user' );
-				$msgHash = array(
-					'confirm_item' => tra( 'Are you sure you want to remove the user?' ),
-					'warning' => tra( 'This will permentally delete the user' )." <strong>$userInfo[real_name] ($userInfo[login])</strong>",
-				);
+				switch( $_REQUEST["action"] ){
+					case 'delete':
+						$gBitSystem->setBrowserTitle( tra( 'Delete user' ) );
+						$msgHash = array(
+							'confirm_item' => tra( 'Are you sure you want to remove the user?' ),
+							'warning' => tra( 'This will permentally delete the user' )." <strong>$userInfo[real_name] ($userInfo[login])</strong>",
+						);
+						break;
+					case 'ban':
+						$gBitSystem->setBrowserTitle( tra( 'Ban user' ) );
+						$msgHash = array(
+							'confirm_item' => tra( 'Are you sure you want to ban this user?' ),
+							'warning' => tra( 'This will suspend the account for user' )." <strong>$userInfo[real_name] ($userInfo[login])</strong>",
+						);
+						break;
+					case 'unban':
+						$gBitSystem->setBrowserTitle( tra( 'Unban user' ) );
+						$msgHash = array(
+							'confirm_item' => tra( 'Are you sure you want to unban this user?' ),
+							'warning' => tra( 'This will restore the account for user' )." <strong>$userInfo[real_name] ($userInfo[login])</strong>",
+						);
+						break;
+				}
 				$gBitSystem->confirmDialog( $formHash,$msgHash );
 			}
 		} else {

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.43 2007/07/11 06:51:34 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.44 2008/02/14 18:49:49 wjames5 Exp $
  * @package users
  */
 global $gBitDbType, $gBitDbHost, $gBitDbUser, $gBitDbPassword, $gBitDbName, $gBitThemes;
@@ -183,4 +183,5 @@ if( $gBitUser->isValid() && ( $gBitUser->isRegistered() || !$gBitSystem->isFeatu
 }
 
 require_once( USERS_PKG_PATH.'BaseAuth.php' );
+
 ?>

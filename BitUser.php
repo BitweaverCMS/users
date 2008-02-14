@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.170 2008/02/13 00:56:46 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.171 2008/02/14 18:49:49 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.170 2008/02/13 00:56:46 spiderr Exp $
+ * $Id: BitUser.php,v 1.171 2008/02/14 18:49:49 wjames5 Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.170 $
+ * @version  $Revision: 1.171 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -908,6 +908,24 @@ class BitUser extends LibertyAttachable {
 			$this->mDb->RollbackTrans();
 			$gBitSystem->fatalError( tra( 'The anonymous user cannot be deleted' ) );
 		}
+	}
+
+	// sets the user account status to -201 suspended
+	function ban(){
+		global $gBitSystem;
+		if( $this->mUserId == ANONYMOUS_USER_ID || $this->mUserId == ROOT_USER_ID || $this->isAdmin()) {
+			$gBitSystem->fatalError( tra( 'You can not ban user'." ".$this->mInfo['login'] ) );
+		}else{
+			$this->storeStatus( -201 );
+			return TRUE;
+		}
+	}
+
+	// unban the user
+	function unban(){
+		global $gBitSystem;
+		$this->storeStatus( 50 );
+		return TRUE;
 	}
 
 	function genPass( $pLength=NULL ) {
@@ -1906,7 +1924,7 @@ class BitUser extends LibertyAttachable {
 			$mid = '';
 			$bindvars = array();
 		}
-		$query = "SELECT uu.*, tf_ava.`storage_path` AS `avatar_storage_path`
+		$query = "SELECT uu.*, lc.`content_status_id`, tf_ava.`storage_path` AS `avatar_storage_path`
 				FROM `".BIT_DB_PREFIX."users_users` uu
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (uu.`content_id`=lc.`content_id`)
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON ( lc.`content_id` = lch.`content_id` )
