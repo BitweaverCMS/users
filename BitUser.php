@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.171 2008/02/14 18:49:49 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.172 2008/02/18 22:44:44 nickpalmer Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.171 2008/02/14 18:49:49 wjames5 Exp $
+ * $Id: BitUser.php,v 1.172 2008/02/18 22:44:44 nickpalmer Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.171 $
+ * @version  $Revision: 1.172 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -638,6 +638,11 @@ class BitUser extends LibertyAttachable {
 			}
 			// Prevent liberty from assuming ANONYMOUS_USER_ID while storing
 			$pParamHash['user_id'] = $this->mUserId;
+			// Don't let LA snarf these now so we can do extra things.
+			$pParamHash['_files_override'] = $_FILES;
+			unset($pParamHash['_files_override']['fPortraitFile']);
+			unset($pParamHash['_files_override']['fAvatarFile']);
+			unset($pParamHash['_files_override']['fLogoFile']);
 			if( LibertyAttachable::store( $pParamHash ) ) {
 				if( empty( $this->mInfo['content_id'] ) || ($pParamHash['content_id'] != $this->mInfo['content_id']) ) {
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `content_id`=? WHERE `user_id`=?";
