@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.172 2008/02/18 22:44:44 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.173 2008/02/19 16:00:07 nickpalmer Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.172 2008/02/18 22:44:44 nickpalmer Exp $
+ * $Id: BitUser.php,v 1.173 2008/02/19 16:00:07 nickpalmer Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.172 $
+ * @version  $Revision: 1.173 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1456,6 +1456,7 @@ class BitUser extends LibertyAttachable {
 		if( isset( $_FILES['fPortraitFile'] ) && is_uploaded_file( $_FILES['fPortraitFile']['tmp_name'] ) && $_FILES['fPortraitFile']['size'] > 0 ) {
 			$portraitHash = $pParamHash;
 			$portraitHash['upload'] = $_FILES['fPortraitFile'];
+			$portraitHash['user_id'] = $this->mUserId;
 			if( !$this->storePortrait( $portraitHash, ( !empty( $portraitHash['fAutoAvatar'] ) ? TRUE : FALSE ))) {
 			}
 		}
@@ -1464,6 +1465,7 @@ class BitUser extends LibertyAttachable {
 			$avatarHash = $pParamHash;
 			$avatarHash['upload'] = $_FILES['fAvatarFile'];
 			$avatarHash['upload']['source_file'] = $_FILES['fAvatarFile']['tmp_name'];
+			$avatarHash['user_id'] = $this->mUserId;
 			if( !$this->storeAvatar( $avatarHash )) {
 			}
 		}
@@ -1472,6 +1474,7 @@ class BitUser extends LibertyAttachable {
 			$logoHash = $pParamHash;
 			$logoHash['upload'] = $_FILES['fLogoFile'];
 			$logoHash['upload']['source_file'] = $_FILES['fLogoFile']['tmp_name'];
+			$logoHash['user_id'] = $this->mUserId;
 			if( !$this->storeLogo( $logoHash )) {
 			}
 		}
