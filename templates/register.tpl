@@ -34,6 +34,17 @@
 					<input type="submit" name="register" value="{tr}register{/tr}" />
 				</div>
 			{elseif $showmsg ne 'y'}
+				{if $gBitSystem->isFeatureActive('users_register_passcode')}
+					<div class="row">
+						{formfeedback error=$errors.passcode}
+						{formlabel label="Passcode to register" for="passcode"}
+						{forminput}
+							<input type="password" name="passcode" id="passcode" />{required}
+							{formhelp note="This is not your user password. It is a code required for registration. Contact your site administrator for details."}
+						{/forminput}
+					</div>
+				{/if}
+
 				{if $gBitSystem->isFeatureActive( 'reg_real_name' )}
 					<div class="row">
 						{formlabel label="Real name" for="real_name"}
@@ -63,17 +74,6 @@
 						<input type="text" size="50" name="email" id="email" value="{$reg.email}" />{required}
 					{/forminput}
 				</div>
-
-				{if $gBitSystem->isFeatureActive('users_register_passcode')}
-					<div class="row">
-						{formfeedback error=$errors.passcode}
-						{formlabel label="Passcode to register" for="passcode"}
-						{forminput}
-							<input type="password" name="passcode" id="passcode" />{required}
-							{formhelp note="This is not your user password, but the code required for registration."}
-						{/forminput}
-					</div>
-				{/if}
 
 				{if !$gBitSystem->isFeatureActive( 'users_validate_user' )}
 					<div class="row">
