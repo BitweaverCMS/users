@@ -1,8 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.25 2007/09/19 18:41:17 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.26 2008/03/22 19:07:43 jht001 Exp $
  *
- * $Id: index.php,v 1.25 2007/09/19 18:41:17 spiderr Exp $
+ * $Id: index.php,v 1.26 2008/03/22 19:07:43 jht001 Exp $
  * @package users
  * @subpackage functions
  */
@@ -53,6 +53,48 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 		$userHomeTitle = $gQueryUser->getDisplayName()."'s Homepage";
 	}
 	$browserTitle = $userHomeTitle;
+
+
+	if( $gBitSystem->verifyPermission( 'p_liberty_list_content' ) ) {
+		// some content specific offsets and pagination settings
+		if( !empty( $_REQUEST['sort_mode'] ) ) {
+			$content_sort_mode = $_REQUEST['sort_mode'];
+			$gBitSmarty->assign( 'sort_mode', $content_sort_mode );
+		}
+
+		$max_content = $gBitSystem->getConfig( 'max_records' );
+		$offset_content = !empty( $_REQUEST['offset'] ) ? $_REQUEST['offset'] : 0;
+		$gBitSmarty->assign( 'curPage', $page = !empty( $_REQUEST['page'] ) ? $_REQUEST['page'] : 1 );
+		$offset_content = ( $page - 1 ) * $gBitSystem->getConfig( 'max_records' );
+
+		// set the user_id to only display content viewing user
+		$_REQUEST['user_id'] = $gBitUser->mUserId;
+		$_REQUEST['user_id'] = $gQueryUserId;
+		$gBitSmarty->assign( 'user_id', $gQueryUserId);
+
+		// now that we have all the offsets, we can get the content list
+		include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
+
+		// calculate page number
+		$numPages = ceil( $contentList['cant'] / $gBitSystem->getConfig( 'max_records' ) );
+		$gBitSmarty->assign( 'numPages', $numPages );
+
+		//$gBitSmarty->assign_by_ref('offset', $offset);
+		$gBitSmarty->assign( 'contentSelect', $contentSelect );
+		$gBitSmarty->assign( 'contentTypes', $contentTypes );
+		$gBitSmarty->assign( 'contentList', $contentList['data'] );
+		$gBitSmarty->assign( 'contentCount', $contentList['cant'] );
+
+		// needed by pagination
+                $contentList['listInfo']['parameters']['content_type_guid'] = $contentSelect;
+		$contentList['listInfo']['parameters']['user_id'] = $gQueryUserId;
+                                
+		$gBitSmarty->assign( 'listInfo', $contentList['listInfo'] );
+		$gBitSmarty->assign( 'display_content_list', 1 );
+		// end of content listing
+	}
+
+
 
 	// need to load layout now that we can check for center pieces
 	$layoutHash['layout'] = $gQueryUser->getField( 'login' );

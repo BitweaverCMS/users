@@ -85,6 +85,14 @@
 
 					{include file="bitpackage:users/user_information_inc.tpl" userData=$gQueryUser}
 				{/jstab}
+
+                {if $display_content_list}
+                        {jstab title="Content List"}
+                                {include file="bitpackage:liberty/list_content_inc.tpl"}
+                        {/jstab}
+                {/if}
+
+
 			{/jstabs}
 		{/if}
 	</div><!-- end .body -->
