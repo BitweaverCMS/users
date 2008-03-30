@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.173 2008/02/19 16:00:07 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.174 2008/03/30 22:07:03 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.173 2008/02/19 16:00:07 nickpalmer Exp $
+ * $Id: BitUser.php,v 1.174 2008/03/30 22:07:03 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.173 $
+ * @version  $Revision: 1.174 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -919,7 +919,7 @@ class BitUser extends LibertyAttachable {
 	function ban(){
 		global $gBitSystem;
 		if( $this->mUserId == ANONYMOUS_USER_ID || $this->mUserId == ROOT_USER_ID || $this->isAdmin()) {
-			$gBitSystem->fatalError( tra( 'You can not ban user'." ".$this->mInfo['login'] ) );
+			$gBitSystem->fatalError( tra( 'You cannot ban the user' )." ".$this->mInfo['login'] );
 		}else{
 			$this->storeStatus( -201 );
 			return TRUE;
