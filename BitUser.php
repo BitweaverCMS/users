@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.174 2008/03/30 22:07:03 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.175 2008/03/30 23:28:29 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.174 2008/03/30 22:07:03 spiderr Exp $
+ * $Id: BitUser.php,v 1.175 2008/03/30 23:28:29 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.174 $
+ * @version  $Revision: 1.175 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1783,7 +1783,7 @@ class BitUser extends LibertyAttachable {
 	}
 
 	function getDisplayUrl( $pUserName=NULL, $pMixed=NULL ) {
-		if( empty( $pUserName ) && !empty( $this ) ) {
+		if( empty( $pUserName ) && !empty( $this ) && $this->isValid() ) {
 			$pUserName = $this->mUsername;
 		}
 		if( function_exists( 'override_user_url' ) ) {
