@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.176 2008/04/09 05:07:40 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.177 2008/05/06 08:27:15 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.176 2008/04/09 05:07:40 spiderr Exp $
+ * $Id: BitUser.php,v 1.177 2008/05/06 08:27:15 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.176 $
+ * @version  $Revision: 1.177 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1981,7 +1981,7 @@ class BitUser extends LibertyAttachable {
 		$result = $this->mDb->query($query,array( $pSemName, (int)$lim) );
 		$query = "SELECT uu.`login`, uu.`real_name`, uu.`email`, uu.`user_id`
 				  FROM `".BIT_DB_PREFIX."users_semaphores` ls INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id`=ls.`user_id`)
-				  WHERE `sem_name`=? AND ls.`user_id`!=?";
+				  WHERE `sem_name`=? AND ls.`user_id` <> ?";
 		if( $ret = $this->mDb->getRow( $query, array( $pSemName, (int)$userId ) ) ) {
 			$ret['nolink'] = TRUE;
 		}
