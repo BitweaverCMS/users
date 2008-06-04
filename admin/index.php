@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.24 2008/02/14 18:49:49 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.25 2008/06/04 19:21:44 wjames5 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -40,6 +40,11 @@ if( isset($_REQUEST["newuser"] ) ) {
 		if( $gBitUser->assumeUser( $userInfo["user_id"] ) ) {
 			header( 'Location: '.$gBitSystem->getDefaultPage() );
 			die;
+		}elseif( !empty( $gBitUser->mErrors ) ){
+			if ( !isset( $feedback['error'] ) ){
+				$feedback['error'] = array();
+			}
+			$feedback['error'] = array_merge( $feedback['error'], $gBitUser->mErrors ); 
 		}
 	} else {
 		$gBitSystem->setBrowserTitle( 'Assume User Identity' );
