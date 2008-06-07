@@ -11,41 +11,56 @@
 			<input type="hidden" name="package" value="{$smarty.request.package}" />
 
 			<p>
-			{smartlink ititle=All package=$packageKey}
-			{foreach from=$permPackages key=i item=packageKey}
-				{if $gBitSystem->isPackageActive($packageKey)}
-					&nbsp;&bull; {smartlink ititle=$gBitSystem->mPackages.$packageKey.name|default:$packageKey package=$packageKey}
-				{/if}
-			{/foreach}
+				{smartlink ititle=All package=$packageKey}
+				{foreach from=$permPackages key=i item=packageKey}
+					{if $gBitSystem->isPackageActive($packageKey)}
+						&nbsp;&bull; {smartlink ititle=$gBitSystem->mPackages.$packageKey.name|default:$packageKey package=$packageKey}
+					{/if}
+				{/foreach}
 			</p>
-			
+
 			<table class="data">
 				<caption>{tr}Available Permissions{/tr}</caption>
-				{capture assign=th}
+				{capture assign=theader}
 					<tr>
 						<th style="width:1%"></th>
 						<th>{tr}Permission{/tr}</th>
 						<th>{tr}Package{/tr}</th>
 						{foreach from=$allGroups item=group name=groups}
-							<th><abbr title="{$group.group_name}">{if $smarty.foreach.groups.total > 8}{$group.group_id}{else}{$group.group_name}{/if}</abbr></th>
+							<th{if $group.group_id lt 4} colspan="2"{/if}>
+								<abbr title="{$group.group_name}">{if $smarty.foreach.groups.total > 8}{$group.group_id}{else}{$group.group_name}{/if}</abbr>
+							</th>
 						{/foreach}
 					</tr>
 				{/capture}
-				{$th}
 				{foreach from=$allPerms item=perm key=p name=perms}
-					{if ($smarty.foreach.perms.iteration % 10) eq 0 and ($smarty.foreach.perms.total - $smarty.foreach.perms.iteration) gt 5}{$th}{/if}
+					{if $prev_package != $perm.package}
+						{$theader}
+						{assign var=prev_package value=$perm.package}
+					{/if}
 					<tr class="{cycle values="odd,even"}{if $unassignedPerms.$p} warning{/if}">
-						<td>{if $unassignedPerms.$p}{biticon iname=dialog-warning iexplian="Unassigned Permission"}{/if}</td>
+						<td>{if $unassignedPerms.$p}{biticon iname=dialog-warning iexplain="Unassigned Permission"}{/if}</td>
 						<td title="{$perm.perm_desc}"><abbr title="{$perm.perm_desc}">{$p}</abbr></td>
 						<td>{$perm.package}</td>
 						{foreach from=$allGroups item=group}
-							<td style="text-align:center;">
-								<input type="checkbox" value="{$p}" name="perms[{$group.group_id}][{$p}]" title="{$group.group_name}" {if $group.perms.$p}checked="checked"{/if}/>
+							<td style="text-align:right;">
+								<input id="{$p}{$group.group_id}" type="checkbox" value="{$p}" name="perms[{$group.group_id}][{$p}]" title="{$group.group_name}" {if $group.perms.$p}checked="checked"{/if}/>
 							</td>
+							{if $group.group_id lt 4}
+								<td style="text-align:left;">
+									{if $perm.perm_level == 'admin'}{assign var=id value=1}
+									{elseif $perm.perm_level == 'editors'}{assign var=id value=2}
+									{elseif $perm.perm_level == 'registered'}{assign var=id value=3}
+									{elseif $perm.perm_level == 'basic'}{assign var=id value=-1}{/if}
+									{if $id == $group.group_id}<label for="{$p}{$group.group_id}">{biticon iname=dialog-ok iexplain="Default"}</label>{/if}
+								</td>
+							{/if}
 						{/foreach}
 					</tr>
 				{/foreach}
 			</table>
+
+			<p class="formhelp">{tr}Default permissions set after installation are marked with:{/tr} {biticon iname=dialog-ok iexplain="Default"}</p>
 
 			<div class="submit">
 				<input type="submit" name="save" value="{tr}Apply Changes{/tr}" />
