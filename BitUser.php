@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.178 2008/05/17 14:43:46 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.179 2008/06/10 12:31:59 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.178 2008/05/17 14:43:46 squareing Exp $
+ * $Id: BitUser.php,v 1.179 2008/06/10 12:31:59 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.178 $
+ * @version  $Revision: 1.179 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1216,9 +1216,16 @@ class BitUser extends LibertyAttachable {
 	function getUserInfo( $pUserMixed ) {
 		$ret = NULL;
 		if( is_array( $pUserMixed ) ) {
+			$val =  current( $pUserMixed );
+			if( !is_numeric( $val ) ) {
+				$col = "UPPER( uu.`".key( $pUserMixed )."` ) ";
+				$val = strtoupper( $val );
+			} else {
+				$col = " uu.`".key( $pUserMixed )."` ";
+			}
 			$query = "SELECT  uu.* FROM `".BIT_DB_PREFIX."users_users` uu LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lc.`content_id`=uu.`content_id`)
-					  WHERE UPPER( uu.`".key( $pUserMixed )."` ) = ?";
-			$ret = $this->mDb->getRow( $query, array( strtoupper( current( $pUserMixed ) ) ) );
+					  WHERE $col = ?";
+			$ret = $this->mDb->getRow( $query, array( $val ) );
 		}
 		return $ret;
 	}
