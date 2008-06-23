@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.179 2008/06/10 12:31:59 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.180 2008/06/23 21:56:13 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.179 2008/06/10 12:31:59 spiderr Exp $
+ * $Id: BitUser.php,v 1.180 2008/06/23 21:56:13 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.179 $
+ * @version  $Revision: 1.180 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -122,8 +122,8 @@ class BitUser extends LibertyAttachable {
 				$this->mContentId = $this->mInfo['content_id'];
 				$this->mUsername = $this->mInfo['login'];
 				$this->mInfo['is_registered'] = $this->isRegistered();
-				$this->mInfo['avatar_url'] = liberty_fetch_thumbnail_url( $this->mInfo['avatar_storage_path'], 'avatar');
-				$this->mInfo['portrait_url'] = liberty_fetch_thumbnail_url( $this->mInfo['portrait_storage_path'], 'medium');
+				$this->mInfo['avatar_url']   = liberty_fetch_thumbnail_url( array( 'storage_path' => $this->mInfo['avatar_storage_path'],   'size' => 'avatar' ));
+				$this->mInfo['portrait_url'] = liberty_fetch_thumbnail_url( array( 'storage_path' => $this->mInfo['portrait_storage_path'], 'size' => 'meduim' ));
 				$this->mInfo['logo_url'] = (!empty($this->mInfo['logo_storage_path']) ? BIT_ROOT_URL.$this->mInfo['logo_storage_path'] : NULL);
 				$this->mInfo['avatar_path'] = (!empty($this->mInfo['avatar_storage_path']) ? BIT_ROOT_PATH.$this->mInfo['avatar_storage_path'] : NULL);
 				$this->mInfo['avatar_path'] = (!empty($this->mInfo['portrait_storage_path']) ? BIT_ROOT_PATH.$this->mInfo['portrait_storage_path']: NULL);
@@ -1952,7 +1952,10 @@ class BitUser extends LibertyAttachable {
 			if( !empty($res['avatar_storage_path'] ) ) {
 				$res['avatar_url'] = $res['avatar_storage_path'];
 				/* TODO: Make this a preference in the package */
-				$res['thumbnail_url'] = liberty_fetch_thumbnail_url( $res['avatar_url'], 'avatar' );
+				$res['thumbnail_url'] = liberty_fetch_thumbnail_url( array(
+					'storage_path' => $res['avatar_url'],
+					'size'         => 'avatar'
+				));
 			}
 			$res["groups"] = $this->getGroups( $res['user_id'] );
 			array_push( $ret, $res );
