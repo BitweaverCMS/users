@@ -1,8 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.29 2008/03/23 13:08:13 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.30 2008/06/25 22:21:28 spiderr Exp $
  *
- * $Id: index.php,v 1.29 2008/03/23 13:08:13 lsces Exp $
+ * $Id: index.php,v 1.30 2008/06/25 22:21:28 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -113,5 +113,5 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 }
 
 $gBitSmarty->assign( 'gBitLanguage', $gBitLanguage );
-$gBitSystem->display( $centerDisplay, $browserTitle );
+$gBitSystem->display( $centerDisplay, $browserTitle , array( 'display_mode' => 'display' ));
 ?>

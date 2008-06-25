@@ -3,13 +3,13 @@
  * assigned_modules
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.13 $
+ * @version  $Revision: 1.14 $
  * @package  users
  * @subpackage  functions
  * @copyright Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
  * @license Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
  */
-// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.13 2007/10/25 20:43:02 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.14 2008/06/25 22:21:27 spiderr Exp $
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Initialization
 
@@ -27,13 +27,13 @@ $gBitSystem->verifyPermission('p_tidbits_configure_modules');
 
 if( !$gBitUser->canCustomizeLayout() && !$gBitUser->canCustomizeTheme() ) {
 	$gBitSmarty->assign('msg', tra("This feature is disabled").": user layout");
-	$gBitSystem->display( 'error.tpl' );
+	$gBitSystem->display( 'error.tpl' , NULL, array( 'display_mode' => 'display' ));
 	die;
 }
 
 if (!$gBitUser->isRegistered()) {
 	$gBitSmarty->assign('msg', tra("Permission denied: You are not logged in"));
-	$gBitSystem->display( 'error.tpl' );
+	$gBitSystem->display( 'error.tpl' , NULL, array( 'display_mode' => 'display' ));
 	die;
 }
 
@@ -41,7 +41,7 @@ include_once(USERS_PKG_PATH.'lookup_user_inc.php');
 
 if ($gQueryUser->mUserId != $gBitUser->mUserId && !$gBitUser->object_has_permission($gBitUser->mUserId, $gQueryUser->mInfo['content_id'], 'bituser', 'p_users_admin')) {
 	$gBitSmarty->assign('msg', tra('You do not have permission to edit this user\'s theme'));
-	$gBitSystem->display('error.tpl');
+	$gBitSystem->display('error.tpl', NULL, array( 'display_mode' => 'display' ));
 	die;
 }
 
@@ -114,6 +114,6 @@ $gBitSmarty->assign_by_ref( 'layoutAreas', $layoutAreas );
 $gBitSmarty->assign_by_ref('modules', $modules);
 //print_r($modules);
 
-$gBitSystem->display( 'bitpackage:users/user_assigned_modules.tpl', 'Edit Layout');
+$gBitSystem->display( 'bitpackage:users/user_assigned_modules.tpl', 'Edit Layout', array( 'display_mode' => 'display' ));
 
 ?>

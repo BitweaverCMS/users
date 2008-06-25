@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.12 2007/11/09 10:54:19 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.13 2008/06/25 22:21:27 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: change_password.php,v 1.12 2007/11/09 10:54:19 squareing Exp $
+ * $Id: change_password.php,v 1.13 2008/06/25 22:21:27 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -74,6 +74,6 @@ if( isset( $_REQUEST["change"] )) {
 }
 
 // Display the template
-$gBitSystem->display( 'bitpackage:users/change_password.tpl', 'Change Password' );
+$gBitSystem->display( 'bitpackage:users/change_password.tpl', 'Change Password' , array( 'display_mode' => 'display' ));
 
 ?>

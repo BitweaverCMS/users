@@ -24,6 +24,6 @@
 
 	$gBitSmarty->assign_by_ref( 'listInfo', $listHash['listInfo'] );
 
-	$gBitSystem->display( 'bitpackage:users/user_activity.tpl', 'User Activity' );
+	$gBitSystem->display( 'bitpackage:users/user_activity.tpl', 'User Activity' , array( 'display_mode' => 'admin' ));
 
 ?>

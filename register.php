@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.34 2008/02/18 22:44:44 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.35 2008/06/25 22:21:28 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.34 2008/02/18 22:44:44 nickpalmer Exp $
+ * $Id: register.php,v 1.35 2008/06/25 22:21:28 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -175,6 +175,6 @@ $gBitSmarty->assign_by_ref( 'groupList', $groupList );
 	}
 	$gBitSmarty->assign_by_ref('packages',$packages );
 	
-$gBitSystem->display('bitpackage:users/register.tpl', 'Register' );
+$gBitSystem->display('bitpackage:users/register.tpl', 'Register' , array( 'display_mode' => 'display' ));
 
 ?>

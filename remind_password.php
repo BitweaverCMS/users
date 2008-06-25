@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.21 2007/02/09 15:28:53 phoenixandy Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.22 2008/06/25 22:21:28 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: remind_password.php,v 1.21 2007/02/09 15:28:53 phoenixandy Exp $
+ * $Id: remind_password.php,v 1.22 2008/06/25 22:21:28 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -59,5 +59,5 @@ if( $gBitUser->isRegistered() ) {
 	$gBitSmarty->assign('msg', $tmp);
 }
 // Display the template
-$gBitSystem->display( 'bitpackage:users/remind_password.tpl', 'Request New Password' );
+$gBitSystem->display( 'bitpackage:users/remind_password.tpl', 'Request New Password' , array( 'display_mode' => 'display' ));
 ?>

@@ -42,5 +42,5 @@ $gBitSmarty->assign( 'permPackages', $gBitUser->getPermissionPackages() );
 $gBitSmarty->assign( 'feedback', $feedback );
 $gBitSmarty->assign( 'contentWithPermissions', LibertyContent::getContentWithPermissionsList() );
 
-$gBitSystem->display( 'bitpackage:users/admin_permissions.tpl', tra( 'Permission Maintenance' ));
+$gBitSystem->display( 'bitpackage:users/admin_permissions.tpl', tra( 'Permission Maintenance' ), array( 'display_mode' => 'admin' ));
 ?>

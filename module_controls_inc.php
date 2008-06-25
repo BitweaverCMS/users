@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/module_controls_inc.php,v 1.6 2006/04/19 13:48:40 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/module_controls_inc.php,v 1.7 2008/06/25 22:21:28 spiderr Exp $
  * @package users
  * @subpackage functions
  *
@@ -10,7 +10,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: module_controls_inc.php,v 1.6 2006/04/19 13:48:40 squareing Exp $
+ * $Id: module_controls_inc.php,v 1.7 2008/06/25 22:21:28 spiderr Exp $
  */
 
 /**
@@ -22,17 +22,17 @@ $check_req = (isset($_REQUEST["mc_unassign"])
            || isset($_REQUEST["mc_move"]));
 if (!$gBitUser->hasPermission( 'p_tidbits_configure_modules' ) && $check_req) {
 	$gBitSmarty->assign('msg', tra("You dont have permission to use this feature"));
-	$gBitSystem->display( 'error.tpl' );
+	$gBitSystem->display( 'error.tpl' , NULL, array( 'display_mode' => 'display' ));
 	die;
 }
 if ($site_user_assigned_modules != 'y' && $check_req) {
 	$gBitSmarty->assign('msg', tra("This feature is disabled").": site_user_assigned_modules");
-	$gBitSystem->display( 'error.tpl' );
+	$gBitSystem->display( 'error.tpl' , NULL, array( 'display_mode' => 'display' ));
 	die;
 }
 if ( !$gBitUser->isRegistered() && $check_req) {
 	$gBitSmarty->assign('msg', tra("You must log in to use this feature"));
-	$gBitSystem->display( 'error.tpl' );
+	$gBitSystem->display( 'error.tpl' , NULL, array( 'display_mode' => 'display' ));
 	die;
 }
 $url = $_SERVER["REQUEST_URI"];

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_images.php,v 1.11 2007/09/26 09:24:22 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_images.php,v 1.12 2008/06/25 22:21:28 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_images.php,v 1.11 2007/09/26 09:24:22 squareing Exp $
+ * $Id: my_images.php,v 1.12 2008/06/25 22:21:28 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -52,5 +52,5 @@ if( !empty( $_REQUEST['fSubmitBio'] ) ) {
 // dunno why, but this fixes the bug. XOXO spiderr
 $gBitSmarty->assign_by_ref( 'gQueryUser', $gQueryUser );
 
-$gBitSystem->display( 'bitpackage:users/my_images.tpl', tra( 'Personal Images' ));
+$gBitSystem->display( 'bitpackage:users/my_images.tpl', tra( 'Personal Images' ), array( 'display_mode' => 'display' ));
 ?>

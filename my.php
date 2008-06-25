@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.17 2008/01/01 23:55:22 jht001 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.18 2008/06/25 22:21:28 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my.php,v 1.17 2008/01/01 23:55:22 jht001 Exp $
+ * $Id: my.php,v 1.18 2008/06/25 22:21:28 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -60,6 +60,6 @@ if( $gBitSystem->isFeatureActive( 'display_users_content_list' ) ) {
 	// end of content listing
 }
 
-$gBitSystem->display( 'bitpackage:users/my_bitweaver.tpl', 'My '.$gBitSystem->getConfig( 'site_title' ) );
+$gBitSystem->display( 'bitpackage:users/my_bitweaver.tpl', 'My '.$gBitSystem->getConfig( 'site_title' ) , array( 'display_mode' => 'display' ));
 
 ?>

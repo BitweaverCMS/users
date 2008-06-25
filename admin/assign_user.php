@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.11 2007/06/17 13:53:04 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/assign_user.php,v 1.12 2008/06/25 22:21:28 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -43,5 +43,5 @@ $gBitSmarty->assign('groups', $gBitUser->getAllGroups( $listHash ));
 $gBitSystem->setBrowserTitle( 'Edit User: '.$assignUser->mUsername );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:users/admin_assign_user.tpl');
+$gBitSystem->display( 'bitpackage:users/admin_assign_user.tpl', NULL, array( 'display_mode' => 'admin' ));
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/admin_levels.php,v 1.3 2007/06/17 12:42:48 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/admin/Attic/admin_levels.php,v 1.4 2008/06/25 22:21:28 spiderr Exp $
  * @package users
  */
 require_once( '../../bit_setup_inc.php' );
@@ -33,5 +33,5 @@ if( !empty( $_REQUEST['allper'] )) {
 $gBitSmarty->assign_by_ref( 'allPerms', $allPerms );
 $gBitSmarty->assign( 'levels', $gBitUser->getPermissionLevels() );
 
-$gBitSystem->display( 'bitpackage:users/admin_levels.tpl', tra( 'Edit permission levels' ));
+$gBitSystem->display( 'bitpackage:users/admin_levels.tpl', tra( 'Edit permission levels' ), array( 'display_mode' => 'admin' ));
 ?>

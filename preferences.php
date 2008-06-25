@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.51 2007/11/02 16:10:20 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.52 2008/06/25 22:21:28 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.51 2007/11/02 16:10:20 spiderr Exp $
+ * $Id: preferences.php,v 1.52 2008/06/25 22:21:28 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -249,5 +249,5 @@ $scramblingEmails = array(
 	scrambleEmail( $editUser->mInfo['email'], 'x' )
 );
 $gBitSmarty->assign_by_ref( 'scramblingEmails', $scramblingEmails );
-$gBitSystem->display( 'bitpackage:users/user_preferences.tpl', 'Edit User Preferences' );
+$gBitSystem->display( 'bitpackage:users/user_preferences.tpl', 'Edit User Preferences' , array( 'display_mode' => 'display' ));
 ?>

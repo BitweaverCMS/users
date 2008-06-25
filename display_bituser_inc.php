@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/display_bituser_inc.php,v 1.2 2005/06/28 07:46:23 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/display_bituser_inc.php,v 1.3 2008/06/25 22:21:28 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: display_bituser_inc.php,v 1.2 2005/06/28 07:46:23 spiderr Exp $
+ * $Id: display_bituser_inc.php,v 1.3 2008/06/25 22:21:28 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -20,6 +20,6 @@
 	// this first version is a bit incomplete, but at least things work now. - spiderr
 
 	include USERS_PKG_PATH.'templates/center_user_wiki_page.php';
-	$gBitSystem->display( 'bitpackage:users/center_user_wiki_page.tpl' );
+	$gBitSystem->display( 'bitpackage:users/center_user_wiki_page.tpl' , NULL, array( 'display_mode' => 'display' ));
 
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.35 2008/01/03 17:43:08 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.36 2008/06/25 22:21:28 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -161,5 +161,5 @@ $gBitSmarty->assign('successMsg',$successMsg);
 $gBitSmarty->assign('errorMsg',$errorMsg);
 
 // Display the template for group administration
-$gBitSystem->display( $mid );
+$gBitSystem->display( $mid , NULL, array( 'display_mode' => 'edit' ));
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.8 2006/04/11 17:52:11 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/theme.php,v 1.9 2008/06/25 22:21:28 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: theme.php,v 1.8 2006/04/11 17:52:11 squareing Exp $
+ * $Id: theme.php,v 1.9 2008/06/25 22:21:28 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -27,7 +27,7 @@ global $gBitUser, $gBitSystem;
 
 if (!$gBitUser->isRegistered()) {
 	$gBitSmarty->assign('msg', tra("Permission denied: You are not logged in"));
-	$gBitSystem->display( 'error.tpl' );
+	$gBitSystem->display( 'error.tpl' , NULL, array( 'display_mode' => 'display' ));
 	die;
 }
 
@@ -35,7 +35,7 @@ include_once(USERS_PKG_PATH.'lookup_user_inc.php');
 
 if ($gQueryUser->mUserId != $gBitUser->mUserId && !$gBitUser->object_has_permission($gBitUser->mUserId, $gQueryUser->mInfo['content_id'], 'bituser', 'p_users_admin')) {
 	$gBitSmarty->assign('msg', tra('You do not have permission to edit this user\'s theme'));
-	$gBitSystem->display('error.tpl');
+	$gBitSystem->display('error.tpl', NULL, array( 'display_mode' => 'display' ));
 	die;
 }
 
@@ -116,7 +116,7 @@ $gBitSmarty->assign_by_ref('usingCustomTheme', $usingCustomTheme);
 
 if( !$gBitUser->canCustomizeTheme() ) {
 	$gBitSmarty->assign('msg', tra("Feature disabled"));
-	$gBitSystem->display( 'error.tpl' );
+	$gBitSystem->display( 'error.tpl' , NULL, array( 'display_mode' => 'display' ));
 	die;
 }
 
@@ -130,7 +130,7 @@ $gBitSmarty->assign_by_ref('customCSSImageURL',$customCSSImageURL);
 if (!file_exists($customCSSFile)) {
 	if (!copy(THEMES_PKG_PATH.'/styles/basic/basic.css', $customCSSFile)) {
 		$gBitSmarty->assign('msg', tra("Unable to create a custom CSS file for you!"));
-		$gBitSystem->display( 'error.tpl' );
+		$gBitSystem->display( 'error.tpl' , NULL, array( 'display_mode' => 'display' ));
 		die;
 	}
 }
@@ -155,7 +155,7 @@ if ($usingCustomTheme) {
 
 		if (!$fp) {
 			$gBitSmarty->assign('msg', tra("You dont have permission to write the style sheet"));
-			$gBitSystem->display( 'error.tpl' );
+			$gBitSystem->display( 'error.tpl' , NULL, array( 'display_mode' => 'display' ));
 			die;
 		}
 
@@ -188,7 +188,7 @@ if ($usingCustomTheme) {
 
 		if (!$fp) {
 			$gBitSmarty->assign('msg', tra("You dont have permission to write the style sheet"));
-			$gBitSystem->display( 'error.tpl' );
+			$gBitSystem->display( 'error.tpl' , NULL, array( 'display_mode' => 'display' ));
 			die;
 		}
 
@@ -288,5 +288,5 @@ $gBitSmarty->assign_by_ref('themeImages',$themeImages);
 $gBitSmarty->assign('PHP_SELF', $_SERVER['PHP_SELF']);
 $gBitSmarty->assign_by_ref('gQueryUser', $gQueryUser);
 
-$gBitSystem->display( 'bitpackage:users/user_theme.tpl');
+$gBitSystem->display( 'bitpackage:users/user_theme.tpl', NULL, array( 'display_mode' => 'display' ));
 ?>

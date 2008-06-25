@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.17 2007/07/11 19:26:24 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.18 2008/06/25 22:21:28 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.17 2007/07/11 19:26:24 squareing Exp $
+ * $Id: my_groups.php,v 1.18 2008/06/25 22:21:28 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -228,5 +228,5 @@ if (empty($mid)) {
 }
 
 // Display the template for group administration
-$gBitSystem->display( $mid );
+$gBitSystem->display( $mid , NULL, array( 'display_mode' => 'display' ));
 ?>

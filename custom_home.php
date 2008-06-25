@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/custom_home.php,v 1.6 2006/04/19 17:11:19 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/custom_home.php,v 1.7 2008/06/25 22:21:28 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: custom_home.php,v 1.6 2006/04/19 17:11:19 spiderr Exp $
+ * $Id: custom_home.php,v 1.7 2008/06/25 22:21:28 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -35,5 +35,5 @@ print_r($b);
 */
 $gBitSystem->verifyFeature( 'users_custom_home' );
 // Display the template
-$gBitSystem->display( 'bitpackage:users/custom_home_2.tpl');
+$gBitSystem->display( 'bitpackage:users/custom_home_2.tpl', NULL, array( 'display_mode' => 'display' ));
 ?>

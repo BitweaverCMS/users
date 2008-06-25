@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/watches.php,v 1.6 2006/08/24 19:29:59 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/watches.php,v 1.7 2008/06/25 22:21:28 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: watches.php,v 1.6 2006/08/24 19:29:59 wjames5 Exp $
+ * $Id: watches.php,v 1.7 2008/06/25 22:21:28 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -20,7 +20,7 @@ include_once( '../bit_setup_inc.php' );
 $user = $gBitUser->mUserId;
 if (!$user) {
 	$gBitSmarty->assign('msg', tra("You must log in to use this feature"));
-	$gBitSystem->display( 'error.tpl' );
+	$gBitSystem->display( 'error.tpl' , NULL, array( 'display_mode' => 'display' ));
 	die;
 }
 
@@ -46,5 +46,5 @@ if (!isset($_REQUEST['event']))
 $watches = $gBitUser->getWatches( $_REQUEST['event'] );
 $gBitSmarty->assign('watches', $watches);
 
-$gBitSystem->display( 'bitpackage:users/user_watches.tpl');
+$gBitSystem->display( 'bitpackage:users/user_watches.tpl', NULL, array( 'display_mode' => 'display' ));
 ?>
