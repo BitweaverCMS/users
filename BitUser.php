@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.182 2008/06/27 10:43:49 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.183 2008/06/28 10:19:40 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.182 2008/06/27 10:43:49 squareing Exp $
+ * $Id: BitUser.php,v 1.183 2008/06/28 10:19:40 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.182 $
+ * @version  $Revision: 1.183 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1559,9 +1559,7 @@ class BitUser extends LibertyMime {
 			$pStorageHash['_files_override'][$pType]['attachment_id'] = !empty( $this->mInfo["{$pType}_attachment_id"] ) ? $this->mInfo["{$pType}_attachment_id"] : NULL;
 			if( LibertyMime::store( $pStorageHash )) {
 				$file = $pStorageHash['upload_store']['files'][$pType];
-				vd($file);
 				if( empty( $this->mInfo["{$pType}_attachment_id"] ) || $this->mInfo["{$pType}_attachment_id"] != $file['attachment_id'] ) {
-					vd('doing the db thing');
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `{$pType}_attachment_id` = ? WHERE `user_id`=?";
 					$result = $this->mDb->query( $query, array( $file['attachment_id'], $this->mUserId ) );
 					$this->mInfo["{$pType}_attachment_id"] = $file['attachment_id'];
