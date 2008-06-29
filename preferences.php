@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.52 2008/06/25 22:21:28 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.53 2008/06/29 08:00:18 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.52 2008/06/25 22:21:28 spiderr Exp $
+ * $Id: preferences.php,v 1.53 2008/06/29 08:00:18 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -34,8 +34,8 @@ if( !empty( $_REQUEST["view_user"] ) && $_REQUEST["view_user"] <> $gBitUser->mUs
 	$editUser = new $userClass( $_REQUEST["view_user"] );
 	$editUser->load( TRUE );
 	$gBitSmarty->assign('view_user', $_REQUEST["view_user"]);
-    $watches = $editUser->getWatches();
-    $gBitSmarty->assign('watches', $watches );
+	$watches = $editUser->getWatches();
+	$gBitSmarty->assign('watches', $watches );
 } else {
 	$gBitUser->load( TRUE );
 	$editUser = &$gBitUser;
@@ -128,7 +128,7 @@ if( isset( $_REQUEST["prefs"] )) {
 	}
 
 	if( $gBitSystem->isFeatureActive( 'users_change_language' )) {
-		$editUser->storePreference( 'bitlanguage', ($_REQUEST['bitlanguage'] != $gBitLanguage->mLanguage) ? $prefs['bitlanguage'] : NULL, LANGUAGES_PKG_NAME);
+		$editUser->storePreference( 'bitlanguage', ( $_REQUEST['bitlanguage'] != $gBitLanguage->mLanguage ) ? $_REQUEST['bitlanguage'] : NULL, LANGUAGES_PKG_NAME );
 	}
 
 	// toggles

@@ -86,7 +86,7 @@
 									{formhelp note="Pick your preferred site language."}
 								{/forminput}
 							</div>
-						 {/if}
+						{/if}
 
 						{foreach from=$customFields key=i item=field}
 							<div class="row">
