@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/users_rss.php,v 1.5 2007/11/18 12:00:19 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/users_rss.php,v 1.6 2008/06/30 19:29:17 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -8,6 +8,8 @@
 /**
  * Initialization
  */
+// ensure that we use absolute URLs everywhere
+$_REQUEST['uri_mode'] = TRUE;
 require_once( "../bit_setup_inc.php" );
 
 $gBitSystem->verifyPackage( 'rss' );
@@ -41,7 +43,7 @@ if( !$gBitUser->hasPermission( 'p_users_view_user_list' ) ) {
 		$item = new FeedItem();
 
 		$item->title = tra( "New user registration" ).": ".$feed['login'];
-		$item->link = BIT_BASE_URI.$gBitUser->getDisplayUrl( $feed['login'] );
+		$item->link = $gBitUser->getDisplayUrl( $feed['login'] );
 
 		$item->description = '';
 
@@ -51,7 +53,7 @@ if( !$gBitUser->hasPermission( 'p_users_view_user_list' ) ) {
 		if( !empty( $feed['real_name'] ) ) {
 			$item->description .= tra( "Real Name" ).": ".$feed['real_name'].'<br />';
 		}
-		$item->description .= tra( "Login" ).': <a href="'.BIT_BASE_URI.$gBitUser->getDisplayUrl( $feed['login'] ).'">'.$feed['login'].'</a><br />';
+		$item->description .= tra( "Login" ).': <a href="'.$gBitUser->getDisplayUrl( $feed['login'] ).'">'.$feed['login'].'</a><br />';
 		if( $gBitUser->hasPermission( 'p_users_admin' ) ) {
 			$item->description .= tra( "Email Address" ).': <a href="mailto:'.$feed['email'].'">'.$feed['email'].'</a><br />';
 		}
@@ -59,7 +61,7 @@ if( !$gBitUser->hasPermission( 'p_users_view_user_list' ) ) {
 		$item->description .= tra( "Member Since" ).": ".smarty_modifier_bit_short_datetime( $feed['registration_date'] ).'<br />';
 
 		$item->date = ( int )$feed['registration_date'];
-		$item->source = 'http://'.BIT_BASE_URI;
+		$item->source = BIT_BASE_URI;
 		$item->author = $_SERVER['HTTP_HOST'];
 
 		$item->descriptionTruncSize = $gBitSystem->getConfig( 'rssfeed_truncate', 5000 );
