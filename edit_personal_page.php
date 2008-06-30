@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.23 2008/06/25 22:47:36 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/edit_personal_page.php,v 1.24 2008/06/30 18:14:11 wjames5 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: edit_personal_page.php,v 1.23 2008/06/25 22:47:36 spiderr Exp $
+ * $Id: edit_personal_page.php,v 1.24 2008/06/30 18:14:11 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -21,6 +21,9 @@ require_once( '../bit_setup_inc.php' );
 // Check if the page has changed
 if (isset($_REQUEST["fSavePage"])) {
 	$gBitUser->store( $_REQUEST );
+	header( "Location:".USERS_PKG_URL."index.php?home=".$gBitUser->mUsername );
+	die;
+}elseif( isset($_REQUEST["fCancel"]) ){
 	header( "Location:".USERS_PKG_URL."index.php?home=".$gBitUser->mUsername );
 	die;
 }
