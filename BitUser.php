@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.183 2008/06/28 10:19:40 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.184 2008/07/01 16:01:46 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.183 2008/06/28 10:19:40 squareing Exp $
+ * $Id: BitUser.php,v 1.184 2008/07/01 16:01:46 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.183 $
+ * @version  $Revision: 1.184 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -285,11 +285,11 @@ class BitUser extends LibertyMime {
 		return FALSE;
 	}
 
-	function verifyTicket( $pFatalOnError=TRUE ) {
+	function verifyTicket( $pFatalOnError=TRUE, $pForceCheck=TRUE ) {
 		global $gBitSystem, $gBitUser;
 		$ret = FALSE;
-		if( !empty( $_REQUEST['tk'] ) ) {
-			if( !($ret = $_REQUEST['tk'] == $this->mTicket ) && $pFatalOnError ) {
+		if( $pForceCheck == TRUE || !empty( $_REQUEST['tk'] ) ) {
+			if( empty( $_REQUEST['tk'] ) || (!($ret = $_REQUEST['tk'] == $this->mTicket ) && $pFatalOnError) ) {
 				$userString = $gBitUser->isRegistered() ? "\nUSER ID: ".$gBitUser->mUserId.' ( '.$gBitUser->getField( 'email' ).' ) ' : '';
 				@error_log( tra( "Security Violation" )."$userString ".$_SERVER['REMOTE_ADDR']."\nURI: $_SERVER[REQUEST_URI] \nREFERER: $_SERVER[HTTP_REFERER] " );
 				$gBitSystem->fatalError( tra( "Security Violation" ));
