@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.26 2008/06/25 22:21:28 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.27 2008/07/02 19:21:57 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -63,8 +63,8 @@ if( isset($_REQUEST["newuser"] ) ) {
 if( isset( $_REQUEST["action"] ) ) {
 	$formHash['action'] = $_REQUEST['action'];
 	if( !empty( $_REQUEST['batch_user_ids'] ) && is_array( $_REQUEST['batch_user_ids'] ) ) {
-		$gBitUser->verifyTicket();
 		if( isset( $_REQUEST["confirm"] ) ) {
+			$gBitUser->verifyTicket();
 			$delUsers = $errDelUsers = "";
 			$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
 			foreach( $_REQUEST['batch_user_ids'] as $uid ) {
@@ -95,11 +95,11 @@ if( isset( $_REQUEST["action"] ) ) {
 			$gBitSystem->confirmDialog( $formHash, $msgHash );
 		}
 	} elseif( $_REQUEST["action"] == 'delete' ||  $_REQUEST["action"] == 'ban' ||  $_REQUEST["action"] == 'unban'  ) {
-		$gBitUser->verifyTicket();
 		$formHash['user_id'] = $_REQUEST['user_id'];
 		$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST["user_id"] ) );
 		if( !empty( $userInfo['user_id'] ) ) {
 			if( isset( $_REQUEST["confirm"] ) ) {
+				$gBitUser->verifyTicket();
 				$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
 				$reqUser = new $userClass( $_REQUEST["user_id"] );
 				switch(  $_REQUEST["action"] ){
