@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.185 2008/07/02 16:06:01 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.186 2008/07/03 15:43:33 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.185 2008/07/02 16:06:01 spiderr Exp $
+ * $Id: BitUser.php,v 1.186 2008/07/03 15:43:33 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.185 $
+ * @version  $Revision: 1.186 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -285,7 +285,7 @@ class BitUser extends LibertyMime {
 		return FALSE;
 	}
 
-	function verifyTicket( $pFatalOnError=TRUE, $pForceCheck=FALSE ) {
+	function verifyTicket( $pFatalOnError=TRUE, $pForceCheck=TRUE ) {
 		global $gBitSystem, $gBitUser;
 		$ret = FALSE;
 		if( $pForceCheck == TRUE || !empty( $_REQUEST['tk'] ) ) {
