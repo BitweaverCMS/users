@@ -1,7 +1,6 @@
 <?php
 require_once( '../../bit_setup_inc.php' );
 $gBitSystem->verifyPermission( 'p_admin' );
-$gBitUser->verifyTicket();
 
 $feedback = array();
 
@@ -15,6 +14,7 @@ $allPerms = $gBitUser->getGroupPermissions( $_REQUEST );
 
 // deal with assigning permissions to various groups
 if( !empty( $_REQUEST['save'] )) {
+	$gBitUser->verifyTicket();
 	foreach( array_keys( $allGroups ) as $groupId ) {
 		foreach( array_keys( $allPerms ) as $perm ) {
 			if( !empty( $_REQUEST['perms'][$groupId][$perm] )) {
