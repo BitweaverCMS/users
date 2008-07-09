@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.53 2008/06/29 08:00:18 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.54 2008/07/09 14:30:53 wjames5 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.53 2008/06/29 08:00:18 squareing Exp $
+ * $Id: preferences.php,v 1.54 2008/07/09 14:30:53 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -231,6 +231,7 @@ $gBitSmarty->assign( 'flags', $flags );
 $editUser->mInfo['users_homepage'] = $editUser->getPreference( 'users_homepage', '' );
 
 $gBitSmarty->assign( 'editUser', $editUser );
+$gBitSmarty->assign( 'gContent', $editUser ); // also assign to gContent to make services happy
 $gBitSmarty->assign( 'feedback', $feedback );
 
 /* This should come from BitDate->get_timezone_list but that seems to rely on a global from PEAR that does not exist. */
@@ -249,5 +250,8 @@ $scramblingEmails = array(
 	scrambleEmail( $editUser->mInfo['email'], 'x' )
 );
 $gBitSmarty->assign_by_ref( 'scramblingEmails', $scramblingEmails );
+
+// edit services
+$editUser->invokeServices( 'content_edit_function' );
 $gBitSystem->display( 'bitpackage:users/user_preferences.tpl', 'Edit User Preferences' , array( 'display_mode' => 'display' ));
 ?>
