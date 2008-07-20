@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.4 2007/06/17 13:53:05 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.5 2008/07/20 15:03:13 wolff_borg Exp $
  *
  * @package users
  */
@@ -11,7 +11,8 @@
 if (file_exists(UTIL_PKG_PATH."pear/Auth/Auth.php")) {
 	require_once (UTIL_PKG_PATH."pear/Auth/Auth.php");
 } else {
-	@include_once("Auth.php");
+// Giving errors: Fatal error: Cannot redeclare class ldapauth in \bitweaver\users\auth\ldap\Auth.php on line 23
+//	include_once("Auth.php");
 }
 
 /**
