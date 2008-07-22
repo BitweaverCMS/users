@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.186 2008/07/03 15:43:33 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.187 2008/07/22 10:26:14 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.186 2008/07/03 15:43:33 spiderr Exp $
+ * $Id: BitUser.php,v 1.187 2008/07/22 10:26:14 lsces Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.186 $
+ * @version  $Revision: 1.187 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1899,25 +1899,32 @@ class BitUser extends LibertyMime {
 		}
 
 		LibertyContent::prepGetList( $pParamHash );
+
+		$selectSql = $joinSql = $whereSql = '';
+		$bindVars = array();
+		array_push( $bindVars, 'bituser' );
+		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, NULL, $pParamHash );
+
 		$sort_mode = $this->mDb->convertSortmode($pParamHash['sort_mode']);
 		// Return an array of users indicating name, email, last changed pages, versions, last_login
 		if ( $pParamHash['find'] ) {
-			$mid = " where UPPER(uu.`login`) LIKE ? OR UPPER(uu.real_name) LIKE ? OR UPPER(uu.email) LIKE ? ";
-			$bindvars = array('%'.strtoupper( $pParamHash['find'] ).'%', '%'.strtoupper( $pParamHash['find'] ).'%', '%'.strtoupper( $pParamHash['find'] ).'%');
-		} else {
-			$mid = '';
-			$bindvars = array();
+			$whereSql = " AND UPPER(uu.`login`) LIKE ? OR UPPER(uu.real_name) LIKE ? OR UPPER(uu.email) LIKE ? ";
+			$bindVars[] = '%'.strtoupper( $pParamHash['find'] ).'%';
+			$bindVars[] = '%'.strtoupper( $pParamHash['find'] ).'%';
+			$bindVars[] = '%'.strtoupper( $pParamHash['find'] ).'%';
 		}
-		$query = "SELECT uu.*, lc.`content_status_id`, tf_ava.`storage_path` AS `avatar_storage_path`
+		$query = "SELECT uu.*, lc.`content_status_id`, tf_ava.`storage_path` AS `avatar_storage_path` $selectSql
 				FROM `".BIT_DB_PREFIX."users_users` uu
 					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (uu.`content_id`=lc.`content_id`)
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON ( lc.`content_id` = lch.`content_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
-					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` )
-				$mid ORDER BY $sort_mode";
-		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_users` uu $mid";
-		$result = $this->mDb->query($query, $bindvars, $pParamHash['max_records'], $pParamHash['offset']);
-
+					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` ) $joinSql
+					WHERE lc.`content_type_guid` = ? $whereSql ORDER BY $sort_mode";
+		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_users` uu 
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (uu.`content_id`=lc.`content_id`)
+					$joinSql
+					WHERE lc.`content_type_guid` = ? $whereSql";
+		$result = $this->mDb->query($query, $bindVars, $pParamHash['max_records'], $pParamHash['offset']);
 		$ret = array();
 		global $gBitSystem;
 		while( $res = $result->fetchRow() ) {
@@ -1935,7 +1942,7 @@ class BitUser extends LibertyMime {
 		$retval = array();
 		$pParamHash["data"] = $ret;
 
-		$pParamHash["cant"] = $this->mDb->getOne($query_cant,$bindvars);
+		$pParamHash["cant"] = $this->mDb->getOne($query_cant,$bindVars);
 
 		LibertyContent::postGetList( $pParamHash );
 
