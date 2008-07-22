@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.16 2008/02/20 10:48:58 nickpalmer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.17 2008/07/22 10:50:37 wolff_borg Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: validate.php,v 1.16 2008/02/20 10:48:58 nickpalmer Exp $
+ * $Id: validate.php,v 1.17 2008/07/22 10:50:37 wolff_borg Exp $
  * @package users
  * @subpackage functions
  */
@@ -29,7 +29,8 @@ if( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], 'logi
 	unset( $_SESSION['loginfrom'] );
 }
 
-$https_mode = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
+// Added check for IIS $_SERVER['HTTPS'] uses 'off' value - wolff_borg
+$https_mode = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off');
 if ($gBitSystem->isFeatureActive( 'site_https_login_required' ) && !$https_mode) {
 	$url = $gBitSystem->getConfig( 'site_https_domain' );
 	$site_https_port = $gBitSystem->getConfig('site_https_port', $site_https_port);
