@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.36 2008/06/25 22:21:28 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.37 2008/07/29 18:10:24 lsces Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -121,7 +121,7 @@ if( !empty( $_REQUEST['group_id'] ) || (!empty( $_REQUEST["action"] ) && $_REQUE
 /*
 	// get content and pass it on to the template
 	include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
-	foreach( $contentList['data'] as $cItem ) {
+	foreach( $contentList as $cItem ) {
 		$cList[$contentTypes[$cItem['content_type_guid']]][$cItem['content_id']] = $cItem['title'].' [id: '.$cItem['content_id'].']';
 	}
 	$gBitSmarty->assign( 'contentList', $cList );

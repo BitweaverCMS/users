@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.18 2008/06/25 22:21:28 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my.php,v 1.19 2008/07/29 18:10:24 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my.php,v 1.18 2008/06/25 22:21:28 spiderr Exp $
+ * $Id: my.php,v 1.19 2008/07/29 18:10:24 lsces Exp $
  * @package users
  * @subpackage functions
  */
@@ -48,15 +48,15 @@ if( $gBitSystem->isFeatureActive( 'display_users_content_list' ) ) {
 	include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
 
 	// calculate page number
-	$numPages = ceil( $contentList['cant'] / $gBitSystem->getConfig( 'max_records' ) );
+	$numPages = ceil( $contentListHash['cant'] / $gBitSystem->getConfig( 'max_records' ) );
 	$gBitSmarty->assign( 'numPages', $numPages );
 
 	//$gBitSmarty->assign_by_ref('offset', $offset);
 	$gBitSmarty->assign( 'contentSelect', $contentSelect );
 	$gBitSmarty->assign( 'contentTypes', $contentTypes );
-	$gBitSmarty->assign( 'contentList', $contentList['data'] );
-	$gBitSmarty->assign( 'contentCount', $contentList['cant'] );
-	$gBitSmarty->assign( 'listInfo', $contentList['listInfo'] );
+	$gBitSmarty->assign( 'contentList', $contentList );
+	$gBitSmarty->assign( 'contentCount', $contentListHash['cant'] );
+	$gBitSmarty->assign( 'listInfo', $contentListHash );
 	// end of content listing
 }
 

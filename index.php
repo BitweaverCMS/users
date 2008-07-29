@@ -1,8 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.30 2008/06/25 22:21:28 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.31 2008/07/29 18:10:24 lsces Exp $
  *
- * $Id: index.php,v 1.30 2008/06/25 22:21:28 spiderr Exp $
+ * $Id: index.php,v 1.31 2008/07/29 18:10:24 lsces Exp $
  * @package users
  * @subpackage functions
  */
@@ -73,7 +73,7 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 		//$gBitSmarty->assign_by_ref('offset', $offset);
 		$gBitSmarty->assign( 'contentSelect', $contentSelect );
 		$gBitSmarty->assign( 'contentTypes', $contentTypes );
-		$gBitSmarty->assign( 'contentList', $contentList['data'] );
+		$gBitSmarty->assign( 'contentList', $contentList );
 
 		// needed by pagination
 		$contentList['listInfo']['ihash']['content_type_guid'] = $contentSelect[0];

@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.php,v 1.4 2005/10/12 15:14:09 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.php,v 1.5 2008/07/29 18:10:24 lsces Exp $
 /**
  * Params:
  * - content_type_guid : if set, show only those content_type_guid's
@@ -40,6 +40,6 @@ $listHash = array(
 	'user_id' => $userId,
 );
 $modLastPages = $gBitUser->getContentList( $listHash );
-$gBitSmarty->assign_by_ref( 'modLastPages', $modLastPages['data'] );
+$gBitSmarty->assign_by_ref( 'modLastPages', $modLastPages );
 ?>
 
