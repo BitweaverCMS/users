@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/multisites/auth.php,v 1.1 2008/07/22 10:19:55 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/multisites/auth.php,v 1.2 2008/08/12 14:18:13 lsces Exp $
  *
  * @package users
  */
@@ -21,6 +21,8 @@ class MultisitesAuth extends BaseAuth {
 		parent::validate($user,$pass,$challenge,$response);
 		global $gBitSystem;
 		global $gBitDb;
+		global $gMultisites;
+
 		$ret = SERVER_ERROR;
 		if( empty( $user ) ) {
 			$this->mErrors['login'] = 'User not found';
