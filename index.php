@@ -1,8 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.31 2008/07/29 18:10:24 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.32 2008/08/28 21:14:12 wjames5 Exp $
  *
- * $Id: index.php,v 1.31 2008/07/29 18:10:24 lsces Exp $
+ * $Id: index.php,v 1.32 2008/08/28 21:14:12 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -78,7 +78,7 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 		// needed by pagination
 		$contentList['listInfo']['ihash']['content_type_guid'] = $contentSelect[0];
 		$contentList['listInfo']['ihash']['user_id'] = $gQueryUserId;
-		$contentList['listInfo']['ihash']['find_objects'] = $contentList['listInfo']['find'];
+		$contentList['listInfo']['ihash']['find_objects'] = $contentListHash['find'];
 
 		$gBitSmarty->assign( 'listInfo', $contentList['listInfo'] );
 		$gBitSmarty->assign( 'display_content_list', 1 );
