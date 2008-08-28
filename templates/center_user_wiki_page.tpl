@@ -45,22 +45,8 @@
 	{/if}
 
 	<div class="body">
-		{if !$parsed}
-			{if $gBitUser->mUserId ne $gQueryUser->mUserId}
-				<p>{tr}This user has not entered any information yet.{/tr}</p>
-			{elseif $gBitUser->hasPermission('p_users_edit_user_homepage')}
-				<p>{tr}To enter some information here, please <a href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">edit your personal homepage</a>.{/tr}</p>
-			{/if}
-
-			{if $userInfo.portrait_url}
-				<p style="text-align:center;">
-					<img src="{$userInfo.portrait_url}" class="icon" title="{tr}Portrait{/tr}" alt="{tr}Portrait{/tr}" />
-				</p>
-			{/if}
-
-			{include file="bitpackage:users/user_information_inc.tpl" userData=$gQueryUser}
-		{else}
-			{jstabs}
+		{jstabs}
+			{if $parsed}
 				{jstab title="User Page"}
 					<div class="header">
 						<h1>{$userInfo.title|escape}</h1>
@@ -77,24 +63,32 @@
 						</div><!-- end .content -->
 					</div><!-- end .body -->
 				{/jstab}
+			{/if}
+		
+			{jstab title="User Information"}
+				{if !$parsed}
+					{if $gBitUser->mUserId ne $gQueryUser->mUserId}
+						<p>{tr}This user has not entered any information yet.{/tr}</p>
+					{elseif $gBitUser->hasPermission('p_users_edit_user_homepage')}
+						<p>{tr}To enter some information here, please <a href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">edit your personal homepage</a>.{/tr}</p>
+					{/if}
 
-				{jstab title="User Information"}
-					<div class="header">
-						<h1 >{displayname hash=$userInfo nolink=true}</h1>
-					</div>
+					{if $userInfo.portrait_url}
+						<p style="text-align:center;">
+							<img src="{$userInfo.portrait_url}" class="icon" title="{tr}Portrait{/tr}" alt="{tr}Portrait{/tr}" />
+						</p>
+					{/if}
+				{/if}
+				{include file="bitpackage:users/user_information_inc.tpl" userData=$gQueryUser}
+			{/jstab}
 
-					{include file="bitpackage:users/user_information_inc.tpl" userData=$gQueryUser}
+			{if $display_content_list}
+				{jstab title="Content List"}
+						{include file="bitpackage:liberty/list_content_inc.tpl"}
 				{/jstab}
+			{/if}
 
-                {if $display_content_list}
-                        {jstab title="Content List"}
-                                {include file="bitpackage:liberty/list_content_inc.tpl"}
-                        {/jstab}
-                {/if}
-
-
-			{/jstabs}
-		{/if}
+		{/jstabs}
 	</div><!-- end .body -->
 </div><!-- end .user -->
 {/strip}
