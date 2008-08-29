@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.54 2008/07/09 14:30:53 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.55 2008/08/29 06:30:35 laetzer Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.54 2008/07/09 14:30:53 wjames5 Exp $
+ * $Id: preferences.php,v 1.55 2008/08/29 06:30:35 laetzer Exp $
  * @package users
  * @subpackage functions
  */
@@ -120,7 +120,7 @@ if( isset( $_REQUEST["prefs"] )) {
 
 	foreach( $prefs as $pref => $default ) {
 		if( !empty( $_REQUEST[$pref] ) && $_REQUEST[$pref] != $default ) {
-			vd( "storePreference( $pref, $_REQUEST[$pref], USERS_PKG_NAME )" );
+			//vd( "storePreference( $pref, $_REQUEST[$pref], USERS_PKG_NAME )" );
 			$editUser->storePreference( $pref, $_REQUEST[$pref], USERS_PKG_NAME );
 		} else {
 			$editUser->storePreference( $pref, NULL, USERS_PKG_NAME );
