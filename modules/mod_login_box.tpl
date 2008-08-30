@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.15 2007/07/13 23:18:55 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_login_box.tpl,v 1.16 2008/08/30 10:08:36 laetzer Exp $ *}
 {strip}
 {bitmodule title="$moduleTitle" name="login_box"}
 	{if $gBitUser->IsRegistered()}
@@ -49,11 +49,11 @@
 
 			<div class="row">
 				{if $gBitSystem->isFeatureActive('users_allow_register')}
-					<a href="{$smarty.const.USERS_PKG_URL}register.php">{tr}Register{/tr}</a>
+					<a title="{tr}Create your own user account{/tr}" href="{$smarty.const.USERS_PKG_URL}register.php">{tr}Register new account{/tr}</a>
 				{/if}
 
 				{if $gBitSystem->isFeatureActive('users_forgot_pass')}
-					<br /><a href="{$smarty.const.USERS_PKG_URL}remind_password.php">{tr}I forgot my password{/tr}</a>
+					<br /><a title="{tr}Receive your password via email{/tr}" href="{$smarty.const.USERS_PKG_URL}remind_password.php">{tr}Reset password{/tr}</a>
 				{/if}
 			</div>
 		{/form}
