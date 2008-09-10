@@ -6,5 +6,6 @@
 
 <dl>
 	<dt class="param"><kbd>time_buffer</kbd></dt>
-	<dd><abbr class="default" title="default">900<abbr>, <em>{tr}Numeric{/tr}</em></dd>
+	<dd><em>{tr}Numeric{/tr}</em></dd>
+	<dd><abbr class="default" title="{tr}default{/tr}">900</abbr></dd>
 </dl>
