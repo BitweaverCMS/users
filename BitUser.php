@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.188 2008/09/14 10:34:27 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.189 2008/09/14 17:24:06 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.188 2008/09/14 10:34:27 squareing Exp $
+ * $Id: BitUser.php,v 1.189 2008/09/14 17:24:06 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.188 $
+ * @version  $Revision: 1.189 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -897,18 +897,11 @@ class BitUser extends LibertyMime {
 			$this->purgeImage( 'logo' );
 			$this->invokeServices( 'users_expunge_function' );
 			$userTables = array(
-			'users_semaphores',
-			// these have to be dealt with functions in there own packages
-			//'stars_history',
-			//'tidbits_user_bookmarks_urls',
-			//'tidbits_user_bookmarks_folders',
-			//'tidbits_user_menus',
-			//'tidbits_user_tasks',
-			'users_cnxn',
-			'users_watches',
-			'users_favorites_map',
-			'users_users',
-			//'liberty_content', you can't delete a content without deleting the associated object - and it is not because a user dissapears that all his production must dissapear - other users can have work on it
+				'users_semaphores',
+				'users_cnxn',
+				'users_watches',
+				'users_favorites_map',
+				'users_users',
 			);
 			foreach( $userTables as $table ) {
 				$query = "DELETE FROM `".BIT_DB_PREFIX.$table."` WHERE `user_id` = ?";
