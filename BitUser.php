@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.187 2008/07/22 10:26:14 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.188 2008/09/14 10:34:27 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.187 2008/07/22 10:26:14 lsces Exp $
+ * $Id: BitUser.php,v 1.188 2008/09/14 10:34:27 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.187 $
+ * @version  $Revision: 1.188 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -397,27 +397,28 @@ class BitUser extends LibertyMime {
 		return FALSE;
 	}
 
-	function get_SMTP_response ( &$pConnect ) {
-		$Out = "";
-		while (1) {
-			$work = fgets ( $pConnect, 1024 );
-			$Out .= $work;
-			if (!preg_match('/^\d\d\d-/',$work)) {
+	function get_SMTP_response( &$pConnect ) {
+		$out = "";
+		while( 1 ) {
+			$work = fgets( $pConnect, 1024 );
+			$out .= $work;
+			if( !preg_match( '/^\d\d\d-/',$work )) {
 				break;
 			}
 		}
-		return $Out;
+		return $out;
 	}
 
 
 	function verifyEmail( $pEmail, $pValidate = FALSE ) {
-		global $gBitSystem, $gDebug;
+		global $gBitSystem;
 
 		if( !empty( $this ) ) {
 			$errors = &$this->mErrors;
 		} else {
 			$errors = array();
 		}
+
 		if( !validate_email_syntax ( $pEmail ) ) {
 			$errors['email'] = 'The email address "'.$pEmail.'" is invalid.';
 		} elseif( !empty( $this ) && is_object( $this ) && $this->userExists( array( 'email' => $pEmail ) ) ) {
@@ -427,6 +428,7 @@ class BitUser extends LibertyMime {
 				$errors['email'] = 'Cannot find a valid MX host';
 			}
 		}
+
 		return( count( $errors ) == 0 );
 	}
 
@@ -443,8 +445,9 @@ class BitUser extends LibertyMime {
 		list ( $Username, $domain ) = split ("@",$pEmail);
 		// That MX(mail exchanger) record exists in domain check .
 		// checkdnsrr function reference : http://www.php.net/manual/en/function.checkdnsrr.php
-		if ( !is_windows() and checkdnsrr ( $domain, "MX" ) )  {
-			if($gDebug) echo "Confirmation : MX record about {$domain} exists.<br>";
+		if( !is_windows() and checkdnsrr ( $domain, "MX" ) )  {
+			bitdebug( "Confirmation : MX record about {$domain} exists." );
+
 			// If MX record exists, save MX record address.
 			// getmxrr function reference : http://www.php.net/manual/en/function.getmxrr.php
 
@@ -452,17 +455,18 @@ class BitUser extends LibertyMime {
 			$MXWeights = array();
 			$lowest_weight = 99999;
 			$lowest_weight_index = 0;
-			if ( getmxrr ($domain, $MXHost, $MXWeights) )  {
+			if( getmxrr ( $domain, $MXHost, $MXWeights ) )  {
 				for ($i = 0; $i < count( $MXHost ); $i++ ) {
 					if ( $MXWeights[$i] < $lowest_weight ) {
 						$lowest_weight = $MXWeights[$i];
 						$lowest_weight_index = $i;
 					}
 				}
-				if($gDebug) {
-					echo "Confirmation : Is confirming address by MX LOOKUP.<br>";
+
+				if( !empty( $gDebug )) {
+					$debug = "Confirmation : Is confirming address by MX LOOKUP.<br />";
 					for ( $i = 0,$j = 1; $i < count ( $MXHost ); $i++,$j++ ) {
-						echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Result($j) - $MXHost[$i]<BR>";
+						$debug .= "&nbsp;&bull; Result( $j ) - $MXHost[$i]<br />";
 					}
 				}
 			}
@@ -472,53 +476,59 @@ class BitUser extends LibertyMime {
 		} else {
 			// If there is no MX record simply @ to next time address socket connection do .
 			$ConnectAddress = $domain;
-			if ($gDebug) echo "Confirmation : MX record about {$domain} does not exist.<br>";
+			bitdebug( "Confirmation : MX record about {$domain} does not exist." );
 		}
 		if( !$pValidate ) {	// Skip the connecting test if it didn't work the first time
 			// fsockopen function reference : http://www.php.net/manual/en/function.fsockopen.php
 			$Connect = @fsockopen ( $ConnectAddress, 25 );
 			// Success in socket connection
-			if ($Connect) {
-				if ($gDebug) echo "Connection succeeded to {$ConnectAddress} SMTP.<br>";
+			if( $Connect ) {
+				bitdebug( "Connection succeeded to {$ConnectAddress} SMTP." );
+
 				// Judgment is that service is preparing though begin by 220 getting string after connection .
 				// fgets function reference : http://www.php.net/manual/en/function.fgets.php
 				// A "Real domain name required for sender address"
-				stream_set_timeout($Connect, 90);
-				$Out = $this->get_SMTP_response( $Connect );
-				if ( ereg ( "^220", $Out ) ) {
+				stream_set_timeout( $Connect, 90 );
+				$out = $this->get_SMTP_response( $Connect );
+				if( ereg ( "^220", $out ) ) {
 					// Inform client's reaching to server who connect.
 					if( $gBitSystem->hasValidSenderEmail() ) {
 						$senderEmail = $gBitSystem->getConfig( 'site_sender_email' );
-						fputs ( $Connect, "HELO $HTTP_HOST\r\n" );
-						if ($gDebug) echo "Run : HELO $HTTP_HOST<br>";
-						$Out = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
+						fputs( $Connect, "HELO $HTTP_HOST\r\n" );
+						bitdebug( "Run : HELO $HTTP_HOST" );
+						// Receive server's answering cord.
+						$out = $this->get_SMTP_response( $Connect );
+
 						// Inform sender's address to server.
 						fputs ( $Connect, "MAIL FROM: <{$senderEmail}>\r\n" );
-						if ($gDebug) echo "Run : MAIL FROM: &lt;{$senderEmail}&gt;<br>";
-						$From = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
+						bitdebug( "Run : MAIL FROM: &lt;{$senderEmail}&gt;" );
+						// Receive server's answering cord.
+						$from = $this->get_SMTP_response( $Connect );
+
 						// Inform listener's address to server.
 						fputs ( $Connect, "RCPT TO: <{$pEmail}>\r\n" );
-						if ($gDebug) echo "Run : RCPT TO: &lt;{$pEmail}&gt;<br>";
-						$To = $this->get_SMTP_response ( $Connect ); // Receive server's answering cord.
+						bitdebug( "Run : RCPT TO: &lt;{$pEmail}&gt;" );
+						// Receive server's answering cord.
+						$to = $this->get_SMTP_response( $Connect );
+
 						// Finish connection.
-						fputs ( $Connect, "QUIT\r\n");
-						if ($gDebug) echo "Run : QUIT<br>";
-						fclose($Connect);
+						fputs( $Connect, "QUIT\r\n" );
+						bitdebug( "Run : QUIT" );
+						fclose( $Connect );
+
 						// Server's answering cord about MAIL and TO command checks.
 						// Server about listener's address reacts to 550 codes if there does not exist
 						// checking that mailbox is in own E-Mail account.
-						if ( !ereg ( "^250", $From )
-						|| ( !ereg ( "^250", $To )
-							&& !ereg( "Please use your ISP relay", $To) )
-
-						) {
-							$errors['email'] = $pEmail." is not recognized by the mail server to=$To= from=$From= out=$Out=";
+						if( !ereg ( "^250", $from ) || ( !ereg ( "^250", $to ) && !ereg( "Please use your ISP relay", $to ))) {
+							$errors['email'] = $pEmail." is not recognized by the mail server to=$to= from=$from= out=$out=";
 						}
 					}
 				}
 			} else {
-				if (!defined($Out)) { $Out = 'n/a'; }
-				$errors['email'] = "Cannot connect to mail server ({$ConnectAddress}). response='$Out'";
+				if( empty( $out )) {
+					$out = 'n/a';
+				}
+				$errors['email'] = "Cannot connect to mail server ({$ConnectAddress}). response='$out'";
 			}
 		}
 		return( count( $errors ) == 0 );
