@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.189 2008/09/14 17:24:06 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.190 2008/09/15 20:27:42 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.189 2008/09/14 17:24:06 spiderr Exp $
+ * $Id: BitUser.php,v 1.190 2008/09/15 20:27:42 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.189 $
+ * @version  $Revision: 1.190 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1911,7 +1911,7 @@ class BitUser extends LibertyMime {
 		$sort_mode = $this->mDb->convertSortmode($pParamHash['sort_mode']);
 		// Return an array of users indicating name, email, last changed pages, versions, last_login
 		if ( $pParamHash['find'] ) {
-			$whereSql = " AND UPPER(uu.`login`) LIKE ? OR UPPER(uu.real_name) LIKE ? OR UPPER(uu.email) LIKE ? ";
+			$whereSql .= " AND UPPER(uu.`login`) LIKE ? OR UPPER(uu.real_name) LIKE ? OR UPPER(uu.email) LIKE ? ";
 			$bindVars[] = '%'.strtoupper( $pParamHash['find'] ).'%';
 			$bindVars[] = '%'.strtoupper( $pParamHash['find'] ).'%';
 			$bindVars[] = '%'.strtoupper( $pParamHash['find'] ).'%';
