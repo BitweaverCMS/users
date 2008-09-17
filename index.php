@@ -1,8 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.34 2008/08/28 21:44:48 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.35 2008/09/17 03:47:47 laetzer Exp $
  *
- * $Id: index.php,v 1.34 2008/08/28 21:44:48 wjames5 Exp $
+ * $Id: index.php,v 1.35 2008/09/17 03:47:47 laetzer Exp $
  * @package users
  * @subpackage functions
  */
@@ -43,7 +43,7 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 		$userHomeStyle = $gQueryUser->getPreference( 'theme' );
 		if( !empty( $userHomeStyle )) {
 			$gBitThemes->setStyle( $userHomeStyle );
-			$gBitThemes->mStyles['styleSheet'] = $gBitThemes->getStyleCss( $userHomeStyle, $gQueryUser->mUserId );
+			$gBitThemes->mStyles['styleSheet'] = $gBitThemes->getStyleCssFile( $userHomeStyle, $gQueryUser->mUserId );
 			$gBitSmarty->assign( 'userStyle', $userHomeStyle );
 		}
 	}
