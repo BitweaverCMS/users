@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.190 2008/09/15 20:27:42 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.191 2008/09/27 18:11:21 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.190 2008/09/15 20:27:42 spiderr Exp $
+ * $Id: BitUser.php,v 1.191 2008/09/27 18:11:21 spiderr Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.190 $
+ * @version  $Revision: 1.191 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -666,10 +666,6 @@ class BitUser extends LibertyMime {
 
 			$this->mDb->CompleteTrans();
 
-			// store any uploaded images
-			$pParamHash['upload']['thumbnail'] = FALSE;   // i don't think this does anything - perhaps replace it by setting thumbnail_sizes
-			$this->storeImages( $pParamHash );
-
 			$this->load( TRUE );
 		}
 		return( count( $this->mErrors ) == 0 );
@@ -726,7 +722,6 @@ class BitUser extends LibertyMime {
 			$this->mDb->CompleteTrans();
 
 			// store any uploaded images
-			$pParamHash['upload']['thumbnail'] = FALSE;   // i don't think this does anything - perhaps replace it by setting thumbnail_sizes
 			$this->storeImages( $pParamHash );
 
 			$this->load( TRUE );
@@ -1556,6 +1551,7 @@ class BitUser extends LibertyMime {
 			$pStorageHash['skip_content_store'] = TRUE;
 
 			// setup the hash for central storage functions
+			$pStorageHash['no_perm_check'] = TRUE;
 			$pStorageHash['_files_override'][$pType] = $pStorageHash['upload'];
 			$pStorageHash['_files_override'][$pType]['max_width']     = constant( strtoupper( $pType )."_MAX_DIM" );
 			$pStorageHash['_files_override'][$pType]['max_height']    = constant( strtoupper( $pType )."_MAX_DIM" );
@@ -1569,7 +1565,7 @@ class BitUser extends LibertyMime {
 					$pStorageHash["{$pType}_storage_path"] = $file['upload']['dest_path'];
 				}
 			} else {
-				$this->mErrors["{$pType}_file"] = 'File '.$file['upload']['name'].' could not be stored.';
+				$this->mErrors["{$pType}_file"] = 'File '.$pStorageHash['upload_store']['files'][$pType]['name'].' could not be stored.';
 			}
 		}
 		return( count( $this->mErrors ) == 0 );

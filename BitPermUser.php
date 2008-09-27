@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.66 2007/09/04 02:17:27 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.67 2008/09/27 18:11:21 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.66 2007/09/04 02:17:27 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.67 2008/09/27 18:11:21 spiderr Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( dirname( __FILE__ ).'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.66 $
+ * @version  $Revision: 1.67 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -111,6 +111,10 @@ class BitPermUser extends BitUser {
 				}
 			}
 			$this->load( TRUE );
+
+			// store any uploaded images, this can stuff mErrors, so we want to do this as the very last thing.
+			$pParamHash['upload']['thumbnail'] = FALSE;   // i don't think this does anything - perhaps replace it by setting thumbnail_sizes
+			$this->storeImages( $pParamHash );
 		}
 		$this->mDb->CompleteTrans();
 		return( count( $this->mErrors ) == 0 );
