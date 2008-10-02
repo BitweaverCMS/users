@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.191 2008/09/27 18:11:21 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.192 2008/10/02 06:22:39 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.191 2008/09/27 18:11:21 spiderr Exp $
+ * $Id: BitUser.php,v 1.192 2008/10/02 06:22:39 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.191 $
+ * @version  $Revision: 1.192 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -544,8 +544,8 @@ class BitUser extends LibertyMime {
 	function register( &$pParamHash ) {
 		global $notificationlib, $gBitSmarty, $gBitSystem, $gBitUser;
 		$ret = FALSE;
-		if( !empty( $_FILES['fPortraitFile'] ) && empty( $_FILES['fAvatarFile'] ) ) {
-			$pParamHash['fAutoAvatar'] = TRUE;
+		if( !empty( $_FILES['user_portrait_file'] ) && empty( $_FILES['user_avatar_file'] ) ) {
+			$pParamHash['user_auto_avatar'] = TRUE;
 		}
 		if ($this->verify($pParamHash)) {
 			for ( $i=0; $i<BaseAuth::getAuthMethodCount(); $i++ ) {
@@ -652,6 +652,7 @@ class BitUser extends LibertyMime {
 					$result = $this->mDb->associateInsert( BIT_DB_PREFIX.'users_users', $pParamHash['user_store'] );
 				}
 			}
+
 			// Prevent liberty from assuming ANONYMOUS_USER_ID while storing
 			$pParamHash['user_id'] = $this->mUserId;
 			// Don't let LA snarf these now so we can do extra things.
@@ -1439,7 +1440,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
-	function getThumbnailUrl( $pSize='small', $pInfoHash=NULL ) {
+	function getThumbnailUrl( $pSize = 'small', $pInfoHash = NULL ) {
 		$ret = '';
 		if( $pInfoHash ) {
 			// do some stuff if we are passed a hash-o-crap, not implemented currently
@@ -1451,40 +1452,41 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * storeImages will store any user images - please note that uploaded files have to be in predefined keys in $_FILES
-	 *     $_FILES['fPortraitFile']
-	 *     $_FILES['fAutoAvatar']
-	 *     $_FILES['fLogoFile']
+	 *     $_FILES['user_portrait_file']
+	 *     $_FILES['user_auto_avatar']
+	 *     $_FILES['user_logo_file']
 	 *
 	 * @param array $pParamHash array of options
-	 * @param boolean $pParamHash['fAutoAvatar'] automatically create avatar from portrait
+	 * @param boolean $pParamHash['user_auto_avatar'] automatically create avatar from portrait
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
 	function storeImages( $pParamHash ) {
-		if( isset( $_FILES['fPortraitFile'] ) && is_uploaded_file( $_FILES['fPortraitFile']['tmp_name'] ) && $_FILES['fPortraitFile']['size'] > 0 ) {
-			$portraitHash = $pParamHash;
-			$portraitHash['upload'] = $_FILES['fPortraitFile'];
-			$portraitHash['user_id'] = $this->mUserId;
-			if( !$this->storePortrait( $portraitHash, ( !empty( $portraitHash['fAutoAvatar'] ) ? TRUE : FALSE ))) {
-			}
+		if( isset( $_FILES['user_portrait_file'] ) && is_uploaded_file( $_FILES['user_portrait_file']['tmp_name'] ) && $_FILES['user_portrait_file']['size'] > 0 ) {
+			$portraitHash                          = $pParamHash;
+			$portraitHash['user_id']               = $this->mUserId;
+			$portraitHash['content_id']            = $this->mContentId;
+			$portraitHash['upload']                = $_FILES['user_portrait_file'];
+			$portraitHash['upload']['source_file'] = $_FILES['user_portrait_file']['tmp_name'];
+			$this->storePortrait( $portraitHash, !empty( $portraitHash['user_auto_avatar'] ));
 		}
 
-		if( isset( $_FILES['fAvatarFile'] ) && is_uploaded_file( $_FILES['fAvatarFile']['tmp_name'] ) && $_FILES['fAvatarFile']['size'] > 0 ) {
-			$avatarHash = $pParamHash;
-			$avatarHash['upload'] = $_FILES['fAvatarFile'];
-			$avatarHash['upload']['source_file'] = $_FILES['fAvatarFile']['tmp_name'];
-			$avatarHash['user_id'] = $this->mUserId;
-			if( !$this->storeAvatar( $avatarHash )) {
-			}
+		if( isset( $_FILES['user_avatar_file'] ) && is_uploaded_file( $_FILES['user_avatar_file']['tmp_name'] ) && $_FILES['user_avatar_file']['size'] > 0 ) {
+			$avatarHash                          = $pParamHash;
+			$avatarHash['user_id']               = $this->mUserId;
+			$avatarHash['content_id']            = $this->mContentId;
+			$avatarHash['upload']                = $_FILES['user_avatar_file'];
+			$avatarHash['upload']['source_file'] = $_FILES['user_avatar_file']['tmp_name'];
+			$this->storeAvatar( $avatarHash );
 		}
 
-		if( isset( $_FILES['fLogoFile'] ) && is_uploaded_file( $_FILES['fLogoFile']['tmp_name'] ) && $_FILES['fLogoFile']['size'] > 0 ) {
-			$logoHash = $pParamHash;
-			$logoHash['upload'] = $_FILES['fLogoFile'];
-			$logoHash['upload']['source_file'] = $_FILES['fLogoFile']['tmp_name'];
-			$logoHash['user_id'] = $this->mUserId;
-			if( !$this->storeLogo( $logoHash )) {
-			}
+		if( isset( $_FILES['user_logo_file'] ) && is_uploaded_file( $_FILES['user_logo_file']['tmp_name'] ) && $_FILES['user_logo_file']['size'] > 0 ) {
+			$logoHash                          = $pParamHash;
+			$logoHash['user_id']               = $this->mUserId;
+			$logoHash['content_id']            = $this->mContentId;
+			$logoHash['upload']                = $_FILES['user_logo_file'];
+			$logoHash['upload']['source_file'] = $_FILES['user_logo_file']['tmp_name'];
+			$this->storeLogo( $logoHash );
 		}
 	}
 

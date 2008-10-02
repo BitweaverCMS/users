@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.35 2008/06/25 22:21:28 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.36 2008/10/02 06:22:39 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.35 2008/06/25 22:21:28 spiderr Exp $
+ * $Id: register.php,v 1.36 2008/10/02 06:22:39 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -35,9 +35,7 @@ if( isset( $_REQUEST['returnto'] ) ) {
 }
 
 if( $gBitUser->isRegistered() ) {
-	$url = $gBitSystem->getDefaultPage();
-	header( 'Location: '.$url );
-	exit;
+	bit_redirect( $gBitSystem->getDefaultPage() );
 }
 
 if( isset( $_REQUEST["register"] ) ) {
@@ -116,16 +114,14 @@ if( isset( $_REQUEST["register"] ) ) {
 		$gBitSmarty->assign('customFields', $fields);
 	}
 
-
-
-	for ($i=0;$i<BaseAuth::getAuthMethodCount();$i++) {
-		$instance = BaseAuth::init($i);
-		if ($instance && $instance->canManageAuth()) {
+	for( $i=0; $i < BaseAuth::getAuthMethodCount(); $i++ ) {
+		$instance = BaseAuth::init( $i );
+		if( $instance && $instance->canManageAuth() ) {
 			$auth_reg_fields = $instance->getRegistrationFields();
-			foreach (array_keys($auth_reg_fields) as $auth_field) {
+			foreach( array_keys( $auth_reg_fields ) as $auth_field ) {
 				$auth_reg_fields[$auth_field]['value'] = $auth_reg_fields[$auth_field]['default'];
 			}
-			$gBitSmarty->assign('auth_reg_fields', $auth_reg_fields);
+			$gBitSmarty->assign( 'auth_reg_fields', $auth_reg_fields );
 			break;
 		}
 	}
@@ -133,20 +129,20 @@ if( isset( $_REQUEST["register"] ) ) {
 
 $languages = array();
 $languages = $gBitLanguage->listLanguages();
-$gBitSmarty->assign_by_ref('languages', $languages);
-$gBitSmarty->assign_by_ref('gBitLanguage', $gBitLanguage);
+$gBitSmarty->assign_by_ref( 'languages', $languages );
+$gBitSmarty->assign_by_ref( 'gBitLanguage', $gBitLanguage );
 
 // Get flags here
 $flags = array();
 $h = opendir( USERS_PKG_PATH.'icons/flags/' );
-while ($file = readdir($h)) {
-	if (strstr($file, ".gif")) {
-		$parts = explode('.', $file);
+while( $file = readdir( $h )) {
+	if( strstr( $file, ".gif" )) {
+		$parts = explode( '.', $file );
 		$flags[] = $parts[0];
 	}
 }
-closedir ($h);
-sort ($flags);
+closedir( $h );
+sort( $flags );
 $gBitSmarty->assign('flags', $flags);
 
 $listHash = array(
@@ -156,25 +152,23 @@ $listHash = array(
 $groupList = $gBitUser->getAllGroups( $listHash );
 $gBitSmarty->assign_by_ref( 'groupList', $groupList );
 
-
-	// include preferences settings from other packages - these will be included as individual tabs
-	$packages = array();
-	foreach( $gBitSystem->mPackages as $package ) {
-		if( $gBitSystem->isPackageActive( $package['name'] )) {
-			$php_file = $package['path'].'user_register_inc.php';
-			$tpl_file = $package['path'].'templates/user_register_inc.tpl';
-			if( file_exists( $tpl_file )) {
-				if( file_exists( $php_file ))  {
-					require( $php_file );
-				}
-				$p=array();
-				$p['template'] = $tpl_file;
-				$packages[] = $p;
+// include preferences settings from other packages - these will be included as individual tabs
+$packages = array();
+foreach( $gBitSystem->mPackages as $package ) {
+	if( $gBitSystem->isPackageActive( $package['name'] )) {
+		$php_file = $package['path'].'user_register_inc.php';
+		$tpl_file = $package['path'].'templates/user_register_inc.tpl';
+		if( file_exists( $tpl_file )) {
+			if( file_exists( $php_file ))  {
+				require( $php_file );
 			}
+			$p=array();
+			$p['template'] = $tpl_file;
+			$packages[] = $p;
 		}
 	}
-	$gBitSmarty->assign_by_ref('packages',$packages );
-	
-$gBitSystem->display('bitpackage:users/register.tpl', 'Register' , array( 'display_mode' => 'display' ));
+}
+$gBitSmarty->assign_by_ref('packages',$packages );
 
+$gBitSystem->display('bitpackage:users/register.tpl', 'Register' , array( 'display_mode' => 'display' ));
 ?>
