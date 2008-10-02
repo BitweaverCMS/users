@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.45 2008/08/13 19:46:04 bitweaver Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.46 2008/10/02 14:45:39 nickpalmer Exp $
  * @package users
  */
 global $gBitDbType, $gBitDbHost, $gBitDbUser, $gBitDbPassword, $gBitDbName, $gBitThemes;
@@ -58,7 +58,10 @@ if( $gBitSystem->isFeatureActive( 'users_remember_me' )) {
 
 // just use a simple COOKIE (unique random string) that is linked to the users_cnxn table.
 // This way, nuking rows in the users_cnxn table can log people out and is much more reliable than SESSIONS
-session_start();
+global $gShellScript;
+if(!$gShellScript) {
+	session_start();
+}
 $cookie_site = strtolower( ereg_replace( "[^a-zA-Z0-9]", "", $gBitSystem->getConfig( 'site_title', 'bitweaver' )));
 global $user_cookie_site;
 $user_cookie_site = 'bit-user-'.$cookie_site;
