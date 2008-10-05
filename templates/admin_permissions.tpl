@@ -24,10 +24,10 @@
 				{foreach from=$allPerms item=perm key=p name=perms}
 					{if $prev_package != $perm.package}
 						<tr>
-							<th style="width:1%"></th>
+							<th class="width1p"></th>
 							<th>{tr}Permission{/tr} - {$perm.package}</th>
 							{foreach from=$allGroups item=group name=groups}
-								<th{if $group.group_id lt 4} colspan="2"{/if}>
+								<th class="width10p"{if $group.group_id lt 4} colspan="2"{/if}>
 									<abbr title="{$group.group_name}">{if $smarty.foreach.groups.total > 8}{$group.group_id}{else}{$group.group_name}{/if}</abbr>
 								</th>
 							{/foreach}
@@ -58,7 +58,7 @@
 							</td>
 
 							{if $group.group_id lt 4}
-								<td class="alignleft {$class}">
+								<td class="alignleft {$class} width5p">
 									{if $id == $group.group_id}<label for="{$p}{$group.group_id}">{biticon iname=dialog-ok iexplain="Default"}</label>{/if}
 								</td>
 							{/if}
