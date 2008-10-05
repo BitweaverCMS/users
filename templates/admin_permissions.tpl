@@ -21,37 +21,44 @@
 
 			<table class="data">
 				<caption>{tr}Available Permissions{/tr}</caption>
-				{capture assign=theader}
-					<tr>
-						<th style="width:1%"></th>
-						<th>{tr}Permission{/tr}</th>
-						<th>{tr}Package{/tr}</th>
-						{foreach from=$allGroups item=group name=groups}
-							<th{if $group.group_id lt 4} colspan="2"{/if}>
-								<abbr title="{$group.group_name}">{if $smarty.foreach.groups.total > 8}{$group.group_id}{else}{$group.group_name}{/if}</abbr>
-							</th>
-						{/foreach}
-					</tr>
-				{/capture}
 				{foreach from=$allPerms item=perm key=p name=perms}
 					{if $prev_package != $perm.package}
-						{$theader}
+						<tr>
+							<th style="width:1%"></th>
+							<th>{tr}Permission{/tr} - {$perm.package}</th>
+							{foreach from=$allGroups item=group name=groups}
+								<th{if $group.group_id lt 4} colspan="2"{/if}>
+									<abbr title="{$group.group_name}">{if $smarty.foreach.groups.total > 8}{$group.group_id}{else}{$group.group_name}{/if}</abbr>
+								</th>
+							{/foreach}
+						</tr>
 						{assign var=prev_package value=$perm.package}
 					{/if}
-					<tr class="{cycle values="odd,even"}{if $unassignedPerms.$p} warning{/if}">
+					<tr class="{cycle values="odd,even"}{if $unassignedPerms.$p} prio5{/if}">
 						<td>{if $unassignedPerms.$p}{biticon iname=dialog-warning iexplain="Unassigned Permission"}{/if}</td>
 						<td title="{$perm.perm_desc}"><abbr title="{$perm.perm_desc}">{$p}</abbr></td>
-						<td>{$perm.package}</td>
 						{foreach from=$allGroups item=group}
-							<td style="text-align:right;">
+							{if     $perm.perm_level == 'admin'     }{assign var=id value=1}
+							{elseif $perm.perm_level == 'editors'   }{assign var=id value=2}
+							{elseif $perm.perm_level == 'registered'}{assign var=id value=3}
+							{elseif $perm.perm_level == 'basic'     }{assign var=id value=-1}{/if}
+
+							{if $id == $group.group_id and !$group.perms.$p}
+								{assign var=class value="prio5"}
+							{elseif $id == $group.group_id and $group.perms.$p}
+								{assign var=class value="prio1"}
+							{elseif $id != $group.group_id and $group.perms.$p}
+								{assign var=class value="prio5"}
+							{else}
+								{assign var=class value=""}
+							{/if}
+
+							<td class="alignright {$class}">
 								<input id="{$p}{$group.group_id}" type="checkbox" value="{$p}" name="perms[{$group.group_id}][{$p}]" title="{$group.group_name}" {if $group.perms.$p}checked="checked"{/if}/>
 							</td>
+
 							{if $group.group_id lt 4}
-								<td style="text-align:left;">
-									{if $perm.perm_level == 'admin'}{assign var=id value=1}
-									{elseif $perm.perm_level == 'editors'}{assign var=id value=2}
-									{elseif $perm.perm_level == 'registered'}{assign var=id value=3}
-									{elseif $perm.perm_level == 'basic'}{assign var=id value=-1}{/if}
+								<td class="alignleft {$class}">
 									{if $id == $group.group_id}<label for="{$p}{$group.group_id}">{biticon iname=dialog-ok iexplain="Default"}</label>{/if}
 								</td>
 							{/if}
