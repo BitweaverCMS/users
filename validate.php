@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.19 2008/10/03 14:50:18 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.20 2008/10/08 17:40:25 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,14 +8,14 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: validate.php,v 1.19 2008/10/03 14:50:18 squareing Exp $
+ * $Id: validate.php,v 1.20 2008/10/08 17:40:25 squareing Exp $
  * @package users
  * @subpackage functions
  */
 $bypass_siteclose_check = 'y';
 
 // this is a dirty hack to allow admins to log in when we require a visit to the installer
-// used in /bit_setup_inc.php - xing - Friday Oct 03, 2008   16:44:48 CEST
+// used in kernel/setup_inc.php - xing - Friday Oct 03, 2008   16:44:48 CEST
 define( 'LOGIN_VALIDATE', TRUE );
 
 /**
