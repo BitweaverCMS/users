@@ -1,6 +1,6 @@
 <?php
 /**
- * @version  $Revision: 1.1 $
+ * @version  $Revision: 1.2 $
  * @package  liberty
  * @subpackage plugins_data
  * @author bigwasp bigwasp@sourceforge.net
@@ -19,7 +19,7 @@
 // | by: StarRider <starrrider@sourceforge.net>
 // | Reworked from: wikiplugin_usercount.php - see deprecated code below
 // +----------------------------------------------------------------------+
-// $Id: data.userlink.php,v 1.1 2008/07/08 07:13:57 squareing Exp $
+// $Id: data.userlink.php,v 1.2 2008/10/15 14:04:20 laetzer Exp $
 
 /**
  * definitions
@@ -31,9 +31,9 @@ $pluginParams = array (
 	'auto_activate' => FALSE,
 	'requires_pair' => FALSE,
 	'load_function' => 'data_userlink',
-	'title' => 'UserLink shows a link to the UserPage for a given login or email',
+	'title' => 'UserLink per login or email',
 	'help_page' => 'DataPluginUserLink',
-	'description' => tra("Will show a link to the userpage"),
+	'description' => tra("Will show a link to the userpage for a given login name or email."),
 	'help_function' => 'data_userlink_help',
 	'syntax' => "{USERLINK login='bigwasp'}",
 	'path' => LIBERTY_PKG_PATH.'plugins/data.userlink.php',
