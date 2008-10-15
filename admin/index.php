@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.27 2008/07/02 19:21:57 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.28 2008/10/15 16:27:20 wjames5 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -173,7 +173,9 @@ if (isset($_REQUEST["numrows"])) {
 $_REQUEST['listInfo']["URL"] = USERS_PKG_URL."admin/index.php";
 $gBitSmarty->assign_by_ref('listInfo', $_REQUEST['listInfo']);
 
-$gBitUser->invokeServices( 'content_edit_function' );
+// invoke edit service for the add user feature
+$userObj = new BitPermUser();
+$userObj->invokeServices( 'content_edit_function' );
 
 // Get groups (list of groups)
 $grouplist = $gBitUser->getGroups('', '', 'group_name_asc');
