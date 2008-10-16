@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/multisites/auth.php,v 1.3 2008/10/16 09:57:58 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/multisites/auth.php,v 1.4 2008/10/16 10:02:56 squareing Exp $
  *
  * @package users
  */
@@ -70,10 +70,10 @@ class MultisitesAuth extends BaseAuth {
 								if ( $id['multisite_id'] == $gMultisites->mMultisiteId ) {
 									$ret=USER_VALID;
 								}
-							} 
+							}
 							if ( $ret == PASSWORD_INCORRECT ) {
 								$this->mErrors[] = 'You are not authorized on this area of the site';
-							}							
+							}
 						}
 					} else {
 						$ret=PASSWORD_INCORRECT;
@@ -108,14 +108,20 @@ class MultisitesAuth extends BaseAuth {
 
 	function canManageAuth() {
 		global $gBitSystem;
-		if( $gBitSystem->isPackageActive( 'multisites' ) ) { return true;
-		} else { return false; }
+		if( $gBitSystem->isPackageActive( 'multisites' ) ) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
 	}
 
 	function isSupported() {
 		global $gBitSystem;
-		if( $gBitSystem->isPackageActive( 'multisites' ) ) { return true;
-		} else { return false; }
+		if( $gBitSystem->isPackageActive( 'multisites' ) ) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
 	}
 
 	function createUser( &$pUserHash ) {
