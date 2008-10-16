@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.194 2008/10/16 09:57:58 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.195 2008/10/16 10:18:26 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.194 2008/10/16 09:57:58 squareing Exp $
+ * $Id: BitUser.php,v 1.195 2008/10/16 10:18:26 squareing Exp $
  * @package users
  */
 
@@ -40,7 +40,7 @@ define("ACCOUNT_DISABLED", -6);
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.194 $
+ * @version  $Revision: 1.195 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -154,7 +154,7 @@ class BitUser extends LibertyMime {
 					);
 					//print("displayName: ".$this->mInfo['display_name']);
 					$this->defaults();
-					$this->mInfo['publicEmail'] = scrambleEmail( $this->mInfo['email'], ( $this->getPreference( 'users_email_display' ) ? $this->getPreference( 'users_email_display' ) : NULL ) );
+					$this->mInfo['publicEmail'] = scramble_email( $this->mInfo['email'], ( $this->getPreference( 'users_email_display' ) ? $this->getPreference( 'users_email_display' ) : NULL ) );
 				}
 				$this->mTicket = substr( md5( session_id() . $this->mUserId ), 0, 20 );
 			} else {
@@ -2440,36 +2440,6 @@ class BitUser extends LibertyMime {
 		return (count($this->mErrors) == 0);
 	}
 	// }}}
-}
-
-function scrambleEmail($email, $method='unicode') {
-	switch ($method) {
-		case 'strtr':
-			$trans = array(	"@" => tra(" AT "),
-			"." => tra(" DOT ")
-			);
-			$ret = strtr($email, $trans);
-			break;
-		case 'x' :
-			$encoded = $email;
-			for ($i = strpos($email, "@") + 1; $i < strlen($email); $i++) {
-				if ($encoded[$i]  != ".") $encoded[$i] = 'x';
-			}
-			$ret = $encoded;
-			break;
-		case 'unicode':
-		case 'y':// for previous compatibility
-		$encoded = '';
-		for ($i = 0; $i < strlen($email); $i++) {
-			$encoded .= '&#' . ord($email[$i]). ';';
-		}
-		$ret = $encoded;
-		break;
-		default:
-			$ret = NULL;
-			break;
-	}
-	return $ret;
 }
 
 /* vim: :set fdm=marker : */

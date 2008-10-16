@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.55 2008/08/29 06:30:35 laetzer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.56 2008/10/16 10:18:26 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.55 2008/08/29 06:30:35 laetzer Exp $
+ * $Id: preferences.php,v 1.56 2008/10/16 10:18:26 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -244,10 +244,10 @@ $gBitSmarty->assign( 'userTimezones', $user_timezones);
 $scramblingMethods = array( "n", "strtr", "unicode", "x" );
 $gBitSmarty->assign_by_ref( 'scramblingMethods', $scramblingMethods );
 $scramblingEmails = array(
-	tra("no"),
-	scrambleEmail( $editUser->mInfo['email'], 'strtr' ),
-	scrambleEmail( $editUser->mInfo['email'], 'unicode' )."-".tra( "unicode" ),
-	scrambleEmail( $editUser->mInfo['email'], 'x' )
+	tra( "no" ),
+	scramble_email( $editUser->mInfo['email'], 'strtr' ),
+	scramble_email( $editUser->mInfo['email'], 'unicode' )."-".tra( "unicode" ),
+	scramble_email( $editUser->mInfo['email'], 'x' )
 );
 $gBitSmarty->assign_by_ref( 'scramblingEmails', $scramblingEmails );
 
