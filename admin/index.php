@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.28 2008/10/15 16:27:20 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.29 2008/10/16 10:22:41 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -13,10 +13,9 @@ $gBitSystem->verifyPermission( 'p_users_admin' );
 $feedback = array();
 
 if( isset($_REQUEST["newuser"] ) ) {
-	require_once( USERS_PKG_PATH.'users_lib.php' );
 	$userRecord = $_REQUEST;
 	$newUser = new BitPermUser();
-	
+
 	if( $newUser->importUser( $userRecord ) ) {
 		$gBitSmarty->assign( 'addSuccess', "User Added Successfully" );
 		if( empty( $_REQUEST['admin_noemail_user'] ) ) {

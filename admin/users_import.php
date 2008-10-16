@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/users_import.php,v 1.3 2008/06/25 22:21:28 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/users_import.php,v 1.4 2008/10/16 10:22:41 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -11,10 +11,8 @@ $gBitSystem->verifyPermission( 'p_users_admin' );
 $feedback = array();
 
 if( isset( $_REQUEST["batchimport"])) {
-	require_once( USERS_PKG_PATH.'users_lib.php' );
 	// check if it's a batch upload
-
-	if( $_FILES['csvlist']['size'] && is_uploaded_file($_FILES['csvlist']['tmp_name'] ) ) {
+	if( $_FILES['csvlist']['size'] && is_uploaded_file( $_FILES['csvlist']['tmp_name'] ) ) {
 		global $gBitSmarty, $gBitUser, $gBitSystem;
 
 		// get the delimiter if it's set - use comma if it not
