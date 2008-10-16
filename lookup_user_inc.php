@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/lookup_user_inc.php,v 1.12 2008/02/08 07:44:42 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/lookup_user_inc.php,v 1.13 2008/10/16 09:57:58 squareing Exp $
  *
  * @package users
  * @subpackage functions
@@ -16,8 +16,8 @@ if( isset( $_REQUEST['fHomepage'] )) {
 } elseif( isset( $_REQUEST['home'] )) {
 	$_REQUEST['fHomepage'] = $_REQUEST['home'];
 } elseif( @BitBase::verifyId( $_REQUEST['content_id'] )) {
-	// This identifies the user_id associated with the content_id
-	$_REQUEST['home'] = $gBitUser->getUserFromContentId( $_REQUEST['content_id'] );
+	$userInfo = $gBitUser->getUserInfo( array( 'content_id' => $_REQUEST['content_id'] ));
+	$_REQUEST['home'] = !empty( $userInfo['login'] ) ? $userInfo['login'] : NULL;
 } elseif( @BitBase::verifyId( $_REQUEST['user_id'] )) {
 	$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST['user_id'] ));
 	$_REQUEST['home'] = !empty( $userInfo['login'] ) ? $userInfo['login'] : NULL;

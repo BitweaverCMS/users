@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/bit/auth.php,v 1.6 2007/06/30 02:34:53 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/bit/auth.php,v 1.7 2008/10/16 09:57:58 squareing Exp $
  *
  * @package users
  */
@@ -74,7 +74,7 @@ class BitAuth extends BaseAuth {
 					//print("response : $response<br/>");
 					if ($response == md5( strtolower($user) . $hash . $_SESSION["challenge"]) ) {
 						$ret = USER_VALID;
-						$this->update_lastlogin( $userId );
+						$this->updateLastLogin( $userId );
 					} else {
 						$this->mErrors[] = 'Invalid challenge';
 						$ret=PASSWORD_INCORRECT;

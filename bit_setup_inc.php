@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.47 2008/10/02 14:52:04 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.48 2008/10/16 09:57:58 squareing Exp $
  * @package users
  */
 global $gBitDbType, $gBitDbHost, $gBitDbUser, $gBitDbPassword, $gBitDbName, $gBitThemes;
@@ -95,7 +95,7 @@ if( !empty( $gOverrideLoginFunction )) {
 		$gBitUser->load();
 		$gBitUser->loadPermissions();
 	}
-} elseif( !empty( $_COOKIE[$user_cookie_site] ) && ( $gBitUser->mUserId = $gBitUser->getByHash( $_COOKIE[$user_cookie_site] ))) {
+} elseif( !empty( $_COOKIE[$user_cookie_site] ) && ( $gBitUser->mUserId = $gBitUser->getUserIdFromCookieHash( $_COOKIE[$user_cookie_site] ))) {
 	$gBitUser->load( TRUE );
 } else {
 	// Now if the remember me feature is on and the user checked the user_remember_me checkbox then ...

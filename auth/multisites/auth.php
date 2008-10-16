@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/multisites/auth.php,v 1.2 2008/08/12 14:18:13 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/multisites/auth.php,v 1.3 2008/10/16 09:57:58 squareing Exp $
  *
  * @package users
  */
@@ -92,7 +92,7 @@ class MultisitesAuth extends BaseAuth {
 					//print("response : $response<br/>");
 					if ($response == md5( strtolower($user) . $hash . $_SESSION["challenge"]) ) {
 						$ret = USER_VALID;
-						$this->update_lastlogin( $userId );
+						$this->updateLastLogin( $userId );
 					} else {
 						$this->mErrors[] = 'Invalid challenge';
 						$ret=PASSWORD_INCORRECT;
@@ -109,13 +109,13 @@ class MultisitesAuth extends BaseAuth {
 	function canManageAuth() {
 		global $gBitSystem;
 		if( $gBitSystem->isPackageActive( 'multisites' ) ) { return true;
-		} else { return false; }	
+		} else { return false; }
 	}
 
 	function isSupported() {
 		global $gBitSystem;
 		if( $gBitSystem->isPackageActive( 'multisites' ) ) { return true;
-		} else { return false; }	
+		} else { return false; }
 	}
 
 	function createUser( &$pUserHash ) {
