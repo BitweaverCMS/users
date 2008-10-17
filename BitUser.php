@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.197 2008/10/17 13:54:27 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.198 2008/10/17 22:04:34 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.197 2008/10/17 13:54:27 squareing Exp $
+ * $Id: BitUser.php,v 1.198 2008/10/17 22:04:34 squareing Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.197 $
+ * @version  $Revision: 1.198 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1806,6 +1806,148 @@ class BitUser extends LibertyMime {
 	 */
 	function purgeLogo() {
 		return $this->purgeImage( 'logo' );
+	}
+	// }}}
+
+	// {{{ ==================== Watches ====================
+	// TODO: clean up all watch functions. these are old and messy. - xing - Thursday Oct 16, 2008   11:07:55 CEST
+	/**
+	 * storeWatch 
+	 * 
+	 * @param array $pEvent 
+	 * @param array $pObject 
+	 * @param array $pType 
+	 * @param array $pTitle 
+	 * @param array $pUrl 
+	 * @access public
+	 * @return TRUE on success, FALSE on failure
+	 */
+	function storeWatch( $pEvent, $pObject, $pType, $pTitle, $pUrl ) {
+		global $userlib;
+		if( $this->isValid() ) {
+			$hash = md5( uniqid( '.' ));
+			$query = "DELETE FROM `".BIT_DB_PREFIX."users_watches` WHERE `user_id`=? AND `event`=? AND `object`=?";
+			$this->mDb->query($query,array( $this->mUserId, $pEvent, $pObject ) );
+			$query = "INSERT INTO `".BIT_DB_PREFIX."users_watches`(`user_id` ,`event` ,`object` , `email`, `hash`, `watch_type`, `title`, `url`) VALUES(?,?,?,?,?,?,?,?)";
+			$this->mDb->query( $query, array( $this->mUserId, $pEvent, $pObject, $this->mInfo['email'], $hash, $pType, $pTitle, $pUrl ) );
+			return TRUE;
+		}
+	}
+
+	/**
+	 * getWatches 
+	 * 
+	 * @param string $pEvent 
+	 * @access public
+	 * @return TRUE on success, FALSE on failure
+	 */
+	function getWatches( $pEvent = '' ) {
+		$ret = NULL;
+		if( $this->isValid() ) {
+			$mid = '';
+			$bindvars=array( $this->mUserId );
+			if ($pEvent) {
+				$mid = " and `event`=? ";
+				$bindvars[]=$pEvent;
+			}
+
+			$query = "select * from `".BIT_DB_PREFIX."users_watches` where `user_id`=? $mid";
+			$result = $this->mDb->query($query,$bindvars);
+			$ret = array();
+
+			while ($res = $result->fetchRow()) {
+				$ret[] = $res;
+			}
+		}
+		return $ret;
+	}
+
+	/**
+	 * getEventWatches 
+	 * 
+	 * @param array $pEvent 
+	 * @param array $object 
+	 * @access public
+	 * @return TRUE on success, FALSE on failure
+	 */
+	function getEventWatches( $pEvent, $pObject ) {
+		$ret = NULL;
+		if( $this->isValid() ) {
+			$query = "SELECT * FROM `".BIT_DB_PREFIX."users_watches` WHERE `user_id`=? AND `event`=? AND `object`=?";
+			$result = $this->mDb->query($query,array( $this->mUserId, $pEvent, $pObject ) );
+			if ( $result->numRows() ) {
+				$ret = $result->fetchRow();
+			}
+		}
+		return $ret;
+	}
+
+	/**
+	 * get_event_watches 
+	 * 
+	 * @param array $pEvent 
+	 * @param array $pObject 
+	 * @access public
+	 * @return TRUE on success, FALSE on failure
+	 */
+	function get_event_watches( $pEvent, $pObject ) {
+		$ret = array();
+
+		$query = "select * from `".BIT_DB_PREFIX."users_watches` tw INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON ( tw.`user_id`=uu.`user_id` )  where `event`=? and `object`=?";
+		$result = $this->mDb->query( $query,array( $pEvent,$pObject ));
+
+		if( !$result->numRows() ) {
+			return $ret;
+		}
+
+		while ($res = $result->fetchRow()) {
+			$ret[] = $res;
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * remove_user_watch_by_hash 
+	 * 
+	 * @param array $pHash 
+	 * @access public
+	 * @return TRUE on success, FALSE on failure
+	 */
+	function remove_user_watch_by_hash( $pHash ) {
+		$query = "DELETE FROM `".BIT_DB_PREFIX."users_watches` WHERE `hash`=?";
+		$this->mDb->query( $query,array( $pHash ));
+	}
+
+	/**
+	 * expungeWatch 
+	 * 
+	 * @param array $pEvent 
+	 * @param array $pObject 
+	 * @access public
+	 * @return TRUE on success, FALSE on failure
+	 */
+	function expungeWatch( $pEvent, $pObject ) {
+		if( $this->isValid() ) {
+			$query = "DELETE FROM `".BIT_DB_PREFIX."users_watches` WHERE `user_id`=? AND `event`=? AND `object`=?";
+			$this->mDb->query( $query, array( $this->mUserId, $pEvent, $pObject ));
+		}
+	}
+
+	/**
+	 * get_watches_events 
+	 * 
+	 * @access public
+	 * @return TRUE on success, FALSE on failure
+	 */
+	function get_watches_events() {
+		$query = "select distinct `event` from `".BIT_DB_PREFIX."users_watches`";
+		$result = $this->mDb->query($query,array());
+		$ret = array();
+		while ($res = $result->fetchRow()) {
+			$ret[] = $res['event'];
+		}
+		return $ret;
 	}
 	// }}}
 
