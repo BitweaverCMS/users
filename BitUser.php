@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.200 2008/10/18 07:41:09 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.201 2008/10/18 09:46:35 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.200 2008/10/18 07:41:09 squareing Exp $
+ * $Id: BitUser.php,v 1.201 2008/10/18 09:46:35 squareing Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.200 $
+ * @version  $Revision: 1.201 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -80,6 +80,8 @@ class BitUser extends LibertyMime {
 	/**
 	 * load - loads all settings & preferences for this user
 	 *
+	 * @param boolean $pFull Load additional user data like
+	 * @param string $pUserName User login name
 	 * @access public
 	 * @author Chrstian Fowler <spider@steelsun.com>
 	 * @return returnString
@@ -147,12 +149,12 @@ class BitUser extends LibertyMime {
 					$this->setPreference( 'users_country', str_replace( '_', ' ', $this->getPreference( 'users_country' ) ) );
 				}
 				if( $pFull ) {
-					$this->mInfo['real_name'] = trim($this->mInfo['real_name']);
+					$this->mInfo['real_name'] = trim( $this->mInfo['real_name'] );
 					$this->mInfo['display_name'] = (
 						( !empty( $this->mInfo['real_name'] ) ? $this->mInfo['real_name'] :
 						( !empty( $this->mUsername) ? $this->mUsername :
-						( !empty( $this->mInfo['email'] ) ? substr($this->mInfo['email'],0, strpos($this->mInfo['email'],'@')) :
-						$this->mUserId)))
+						( !empty( $this->mInfo['email'] ) ? substr( $this->mInfo['email'], 0, strpos( $this->mInfo['email'],'@' )) :
+						$this->mUserId )))
 					);
 					//print("displayName: ".$this->mInfo['display_name']);
 					$this->defaults();
