@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.198 2008/10/17 22:04:34 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.199 2008/10/18 07:08:13 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.198 2008/10/17 22:04:34 squareing Exp $
+ * $Id: BitUser.php,v 1.199 2008/10/18 07:08:13 squareing Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.198 $
+ * @version  $Revision: 1.199 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -165,7 +165,7 @@ class BitUser extends LibertyMime {
 		}
 		if( !$gBitSystem->isFeatureActive( 'i18n_browser_languages' ) ) {
 			global $gBitLanguage;
-			if( $this->mUserId && $this->mUserId != -1 ) {
+			if( $this->mUserId && $this->mUserId != ANONYMOUS_USER_ID ) {
 				$gBitLanguage->mLanguage = $this->getPreference( 'bitlanguage', $gBitLanguage->mLanguage );
 			} elseif( isset( $_SESSION['bitlanguage'] )) {
 				// users not logged that change the preference
