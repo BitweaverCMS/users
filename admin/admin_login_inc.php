@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.27 2007/06/17 13:53:04 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.28 2008/10/18 09:45:05 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -136,23 +136,27 @@ if( !empty( $_REQUEST["loginprefs"] ) ) {
 	simple_set_value( 'users_remember_time', USERS_PKG_NAME );
 	simple_set_value( 'users_auth_method', USERS_PKG_NAME );
 
-	if ( isset( $_REQUEST['registration_group_choice'] ) ) {
+	if( isset( $_REQUEST['registration_group_choice'] ) ) {
 		$listHash = array();
 		$groupList = $gBitUser->getAllGroups( $listHash );
 		$in = array();
 		$out = array();
-		foreach ( $groupList as $gr ) {
-			if ($gr['group_id'] == -1)
+		foreach( $groupList as $gr ) {
+			if( $gr['group_id'] == ANONYMOUS_GROUP_ID ) {
 				continue;
-			if ( $gr['is_public'] == 'y' && !in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] ) ) // deselect
+			}
+
+			// work out if someting has been selected or deselected
+			if( $gr['is_public'] == 'y' && !in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] )) {
 				$out[] = $gr['group_id'];
-			elseif ( $gr['is_public'] != 'y' && in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] ) ) //select
+			} elseif( $gr['is_public'] != 'y' && in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] )) {
 				$in[] = $gr['group_id'];
+			}
 		}
-		if ( count($in) ) {
+		if( count( $in ) ) {
 			$gBitUser->storeRegistrationChoice( $in, 'y' );
 		}
-		if ( count($out) ) {
+		if( count( $out ) ) {
 			$gBitUser->storeRegistrationChoice( $out, NULL );
 		}
 	}
