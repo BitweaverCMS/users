@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.37 2008/07/29 18:10:24 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.38 2008/10/18 09:48:44 squareing Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -43,7 +43,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 } elseif( isset($_REQUEST["members"] ) ) {
 	$groupInfo = $gBitUser->getGroupInfo( $_REQUEST["members"] );
 	$gBitSmarty->assign_by_ref( 'groupInfo', $groupInfo );
-	$groupMembers = $gBitUser->get_group_users( $_REQUEST["members"] );
+	$groupMembers = $gBitUser->getGroupUsers( $_REQUEST["members"] );
 	$gBitSmarty->assign_by_ref( 'groupMembers', $groupMembers );
 	$mid = "bitpackage:users/group_list_members.tpl";
 	$gBitSystem->setBrowserTitle( tra( 'Group Members' ).': '.$groupInfo['group_name'] );
@@ -89,7 +89,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 			if( $_REQUEST['group_id'] == $gBitSystem->getConfig( 'default_home_group' ) ) {
 				$gBitSystem->storeConfig( 'default_home_group', NULL, USERS_PKG_NAME );
 			}
-			$gBitUser->remove_group($_REQUEST['group_id']);
+			$gBitUser->expungeGroup( $_REQUEST['group_id'] );
 			$successMsg = "The group ".$groupInfo['group_name']." was deleted.";
 			unset( $_REQUEST['group_id'] );
 		} else {
