@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.199 2008/10/18 07:08:13 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.200 2008/10/18 07:41:09 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.199 2008/10/18 07:08:13 squareing Exp $
+ * $Id: BitUser.php,v 1.200 2008/10/18 07:41:09 squareing Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.199 $
+ * @version  $Revision: 1.200 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -353,8 +353,8 @@ class BitUser extends LibertyMime {
 			$errors = array();
 		}
 
-		// during install we have root@localhost as email address. we'll ignore that here.
-		if( $pEmail == 'root@localhost' ) {
+		// during install we have some <user>@localhost as email address. we won't cause problems on those
+		if( $pEmail == 'root@localhost' || $pEmail == 'guest@localhost' ) {
 			// nothing to do
 		} elseif( !validate_email_syntax( $pEmail ) ) {
 			$errors['email'] = 'The email address "'.$pEmail.'" is invalid.';
