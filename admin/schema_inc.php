@@ -84,6 +84,7 @@ $tables = array(
   CONSTRAINT ', CONSTRAINT `users_cnxn_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
+// remove this table - semaphores have been moved to their own package.
 'users_semaphores' => "
 	sem_name C(250) PRIMARY,
 	user_id I4 NOTNULL,

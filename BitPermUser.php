@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.69 2008/10/18 11:05:41 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.70 2008/10/18 17:12:55 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.69 2008/10/18 11:05:41 squareing Exp $
+ * $Id: BitPermUser.php,v 1.70 2008/10/18 17:12:55 squareing Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.69 $
+ * @version  $Revision: 1.70 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -738,26 +738,6 @@ class BitPermUser extends BitUser {
 	}
 
 	/**
-	 * setPermission temporarily set the permission for the active user does NOT store the permission
-	 * 
-	 * @param array $pPerm 
-	 * @param array $pValue 
-	 * @access public
-	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
-	 */
-	function setPermission( $pPerm, $pValue = NULL ) {
-		if( $this->isAdmin() ) {
-			$this->mPerms[$pPerm] = TRUE;
-		} elseif( $this->isValid() ) {
-			if( $pValue == 'y' || $pValue == TRUE ) {
-				$this->mPerms[$pPerm] = TRUE;
-			} else {
-				unset( $this->mPerms[$pPerm] );
-			}
-		}
-	}
-
-	/**
 	 * getGroupPermissions 
 	 * 
 	 * @param array $pGroupId Group id, if unset, all groups are returned
@@ -993,6 +973,18 @@ class BitPermUser extends BitUser {
 			$perm = $contentType["content_type_guid"].'_p_view';
 			if (!empty( $perm ) and $gBitUser->hasPermission( $perm )) {
 				$contentTypes[$contentType["content_type_guid"]] = $contentType["content_description"];
+			}
+		}
+	}
+	function setPermission( $pPerm, $pValue = NULL ) {
+		deprecated( "This method doesn't do what it's supposed to and it seems it's not used." );
+		if( $this->isAdmin() ) {
+			$this->mPerms[$pPerm] = TRUE;
+		} elseif( $this->isValid() ) {
+			if( $pValue == 'y' || $pValue == TRUE ) {
+				$this->mPerms[$pPerm] = TRUE;
+			} else {
+				unset( $this->mPerms[$pPerm] );
 			}
 		}
 	}

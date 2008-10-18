@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.201 2008/10/18 09:46:35 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.202 2008/10/18 17:12:55 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.201 2008/10/18 09:46:35 squareing Exp $
+ * $Id: BitUser.php,v 1.202 2008/10/18 17:12:55 squareing Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.201 $
+ * @version  $Revision: 1.202 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -855,7 +855,6 @@ class BitUser extends LibertyMime {
 			$this->purgeImage( 'logo' );
 			$this->invokeServices( 'users_expunge_function' );
 			$userTables = array(
-				'users_semaphores',
 				'users_cnxn',
 				'users_watches',
 				'users_favorites_map',
@@ -2210,75 +2209,6 @@ class BitUser extends LibertyMime {
 		return $ret;
 	}
 
-	// {{{ ==================== Semaphores ====================
-	/**
-	 * isSemaphoreSet 
-	 * 
-	 * @param array $pSemName 
-	 * @param array $pLimit 
-	 * @access public
-	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
-	 */
-	function isSemaphoreSet( $pSemName, $pLimit ) {
-		if( !empty( $pSemName ) && !empty( $pLimit )) {
-			global $gBitSystem;
-
-			$pLimit = $gBitSystem->getUTCTime() - $pLimit;
-			$query = "DELETE FROM `".BIT_DB_PREFIX."users_semaphores` WHERE `sem_name` = ? AND `created` < ?";
-			$result = $this->mDb->query( $query, array( $pSemName, ( int )$pLimit) );
-
-			$query = "SELECT `sem_name` FROM `".BIT_DB_PREFIX."users_semaphores` WHERE `sem_name`=?";
-			$result = $this->mDb->query( $query, array( $pSemName ));
-			return $result->numRows();
-		}
-	}
-
-	/**
-	 * hasSemaphoreConflict 
-	 * 
-	 * @param array $pSemName 
-	 * @param array $pLimit 
-	 * @access public
-	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
-	 */
-	function hasSemaphoreConflict( $pSemName, $pLimit ) {
-		if( !empty( $pSemName ) && !empty( $pLimit )) {
-			global $gBitSystem;
-			$ret = NULL;
-			$pLimit = $gBitSystem->getUTCTime() - $pLimit;
-			$query = "delete from `".BIT_DB_PREFIX."users_semaphores` where `sem_name`=? and `created`<?";
-			$result = $this->mDb->query($query,array( $pSemName, (int)$pLimit) );
-			$query = "
-				SELECT uu.`login`, uu.`real_name`, uu.`email`, uu.`user_id`
-				FROM `".BIT_DB_PREFIX."users_semaphores` ls INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id`=ls.`user_id`)
-				WHERE `sem_name`=? AND ls.`user_id` <> ?";
-			if( $ret = $this->mDb->getRow( $query, array( $pSemName, ( $this->isValid() ? $this->mUserId : ANONYMOUS_USER_ID )))) {
-				$ret['nolink'] = TRUE;
-			}
-			return( $ret );
-		}
-	}
-
-	/**
-	 * storeSemaphore 
-	 * 
-	 * @param array $pSemName 
-	 * @access public
-	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
-	 */
-	function storeSemaphore( $pSemName ) {
-		if( !empty( $pSemName ) ) {
-			global $gBitSystem;
-			$query = "DELETE FROM `".BIT_DB_PREFIX."users_semaphores` WHERE `sem_name`=?";
-			$this->mDb->query( $query, array( $pSemName ));
-
-			$query = "INSERT INTO `".BIT_DB_PREFIX."users_semaphores`(`sem_name`,`created`,`user_id`) VALUES(?,?,?)";
-			$result = $this->mDb->query( $query, array( $pSemName, $gBitSystem->getUTCTime(), ( $this->isValid() ? $this->mUserId : ANONYMOUS_USER_ID )));
-			return $gBitSystem->getUTCTime();
-		}
-	}
-	// }}}
-
 	// PURE VIRTUAL FUNCTIONS
 	function getGroups () {
 		print "CALL TO PURE VIRTUAL FUNCTIONS"; bt(); die;
@@ -2445,6 +2375,50 @@ class BitUser extends LibertyMime {
 		}
 
 		return (count($this->mErrors) == 0);
+	}
+	function isSemaphoreSet( $pSemName, $pLimit ) {
+		deprecated( "Semaphore methods in users have been deprecated. Please use the semaphore package instead." );
+		if( !empty( $pSemName ) && !empty( $pLimit )) {
+			global $gBitSystem;
+
+			$pLimit = $gBitSystem->getUTCTime() - $pLimit;
+			$query = "DELETE FROM `".BIT_DB_PREFIX."users_semaphores` WHERE `sem_name` = ? AND `created` < ?";
+			$result = $this->mDb->query( $query, array( $pSemName, ( int )$pLimit) );
+
+			$query = "SELECT `sem_name` FROM `".BIT_DB_PREFIX."users_semaphores` WHERE `sem_name`=?";
+			$result = $this->mDb->query( $query, array( $pSemName ));
+			return $result->numRows();
+		}
+	}
+	function hasSemaphoreConflict( $pSemName, $pLimit ) {
+		deprecated( "Semaphore methods in users have been deprecated. Please use the semaphore package instead." );
+		if( !empty( $pSemName ) && !empty( $pLimit )) {
+			global $gBitSystem;
+			$ret = NULL;
+			$pLimit = $gBitSystem->getUTCTime() - $pLimit;
+			$query = "delete from `".BIT_DB_PREFIX."users_semaphores` where `sem_name`=? and `created`<?";
+			$result = $this->mDb->query($query,array( $pSemName, (int)$pLimit) );
+			$query = "
+				SELECT uu.`login`, uu.`real_name`, uu.`email`, uu.`user_id`
+				FROM `".BIT_DB_PREFIX."users_semaphores` ls INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id`=ls.`user_id`)
+				WHERE `sem_name`=? AND ls.`user_id` <> ?";
+			if( $ret = $this->mDb->getRow( $query, array( $pSemName, ( $this->isValid() ? $this->mUserId : ANONYMOUS_USER_ID )))) {
+				$ret['nolink'] = TRUE;
+			}
+			return( $ret );
+		}
+	}
+	function storeSemaphore( $pSemName ) {
+		deprecated( "Semaphore methods in users have been deprecated. Please use the semaphore package instead." );
+		if( !empty( $pSemName ) ) {
+			global $gBitSystem;
+			$query = "DELETE FROM `".BIT_DB_PREFIX."users_semaphores` WHERE `sem_name`=?";
+			$this->mDb->query( $query, array( $pSemName ));
+
+			$query = "INSERT INTO `".BIT_DB_PREFIX."users_semaphores`(`sem_name`,`created`,`user_id`) VALUES(?,?,?)";
+			$result = $this->mDb->query( $query, array( $pSemName, $gBitSystem->getUTCTime(), ( $this->isValid() ? $this->mUserId : ANONYMOUS_USER_ID )));
+			return $gBitSystem->getUTCTime();
+		}
 	}
 	// }}}
 }
