@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.18 2008/06/25 22:21:28 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_groups.php,v 1.19 2008/10/18 09:23:54 squareing Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: my_groups.php,v 1.18 2008/06/25 22:21:28 spiderr Exp $
+ * $Id: my_groups.php,v 1.19 2008/10/18 09:23:54 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -55,25 +55,11 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 		} else {
 			$errorMsg = $gBitUser->mErrors['groups'];
 		}
-	// Save a level join
-	} elseif (isset($_REQUEST['allper'])) {
-		if ($_REQUEST['oper'] == 'assign') {
-			$gBitUser->assignLevelPermissions($_REQUEST['group_id'], $_REQUEST['level']);
-		} else {
-			$gBitUser->removeLevelPermissions($_REQUEST['group_id'], $_REQUEST['level']);
-		}
-	// Create a level
-	} elseif (isset($_REQUEST["createlevel"])) {
-		$gBitUser->create_dummy_level($_REQUEST['level']);
 	// Update Permissions
 	} elseif (isset($_REQUEST['updateperms'])) {
 		$listHash = array( 'group_id' => $_REQUEST['group_id'] );
 		$updatePerms = $gBitUser->getgroupPermissions( $listHash );
-		foreach (array_keys($_REQUEST['level'])as $per) {
-			if( $allPerms[$per]['perm_level'] != $_REQUEST['level'][$per] ) {
-				// we changed level. perm[] checkbox is not taken into account
-				$gBitUser->change_permission_level($per, $_REQUEST['level'][$per]);
-			}
+		foreach (array_keys($_REQUEST['perm']) as $per) {
 			if( isset($_REQUEST['perm'][$per]) && !isset($updatePerms[$per]) ) {
 				// we have an unselected perm that is now selected
 				$gBitUser->assignPermissionToGroup($per, $_REQUEST['group_id']);
@@ -91,7 +77,7 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 			if( $gBitUser->getDefaultGroup( $_REQUEST['group_id'] ) ) {
 				$errorMsg = tra("You cannot remove this group, as it is currently set as your 'Default' group");
 			} else {
-				$gBitUser->remove_group($_REQUEST['group_id']);
+				$gBitUser->expungeGroup( $_REQUEST['group_id'] );
 				$successMsg = tra("The group was deleted.");
 				unset( $_REQUEST['group_id'] );
 			}
@@ -140,7 +126,7 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 			unset( $groupList[$_REQUEST['group_id']] );
 		}
 		$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group_id'] );
-		$groupUsers = $gBitUser->get_group_users( $_REQUEST['group_id'] );
+		$groupUsers = $gBitUser->getGroupUsers( $_REQUEST['group_id'] );
 		$gBitSmarty->assign_by_ref('groupUsers', $groupUsers);
 		$gBitSmarty->assign_by_ref('groupInfo', $groupInfo);
 		$gBitSmarty->assign_by_ref( 'allPerms', $allPerms );

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_group_edit.tpl,v 1.7 2008/02/09 23:44:00 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_group_edit.tpl,v 1.8 2008/10/18 09:23:54 squareing Exp $ *}
 {strip}
 <div class="floaticon">
 	<a href="{$smarty.const.USERS_PKG_URL}my_groups.php">{tr}&laquo; Group List{/tr}</a> 
@@ -107,28 +107,30 @@
 
 			{if $gBitUser->hasPermission( 'p_users_assign_group_perms' )}
 				{if $groupInfo.group_id}
-					{jstab title="Permissions"}
-						{form legend="Permissions currently assigned to `$groupInfo.group_name`"}
-							<table class="data">
-								<tr>
-									<th>{tr}Permission{/tr}</th>
-									<th>{tr}Description{/tr}</th>
-								</tr>
-								{foreach from=$groupInfo.perms key=permName item=perm}
-								<tr class="{cycle values="odd,even"}">
-									<td>
-										{smartlink ititle="Remove" ibiticon="icons/edit-delete" package=$package group_id=$groupInfo.group_id action=remove permission=$permName}
-										&nbsp;{$permName}
-									</td>
-									<td>{$perm.perm_desc}</td>
-								</tr>
-								{/foreach}
-							</table>
-						{/form}
-					{/jstab}
+					{if $groupInfo.perms}
+						{jstab title="Permissions"}
+							{form legend="Permissions currently assigned to `$groupInfo.group_name`"}
+								<table class="data">
+									<tr>
+										<th>{tr}Permission{/tr}</th>
+										<th>{tr}Description{/tr}</th>
+									</tr>
+									{foreach from=$groupInfo.perms key=permName item=perm}
+										<tr class="{cycle values="odd,even"}">
+											<td>
+												{smartlink ititle="Remove" ibiticon="icons/edit-delete" package=$package group_id=$groupInfo.group_id action=remove permission=$permName}
+												&nbsp;{$permName}
+											</td>
+											<td>{$perm.perm_desc}</td>
+										</tr>
+									{/foreach}
+								</table>
+							{/form}
+						{/jstab}
+					{/if}
 
 					{jstab title="Assign Permissions"}
-						{form legend="Assign permissions and / or set level"}
+						{form legend="Assign permissions"}
 							<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
 							<input type="hidden" name="package" value="{$package|escape}" />
 							<input type="hidden" name="tab" value="assign" />
@@ -151,7 +153,6 @@
 									<tr>
 										<th>&nbsp;</th>
 										<th>{smartlink ititle="Name" isort=perm_name group_id=$groupInfo.group_id offset=$offset package=$package}</th>
-										<th>{tr}Level{/tr}</th>
 										<th>{smartlink ititle="Package" isort=package group_id=$groupInfo.group_id offset=$offset package=$package}</th>
 										<th>{smartlink ititle="Description" isort=perm_desc group_id=$groupInfo.group_id offset=$offset package=$package}</th>
 										<th>&nbsp;</th>
@@ -161,7 +162,6 @@
 											<tr class="{cycle values="even,odd"}">
 												<td><input type="checkbox" id="{$permName}" name="perm[{$permName}]"{if $groupInfo.perms.$permName} checked="checked"{/if} /></td>
 												<td><label for="{$permName}">{$permName}</label></td>
-												<td><select name="level[{$permName}]">{html_options output=$levels values=$levels selected=$perm.perm_level}</select></td>
 												<td>{tr}{$perm.package}{/tr}</td>
 												<td>{tr}{$perm.perm_desc}{/tr}</td>
 											</tr>
@@ -172,47 +172,6 @@
 
 							<div class="row submit">
 								<input type="submit" name="updateperms" value="{tr}Update{/tr}" />
-							</div>
-						{/form}
-					{/jstab}
-
-					{jstab title="Batch Assign"}
-						{form legend="Batch assign permissions"}
-							<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
-							<input type="hidden" name="package" value="{$package|escape}" />
-
-							<div class="row">
-								<select name="oper">
-									<option value="assign">{tr}assign{/tr}</option>
-									<option value="remove">{tr}remove{/tr}</option>
-								</select> 
-								{tr}all permissions in level{/tr} 
-								<select name="level">
-									{html_options output=$levels values=$levels selected=$perms[user].level}
-								</select> 
-								{tr}to {$groupInfo.group_name}{/tr}
-							</div>
-
-							<div class="row submit">
-								<input type="submit" name="allper" value="{tr}Update{/tr}" />
-							</div>
-						{/form}
-					{/jstab}
-
-					{jstab title="Create Level"}
-						{form legend="Create a new level"}
-							<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
-							<input type="hidden" name="package" value="{$package|escape}" />
-							<div class="row">
-								{formlabel label="Level" for="level"}
-								{forminput}
-									<input type="text" name="level" id="level" />
-									{formhelp note="Levels can be used to group certain permissions and thus easily assign a set of permissions to a group. Assinging a permission to a level has no outcome on the users or groups. It's merely a way to organise permissions."}
-								{/forminput}
-							</div>
-
-							<div class="row submit">
-								<input type="submit" name="createlevel" value="{tr}Create{/tr}" />
 							</div>
 						{/form}
 					{/jstab}
