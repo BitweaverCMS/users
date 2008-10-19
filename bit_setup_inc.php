@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.48 2008/10/16 09:57:58 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.49 2008/10/19 10:31:00 nickpalmer Exp $
  * @package users
  */
 global $gBitDbType, $gBitDbHost, $gBitDbUser, $gBitDbPassword, $gBitDbName, $gBitThemes;
@@ -104,7 +104,13 @@ if( !empty( $gOverrideLoginFunction )) {
 	} else {
 		$cookie_time = 0;
 	}
+
 	setcookie( $user_cookie_site, session_id(), $cookie_time, $gBitSystem->getConfig( 'cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig( 'cookie_domain', '' ));
+	// Some firewall software blocks cookies sent the above way so try this
+	// way if that failed.
+	if (empty($_COOKIE[$user_cookie_site])) {
+		$_COOKIE[$user_cookie_site] = session_id();
+	}
 
 	// if the auth method is 'web site', look for the username in $_SERVER
 	if( $gBitSystem->getConfig( 'users_auth_method', 'tiki' ) == 'ws' ) {
