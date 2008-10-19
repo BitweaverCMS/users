@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.70 2008/10/18 17:12:55 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.71 2008/10/19 08:14:21 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.70 2008/10/18 17:12:55 squareing Exp $
+ * $Id: BitPermUser.php,v 1.71 2008/10/19 08:14:21 squareing Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.70 $
+ * @version  $Revision: 1.71 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -898,6 +898,9 @@ class BitPermUser extends BitUser {
 
 	// {{{ ==================== deprecated methods - will be removed soon ====================
 	//  - xing - Saturday Oct 18, 2008   11:38:05 CEST
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function get_user_id( $pUserName ) {
 		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
 		if( !empty( $pUserName ) ) {
@@ -906,18 +909,30 @@ class BitPermUser extends BitUser {
 			return $id;
 		}
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function remove_group($pGroupId) {
 		deprecated( 'Method has been renamed to $gBitUser->expungeGroup()' );
 		$this->expungeGroup( $pGroupId );
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function get_group_users( $pGroupId ) {
 		deprecated( 'Method has been renamed to $gBitUser->getGroupUsers()' );
 		$this->getGroupUsers( $pGroupId );
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function batch_set_user_default_group( $pGroupId ) {
 		deprecated( 'Method has been renamed to $gBitUser->batchSetUserDefaultGroup()' );
 		$this->batchSetUserDefaultGroup( $pGroupId );
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function countGroupUsers( $pGroupId ) {
 		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
 		static $sGroupUsers = array();
@@ -927,12 +942,18 @@ class BitPermUser extends BitUser {
 		}
 		return $sGroupUsers[$pGroupId];
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function changePermissionLevel($perm, $pLevel) {
 		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
 		$query = "update `".BIT_DB_PREFIX."users_permissions` set `perm_level` = ?
 			where `perm_name` = ?";
 		$this->mDb->query($query, array($pLevel, $perm));
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function removeLevelPermissions($group, $pLevel) {
 		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
 		$query = "select `perm_name` from `".BIT_DB_PREFIX."users_permissions` where `perm_level` = ?";
@@ -941,6 +962,9 @@ class BitPermUser extends BitUser {
 			$this->removePermissionFromGroup($res['perm_name'], $group);
 		}
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function createDummyLevel($pLevel) {
 		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
 		$query = "delete from `".BIT_DB_PREFIX."users_permissions` where `perm_name` = ?";
@@ -949,10 +973,16 @@ class BitPermUser extends BitUser {
 			`package`, `perm_level`) VALUES ('','','',?)";
 		$this->mDb->query($query, array($pLevel));
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function getPermissionLevels() {
 		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
 		return( $this->mDb->getCol( "SELECT DISTINCT(`perm_level`) FROM `".BIT_DB_PREFIX."users_permissions` ORDER BY `perm_level`" ));
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function group_has_permission( $pGroupId, $pPerm ) {
 		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
 		if (!isset($pPerm, $this->cGroupPerms[$pGroupId][$pPerm])) {
@@ -966,6 +996,9 @@ class BitPermUser extends BitUser {
 			return $this->cGroupPerms[$pGroupId][$pPerm];
 		}
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function getContentTypeList( $pUserId ) {
 		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
 		foreach( $gLibertySystem->mContentTypes as $contentType ) {
@@ -976,6 +1009,9 @@ class BitPermUser extends BitUser {
 			}
 		}
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function setPermission( $pPerm, $pValue = NULL ) {
 		deprecated( "This method doesn't do what it's supposed to and it seems it's not used." );
 		if( $this->isAdmin() ) {

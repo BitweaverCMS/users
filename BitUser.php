@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.202 2008/10/18 17:12:55 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.203 2008/10/19 08:14:21 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.202 2008/10/18 17:12:55 squareing Exp $
+ * $Id: BitUser.php,v 1.203 2008/10/19 08:14:21 squareing Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.202 $
+ * @version  $Revision: 1.203 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -2267,27 +2267,45 @@ class BitUser extends LibertyMime {
 
 	// {{{ ==================== deprecated methods - will be removed soon ====================
 	//  - xing - Thursday Oct 16, 2008   10:35:11 CEST
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function get_SMTP_response( &$pConnect ) {
 		deprecated( 'Method has been renamed to $gBitUser->getSmtpResponse()' );
 		$this->getSmtpResponse( $pConnect );
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function update_lastlogin( $pUserId ) {
 		deprecated( 'Method has been renamed to $gBitUser->updateLastLogin()' );
 		$this->updateLastLogin( $pUserId );
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function get_users_names() {
 		deprecated( 'Method has been removed. Please use $gBitUser->getSelectionList() instead.' );
 		$this->getSelectionList();
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function getUserFromContentId( $content_id ) {
 		deprecated( 'Method has been deprecated. Use $gBitUser->getUserInfo() instead' );
 		$userInfo = $this->getUserInfo( array( 'content_id' => $content_id ));
 		return $userInfo['user_id'];
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function getByHash( $pHash ) {
 		deprecated( "Method has been renamed to getUserIdFromCookieHash()" );
 		$this->getUserIdFromCookieHash( $pHash );
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function renewPassword( $pLogin ) {
 		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
 		global $gBitSystem;
@@ -2295,6 +2313,9 @@ class BitUser extends LibertyMime {
 		$this->storePassword( $pass, $pLogin );
 		return $pass;
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function get_users($offset = 0, $max_records = -1, $sort_mode = 'login_desc', $find = '') {
 		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
 		$sort_mode = $this->mDb->convertSortmode($sort_mode);
@@ -2322,6 +2343,9 @@ class BitUser extends LibertyMime {
 		$retval["cant"] = $cant;
 		return $retval;
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function getUserFiles() {
 		deprecated( 'Please use $gBitUser->getUserAttachments() instead.' );
 		global $gLibertySystem;
@@ -2352,6 +2376,9 @@ class BitUser extends LibertyMime {
 		}
 		return $ret;
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function storeRealName($newRealName) {
 		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
 		if (strlen($newRealName) > REAL_NAME_COL_SIZE) {
@@ -2362,6 +2389,9 @@ class BitUser extends LibertyMime {
 			$this->mDb->query($sql, array($newRealName, $this->mUserId));
 		}
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function storeLogin($newLogin) {
 		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
 		$newLogin = substr($newLogin,0,40);
@@ -2376,6 +2406,9 @@ class BitUser extends LibertyMime {
 
 		return (count($this->mErrors) == 0);
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function isSemaphoreSet( $pSemName, $pLimit ) {
 		deprecated( "Semaphore methods in users have been deprecated. Please use the semaphore package instead." );
 		if( !empty( $pSemName ) && !empty( $pLimit )) {
@@ -2390,6 +2423,9 @@ class BitUser extends LibertyMime {
 			return $result->numRows();
 		}
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function hasSemaphoreConflict( $pSemName, $pLimit ) {
 		deprecated( "Semaphore methods in users have been deprecated. Please use the semaphore package instead." );
 		if( !empty( $pSemName ) && !empty( $pLimit )) {
@@ -2408,6 +2444,9 @@ class BitUser extends LibertyMime {
 			return( $ret );
 		}
 	}
+	/**
+	 * @deprecated deprecated since version 2.1.0-beta
+	 */
 	function storeSemaphore( $pSemName ) {
 		deprecated( "Semaphore methods in users have been deprecated. Please use the semaphore package instead." );
 		if( !empty( $pSemName ) ) {
