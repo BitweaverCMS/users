@@ -638,6 +638,20 @@ array( 'DATADICT' => array(
 
 )),
 
+
+
+
+'BWR2' => array(
+	'BWR3' => array(
+
+array( 'DATADICT' => array(
+	array( 'DROPTABLE' => array(
+		'users_semaphores',
+	)),
+)),
+
+	)
+),
 );
 
 if( isset( $upgrades[$gUpgradeFrom][$gUpgradeTo] ) ) {
