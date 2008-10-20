@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.203 2008/10/19 08:14:21 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.204 2008/10/20 21:40:12 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.203 2008/10/19 08:14:21 squareing Exp $
+ * $Id: BitUser.php,v 1.204 2008/10/20 21:40:12 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.203 $
+ * @version  $Revision: 1.204 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -355,13 +355,14 @@ class BitUser extends LibertyMime {
 			$errors = array();
 		}
 
+		// check for existing user first, so root@localhost doesn't get attempted to re-register
+		if( !empty( $this ) && is_object( $this ) && $this->userExists( array( 'email' => $pEmail ) ) ) {
+			$errors['email'] = 'The email address "'.$pEmail.'" has already been registered.';
 		// during install we have some <user>@localhost as email address. we won't cause problems on those
-		if( $pEmail == 'root@localhost' || $pEmail == 'guest@localhost' ) {
+		} elseif( $pEmail == 'root@localhost' || $pEmail == 'guest@localhost' ) {
 			// nothing to do
 		} elseif( !validate_email_syntax( $pEmail ) ) {
 			$errors['email'] = 'The email address "'.$pEmail.'" is invalid.';
-		} elseif( !empty( $this ) && is_object( $this ) && $this->userExists( array( 'email' => $pEmail ) ) ) {
-			$errors['email'] = 'The email address "'.$pEmail.'" has already been registered.';
 		} elseif( $gBitSystem->isFeatureActive( 'users_validate_email' ) ) {
 			if( !$this->verifyMX( $pEmail, $pValidate ) ) {
 				$errors['email'] = 'Cannot find a valid MX host';
