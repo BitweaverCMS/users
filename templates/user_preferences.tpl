@@ -11,7 +11,7 @@
 	<div class="body">
 		{formfeedback hash=$feedback}
 		{jstabs}
-			{jstab title="User Information"}
+			{jstab title="User"}
 				{form}
 					{legend legend="User Information"}
 						<input type="hidden" name="view_user" value="{$editUser->mUserId}" />
@@ -59,16 +59,14 @@
 						<div class="row">
 							{formlabel label="Country" for="country"}
 							{forminput}
-								{if $editUser->mPrefs.flag}{biticon iforce=icon ipackage=users ipath=flags/ iname=$editUser->mPrefs.flag iexplain=$editUser->mPrefs.flag}{/if}
 								<select name="users_country" id="country">
-									<option value="" />
-									{sortlinks}
+									<option value=""></option>
 										{section name=ix loop=$flags}
 											<option value="{$flags[ix]|escape}" {if $editUser->mPrefs.flag eq $flags[ix]}selected="selected"{/if}>{tr}{$flags[ix]|replace:'_':' '}{/tr}</option>
 										{/section}
-									{/sortlinks}
 								</select>
-								{formhelp note=""}
+								&nbsp;
+								{if $editUser->mPrefs.flag}{biticon iforce=icon ipackage=users ipath=flags/ iname=$editUser->mPrefs.flag iexplain=$editUser->mPrefs.flag}{/if}
 							{/forminput}
 						</div>
 
@@ -259,7 +257,7 @@
 				{/if}
 			{/jstab}
 
-			{jstab title="Pictures and Icons"}
+			{jstab title="Pictures"}
 				{legend legend="Pictures and Icons"}
 					<div class="row">
 						{formlabel label="Pictures"}
@@ -319,7 +317,7 @@
 			{/if}
 
 			{foreach item=file from=$includFiles}
-			{include file=$file.tpl userPrefs=$editUser->mPrefs view_user=$editUser->mUserId}
+				{include file=$file.tpl userPrefs=$editUser->mPrefs view_user=$editUser->mUserId}
 			{/foreach}
 
 		{/jstabs}
