@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/admin/upgrades/Attic/2.0.0.php,v 1.3 2008/10/25 09:37:34 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/admin/upgrades/2.1.0.php,v 1.1 2008/10/28 21:15:00 squareing Exp $
  */
 global $gBitInstaller;
 
