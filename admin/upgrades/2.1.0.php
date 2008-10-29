@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/admin/upgrades/2.1.0.php,v 1.1 2008/10/28 21:15:00 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/admin/upgrades/2.1.0.php,v 1.2 2008/10/29 22:05:19 squareing Exp $
  */
 global $gBitInstaller;
 
@@ -19,5 +19,12 @@ array( 'DATADICT' => array(
 	)),
 )),
 
+));
+
+$gBitInstaller->registerPackageDependencies( $infoHash, array(
+	'liberty'   => array( 'min' => '2.1.0' ),
+	'kernel'    => array( 'min' => '2.0.0' ),
+	'themes'    => array( 'min' => '2.0.0' ),
+	'languages' => array( 'min' => '2.0.0' ),
 ));
 ?>
