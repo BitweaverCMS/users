@@ -208,8 +208,8 @@ $gBitInstaller->registerUserPermissions( USERS_PKG_NAME, array(
 	array('p_users_bypass_captcha', 'Can bypass spam validation mechanisms', 'registered', USERS_PKG_NAME),
 ) );
 
-// Package dependencies
-$gBitInstaller->registerDependencies( USERS_PKG_NAME, array(
+// Package Requirements
+$gBitInstaller->registerRequirements( USERS_PKG_NAME, array(
 	'liberty'   => array( 'min' => '2.1.0' ),
 	'kernel'    => array( 'min' => '2.0.0' ),
 	'themes'    => array( 'min' => '2.0.0' ),
