@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.204 2008/10/20 21:40:12 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.205 2008/11/02 04:41:21 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.204 2008/10/20 21:40:12 spiderr Exp $
+ * $Id: BitUser.php,v 1.205 2008/11/02 04:41:21 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.204 $
+ * @version  $Revision: 1.205 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1390,6 +1390,10 @@ class BitUser extends LibertyMime {
 				$val = strtoupper( $val );
 			} else {
 				$col = " uu.`".key( $pUserMixed )."` ";
+				if( $val > 0xFFFFFFFF ) {
+					// 32 bit overflow, set to zero to avoid fatal error in databases with 32 bit integer columns
+					$val = 0;
+				}
 			}
 			$query = "SELECT  uu.* FROM `".BIT_DB_PREFIX."users_users` uu LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lc.`content_id`=uu.`content_id`) WHERE $col = ?";
 			$ret = $this->mDb->getRow( $query, array( $val ));
