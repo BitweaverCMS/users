@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.205 2008/11/02 04:41:21 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.206 2008/11/07 19:33:53 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.205 2008/11/02 04:41:21 spiderr Exp $
+ * $Id: BitUser.php,v 1.206 2008/11/07 19:33:53 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.205 $
+ * @version  $Revision: 1.206 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1124,28 +1124,24 @@ class BitUser extends LibertyMime {
 			$url = USERS_PKG_URL.'login.php?error=' . urlencode( tra( 'Invalid username or password' ));
 		}
 
-		// check for HTTPS mode
+		// check for HTTPS mode and redirect back to non-ssl when not requested, or a  SSL login was forced
 		if( isset( $_SERVER['HTTPS'] ) && strtolower( $_SERVER['HTTPS'] ) == 'on' ) {
-			if( !(( isset( $_SERVER['HTTP_REFERER'] ) && ( substr( $_SERVER['HTTP_REFERER'], 0, 5 ) == 'https' )) || ( isset( $_REQUEST['stay_in_ssl_mode'] ) && $_REQUEST['stay_in_ssl_mode'] == 'on' ))) {
-				if( $gBitSystem->isFeatureActive( 'site_http_domain' )) {
-					// start setting up the URL
-					$prefix = 'http://' . $gBitSystem->getConfig( 'site_http_domain' );
+			$refererSsl = isset( $_SERVER['HTTP_REFERER'] ) && substr( $_SERVER['HTTP_REFERER'], 0, 5 ) == 'https';
+			if( ($gBitSystem->getConfig( 'site_https_login_required' ) && !$refererSsl) || ($refererSsl && empty( $_REQUEST['stay_in_ssl_mode'] )) ) {
+				// start setting up the URL redirect without SSL
+				$prefix = 'http://' . $gBitSystem->getConfig( 'site_http_domain', $_SERVER['HTTP_HOST'] );
 
-					// add port to prefix if needed
-					$port   = $gBitSystem->getConfig( 'site_http_port', 80 );
-					if( $port != 80 ) {
-						$prefix .= ':'.$port;
-					}
-					$prefix .= $gBitSystem->getConfig( 'site_http_prefix', '/' );
-
-					// join prefix and URL
-					$url = $prefix.$url;
-
-					// append SID
-					if( SID ) {
-						$url .= '?' . SID;
-					}
+				// add port to prefix if needed
+				$port   = $gBitSystem->getConfig( 'site_http_port', 80 );
+				if( $port != 80 ) {
+					$prefix .= ':'.$port;
 				}
+				$prefix .= $gBitSystem->getConfig( 'site_http_prefix', BIT_ROOT_URL );
+				if( strrpos( $prefix, '/' ) == (strlen( $prefix )  - 1) ) {
+					$prefix = substr( $prefix, 0, strlen( $prefix ) - 1 );
+				}
+				// join prefix and URL
+				$url = $prefix.$url;
 			}
 		}
 		return( $url );
