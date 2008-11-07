@@ -27,14 +27,12 @@
 		</div>
 	{/if}
 
-	{if $gBitSystem->isFeatureActive('http_login_url') or $gBitSystem->isFeatureActive('https_login_url')}
+	
+	{if !$gBitSystem->getConfig('site_https_login_required') && $gBitSystem->isFeatureActive('http_login_url') or $gBitSystem->isFeatureActive('https_login_url')}
 		<div class="row">
 			{formlabel label="" for=""}
 			{forminput}
-				{if !$force_secure}
-					<a href="{$gBitSystem->getConfig('http_login_url')}" title="{tr}Click here to login using the default security protocol{/tr}">{tr}Standard{/tr}</a> |
-				{/if}
-				<a href="{$gBitSystem->getConfig('https_login_url')}" title="{tr}Click here to login using a secure protocol{/tr}">{tr}Secure{/tr}</a>
+				<a href="{$gBitSystem->getConfig('http_login_url')}" title="{tr}Click here to login using the default security protocol{/tr}">{tr}Standard{/tr}</a> | <a href="{$gBitSystem->getConfig('https_login_url')}" title="{tr}Click here to login using a secure protocol{/tr}">{tr}Secure{/tr}</a>
 				{formhelp note=""}
 			{/forminput}
 		</div>
@@ -54,6 +52,9 @@
 
 	<div class="row submit">
 		<input type="submit" name="login" value="{tr}Log in to {$gBitSystem->getConfig('site_title')|default:"this site"}{/tr}" />
+		{if $gBitSystem->isFeatureActive('site_https_login_required') || $smarty.server.HTTPS=='on'}
+			{biticon iname="emblem-readonly" ipackage="icons" iexplain="Secure Login"}
+		{/if}
 	</div>
 {/form}
 {/strip}
