@@ -301,8 +301,8 @@ array( 'DROPCOLUMN' => array(
 )),
 
 // STEP 5
-array( 'SQL92' =>
-	array( 'QUERY' => array(
+array( 'QUERY' =>
+	array( 'SQL92' => array(
 		"INSERT INTO `".BIT_DB_PREFIX."users_groups_map` (`group_id`, `user_id` ) VALUES ( -1, ".ANONYMOUS_USER_ID." )",
 	),
 )),
