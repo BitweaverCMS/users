@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_assign_user.tpl,v 1.4 2007/01/24 18:26:47 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_assign_user.tpl,v 1.5 2008/11/17 23:22:13 laetzer Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 <div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{biticon ipackage="icons" iname="go-previous" iexplain="back to users"}</a></div>
@@ -90,7 +90,9 @@
 						<td>{$group.group_name}</td>
 						<td>{$group.group_desc}</td>
 						<td class="actionicon">
-							<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="icons" iname="mail-attachment" iexplain="assign" iforce="icon"}</a>
+							<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">
+								{biticon ipackage="icons" iname="emblem-shared" iexplain="assign" iforce="icon"}
+							</a>
 						</td>
 					</tr>
 				{/if}
