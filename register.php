@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.36 2008/10/02 06:22:39 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.37 2008/11/18 00:03:50 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.36 2008/10/02 06:22:39 squareing Exp $
+ * $Id: register.php,v 1.37 2008/11/18 00:03:50 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -83,7 +83,8 @@ if( isset( $_REQUEST["register"] ) ) {
 				if( empty($_COOKIE[$user_cookie_site] ) ) {
 					$_COOKIE[$user_cookie_site] = session_id();
 				}
-				$afterRegDefault = $newUser->login( $reg['login'], $reg['password'], FALSE, FALSE );
+				// login with email since login is not technically required in the form, as it can be auto generated during store
+				$afterRegDefault = $newUser->login( $reg['email'], $reg['password'], FALSE, FALSE );
 				$url = $gBitSystem->getConfig( 'after_reg_url' )?BIT_ROOT_URI.$gBitSystem->getConfig( 'after_reg_url' ):$afterRegDefault;
 				if( !empty( $_SESSION['returnto'] ) ) {
 					$url = $_SESSION['returnto'];
