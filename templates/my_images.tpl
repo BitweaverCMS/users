@@ -15,7 +15,7 @@
 			{/if}
 			<div class="row">
 				{formlabel label="Self Portrait" for="user_portrait_file"}
-				{if $gBitUser->mInfo.portrait_url}
+				{if $gBitUser->mInfo.portrait_attachment_id}
 					{forminput}
 						<img src="{$gQueryUser->mInfo.portrait_url}?{php}print time();{/php}" alt="{tr}self portrait{/tr}" /><br />
 						<input type="submit" value="{tr}delete self portrait{/tr}" name="delete_portrait" id="delete_portrait"/>
@@ -38,7 +38,7 @@
 
 			<div class="row">
 				{formlabel label="Avatar" for="user_auto_avatar"}
-				{if $gQueryUser->mInfo.avatar_url}
+				{if $gQueryUser->mInfo.avatar_attachment_id}
 					{forminput}
 						<img src="{$gQueryUser->mInfo.avatar_url}?{php}print time();{/php}" alt="{tr}avatar{/tr}" /><br />
 						<input type="submit" value="{tr}delete avatar{/tr}" name="delete_avatar" />
@@ -53,7 +53,7 @@
 
 			<div class="row">
 				{formlabel label="Logo" for="user_logo_file"}
-				{if $gBitUser->mInfo.logo_url}
+				{if $gBitUser->mInfo.logo_attachment_id}
 					{forminput}
 						<img src="{$gQueryUser->mInfo.logo_url}?{php}print time();{/php}" alt="{tr}logo{/tr}" /><br />
 						<input type="submit" value="{tr}delete logo{/tr}" id="delete_logo" name="delete_logo" />
