@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.207 2008/11/18 00:04:31 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.208 2008/11/19 08:47:30 squareing Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.207 2008/11/18 00:04:31 spiderr Exp $
+ * $Id: BitUser.php,v 1.208 2008/11/19 08:47:30 squareing Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.207 $
+ * @version  $Revision: 1.208 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1749,6 +1749,7 @@ class BitUser extends LibertyMime {
 			$pStorageHash['_files_override'][$pType]['max_width']     = constant( strtoupper( $pType )."_MAX_DIM" );
 			$pStorageHash['_files_override'][$pType]['max_height']    = constant( strtoupper( $pType )."_MAX_DIM" );
 			$pStorageHash['_files_override'][$pType]['attachment_id'] = !empty( $this->mInfo["{$pType}_attachment_id"] ) ? $this->mInfo["{$pType}_attachment_id"] : NULL;
+			$pStorageHash['_files_override'][$pType]['user_id']       = $this->mUserId;
 			if( LibertyMime::store( $pStorageHash )) {
 				$file = $pStorageHash['upload_store']['files'][$pType];
 				if( empty( $this->mInfo["{$pType}_attachment_id"] ) || $this->mInfo["{$pType}_attachment_id"] != $file['attachment_id'] ) {
