@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.56 2008/10/16 10:18:26 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.57 2008/11/29 21:05:41 wjames5 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.56 2008/10/16 10:18:26 squareing Exp $
+ * $Id: preferences.php,v 1.57 2008/11/29 21:05:41 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -169,8 +169,19 @@ if( isset( $_REQUEST['chgemail'] )) {
 		$gBitSystem->fatalError( tra("Invalid password.  Your current password is required to change your email address." ));
 	}
 
+	$org_email = $editUser->getField( 'email' );
 	if( $editUser->changeUserEmail( $editUser->mUserId, $_REQUEST['email'] )) {
 		$feedback['success'] = tra( 'Your email address was updated successfully' );
+
+		/* this file really needs a once over
+			we need to call services when various preferences are stored
+			for now my need is when the email address is changed. when the 
+			need expands to more we can look at cleaning up this file
+			into something more sane. happy to help out at that time -wjames5
+		 */
+		$paramHash = $_REQUEST;
+		$paramHash['org_email'] = $org_email;
+		$editUser->invokeServices( 'content_store_function', $_REQUEST );
 	} else {
 		$feedback['error'] = $editUser->mErrors;
 	}
