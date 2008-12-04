@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.58 2008/12/04 09:44:04 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.59 2008/12/04 09:55:00 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.58 2008/12/04 09:44:04 lsces Exp $
+ * $Id: preferences.php,v 1.59 2008/12/04 09:55:00 lsces Exp $
  * @package users
  * @subpackage functions
  */
@@ -246,7 +246,7 @@ $gBitSmarty->assign( 'gContent', $editUser ); // also assign to gContent to make
 $gBitSmarty->assign( 'feedback', $feedback );
 
 /* This should come from BitDate->get_timezone_list but that seems to rely on a global from PEAR that does not exist. */
-if (PHP_VERSION >= '5.1.0') {
+if ( version_compare( phpversion(), "5.1.0", ">=" ) ) {
 	$user_timezones = timezone_identifiers_list();
 } else {
 	for($i=-12;$i<=12;$i++) {
