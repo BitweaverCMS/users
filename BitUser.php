@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.208 2008/11/19 08:47:30 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.209 2008/12/04 23:03:57 pppspoonman Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.208 2008/11/19 08:47:30 squareing Exp $
+ * $Id: BitUser.php,v 1.209 2008/12/04 23:03:57 pppspoonman Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.208 $
+ * @version  $Revision: 1.209 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -166,8 +166,10 @@ class BitUser extends LibertyMime {
 			}
 		}
 		if( !$gBitSystem->isFeatureActive( 'i18n_browser_languages' ) ) {
-			global $gBitLanguage;
-			if( $this->mUserId && $this->mUserId != ANONYMOUS_USER_ID ) {
+			global $gBitLanguage, $gBitUser;
+			//change language only if if logged user is this user
+			//otherwise it's just logged user (lang A) watching other user's page (lang B) and don't change
+			if( $this->mUserId && $this->mUserId != ANONYMOUS_USER_ID && $gBitUser === $this) {
 				$gBitLanguage->mLanguage = $this->getPreference( 'bitlanguage', $gBitLanguage->mLanguage );
 			} elseif( isset( $_SESSION['bitlanguage'] )) {
 				// users not logged that change the preference
