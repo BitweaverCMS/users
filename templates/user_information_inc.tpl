@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.16 2007/02/13 14:33:58 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.17 2008/12/25 07:16:42 squareing Exp $ *}
 {strip}
 {if $userData->getPreference('users_information') eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
@@ -77,24 +77,26 @@
 		{/forminput}
 	</div>
 
-	<div class="row">
-		{formlabel label="Last Login"}
-		{forminput}
-			{$userData->mInfo.last_login|bit_long_datetime}
-		{/forminput}
-	</div>
-
-	{if $gBitSystem->isPackageActive( 'messages' ) and $userData->getPreference('messages_allow_messages') ne 'n' and $gBitUser->mUserId ne $userData->mUserId}
+	{if $userData->mUserId ne $smarty.const.ANONYMOUS_USER_ID}
 		<div class="row">
-			{formlabel label="Send Message"}
+			{formlabel label="Last Login"}
 			{forminput}
-				{tr}Send a <a href="{$smarty.const.MESSAGES_PKG_URL}compose.php?to={$userInfo.login}">personal message</a> to this user{/tr}
+				{$userData->mInfo.last_login|bit_long_datetime}
 			{/forminput}
 		</div>
-	{/if}
 
-	{if $gBitSystem->isPackageActive('stars') && $gBitSystem->isFeatureActive('stars_user_ratings')}
-		{include file="bitpackage:stars/user_ratings.tpl"}
+		{if $gBitSystem->isPackageActive( 'messages' ) and $userData->getPreference('messages_allow_messages') ne 'n' and $gBitUser->mUserId ne $userData->mUserId}
+			<div class="row">
+				{formlabel label="Send Message"}
+				{forminput}
+					{tr}Send a <a href="{$smarty.const.MESSAGES_PKG_URL}compose.php?to={$userInfo.login}">personal message</a> to this user{/tr}
+				{/forminput}
+			</div>
+		{/if}
+
+		{if $gBitSystem->isPackageActive('stars') && $gBitSystem->isFeatureActive('stars_user_ratings')}
+			{include file="bitpackage:stars/user_ratings.tpl"}
+		{/if}
 	{/if}
 {else}
 	<div class="norecords">
