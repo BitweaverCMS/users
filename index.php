@@ -1,8 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.35 2008/09/17 03:47:47 laetzer Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.36 2009/01/09 10:18:14 squareing Exp $
  *
- * $Id: index.php,v 1.35 2008/09/17 03:47:47 laetzer Exp $
+ * $Id: index.php,v 1.36 2009/01/09 10:18:14 squareing Exp $
  * @package users
  * @subpackage functions
  */
@@ -54,8 +54,10 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 	}
 	$browserTitle = $userHomeTitle;
 
-	if( ( $gBitSystem->isFeatureActive('display_users_content_list') && $gBitUser->hasPermission( 'p_liberty_list_content' ) ) || 
-		( $gBitUser->hasPermission( 'p_users_admin' ) || $gQueryUser->mUserId == $gBitUser->mUserId ) ) {
+	if(
+		( $gBitSystem->isFeatureActive( 'display_users_content_list' ) && $gBitUser->hasPermission( 'p_liberty_list_content' ))
+		|| ( $gBitUser->hasPermission( 'p_users_admin' ) || $gQueryUser->mUserId == $gBitUser->mUserId )
+	) {
 
 		// some content specific offsets and pagination settings
 		if( !empty( $_REQUEST['sort_mode'] ) ) {
@@ -85,8 +87,6 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 		$gBitSmarty->assign( 'display_content_list', 1 );
 		// end of content listing
 	}
-
-
 
 	// need to load layout now that we can check for center pieces
 	$layoutHash['layout'] = $gQueryUser->getField( 'login' );
