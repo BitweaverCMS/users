@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.209 2008/12/04 23:03:57 pppspoonman Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.210 2009/01/12 08:55:09 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.209 2008/12/04 23:03:57 pppspoonman Exp $
+ * $Id: BitUser.php,v 1.210 2009/01/12 08:55:09 lsces Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.209 $
+ * @version  $Revision: 1.210 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -196,11 +196,14 @@ class BitUser extends LibertyMime {
 		if( !$this->getPreference( 'site_display_utc' ) ) {
 			$this->setPreference( 'site_display_utc', 'Local' );
 		}
+/*
+ * site_display_timezone is not used for 'Local' time display so daylight saving offset is not available
+ * both of these should pick up the 'site default' values 
 		if( !$this->getPreference( 'site_display_timezone' ) ) {
-			$serverTime = new BitDate();
-			$this->setPreference( 'site_display_timezone', $serverTime->display_offset );
+			$this->setPreference( 'site_display_timezone', 'UTC' );
 		}
-		if( !$this->getPreference( 'bitlanguage' ) ) {
+ */
+ 		if( !$this->getPreference( 'bitlanguage' ) ) {
 			$this->setPreference( 'bitlanguage', $gBitLanguage->mLanguage );
 		}
 		if( !$this->getPreference( 'theme' ) ) {
