@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.61 2008/12/29 08:59:55 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.62 2009/01/12 08:15:48 lsces Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.61 2008/12/29 08:59:55 spiderr Exp $
+ * $Id: preferences.php,v 1.62 2009/01/12 08:15:48 lsces Exp $
  * @package users
  * @subpackage functions
  */
@@ -101,7 +101,7 @@ if( isset( $_REQUEST["prefs"] )) {
 	$prefs = array(
 		'users_homepage'        => NULL,
 		'site_display_utc'		=> 'Local',
-		'site_display_timezone' => 0,
+		'site_display_timezone' => 'UTC',
 		'users_country'         => NULL,
 		'users_information'     => 'public',
 		'users_email_display'   => 'n',
