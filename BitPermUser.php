@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.74 2008/11/03 18:26:34 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.75 2009/01/24 19:16:14 tekimaki_admin Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.74 2008/11/03 18:26:34 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.75 2009/01/24 19:16:14 tekimaki_admin Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.74 $
+ * @version  $Revision: 1.75 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -691,6 +691,12 @@ class BitPermUser extends BitUser {
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."users_groups_map` ugm ON ( ugm.`group_id`=ugp.`group_id` AND ugm.`user_id` = ? )
 				WHERE ug.`group_id`= ".ANONYMOUS_GROUP_ID." OR ugm.`group_id`=ug.`group_id`";
 			$this->mPerms = $this->mDb->getAssoc( $query, array( $this->mUserId ));
+			// Add in override permissions
+			if( !empty( $this->mPermsOverride ) ) {
+				foreach( $this->mPermsOverride as $key => $val ) {
+					$this->mPerms[$key] = $val;
+				}
+			}
 		}
 		return( count( $this->mPerms ) );
 	}
@@ -896,6 +902,23 @@ class BitPermUser extends BitUser {
 		}
 	}
 
+	/**
+	 * Grant a single permission to a given value
+	 */
+	function setPermissionOverride( $pPerm, $pValue = NULL ) {
+		if( $this->isAdmin() ) {
+			$this->mPerms[$pPerm] = TRUE;
+			$this->mPermsOverride[$pPerm] = TRUE;
+		} elseif( $this->isValid() ) {
+			if( $pValue == 'y' || $pValue == TRUE ) {
+				$this->mPermsOverride[$pPerm] = TRUE;
+				$this->mPerms[$pPerm] = TRUE;
+			} else {
+				unset( $this->mPermsOverride[$pPerm] );
+				unset( $this->mPerms[$pPerm] );
+			}
+		}
+	}
 
 
 	// {{{ ==================== deprecated methods - will be removed soon ====================
