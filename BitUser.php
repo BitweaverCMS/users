@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.210 2009/01/12 08:55:09 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.211 2009/01/24 17:59:28 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.210 2009/01/12 08:55:09 lsces Exp $
+ * $Id: BitUser.php,v 1.211 2009/01/24 17:59:28 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.210 $
+ * @version  $Revision: 1.211 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1344,6 +1344,8 @@ class BitUser extends LibertyMime {
 		if( @$this->verifyId( $iHomepage )) {
 			// iHomepage is the user_id for the user...
 			$key = 'user_id';
+			// force to proper integer to get things like "007." to properly query
+			$iHomepage = (integer)$iHomepage;
 		} elseif( substr( $iHomepage, 0, 7 ) == 'mailto:' ) {
 			// iHomepage is the email address of the user...
 			$key = 'email';
