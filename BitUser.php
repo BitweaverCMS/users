@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.213 2009/02/06 01:30:41 tekimaki_admin Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.214 2009/02/12 19:25:21 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.213 2009/02/06 01:30:41 tekimaki_admin Exp $
+ * $Id: BitUser.php,v 1.214 2009/02/12 19:25:21 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.213 $
+ * @version  $Revision: 1.214 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -867,9 +867,22 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
-	function expunge() {
+	function expunge( $pExpungeContent = NULL ) {
 		global $gBitSystem;
 		$this->mDb->StartTrans();
+
+		if( !empty( $pExpungeContent ) ) {
+			if( $pExpungeContent == 'all' ) {
+				if( $userContent = $this->mDb->getAssoc( "SELECT content_id, content_type_guid FROM `".BIT_DB_PREFIX."liberty_content` WHERE `user_id`=? AND `content_type_guid` != 'bituser'", array( $this->mUserId ) ) ) {
+					foreach( $userContent as $contentId=>$contentTypeGuid ) {
+						if( $delContent = LibertyBase::getLibertyObject( $contentId, $contentTypeGuid ) ) {
+							$delContent->expunge();
+						}
+					}
+				}
+			}
+		}
+
 		if( $this->mUserId != ANONYMOUS_USER_ID ) {
 			$this->purgeImage( 'avatar' );
 			$this->purgeImage( 'portrait' );

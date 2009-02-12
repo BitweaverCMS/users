@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.75 2009/01/24 19:16:14 tekimaki_admin Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.76 2009/02/12 19:25:21 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.75 2009/01/24 19:16:14 tekimaki_admin Exp $
+ * $Id: BitPermUser.php,v 1.76 2009/02/12 19:25:21 spiderr Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.75 $
+ * @version  $Revision: 1.76 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -191,7 +191,7 @@ class BitPermUser extends BitUser {
 	 * @return always FALSE???
 	 * TODO: fix return
 	 */
-	function expunge() {
+	function expunge( $pExpungeContent=NULL) {
 		global $gBitSystem, $gBitUser;
 		if( $this->isValid() ) {
 			$this->mDb->StartTrans();
@@ -208,7 +208,7 @@ class BitPermUser extends BitUser {
 					$result = $this->mDb->query( $query, array( $this->mUserId ) );
 				}
 
-				if( BitUser::expunge( $this->mUserId ) ) {
+				if( parent::expunge( $pExpungeContent ) ) {
 					$this->mDb->CompleteTrans();
 					return TRUE;
 				} else {

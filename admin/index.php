@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.29 2008/10/16 10:22:41 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.30 2009/02/12 19:25:22 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -103,9 +103,11 @@ if( isset( $_REQUEST["action"] ) ) {
 				$reqUser = new $userClass( $_REQUEST["user_id"] );
 				switch(  $_REQUEST["action"] ){
 					case 'delete':
-						if( $reqUser->load() && $reqUser->expunge() ) {
+						$reqUser->mDb->StartTrans();
+						if( $reqUser->load() && $reqUser->expunge( !empty( $_REQUEST['delete_user_content'] ) ? $_REQUEST['delete_user_content'] : NULL ) ) {
 							$feedback['success'][] = tra( 'User deleted' )." <strong>{$userInfo['real_name']} ({$userInfo['login']})</strong>";
 						}
+						$reqUser->mDb->CompleteTrans();
 						break;
 					case 'ban':
 						if( $reqUser->load() && $reqUser->ban() ) {
@@ -121,6 +123,11 @@ if( isset( $_REQUEST["action"] ) ) {
 			} else {
 				switch( $_REQUEST["action"] ){
 					case 'delete':
+						$formHash['input'][] = "<input type='checkbox' name='delete_user_content' value='all' checked='checked'/>".tra( 'Delete all content created by this user' );
+						foreach( $gLibertySystem->mContentTypes as $contentTypeGuid => $contentTypeHash ) {
+//							$formHash['input'][] = "<input type='checkbox' name='delete_user_content' checked='checked' value='$contentTypeGuid'/>Delete All User's $contentTypeHash[content_description]";
+						}
+
 						$gBitSystem->setBrowserTitle( tra( 'Delete user' ) );
 						$msgHash = array(
 							'confirm_item' => tra( 'Are you sure you want to remove the user?' ),
