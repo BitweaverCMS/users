@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.214 2009/02/12 19:25:21 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.215 2009/02/25 23:37:26 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.214 2009/02/12 19:25:21 spiderr Exp $
+ * $Id: BitUser.php,v 1.215 2009/02/25 23:37:26 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.214 $
+ * @version  $Revision: 1.215 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -599,6 +599,7 @@ class BitUser extends LibertyMime {
 		if( $this->hasPermission( 'p_users_bypass_captcha' ) || ( !empty( $_SESSION['captcha_verified'] ) && $_SESSION['captcha_verified'] === TRUE ) ) {
 			return TRUE;
 		} else {
+bt(); die;
 			if( empty( $pCaptcha ) || empty( $_SESSION['captcha'] ) || $_SESSION['captcha'] != md5( $pCaptcha ) ) {
 				return FALSE;
 			} else {
@@ -1111,7 +1112,8 @@ class BitUser extends LibertyMime {
 
 		// Make sure cookies are enabled
 		if ( !isset( $_COOKIE[$user_cookie_site] )) {
-			$url = USERS_PKG_URL.'login.php?error=' . urlencode( tra( 'No cookie found. Please enable cookies and try again.' ));
+			$this->mErrors['login'] = tra( 'No cookie found. Please enable cookies and try again.' );
+			$url = USERS_PKG_URL.'login.php?error=' . urlencode( $this->mErrors['login'] );
 			return( $url );
 		}
 
@@ -1133,7 +1135,7 @@ class BitUser extends LibertyMime {
 				// User is valid and not due to change pass..
 				$this->mUserId = $userInfo['user_id'];
 				$this->load();
-				$this->loadPermissions();
+				$this->loadPermissions( TRUE );
 				$url = isset($_SESSION['loginfrom']) ? $_SESSION['loginfrom'] : $gBitSystem->getDefaultPage();
 				unset( $_SESSION['loginfrom'] );
 
@@ -1154,7 +1156,8 @@ class BitUser extends LibertyMime {
 		} else {
 			$this->mUserId = ANONYMOUS_USER_ID;
 			unset( $this->mInfo );
-			$url = USERS_PKG_URL.'login.php?error=' . urlencode( tra( 'Invalid username or password' ));
+			$this->mErrors['login'] = tra( 'Invalid username or password' );
+			$url = USERS_PKG_URL.'login.php?error=' . urlencode( $this->mErrors['login'] );
 		}
 
 		// check for HTTPS mode and redirect back to non-ssl when not requested, or a  SSL login was forced
