@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.76 2009/02/12 19:25:21 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.77 2009/02/25 23:33:47 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitPermUser.php,v 1.76 2009/02/12 19:25:21 spiderr Exp $
+ * $Id: BitPermUser.php,v 1.77 2009/02/25 23:33:47 spiderr Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.76 $
+ * @version  $Revision: 1.77 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -679,8 +679,8 @@ class BitPermUser extends BitUser {
 	 * @access public
 	 * @return TRUE on success, FALSE if no perms were loaded
 	 */
-	function loadPermissions() {
-		if( $this->isValid() && empty( $this->mPerms ) ) {
+	function loadPermissions( $pForceReload=FALSE ) {
+		if( $this->isValid() && (empty( $this->mPerms ) || $pForceReload) ) {
 			$this->mPerms = array();
 			// the double up.`perm_name` is intentional - the first is for hash key, the second is for hash value
 			$query = "
