@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.20 2008/10/08 17:40:25 squareing Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.21 2009/03/06 20:11:50 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: validate.php,v 1.20 2008/10/08 17:40:25 squareing Exp $
+ * $Id: validate.php,v 1.21 2009/03/06 20:11:50 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -28,8 +28,12 @@ global $gBitSystem;
 //Remember where user is logging in from and send them back later; using session variable for those of us who use WebISO services
 //do not use session loginfrom with login.php or register.php - only "inline" login forms display in perm denied fatals, etc.
 if( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], 'login.php' ) === FALSE && strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) === FALSE ) {
+bt();
 	$from = parse_url( $_SERVER['HTTP_REFERER'] );
 	$_SESSION['loginfrom'] = (!empty($from['path']) ? $from['path'] : '').( !empty( $from['query'] ) ? '?'.$from['query'] : '' );
+} elseif( !empty( $_SESSION['returnto'] ) ) {
+	// we have been explicitly told where we want to return
+	$_SESSION['loginfrom'] = $_SESSION['returnto'];
 } elseif( !empty( $_SESSION['loginfrom'] ) ) {
 	unset( $_SESSION['loginfrom'] );
 }
