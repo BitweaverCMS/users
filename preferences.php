@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.63 2009/01/12 08:52:34 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.64 2009/03/14 03:05:57 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.63 2009/01/12 08:52:34 lsces Exp $
+ * $Id: preferences.php,v 1.64 2009/03/14 03:05:57 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -193,7 +193,7 @@ if( isset( $_REQUEST["chgpswd"] )) {
 	if( $_REQUEST["pass1"] != $_REQUEST["pass2"] ) {
 		$gBitSystem->fatalError( tra("The passwords didn't match" ));
 	}
-	if( !$gBitUser->hasPermission( 'p_users_admin' ) && !$editUser->validate( $editUser->mUsername, $_REQUEST["old"], '', '' )) {
+	if( !$gBitUser->hasPermission( 'p_users_admin' ) && !$editUser->validate( $editUser->getField( 'email' ), $_REQUEST["old"], '', '' )) {
 		$gBitSystem->fatalError( tra( "Invalid old password" ));
 	}
 	//Validate password here
