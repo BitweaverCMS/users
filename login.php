@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/login.php,v 1.11 2009/03/06 20:11:50 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/login.php,v 1.12 2009/03/16 20:04:19 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: login.php,v 1.11 2009/03/06 20:11:50 spiderr Exp $
+ * $Id: login.php,v 1.12 2009/03/16 20:04:19 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -18,13 +18,13 @@
  */
 include_once ("../bit_setup_inc.php");
 
-if( !empty( $_SERVER['HTTP_REFERER'] ) && !strpos( $_SERVER['HTTP_REFERER'], 'login.php' )  && !strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) ) {
+if( !empty( $_REQUEST['returnto'] ) ) {
+	$_SESSION['returnto'] = $_REQUEST['returnto'];
+} elseif( !empty( $_SERVER['HTTP_REFERER'] ) && !strpos( $_SERVER['HTTP_REFERER'], 'login.php' )  && !strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) ) {
 	$from = parse_url( $_SERVER['HTTP_REFERER'] );
 	if( !empty( $from['path'] ) && $from['host'] == $_SERVER['SERVER_NAME'] ) {
 		$_SESSION['loginfrom'] = $from['path'].'?'.( !empty( $from['query'] ) ? $from['query'] : '' );
 	}
-} elseif( !empty( $_REQUEST['returnto'] ) ) {
-	$_SESSION['returnto'] = $_REQUEST['returnto'];
 }
 
 if( $gBitUser->isRegistered() ) {
