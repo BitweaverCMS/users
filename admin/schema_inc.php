@@ -74,7 +74,7 @@ $tables = array(
 'users_cnxn' => "
   user_id I4,
   cookie C(64),
-  ip C(16),
+  ip C(39),
   last_get I8,
   connect_time I8,
   get_count I8,
