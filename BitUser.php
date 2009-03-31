@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.218 2009/03/24 11:05:47 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.219 2009/03/31 06:15:41 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.218 2009/03/24 11:05:47 lsces Exp $
+ * $Id: BitUser.php,v 1.219 2009/03/31 06:15:41 lsces Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.218 $
+ * @version  $Revision: 1.219 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1193,7 +1193,7 @@ class BitUser extends LibertyMime {
 	 * @param array $pResponse 
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
-	 * @TODO: rewrite this mess. this is horrible stuff. - xing - Thursday Oct 16, 2008   09:47:20 CEST
+	 * @todo rewrite this mess. this is horrible stuff. - xing - Thursday Oct 16, 2008   09:47:20 CEST
 	 */
 	function validate( $pUser, $pPass, $pChallenge, $pResponse ) {
 		global $gBitSystem;
