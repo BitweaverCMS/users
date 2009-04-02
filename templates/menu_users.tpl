@@ -4,7 +4,7 @@
 {/if}
 <ul>
 	{if $gBitUser->isRegistered()}
-		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}my.php">{biticon iname="emblem-symbolic-link" iexplain="My Personal Page" ilocation=$location}</a></li>
+		<li><a class="item" href="{$gBitSystem->getConfig('users_login_homepage',"`$smarty.const.USERS_PKG_URL`my.php")}">{biticon iname="emblem-symbolic-link" iexplain="My Personal Page" ilocation=$location}</a></li>
 		{if $gBitUser->hasPermission( 'p_users_view_user_homepage' )}
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}index.php?home={$gBitUser->mInfo.login}">{biticon iname="go-home" iexplain="My Homepage" ilocation=$location}</a></li>
 		{/if}
