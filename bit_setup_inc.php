@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.49 2008/10/19 10:31:00 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.50 2009/04/02 19:48:07 spiderr Exp $
  * @package users
  */
 global $gBitDbType, $gBitDbHost, $gBitDbUser, $gBitDbPassword, $gBitDbName, $gBitThemes;
@@ -184,7 +184,7 @@ if( !empty( $theme )) {
 if( $gBitUser->isValid() && ( $gBitUser->isRegistered() || !$gBitSystem->isFeatureActive( 'site_hide_my_top_bar_link' ))) {
 	$menuHash = array(
 		'package_name'  => USERS_PKG_NAME,
-		'index_url'     => ( $gBitSystem->isFeatureActive( 'users_preferences' ) ? USERS_PKG_URL.'my.php' : '' ),
+		'index_url'     => ( $gBitSystem->isFeatureActive( 'users_preferences' ) ? $gBitSystem->getConfig( 'users_login_homepage', USERS_PKG_URL.'my.php' ) : '' ),
 		'menu_title'    => 'My '.$gBitSystem->getConfig( 'site_menu_title', $gBitSystem->getConfig( 'site_title', 'Site' )),
 		'menu_template' => 'bitpackage:users/menu_users.tpl',
 	);

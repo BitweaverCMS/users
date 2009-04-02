@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.28 2008/10/18 09:45:05 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.29 2009/04/02 19:48:11 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -26,6 +26,11 @@ $loginSettings = array(
 		'label' => "After registration url",
 		'type' => "text",
 		'note' => "Set a url users will be directed to after registration. Default is your site's home page.",
+	),
+	'users_login_homepage' => array(
+		'label' => "After login url",
+		'type' => "text",
+		'note' => "Set a custom url where users will be directed after logging in. Default is /users/my.php",
 	),
 	'users_eponymous_groups' => array(
 		'label' => "Create a group for each user",

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/login.php,v 1.12 2009/03/16 20:04:19 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/login.php,v 1.13 2009/04/02 19:48:07 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: login.php,v 1.12 2009/03/16 20:04:19 spiderr Exp $
+ * $Id: login.php,v 1.13 2009/04/02 19:48:07 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -28,7 +28,7 @@ if( !empty( $_REQUEST['returnto'] ) ) {
 }
 
 if( $gBitUser->isRegistered() ) {
-	header( 'Location: '.USERS_PKG_URL.'my.php' );
+	header( 'Location: '.$gBitSystem->getConfig( 'users_login_homepage', USERS_PKG_URL.'my.php' ) );
 	die;
 }
 

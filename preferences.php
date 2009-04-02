@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.64 2009/03/14 03:05:57 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.65 2009/04/02 19:48:08 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.64 2009/03/14 03:05:57 spiderr Exp $
+ * $Id: preferences.php,v 1.65 2009/04/02 19:48:08 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -21,9 +21,7 @@ require_once( '../bit_setup_inc.php' );
 // User preferences screen
 $gBitSystem->verifyFeature( 'users_preferences' );
 
-if( !$gBitUser->isRegistered() ) {
-	$gBitSystem->fatalError( tra( "You are not logged in" ));
-}
+$gBitUser->verifyRegistered();
 
 $feedback = array();
 
