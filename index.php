@@ -1,8 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.37 2009/01/24 18:40:54 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.38 2009/04/13 21:01:42 spiderr Exp $
  *
- * $Id: index.php,v 1.37 2009/01/24 18:40:54 wjames5 Exp $
+ * $Id: index.php,v 1.38 2009/04/13 21:01:42 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -54,10 +54,7 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 	}
 	$browserTitle = $userHomeTitle;
 
-	if(
-		( $gBitSystem->isFeatureActive( 'display_users_content_list' ) && $gBitUser->hasPermission( 'p_liberty_list_content' ))
-		|| ( $gBitUser->hasPermission( 'p_users_admin' ) || $gQueryUser->mUserId == $gBitUser->mUserId )
-	) {
+	if( $gBitSystem->isFeatureActive( 'display_users_content_list' ) && $gBitUser->hasPermission( 'p_liberty_list_content' ) ) {
 
 		// some content specific offsets and pagination settings
 		if( !empty( $_REQUEST['sort_mode'] ) ) {
