@@ -1,8 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.38 2009/04/13 21:01:42 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.39 2009/04/14 17:58:29 spiderr Exp $
  *
- * $Id: index.php,v 1.38 2009/04/13 21:01:42 spiderr Exp $
+ * $Id: index.php,v 1.39 2009/04/14 17:58:29 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -100,6 +100,7 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 	$gBitSmarty->assign_by_ref( 'usercount', $_REQUEST["cant"] );
 	// display an error message
 	if( !empty( $_REQUEST['home'] )) {
+		$gBitSystem->setHttpStatus( '404' );
 		$feedback['error'] = tra( 'The following user could not be found' ).': '.$_REQUEST['home'];
 		$gBitSmarty->assign( 'feedback', $feedback );
 	}
