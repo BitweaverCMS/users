@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.6 2009/04/17 06:23:49 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.7 2009/04/17 20:03:25 lsces Exp $
  *
  * @package users
  */
@@ -34,7 +34,7 @@ class LDAPAuth extends BaseAuth {
 		$a->login();
 		$ret = '';
 		switch ($a->getStatus()) {
-			case AUTH_LOGIN_OK:
+			case AUTH_LOG_INFO:
 				$ret=USER_VALID;
 				$ds=ldap_connect($this->mConfig["host"], $this->mConfig["port"]);  // Connects to LDAP Server
 				if ($ds) {
@@ -62,9 +62,9 @@ class LDAPAuth extends BaseAuth {
 					ldap_close($ds);
 				}
 				break;
-			case AUTH_USER_NOT_FOUND:
-				$ret=USER_NOT_FOUND;
-				break;
+//			case AUTH_USER_NOT_FOUND:
+//				$ret=USER_NOT_FOUND;
+//				break;
 			case AUTH_WRONG_LOGIN:
 				$ret=PASSWORD_INCORRECT;
 				break;
