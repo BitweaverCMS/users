@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.5 2008/07/20 15:03:13 wolff_borg Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.6 2009/04/17 06:23:49 lsces Exp $
  *
  * @package users
  */
@@ -11,8 +11,8 @@
 if (file_exists(UTIL_PKG_PATH."pear/Auth/Auth.php")) {
 	require_once (UTIL_PKG_PATH."pear/Auth/Auth.php");
 } else {
-// Giving errors: Fatal error: Cannot redeclare class ldapauth in \bitweaver\users\auth\ldap\Auth.php on line 23
-//	include_once("Auth.php");
+// THIS may need changing if a different PEAR installation is used
+	include_once("Auth/Auth.php");
 }
 
 /**
@@ -77,7 +77,7 @@ class LDAPAuth extends BaseAuth {
 
 	function isSupported() {
 		$ret = true;
-		if (! class_exists("Auth")) {
+		if (!class_exists("Auth")) {
 			$this->mErrors['support']=tra("LDAP Authentication is not supported as PEAR Package Auth is not availible.");
 			$ret = false;
 		}
