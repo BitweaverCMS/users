@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.7 2009/04/17 20:03:25 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.8 2009/04/18 22:00:55 lsces Exp $
  *
  * @package users
  */
@@ -28,11 +28,16 @@ class LDAPAuth extends BaseAuth {
 
 	function validate($user,$pass,$challenge,$response) {
 		parent::validate($user,$pass,$challenge,$response);
+
 		// set the Auth options
-		$a = new Auth("LDAP", $this->mConfig, "", false, $user, $pass);
+		$a = new Auth("LDAP", $this->mConfig, "", false);
+		$a->username = $user;
+		$a->password = $pass;
+
 		// check if the login correct
 		$a->login();
-		$ret = '';
+
+		$this->mInfo["real_name"] = '';  // This needs fixing in the base code - real_name will only exist if a user has been identiied
 		switch ($a->getStatus()) {
 			case AUTH_LOG_INFO:
 				$ret=USER_VALID;
@@ -40,10 +45,10 @@ class LDAPAuth extends BaseAuth {
 				if ($ds) {
 					$r=ldap_bind($ds, $this->mConfig["adminuser"], $this->mConfig["adminpass"]);
 					if ($r) {
-						$attrs = array("cn", "mail");
+						$attrs = array("mail", "uidNumber", "displayName");
 						$sr=ldap_search($ds, $this->mConfig["basedn"], "(".$this->mConfig["userattr"]."=".$user.")", $attrs);  // Search
 						$info = ldap_get_entries($ds, $sr);
-						$this->mInfo["real_name"] = $info[0]["cn"][0];
+						$this->mInfo["real_name"] = $info[0]["displayname"][0];
 						if(empty($this->mConfig["email"])) {
 							if(empty($info[0]["mail"][0])) {
 								$this->mInfo["email"] = $info[0][$this->mConfig["userattr"]][0];
@@ -59,17 +64,21 @@ class LDAPAuth extends BaseAuth {
 							$this->mInfo["email"] = preg_replace_callback('/%.*?%/',$replace_func,$this->mConfig["email"]);
 						}
 					}
+					$this->mInfo['user_id']=$info[0]["uidnumber"][0] - 1000;
 					ldap_close($ds);
 				}
 				break;
 //			case AUTH_USER_NOT_FOUND:
-//				$ret=USER_NOT_FOUND;
+//				$this->mErrors['login'] = 'Password incorrect';
+//				$ret=PASSWORD_INCORRECT;
 //				break;
 			case AUTH_WRONG_LOGIN:
+				$this->mErrors['login'] = 'User not found';
 				$ret=PASSWORD_INCORRECT;
 				break;
 			default:
-				$ret=SERVER_ERROR;
+				$this->mErrors['login'] = 'Unidentified Error';
+				$ret=PASSWORD_INCORRECT;
 				break;
 		}
 		return $ret;
@@ -216,13 +225,13 @@ class LDAPAuth extends BaseAuth {
 				'base' => "Base",
 			),
 		),
-		'users_ldap_group' => array(
-			'label' => "LDAP Group",
-			'type' => "option",
-			'note' => "",
-			'default' => '3',
-			'options' => $groups,
-		),
+//		'users_ldap_group' => array(
+//			'label' => "LDAP Group",
+//			'type' => "option",
+//			'note' => "",
+//			'default' => '3',
+//			'options' => $groups,
+//		),
 	);
 	}
 }
