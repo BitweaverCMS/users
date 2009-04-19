@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.8 2009/04/18 22:00:55 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.9 2009/04/19 09:33:50 lsces Exp $
  *
  * @package users
  */
@@ -28,30 +28,42 @@ class LDAPAuth extends BaseAuth {
 
 	function validate($user,$pass,$challenge,$response) {
 		parent::validate($user,$pass,$challenge,$response);
-
+		global $gBitDb;
+		
+		// Check for login name or email address username 
+		$this->mConfig['userattrsto'] = $this->mConfig['userattr'];
+		$this->mConfig['userattr'] = strpos( $user, '@' ) ? 'mail' : 'cn';
 		// set the Auth options
 		$a = new Auth("LDAP", $this->mConfig, "", false);
-		$a->username = $user;
-		$a->password = $pass;
-
+			
 		// check if the login correct
-		$a->login();
+		$login = AUTH_WRONG_LOGIN;
+        $a->_loadStorage();
 
 		$this->mInfo["real_name"] = '';  // This needs fixing in the base code - real_name will only exist if a user has been identiied
-		switch ($a->getStatus()) {
-			case AUTH_LOG_INFO:
+        // When the user has already entered a username, we have to validate it.
+        if (!empty($user)) {
+            if (true === $a->storage->fetchData($user, $pass, false)) {
 				$ret=USER_VALID;
 				$ds=ldap_connect($this->mConfig["host"], $this->mConfig["port"]);  // Connects to LDAP Server
 				if ($ds) {
 					$r=ldap_bind($ds, $this->mConfig["adminuser"], $this->mConfig["adminpass"]);
 					if ($r) {
-						$attrs = array("mail", "uidNumber", "displayName");
-						$sr=ldap_search($ds, $this->mConfig["basedn"], "(".$this->mConfig["userattr"]."=".$user.")", $attrs);  // Search
+						$this->mConfig['ldapmail'] = empty($this->mConfig['email'] ) ? "mail" : $this->mConfig['email'];
+						if ( empty($this->mConfig['name'] ) ) { 
+							$this->mConfig['name'] = "displayName";
+						}
+						$attrs = array("uidNumber", $this->mConfig['ldapmail'], $this->mConfig['name'], $this->mConfig['userattrsto'] );
+						$sr=ldap_search($ds, $this->mConfig['basedn'], "(".$this->mConfig['userattr']."=".$user.")", $attrs);  // Search
 						$info = ldap_get_entries($ds, $sr);
-						$this->mInfo["real_name"] = $info[0]["displayname"][0];
+						$this->mInfo["login"] = $info[0][strtolower($this->mConfig['userattrsto'])][0];
+						$this->mInfo["email"] = $info[0][strtolower($this->mConfig['ldapmail'])][0];
+						$this->mInfo["real_name"] = empty($info[0][strtolower($this->mConfig['name'])][0]) ? $this->mInfo["login"] : $info[0][strtolower($this->mConfig['name'])][0];	
+/* Dont understand this bit!
+ * email should be the field name for the email data inside ldap? So why the function section?
 						if(empty($this->mConfig["email"])) {
-							if(empty($info[0]["mail"][0])) {
-								$this->mInfo["email"] = $info[0][$this->mConfig["userattr"]][0];
+							if(empty($info[0][$this->mConfig['ldapmail']][0])) {
+								$this->mInfo["email"] = $info[0][$this->mConfig["userattrsto"]][0];
 							} else {
 								$this->mInfo["email"] = $info[0]["mail"][0];
 							}
@@ -63,24 +75,29 @@ class LDAPAuth extends BaseAuth {
 								return strtolower($info[0][$m][0]);');
 							$this->mInfo["email"] = preg_replace_callback('/%.*?%/',$replace_func,$this->mConfig["email"]);
 						}
+ */
 					}
-					$this->mInfo['user_id']=$info[0]["uidnumber"][0] - 1000;
+					
+					// Verify that the user exists in local database ... this may want entending to used email ...
+					$query = "select `user_id` from `".BIT_DB_PREFIX."users_users` where `login` = ?";
+					$result = $gBitDb->query( $query, array( $this->mInfo["login"] ) );
+					if( $result->numRows() ) {
+						$res = $result->fetchRow();
+						$userId = $res['user_id'];
+						$this->mInfo['user_id'] = $userId;
+						// need to update local copy with data from ldap for real_name and possibly email ...
+					} else {
+						// Need to creat entry in users_users ...
+						// $this->mInfo['user_id']=$info[0]["uidnumber"][0] - 1000;
+						$this->mErrors['login'] = 'No local User record';
+					}
 					ldap_close($ds);
 				}
-				break;
-//			case AUTH_USER_NOT_FOUND:
-//				$this->mErrors['login'] = 'Password incorrect';
-//				$ret=PASSWORD_INCORRECT;
-//				break;
-			case AUTH_WRONG_LOGIN:
-				$this->mErrors['login'] = 'User not found';
+            } else {
+				$this->mErrors['login'] = isset($a->storage->options['status']) ? $a->storage->options['status'] : 'Not authenticated';
 				$ret=PASSWORD_INCORRECT;
-				break;
-			default:
-				$this->mErrors['login'] = 'Unidentified Error';
-				$ret=PASSWORD_INCORRECT;
-				break;
-		}
+            }
+        }
 		return $ret;
 	}
 
@@ -164,6 +181,12 @@ class LDAPAuth extends BaseAuth {
 			'label' => "LDAP User E-Mail Address",
 			'type' => "text",
 			'note' => "If empty the attribute \"mail\" is used, if it not set for a user, <em>LDAP User Attribute</em> is used instead.<br />Otherwise all %<em>fields</em>% are replaced with the first value from the ldap attribute of the same name, and the result used as the email address.<br />Please remember to include the @ sign",
+			'default' => '',
+		),
+		'users_ldap_name' => array(
+			'label' => "LDAP User Display Name",
+			'type' => "text",
+			'note' => "If empty the attribute \"displayName\" is used, if it not set for a user, <em>LDAP User Attribute</em> is used instead.<br />Otherwise all %<em>fields</em>% are replaced with the first value from the ldap attribute of the same name, and the result used as the real name.",
 			'default' => '',
 		),
 		'users_ldap_useroc' => array(
