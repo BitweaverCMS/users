@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.9 2009/04/19 09:33:50 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.10 2009/04/19 09:52:12 lsces Exp $
  *
  * @package users
  */
@@ -36,8 +36,7 @@ class LDAPAuth extends BaseAuth {
 		// set the Auth options
 		$a = new Auth("LDAP", $this->mConfig, "", false);
 			
-		// check if the login correct
-		$login = AUTH_WRONG_LOGIN;
+		// set up connection to ldap via user details
         $a->_loadStorage();
 
 		$this->mInfo["real_name"] = '';  // This needs fixing in the base code - real_name will only exist if a user has been identiied
