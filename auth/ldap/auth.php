@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.11 2009/04/21 18:57:38 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.12 2009/04/21 19:03:50 lsces Exp $
  *
  * @package users
  */
@@ -53,13 +53,13 @@ class LDAPAuth extends BaseAuth {
 		$success = $a->storage->fetchData($user_utf8, $pass, false);
 		if ($success == false) {
 			// The user wasn't found.  Try again by email address:
-			$a = new Auth("LDAP", $this->mConfig, "", false);
-
 			$this->mConfig['userattrsto'] = $this->mConfig['userattr'];  // Keep this for later
 			$this->mConfig['userattr'] = $this->mConfig['email'];  // Tell PEAR::Auth() to look at the 'mail' attribute
-			$a->_loadStorage();  // set up connection to ldap via user details
-			$success = $a->storage->fetchData($user_utf8, $pass, false);
 
+			$a = new Auth("LDAP", $this->mConfig, "", false);
+			$a->_loadStorage();  // set up connection to ldap via user details
+
+			$success = $a->storage->fetchData($user_utf8, $pass, false);
 			if ($success == false) {
 				$this->mErrors['login'] = isset($a->storage->options['status']) ? $a->storage->options['status'] : 'Not authenticated';
 				return PASSWORD_INCORRECT;
