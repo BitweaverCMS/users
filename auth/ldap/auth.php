@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.10 2009/04/19 09:52:12 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.11 2009/04/21 18:57:38 lsces Exp $
  *
  * @package users
  */
@@ -30,76 +30,56 @@ class LDAPAuth extends BaseAuth {
 		parent::validate($user,$pass,$challenge,$response);
 		global $gBitDb;
 		
-		// Check for login name or email address username 
-		$this->mConfig['userattrsto'] = $this->mConfig['userattr'];
-		$this->mConfig['userattr'] = strpos( $user, '@' ) ? 'mail' : 'cn';
-		// set the Auth options
-		$a = new Auth("LDAP", $this->mConfig, "", false);
-			
-		// set up connection to ldap via user details
-        $a->_loadStorage();
+		if ( empty($user) or empty($pass) ) {
+			return USER_NOT_FOUND;
+		}
 
 		$this->mInfo["real_name"] = '';  // This needs fixing in the base code - real_name will only exist if a user has been identiied
-        // When the user has already entered a username, we have to validate it.
-        if (!empty($user)) {
-            if (true === $a->storage->fetchData($user, $pass, false)) {
-				$ret=USER_VALID;
-				$ds=ldap_connect($this->mConfig["host"], $this->mConfig["port"]);  // Connects to LDAP Server
-				if ($ds) {
-					$r=ldap_bind($ds, $this->mConfig["adminuser"], $this->mConfig["adminpass"]);
-					if ($r) {
-						$this->mConfig['ldapmail'] = empty($this->mConfig['email'] ) ? "mail" : $this->mConfig['email'];
-						if ( empty($this->mConfig['name'] ) ) { 
-							$this->mConfig['name'] = "displayName";
-						}
-						$attrs = array("uidNumber", $this->mConfig['ldapmail'], $this->mConfig['name'], $this->mConfig['userattrsto'] );
-						$sr=ldap_search($ds, $this->mConfig['basedn'], "(".$this->mConfig['userattr']."=".$user.")", $attrs);  // Search
-						$info = ldap_get_entries($ds, $sr);
-						$this->mInfo["login"] = $info[0][strtolower($this->mConfig['userattrsto'])][0];
-						$this->mInfo["email"] = $info[0][strtolower($this->mConfig['ldapmail'])][0];
-						$this->mInfo["real_name"] = empty($info[0][strtolower($this->mConfig['name'])][0]) ? $this->mInfo["login"] : $info[0][strtolower($this->mConfig['name'])][0];	
-/* Dont understand this bit!
- * email should be the field name for the email data inside ldap? So why the function section?
-						if(empty($this->mConfig["email"])) {
-							if(empty($info[0][$this->mConfig['ldapmail']][0])) {
-								$this->mInfo["email"] = $info[0][$this->mConfig["userattrsto"]][0];
-							} else {
-								$this->mInfo["email"] = $info[0]["mail"][0];
-							}
-						} else {
-							$replace_func = create_function('$matches','$info = '.var_export($info,true).';
-								$m = $matches[0];
-								$m = substr($m,1,strlen($m)-2);
-								if(empty($info[0][$m][0])) return "";
-								return strtolower($info[0][$m][0]);');
-							$this->mInfo["email"] = preg_replace_callback('/%.*?%/',$replace_func,$this->mConfig["email"]);
-						}
- */
-					}
-					
-					// Verify that the user exists in local database ... this may want entending to used email ...
-					$query = "select `user_id` from `".BIT_DB_PREFIX."users_users` where `login` = ?";
-					$result = $gBitDb->query( $query, array( $this->mInfo["login"] ) );
-					if( $result->numRows() ) {
-						$res = $result->fetchRow();
-						$userId = $res['user_id'];
-						$this->mInfo['user_id'] = $userId;
-						// need to update local copy with data from ldap for real_name and possibly email ...
-					} else {
-						// Need to creat entry in users_users ...
-						// $this->mInfo['user_id']=$info[0]["uidnumber"][0] - 1000;
-						$this->mErrors['login'] = 'No local User record';
-					}
-					ldap_close($ds);
-				}
-            } else {
-				$this->mErrors['login'] = isset($a->storage->options['status']) ? $a->storage->options['status'] : 'Not authenticated';
-				$ret=PASSWORD_INCORRECT;
-            }
-        }
-		return $ret;
-	}
+		
+		// Use V3, which requires UTF-8:
+		$this->mConfig['version'] = 3;
+		$user_utf8 = utf8_encode( $user );
+		
+		if ( $this->mConfig['reqcert'] ) {
+			// Skip the SSL certificate check:
+			// (This assumes PHP is using the OpenLDAP client library.)
+			putenv('LDAPTLS_REQCERT=never');
+		}
+		
+		$a = new Auth("LDAP", $this->mConfig, "", false);
+		$a->_loadStorage();  // set up connection to ldap via user details
 
+		// First, try by username.  If that fails, try by email address.
+		$success = $a->storage->fetchData($user_utf8, $pass, false);
+		if ($success == false) {
+			// The user wasn't found.  Try again by email address:
+			$a = new Auth("LDAP", $this->mConfig, "", false);
+
+			$this->mConfig['userattrsto'] = $this->mConfig['userattr'];  // Keep this for later
+			$this->mConfig['userattr'] = $this->mConfig['email'];  // Tell PEAR::Auth() to look at the 'mail' attribute
+			$a->_loadStorage();  // set up connection to ldap via user details
+			$success = $a->storage->fetchData($user_utf8, $pass, false);
+
+			if ($success == false) {
+				$this->mErrors['login'] = isset($a->storage->options['status']) ? $a->storage->options['status'] : 'Not authenticated';
+				return PASSWORD_INCORRECT;
+			}
+		}
+		
+		// At this point, there was a successful ldap_bind() using the 
+		// user's Distinguished Name (DN) and password for login.  
+		// The call to ldap_get_attributes() has been saved into $a->getAuthData('attributes')
+		$attributes = $a->getAuthData('attributes');
+		// Warning: ldap_get_attributes() uses case-sensitive array keys
+		$this->mInfo["login"] = $attributes[ $this->mConfig['userattr'] ][0];
+		$this->mInfo["email"] = $attributes[ $this->mConfig['email'] ][0];
+		$this->mInfo["real_name"] = empty($attributes[$this->mConfig['name']][0]) ? $this->mInfo["login"] : $attributes[$this->mConfig['name']][0];	
+		// Note, the new (or updated) SQL user will be created by the calling BitUser class.
+
+		return USER_VALID;  // Success!
+		
+	}
+	
 	function isSupported() {
 		$ret = true;
 		if (!class_exists("Auth")) {
@@ -146,10 +126,16 @@ class LDAPAuth extends BaseAuth {
 		}
 		$groups = $groupsD;
 		return array(
+		'users_ldap_url' => array(
+			'label' => "LDAP Connection URL",
+			'type' => "text",
+			'note' => "You can specify an LDAP URL, like ldap://localhost/ or ldaps://some-server/.",
+			'default' => '',
+		),
 		'users_ldap_host' => array(
 			'label' => "LDAP Host",
 			'type' => "text",
-			'note' => "",
+			'note' => "Instead of a URL, you can specify a hostname and port explicitly.  Give either a URL, or else a hostname/port (but not both).",
 			'default' => 'localhost',
 		),
 		'users_ldap_port' => array(
@@ -157,6 +143,24 @@ class LDAPAuth extends BaseAuth {
 			'type' => "text",
 			'note' => "",
 			'default' => '389',
+		),
+		'users_ldap_start_tls' => array(
+			'label' => "Use Start-TLS?",
+			'type' => "checkbox",
+			'note' => "Please note there is a difference between ldaps:// and Start-TLS for ldap.  Start-TLS uses port 389, while ldaps:// uses port 636.  Both encrypted LDAP (with Start-TLS) and unencrypted LDAP can run on port 389 concurrently.",
+			'default' => 'y',
+		),
+		'users_ldap_reqcert' => array(
+			'label' => "Skip the SSL Cert validation?",
+			'type' => "checkbox",
+			'note' => "If Start-TLS is checked, then your LDAP server needs a trusted SSL cert -- unless you check this option, in which case you can use a self-signed (untrusted) cert.",
+			'default' => 'y',
+		),
+		'users_ldap_referrals' => array(
+			'label' => "Use Referrals?",
+			'type' => "checkbox",
+			'note' => "This should probably be 'yes'.  (Only applies to LDAP V3 servers.)",
+			'default' => 'y',
 		),
 		'users_ldap_basedn' => array(
 			'label' => "LDAP Base DN",
@@ -173,20 +177,20 @@ class LDAPAuth extends BaseAuth {
 		'users_ldap_userattr' => array(
 			'label' => "LDAP User Attribute",
 			'type' => "text",
-			'note' => "",
+			'note' => "The LDAP Attribute to use for the user's login in Bitweaver.  (This is the first attribute searched when the user logs in.)",
 			'default' => 'uid',
 		),
 		'users_ldap_email' => array(
 			'label' => "LDAP User E-Mail Address",
 			'type' => "text",
-			'note' => "If empty the attribute \"mail\" is used, if it not set for a user, <em>LDAP User Attribute</em> is used instead.<br />Otherwise all %<em>fields</em>% are replaced with the first value from the ldap attribute of the same name, and the result used as the email address.<br />Please remember to include the @ sign",
-			'default' => '',
+			'note' => "The LDAP Attribute to use for the user's email address in Bitweaver.  (This is the second attribute searched when the user logs in.)",
+			'default' => 'mail',
 		),
 		'users_ldap_name' => array(
 			'label' => "LDAP User Display Name",
 			'type' => "text",
-			'note' => "If empty the attribute \"displayName\" is used, if it not set for a user, <em>LDAP User Attribute</em> is used instead.<br />Otherwise all %<em>fields</em>% are replaced with the first value from the ldap attribute of the same name, and the result used as the real name.",
-			'default' => '',
+			'note' => "The LDAP Attribute to use for the user's Full Name in Bitweaver.",
+			'default' => 'displayName',
 		),
 		'users_ldap_useroc' => array(
 			'label' => "LDAP User OC",
@@ -224,20 +228,20 @@ class LDAPAuth extends BaseAuth {
 			'note' => "",
 			'default' => '',
 		),
-		'users_ldap_adminuser' => array(
-			'label' => "LDAP Admin User",
+		'users_ldap_binddn' => array(
+			'label' => "LDAP Bind DN",
 			'type' => "text",
-			'note' => "",
+			'note' => "This DN will be used to search the LDAP directory for users.  If left blank, 'anonymous bind' is used.",
 			'default' => '',
 		),
-		'users_ldap_adminpass' => array(
-			'label' => "LDAP Admin Pwd",
+		'users_ldap_bindpw' => array(
+			'label' => "LDAP Bind Pwd",
 			'type' => "password",
 			'note' => "",
 			'default' => '',
 		),
-		'users_ldap_scope' => array(
-			'label' => "LDAP Scope",
+		'users_ldap_userscope' => array(
+			'label' => "LDAP Scope to use when searching for users",
 			'type' => "option",
 			'note' => "",
 			'default' => 'sub',
@@ -247,13 +251,12 @@ class LDAPAuth extends BaseAuth {
 				'base' => "Base",
 			),
 		),
-//		'users_ldap_group' => array(
-//			'label' => "LDAP Group",
-//			'type' => "option",
-//			'note' => "",
-//			'default' => '3',
-//			'options' => $groups,
-//		),
+		'users_ldap_group' => array(
+			'label' => "LDAP Group Requirement",
+			'type' => "text",
+			'note' => "If this is specified, then the LDAP user must also be a member of this LDAP group to connect.",
+			'default' => ''
+		),
 	);
 	}
 }
