@@ -1,6 +1,6 @@
 {strip}
 {assign var=force_secure value=$gBitSystem->isFeatureActive("site_https_login_required")}
-{form legend="Sign in with your username or email to continue" ipackage=users ifile='validate.php' secure=$force_secure}
+{form name="login" legend="Sign in with your username or email to continue" ipackage=users ifile='validate.php' secure=$force_secure}
 	<div class="row">
 		{formfeedback error="$error"}
 		{formlabel label="Username or Email" for="user"}
@@ -57,4 +57,7 @@
 		{/if}
 	</div>
 {/form}
+<script type="text/javascript">
+     document.getElementById("user").focus();
+</script>
 {/strip}
