@@ -53,7 +53,7 @@
 								{assign var=class value=""}
 							{/if}
 
-							<td class="alignright {$class}">
+							<td class="{if $group.group_id lt 4}alignright{else}aligncenter{/if} {$class}">
 								<input id="{$p}{$group.group_id}" type="checkbox" value="{$p}" name="perms[{$group.group_id}][{$p}]" title="{$group.group_name}" {if $group.perms.$p}checked="checked"{/if}/>
 							</td>
 
