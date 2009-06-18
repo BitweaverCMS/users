@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.65 2009/04/02 19:48:08 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/preferences.php,v 1.66 2009/06/18 17:03:16 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: preferences.php,v 1.65 2009/04/02 19:48:08 spiderr Exp $
+ * $Id: preferences.php,v 1.66 2009/06/18 17:03:16 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -91,9 +91,7 @@ if( $gBitSystem->getConfig( 'users_themes' ) == 'y' ) {
 
 // process the preferences form
 if( isset( $_REQUEST["prefs"] )) {
-	if( isset( $_REQUEST["real_name"] )) {
-		$editUser->store( $_REQUEST );
-	}
+	$editUser->store( $_REQUEST );
 
 	// preferences
 	$prefs = array(

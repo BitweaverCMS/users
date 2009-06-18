@@ -29,7 +29,11 @@
 						<div class="row">
 							{formlabel label="Username"}
 							{forminput}
-								{$editUser->mInfo.login}
+								{if $gBitUser->hasPermission('p_users_admin')}
+									<input type="text" name="login" value="{$editUser->mInfo.login|escape}" />
+								{else}
+									{$editUser->mInfo.login}
+								{/if}
 								{if $gBitSystem->getConfig('users_display_name') eq 'login'}
 									{formhelp note="This is the name that is visible to other users when viewing information added by you."}
 								{/if}
@@ -114,12 +118,6 @@
 							{/forminput}
 						</div>
 
-						<div class="row submit">
-							<input type="submit" name="prefs" value="{tr}Change preferences{/tr}" />
-						</div>
-					{/legend}
-
-					{legend legend="User Preferences"}
 						{if $gBitSystem->getConfig('users_themes') == 'y'}
 							<div class="row">
 								{formlabel label="Theme" for="style"}
