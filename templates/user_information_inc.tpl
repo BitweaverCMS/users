@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.17 2008/12/25 07:16:42 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/user_information_inc.tpl,v 1.18 2009/06/30 19:05:33 spiderr Exp $ *}
 {strip}
 {if $userData->getPreference('users_information') eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
 	<div class="row">
@@ -100,7 +100,7 @@
 	{/if}
 {else}
 	<div class="norecords">
-		{tr}This users information is not publically viewable.{/tr}
+		{tr}This users information is not publicly viewable.{/tr}
 	</div>
 {/if}
 {/strip}

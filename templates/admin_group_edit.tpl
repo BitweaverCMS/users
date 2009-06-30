@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.22 2009/01/24 18:40:54 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.23 2009/06/30 19:05:33 spiderr Exp $ *}
 {strip}
 
 <div class="floaticon">
@@ -46,7 +46,7 @@
 							<input type="text" id="group_home_lookup" name="group_home_name">
 						{formhelp note="Enter the title of the content you are looking for to receive an auto-suggest list of possibilities."}
 {*
-							{html_options name="dummy" id="content-list" values=$contentList options=$contentList onchange="$('group_home').value=options[selectedIndex].value;"}
+							{html_options name="dummy" id="content-list" values=$contentList options=$contentList onchange="document.getElementById('group_home').value=options[selectedIndex].value;"}
 							<input type="text" size="30" name="find" value="{$smarty.request.find}" />
 							<input type="submit" value="{tr}Apply filter{/tr}" name="search_objects" />
 							<br />
