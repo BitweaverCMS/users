@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.29 2009/04/02 19:48:11 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.30 2009/07/04 07:47:01 lsces Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -263,6 +263,19 @@ if( !empty( $_REQUEST["httpprefs"] ) ) {
 $listHash = array();
 $gBitSmarty->assign_by_ref( 'groupList', $gBitUser->getAllGroups( $listHash ));
 
-$gBitSmarty->assign_by_ref( 'authSettings', BaseAuth::getConfig() );
+// This needs to be made more generic so that it picks up all plugins
+// Could not see where the 'auth_ldap' was defined in the $options['avail'] array
+$options = BaseAuth::getConfig();
+$option_ldap = $options['avail']['ldap']['options'];
+if( !empty( $_REQUEST["auth_ldap"] ) ) {
+	foreach( array_keys( $option_ldap ) as $feature ) {
+		if( $option_ldap[$feature]['type'] == 'text' ) {
+			simple_set_value( $feature, USERS_PKG_NAME );
+		} else {
+			simple_set_toggle( $feature, USERS_PKG_NAME );
+		}
+	}
+}
 
+$gBitSmarty->assign_by_ref( 'authSettings', BaseAuth::getConfig() );
 ?>
