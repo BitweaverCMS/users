@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.50 2009/04/02 19:48:07 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.51 2009/07/14 19:55:01 spiderr Exp $
  * @package users
  */
 global $gBitDbType, $gBitDbHost, $gBitDbUser, $gBitDbPassword, $gBitDbName, $gBitThemes;
@@ -86,6 +86,10 @@ if( !empty( $_COOKIE['tiki-user-'.$cookie_site] )) {
 	$_COOKIE[$user_cookie_site] = $_COOKIE['tiki-user-'.$cookie_site];
 }
 
+// Init USER AGENT if empty so reliant methods don't need gobs of empty checking
+if( !isset( $_SERVER['HTTP_USER_AGENT'] )) {
+	$_SERVER['HTTP_USER_AGENT'] = "";
+}
 
 // load the user
 global $gOverrideLoginFunction;
