@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.221 2009/04/18 22:04:22 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.222 2009/07/14 19:54:36 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.221 2009/04/18 22:04:22 lsces Exp $
+ * $Id: BitUser.php,v 1.222 2009/07/14 19:54:36 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.221 $
+ * @version  $Revision: 1.222 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -938,7 +938,7 @@ class BitUser extends LibertyMime {
 					$update['ip'] = $_SERVER['REMOTE_ADDR'];
 				}
 				if( !empty( $_SERVER['HTTP_USER_AGENT'] ) && (empty( $row['user_agent'] ) || $row['user_agent'] != $_SERVER['HTTP_USER_AGENT']) ) {
-					$update['user_agent'] = substr( $_SERVER['HTTP_USER_AGENT'], 0, 128 );
+					$update['user_agent'] = (string)substr( $_SERVER['HTTP_USER_AGENT'], 0, 128 );
 				}
 				$update['get_count'] = $row['get_count'] + 1;
 				$ret = $this->mDb->associateUpdate( BIT_DB_PREFIX.'users_cnxn', $update, array( 'cookie' => $pSessionId ) );
@@ -946,6 +946,7 @@ class BitUser extends LibertyMime {
 				if( $this->isRegistered() ) {
 					$update['user_id'] = $this->mUserId;
 					$update['ip'] = $_SERVER['REMOTE_ADDR'];
+					// truncate length & cast substr to (string) to prevent insert fatals if substr returns false
 					$update['user_agent'] = (string)substr( $_SERVER['HTTP_USER_AGENT'], 0, 128 );
 					$update['get_count'] = 1;
 					$update['connect_time'] = $update['last_get'];
