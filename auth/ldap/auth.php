@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.12 2009/04/21 19:03:50 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.13 2009/07/15 16:56:46 spiderr Exp $
  *
  * @package users
  */
@@ -11,8 +11,7 @@
 if (file_exists(UTIL_PKG_PATH."pear/Auth/Auth.php")) {
 	require_once (UTIL_PKG_PATH."pear/Auth/Auth.php");
 } else {
-// THIS may need changing if a different PEAR installation is used
-	include_once("Auth/Auth.php");
+	@include_once("Auth/Auth.php");
 }
 
 /**
