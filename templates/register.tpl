@@ -103,58 +103,56 @@
 				{/if}
 
 				{if $gBitSystem->isFeatureActive( 'reg_real_name' ) or $gBitSystem->isFeatureActive( 'reg_homepage' ) or $gBitSystem->isFeatureActive( 'reg_country' ) or $gBitSystem->isFeatureActive( 'reg_language' ) or $gBitSystem->isFeatureActive( 'reg_portrait' )}
-					{legend legend="Optional Details"}
-						{if $gBitSystem->isFeatureActive( 'reg_homepage' )}
-							<div class="row">
-								{formlabel label="HomePage" for="users_homepage"}
-								{forminput}
-									<input size="50" type="text" name="prefs[users_homepage]" id="users_homepage" value="{$smarty.request.prefs.users_homepage}" />
-									{formhelp note="If you have a personal or professional homepage, enter it here."}
-								{/forminput}
-							</div>
-						{/if}
+					{if $gBitSystem->isFeatureActive( 'reg_homepage' )}
+						<div class="row">
+							{formlabel label="HomePage" for="users_homepage"}
+							{forminput}
+								<input size="50" type="text" name="prefs[users_homepage]" id="users_homepage" value="{$smarty.request.prefs.users_homepage}" />
+								{formhelp note="If you have a personal or professional homepage, enter it here."}
+							{/forminput}
+						</div>
+					{/if}
 
-						{if $gBitSystem->isFeatureActive( 'reg_country' )}
-							<div class="row">
-								{formlabel label="Country" for="country"}
-								{forminput}
-									<select name="prefs[users_country]" id="country">
-										<option value="" />
-											{section name=ix loop=$flags}
-												<option value="{$flags[ix]|escape}" {if $smarty.request.prefs.users_country eq $flags[ix]}selected="selected"{/if}>{tr}{$flags[ix]|replace:'_':' '}{/tr}</option>
-											{/section}
-									</select>
-									{formhelp note=""}
-								{/forminput}
-							</div>
-						{/if}
+					{if $gBitSystem->isFeatureActive( 'reg_country' )}
+						<div class="row">
+							{formlabel label="Country" for="country"}
+							{forminput}
+								<select name="prefs[users_country]" id="country">
+									<option value="" />
+										{section name=ix loop=$flags}
+											<option value="{$flags[ix]|escape}" {if $smarty.request.prefs.users_country eq $flags[ix]}selected="selected"{/if}>{tr}{$flags[ix]|replace:'_':' '}{/tr}</option>
+										{/section}
+								</select>
+								{formhelp note=""}
+							{/forminput}
+						</div>
+					{/if}
 
-						{if $gBitSystem->isFeatureActive( 'reg_language' )}
-							<div class="row">
-								{formlabel label="Language" for="language"}
-								{forminput}
-									<select name="prefs[bitlanguage]" id="language">
-										{foreach from=$languages key=langCode item=lang}
-											<option value="{$langCode}"{if $gBitLanguage->mLanguage eq $langCode} selected="selected"{/if}>
-												{$lang.full_name}
-											</option>
-										{/foreach}
-									</select>
-									{formhelp note="Pick your preferred site language."}
-								{/forminput}
-							</div>
-						{/if}
+					{if $gBitSystem->isFeatureActive( 'reg_language' )}
+						<div class="row">
+							{formlabel label="Language" for="language"}
+							{forminput}
+								<select name="prefs[bitlanguage]" id="language">
+									{foreach from=$languages key=langCode item=lang}
+										<option value="{$langCode}"{if $gBitLanguage->mLanguage eq $langCode} selected="selected"{/if}>
+											{$lang.full_name}
+										</option>
+									{/foreach}
+								</select>
+								{formhelp note="Pick your preferred site language."}
+							{/forminput}
+						</div>
+					{/if}
 
-						{if $gBitSystem->isFeatureActive( 'reg_portrait' )}
-							<div class="row">
-								{formlabel label="Self Portrait" for="user_portrait_file"}
-								{forminput}
-									<input name="user_portrait_file" id="user_portrait_file" type="file" />
-									{formhelp note="Upload a personal photo to be displayed on your personal page."}
-								{/forminput}
-							</div>
-						{/if}
-					{/legend}
+					{if $gBitSystem->isFeatureActive( 'reg_portrait' )}
+						<div class="row">
+							{formlabel label="Self Portrait" for="user_portrait_file"}
+							{forminput}
+								<input name="user_portrait_file" id="user_portrait_file" type="file" />
+								{formhelp note="Upload a personal photo to be displayed on your personal page."}
+							{/forminput}
+						</div>
+					{/if}
 				{/if}
 
 				{section name=f loop=$customFields}
