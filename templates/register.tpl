@@ -101,7 +101,19 @@
 						</div>
 					{/if}
 				{/if}
-
+				{if $gBitUser->hasPermission( 'p_users_view_user_homepage' ) }
+				{*For public sites, get user approval to display information*}
+				<div class="row">
+					{formlabel label="User information" for="users_information"}
+					{forminput}
+						<select name="users_information" id="users_information">
+							<option value="public" selected="selected">{tr}public{/tr}</option>
+							<option value="private">{tr}private{/tr}</option>
+						</select>
+						{formhelp note="Please select whether you would like to be a public or private user (you can change this later)"}
+					{/forminput}
+				</div>
+				{/if}
 				{if $gBitSystem->isFeatureActive( 'reg_real_name' ) or $gBitSystem->isFeatureActive( 'reg_homepage' ) or $gBitSystem->isFeatureActive( 'reg_country' ) or $gBitSystem->isFeatureActive( 'reg_language' ) or $gBitSystem->isFeatureActive( 'reg_portrait' )}
 					{if $gBitSystem->isFeatureActive( 'reg_homepage' )}
 						<div class="row">
