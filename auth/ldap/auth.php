@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.13 2009/07/15 16:56:46 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/auth/ldap/auth.php,v 1.14 2009/07/16 08:13:39 lsces Exp $
  *
  * @package users
  */
@@ -11,7 +11,8 @@
 if (file_exists(UTIL_PKG_PATH."pear/Auth/Auth.php")) {
 	require_once (UTIL_PKG_PATH."pear/Auth/Auth.php");
 } else {
-	@include_once("Auth/Auth.php");
+// THIS may need changing if a different PEAR installation is used
+	include_once("Auth/Auth.php");
 }
 
 /**
@@ -45,17 +46,29 @@ class LDAPAuth extends BaseAuth {
 			putenv('LDAPTLS_REQCERT=never');
 		}
 		
-		$a = new Auth("LDAP", $this->mConfig, "", false);
+		if ( $this->mConfig['activedirectory'] ) {	
+			$this->mConfig['attributes'] = (array) null;
+			$this->mConfig['userfilter'] = '(objectClass='.$this->mConfig['useroc'].')';
+			$this->mConfig['groupfilter'] = '(objectClass='.$this->mConfig['groupoc'].')';
+			$this->mConfig['groupscope'] = $this->mConfig['userscope'];
+		} else {
+			// Using bitweaver groups with LDAP still needs completing so disable for now
+			unset($this->mConfig['group']);		
+		}
+
+		$a = new Auth('LDAP', $this->mConfig, "", false);
 		$a->_loadStorage();  // set up connection to ldap via user details
 
 		// First, try by username.  If that fails, try by email address.
 		$success = $a->storage->fetchData($user_utf8, $pass, false);
+
 		if ($success == false) {
 			// The user wasn't found.  Try again by email address:
 			$this->mConfig['userattrsto'] = $this->mConfig['userattr'];  // Keep this for later
 			$this->mConfig['userattr'] = $this->mConfig['email'];  // Tell PEAR::Auth() to look at the 'mail' attribute
 
-			$a = new Auth("LDAP", $this->mConfig, "", false);
+			// this needs testing better, should be no need to create second instance of Auth!
+			$a = new Auth('LDAP', $this->mConfig, "", false);
 			$a->_loadStorage();  // set up connection to ldap via user details
 
 			$success = $a->storage->fetchData($user_utf8, $pass, false);
@@ -68,11 +81,22 @@ class LDAPAuth extends BaseAuth {
 		// At this point, there was a successful ldap_bind() using the 
 		// user's Distinguished Name (DN) and password for login.  
 		// The call to ldap_get_attributes() has been saved into $a->getAuthData('attributes')
-		$attributes = $a->getAuthData('attributes');
-		// Warning: ldap_get_attributes() uses case-sensitive array keys
-		$this->mInfo["login"] = $attributes[ $this->mConfig['userattr'] ][0];
-		$this->mInfo["email"] = $attributes[ $this->mConfig['email'] ][0];
-		$this->mInfo["real_name"] = empty($attributes[$this->mConfig['name']][0]) ? $this->mInfo["login"] : $attributes[$this->mConfig['name']][0];	
+
+		if ( $this->mConfig['activedirectory'] ) {
+			// Active Directory does some things differently - mainly in the returns
+			$attributes = $a->getAuthData();
+			// Warning: ldap_get_attributes() uses case-sensitive array keys
+			$this->mInfo["login"] = $attributes[ $this->mConfig['userattr'] ];
+			$this->mInfo["email"] = $attributes[ $this->mConfig['email'] ];
+			$this->mInfo["real_name"] = empty($attributes[$this->mConfig['name']]) ? $this->mInfo["login"] : $attributes[$this->mConfig['name']];	
+		}
+		else {
+			$attributes = $a->getAuthData('attributes');
+			// Warning: ldap_get_attributes() uses case-sensitive array keys
+			$this->mInfo["login"] = $attributes[ $this->mConfig['userattr'] ][0];
+			$this->mInfo["email"] = $attributes[ $this->mConfig['email'] ][0];
+			$this->mInfo["real_name"] = empty($attributes[$this->mConfig['name']][0]) ? $this->mInfo["login"] : $attributes[$this->mConfig['name']][0];	
+		}
 		// Note, the new (or updated) SQL user will be created by the calling BitUser class.
 
 		return USER_VALID;  // Success!
@@ -195,7 +219,7 @@ class LDAPAuth extends BaseAuth {
 			'label' => "LDAP User OC",
 			'type' => "text",
 			'note' => "",
-		'default' => 'inetOrgPerson',
+		'default' => '(objectClass=inetOrgPerson)',
 		),
 		'users_ldap_groupdn' => array(
 			'label' => "LDAP Group DN",
@@ -213,7 +237,7 @@ class LDAPAuth extends BaseAuth {
 			'label' => "LDAP Group OC",
 			'type' => "text",
 			'note' => "",
-			'default' => 'groupOfUniqueNames',
+			'default' => '(objectClass=groupOfUniqueNames)',
 		),
 		'users_ldap_memberattr' => array(
 			'label' => "LDAP Member Attribute",
@@ -223,9 +247,9 @@ class LDAPAuth extends BaseAuth {
 		),
 		'users_ldap_memberisdn' => array(
 			'label' => "LDAP Member Is DN",
-			'type' => "text",
+			'type' => "checkbox",
 			'note' => "",
-			'default' => '',
+			'default' => 'n',
 		),
 		'users_ldap_binddn' => array(
 			'label' => "LDAP Bind DN",
@@ -255,6 +279,12 @@ class LDAPAuth extends BaseAuth {
 			'type' => "text",
 			'note' => "If this is specified, then the LDAP user must also be a member of this LDAP group to connect.",
 			'default' => ''
+		),
+		'users_ldap_activedirectory' => array(
+			'label' => "Active Directory?",
+			'type' => "checkbox",
+			'note' => "",
+			'default' => 'n'
 		),
 	);
 	}
