@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/lookup_user_inc.php,v 1.14 2009/07/03 16:02:11 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/lookup_user_inc.php,v 1.15 2009/08/07 20:23:44 spiderr Exp $
  *
  * @package users
  * @subpackage functions
@@ -34,7 +34,7 @@ if( isset( $_REQUEST['home'] )) {
 	$gQueryUser = &$gBitUser;
 }
 
-if( !$gBitUser->isAdmin() ) {
+if( !$gBitUser->hasPermission( 'p_users_admin' ) ) {
 	if( $gQueryUser->mUserId != $gBitUser->mUserId && $gQueryUser->getPreference( 'users_information' ) == 'private' ) {
 		$gBitSystem->setHttpStatus( 403 );
 		$gBitSystem->fatalError( tra( "This information is private" ));
