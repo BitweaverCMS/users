@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.38 2009/07/15 16:47:02 tylerbello Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.39 2009/08/21 21:44:53 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.38 2009/07/15 16:47:02 tylerbello Exp $
+ * $Id: register.php,v 1.39 2009/08/21 21:44:53 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -37,8 +37,8 @@ if( isset( $_REQUEST['returnto'] ) ) {
 if( $gBitUser->isRegistered() ) {
 	bit_redirect( $gBitSystem->getDefaultPage() );
 }
-
 if( isset( $_REQUEST["register"] ) ) {
+
 	$reg = $_REQUEST;
 	// novalidation is set to yes if a user confirms his email is correct after tiki fails to validate it
 	if( $gBitSystem->isFeatureActive( 'users_random_number_reg' ) ) {
@@ -56,7 +56,10 @@ if( isset( $_REQUEST["register"] ) ) {
 		}
 	}
 	if( empty( $errors ) ) {
-		$newUser = new BitPermUser();
+		
+		$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+		$newUser = new $userClass();
+		
 		if( $newUser->register( $reg ) ) {
 			$gBitUser->mUserId = $newUser->mUserId;
 
