@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.222 2009/07/14 19:54:36 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.223 2009/08/24 13:02:44 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.222 2009/07/14 19:54:36 spiderr Exp $
+ * $Id: BitUser.php,v 1.223 2009/08/24 13:02:44 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.222 $
+ * @version  $Revision: 1.223 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -509,7 +509,7 @@ class BitUser extends LibertyMime {
 	 * @author Christian Fowler<spider@viovio.com>
 	 * @return TRUE on success, FALSE on failure
 	 */
-	function register( &$pParamHash ) {
+	function register( &$pParamHash, $pNotifyRegistrant=TRUE ) {
 		global $notificationlib, $gBitSmarty, $gBitSystem, $gBitUser;
 		$ret = FALSE;
 		if( !empty( $_FILES['user_portrait_file'] ) && empty( $_FILES['user_avatar_file'] ) ) {
@@ -529,58 +529,60 @@ class BitUser extends LibertyMime {
 				}
 			}
 
-			$this->load( FALSE, $pParamHash['login'] );
+			if( $pNotifyRegistrant ) {
+				$this->load( FALSE, $pParamHash['login'] );
 
-			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
-			$notificationlib->post_new_user_event( $pParamHash['login'] );
-			$this->mLogs['register'] = 'New user registered.';
-			$ret = TRUE;
+				require_once( KERNEL_PKG_PATH.'notification_lib.php' );
+				$notificationlib->post_new_user_event( $pParamHash['login'] );
+				$this->mLogs['register'] = 'New user registered.';
+				$ret = TRUE;
 
-			// set local time zone as default when registering
-			$this->storePreference( 'site_display_utc', 'Local' );
+				// set local time zone as default when registering
+				$this->storePreference( 'site_display_utc', 'Local' );
 
-			if( !empty( $_REQUEST['CUSTOM'] ) ) {
-				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
-					$this->storePreference( $field, $value );
+				if( !empty( $_REQUEST['CUSTOM'] ) ) {
+					foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
+						$this->storePreference( $field, $value );
+					}
 				}
-			}
 
-			// Handle optional user preferences that may be collected during registration
-			if( !empty( $pParamHash['prefs'] ) ) {
-				foreach( array_keys( $pParamHash['prefs'] ) as $key ) {
-					$this->storePreference( $key, $pParamHash['prefs'][$key] );
+				// Handle optional user preferences that may be collected during registration
+				if( !empty( $pParamHash['prefs'] ) ) {
+					foreach( array_keys( $pParamHash['prefs'] ) as $key ) {
+						$this->storePreference( $key, $pParamHash['prefs'][$key] );
+					}
 				}
-			}
 
-			$siteName = $gBitSystem->getConfig('site_title', $_SERVER['HTTP_HOST'] );
-			$gBitSmarty->assign( 'siteName',$_SERVER["SERVER_NAME"] );
-			$gBitSmarty->assign( 'mail_site',$_SERVER["SERVER_NAME"] );
-			$gBitSmarty->assign( 'mail_user',$pParamHash['login'] );
-			if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
-				// $apass = addslashes(substr(md5($gBitSystem->genPass()),0,25));
-				$apass = $pParamHash['user_store']['provpass'];
-				$foo  = parse_url( $_SERVER["REQUEST_URI"] );
-				$foo1 = str_replace( "register", "confirm", $foo["path"] );
-				$machine = httpPrefix().$foo1;
+				$siteName = $gBitSystem->getConfig('site_title', $_SERVER['HTTP_HOST'] );
+				$gBitSmarty->assign( 'siteName',$_SERVER["SERVER_NAME"] );
+				$gBitSmarty->assign( 'mail_site',$_SERVER["SERVER_NAME"] );
+				$gBitSmarty->assign( 'mail_user',$pParamHash['login'] );
+				if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
+					// $apass = addslashes(substr(md5($gBitSystem->genPass()),0,25));
+					$apass = $pParamHash['user_store']['provpass'];
+					$foo  = parse_url( $_SERVER["REQUEST_URI"] );
+					$foo1 = str_replace( "register", "confirm", $foo["path"] );
+					$machine = httpPrefix().$foo1;
 
-				// Send the mail
-				$gBitSmarty->assign( 'msg',tra( 'You will receive an email with information to login for the first time into this site' ));
-				$gBitSmarty->assign( 'mail_machine',$machine );
-				$gBitSmarty->assign( 'mailUserId',$this->mUserId );
-				$gBitSmarty->assign( 'mailProvPass',$apass );
-				$mail_data = $gBitSmarty->fetch( 'bitpackage:users/user_validation_mail.tpl' );
-				mail( $pParamHash["email"], $siteName.' - '.tra( 'Your registration information' ), $mail_data, "From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n" );
-				$gBitSmarty->assign( 'showmsg', 'y' );
+					// Send the mail
+					$gBitSmarty->assign( 'msg',tra( 'You will receive an email with information to login for the first time into this site' ));
+					$gBitSmarty->assign( 'mail_machine',$machine );
+					$gBitSmarty->assign( 'mailUserId',$this->mUserId );
+					$gBitSmarty->assign( 'mailProvPass',$apass );
+					$mail_data = $gBitSmarty->fetch( 'bitpackage:users/user_validation_mail.tpl' );
+					mail( $pParamHash["email"], $siteName.' - '.tra( 'Your registration information' ), $mail_data, "From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n" );
+					$gBitSmarty->assign( 'showmsg', 'y' );
 
-				$this->mLogs['confirm'] = 'Validation email sent.';
-			} elseif( $gBitSystem->isFeatureActive( 'send_welcome_email' ) ) {
-				// Send the welcome mail
-				$gBitSmarty->assign( 'mailPassword',$pParamHash['password'] );
-				$gBitSmarty->assign( 'mailEmail',$pParamHash['email'] );
-				$mail_data = $gBitSmarty->fetch( 'bitpackage:users/welcome_mail.tpl' );
-				mail( $pParamHash["email"], tra( 'Welcome to' ).' '.$siteName, $mail_data, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n" );
+					$this->mLogs['confirm'] = 'Validation email sent.';
+				} elseif( $gBitSystem->isFeatureActive( 'send_welcome_email' ) ) {
+					// Send the welcome mail
+					$gBitSmarty->assign( 'mailPassword',$pParamHash['password'] );
+					$gBitSmarty->assign( 'mailEmail',$pParamHash['email'] );
+					$mail_data = $gBitSmarty->fetch( 'bitpackage:users/welcome_mail.tpl' );
+					mail( $pParamHash["email"], tra( 'Welcome to' ).' '.$siteName, $mail_data, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n" );
 
-				$this->mLogs['welcome'] = 'Welcome email sent.';
+					$this->mLogs['welcome'] = 'Welcome email sent.';
+				}
 			}
 			$logHash['action_log']['title'] = $pParamHash['login'];
 			$this->storeActionLog( $logHash );
