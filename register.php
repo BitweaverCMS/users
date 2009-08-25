@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.39 2009/08/21 21:44:53 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.40 2009/08/25 12:26:13 wjames5 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: register.php,v 1.39 2009/08/21 21:44:53 spiderr Exp $
+ * $Id: register.php,v 1.40 2009/08/25 12:26:13 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -40,6 +40,7 @@ if( $gBitUser->isRegistered() ) {
 if( isset( $_REQUEST["register"] ) ) {
 
 	$reg = $_REQUEST;
+	// require catpcha
 	// novalidation is set to yes if a user confirms his email is correct after tiki fails to validate it
 	if( $gBitSystem->isFeatureActive( 'users_random_number_reg' ) ) {
 		if( ( empty( $reg['novalidation'] ) || $reg['novalidation'] != 'yes' )
@@ -49,20 +50,20 @@ if( isset( $_REQUEST["register"] ) ) {
 		}
 	}
 
-	// Check the mode
+	// require passcode
 	if( $gBitSystem->isFeatureActive( 'users_register_require_passcode' ) ) {
 		if( $reg["passcode"] != $gBitSystem->getConfig( "users_register_passcode",md5( $gBitUser->genPass() ) ) ) {
 			$errors['passcode'] = 'Wrong passcode! You need to know the passcode to register at this site';
 		}
 	}
+	// Register the new user
 	if( empty( $errors ) ) {
-		
 		$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
 		$newUser = new $userClass();
-		
 		if( $newUser->register( $reg ) ) {
 			$gBitUser->mUserId = $newUser->mUserId;
 
+			// add user to user-selected group
 			if ( !empty( $_REQUEST['group'] ) ) {
 				$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group'] );
 				if ( empty($groupInfo) || $groupInfo['is_public'] != 'y' ) {
@@ -75,11 +76,12 @@ if( isset( $_REQUEST["register"] ) ) {
 				}
 			}
 
-			//set the user to private if necessary. defaults to public
+			// set the user to private if necessary. defaults to public
 			if(!empty($_REQUEST['users_information']) && $_REQUEST['users_information'] == 'private'){
 				$newUser->storePreference('users_information','private');
 			}
 
+			// requires validation by email 
 			if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 				$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
 				$gBitSmarty->assign('showmsg','y');
@@ -94,8 +96,10 @@ if( isset( $_REQUEST["register"] ) ) {
 				// login with email since login is not technically required in the form, as it can be auto generated during store
 				$afterRegDefault = $newUser->login( $reg['email'], $reg['password'], FALSE, FALSE );
 				$url = $gBitSystem->getConfig( 'after_reg_url' )?BIT_ROOT_URI.$gBitSystem->getConfig( 'after_reg_url' ):$afterRegDefault;
+				// return to referring page
 				if( !empty( $_SESSION['returnto'] ) ) {
 					$url = $_SESSION['returnto'];
+				// forward to group post-registration page 
 				} elseif ( !empty( $_REQUEST['group'] ) && !empty( $groupInfo['after_registration_page'] ) ) {
 					if ( $newUser->verifyId( $groupInfo['after_registration_page'] ) ) {
 						$url = BIT_ROOT_URI."index.php?content_id=".$groupInfo['after_registration_page'];
