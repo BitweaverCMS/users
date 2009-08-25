@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.30 2009/07/04 07:47:01 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.31 2009/08/25 15:44:59 lsces Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -266,8 +266,8 @@ $gBitSmarty->assign_by_ref( 'groupList', $gBitUser->getAllGroups( $listHash ));
 // This needs to be made more generic so that it picks up all plugins
 // Could not see where the 'auth_ldap' was defined in the $options['avail'] array
 $options = BaseAuth::getConfig();
-$option_ldap = $options['avail']['ldap']['options'];
 if( !empty( $_REQUEST["auth_ldap"] ) ) {
+	$option_ldap = $options['avail']['ldap']['options'];
 	foreach( array_keys( $option_ldap ) as $feature ) {
 		if( $option_ldap[$feature]['type'] == 'text' ) {
 			simple_set_value( $feature, USERS_PKG_NAME );
