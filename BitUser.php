@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.224 2009/08/25 14:15:32 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.225 2009/08/25 14:23:07 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.224 2009/08/25 14:15:32 wjames5 Exp $
+ * $Id: BitUser.php,v 1.225 2009/08/25 14:23:07 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.224 $
+ * @version  $Revision: 1.225 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -524,8 +524,6 @@ class BitUser extends LibertyMime {
 				if( $instance && $instance->canManageAuth() ) {
 					if( $userId = $instance->createUser( $pParamHash )) {
 						$this->mUserId = $userId;
-						$this->mLogs['register'] = 'New user registered.';
-						$ret = TRUE;
 						break;
 					} else {
 						$this->mErrors = array_merge( $this->mErrors, $instance->mErrors );
@@ -534,28 +532,32 @@ class BitUser extends LibertyMime {
 				}
 			}
 
+			$this->mLogs['register'] = 'New user registered.';
+			$ret = TRUE;
+
+			$this->load( FALSE, $pParamHash['login'] );
+
+			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
+			$notificationlib->post_new_user_event( $pParamHash['login'] );
+
+			// set local time zone as default when registering
+			$this->storePreference( 'site_display_utc', 'Local' );
+
+			if( !empty( $_REQUEST['CUSTOM'] ) ) {
+				foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
+					$this->storePreference( $field, $value );
+				}
+			}
+
+			// Handle optional user preferences that may be collected during registration
+			if( !empty( $pParamHash['prefs'] ) ) {
+				foreach( array_keys( $pParamHash['prefs'] ) as $key ) {
+					$this->storePreference( $key, $pParamHash['prefs'][$key] );
+				}
+			}
+
+			// Send notification
 			if( $pNotifyRegistrant ) {
-				$this->load( FALSE, $pParamHash['login'] );
-
-				require_once( KERNEL_PKG_PATH.'notification_lib.php' );
-				$notificationlib->post_new_user_event( $pParamHash['login'] );
-
-				// set local time zone as default when registering
-				$this->storePreference( 'site_display_utc', 'Local' );
-
-				if( !empty( $_REQUEST['CUSTOM'] ) ) {
-					foreach( $_REQUEST['CUSTOM'] as $field=>$value ) {
-						$this->storePreference( $field, $value );
-					}
-				}
-
-				// Handle optional user preferences that may be collected during registration
-				if( !empty( $pParamHash['prefs'] ) ) {
-					foreach( array_keys( $pParamHash['prefs'] ) as $key ) {
-						$this->storePreference( $key, $pParamHash['prefs'][$key] );
-					}
-				}
-
 				$siteName = $gBitSystem->getConfig('site_title', $_SERVER['HTTP_HOST'] );
 				$gBitSmarty->assign( 'siteName',$_SERVER["SERVER_NAME"] );
 				$gBitSmarty->assign( 'mail_site',$_SERVER["SERVER_NAME"] );
