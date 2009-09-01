@@ -59,6 +59,19 @@
 			{/foreach}
 
 			<div class="row">
+				{formlabel label="Default group for users with unverifiable emails" for="users_validate_email_group"}
+				{forminput}
+
+					<select name="users_validate_email_group" id="users_validate_email_group">
+						<option value="(none)" {if $gBitSystem->getConfig('users_validate_email_group') eq ''} selected="selected"{/if}>(none)</option>
+						{foreach from=$groups item='group'}
+							<option value="{$group.group_name}" {if $gBitSystem->getConfig('users_validate_email_group') eq $group.group_name} selected="selected"{/if}>{$group.group_name}</option>
+						{/foreach}
+					</select>
+					{formhelp note="Selecting (none) will prevent the user from registering with a non responsive email."}
+				{/forminput}
+			</div>
+			<div class="row">
 				{formlabel label="Duration of 'Remember me' feature" for="users_remember_time"}
 				{forminput}
 					<select name="users_remember_time" id="users_remember_time">

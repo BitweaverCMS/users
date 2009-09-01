@@ -2,6 +2,17 @@
 
 {minifind}
 
+{if $gBitUser->hasPermission( 'p_users_admin' ) && $gBitSystem->isFeatureActive('users_validate_email')}
+
+<div class="row">
+<form>
+	{formlabel label="Verify user emails"}
+	<input type = "submit" name="action" value="Verify Emails"/>
+	{formhelp note="This button will iterate through all current users, check their emails for validity, and place them in the appropriate group."}
+</form>
+</div>
+
+{/if}
 <div class="navbar">
 	<ul>
 		<li>{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="sort by"}</li>
@@ -10,7 +21,9 @@
 		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Registration Date" isort="registration_date"}</li>
 		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Last Login" isort="current_login"}</li>
 	</ul>
+
 </div>
+
 
 {formfeedback hash=$feedback}
 

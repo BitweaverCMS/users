@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.30 2009/02/12 19:25:22 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.31 2009/09/01 20:10:13 tylerbello Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -56,7 +56,6 @@ if( isset($_REQUEST["newuser"] ) ) {
 } elseif( !empty( $_REQUEST['find'] ) ) {
 	$title = 'Find Users';
 }
-
 // Process actions here
 // Remove user or remove user from group
 if( isset( $_REQUEST["action"] ) ) {
@@ -157,6 +156,18 @@ if( isset( $_REQUEST["action"] ) ) {
 	}
 	if ($_REQUEST["action"] == 'removegroup') {
 		$gBitUser->removeUserFromGroup($_REQUEST["user"], $_REQUEST["group"]);
+	}
+	if ($_REQUEST["action"] == 'Verify Emails') {
+		$selectSql = 'SELECT group_id from users_groups ug where group_name = \''.$gBitSystem->getConfig('users_validate_email_group').'\'';
+		$groupId   = $gBitDb->getOne($selectSql);
+		$selectSql = 'SELECT uu.user_id,uu.email  FROM users_users uu INNER JOIN users_groups_map ugm ON ( ugm.user_id = uu.user_id ) INNER JOIN users_groups ug ON ( ug.group_id = ugm.group_id) WHERE group_name !=\''.$groupId.'\'';
+		$users     = $gBitDb->getAssoc($selectSql);
+		$errors;
+		foreach ( $users as $id=>$email ){
+			if($gBitUser->verifyMx($email,$errors) === true){
+				$gBitUser->addUserToGroup( $id , $groupId );
+			}
+		}
 	}
 }
 

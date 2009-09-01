@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.225 2009/08/25 14:23:07 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.226 2009/09/01 20:10:13 tylerbello Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.225 2009/08/25 14:23:07 wjames5 Exp $
+ * $Id: BitUser.php,v 1.226 2009/09/01 20:10:13 tylerbello Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.225 $
+ * @version  $Revision: 1.226 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -249,8 +249,9 @@ class BitUser extends LibertyMime {
 		if( !empty( $pParamHash['email'] ) ) {
 			// LOWER CASE all emails
 			$pParamHash['email'] = strtolower( $pParamHash['email'] );
-			if( $this->verifyEmail( $pParamHash['email'] ) ) {
+			if( $emailResult = $this->verifyEmail( $pParamHash['email'] , $this->mErrors) ) {
 				$pParamHash['user_store']['email'] = strtolower( substr( $pParamHash['email'], 0, 200 ) );
+				$pParamHash['verified_email'] = ($emailResult === true);
 			}
 		}
 		// check some new user requirements
@@ -314,6 +315,7 @@ class BitUser extends LibertyMime {
 			parent::verify( $pParamHash );
 		}
 
+
 		return ( count($this->mErrors) == 0 );
 	}
 
@@ -365,34 +367,27 @@ class BitUser extends LibertyMime {
 	 * verifyEmail 
 	 * 
 	 * @param array $pEmail 
-	 * @param array $pValidate 
 	 * @access public
-	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
+	 * @return TRUE on success, FALSE on failure, or -1 if verifyMX had a connection failure - mErrors will contain reason for failure
 	 */
-	function verifyEmail( $pEmail, $pValidate = FALSE ) {
+	function verifyEmail( $pEmail , &$pErrors ) {
 		global $gBitSystem;
-
-		if( !empty( $this ) ) {
-			$errors = &$this->mErrors;
-		} else {
-			$errors = array();
-		}
 
 		// check for existing user first, so root@localhost doesn't get attempted to re-register
 		if( !empty( $this ) && is_object( $this ) && $this->userExists( array( 'email' => $pEmail ) ) ) {
-			$errors['email'] = 'The email address "'.$pEmail.'" has already been registered.';
+			$pErrors['email'] = 'The email address "'.$pEmail.'" has already been registered.';
 		// during install we have some <user>@localhost as email address. we won't cause problems on those
 		} elseif( $pEmail == 'root@localhost' || $pEmail == 'guest@localhost' ) {
 			// nothing to do
 		} elseif( !validate_email_syntax( $pEmail ) ) {
-			$errors['email'] = 'The email address "'.$pEmail.'" is invalid.';
+			$pErrors['email'] = 'The email address "'.$pEmail.'" is invalid.';
 		} elseif( $gBitSystem->isFeatureActive( 'users_validate_email' ) ) {
-			if( !$this->verifyMX( $pEmail, $pValidate ) ) {
-				$errors['email'] = 'Cannot find a valid MX host';
-			}
+			$ret = $this->verifyMX( $pEmail, $pErrors ) ;
+		} else { 
+			$ret = ( count( $pErrors ) == 0 )  ;
 		}
 
-		return( count( $errors ) == 0 );
+		return $ret;
 	}
 
 	/**
@@ -403,53 +398,53 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
-	function verifyMX( $pEmail, $pValidate = FALSE ) {
+	function verifyMX( $pEmail, &$pErrors ) {
 		global $gBitSystem, $gDebug;
 		$HTTP_HOST=$_SERVER['SERVER_NAME'];
+		$ret = false;
 
-		if( !empty( $this ) ) {
-			$errors = &$this->mErrors;
-		} else {
-			$errors = array();
-		}
+		if( validate_email_syntax( $pEmail ) ){
+			list ( $Username, $domain ) = split ("@",$pEmail);
+			// That MX(mail exchanger) record exists in domain check .
+			// checkdnsrr function reference : http://www.php.net/manual/en/function.checkdnsrr.php
+			if( !is_windows() and checkdnsrr ( $domain, "MX" ) )  {
+				bitdebug( "Confirmation : MX record about {$domain} exists." );
 
-		list ( $Username, $domain ) = split ("@",$pEmail);
-		// That MX(mail exchanger) record exists in domain check .
-		// checkdnsrr function reference : http://www.php.net/manual/en/function.checkdnsrr.php
-		if( !is_windows() and checkdnsrr ( $domain, "MX" ) )  {
-			bitdebug( "Confirmation : MX record about {$domain} exists." );
+				// If MX record exists, save MX record address.
+				// getmxrr function reference : http://www.php.net/manual/en/function.getmxrr.php
 
-			// If MX record exists, save MX record address.
-			// getmxrr function reference : http://www.php.net/manual/en/function.getmxrr.php
+				// Sometimes only the highest priority MX are active
+				$MXWeights = array();
+				$lowest_weight = 99999;
+				$lowest_weight_index = 0;
 
-			// Sometimes only the highest priority MX are active
-			$MXWeights = array();
-			$lowest_weight = 99999;
-			$lowest_weight_index = 0;
-			if( getmxrr ( $domain, $MXHost, $MXWeights ) )  {
-				for( $i = 0; $i < count( $MXHost ); $i++ ) {
-					if( $MXWeights[$i] < $lowest_weight ) {
-						$lowest_weight = $MXWeights[$i];
-						$lowest_weight_index = $i;
+				getmxrr ( $domain, $MXHost, $MXWeights );
+				if( !empty($MXHost) )  {
+					for( $i = 0; $i < count( $MXHost ); $i++ ) {
+						if( $MXWeights[$i] < $lowest_weight ) {
+							$lowest_weight = $MXWeights[$i];
+							$lowest_weight_index = $i;
+						}
 					}
-				}
 
-				if( !empty( $gDebug )) {
-					$debug = "Confirmation : Is confirming address by MX LOOKUP.<br />";
-					for ( $i = 0,$j = 1; $i < count ( $MXHost ); $i++,$j++ ) {
-						$debug .= "&nbsp;&bull; Result( $j ) - $MXHost[$i]<br />";
+					if( !empty( $gDebug )) {
+						$debug = "Confirmation : Is confirming address by MX LOOKUP.<br />";
+						for ( $i = 0,$j = 1; $i < count ( $MXHost ); $i++,$j++ ) {
+							$debug .= "&nbsp;&bull; Result( $j ) - $MXHost[$i]<br />";
+						}
 					}
+				
+					// Getmxrr function does to store MX record address about $domain in arrangement form to $MXHost.
+					// $ConnectAddress socket connection address.
+					$ConnectAddress = $MXHost[$lowest_weight_index];
 				}
+			} else {
+				// If there is no MX record simply @ to next time address socket connection do .
+				//$ConnectAddress = $domain;
+				bitdebug( "Confirmation : MX record about {$domain} does not exist." );
 			}
-			// Getmxrr function does to store MX record address about $domain in arrangement form to $MXHost.
-			// $ConnectAddress socket connection address.
-			$ConnectAddress = $MXHost[$lowest_weight_index];
-		} else {
-			// If there is no MX record simply @ to next time address socket connection do .
-			$ConnectAddress = $domain;
-			bitdebug( "Confirmation : MX record about {$domain} does not exist." );
 		}
-		if( !$pValidate ) {	// Skip the connecting test if it didn't work the first time
+		if( !empty($ConnectAddress) ) {	// Skip the connecting test if it didn't work the first time
 			// fsockopen function reference : http://www.php.net/manual/en/function.fsockopen.php
 			$Connect = @fsockopen ( $ConnectAddress, 25 );
 			// Success in socket connection
@@ -491,18 +486,27 @@ class BitUser extends LibertyMime {
 						// Server about listener's address reacts to 550 codes if there does not exist
 						// checking that mailbox is in own E-Mail account.
 						if( !ereg ( "^250", $from ) || ( !ereg ( "^250", $to ) && !ereg( "Please use your ISP relay", $to ))) {
-							$errors['email'] = $pEmail." is not recognized by the mail server to=$to= from=$from= out=$out=";
+							//$pErrors['email'] = $pEmail." is not recognized by the mail server to=$to= from=$from= out=$out=";
+							$pErrors['email']   = $pEmail." is not recognized by the mail server. Try double checking the address for typos.";
+						}else{
+							$ret = true;
 						}
 					}
 				}
-			} else {
+			} 
+		} else {
 				if( empty( $out )) {
 					$out = 'n/a';
 				}
-				$errors['email'] = "Cannot connect to mail server ({$ConnectAddress}). response='$out'";
+				//could not connect to the mail server. Suppress this error if a group has been specified for verifiable emails
+				if($gBitSystem->getConfig('users_validate_email_group') == '(none)'){
+					$pErrors['email'] = "Cannot connect to mail server ({$ConnectAddress}). response='$out'";
+				}
+				$ret = -1; //implies MX error
 			}
-		}
-		return( count( $errors ) == 0 );
+
+		
+		return $ret;
 	}
 
 	/**
@@ -532,11 +536,15 @@ class BitUser extends LibertyMime {
 				}
 			}
 
+			if( $pParamHash['verified_email'] ){
+				BitPermUser::addUserToGroup( $this->mUserId, $gBitSystem->getConfig('users_validate_email_group'));
+			}
+
 			$this->mLogs['register'] = 'New user registered.';
 			$ret = TRUE;
 
 			$this->load( FALSE, $pParamHash['login'] );
-
+			
 			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
 			$notificationlib->post_new_user_event( $pParamHash['login'] );
 
@@ -646,6 +654,7 @@ class BitUser extends LibertyMime {
 			// Don't let LA snarf these now so we can do extra things.
 			$pParamHash['_files_override'] = array();
 			if( LibertyMime::store( $pParamHash ) ) {
+				
 				if( empty( $this->mInfo['content_id'] ) || ($pParamHash['content_id'] != $this->mInfo['content_id']) ) {
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `content_id`=? WHERE `user_id`=?";
 					$result = $this->mDb->query( $query, array( $pParamHash['content_id'], $this->mUserId ) );
@@ -1295,7 +1304,6 @@ class BitUser extends LibertyMime {
 				$this->mErrors = array_merge( $this->mErrors,$instance->mErrors );
 			}
 		}
-
 		if( $this->mUserId != ANONYMOUS_USER_ID ) {
 			$this->load();
 			//on first time login we run the users registation service

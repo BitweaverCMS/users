@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.31 2009/08/25 15:44:59 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.32 2009/09/01 20:10:13 tylerbello Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -57,12 +57,6 @@ $loginSettings = array(
 		'type' => "checkbox",
 		'note' => "Send an email to the user, to validate registration.",
 	),
-	'users_validate_email' => array(
-		'label' => "Validate email address",
-		'type' => "checkbox",
-		'link' => "kernel/admin/index.php?page=server/General Settings",
-		'note' => "This feature should be used only when you need the maximum security and should be used with discretion. If a visitor's email server is not responding, they will not be able to register. You also must have a valid sender email to use this feature.",
-	),
 	'users_forgot_pass' => array(
 		'label' => "Remind passwords by email",
 		'type' => "checkbox",
@@ -113,8 +107,18 @@ $loginSettings = array(
 		'type' => "text",
 		'note' => "The path '/foo' would match '/foobar' and '/foo/bar.html'",
 	),
+	'users_validate_email' => array(
+		'label' => "Validate email address",
+		'type' => "checkbox",
+		'link' => "kernel/admin/index.php?page=server/General Settings",
+		'note' => "This feature should be used only when you need the maximum security and should be used with discretion. If a visitor's email server is not responding, they will not be placed into the group specified below for verified emails. If a users email is determined to be invalid (meaning, the server does respond, but negatively) they will not be able to register. You also must have a valid sender email to use this feature.",
+	),
 );
 $gBitSmarty->assign( 'loginSettings', $loginSettings );
+
+$listHash = array( 'sort_mode' => 'group_name_asc' );
+
+$gBitSmarty->assign('groups', $gBitUser->getAllGroups( $listHash ));
 
 if( !function_exists("gd_info" ) ) {
 	$gBitSmarty->assign( 'warning', 'PHP GD library is required for this feature (not found on your system)' );
@@ -140,6 +144,7 @@ if( !empty( $_REQUEST["loginprefs"] ) ) {
 	}
 	simple_set_value( 'users_remember_time', USERS_PKG_NAME );
 	simple_set_value( 'users_auth_method', USERS_PKG_NAME );
+	simple_set_value( 'users_validate_email_group', USERS_PKG_NAME );
 
 	if( isset( $_REQUEST['registration_group_choice'] ) ) {
 		$listHash = array();
