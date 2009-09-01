@@ -65,10 +65,10 @@
 					<select name="users_validate_email_group" id="users_validate_email_group">
 						<option value="(none)" {if $gBitSystem->getConfig('users_validate_email_group') eq ''} selected="selected"{/if}>(none)</option>
 						{foreach from=$groups item='group'}
-							<option value="{$group.group_name}" {if $gBitSystem->getConfig('users_validate_email_group') eq $group.group_name} selected="selected"{/if}>{$group.group_name}</option>
+							<option value="{$group.group_id}" {if $gBitSystem->getConfig('users_validate_email_group') eq $group.group_id} selected="selected"{/if}>{$group.group_name}</option>
 						{/foreach}
 					</select>
-					{formhelp note="Selecting (none) will prevent the user from registering with a non responsive email."}
+					<div class="formhelp">Selecting (none) will prevent the user from registering with a non responsive email. Click <a href='{$smarty.const.USERS_PKG_URL}admin/verify_emails.php?tk={$gBitUser->mTicket}'>here</a> to validate all of your current users emails.</div>
 				{/forminput}
 			</div>
 			<div class="row">
