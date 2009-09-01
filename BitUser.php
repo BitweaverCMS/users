@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.227 2009/09/01 20:44:00 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.228 2009/09/01 21:03:52 tylerbello Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.227 2009/09/01 20:44:00 spiderr Exp $
+ * $Id: BitUser.php,v 1.228 2009/09/01 21:03:52 tylerbello Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.227 $
+ * @version  $Revision: 1.228 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -383,6 +383,9 @@ class BitUser extends LibertyMime {
 			$pErrors['email'] = 'The email address "'.$pEmail.'" is invalid.';
 		} elseif( $gBitSystem->isFeatureActive( 'users_validate_email' ) ) {
 			$ret = $this->verifyMX( $pEmail, $pErrors ) ;
+			if ($ret === false)	{
+				bit_log_error('INVALID EMAIL : '.$pEmail.' by '. $_SERVER['REMOTE_ADDR']);
+			}
 		}
 
 		if( !isset( $ret ) ) { 
