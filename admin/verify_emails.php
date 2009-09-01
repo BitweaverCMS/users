@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/verify_emails.php,v 1.3 2009/09/01 20:48:47 tylerbello Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/verify_emails.php,v 1.4 2009/09/01 20:53:09 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -9,7 +9,7 @@ require_once( '../../bit_setup_inc.php' );
 	
 	$gBitUser->verifyTicket();
 
-		$selectSql = 'SELECT uu.user_id,uu.email  FROM users_users uu INNER JOIN users_groups_map ugm ON ( ugm.user_id = uu.user_id ) WHERE group_id != ?';
+		$selectSql = 'SELECT uu.user_id,uu.email  FROM users_users uu WHERE user_id NOT IN (SELECT user_id FROM users_groups_map WHERE group_id = ?)';
 		$users     = $gBitDb->getAssoc($selectSql, array( $gBitSystem->getConfig('users_validate_email_group') ) );
 		$errors;
 		foreach ( $users as $id=>$email ){
