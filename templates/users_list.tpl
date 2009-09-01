@@ -4,14 +4,6 @@
 
 {if $gBitUser->hasPermission( 'p_users_admin' ) && $gBitSystem->isFeatureActive('users_validate_email')}
 
-<div class="row">
-<form>
-	{formlabel label="Verify user emails"}
-	<input type = "submit" name="action" value="Verify Emails"/>
-	{formhelp note="This button will iterate through all current users, check their emails for validity, and place them in the appropriate group."}
-</form>
-</div>
-
 {/if}
 <div class="navbar">
 	<ul>
