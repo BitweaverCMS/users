@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.229 2009/09/14 02:16:35 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.230 2009/09/14 13:42:44 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.229 2009/09/14 02:16:35 spiderr Exp $
+ * $Id: BitUser.php,v 1.230 2009/09/14 13:42:44 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.229 $
+ * @version  $Revision: 1.230 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -2343,9 +2343,6 @@ class BitUser extends LibertyMime {
 		return $ret;
 	}
 
-
-
-
 	// {{{ ==================== deprecated methods - will be removed soon ====================
 	//  - xing - Thursday Oct 16, 2008   10:35:11 CEST
 	/**
@@ -2541,6 +2538,13 @@ class BitUser extends LibertyMime {
 		}
 	}
 	// }}}
+}
+
+function get_user_content_count( $pUserId ) {
+	global $gBitDb;
+	if( BitBase::verifyId( $pUserId ) ) {
+		return $gBitDb->getOne( "SELECT COUNT(`content_id`) FROM `".BIT_DB_PREFIX."liberty_content` lc WHERE lc.`content_type_guid`!='bituser' AND lc.`user_id`=?", array( $pUserId ) );
+	}
 }
 
 /* vim: :set fdm=marker : */
