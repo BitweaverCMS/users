@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.228 2009/09/01 21:03:52 tylerbello Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.229 2009/09/14 02:16:35 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.228 2009/09/01 21:03:52 tylerbello Exp $
+ * $Id: BitUser.php,v 1.229 2009/09/14 02:16:35 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.228 $
+ * @version  $Revision: 1.229 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -541,8 +541,8 @@ class BitUser extends LibertyMime {
 				}
 			}
 
-			if( $pParamHash['verified_email'] ){
-				BitPermUser::addUserToGroup( $this->mUserId, $gBitSystem->getConfig('users_validate_email_group'));
+			if( !empty( $pParamHash['verified_email'] ) && $gBitSystem->getConfig('users_validate_email_group') ) {
+				BitPermUser::addUserToGroup( $this->mUserId, $gBitSystem->getConfig('users_validate_email_group') );
 			}
 
 			$this->mLogs['register'] = 'New user registered.';
