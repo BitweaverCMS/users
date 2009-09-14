@@ -1,6 +1,6 @@
 {if $userInfo.is_private neq 'true' or $gBitUser->mUserId eq $userInfo.user_id}
 {strip}
-{bitmodule title="$moduleTitle"}
+{bitmodule}
 <div style="text-align:center;">
 
 	{if $userInfo.portrait_url}
@@ -24,17 +24,17 @@
 </div>
 
 	{if $gBitUser->hasPermission( 'p_users_admin' )}
-		 <div>{$userInfo.email} ({$userInfo.user_id})</div>
+		 <div>{$userInfo.email|default:'No Email'} ({$userInfo.user_id})</div>
 	{/if}
 
 {if $userInfo.publicEmail}
 	{$userInfo.publicEmail}
 {/if}
 
-	<div>{tr}Member Since{/tr}: {$userInfo.registration_date|bit_short_date}</div>
-	<div>{tr}Last login{/tr}: {$userInfo.last_login|bit_short_date}</div>
+	<div>{tr}Joined{/tr}: {$userInfo.registration_date|bit_short_date}</div>
+	<div>{tr}Last visit{/tr}: {$userInfo.last_login|bit_short_date}</div>
 
-	{biticon iforce=icon ipackage=users ipath=flags/ iname=$userPrefs.flag iexplain=$userPrefs.flag} {assign var=langcode value=$userInfo.lang_code|default:$gBitSystem->getConfig('bitlanguage','en')}{$gBitLanguage->mLanguageList.$langcode.native_name}
+	{if $userPrefs.flag}{biticon iforce=icon ipackage=users ipath=flags/ iname=$userPrefs.flag iexplain=$userPrefs.flag}{/if} {assign var=langcode value=$userPrefs.bitlanguage|default:$gBitSystem->getConfig('bitlanguage','en')}{$gBitLanguage->mLanguageList.$langcode.native_name}
 {/bitmodule}
 {/strip}
 {/if}
