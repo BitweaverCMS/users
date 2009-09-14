@@ -20,7 +20,7 @@
 {formfeedback hash=$feedback}
 
 {form id=checkform}
-	<ul class="clear data">
+	<ol class="clear data" start="{$listInfo.offset+1}">
 		{section name=user loop=$users}
 			<li class="item {cycle values='even,odd'}">
 				{if $gBitUser->hasPermission( 'p_users_admin' )}
@@ -71,7 +71,7 @@
 				<div class="clear"></div>
 			</li>
 		{/section}
-	</ul>
+	</ol>
 
 	{if $gBitUser->hasPermission( 'p_users_admin' )}
 		<div style="text-align:right;">
