@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.230 2009/09/14 13:42:44 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.231 2009/09/15 18:03:29 tylerbello Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: BitUser.php,v 1.230 2009/09/14 13:42:44 spiderr Exp $
+ * $Id: BitUser.php,v 1.231 2009/09/15 18:03:29 tylerbello Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.230 $
+ * @version  $Revision: 1.231 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -250,7 +250,6 @@ class BitUser extends LibertyMime {
 			// LOWER CASE all emails
 			$pParamHash['email'] = strtolower( $pParamHash['email'] );
 			if( $emailResult = $this->verifyEmail( $pParamHash['email'] , $this->mErrors) ) {
-				$pParamHash['user_store']['email'] = strtolower( substr( $pParamHash['email'], 0, 200 ) );
 				$pParamHash['verified_email'] = ($emailResult === true);
 			}
 		}
@@ -271,9 +270,13 @@ class BitUser extends LibertyMime {
 				$pParamHash['registration_date'] = date( "U" );
 			}
 			$pParamHash['user_store']['registration_date'] = $pParamHash['registration_date'];
-			if( empty( $pParamHash['email'] ) ) {
+
+			if( !empty( $pParamHash['email'] ) && empty($this->mErrors['email']) ) {
+				$pParamHash['user_store']['email'] = substr( $pParamHash['email'], 0, 200 ) ;
+			}elseif( empty($pParamHash['email']) ){
 				$this->mErrors['email'] = tra( 'You must enter your email address' );
 			}
+
 			if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 				$pParamHash['user_store']['provpass'] = md5(BitSystem::genPass());
 				$pParamHash['pass_due'] = 0;
@@ -281,7 +284,7 @@ class BitUser extends LibertyMime {
 				$this->mErrors['password'] = tra( 'Your password should be at least '.$gBitSystem->getConfig( 'users_min_pass_length', 4 ).' characters long' );
 			}
 		} elseif( $this->isValid() ) {
-			// Prevent loosing user info on save
+			// Prevent losing user info on save
 			if( empty( $pParamHash['edit'] ) ) {
 				$pParamHash['edit'] = $this->mInfo['data'];
 			}
@@ -384,7 +387,7 @@ class BitUser extends LibertyMime {
 		} elseif( $gBitSystem->isFeatureActive( 'users_validate_email' ) ) {
 			$ret = $this->verifyMX( $pEmail, $pErrors ) ;
 			if ($ret === false)	{
-				bit_log_error('INVALID EMAIL : '.$pEmail.' by '. $_SERVER['REMOTE_ADDR']);
+				bit_log_error('INVALID EMAIL : '.$pEmail.' by '. $_SERVER['REMOTE_ADDR'] .' for '. $this->mErrors['email']);
 			}
 		}
 
@@ -404,113 +407,108 @@ class BitUser extends LibertyMime {
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
 	function verifyMX( $pEmail, &$pErrors ) {
+
 		global $gBitSystem, $gDebug;
+
 		$HTTP_HOST=$_SERVER['SERVER_NAME'];
 		$ret = false;
 
 		if( validate_email_syntax( $pEmail ) ){
 			list ( $Username, $domain ) = split ("@",$pEmail);
-			// That MX(mail exchanger) record exists in domain check .
-			// checkdnsrr function reference : http://www.php.net/manual/en/function.checkdnsrr.php
+			//checkdnsrr will check to see if there are any MX records for the domain
 			if( !is_windows() and checkdnsrr ( $domain, "MX" ) )  {
-				bitdebug( "Confirmation : MX record about {$domain} exists." );
+				bitdebug( "Confirmation : MX record for {$domain} exists." );
 
-				// If MX record exists, save MX record address.
-				// getmxrr function reference : http://www.php.net/manual/en/function.getmxrr.php
-
-				// Sometimes only the highest priority MX are active
 				$MXWeights = array();
-				$lowest_weight = 99999;
-				$lowest_weight_index = 0;
 
 				getmxrr ( $domain, $MXHost, $MXWeights );
-				if( !empty($MXHost) )  {
-					for( $i = 0; $i < count( $MXHost ); $i++ ) {
-						if( $MXWeights[$i] < $lowest_weight ) {
-							$lowest_weight = $MXWeights[$i];
-							$lowest_weight_index = $i;
-						}
-					}
+				$hosts = array();
 
-					if( !empty( $gDebug )) {
-						$debug = "Confirmation : Is confirming address by MX LOOKUP.<br />";
-						for ( $i = 0,$j = 1; $i < count ( $MXHost ); $i++,$j++ ) {
-							$debug .= "&nbsp;&bull; Result( $j ) - $MXHost[$i]<br />";
-						}
-					}
+				//create an array that combines the MXWeights with their associated hosts	
+				for( $i = 0; $i < count( $MXHost ); $i++ ) {
+					$hosts[$MXHost[$i]] = $MXWeights[$i];
+				}
 				
-					// Getmxrr function does to store MX record address about $domain in arrangement form to $MXHost.
-					// $ConnectAddress socket connection address.
-					$ConnectAddress = $MXHost[$lowest_weight_index];
-				}
-			} else {
-				// If there is no MX record simply @ to next time address socket connection do .
-				//$ConnectAddress = $domain;
-				bitdebug( "Confirmation : MX record about {$domain} does not exist." );
-			}
-		}
-		if( !empty($ConnectAddress) ) {	// Skip the connecting test if it didn't work the first time
-			// fsockopen function reference : http://www.php.net/manual/en/function.fsockopen.php
-			$Connect = @fsockopen ( $ConnectAddress, 25 );
-			// Success in socket connection
-			if( $Connect ) {
-				bitdebug( "Connection succeeded to {$ConnectAddress} SMTP." );
+				//sorts the hosts by weight
+				asort($hosts);
 
-				// Judgment is that service is preparing though begin by 220 getting string after connection .
-				// fgets function reference : http://www.php.net/manual/en/function.fgets.php
-				// A "Real domain name required for sender address"
-				stream_set_timeout( $Connect, 90 );
-				$out = $this->getSmtpResponse( $Connect );
-				if( ereg ( "^220", $out ) ) {
-					// Inform client's reaching to server who connect.
-					if( $gBitSystem->hasValidSenderEmail() ) {
-						$senderEmail = $gBitSystem->getConfig( 'site_sender_email' );
-						fputs( $Connect, "HELO $HTTP_HOST\r\n" );
-						bitdebug( "Run : HELO $HTTP_HOST" );
-						// Receive server's answering cord.
-						$out = $this->getSmtpResponse( $Connect );
+				if( !empty($hosts)) {	//hosts shouldn't be empty here, since we passed the checkdnsrr check, but the server COULD have died between the first and second check.
+					$Connect = '' ; 	
+					foreach ($hosts as $host=>$priority){
+						
+						$Connect = @fsockopen ( $host, 25, $errNo, $errStr, 10 ); // 10 second timeout to open each MX server, seems adequate to me, increase as necessary
+						// Success in fsockopen 
+					
+						if( $Connect ) {
+							bitdebug( "Connection succeeded to {$host} SMTP." );
+							
 
-						// Inform sender's address to server.
-						fputs ( $Connect, "MAIL FROM: <{$senderEmail}>\r\n" );
-						bitdebug( "Run : MAIL FROM: &lt;{$senderEmail}&gt;" );
-						// Receive server's answering cord.
-						$from = $this->getSmtpResponse( $Connect );
+							stream_set_timeout( $Connect, 90 );
+							$out = $this->getSmtpResponse( $Connect );
 
-						// Inform listener's address to server.
-						fputs ( $Connect, "RCPT TO: <{$pEmail}>\r\n" );
-						bitdebug( "Run : RCPT TO: &lt;{$pEmail}&gt;" );
-						// Receive server's answering cord.
-						$to = $this->getSmtpResponse( $Connect );
+							// Judgment is that a service preparing to begin a transaction will send a 220 string after a succesful handshake
+							if( ereg ( "^220", $out ) ) {
+								// Inform client's reaching to server who connect.
+								if( $gBitSystem->hasValidSenderEmail() ) {
+									$senderEmail = $gBitSystem->getConfig( 'site_sender_email' );
+									fputs( $Connect, "HELO $HTTP_HOST\r\n" );
+									bitdebug( "Run : HELO $HTTP_HOST" );
+									// Receive server's answering cord.
+									$out = $this->getSmtpResponse( $Connect );
 
-						// Finish connection.
-						fputs( $Connect, "QUIT\r\n" );
-						bitdebug( "Run : QUIT" );
-						fclose( $Connect );
+									// Inform sender's address to server.
+									fputs ( $Connect, "MAIL FROM: <{$senderEmail}>\r\n" );
+									bitdebug( "Run : MAIL FROM: &lt;{$senderEmail}&gt;" );
+									// Receive server's answering cord.
+									$from = $this->getSmtpResponse( $Connect );
 
-						// Server's answering cord about MAIL and TO command checks.
-						// Server about listener's address reacts to 550 codes if there does not exist
-						// checking that mailbox is in own E-Mail account.
-						if( !ereg ( "^250", $from ) || ( !ereg ( "^250", $to ) && !ereg( "Please use your ISP relay", $to ))) {
-							//$pErrors['email'] = $pEmail." is not recognized by the mail server to=$to= from=$from= out=$out=";
-							$pErrors['email']   = $pEmail." is not recognized by the mail server. Try double checking the address for typos.";
-						}else{
-							$ret = true;
+									// Inform listener's address to server.
+									fputs ( $Connect, "RCPT TO: <{$pEmail}>\r\n" );
+									bitdebug( "Run : RCPT TO: &lt;{$pEmail}&gt;" );
+									// Receive server's answering cord.
+									$to = $this->getSmtpResponse( $Connect );
+
+									// Finish connection.
+									fputs( $Connect, "QUIT\r\n" );
+									bitdebug( "Run : QUIT" );
+									fclose( $Connect );
+									
+									//Checks if we received a 250 OK from the server. If we did not, the server is telling us that this address is not a valid mailbox.
+									if( !ereg ( "^250", $from ) || ( !ereg ( "^250", $to ) && !ereg( "Please use your ISP relay", $to ))) {
+										$pErrors['email']   = $pEmail." is not recognized by the mail server. Try double checking the address for typos." ;
+										bit_log_error("INVALID EMAIL : ".$pEmail."SMTP FROM : ".$from." SMTP TO: ".$to);
+										$ret = false;
+										break; //break out of foreach and fall through to the end of function
+									}else{
+										$ret = true;//address has been verified by the server, no more checking necessary
+										break;
+									}
+								}
+							}else{
+								$pErrors['email'] = 'Connection rejected by MX server';
+								bit_log_error("INVALID EMAIL : ".$pEmail." SMTP response: ".$out);
+								$ret = false;
+							}
+						} else {
+							//fsockopen failed
+							if(!$gBitSystem->getConfig('users_validate_email_group')){ //will ONLY stuff mErrors if you have not set a default group for unverifiable emails, otherwise this is not a game breaking case
+								$pErrors['email'] = "One or more mail servers not responding";	
+							}
+							$ret = -1; //-1 implies ambiguity, MX servers found, but unable to be reached.
 						}
-					}
-				}
-			} 
-		} else {
-				if( empty( $out )) {
-					$out = 'n/a';
-				}
-				//could not connect to the mail server. Suppress this error if a group has been specified for verifiable emails
-				if($gBitSystem->getConfig('users_validate_email_group') == '(none)'){
-					$pErrors['email'] = "Cannot connect to mail server ({$ConnectAddress}). response='$out'";
-				}
-				$ret = -1; //implies MX error
+					} 
+				}else{
+					$pErrors['email'] = "Mail server not found";
+					$ret = false;
+				}					
+			} else {
+				$pErrors['email'] = "Mail server not found"; 
+				$ret = false;	
 			}
-
-		
+		} else {
+			$pErrors['email'] = "Invalid email syntax";
+			$ret = false;
+		}
 		return $ret;
 	}
 
@@ -541,7 +539,7 @@ class BitUser extends LibertyMime {
 				}
 			}
 
-			if( !empty( $pParamHash['verified_email'] ) && $gBitSystem->getConfig('users_validate_email_group') ) {
+			if( !empty( $pParamHash['verified_email'] ) && $pParamHash['verified_email'] && $gBitSystem->getConfig('users_validate_email_group') ) {
 				BitPermUser::addUserToGroup( $this->mUserId, $gBitSystem->getConfig('users_validate_email_group') );
 			}
 
