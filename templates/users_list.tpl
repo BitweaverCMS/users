@@ -20,7 +20,7 @@
 {formfeedback hash=$feedback}
 
 {form id=checkform}
-	<ol class="clear data" start="{$listInfo.offset+1}">
+	<ol class="clear data userslist" start="{$listInfo.offset+1}">
 		{section name=user loop=$users}
 			<li class="item {cycle values='even,odd'}">
 				{if $gBitUser->hasPermission( 'p_users_admin' )}
@@ -44,6 +44,9 @@
 					</div>
 				{/if}
 
+				<img alt="{tr}user portrait{/tr}" title="{$users[user].login} {tr}user portrait{/tr}" src="{$users[user].thumbnail_url|default:"`$smarty.const.USERS_PKG_URL`icons/silhouette_100.png"}" class="thumb" />
+
+				<div class="usersinfo">
 				{if $users[user].real_name}
 					{if $gBitSystem->getConfig('users_display_name') == 'login'}
 						<h2>{$users[user].real_name} <small>[ {displayname hash=$users[user]} ]</small></h2>
@@ -52,10 +55,6 @@
 					{/if}
 				{else}
 					<h2>{displayname hash=$users[user]}</h2>
-				{/if}
-
-				{if $users[user].thumbnail_url}
-					<img alt="{tr}user portrait{/tr}" title="{$users[user].login} {tr}user portrait{/tr}" src="{$users[user].thumbnail_url}" class="thumb" />
 				{/if}
 
 				{if $gBitUser->hasPermission( 'p_users_admin' )}
@@ -67,8 +66,7 @@
 				{if $users[user].current_login }
 					{tr}Last seen{/tr}: {$users[user].current_login|bit_short_date}<br/>
 				{/if}
-
-				<div class="clear"></div>
+				</div>
 			</li>
 		{/section}
 	</ol>
