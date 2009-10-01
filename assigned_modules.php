@@ -3,13 +3,13 @@
  * assigned_modules
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.14 $
+ * @version  $Revision: 1.15 $
  * @package  users
  * @subpackage  functions
  * @copyright Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * @license Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
+ * @license Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
  */
-// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.14 2008/06/25 22:21:27 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.15 2009/10/01 13:45:51 wjames5 Exp $
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Initialization
 
