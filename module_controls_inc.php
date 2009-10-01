@@ -1,16 +1,16 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/module_controls_inc.php,v 1.8 2009/10/01 13:45:51 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/module_controls_inc.php,v 1.9 2009/10/01 14:17:06 wjames5 Exp $
  * @package users
  * @subpackage functions
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
  * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: module_controls_inc.php,v 1.8 2009/10/01 13:45:51 wjames5 Exp $
+ * $Id: module_controls_inc.php,v 1.9 2009/10/01 14:17:06 wjames5 Exp $
  */
 
 /**
