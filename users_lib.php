@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/users_lib.php,v 1.4 2009/10/02 18:16:20 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/users_lib.php,v 1.5 2009/10/02 19:44:51 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -123,7 +123,7 @@ function users_httpauth(){
 	else{
 		header('WWW-Authenticate: Basic realm="Test"');
 		header('HTTP/1.0 401 Unauthorized');
-		$gBitSystem->fatalError( 'HTTP Authentication Cancelled' );
+		$gBitSystem->fatalError( tra('HTTP Authentication Canceled') );
 		exit;
 	}
 }
