@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/users_lib.php,v 1.3 2008/10/16 10:18:26 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/users_lib.php,v 1.4 2009/10/02 18:16:20 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -90,4 +90,40 @@ function scramble_email( $email, $method = 'unicode' ) {
 	return $ret;
 }
 
-?>
+
+function users_httpauth(){
+	global $gBitSystem, $gBitUser;
+	// require ssl
+	$https_mode = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off';
+	// no https redirect
+	if( !$https_mode ){
+		$url = $gBitSystem->getConfig( 'site_https_domain' );
+		$site_https_port = $gBitSystem->getConfig('site_https_port', 443);
+		if ($site_https_port != 443)
+			$url .= ':' . $site_https_port;
+		$url .= $gBitSystem->getConfig( 'site_https_prefix' ) . $_SERVER['REQUEST_URI'];
+		if (SID)
+			$url .= (!empty( $_SERVER['QUERY_STRING'] )?'&':'?') . SID;
+		$url = preg_replace('/\/+/', '/', $url);
+		header("Location: https://$url");
+		exit;
+	}
+
+	$user = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : false;
+	$pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : false;
+	$challenge = false;
+	$response = false;
+	// verify the user is valid first
+	if( $gBitUser->validate( $user, $pass, $challenge, $response ) ){
+		// log in user - returns a url so can't use it for validation check
+		$gBitUser->login( $user, $pass, $challenge, $response );
+		return( TRUE );
+	}
+	// require http auth
+	else{
+		header('WWW-Authenticate: Basic realm="Test"');
+		header('HTTP/1.0 401 Unauthorized');
+		$gBitSystem->fatalError( 'HTTP Authentication Cancelled' );
+		exit;
+	}
+}
