@@ -29,6 +29,9 @@
 						{smartlink ipackage=users ifile="preferences.php" view_user=$users[user].user_id ititle="Edit User Information" ibiticon="icons/accessories-text-editor" iforce=icon}
 						{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$users[user].user_id ititle="Assign Group" ibiticon="icons/emblem-shared" iforce=icon}
 						{smartlink ipackage=liberty ifile="list_content.php" user_id=$users[user].user_id ititle="User Content" ibiticon="icons/format-justify-fill" iforce="icon"}
+						{if $gBitUser->hasPermission( 'p_users_admin' )}
+							<span title="{tr}Content Count{/tr}">{$users[user].user_id|get_user_content_count}</span>
+						{/if}
 						{if $users[user].user_id != $smarty.const.ANONYMOUS_USER_ID && $users[user].user_id != $smarty.const.ROOT_USER_ID && $users[user].user_id != $gBitUser->mUserId}
 							{if $users[user].content_status_id > 0}
 								{smartlink ipackage=users ifile="admin/index.php" user_id=$users[user].user_id action=ban ititle="Ban User" ibiticon="icons/dialog-cancel" iforce=icon}
@@ -65,9 +68,6 @@
 					<strong>{tr}Last logged in on{/tr}:</strong> {$users[user].current_login|bit_short_date}<br/>
 				{/if}
 
-				{if $gBitUser->hasPermission( 'p_users_admin' )}
-					<strong>{tr}Content Count{/tr}:</strong> {$users[user].user_id|get_user_content_count}<br/>
-				{/if}
 				</div>
 				<div class="clear"></div>
 			</li>
