@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.40 2009/10/01 14:17:06 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.41 2009/10/06 19:40:15 wjames5 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
@@ -80,12 +80,12 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 	$allPerms = $gBitUser->getGroupPermissions( $permListHash );
 } elseif( isset( $_REQUEST["action"] )) {
 	$formHash['action'] = $_REQUEST['action'];
-// Process a form to remove a group
+	// Process a form to remove a group
 	if( $_REQUEST["action"] == 'delete' ) {
-		$gBitUser->verifyTicket();
 		$formHash['group_id'] = $_REQUEST['group_id'];
 		$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group_id'] );
 		if( isset( $_REQUEST["confirm"] ) ) {
+			$gBitUser->verifyTicket();
 			if( $_REQUEST['group_id'] == $gBitSystem->getConfig( 'default_home_group' ) ) {
 				$gBitSystem->storeConfig( 'default_home_group', NULL, USERS_PKG_NAME );
 			}
