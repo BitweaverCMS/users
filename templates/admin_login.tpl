@@ -59,7 +59,7 @@
 			{/foreach}
 
 			<div class="row">
-				{formlabel label="Default group for users with unverifiable emails" for="users_validate_email_group"}
+				{formlabel label="Default group for users with verifiable emails" for="users_validate_email_group"}
 				{forminput}
 
 					<select name="users_validate_email_group" id="users_validate_email_group">

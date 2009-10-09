@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.233 2009/10/01 14:17:06 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.234 2009/10/09 16:25:49 tylerbello Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.233 2009/10/01 14:17:06 wjames5 Exp $
+ * $Id: BitUser.php,v 1.234 2009/10/09 16:25:49 tylerbello Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.233 $
+ * @version  $Revision: 1.234 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -137,7 +137,6 @@ class BitUser extends LibertyMime {
 				$this->mUserId    = $this->mInfo['uu_user_id'];
 				$this->mContentId = $this->mInfo['content_id'];
 				$this->mUsername  = $this->mInfo['login'];
-
 				// a few random security conscious unset's - SPIDER
 				unset( $this->mInfo['user_password'] );
 				unset( $this->mInfo['hash'] );
@@ -491,7 +490,7 @@ class BitUser extends LibertyMime {
 							}
 						} else {
 							//fsockopen failed
-							if(!$gBitSystem->getConfig('users_validate_email_group')){ //will ONLY stuff mErrors if you have not set a default group for unverifiable emails, otherwise this is not a game breaking case
+							if(!$gBitSystem->getConfig('users_validate_email_group')){ //will ONLY stuff mErrors if you have not set a default group for verifiable emails, otherwise this is not a game breaking case
 								$pErrors['email'] = "One or more mail servers not responding";	
 							}
 							$ret = -1; //-1 implies ambiguity, MX servers found, but unable to be reached.
