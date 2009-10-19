@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.51 2009/07/14 19:55:01 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.52 2009/10/19 21:49:39 spiderr Exp $
  * @package users
  */
 global $gBitDbType, $gBitDbHost, $gBitDbUser, $gBitDbPassword, $gBitDbName, $gBitThemes;
@@ -62,7 +62,7 @@ global $gShellScript;
 if( empty( $gShellScript ) ) {
 	session_start();
 }
-$cookie_site = strtolower( ereg_replace( "[^a-zA-Z0-9]", "", $gBitSystem->getConfig( 'site_title', 'bitweaver' )));
+$cookie_site = strtolower( preg_replace( "/[^a-zA-Z0-9]/", "", $gBitSystem->getConfig( 'site_title', 'bitweaver' )));
 global $user_cookie_site;
 $user_cookie_site = 'bit-user-'.$cookie_site;
 
