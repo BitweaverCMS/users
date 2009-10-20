@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.235 2009/10/20 15:17:45 ukgrad89 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.236 2009/10/20 20:03:32 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.235 2009/10/20 15:17:45 ukgrad89 Exp $
+ * $Id: BitUser.php,v 1.236 2009/10/20 20:03:32 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.235 $
+ * @version  $Revision: 1.236 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -441,7 +441,7 @@ class BitUser extends LibertyMime {
 							bitdebug( "Connection succeeded to {$host} SMTP." );
 							
 
-							stream_set_timeout( $Connect, 90 );
+							stream_set_timeout( $Connect, 30 );
 							$out = $this->getSmtpResponse( $Connect );
 
 							// Judgment is that a service preparing to begin a transaction will send a 220 string after a succesful handshake
