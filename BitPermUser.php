@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.81 2009/10/20 20:00:07 tylerbello Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.82 2009/10/20 20:02:24 tylerbello Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitPermUser.php,v 1.81 2009/10/20 20:00:07 tylerbello Exp $
+ * $Id: BitPermUser.php,v 1.82 2009/10/20 20:02:24 tylerbello Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.81 $
+ * @version  $Revision: 1.82 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -299,7 +299,7 @@ class BitPermUser extends BitUser {
 			$bindvars[] = $pListHash['user_id'];
 		}
 		if( !empty( $pListHash['is_public'] ) ) {
-			$mid .= ' OR `is_public` = ?';
+			$mid .= ' AND `is_public` = ?';
 			$bindvars[] = $pListHash['is_public'];
 		}
 		if( !empty( $pListHash['visible'] ) ){
