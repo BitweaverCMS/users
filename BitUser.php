@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.234 2009/10/09 16:25:49 tylerbello Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.235 2009/10/20 15:17:45 ukgrad89 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.234 2009/10/09 16:25:49 tylerbello Exp $
+ * $Id: BitUser.php,v 1.235 2009/10/20 15:17:45 ukgrad89 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.234 $
+ * @version  $Revision: 1.235 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -120,7 +120,6 @@ class BitUser extends LibertyMime {
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_logo ON ( tf_logo.`file_id`=ta_logo.`foreign_id` )
 					$fullJoin
 				$whereSql";
-
 			if(( $result = $this->mDb->query( $query, $bindVars )) && $result->numRows() ) {
 				$this->mInfo = $result->fetchRow();
 				$this->mInfo['user']          = $this->mInfo['login'];
@@ -2223,7 +2222,7 @@ class BitUser extends LibertyMime {
 
 		// lets search for a user
 		if ( $pParamHash['find'] ) {
-			$whereSql .= " AND UPPER( uu.`login` ) LIKE ? OR UPPER( uu.`real_name` ) LIKE ? OR UPPER( uu.`email` ) LIKE ? ";
+			$whereSql .= " AND ( UPPER( uu.`login` ) LIKE ? OR UPPER( uu.`real_name` ) LIKE ? OR UPPER( uu.`email` ) LIKE ? ) ";
 			$bindVars[] = '%'.strtoupper( $pParamHash['find'] ).'%';
 			$bindVars[] = '%'.strtoupper( $pParamHash['find'] ).'%';
 			$bindVars[] = '%'.strtoupper( $pParamHash['find'] ).'%';
