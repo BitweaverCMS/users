@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.79 2009/10/01 14:17:06 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.80 2009/10/20 19:52:00 tylerbello Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitPermUser.php,v 1.79 2009/10/01 14:17:06 wjames5 Exp $
+ * $Id: BitPermUser.php,v 1.80 2009/10/20 19:52:00 tylerbello Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.79 $
+ * @version  $Revision: 1.80 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -276,13 +276,12 @@ class BitPermUser extends BitUser {
 			$pListHash['sort_mode'] = 'group_name_asc';
 		}
 		$this->prepGetList( $pListHash );
-
 		$sortMode = $this->mDb->convertSortmode( $pListHash['sort_mode'] );
 		if( !empty( $pListHash['find_groups'] ) ) {
-			$mid = " WHERE UPPER(`group_name`) like ?";
+			$mid = " AND UPPER(`group_name`) like ?";
 			$bindvars[] = "%".strtoupper( $pListHash['find_groups'] )."%";
 		} elseif( !empty( $pListHash['find'] ) ) {
-			$mid = " WHERE UPPER(`group_name`) like ?";
+			$mid = " AND  UPPER(`group_name`) like ?";
 			$bindvars[] = "%".strtoupper( $pListHash['find'] )."%";
 		} else {
 			$mid = '';
@@ -290,22 +289,28 @@ class BitPermUser extends BitUser {
 		}
 
 		if( !empty( $pListHash['hide_root_groups'] )) {
-			$mid .= !empty( $mid ) ? ' AND ' : ' WHERE ';
-			$mid .= '`user_id` <> '.ROOT_USER_ID;
+			$mid .= ' AND `user_id` <> '.ROOT_USER_ID;
 		} elseif( !empty( $pListHash['only_root_groups'] )) {
-			$mid .= !empty( $mid ) ? ' AND ' : ' WHERE ';
-			$mid .= '`user_id` = '.ROOT_USER_ID;
+			$mid .= ' AND `user_id` = '.ROOT_USER_ID;
 		}
 
+		if( !empty( $pListHash['user_id'] ) ){
+			$mid .= ' AND `user_id` = ? ';
+			$bindvars[] = $pListHash['user_id'];
+		}
 		if( !empty( $pListHash['is_public'] ) ) {
-			if (strlen($mid) > 0) {
-				$mid .= ' AND ';
-			} else {
-				$mid = 'WHERE ';
-			}
-			$mid .= '`is_public`= ?';
+			$mid .= ' OR `is_public` = ?';
 			$bindvars[] = $pListHash['is_public'];
 		}
+		if( !empty( $pListHash['visible'] ) ){
+			global $gBitUser;
+			$mid .= ' AND `user_id` = ? OR `is_public` = ? ';
+			$bindvars[] = $gBitUser->mUserId;
+			$bindvars[] = 1;
+
+		}
+
+		$mid =  preg_replace('/^ AND */',' WHERE ', $mid);
 
 		$query = "
 			SELECT `user_id`, `group_id`, `group_name` , `group_desc`, `group_home`, `is_default`, `is_public`
