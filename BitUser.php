@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.237 2009/10/21 15:05:56 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.238 2009/11/11 14:48:08 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.237 2009/10/21 15:05:56 spiderr Exp $
+ * $Id: BitUser.php,v 1.238 2009/11/11 14:48:08 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.237 $
+ * @version  $Revision: 1.238 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -2221,6 +2221,13 @@ class BitUser extends LibertyMime {
 		array_push( $bindVars, 'bituser' );
 		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, NULL, $pParamHash );
 
+		// limit search to users with a specific language
+		if ( $pParamHash['lang_code'] ) {
+			$joinSql .= " INNER JOIN `".BIT_DB_PREFIX."liberty_content_prefs` lcp ON ( lcp.`content_id`=uu.`content_id` AND lcp.`pref_name`='bitlanguage')";
+			$whereSql = " AND lcp.`pref_value`=? ";
+			$bindVars[] = $pParamHash['lang_code'];
+		}
+
 		// lets search for a user
 		if ( $pParamHash['find'] ) {
 			$whereSql .= " AND ( UPPER( uu.`login` ) LIKE ? OR UPPER( uu.`real_name` ) LIKE ? OR UPPER( uu.`email` ) LIKE ? ) ";
@@ -2234,14 +2241,30 @@ class BitUser extends LibertyMime {
 			SELECT uu.*, lc.`content_status_id`, tf_ava.`storage_path` AS `avatar_storage_path` $selectSql
 			FROM `".BIT_DB_PREFIX."users_users` uu
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (uu.`content_id`=lc.`content_id`)
+				$joinSql
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON ( lc.`content_id` = lch.`content_id` )
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` ta_ava ON ( uu.`avatar_attachment_id`=ta_ava.`attachment_id` )
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` ) $joinSql
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` tf_ava ON ( tf_ava.`file_id`=ta_ava.`foreign_id` ) 
 			WHERE lc.`content_type_guid` = ? $whereSql ORDER BY ".$this->mDb->convertSortmode( $pParamHash['sort_mode'] );
 		$result = $this->mDb->query( $query, $bindVars, $pParamHash['max_records'], $pParamHash['offset'] );
 
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
+			// Used for pulling out dead/empty/spam accounts
+			if( isset( $pParamHash['max_content_count'] ) ) {
+				$contentCount = $this->mDb->getOne( "SELECT COUNT(*) FROM  `".BIT_DB_PREFIX."liberty_content` lc INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON ( lc.`user_id`=uu.`user_id` ) WHERE uu.`user_id`=? AND `content_type_guid` != 'bituser'", array( $res['user_id'] ) );
+				if( $contentCount >  $pParamHash['max_content_count'] ) {
+					continue;
+				}
+			}
+			// Used for pulling out non-idle accounts or pigs
+			if( isset( $pParamHash['min_content_count'] ) ) {
+				$contentCount = $this->mDb->getOne( "SELECT COUNT(*) FROM  `".BIT_DB_PREFIX."liberty_content` lc INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON ( lc.`user_id`=uu.`user_id` ) WHERE uu.`user_id`=? AND `content_type_guid` != 'bituser'", array( $res['user_id'] ) );
+				if( $contentCount <  $pParamHash['min_content_count'] ) {
+					continue;
+				}
+			}
+			
 			if( !empty( $res['avatar_storage_path'] )) {
 				$res['avatar_url'] = $res['avatar_storage_path'];
 				$res['thumbnail_url'] = liberty_fetch_thumbnail_url( array(
