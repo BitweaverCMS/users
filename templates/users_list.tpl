@@ -19,7 +19,7 @@
 
 {formfeedback hash=$feedback}
 
-{form id=checkform}
+{form id=checkform action=$smarty.server.REQUEST_URI}
 	<ol class="clear data userslist" start="{$listInfo.offset+1}">
 		{section name=user loop=$users}
 			<li class="item {cycle values='even,odd'}">
