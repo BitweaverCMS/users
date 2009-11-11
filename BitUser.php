@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.238 2009/11/11 14:48:08 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.239 2009/11/11 17:42:13 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.238 2009/11/11 14:48:08 spiderr Exp $
+ * $Id: BitUser.php,v 1.239 2009/11/11 17:42:13 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.238 $
+ * @version  $Revision: 1.239 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -2222,10 +2222,17 @@ class BitUser extends LibertyMime {
 		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, NULL, $pParamHash );
 
 		// limit search to users with a specific language
-		if ( $pParamHash['lang_code'] ) {
+		if( !empty( $pParamHash['lang_code'] ) ) {
 			$joinSql .= " INNER JOIN `".BIT_DB_PREFIX."liberty_content_prefs` lcp ON ( lcp.`content_id`=uu.`content_id` AND lcp.`pref_name`='bitlanguage')";
 			$whereSql = " AND lcp.`pref_value`=? ";
 			$bindVars[] = $pParamHash['lang_code'];
+		}
+
+		// limit to registrations over a time period like 'YYYY-MM-DD' or 'Y \Week W' or anything convertible by SQLDate
+		if( !empty( $pParamHash['registration_period'] ) ) {
+			$sqlPeriod = $this->mDb->SQLDate( $pParamHash['registration_period_format'], $this->mDb->SQLIntToTimestamp( 'registration_date' ));
+			$whereSql .= ' AND '.$sqlPeriod.'=?';
+			$bindVars[] = $pParamHash['registration_period'];
 		}
 
 		// lets search for a user
