@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.34 2009/10/01 14:17:06 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.35 2009/11/11 14:49:10 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
@@ -166,7 +166,7 @@ foreach( $gBitUser->getDefaultGroup() as $defaultGroupId => $defaultGroupName ) 
 }
 
 // override default max_records
-$_REQUEST['max_records'] = !empty( $_REQUEST['max_records'] ) ? $_REQUEST['max_records'] : 20;
+$_REQUEST['max_records'] = !empty( $_REQUEST['max_records'] ) ? $_REQUEST['max_records'] : $gBitSystem->getConfig('max_records');
 $gBitUser->getList( $_REQUEST );
 $gBitSmarty->assign_by_ref('users', $_REQUEST["data"]);
 $gBitSmarty->assign_by_ref('usercount', $_REQUEST["cant"]);
