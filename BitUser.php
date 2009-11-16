@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.239 2009/11/11 17:42:13 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.240 2009/11/16 20:32:48 tylerbello Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.239 2009/11/11 17:42:13 spiderr Exp $
+ * $Id: BitUser.php,v 1.240 2009/11/16 20:32:48 tylerbello Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.239 $
+ * @version  $Revision: 1.240 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -2298,9 +2298,36 @@ class BitUser extends LibertyMime {
 		return $ret;
 	}
 
-	// PURE VIRTUAL FUNCTIONS
-	function getGroups () {
-		print "CALL TO PURE VIRTUAL FUNCTIONS"; bt(); die;
+	/**
+	 * getGroups 
+	 * 
+	 * @param array $pUserId 
+	 * @param array $pForceRefresh 
+	 * @access public
+	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
+	 */
+	function getGroups( $pUserId=NULL, $pForceRefresh = FALSE ) {
+		$pUserId = !empty( $pUserId ) ? $pUserId : $this->mUserId;
+		if( !isset( $this->cUserGroups[$pUserId] ) || $pForceRefresh ) {
+			$query = "
+				SELECT ug.`group_id`, ug.`group_name`, ug.`user_id` as group_owner_user_id
+				FROM `".BIT_DB_PREFIX."users_groups_map` ugm INNER JOIN `".BIT_DB_PREFIX."users_groups` ug ON (ug.`group_id`=ugm.`group_id`)
+				WHERE ugm.`user_id`=? OR ugm.`group_id`=".ANONYMOUS_GROUP_ID;
+			$ret = $this->mDb->getAssoc( $query, array(( int )$pUserId ));
+			if( $ret ) {
+				foreach( array_keys( $ret ) as $groupId ) {
+					$res = array();
+					foreach( $res as $key=>$val) {
+						$ret[$key] = array( 'group_name' => $val );
+					}
+				}
+			}
+			// cache it
+			$this->cUserGroups[$pUserId] = $ret;
+			return $ret;
+		} else {
+			return $this->cUserGroups[$pUserId];
+		}
 	}
 
 	/**
