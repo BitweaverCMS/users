@@ -1,8 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.39 2009/04/14 17:58:29 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.40 2010/02/01 16:49:13 wjames5 Exp $
  *
- * $Id: index.php,v 1.39 2009/04/14 17:58:29 spiderr Exp $
+ * $Id: index.php,v 1.40 2010/02/01 16:49:13 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -84,6 +84,8 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 		$gBitSmarty->assign( 'display_content_list', 1 );
 		// end of content listing
 	}
+
+	$gQueryUser->invokeServices( 'content_display_function' );
 
 	// need to load layout now that we can check for center pieces
 	$layoutHash['layout'] = $gQueryUser->getField( 'login' );

@@ -85,6 +85,7 @@
 					</div>
 
 					<div class="row">
+						{formfeedback error=$errors.password2}
 						{formlabel label="Repeat password" for="password2"}
 						{forminput}
 							<input id="password2" type="password" name="password2" />{required}

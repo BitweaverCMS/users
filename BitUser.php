@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.242 2010/02/01 16:27:28 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.243 2010/02/01 16:49:13 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.242 2010/02/01 16:27:28 wjames5 Exp $
+ * $Id: BitUser.php,v 1.243 2010/02/01 16:49:13 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.242 $
+ * @version  $Revision: 1.243 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -293,10 +293,10 @@ class BitUser extends LibertyMime {
                 $passwordErrors['password2'] = tra("The passwords didn't match");
             } 
 			if (!$this->isValid() || isset($pParamHash['password']) ) {
-				$passswordError = $this->verifyPasswordFormat( $pParamHash['password'] );
+				$passwordErrors['password'] = $this->verifyPasswordFormat( $pParamHash['password'] );
 			}
-			if( !empty( $passswordError ) ) {
-				$this->mErrors['password'] = $passswordError;
+			if( !empty( $passwordErrors ) ) {
+				$this->mErrors = array_merge( $this->mErrors,$passwordErrors );
 			} else {
 				// Generate a unique hash
 				//$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pPassword.$pParamHash['email'] );
