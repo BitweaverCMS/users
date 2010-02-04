@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.245 2010/02/04 15:03:41 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.246 2010/02/04 15:07:35 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.245 2010/02/04 15:03:41 wjames5 Exp $
+ * $Id: BitUser.php,v 1.246 2010/02/04 15:07:35 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.245 $
+ * @version  $Revision: 1.246 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -302,9 +302,12 @@ class BitUser extends LibertyMime {
 				//$pParamHash['user_store']['hash'] = md5( strtolower( (!empty($pParamHash['login'])?$pParamHash['login']:'') ).$pPassword.$pParamHash['email'] );
 				$pParamHash['user_store']['hash'] = md5( $pParamHash['password'] );
 				$now = $gBitSystem->getUTCTime();
-				if( !isset( $pParamHash['pass_due'] ) && $gBitSystem->getConfig('users_pass_due') ) {
+				// set password due date
+				// if no pass_due and no user_pass_due value user will never have to update the password 
+				if( empty( $pParamHash['pass_due'] ) && $gBitSystem->getConfig('users_pass_due') ) {
+					// renew password according to config value
 					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getConfig('users_pass_due') );
-				} elseif( isset( $pParamHash['pass_due'] ) ) {
+				} elseif( !empty( $pParamHash['pass_due'] ) ) {
 					// renew password only next half year ;)
 					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
 				}
