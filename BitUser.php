@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.244 2010/02/01 23:14:08 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.245 2010/02/04 15:03:41 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.244 2010/02/01 23:14:08 wjames5 Exp $
+ * $Id: BitUser.php,v 1.245 2010/02/04 15:03:41 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.244 $
+ * @version  $Revision: 1.245 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1488,7 +1488,7 @@ class BitUser extends LibertyMime {
 				FROM `".BIT_DB_PREFIX."users_users`
 				WHERE `pass_due` IS NOT NULL AND `user_id`=? ";
 			$due = $this->mDb->getRow( $query, array( $this->mUserId ) );
-			if( @$this->verifyId( $due['user_id'] ) ) {
+			if( @$this->verifyId( $due['user_id'] ) && !empty( $due['pass_due'] ) ) {
 				$ret = $due['pass_due'] <= $gBitSystem->getUTCTime();
 			}
 		}
