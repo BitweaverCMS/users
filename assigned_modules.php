@@ -3,13 +3,13 @@
  * assigned_modules
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.16 $
+ * @version  $Revision: 1.17 $
  * @package  users
  * @subpackage  functions
  * @copyright Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
  * @license Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
  */
-// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.16 2009/10/01 14:17:06 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/assigned_modules.php,v 1.17 2010/02/08 21:27:26 wjames5 Exp $
 // All Rights Reserved. See below for details and a complete list of authors.
 // Initialization
 
@@ -19,7 +19,7 @@ $gEditMode = 'layout';
 /**
  * required setup
  */
-require_once( '../bit_setup_inc.php' );
+require_once( '../kernel/setup_inc.php' );
 
 $gBitSystem->fatalError( 'This page is not functional and will be fixed asap.' );
 

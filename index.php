@@ -1,8 +1,8 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.41 2010/02/01 16:52:28 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/index.php,v 1.42 2010/02/08 21:27:26 wjames5 Exp $
  *
- * $Id: index.php,v 1.41 2010/02/01 16:52:28 wjames5 Exp $
+ * $Id: index.php,v 1.42 2010/02/08 21:27:26 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -16,7 +16,7 @@ if( !defined( 'ACTIVE_PACKAGE' )) {
 	define( 'ACTIVE_PACKAGE', 'users' );
 }
 
-require_once( '../bit_setup_inc.php' );
+require_once( '../kernel/setup_inc.php' );
 require_once( LIBERTY_PKG_PATH."LibertyStructure.php" );
 
 // custom userfields

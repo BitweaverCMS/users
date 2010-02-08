@@ -1,10 +1,10 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.41 2009/10/06 19:40:15 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/edit_group.php,v 1.42 2010/02/08 21:27:26 wjames5 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
 // Initialization
-require_once( '../../bit_setup_inc.php' );
+require_once( '../../kernel/setup_inc.php' );
 
 // PERMISSIONS: NEEDS admin
 $gBitSystem->verifyPermission( 'p_users_admin' );

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/watches.php,v 1.9 2009/10/01 14:17:06 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/watches.php,v 1.10 2010/02/08 21:27:26 wjames5 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: watches.php,v 1.9 2009/10/01 14:17:06 wjames5 Exp $
+ * $Id: watches.php,v 1.10 2010/02/08 21:27:26 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -16,7 +16,7 @@
 /**
  * required setup
  */
-include_once( '../bit_setup_inc.php' );
+include_once( '../kernel/setup_inc.php' );
 $user = $gBitUser->mUserId;
 if (!$user) {
 	$gBitSmarty->assign('msg', tra("You must log in to use this feature"));
