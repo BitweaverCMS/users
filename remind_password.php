@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.25 2010/02/08 21:27:26 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.26 2010/02/08 23:25:30 wjames5 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: remind_password.php,v 1.25 2010/02/08 21:27:26 wjames5 Exp $
+ * $Id: remind_password.php,v 1.26 2010/02/08 23:25:30 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -24,6 +24,7 @@ if( $gBitUser->isRegistered() ) {
 	header( 'Location: '.BIT_ROOT_URL );
 	die;
 } elseif (isset($_REQUEST["remind"])) {
+	$pageTitle = tra( 'Request Password Reminder' );
 	$userInfo = '';
 	$pLogin = trim( $_REQUEST["username"] );
     if ( strlen ( $pLogin ) ) {
@@ -40,7 +41,8 @@ if( $gBitUser->isRegistered() ) {
 			list($pass,$provpass) = $gBitUser->createTempPassword( $_REQUEST["username"], $pass );
 			$gBitSmarty->assign( 'mailProvPass', $provpass );
 			$gBitSmarty->assign( 'mailUserId', $userInfo['user_id'] );
-			$tmp['success'] = tra("Information to reset your password has been sent ");
+			$pageTitle = tra( 'Change Your Password' );
+			$tmp['success'] = tra("Information to change your password has been sent ");
 		}
 		$tmp['success'] .= tra("to the registered email address for")." " . $_REQUEST["username"] . ".";
 
@@ -59,5 +61,4 @@ if( $gBitUser->isRegistered() ) {
 	$gBitSmarty->assign('msg', $tmp);
 }
 // Display the template
-$gBitSystem->display( 'bitpackage:users/remind_password.tpl', 'Request New Password' , array( 'display_mode' => 'display' ));
-?>
+$gBitSystem->display( 'bitpackage:users/remind_password.tpl', $pageTitle, array( 'display_mode' => 'display' ));

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.16 2010/02/08 21:27:26 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/change_password.php,v 1.17 2010/02/08 23:25:30 wjames5 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: change_password.php,v 1.16 2010/02/08 21:27:26 wjames5 Exp $
+ * $Id: change_password.php,v 1.17 2010/02/08 23:25:30 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -19,6 +19,9 @@
 require_once( '../kernel/setup_inc.php' );
 if( !isset( $_REQUEST['login'] )) {
 	$_REQUEST['login'] = '';
+}
+if( !isset( $_REQUEST['user_id'] )) {
+	$_REQUEST['user_id'] = '';
 }
 if( !isset( $_REQUEST["oldpass"] )) {
 	$_REQUEST["oldpass"] = '';
@@ -31,8 +34,10 @@ $gBitSmarty->assign( 'login', $_REQUEST['login'] );
 $gBitSmarty->assign( 'oldpass', $_REQUEST["oldpass"] );
 $gBitSmarty->assign( 'provpass', $_REQUEST["provpass"] );
 
+$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST['user_id'] ));
+$gBitSmarty->assign_by_ref( 'userInfo', $userInfo );
+
 if( isset( $_REQUEST["change"] )) {
-	$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST['user_id'] ));
 
 	if( $_REQUEST["pass"] == $_REQUEST["oldpass"] ) {
 		$gBitSystem->fatalError( tra( "You can not use the same password again" ));
@@ -59,15 +64,13 @@ if( isset( $_REQUEST["change"] )) {
 		} else	{
 				$gBitSystem->fatalError( tra("Password reset request is invalid or has expired") );
 		}
-	} elseif( $gBitUser->isRegistered() ) {
-		if( !( $validated = $gBitUser->validate( $userInfo['login'], $_REQUEST["oldpass"], '', '' )) ) {
-			$gBitSystem->fatalError( tra("Invalid old password") );
-		}
+	} elseif( !( $validated = $gBitUser->validate( $userInfo['email'], $_REQUEST["oldpass"], '', '' )) ) {
+		$gBitSystem->fatalError( tra("Invalid old password") );
 	}
 
 	if( $validated ) {
-		$gBitUser->storePassword( $_REQUEST["pass"], $userInfo['login'] );
-		$url = $gBitUser->login( $userInfo['login'], $_REQUEST["pass"] );
+		$gBitUser->storePassword( $_REQUEST["pass"], (!empty( $userInfo['login'] )?$userInfo['login']:$userInfo['email']) );
+		$url = $gBitUser->login( (!empty( $userInfo['login'] )?$userInfo['login']:$userInfo['email']), $_REQUEST["pass"] );
 	}
 
 	bit_redirect( $url );

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.247 2010/02/08 20:24:29 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.248 2010/02/08 23:25:30 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.247 2010/02/08 20:24:29 wjames5 Exp $
+ * $Id: BitUser.php,v 1.248 2010/02/08 23:25:30 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.247 $
+ * @version  $Revision: 1.248 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1181,10 +1181,18 @@ class BitUser extends LibertyMime {
 				$this->updateSession( $session_id );
 			}
 		} else {
-			$this->mUserId = ANONYMOUS_USER_ID;
-			unset( $this->mInfo );
-			$this->mErrors['login'] = tra( 'Invalid username or password' );
-			$url = USERS_PKG_URL.'login.php?error=' . urlencode( $this->mErrors['login'] );
+			// before we give up lets see if the user exists and if the password is expired
+			$query = "select `email`, `user_id`, `user_password` from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convertBinary(). " $loginCol = ?";
+			$result = $this->mDb->getRow( $query, array( $pLogin ) ); 
+			if( $this->isPasswordDue( $result['user_id'] ) ) {
+				// user needs email password reset so send it and let them know
+				$url = USERS_PKG_URL.'remind_password.php?remind=y&required=y&username='.$pLogin;
+			}else{
+				$this->mUserId = ANONYMOUS_USER_ID;
+				unset( $this->mInfo );
+				$this->mErrors['login'] = tra( 'Invalid username or password' );
+				$url = USERS_PKG_URL.'login.php?error=' . urlencode( $this->mErrors['login'] );
+			}
 		}
 
 		// check for HTTPS mode and redirect back to non-ssl when not requested, or a  SSL login was forced
@@ -1481,10 +1489,13 @@ class BitUser extends LibertyMime {
 	 * @return TRUE when the password is due, FALSE if it isn't, NULL when no due time is set
 	 * @note NULL password due means *no* expiration
 	 */
-	function isPasswordDue() {
+	function isPasswordDue( $pUserId = NULL ) {
 		global $gBitSystem;
 		$ret = FALSE;
-		if( $this->isRegistered() ) {
+		if( empty( $pUserId) && $this->isRegistered() ) {
+			$pUserId = $this->mUserId;
+		}
+		if( !empty( $pUserId ) ){
 			// get user_id to avoid NULL and zero confusion
 			$query = "
 				SELECT `user_id`, `pass_due`
