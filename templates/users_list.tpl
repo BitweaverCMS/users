@@ -78,7 +78,7 @@
 		<div style="text-align:right;">
 			<script type="text/javascript">/* <![CDATA[ check / uncheck all */
 				document.write("<label for=\"switcher\">{tr}Select All{/tr}</label> ");
-				document.write("<input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"switchCheckboxes(this.form.id,'batch_user_ids[]','switcher')\" />");
+				document.write("<input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"BitBase.switchCheckboxes(this.form.id,'batch_user_ids[]','switcher')\" />");
 			/* ]]> */</script>
 			<br />
 			<select name="action" onchange="this.form.submit();">
