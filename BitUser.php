@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.249 2010/02/09 03:48:11 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.250 2010/02/09 18:05:09 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.249 2010/02/09 03:48:11 spiderr Exp $
+ * $Id: BitUser.php,v 1.250 2010/02/09 18:05:09 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.249 $
+ * @version  $Revision: 1.250 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -2420,202 +2420,6 @@ error_log( print_r( $update, TRUE ) );
 		}
 		return $ret;
 	}
-
-	// {{{ ==================== deprecated methods - will be removed soon ====================
-	//  - xing - Thursday Oct 16, 2008   10:35:11 CEST
-	/**
-	 * @deprecated deprecated since version 2.1.0-beta
-	 */
-	function get_SMTP_response( &$pConnect ) {
-		deprecated( 'Method has been renamed to $gBitUser->getSmtpResponse()' );
-		$this->getSmtpResponse( $pConnect );
-	}
-	/**
-	 * @deprecated deprecated since version 2.1.0-beta
-	 */
-	function update_lastlogin( $pUserId ) {
-		deprecated( 'Method has been renamed to $gBitUser->updateLastLogin()' );
-		$this->updateLastLogin( $pUserId );
-	}
-	/**
-	 * @deprecated deprecated since version 2.1.0-beta
-	 */
-	function get_users_names() {
-		deprecated( 'Method has been removed. Please use $gBitUser->getSelectionList() instead.' );
-		$this->getSelectionList();
-	}
-	/**
-	 * @deprecated deprecated since version 2.1.0-beta
-	 */
-	function getUserFromContentId( $content_id ) {
-		deprecated( 'Method has been deprecated. Use $gBitUser->getUserInfo() instead' );
-		$userInfo = $this->getUserInfo( array( 'content_id' => $content_id ));
-		return $userInfo['user_id'];
-	}
-	/**
-	 * @deprecated deprecated since version 2.1.0-beta
-	 */
-	function getByHash( $pHash ) {
-		deprecated( "Method has been renamed to getUserIdFromCookieHash()" );
-		$this->getUserIdFromCookieHash( $pHash );
-	}
-	/**
-	 * @deprecated deprecated since version 2.1.0-beta
-	 */
-	function renewPassword( $pLogin ) {
-		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
-		global $gBitSystem;
-		$pass = BitSystem::genPass();
-		$this->storePassword( $pass, $pLogin );
-		return $pass;
-	}
-	/**
-	 * @deprecated deprecated since version 2.1.0-beta
-	 */
-	function get_users($offset = 0, $max_records = -1, $sort_mode = 'login_desc', $find = '') {
-		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
-		$sort_mode = $this->mDb->convertSortmode($sort_mode);
-		// Return an array of users indicating name, email, last changed pages, versions, last_login
-		if ($find) {
-			$findesc = '%' . strtoupper( $find ) . '%';
-			$mid = " where UPPER(`login`) like ?";
-			$bindvars = array($findesc);
-		} else {
-			$mid = '';
-			$bindvars = array();
-		}
-		$query = "select * from `".BIT_DB_PREFIX."users_users` $mid order by $sort_mode";
-		$query_cant = "select count(*) from `".BIT_DB_PREFIX."users_users`";
-		$result = $this->mDb->query($query, $bindvars, $max_records, $offset);
-		$cant = $this->mDb->getOne($query_cant, array());
-		$ret = array();
-		while( $res = $result->fetchRow() ) {
-			//$res["groups"] = $this->get_user_groups( $res['login'] );
-			$res["groups"] = $this->getGroups( $res['user_id'] );
-			array_push( $ret, $res );
-		}
-		$retval = array();
-		$retval["data"] = $ret;
-		$retval["cant"] = $cant;
-		return $retval;
-	}
-	/**
-	 * @deprecated deprecated since version 2.1.0-beta
-	 */
-	function getUserFiles() {
-		deprecated( 'Please use $gBitUser->getUserAttachments() instead.' );
-		global $gLibertySystem;
-		$ret = array();
-		$ret['files'] = NULL;
-		$ret['diskUsage'] = 0;
-
-		if( $this->mUserId ) {
-			$query = "
-				SELECT a.`attachment_id`, a.`foreign_id`
-				FROM `".BIT_DB_PREFIX."liberty_attachments` a
-				WHERE a.`user_id` = ? AND a.`attachment_plugin_guid` = 'liberty_files'";
-			$result = $this->mDb->query($query, array($this->mUserId));
-			$attachmentIds = $result->getRows();
-
-			$bit_files_load_func = $gLibertySystem->getPluginFunction( 'bitfile', 'load_function'  );
-			if ($bit_files_load_func && count($attachmentIds) > 0) {
-				$files = array();
-				foreach ($attachmentIds as $attachmentId) {
-					if ($attachmentId != $this->mInfo['portrait_attachment_id'] && $attachmentId != $this->mInfo['avatar_attachment_id'] && $attachmentId != $this->mInfo['logo_attachment_id']) {
-						$fileInfo = $bit_files_load_func($attachmentId);
-						$ret['diskUsage'] += $fileInfo['size'];
-						$files[] = $fileInfo;
-					}
-				}
-				$ret['files'] = $files;
-			}
-		}
-		return $ret;
-	}
-	/**
-	 * @deprecated deprecated since version 2.1.0-beta
-	 */
-	function storeRealName($newRealName) {
-		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
-		if (strlen($newRealName) > REAL_NAME_COL_SIZE) {
-			$newRealName = substr($newRealName,0,REAL_NAME_COL_SIZE);
-		}
-		if ($this->mUserId) {
-			$sql = "UPDATE `".BIT_DB_PREFIX."users_users` SET `real_name` = ? WHERE `user_id` = ?";
-			$this->mDb->query($sql, array($newRealName, $this->mUserId));
-		}
-	}
-	/**
-	 * @deprecated deprecated since version 2.1.0-beta
-	 */
-	function storeLogin($newLogin) {
-		deprecated( "This method doesn't seem to be used. Please remove this note if it is actually used." );
-		$newLogin = substr($newLogin,0,40);
-		if ($this->userExists(array('login' => $newLogin))) {
-			$this->mErrors[] = "The username '$newLogin' is already taken";
-		} elseif ($this->mUserId) {
-			$sql = "UPDATE `".BIT_DB_PREFIX."users_users` SET `login` = ? WHERE `user_id` = ?";
-			$rs = $this->mDb->query($sql, array($newLogin, $this->mUserId));
-		} else {
-			$this->mErrors[] = "Invalid user";
-		}
-
-		return (count($this->mErrors) == 0);
-	}
-	/**
-	 * @deprecated deprecated since version 2.1.0-beta
-	 */
-	function isSemaphoreSet( $pSemName, $pLimit ) {
-		deprecated( "Semaphore methods in users have been deprecated. Please use the semaphore package instead." );
-		if( !empty( $pSemName ) && !empty( $pLimit )) {
-			global $gBitSystem;
-
-			$pLimit = $gBitSystem->getUTCTime() - $pLimit;
-			$query = "DELETE FROM `".BIT_DB_PREFIX."users_semaphores` WHERE `sem_name` = ? AND `created` < ?";
-			$result = $this->mDb->query( $query, array( $pSemName, ( int )$pLimit) );
-
-			$query = "SELECT `sem_name` FROM `".BIT_DB_PREFIX."users_semaphores` WHERE `sem_name`=?";
-			$result = $this->mDb->query( $query, array( $pSemName ));
-			return $result->numRows();
-		}
-	}
-	/**
-	 * @deprecated deprecated since version 2.1.0-beta
-	 */
-	function hasSemaphoreConflict( $pSemName, $pLimit ) {
-		deprecated( "Semaphore methods in users have been deprecated. Please use the semaphore package instead." );
-		if( !empty( $pSemName ) && !empty( $pLimit )) {
-			global $gBitSystem;
-			$ret = NULL;
-			$pLimit = $gBitSystem->getUTCTime() - $pLimit;
-			$query = "delete from `".BIT_DB_PREFIX."users_semaphores` where `sem_name`=? and `created`<?";
-			$result = $this->mDb->query($query,array( $pSemName, (int)$pLimit) );
-			$query = "
-				SELECT uu.`login`, uu.`real_name`, uu.`email`, uu.`user_id`
-				FROM `".BIT_DB_PREFIX."users_semaphores` ls INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON( uu.`user_id`=ls.`user_id`)
-				WHERE `sem_name`=? AND ls.`user_id` <> ?";
-			if( $ret = $this->mDb->getRow( $query, array( $pSemName, ( $this->isValid() ? $this->mUserId : ANONYMOUS_USER_ID )))) {
-				$ret['nolink'] = TRUE;
-			}
-			return( $ret );
-		}
-	}
-	/**
-	 * @deprecated deprecated since version 2.1.0-beta
-	 */
-	function storeSemaphore( $pSemName ) {
-		deprecated( "Semaphore methods in users have been deprecated. Please use the semaphore package instead." );
-		if( !empty( $pSemName ) ) {
-			global $gBitSystem;
-			$query = "DELETE FROM `".BIT_DB_PREFIX."users_semaphores` WHERE `sem_name`=?";
-			$this->mDb->query( $query, array( $pSemName ));
-
-			$query = "INSERT INTO `".BIT_DB_PREFIX."users_semaphores`(`sem_name`,`created`,`user_id`) VALUES(?,?,?)";
-			$result = $this->mDb->query( $query, array( $pSemName, $gBitSystem->getUTCTime(), ( $this->isValid() ? $this->mUserId : ANONYMOUS_USER_ID )));
-			return $gBitSystem->getUTCTime();
-		}
-	}
-	// }}}
 }
 
 function get_user_content_count( $pUserId ) {
