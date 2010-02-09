@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.52 2009/10/19 21:49:39 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.53 2010/02/09 03:48:11 spiderr Exp $
  * @package users
  */
 global $gBitDbType, $gBitDbHost, $gBitDbUser, $gBitDbPassword, $gBitDbName, $gBitThemes;
@@ -62,29 +62,6 @@ global $gShellScript;
 if( empty( $gShellScript ) ) {
 	session_start();
 }
-$cookie_site = strtolower( preg_replace( "/[^a-zA-Z0-9]/", "", $gBitSystem->getConfig( 'site_title', 'bitweaver' )));
-global $user_cookie_site;
-$user_cookie_site = 'bit-user-'.$cookie_site;
-
-
-// TODO: Remove this cookie munging business. This is a temporary fix that users don't have to log in again when they visit
-// first we check to see if the 'bit' and the 'tiki' version of the cookie are present
-if( !empty( $_COOKIE['tiki-user-'.$cookie_site] ) && !empty( $_COOKIE[$user_cookie_site] )) {
-	setcookie( 'tiki-user-'.$cookie_site, $_COOKIE['tiki-user-'.$cookie_site], 1, $gBitSystem->getConfig( 'cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig( 'cookie_domain', '' ));
-	unset( $_COOKIE['tiki-user-'.$cookie_site] );
-}
-// if the 'tiki' version is still set, we make sure that it's copied to the 'bit' version of the cookie
-if( !empty( $_COOKIE['tiki-user-'.$cookie_site] )) {
-	// here we can't check to see if a user has checked the rme button. this doesn't really matter since there's only _very_ few users who will be logging in exactly now
-	if( $gBitSystem->isFeatureActive( 'users_remember_me' )) {
-		$cookie_time = (int)(time() + $gBitSystem->getConfig( 'users_remember_time', 86400 ));
-	} else {
-		$cookie_time = 0;
-	}
-	// we copy the existing cookie accross
-	setcookie( $user_cookie_site, $_COOKIE['tiki-user-'.$cookie_site], $cookie_time, $gBitSystem->getConfig( 'cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig( 'cookie_domain', '' ));
-	$_COOKIE[$user_cookie_site] = $_COOKIE['tiki-user-'.$cookie_site];
-}
 
 // Init USER AGENT if empty so reliant methods don't need gobs of empty checking
 if( !isset( $_SERVER['HTTP_USER_AGENT'] )) {
@@ -99,31 +76,10 @@ if( !empty( $gOverrideLoginFunction )) {
 		$gBitUser->load();
 		$gBitUser->loadPermissions();
 	}
-} elseif( !empty( $_COOKIE[$user_cookie_site] ) && ( $gBitUser->mUserId = $gBitUser->getUserIdFromCookieHash( $_COOKIE[$user_cookie_site] ))) {
-	$gBitUser->load( TRUE );
-} else {
-	// Now if the remember me feature is on and the user checked the user_remember_me checkbox then ...
-	if( $gBitSystem->isFeatureActive( 'users_remember_me' ) && isset( $_REQUEST['rme'] ) && $_REQUEST['rme'] == 'on' ) {
-		$cookie_time = (int)(time() + $gBitSystem->getConfig( 'users_remember_time', 86400 ));
-	} else {
-		$cookie_time = 0;
-	}
-
-	setcookie( $user_cookie_site, session_id(), $cookie_time, $gBitSystem->getConfig( 'cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig( 'cookie_domain', '' ));
-	// Some firewall software blocks cookies sent the above way so try this
-	// way if that failed.
-	if (empty($_COOKIE[$user_cookie_site])) {
-		$_COOKIE[$user_cookie_site] = session_id();
-	}
-
-	// if the auth method is 'web site', look for the username in $_SERVER
-	if( $gBitSystem->getConfig( 'users_auth_method', 'tiki' ) == 'ws' ) {
-		if( isset( $_SERVER['REMOTE_USER'] )) {
-			if( $gBitUser->userExists( $_SERVER['REMOTE_USER'] )) {
-				$gBitUser->mUserId = $_SERVER['REMOTE_USER'];
-				$gBitUser->load( TRUE );
-			}
-		}
+} elseif( !empty( $_COOKIE[$gBitUser->getSiteCookieName()] ) && ( $gBitUser->mUserId = $gBitUser->getUserIdFromCookieHash( $_COOKIE[$gBitUser->getSiteCookieName()] ))) {
+	// we have user with this cookie.
+	if( $gBitUser->load( TRUE ) ) {
+		// maybe do something...
 	}
 }
 
@@ -131,12 +87,6 @@ if( !empty( $gOverrideLoginFunction )) {
 if( !$gBitUser->isValid() ) {
 	$gBitUser->mUserId = ANONYMOUS_USER_ID;
 	$gBitUser->load( TRUE );
-}
-
-if( isset( $_COOKIE[$user_cookie_site] )) {
-	$gBitUser->updateSession( $_COOKIE[$user_cookie_site] );
-} elseif( function_exists( "session_id" )) {
-	$gBitUser->updateSession( session_id() );
 }
 
 $gBitSmarty->assign_by_ref( 'gBitUser', $gBitUser );

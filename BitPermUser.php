@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.84 2009/11/16 20:32:48 tylerbello Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.85 2010/02/09 03:48:11 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitPermUser.php,v 1.84 2009/11/16 20:32:48 tylerbello Exp $
+ * $Id: BitPermUser.php,v 1.85 2010/02/09 03:48:11 spiderr Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.84 $
+ * @version  $Revision: 1.85 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -60,7 +60,7 @@ class BitPermUser extends BitUser {
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
 	function assumeUser( $pUserId ) {
-		global $gBitUser, $user_cookie_site;
+		global $gBitUser;
 		$ret = FALSE;
 		// make double sure the current logged in user has permission, check for p_users_admin, not admin, as that is all you need for assuming another user.
 		// this enables creating of a non technical site adminstrators group, eg customer support representatives.
@@ -71,7 +71,7 @@ class BitPermUser extends BitUser {
 			if( $assumeUser->isAdmin() ) {
 				$this->mErrors['assume_user'] = tra( "User administrators cannot be assumed." );
 			} else {
-				$this->mDb->query( "UPDATE `".BIT_DB_PREFIX."users_cnxn` SET `user_id`=?, `assume_user_id`=? WHERE `cookie`=?", array( $pUserId, $gBitUser->mUserId, $_COOKIE[$user_cookie_site] ) );
+				$this->mDb->query( "UPDATE `".BIT_DB_PREFIX."users_cnxn` SET `user_id`=?, `assume_user_id`=? WHERE `cookie`=?", array( $pUserId, $gBitUser->mUserId, $this->getSiteCookieName() ) );
 				$ret = TRUE;
 			}
 		}

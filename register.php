@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.43 2010/02/08 21:27:26 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.44 2010/02/09 03:48:11 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: register.php,v 1.43 2010/02/08 21:27:26 wjames5 Exp $
+ * $Id: register.php,v 1.44 2010/02/09 03:48:11 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -90,8 +90,8 @@ if( isset( $_REQUEST["register"] ) ) {
 					unset( $_SESSION['loginfrom'] );
 				}
 				// registration login, fake the cookie so the session gets updated properly.
-				if( empty($_COOKIE[$user_cookie_site] ) ) {
-					$_COOKIE[$user_cookie_site] = session_id();
+				if( empty($_COOKIE[$gBitUser->getSiteCookieName()] ) ) {
+					$_COOKIE[$gBitUser->getSiteCookieName()] = session_id();
 				}
 				// login with email since login is not technically required in the form, as it can be auto generated during store
 				$afterRegDefault = $newUser->login( $reg['email'], $reg['password'], FALSE, FALSE );
