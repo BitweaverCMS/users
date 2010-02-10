@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.251 2010/02/10 20:07:06 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.252 2010/02/10 20:29:14 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.251 2010/02/10 20:07:06 wjames5 Exp $
+ * $Id: BitUser.php,v 1.252 2010/02/10 20:29:14 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.251 $
+ * @version  $Revision: 1.252 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -132,6 +132,16 @@ class BitUser extends LibertyMime {
 				$this->mInfo['avatar_path']   = ( !empty( $this->mInfo['avatar_storage_path'] )   ? BIT_ROOT_PATH.$this->mInfo['avatar_storage_path']  : NULL);
 				$this->mInfo['portrait_path'] = ( !empty( $this->mInfo['portrait_storage_path'] ) ? BIT_ROOT_PATH.$this->mInfo['portrait_storage_path']: NULL);
 				$this->mInfo['logo_path']     = ( !empty( $this->mInfo['logo_storage_path'] )     ? BIT_ROOT_PATH.$this->mInfo['logo_storage_path']    : NULL);
+
+				// break the real name into first and last name using the last space as the beginning of the last name
+				// for people who really want to use first and last name fields 
+				if( preg_match( '/ /', $this->mInfo['real_name'] ) ) { 
+					$this->mInfo['first_name'] = substr( $this->mInfo['real_name'], 0, strrpos($this->mInfo['real_name'], ' ') );
+					$this->mInfo['last_name'] = substr( $this->mInfo['real_name'], strrpos($this->mInfo['real_name'], ' ')+1 );
+				}else{
+					// no spaces assign the real name to the first name
+					$this->mInfo['first_name'] = $this->mInfo['real_name'];
+				}
 
 				$this->mUserId    = $this->mInfo['uu_user_id'];
 				$this->mContentId = $this->mInfo['content_id'];
@@ -238,6 +248,15 @@ class BitUser extends LibertyMime {
 				$pParamHash['login'] = strtolower( $pParamHash['login'] );
 				$pParamHash['user_store']['login'] = $pParamHash['login'];
 			}
+		}
+		// some people really like using first and last names 
+		// push them into real_name
+		if( !empty( $pParamHash['first_name'] ) ) {
+			$pParamHash['real_name'] = $pParamHash['first_name'];
+		}
+		if( !empty( $pParamHash['last_name'] ) ) {
+			$pParamHash['real_name'] = !empty( $pParamHash['real_name'] )?$pParamHash['real_name']." ":'';
+			$pParamHash['real_name'] .= $pParamHash['last_name'];
 		}
 		// real_name
 		if( !empty( $pParamHash['real_name'] ) ) {
@@ -2431,4 +2450,3 @@ function get_user_content_count( $pUserId ) {
 }
 
 /* vim: :set fdm=marker : */
-?>
