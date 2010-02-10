@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.250 2010/02/09 18:05:09 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.251 2010/02/10 20:07:06 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.250 2010/02/09 18:05:09 wjames5 Exp $
+ * $Id: BitUser.php,v 1.251 2010/02/10 20:07:06 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.250 $
+ * @version  $Revision: 1.251 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1159,9 +1159,10 @@ error_log( print_r( $update, TRUE ) );
 		global $gBitSystem;
 		$isvalid = false;
 
+		$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
+
 		// Verify user is valid
 		if( $this->validate( $pLogin, $pPassword, $pChallenge, $pResponse )) {
-			$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
 			$userInfo = $this->getUserInfo( array( $loginCol => $pLogin ));
 
 			// If the password is valid but it is due then force the user to change the password by
@@ -1189,7 +1190,7 @@ error_log( print_r( $update, TRUE ) );
 			// before we give up lets see if the user exists and if the password is expired
 			$query = "select `email`, `user_id`, `user_password` from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convertBinary(). " $loginCol = ?";
 			$result = $this->mDb->getRow( $query, array( $pLogin ) ); 
-			if( $this->isPasswordDue( $result['user_id'] ) ) {
+			if( !empty( $result['user_id'] ) && $this->isPasswordDue( $result['user_id'] ) ) {
 				// user needs email password reset so send it and let them know
 				$url = USERS_PKG_URL.'remind_password.php?remind=y&required=y&username='.$pLogin;
 			}else{
