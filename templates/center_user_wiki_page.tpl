@@ -14,7 +14,7 @@
 				{/if}
 			{/if}
 			
-			<a href="" onclick="toggle('userinformation');return false;">{biticon iname="contact-new" iforce="icon" ipackage="icons" iexplain="User Information"}</a>
+			<a href="" onclick="BitBase.toggleElementDisplay('userinformation','block',true);return false;">{biticon iname="contact-new" iforce="icon" ipackage="icons" iexplain="User Information"}</a>
 
 			{if $gBitUser->isRegistered() && $gBitUser->mUserId eq $gQueryUser->mUserId}
 				{if $gBitSystem->isFeatureActive('users_preferences')}

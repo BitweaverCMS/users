@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.11 2009/01/20 22:18:07 dansut Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/users_admin.tpl,v 1.12 2010/02/10 19:33:07 spiderr Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -67,7 +67,7 @@
 					</div>
 
 					<div class="row">
-						{formlabel label="<a href=\"javascript:genPass('genepass','password','password2');\">{tr}Generate a password{/tr}</a>" for="email"}
+						{formlabel label="<a href=\"javascript:BitBase.genPass('genepass','password','password2');\">{tr}Generate a password{/tr}</a>" for="email"}
 						{forminput}
 							<input id="genepass" type="text" />
 							{formhelp note="You can use this link to create a random password. Make sure you pass the information on to the user."}
