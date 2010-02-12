@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.26 2010/02/08 23:25:30 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/remind_password.php,v 1.27 2010/02/12 22:21:15 dansut Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: remind_password.php,v 1.26 2010/02/08 23:25:30 wjames5 Exp $
+ * $Id: remind_password.php,v 1.27 2010/02/12 22:21:15 dansut Exp $
  * @package users
  * @subpackage functions
  */
@@ -20,11 +20,12 @@ require_once( '../kernel/setup_inc.php' );
 
 $gBitSystem->verifyFeature( 'users_forgot_pass' );
 
+$pageTitle = tra( 'Request Password Reminder' );
+
 if( $gBitUser->isRegistered() ) {
 	header( 'Location: '.BIT_ROOT_URL );
 	die;
 } elseif (isset($_REQUEST["remind"])) {
-	$pageTitle = tra( 'Request Password Reminder' );
 	$userInfo = '';
 	$pLogin = trim( $_REQUEST["username"] );
     if ( strlen ( $pLogin ) ) {
