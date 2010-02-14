@@ -47,9 +47,10 @@
 
 				{if $gBitSystem->isFeatureActive( 'reg_real_name' )}
 					<div class="row">
-						{formlabel label="Real name" for="real_name"}
+						{formlabel label="Your Name" for="real_name"}
 						{forminput}
 							<input type="text" name="real_name" id="real_name" value="{$smarty.request.real_name}" />
+							{formhelp note="This will be displayed in links to your information."}
 						{/forminput}
 					</div>
 				{/if}
@@ -58,7 +59,7 @@
 					{formfeedback error=$errors.login}
 					{formlabel label="Username" for="login"}
 					{forminput}
-						<input type="text" name="login" id="login" value="{$reg.login}" />{required}
+						{$gBitUser->getDisplayUri(' ')}<input type="text" name="login" id="login" value="{$reg.login}" />{required}
 						{formhelp note="Your username can only contain numbers, characters, and underscores."}
 					{/forminput}
 				</div>
