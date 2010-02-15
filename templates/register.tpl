@@ -205,7 +205,7 @@
 					{captcha force=true variant=row}
 				{/if}
 
-				{if $groupList}
+				{if count($groupList) > 1}
 					<hr />
 					{formlabel label="Group" for="group"}
 					{forminput}
