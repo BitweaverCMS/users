@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.255 2010/02/15 21:24:56 dansut Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.256 2010/02/15 22:04:25 dansut Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.255 2010/02/15 21:24:56 dansut Exp $
+ * $Id: BitUser.php,v 1.256 2010/02/15 22:04:25 dansut Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.255 $
+ * @version  $Revision: 1.256 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1400,7 +1400,9 @@ error_log( print_r( $update, TRUE ) );
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
 	function changeUserEmail( $pUserId, $pEmail ) {
-		if( $this->userExists( array( 'email' => $pEmail ))) {
+		if( !validate_email_syntax( $pEmail ) ) {
+			$this->mErrors['bad_mail'] = tra( "The email address provided does not have recognised valid syntax." );
+		} elseif( $this->userExists( array( 'email' => $pEmail ))) {
 			$this->mErrors['duplicate_mail'] = tra( "The email address you selected already exists." );
 		} else {
 			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `email`=? WHERE `user_id`=?";
