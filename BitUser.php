@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.253 2010/02/12 22:44:54 dansut Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.254 2010/02/15 21:22:31 dansut Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.253 2010/02/12 22:44:54 dansut Exp $
+ * $Id: BitUser.php,v 1.254 2010/02/15 21:22:31 dansut Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.253 $
+ * @version  $Revision: 1.254 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1409,7 +1409,7 @@ error_log( print_r( $update, TRUE ) );
 			$result = $this->mDb->query( $query, array( $pEmail, $pUserId ) );
 
 			// update value in hash
-			$this->mInfo['email'] = $_REQUEST['email'];
+			$this->mInfo['email'] = $pEmail;
 		}
 		return( count( $this->mErrors ) == 0 );
 	}
