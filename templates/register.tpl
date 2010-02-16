@@ -59,8 +59,11 @@
 					{formfeedback error=$errors.login}
 					{formlabel label="Username" for="login"}
 					{forminput}
-						{$gBitUser->getDisplayUri('')}<input type="text" name="login" id="login" value="{$reg.login}" />{required}
+						<input type="text" name="login" id="login" value="{$reg.login}" />{required}
 						{formhelp note="Your username can only contain numbers, characters, and underscores."}
+						<div class="formfeedback">
+							{tr}This will be the path to your user page: {$gBitUser->getDisplayUri('')}[ YOUR USERNAME HERE ]{/tr}
+						</div>
 					{/forminput}
 				</div>
 
