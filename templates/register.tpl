@@ -59,19 +59,22 @@
 					{formfeedback error=$errors.login}
 					{formlabel label="Username" for="login"}
 					{forminput}
-						<input type="text" name="login" id="login" value="{$reg.login}" onkeyup="updateUserUrl();"/>{required}
+						<input type="text" name="login" id="login" value="{$reg.login}" onkeyup="BitUser.updateUserUrl();"/>{required}
 						{formhelp note="This will be used in links to your profile. Your username can only contain numbers, characters, and underscores."}
 						<div class="formfeedback" id="loginurl"></div>
 					{/forminput}
 					<script type="text/javascript">/* <![CDATA[ */ {literal}
-					function updateUserUrl() {
-						document.getElementById('login').value = document.getElementById('login').value.replace( /[^_a-zA-Z0-9]/, "" );
-						if( document.getElementById('login').value ) {
-							var baseUrl = "{/literal}{$gBitUser->getDisplayUri('')}{literal}";
-							document.getElementById('loginurl').innerHTML = baseUrl + document.getElementById('login').value;
+					BitUser = {
+						"updateUserUrl": function(){
+							var loginEle = document.getElementById('login');
+							loginEle.value = loginEle.value.replace( /[^_a-zA-Z0-9]/, "" );
+							if( loginEle.value ) {
+								var baseUrl = "{/literal}{$gBitUser->getDisplayUri('')}{literal}";
+								document.getElementById('loginurl').innerHTML = baseUrl + loginEle.value;
+							}
 						}
-					}
-					updateUserUrl();
+					};
+					BitUser.updateUserUrl();
 					{/literal} /* ]]> */</script>
 				</div>
 
