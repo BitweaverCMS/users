@@ -63,17 +63,17 @@
 						{formhelp note="This will be used in links to your profile. Your username can only contain numbers, characters, and underscores."}
 						<div class="formfeedback" id="loginurl"></div>
 					{/forminput}
+					<script type="text/javascript">/* <![CDATA[ */ {literal}
+					function updateUserUrl() {
+						document.getElementById('login').value = document.getElementById('login').value.replace( /[^_a-zA-Z0-9]/, "" );
+						if( document.getElementById('login').value ) {
+							var baseUrl = "{/literal}{$gBitUser->getDisplayUri('')}{literal}";
+							document.getElementById('loginurl').innerHTML = baseUrl + document.getElementById('login').value;
+						}
+					}
+					updateUserUrl();
+					{/literal} /* ]]> */</script>
 				</div>
-<script type="text/javascript">/* <![CDATA[ */ {literal}
-function updateUserUrl() {
-	document.getElementById('login').value = document.getElementById('login').value.replace( /[^_a-zA-Z0-9]/, "" );
-	if( document.getElementById('login').value ) {
-		var baseUrl = "{/literal}{$gBitUser->getDisplayUri('')}{literal}";
-		document.getElementById('loginurl').innerHTML = baseUrl + document.getElementById('login').value;
-	}
-}
-updateUserUrl();
-{/literal} /* ]]> */</script>
 
 				{if $gBitSystem->isFeatureActive( 'users_validate_user' )}
 					{formfeedback warning="{tr}A confirmation email will be sent to you with instructions on how to login{/tr}"}
