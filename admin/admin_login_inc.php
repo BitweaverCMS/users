@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.34 2009/10/01 14:17:06 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.35 2010/02/16 19:41:27 wjames5 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
@@ -48,9 +48,9 @@ $loginSettings = array(
 		'note' => "Enter the Passcode that is required for users to register with your site.",
 	),
 	'users_random_number_reg' => array(
-		'label' => "Prevent automatic/robot registration",
+		'label' => "Use captcha to prevent automatic/robot registration",
 		'type' => "checkbox",
-		'note' => "This will generate a random number as an image, the user has to confirm during the registration step.",
+		'note' => "This will generate an image with text that the user has to confirm during the registration step.",
 	),
 	'users_validate_user' => array(
 		'label' => "Validate users by email",
