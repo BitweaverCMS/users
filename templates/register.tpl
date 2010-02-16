@@ -59,13 +59,19 @@
 					{formfeedback error=$errors.login}
 					{formlabel label="Username" for="login"}
 					{forminput}
-						<input type="text" name="login" id="login" value="{$reg.login}" />{required}
+						<input type="text" name="login" id="login" value="{$reg.login}" onkeyup="updateUserUrl();"/>{required}
 						{formhelp note="Your username can only contain numbers, characters, and underscores."}
-						<div class="formfeedback">
-							{tr}This will be the path to your user page: {$gBitUser->getDisplayUri('')}[ YOUR USERNAME HERE ]{/tr}
-						</div>
+						<div class="formfeedback" id="loginurl"></div>
 					{/forminput}
 				</div>
+<script type="text/javascript">/* <![CDATA[ */ {literal}
+function updateUserUrl() {
+	document.getElementById('login').value = document.getElementById('login').value.replace( /[^_a-zA-Z0-9]/, "" );
+	var baseUrl = "{/literal}{$gBitUser->getDisplayUri('')}{literal}";
+	document.getElementById('loginurl').innerHTML = baseUrl + document.getElementById('login').value;
+}
+updateUserUrl();
+{/literal} /* ]]> */</script>
 
 				{if $gBitSystem->isFeatureActive( 'users_validate_user' )}
 					{formfeedback warning="{tr}A confirmation email will be sent to you with instructions on how to login{/tr}"}
