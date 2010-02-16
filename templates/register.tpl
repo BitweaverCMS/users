@@ -60,7 +60,7 @@
 					{formlabel label="Username" for="login"}
 					{forminput}
 						<input type="text" name="login" id="login" value="{$reg.login}" onkeyup="updateUserUrl();"/>{required}
-						{formhelp note="Your username can only contain numbers, characters, and underscores."}
+						{formhelp note="This will be used in links to your profile. Your username can only contain numbers, characters, and underscores."}
 						<div class="formfeedback" id="loginurl"></div>
 					{/forminput}
 				</div>
