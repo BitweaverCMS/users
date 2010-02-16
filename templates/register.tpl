@@ -67,8 +67,10 @@
 <script type="text/javascript">/* <![CDATA[ */ {literal}
 function updateUserUrl() {
 	document.getElementById('login').value = document.getElementById('login').value.replace( /[^_a-zA-Z0-9]/, "" );
-	var baseUrl = "{/literal}{$gBitUser->getDisplayUri('')}{literal}";
-	document.getElementById('loginurl').innerHTML = baseUrl + document.getElementById('login').value;
+	if( document.getElementById('login').value ) {
+		var baseUrl = "{/literal}{$gBitUser->getDisplayUri('')}{literal}";
+		document.getElementById('loginurl').innerHTML = baseUrl + document.getElementById('login').value;
+	}
 }
 updateUserUrl();
 {/literal} /* ]]> */</script>
