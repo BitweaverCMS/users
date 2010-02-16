@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.256 2010/02/15 22:04:25 dansut Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.257 2010/02/16 19:54:15 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.256 2010/02/15 22:04:25 dansut Exp $
+ * $Id: BitUser.php,v 1.257 2010/02/16 19:54:15 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.256 $
+ * @version  $Revision: 1.257 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -341,7 +341,34 @@ class BitUser extends LibertyMime {
 			parent::verify( $pParamHash );
 		}
 
+		return ( count($this->mErrors) == 0 );
+	}
 
+	/**
+	 * preRegisterVerify
+	 *
+	 * A collection of values to verify before a user can register
+	 * Separated from BitUser::verify so that import verification can
+	 * be processed with less rigor than user submitted requests 
+	 */
+	function preRegisterVerify( &$pParamHash ){
+		global $gBitSystem;
+		// require catpcha
+		// novalidation is set to yes if a user confirms his email is correct after tiki fails to validate it
+		if( $gBitSystem->isFeatureActive( 'users_random_number_reg' ) ) {
+			if( ( empty( $pParamHash['novalidation'] ) || $pParamHash['novalidation'] != 'yes' )
+				&&( !isset( $_SESSION['captcha'] ) || $_SESSION['captcha'] != md5( $pParamHash['captcha'] ) ) )
+			{
+				$this->mErrors['captcha'] = "Wrong registration code";
+			}
+		}
+
+		// require passcode
+		if( $gBitSystem->isFeatureActive( 'users_register_require_passcode' ) ) {
+			if( $pParamHash["passcode"] != $gBitSystem->getConfig( "users_register_passcode",md5( $this->genPass() ) ) ) {
+				$this->mErrors['passcode'] = 'Wrong passcode! You need to know the passcode to register at this site';
+			}
+		}
 		return ( count($this->mErrors) == 0 );
 	}
 

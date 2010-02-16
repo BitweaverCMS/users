@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.44 2010/02/09 03:48:11 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.45 2010/02/16 19:54:15 wjames5 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: register.php,v 1.44 2010/02/09 03:48:11 spiderr Exp $
+ * $Id: register.php,v 1.45 2010/02/16 19:54:15 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -40,84 +40,66 @@ if( $gBitUser->isRegistered() ) {
 if( isset( $_REQUEST["register"] ) ) {
 
 	$reg = $_REQUEST;
-	// require catpcha
-	// novalidation is set to yes if a user confirms his email is correct after tiki fails to validate it
-	if( $gBitSystem->isFeatureActive( 'users_random_number_reg' ) ) {
-		if( ( empty( $reg['novalidation'] ) || $reg['novalidation'] != 'yes' )
-			&&( !isset( $_SESSION['captcha'] ) || $_SESSION['captcha'] != md5( $reg['captcha'] ) ) )
-		{
-			$errors['captcha'] = "Wrong registration code";
-		}
-	}
 
-	// require passcode
-	if( $gBitSystem->isFeatureActive( 'users_register_require_passcode' ) ) {
-		if( $reg["passcode"] != $gBitSystem->getConfig( "users_register_passcode",md5( $gBitUser->genPass() ) ) ) {
-			$errors['passcode'] = 'Wrong passcode! You need to know the passcode to register at this site';
-		}
-	}
 	// Register the new user
-	if( empty( $errors ) ) {
-		$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
-		$newUser = new $userClass();
-		if( $newUser->register( $reg ) ) {
-			$gBitUser->mUserId = $newUser->mUserId;
+	$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+	$newUser = new $userClass();
+	if( $newUser->preRegisterVerify( $reg ) && $newUser->register( $reg ) ) {
+		$gBitUser->mUserId = $newUser->mUserId;
 
-			// add user to user-selected group
-			if ( !empty( $_REQUEST['group'] ) ) {
-				$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group'] );
-				if ( empty($groupInfo) || $groupInfo['is_public'] != 'y' ) {
-					$errors[] = "You can't use this group";
-					$gBitSmarty->assign_by_ref( 'errors', $errors );
-				} else {
-					$userId = $newUser->getUserId();
-					$gBitUser->addUserToGroup( $userId, $_REQUEST['group'] );
-					$gBitUser->storeUserDefaultGroup( $userId, $_REQUEST['group'] );
-				}
-			}
-
-			// set the user to private if necessary. defaults to public
-			if(!empty($_REQUEST['users_information']) && $_REQUEST['users_information'] == 'private'){
-				$newUser->storePreference('users_information','private');
-			}
-
-			// requires validation by email 
-			if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
-				$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
-				$gBitSmarty->assign('showmsg','y');
+		// add user to user-selected group
+		if ( !empty( $_REQUEST['group'] ) ) {
+			$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group'] );
+			if ( empty($groupInfo) || $groupInfo['is_public'] != 'y' ) {
+				$errors[] = "You can't use this group";
+				$gBitSmarty->assign_by_ref( 'errors', $errors );
 			} else {
-				if( !empty( $_SESSION['loginfrom'] ) ) {
-					unset( $_SESSION['loginfrom'] );
-				}
-				// registration login, fake the cookie so the session gets updated properly.
-				if( empty($_COOKIE[$gBitUser->getSiteCookieName()] ) ) {
-					$_COOKIE[$gBitUser->getSiteCookieName()] = session_id();
-				}
-				// login with email since login is not technically required in the form, as it can be auto generated during store
-				$afterRegDefault = $newUser->login( $reg['email'], $reg['password'], FALSE, FALSE );
-				$url = $gBitSystem->getConfig( 'after_reg_url' )?BIT_ROOT_URI.$gBitSystem->getConfig( 'after_reg_url' ):$afterRegDefault;
-				// return to referring page
-				if( !empty( $_SESSION['returnto'] ) ) {
-					$url = $_SESSION['returnto'];
-				// forward to group post-registration page 
-				} elseif ( !empty( $_REQUEST['group'] ) && !empty( $groupInfo['after_registration_page'] ) ) {
-					if ( $newUser->verifyId( $groupInfo['after_registration_page'] ) ) {
-						$url = BIT_ROOT_URI."index.php?content_id=".$groupInfo['after_registration_page'];
-					} elseif( strpos( $groupInfo['after_registration_page'], '/' ) === FALSE ) {
-						$url = BitPage::getDisplayUrl( $groupInfo['after_registration_page'] );
-					} else {
-						$url = $groupInfo['after_registration_page'];
-					}
-				}
-				header( 'Location: '.$url );
-				exit;
+				$userId = $newUser->getUserId();
+				$gBitUser->addUserToGroup( $userId, $_REQUEST['group'] );
+				$gBitUser->storeUserDefaultGroup( $userId, $_REQUEST['group'] );
 			}
+		}
+
+		// set the user to private if necessary. defaults to public
+		if(!empty($_REQUEST['users_information']) && $_REQUEST['users_information'] == 'private'){
+			$newUser->storePreference('users_information','private');
+		}
+
+		// requires validation by email 
+		if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
+			$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
+			$gBitSmarty->assign('showmsg','y');
 		} else {
-			$gBitSmarty->assign_by_ref( 'errors', $newUser->mErrors );
+			if( !empty( $_SESSION['loginfrom'] ) ) {
+				unset( $_SESSION['loginfrom'] );
+			}
+			// registration login, fake the cookie so the session gets updated properly.
+			if( empty($_COOKIE[$gBitUser->getSiteCookieName()] ) ) {
+				$_COOKIE[$gBitUser->getSiteCookieName()] = session_id();
+			}
+			// login with email since login is not technically required in the form, as it can be auto generated during store
+			$afterRegDefault = $newUser->login( $reg['email'], $reg['password'], FALSE, FALSE );
+			$url = $gBitSystem->getConfig( 'after_reg_url' )?BIT_ROOT_URI.$gBitSystem->getConfig( 'after_reg_url' ):$afterRegDefault;
+			// return to referring page
+			if( !empty( $_SESSION['returnto'] ) ) {
+				$url = $_SESSION['returnto'];
+			// forward to group post-registration page 
+			} elseif ( !empty( $_REQUEST['group'] ) && !empty( $groupInfo['after_registration_page'] ) ) {
+				if ( $newUser->verifyId( $groupInfo['after_registration_page'] ) ) {
+					$url = BIT_ROOT_URI."index.php?content_id=".$groupInfo['after_registration_page'];
+				} elseif( strpos( $groupInfo['after_registration_page'], '/' ) === FALSE ) {
+					$url = BitPage::getDisplayUrl( $groupInfo['after_registration_page'] );
+				} else {
+					$url = $groupInfo['after_registration_page'];
+				}
+			}
+			header( 'Location: '.$url );
+			exit;
 		}
 	} else {
-		$gBitSmarty->assign_by_ref( 'errors', $errors );
+		$gBitSmarty->assign_by_ref( 'errors', $newUser->mErrors );
 	}
+
 	$gBitSmarty->assign_by_ref( 'reg', $reg );
 
 } else {
