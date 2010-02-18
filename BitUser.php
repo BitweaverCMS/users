@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.257 2010/02/16 19:54:15 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.258 2010/02/18 21:55:25 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.257 2010/02/16 19:54:15 wjames5 Exp $
+ * $Id: BitUser.php,v 1.258 2010/02/18 21:55:25 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.257 $
+ * @version  $Revision: 1.258 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -2299,6 +2299,13 @@ error_log( print_r( $update, TRUE ) );
 			$joinSql .= " INNER JOIN `".BIT_DB_PREFIX."liberty_content_prefs` lcp ON ( lcp.`content_id`=uu.`content_id` AND lcp.`pref_name`='bitlanguage')";
 			$whereSql = " AND lcp.`pref_value`=? ";
 			$bindVars[] = $pParamHash['lang_code'];
+		}
+
+		// limit search to users with a specific IP
+		if( !empty( $pParamHash['ip'] ) ) {
+			$joinSql .= " LEFT OUTER JOIN `".BIT_DB_PREFIX."users_cnxn` uc ON ( uu.`user_id`=uc.`user_id`)";
+			$whereSql = " AND uc.`ip`=? ";
+			$bindVars[] = $pParamHash['ip'];
 		}
 
 		// limit to registrations over a time period like 'YYYY-MM-DD' or 'Y \Week W' or anything convertible by SQLDate
