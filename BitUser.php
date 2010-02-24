@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.259 2010/02/22 15:32:28 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.260 2010/02/24 16:12:46 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.259 2010/02/22 15:32:28 spiderr Exp $
+ * $Id: BitUser.php,v 1.260 2010/02/24 16:12:46 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.259 $
+ * @version  $Revision: 1.260 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1612,8 +1612,13 @@ error_log( print_r( $update, TRUE ) );
 		if( !empty( $pLogin )) {
 			$ret = TRUE;
 			$hash = md5( $pPass );
-			$now = $gBitSystem->getUTCTime();;
-			$passDue = $now + ( 60 * 60 * 24 * $gBitSystem->getConfig( 'users_pass_due' ));
+			// if renew password config is set then set - otherwise set null to respect no pass due
+			$passDue = NULL;
+			if( $gBitSystem->getConfig('users_pass_due') ) {
+				$now = $gBitSystem->getUTCTime();;
+				// renew password according to config value
+				$passDue = $now + ( 60 * 60 * 24 * $gBitSystem->getConfig( 'users_pass_due' ));
+			}
 			if( !$gBitSystem->isFeatureActive( 'users_clear_passwords' )) {
 				$pPass = NULL;
 			}
