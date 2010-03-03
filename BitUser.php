@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.260 2010/02/24 16:12:46 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.261 2010/03/03 21:37:59 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.260 2010/02/24 16:12:46 wjames5 Exp $
+ * $Id: BitUser.php,v 1.261 2010/03/03 21:37:59 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.260 $
+ * @version  $Revision: 1.261 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -466,7 +466,7 @@ class BitUser extends LibertyMime {
 		$ret = false;
 
 		if( validate_email_syntax( $pEmail ) ){
-			list ( $Username, $domain ) = split ("@",$pEmail);
+			list ( $Username, $domain ) = preg_split ("/@/",$pEmail);
 			//checkdnsrr will check to see if there are any MX records for the domain
 			if( !is_windows() and checkdnsrr ( $domain, "MX" ) )  {
 				bitdebug( "Confirmation : MX record for {$domain} exists." );
@@ -499,7 +499,7 @@ class BitUser extends LibertyMime {
 							$out = $this->getSmtpResponse( $Connect );
 
 							// Judgment is that a service preparing to begin a transaction will send a 220 string after a succesful handshake
-							if( ereg ( "^220", $out ) ) {
+							if( preg_match ( "/^220/", $out ) ) {
 								// Inform client's reaching to server who connect.
 								if( $gBitSystem->hasValidSenderEmail() ) {
 									$senderEmail = $gBitSystem->getConfig( 'site_sender_email' );
@@ -526,7 +526,7 @@ class BitUser extends LibertyMime {
 									fclose( $Connect );
 									
 									//Checks if we received a 250 OK from the server. If we did not, the server is telling us that this address is not a valid mailbox.
-									if( !ereg ( "^250", $from ) || ( !ereg ( "^250", $to ) && !ereg( "Please use your ISP relay", $to ))) {
+									if( !preg_match ( "/^250/", $from ) || ( !preg_match ( "/^250/", $to ) && !preg_match( "/Please use your ISP relay/", $to ))) {
 										$pErrors['email']   = $pEmail." is not recognized by the mail server. Try double checking the address for typos." ;
 										bit_log_error("INVALID EMAIL : ".$pEmail."SMTP FROM : ".$from." SMTP TO: ".$to);
 										$ret = false;
