@@ -28,6 +28,7 @@
 						{smartlink ipackage=users ifile="admin/index.php" assume_user=$users[user].user_id ititle="Assume User Identity" ibiticon="users/assume_user" iforce=icon}
 						{smartlink ipackage=users ifile="preferences.php" view_user=$users[user].user_id ititle="Edit User Information" ibiticon="icons/accessories-text-editor" iforce=icon}
 						{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$users[user].user_id ititle="Assign Group" ibiticon="icons/emblem-shared" iforce=icon}
+						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$users[user].user_id ititle="User Activity" ibiticon="icons/preferences-desktop-sound" iforce="icon"}
 						{smartlink ipackage=liberty ifile="list_content.php" user_id=$users[user].user_id ititle="User Content" ibiticon="icons/format-justify-fill" iforce="icon"}
 						{if $gBitUser->hasPermission( 'p_users_admin' )}
 							<span title="{tr}Content Count{/tr}">{$users[user].user_id|get_user_content_count}</span>
