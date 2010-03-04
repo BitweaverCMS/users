@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.261 2010/03/03 21:37:59 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.262 2010/03/04 03:40:48 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.261 2010/03/03 21:37:59 spiderr Exp $
+ * $Id: BitUser.php,v 1.262 2010/03/04 03:40:48 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.261 $
+ * @version  $Revision: 1.262 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -2148,7 +2148,7 @@ error_log( print_r( $update, TRUE ) );
 	 * @return URL to users homepage
 	 */
 	function getDisplayUrl( $pUserName=NULL, $pMixed=NULL ) {
-		if( ( $pUserName === NULL) && !empty( $this ) && $this->isValid() ) {
+		if( ( $pUserName === NULL) && !empty( $this ) && !empty( $this->mUsername ) ) {
 			$pUserName = $this->mUsername;
 		}
 		if( function_exists( 'override_user_url' ) ) {
