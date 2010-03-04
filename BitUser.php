@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.262 2010/03/04 03:40:48 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.263 2010/03/04 22:50:45 spiderr Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.262 2010/03/04 03:40:48 spiderr Exp $
+ * $Id: BitUser.php,v 1.263 2010/03/04 22:50:45 spiderr Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.262 $
+ * @version  $Revision: 1.263 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -528,7 +528,7 @@ class BitUser extends LibertyMime {
 									//Checks if we received a 250 OK from the server. If we did not, the server is telling us that this address is not a valid mailbox.
 									if( !preg_match ( "/^250/", $from ) || ( !preg_match ( "/^250/", $to ) && !preg_match( "/Please use your ISP relay/", $to ))) {
 										$pErrors['email']   = $pEmail." is not recognized by the mail server. Try double checking the address for typos." ;
-										bit_log_error("INVALID EMAIL : ".$pEmail."SMTP FROM : ".$from." SMTP TO: ".$to);
+										bit_log_error("INVALID EMAIL : ".$pEmail." SMTP FROM : ".$from." SMTP TO: ".$to);
 										$ret = false;
 										break; //break out of foreach and fall through to the end of function
 									}else{
@@ -536,7 +536,11 @@ class BitUser extends LibertyMime {
 										break;
 									}
 								}
-							}else{
+							} elseif( preg_match ( "/^420/", $out ) ) {
+								// Yahoo has a bad, bad habit of issuing 420's
+								bit_log_error("UNKNOWN EMAIL : ".$pEmail." SMTP response: ".$out);
+								$ret = true;
+							} else {
 								$pErrors['email'] = 'Connection rejected by MX server';
 								bit_log_error("INVALID EMAIL : ".$pEmail." SMTP response: ".$out);
 								$ret = false;
