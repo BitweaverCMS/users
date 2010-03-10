@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.45 2010/02/16 19:54:15 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/register.php,v 1.46 2010/03/10 22:26:52 wjames5 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: register.php,v 1.45 2010/02/16 19:54:15 wjames5 Exp $
+ * $Id: register.php,v 1.46 2010/03/10 22:26:52 wjames5 Exp $
  * @package users
  * @subpackage functions
  */
@@ -146,6 +146,9 @@ $listHash = array(
 );
 $groupList = $gBitUser->getAllGroups( $listHash );
 $gBitSmarty->assign_by_ref( 'groupList', $groupList );
+
+// invoke edit services
+$gBitUser->invokeServices( 'content_edit_function' );
 
 // include preferences settings from other packages - these will be included as individual tabs
 $packages = array();
