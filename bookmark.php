@@ -19,25 +19,30 @@ if( $gBitUser->isRegistered() ){
 		// verify user has access to view this content
 		$Content = LibertyBase::getLibertyObject( $_REQUEST['content_id'] );
 		$Content->load();
-		if( $Content->hasViewPermission() && $Content->hasService( CONTENT_SERVICE_USERS_FAVS ) ){
-			// default action is to add the favorite
-			$_REQUEST['action'] = empty( $_REQUEST['action'] )?'add':$_REQUEST['action']; 
-			// add or remove 
-			switch( $_REQUEST['action'] ){
-				case 'add':
-					$gBitUser->storeFavorite( $_REQUEST['content_id'] );
-					$bookmarkState = 1;
-					$msg = tra( 'This content has been added to your favorites' );
-					break;
-				case 'remove':
-					$gBitUser->expungeFavorite( $_REQUEST['content_id'] );
-					$bookmarkState = 0;
-					$msg = tra( 'This content has been removed from your favorites' );
-					break;
+		if( $Content->hasViewPermission() ){
+			if( $Content->hasService( CONTENT_SERVICE_USERS_FAVS ) ){
+				// default action is to add the favorite
+				$_REQUEST['action'] = empty( $_REQUEST['action'] )?'add':$_REQUEST['action']; 
+				// add or remove 
+				switch( $_REQUEST['action'] ){
+					case 'add':
+						$gBitUser->storeFavorite( $_REQUEST['content_id'] );
+						$bookmarkState = 1;
+						$msg = tra( 'This content has been added to your favorites' );
+						break;
+					case 'remove':
+						$gBitUser->expungeFavorite( $_REQUEST['content_id'] );
+						$bookmarkState = 0;
+						$msg = tra( 'This content has been removed from your favorites' );
+						break;
+				}
+				$gBitSmarty->assign( 'bookmarkState', $bookmarkState );
+				$gBitSmarty->assign( 'contentId', $_REQUEST['content_id'] );
+				$error = FALSE;
+			}else{
+				$statusCode = 401;
+				$msg = tra( 'You can not bookmark this type of content, bookmarking denied' );
 			}
-			$gBitSmarty->assign( 'bookmarkState', $bookmarkState );
-			$gBitSmarty->assign( 'contentId', $_REQUEST['content_id'] );
-			$error = FALSE;
 		}else{
 			$statusCode = 401;
 			$msg = tra( 'You do not have permission to view this content, bookmarking denied' );
@@ -47,7 +52,7 @@ if( $gBitUser->isRegistered() ){
 		$msg = tra( 'No content was specified to bookmark' );
 	}
 }else{
-	$msg = tra( 'You must be a registered user to bookmark content.' );
+	$msg = tra( 'You must be a registered user to bookmark content' );
 }
 
 $gBitSmarty->assign( 'statusCode', $statusCode );
