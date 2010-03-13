@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.53 2010/02/09 03:48:11 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_users/bit_setup_inc.php,v 1.54 2010/03/13 20:09:00 wjames5 Exp $
  * @package users
  */
 global $gBitDbType, $gBitDbHost, $gBitDbUser, $gBitDbPassword, $gBitDbName, $gBitThemes;
@@ -12,6 +12,19 @@ $registerHash = array(
 	'required_package'=> TRUE,
 );
 $gBitSystem->registerPackage( $registerHash );
+
+/* ---- services ----- */
+define( 'CONTENT_SERVICE_USERS_FAVS', 'users_favorites' );
+$gLibertySystem->registerService( CONTENT_SERVICE_USERS_FAVS, 
+	USERS_PKG_NAME, 
+	array(
+		'content_icon_tpl' => 'bitpackage:users/user_favs_service_icon_inc.tpl',
+		'content_list_sql_function' => 'users_favs_content_list_sql',
+	),
+	array( 
+		'description' => tra( 'Provides a ajax service enabling users to bookmark any content as a favorite.' ),
+	)
+);
 
 $gBitSystem->registerNotifyEvent( array( "user_registers" => tra( "A user registers" )));
 

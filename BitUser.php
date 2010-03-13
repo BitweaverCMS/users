@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.263 2010/03/04 22:50:45 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.264 2010/03/13 20:09:00 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.263 2010/03/04 22:50:45 spiderr Exp $
+ * $Id: BitUser.php,v 1.264 2010/03/13 20:09:00 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.263 $
+ * @version  $Revision: 1.264 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -2131,6 +2131,23 @@ error_log( print_r( $update, TRUE ) );
 		}
 		return( $ret );
 	}
+
+	/** 
+	 * getFavorites
+	 * 
+	 * @see LibertyContent::getContentList
+	 * @return Array of content data
+	 */
+	function getFavorites(){
+		$ret = NULL;
+		if( $this->isRegistered() ){
+			$listHash['user_favs'] = TRUE;
+			$listHash['order_table'] = 'ufm.';
+			$listHash['sort_mode'] = 'map_position_desc';
+			$ret = $this->getContentList( $listHash );
+		}
+		return $ret;
+	}
 	// }}}
 
 	/**
@@ -2493,5 +2510,19 @@ function get_user_content_count( $pUserId ) {
 		return $gBitDb->getOne( "SELECT COUNT(`content_id`) FROM `".BIT_DB_PREFIX."liberty_content` lc WHERE lc.`content_type_guid`!='bituser' AND lc.`user_id`=?", array( $pUserId ) );
 	}
 }
+
+
+// {{{ ==================== Services ====================
+function users_favs_content_list_sql( &$pObject, $pParamHash=NULL ){
+    $ret = array();
+	if( !empty( $pParamHash['user_favs'] ) ){
+		// $ret['select_sql'] = "";
+		$ret['join_sql'] = " INNER JOIN `".BIT_DB_PREFIX."users_favorites_map` ufm ON ( ufm.`favorite_content_id`=lc.`content_id` )";
+		$ret['where_sql'] = " AND ufm.`user_id` = ?";
+		$ret['bind_vars'][] = $pObject->mUserId;
+	}
+	return $ret;
+}
+// }}}
 
 /* vim: :set fdm=marker : */
