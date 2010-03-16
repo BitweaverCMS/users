@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/confirm.php,v 1.10 2010/02/08 21:27:26 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/confirm.php,v 1.11 2010/03/16 22:11:15 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: confirm.php,v 1.10 2010/02/08 21:27:26 wjames5 Exp $
+ * $Id: confirm.php,v 1.11 2010/03/16 22:11:15 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -19,7 +19,7 @@
 require_once( '../kernel/setup_inc.php' );
 
 if( !empty( $_REQUEST["v"] ) && strpos( $_REQUEST["v"], ':' ) ) {
-	list( $userId, $provPass ) = split( ':', $_REQUEST["v"] );
+	list( $userId, $provPass ) = explode( ':', $_REQUEST["v"] );
 }
 
 if( !empty( $userId ) && !empty( $provPass ) && $userInfo = $gBitUser->confirmRegistration( $userId, $provPass ) ) {
