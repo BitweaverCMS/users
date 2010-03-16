@@ -162,6 +162,7 @@
 					{/legend}
 				{/form}
 
+				<div>
 				{form legend="Change your email address"}
 					<input type="hidden" name="view_user" value="{$editUser->mUserId}" />
 					<div class="row">
@@ -184,7 +185,9 @@
 						<input type="submit" name="chgemail" value="{tr}Change email{/tr}" />
 					</div>
 				{/form}
+				</div>
 
+				<div>
 				{form legend="Change your password"}
 					<input type="hidden" name="view_user" value="{$editUser->mUserId}" />
 					{* Users with admin priv can change password without knowing the old one *}
@@ -220,6 +223,7 @@
 						<input type="submit" name="chgpswd" value="{tr}Change Password{/tr}" />
 					</div>
 				{/form}
+				</div>
 
 				{* this should go in tidbits *}
 				{if $gBitSystem->isFeatureActive( 'feature_tasks' )}
