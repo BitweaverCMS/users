@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.264 2010/03/13 20:09:00 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.265 2010/03/20 02:02:46 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.264 2010/03/13 20:09:00 wjames5 Exp $
+ * $Id: BitUser.php,v 1.265 2010/03/20 02:02:46 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.264 $
+ * @version  $Revision: 1.265 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -274,14 +274,19 @@ class BitUser extends LibertyMime {
 		if( !$this->isRegistered() ) {
 			if( empty( $pParamHash['login'] ) ) {
 				// choose a login based on the username in the email
-				$loginBase = preg_replace( '/[^A-Za-z0-9_]/', '', substr( $pParamHash['email'], 0, strpos( $pParamHash['email'], '@' ) ) );
-				$login = $loginBase;
-				do {
-					if( $loginTaken = $this->userExists( array( 'login' => $login ) ) ) {
-						$login = $loginBase.rand(100,999);
-					}
-				} while( $loginTaken );
-				$pParamHash['login'] = $login;
+				if( empty($pParamHash['email']) ){
+					// obviously if they didnt enter an email address we cant help them out
+					$this->mErrors['email'] = tra( 'You must enter your email address' );
+				}else{
+					$loginBase = preg_replace( '/[^A-Za-z0-9_]/', '', substr( $pParamHash['email'], 0, strpos( $pParamHash['email'], '@' ) ) );
+					$login = $loginBase;
+					do {
+						if( $loginTaken = $this->userExists( array( 'login' => $login ) ) ) {
+							$login = $loginBase.rand(100,999);
+						}
+					} while( $loginTaken );
+					$pParamHash['login'] = $login;
+				}
 			}
 			if( empty( $pParamHash['registration_date'] ) ) {
 				$pParamHash['registration_date'] = date( "U" );
