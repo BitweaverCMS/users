@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.267 2010/03/21 00:46:43 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.268 2010/03/21 02:50:49 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.267 2010/03/21 00:46:43 wjames5 Exp $
+ * $Id: BitUser.php,v 1.268 2010/03/21 02:50:49 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.267 $
+ * @version  $Revision: 1.268 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -2135,7 +2135,9 @@ error_log( print_r( $update, TRUE ) );
 	function storeFavorite( $pContentId ) {
 		$ret = FALSE;
 		if( $this->isValid() && $this->verifyId( $pContentId )) {
-			$this->mDb->query( "INSERT INTO `".BIT_DB_PREFIX."users_favorites_map` ( `user_id`, `favorite_content_id` ) VALUES (?,?)", array( $this->mUserId, $pContentId ) );
+			if( !$this->hasFavorite( $pContentId ) ){
+				$this->mDb->query( "INSERT INTO `".BIT_DB_PREFIX."users_favorites_map` ( `user_id`, `favorite_content_id` ) VALUES (?,?)", array( $this->mUserId, $pContentId ) );
+			}
 			$ret = TRUE;
 		}
 		return( $ret );
@@ -2148,6 +2150,15 @@ error_log( print_r( $update, TRUE ) );
 			$ret = TRUE;
 		}
 		return( $ret );
+	}
+
+	function hasFavorite( $pContentId ) {
+		$ret = FALSE;
+		$rslt = $this->mDb->getOne( "SELECT `favorite_content_id` FROM `".BIT_DB_PREFIX."users_favorites_map` WHERE `user_id`=? AND `favorite_content_id`=?", array( $this->mUserId, $pContentId ) );
+		if( !is_null( $rslt ) ){
+			$ret = TRUE;
+		}
+		return $ret;
 	}
 
 	/** 
