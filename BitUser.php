@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.266 2010/03/20 14:30:16 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.267 2010/03/21 00:46:43 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.266 2010/03/20 14:30:16 wjames5 Exp $
+ * $Id: BitUser.php,v 1.267 2010/03/21 00:46:43 wjames5 Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.266 $
+ * @version  $Revision: 1.267 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1234,7 +1234,20 @@ error_log( print_r( $update, TRUE ) );
 				$this->mUserId = $userInfo['user_id'];
 				$this->load();
 				$this->loadPermissions( TRUE );
-				$url = isset($_SESSION['loginfrom']) ? $_SESSION['loginfrom'] : $gBitSystem->getDefaultPage();
+
+				// set post-login url
+				// if group home is set for this user we get that
+				// default to general post-login
+				// @see BitSystem::getIndexPage 
+				$indexType = 'my_page';
+				// getGroupHome is BitPermUser method
+				if( method_exists( $this, 'getGroupHome' ) && 
+					(( @$this->verifyId( $this->mInfo['default_group_id'] ) && ( $group_home = $this->getGroupHome( $this->mInfo['default_group_id'] ) ) ) ||
+					( $gBitSystem->getConfig( 'default_home_group' ) && ( $group_home = $this->getGroupHome( $gBitSystem->getConfig( 'default_home_group' ) ) ) )) ){
+					$indexType = 'group_home';
+				}
+
+				$url = isset($_SESSION['loginfrom']) ? $_SESSION['loginfrom'] : $gBitSystem->getIndexPage( $indexType );
 				unset( $_SESSION['loginfrom'] );
 
 				$sessionId = session_id();
