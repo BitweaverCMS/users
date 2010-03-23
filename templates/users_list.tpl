@@ -59,7 +59,7 @@
 				{/if}
 
 				{if $gBitUser->hasPermission( 'p_users_admin' )}
-					<strong>{tr}Email:{/tr}</strong> {mailto address=$users[user].email encode="javascript"}<br/> 
+					<strong>{tr}Email:{/tr}</strong> {if !empty($users[user].email)}{mailto address=$users[user].email encode="javascript"}{/if}<br/> 
 					<strong>{tr}User ID{/tr}:</strong> {$users[user].user_id}<br/>
 				{/if}
 
