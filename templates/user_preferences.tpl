@@ -264,7 +264,7 @@
 					<div class="row">
 						{formlabel label="Pictures"}
 						{forminput}
-							<a href="{$smarty.const.USERS_PKG_URL}my_images.php">{tr}Upload new pictures{/tr}</a>
+							<a href="{$smarty.const.USERS_PKG_URL}my_images.php{if $editUser->mUserId ne $gBitUser->mUserId}?user_id={$editUser->mUserId}{/if}">{tr}Change pictures{/tr}</a>
 							{formhelp note=""}
 						{/forminput}
 					</div>

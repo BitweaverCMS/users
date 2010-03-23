@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/my_images.php,v 1.16 2010/02/08 21:27:26 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/my_images.php,v 1.17 2010/03/23 16:04:00 dansut Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: my_images.php,v 1.16 2010/02/08 21:27:26 wjames5 Exp $
+ * $Id: my_images.php,v 1.17 2010/03/23 16:04:00 dansut Exp $
  * @package users
  * @subpackage functions
  */
@@ -27,7 +27,7 @@ if( !$gBitUser->isRegistered() ) {
 
 include_once( USERS_PKG_PATH.'lookup_user_inc.php' );
 
-if( $gQueryUser->mUserId != $gBitUser->mUserId ) {
+if( $gQueryUser->mUserId != $gBitUser->mUserId && !$gBitUser->hasPermission( 'p_users_admin' ) ) {
 	$gBitSystem->fatalError( tra( "You do not have permission to edit this user's images" ));
 }
 

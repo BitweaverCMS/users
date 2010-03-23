@@ -10,12 +10,15 @@
 
 	<div class="body">
 		{form enctype="multipart/form-data" legend="Upload personal Portrait, Avatar and Logo"}
+			{if $gQueryUser->mUserId ne $gBitUser->mUserId}
+				<input type="hidden" name="user_id" value="{$gQueryUser->mUserId}" />
+			{/if}
 			{if $fHomepage}
 				<input type="hidden" name="fHomepage" value="{$fHomepage}"/>
 			{/if}
 			<div class="row">
 				{formlabel label="Self Portrait" for="user_portrait_file"}
-				{if $gBitUser->mInfo.portrait_attachment_id}
+				{if $gQueryUser->mInfo.portrait_attachment_id}
 					{forminput}
 						<img src="{$gQueryUser->mInfo.portrait_url}?{php}print time();{/php}" alt="{tr}self portrait{/tr}" /><br />
 						<input type="submit" value="{tr}delete self portrait{/tr}" name="delete_portrait" id="delete_portrait"/>
@@ -53,7 +56,7 @@
 
 			<div class="row">
 				{formlabel label="Logo" for="user_logo_file"}
-				{if $gBitUser->mInfo.logo_attachment_id}
+				{if $gQueryUser->mInfo.logo_attachment_id}
 					{forminput}
 						<img src="{$gQueryUser->mInfo.logo_url}?{php}print time();{/php}" alt="{tr}logo{/tr}" /><br />
 						<input type="submit" value="{tr}delete logo{/tr}" id="delete_logo" name="delete_logo" />
