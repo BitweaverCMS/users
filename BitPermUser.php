@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.87 2010/04/12 15:28:06 dansut Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.88 2010/04/12 15:59:28 dansut Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitPermUser.php,v 1.87 2010/04/12 15:28:06 dansut Exp $
+ * $Id: BitPermUser.php,v 1.88 2010/04/12 15:59:28 dansut Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.87 $
+ * @version  $Revision: 1.88 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -248,7 +248,7 @@ class BitPermUser extends BitUser {
 		$ret = FALSE;
 		if( $this->isAdmin() ) {
 			$ret = TRUE;
-		} /* ??? */ if( $this->isValid() ) { // Should this be an elseif ?
+		} if( $this->isValid() ) {
 			if( empty( $this->mGroups ) ) {
 				$this->loadGroups();
 			}
@@ -697,7 +697,7 @@ class BitPermUser extends BitUser {
 	 */
 	function isAdmin() {
 		// we can't use hasPermission here since it turn into an endless loop
-		return( ( $this->mUserId == 1 ) || !empty( $this->mPerms['p_admin'] ));
+		return( !empty( $this->mPerms['p_admin'] ));
 	}
 
 	/**
