@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.35 2010/02/16 19:41:27 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/admin_login_inc.php,v 1.36 2010/04/16 19:40:38 spiderr Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
@@ -30,7 +30,7 @@ $loginSettings = array(
 	'users_login_homepage' => array(
 		'label' => "After login url",
 		'type' => "text",
-		'note' => "Set a custom url where users will be directed after logging in. Default is /users/my.php",
+		'note' => "Set a custom url where users will be directed after logging in. It should not include a leading slash or subdirectory. Default is users/my.php",
 	),
 	'users_eponymous_groups' => array(
 		'label' => "Create a group for each user",
