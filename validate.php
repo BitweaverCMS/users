@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.26 2010/02/08 21:27:26 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/validate.php,v 1.27 2010/04/16 19:40:50 spiderr Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: validate.php,v 1.26 2010/02/08 21:27:26 wjames5 Exp $
+ * $Id: validate.php,v 1.27 2010/04/16 19:40:50 spiderr Exp $
  * @package users
  * @subpackage functions
  */
@@ -44,11 +44,13 @@ $https_mode = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off';
 if ($gBitSystem->isFeatureActive( 'site_https_login_required' ) && !$https_mode) {
 	$url = $gBitSystem->getConfig( 'site_https_domain' );
 	$site_https_port = $gBitSystem->getConfig('site_https_port', $site_https_port);
-	if ($site_https_port != 443)
+	if ($site_https_port != 443) {
 		$url .= ':' . $site_https_port;
+	}
 	$url .= $gBitSystem->getConfig( 'site_https_prefix' ) . $gBitSystem->getDefaultPage();
-	if (SID)
+	if ( defined( 'SID' ) ) {
 		$url .= '?' . SID;
+	}
 	$url = preg_replace('/\/+/', '/', $url);
 	header("Location: https://$url");
 	exit;
@@ -72,4 +74,3 @@ if(( strpos( $url, 'login.php?' ) || strpos( $url, 'remind_password.php' )) && s
 
 bit_redirect( $url );
 exit;
-?>
