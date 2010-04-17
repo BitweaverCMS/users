@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.php,v 1.5 2008/07/29 18:10:24 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.php,v 1.6 2010/04/17 04:56:46 wjames5 Exp $
 /**
  * Params:
  * - content_type_guid : if set, show only those content_type_guid's
@@ -19,7 +19,7 @@ if( !empty( $gQueryUser->mUserId ) ) {
 
 if( empty( $module_title ) ) {
 	if( !empty( $module_params['content_type_guid'] ) && !empty( $gLibertySystem->mContentTypes[$module_params['content_type_guid']] ) ) {
-		$title = tra( "Last Changes" ).': '.tra( $gLibertySystem->mContentTypes[$module_params['content_type_guid']]['content_description'] );
+		$title = tra( "Last Changes" ).': '.$gLibertySystem->getContentTypeName( $module_params['content_type_guid'] );
 		$gBitSmarty->assign( 'contentType', $module_params['content_type_guid'] );
 	} else {
 		$gBitSmarty->assign( 'userContentType', FALSE );
