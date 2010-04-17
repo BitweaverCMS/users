@@ -210,9 +210,8 @@ $gBitInstaller->registerUserPermissions( USERS_PKG_NAME, array(
 
 // Package Requirements
 $gBitInstaller->registerRequirements( USERS_PKG_NAME, array(
-	'liberty'   => array( 'min' => '2.1.0' ),
+	'liberty'   => array( 'min' => '2.1.4' ),
 	'kernel'    => array( 'min' => '2.0.0' ),
 	'themes'    => array( 'min' => '2.0.0' ),
 	'languages' => array( 'min' => '2.0.0' ),
 ));
-?>
