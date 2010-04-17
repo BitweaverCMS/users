@@ -87,7 +87,7 @@
 			<h2>{tr}Content with individual Permissions{/tr}</h2>
 			<ul>
 				{foreach from=$contentWithPermissions item=content key=content_type_guid}
-					<li><em>{$gLibertySystem->getContentTypeDescription($content_type_guid)}</em>
+					<li><em>{$gLibertySystem->getContentTypeName($content_type_guid)}</em>
 						<ul>
 							{foreach from=$content item=perms key=content_id}
 								<li><a href="{$smarty.const.LIBERTY_PKG_URL}content_permissions.php?content_id={$content_id}">{$perms.0.title}</a>
