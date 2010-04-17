@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.88 2010/04/12 15:59:28 dansut Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.89 2010/04/17 15:36:08 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitPermUser.php,v 1.88 2010/04/12 15:59:28 dansut Exp $
+ * $Id: BitPermUser.php,v 1.89 2010/04/17 15:36:08 wjames5 Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.88 $
+ * @version  $Revision: 1.89 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -1002,7 +1002,7 @@ class BitPermUser extends BitUser {
 			// TODO: if this method is used somewhere, please fix this to use mViewContentPerm
 			$perm = $contentType["content_type_guid"].'_p_view';
 			if (!empty( $perm ) and $gBitUser->hasPermission( $perm )) {
-				$contentTypes[$contentType["content_type_guid"]] = $contentType["content_description"];
+				$contentTypes[$contentType["content_type_guid"]] = $gLibertySystem->getContentTypeName( $contentType["content_type_guid"] );
 			}
 		}
 	}
