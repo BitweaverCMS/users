@@ -1,12 +1,12 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.tpl,v 1.4 2005/10/12 15:14:09 spiderr Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.tpl,v 1.5 2010/04/17 19:45:49 wjames5 Exp $ *}
 {strip}
 {if $modLastPages}
 	{bitmodule title="$moduleTitle" name="last_changes"}
 		<ol>
 			{section name=ix loop=$modLastPages}
 				<li>
-					{if !$userContentType}
-						<strong>{tr}{$modLastPages[ix].content_description}{/tr}: </strong>
+					{if !$contentType}
+						<strong>{tr}{$gLibertySystem->getContentTypeName($modLastPages[ix].content_type_guid)}{/tr}: </strong>
 					{/if}
 					{$modLastPages[ix].display_link}
 					{if $userShowDate}

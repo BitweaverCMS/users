@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.36 2010/02/08 21:27:26 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.37 2010/04/17 19:45:49 wjames5 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
@@ -124,7 +124,7 @@ if( isset( $_REQUEST["action"] ) ) {
 					case 'delete':
 						$formHash['input'][] = "<input type='checkbox' name='delete_user_content' value='all' checked='checked'/>".tra( 'Delete all content created by this user' );
 						foreach( $gLibertySystem->mContentTypes as $contentTypeGuid => $contentTypeHash ) {
-//							$formHash['input'][] = "<input type='checkbox' name='delete_user_content' checked='checked' value='$contentTypeGuid'/>Delete All User's $contentTypeHash[content_description]";
+//							$formHash['input'][] = "<input type='checkbox' name='delete_user_content' checked='checked' value='$contentTypeGuid'/>Delete All User's $gLibertySystem->getContentTypeName($contentTypeHash['content_type_guid'],TRUE)";
 						}
 
 						$gBitSystem->setBrowserTitle( tra( 'Delete user' ) );
