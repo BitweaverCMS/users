@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/edit_personal_page.tpl,v 1.5 2009/01/20 22:18:07 dansut Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_users/templates/edit_personal_page.tpl,v 1.6 2010/04/17 04:28:31 wjames5 Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -6,7 +6,7 @@
 	<div class="header">
 		<h1>
 			{* this weird dual assign thing is cause smarty wont interpret backticks to object in assign tag - spiderr *}
-			{assign var=conDescr value=$gContent->mType.content_description}
+			{assign var=conDescr value=$gContent->getContentTypeName()}
 			{if $pageInfo.page_id}
 				{assign var=editLabel value="{tr}Edit{/tr} $conDescr"}
 				{tr}{tr}Edit{/tr} {$pageInfo.original_title}{/tr}
