@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.269 2010/04/17 22:46:11 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.270 2010/04/19 18:33:18 dansut Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.269 2010/04/17 22:46:11 wjames5 Exp $
+ * $Id: BitUser.php,v 1.270 2010/04/19 18:33:18 dansut Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.269 $
+ * @version  $Revision: 1.270 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -67,7 +67,7 @@ class BitUser extends LibertyMime {
 		$this->registerContentType(
 			BITUSER_CONTENT_TYPE_GUID, array(
 				'content_type_guid'   => BITUSER_CONTENT_TYPE_GUID,
-				'content_name'		  => 'User Inforamtion',
+				'content_name'        => 'User Information',
 				'content_name_plural' => 'User Information',
 				'handler_class'       => 'BitUser',
 				'handler_package'     => 'users',
