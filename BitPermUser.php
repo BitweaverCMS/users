@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.89 2010/04/17 15:36:08 wjames5 Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitPermUser.php,v 1.90 2010/04/24 19:03:37 wjames5 Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -11,7 +11,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitPermUser.php,v 1.89 2010/04/17 15:36:08 wjames5 Exp $
+ * $Id: BitPermUser.php,v 1.90 2010/04/24 19:03:37 wjames5 Exp $
  * @package users
  */
 
@@ -24,7 +24,7 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.89 $
+ * @version  $Revision: 1.90 $
  * @package  users
  * @subpackage  BitPermUser
  */
@@ -715,6 +715,22 @@ class BitPermUser extends BitUser {
 			$ret = isset( $this->mPerms[$pPerm] );
 		}
 		return ( $ret );
+	}
+
+	/**
+	 * verifyPermission check if a user has a given permission and if not 
+	 * it will display the error template and die()
+	 * @param $pPermission value of a given permission
+	 * @return none
+	 * @access public
+	 */
+	function verifyPermission( $pPermission, $pMsg = NULL ) {
+		global $gBitSmarty, $gBitSystem, ${$pPermission};
+		if( empty( $pPermission ) || $this->hasPermission( $pPermission ) ) {
+			return TRUE;
+		} else {
+			$gBitSystem->fatalPermission( $pPermission, $pMsg );
+		}
 	}
 
 	/**
