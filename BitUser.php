@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.270 2010/04/19 18:33:18 dansut Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/BitUser.php,v 1.271 2010/04/29 10:57:11 lsces Exp $
  *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
@@ -12,7 +12,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: BitUser.php,v 1.270 2010/04/19 18:33:18 dansut Exp $
+ * $Id: BitUser.php,v 1.271 2010/04/29 10:57:11 lsces Exp $
  * @package users
  */
 
@@ -42,7 +42,7 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision: 1.270 $
+ * @version  $Revision: 1.271 $
  * @package  users
  * @subpackage  BitUser
  */
@@ -1009,7 +1009,6 @@ class BitUser extends LibertyMime {
 		$update['current_view'] = $_SERVER['PHP_SELF'];
 
 		if( empty( $gLightWeightScan ) ) {
-			$this->mDb->StartTrans();
 			$row = $this->mDb->getRow( "SELECT `last_get`, `connect_time`, `get_count`, `user_agent`, `current_view` FROM `".BIT_DB_PREFIX."users_cnxn` WHERE `cookie`=? ", array( $pSessionId ) );
 			if( $gBitUser->isRegistered() ) {
 				$update['user_id'] = $gBitUser->mUserId;
@@ -1022,7 +1021,6 @@ class BitUser extends LibertyMime {
 					$update['user_agent'] = (string)substr( $_SERVER['HTTP_USER_AGENT'], 0, 128 );
 				}
 				$update['get_count'] = $row['get_count'] + 1;
-error_log( print_r( $update, TRUE ) );
 				$ret = $this->mDb->associateUpdate( BIT_DB_PREFIX.'users_cnxn', $update, array( 'cookie' => $pSessionId ) );
 			} else {
 				if( $this->isRegistered() ) {
@@ -1044,7 +1042,6 @@ error_log( print_r( $update, TRUE ) );
 				$query = "DELETE from `".BIT_DB_PREFIX."users_cnxn` where `connect_time` < ?";
 				$result = $this->mDb->query($query, array($oldy));
 			}
-			$this->mDb->CompleteTrans();
 		}
 		return true;
 	}
@@ -1217,6 +1214,7 @@ error_log( print_r( $update, TRUE ) );
 
 		$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
 
+		$this->mDb->StartTrans();
 		// Verify user is valid
 		if( $this->validate( $pLogin, $pPassword, $pChallenge, $pResponse )) {
 			$userInfo = $this->getUserInfo( array( $loginCol => $pLogin ));
@@ -1269,6 +1267,7 @@ error_log( print_r( $update, TRUE ) );
 				$url = USERS_PKG_URL.'login.php?error=' . urlencode( $this->mErrors['login'] );
 			}
 		}
+		$this->mDb->CompleteTrans();
 
 		// check for HTTPS mode and redirect back to non-ssl when not requested, or a  SSL login was forced
 		if( isset( $_SERVER['HTTPS'] ) && strtolower( $_SERVER['HTTPS'] ) == 'on' ) {
