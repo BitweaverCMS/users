@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.37 2010/04/17 19:45:49 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_users/admin/index.php,v 1.38 2010/04/30 18:14:50 wjames5 Exp $
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
@@ -103,7 +103,7 @@ if( isset( $_REQUEST["action"] ) ) {
 				switch(  $_REQUEST["action"] ){
 					case 'delete':
 						$reqUser->mDb->StartTrans();
-						if( $reqUser->load() && $reqUser->expunge( !empty( $_REQUEST['delete_user_content'] ) ? $_REQUEST['delete_user_content'] : NULL ) ) {
+						if( $reqUser->load(TRUE) && $reqUser->expunge( !empty( $_REQUEST['delete_user_content'] ) ? $_REQUEST['delete_user_content'] : NULL ) ) {
 							$feedback['success'][] = tra( 'User deleted' )." <strong>{$userInfo['real_name']} ({$userInfo['login']})</strong>";
 						}
 						$reqUser->mDb->CompleteTrans();
