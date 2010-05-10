@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/confirm.php,v 1.11 2010/03/16 22:11:15 spiderr Exp $
+ * $Header: /cvsroot/bitweaver/_bit_users/confirm.php,v 1.12 2010/05/10 21:08:24 ukgrad89 Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: confirm.php,v 1.11 2010/03/16 22:11:15 spiderr Exp $
+ * $Id: confirm.php,v 1.12 2010/05/10 21:08:24 ukgrad89 Exp $
  * @package users
  * @subpackage functions
  */
@@ -24,7 +24,7 @@ if( !empty( $_REQUEST["v"] ) && strpos( $_REQUEST["v"], ':' ) ) {
 
 if( !empty( $userId ) && !empty( $provPass ) && $userInfo = $gBitUser->confirmRegistration( $userId, $provPass ) ) {
 	$gBitSmarty->assign_by_ref( 'userInfo', $userInfo );
-	$gBitSystem->display( 'bitpackage:users/change_password.tpl', 'Confrim Password Change' , array( 'display_mode' => 'display' ));
+	$gBitSystem->display( 'bitpackage:users/change_password.tpl', 'Confirm Password Change' , array( 'display_mode' => 'display' ));
 } else {
 	$gBitSystem->setHttpStatus( 410 );
 	$gBitSystem->fatalError( tra("This confirmation link is no longer valid.  Please Login or <a href=\"".USERS_PKG_URL."remind_password.php\">request a new password change</a>") );
