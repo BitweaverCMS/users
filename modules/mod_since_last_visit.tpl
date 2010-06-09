@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_since_last_visit.tpl,v 1.2 2005/08/24 20:59:13 squareing Exp $ *}
+{* $Header$ *}
 {if $gBitUser->isRegistered()}
 	{bitmodule title="$moduleTitle" name="since_last_visit"}
 		{tr}Since your last visit on{/tr}<br />

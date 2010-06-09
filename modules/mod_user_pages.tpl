@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.tpl,v 1.5 2010/04/17 19:45:49 wjames5 Exp $ *}
+{* $Header$ *}
 {strip}
 {if $modLastPages}
 	{bitmodule title="$moduleTitle" name="last_changes"}

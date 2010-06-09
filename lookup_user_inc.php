@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/lookup_user_inc.php,v 1.15 2009/08/07 20:23:44 spiderr Exp $
+ * $Header$
  *
  * @package users
  * @subpackage functions

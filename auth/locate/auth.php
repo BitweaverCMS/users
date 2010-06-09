@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/locate/auth.php,v 1.1 2008/11/28 08:03:20 lsces Exp $
+ * $Header$
  *
  * @package users
  */

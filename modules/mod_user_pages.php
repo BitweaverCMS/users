@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_users/modules/mod_user_pages.php,v 1.7 2010/04/17 19:45:49 wjames5 Exp $
+// $Header$
 /**
  * Params:
  * - content_type_guid : if set, show only those content_type_guid's

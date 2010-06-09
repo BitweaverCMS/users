@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_online_users.tpl,v 1.5 2007/01/07 22:22:18 squareing Exp $ *}
+{* $Header$ *}
 {strip}
 {bitmodule title="$moduleTitle" name="online_users"}
 	{tr}We have {$logged_users} online user(s){/tr}

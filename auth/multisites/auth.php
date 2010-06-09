@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/multisites/auth.php,v 1.4 2008/10/16 10:02:56 squareing Exp $
+ * $Header$
  *
  * @package users
  */

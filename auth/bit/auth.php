@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/auth/bit/auth.php,v 1.7 2008/10/16 09:57:58 squareing Exp $
+ * $Header$
  *
  * @package users
  */

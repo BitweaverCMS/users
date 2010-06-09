@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/modules/mod_who_is_there.tpl,v 1.9 2007/10/26 13:26:51 nickpalmer Exp $ *}
+{* $Header$ *}
 {bitmodule title="$moduleTitle" name="who_is_there"}
 	<div>
 		{if $logged_users eq 0}

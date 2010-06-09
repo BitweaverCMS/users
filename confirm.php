@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_users/confirm.php,v 1.12 2010/05/10 21:08:24 ukgrad89 Exp $
+ * $Header$
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id: confirm.php,v 1.12 2010/05/10 21:08:24 ukgrad89 Exp $
+ * $Id$
  * @package users
  * @subpackage functions
  */

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/my_group_edit.tpl,v 1.8 2008/10/18 09:23:54 squareing Exp $ *}
+{* $Header$ *}
 {strip}
 <div class="floaticon">
 	<a href="{$smarty.const.USERS_PKG_URL}my_groups.php">{tr}&laquo; Group List{/tr}</a> 

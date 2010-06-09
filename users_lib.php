@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_users/users_lib.php,v 1.5 2009/10/02 19:44:51 wjames5 Exp $
+ * @version $Header$
  * @package users
  * @subpackage functions
  */

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/login.tpl,v 1.6 2006/04/19 17:11:19 spiderr Exp $ *}
+{* $Header$ *}
 
 {strip}
 <div class="display login">

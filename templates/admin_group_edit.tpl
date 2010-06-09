@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_users/templates/admin_group_edit.tpl,v 1.23 2009/06/30 19:05:33 spiderr Exp $ *}
+{* $Header$ *}
 {strip}
 
 <div class="floaticon">
