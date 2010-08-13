@@ -33,6 +33,12 @@
 		{if $gBitUser->hasPermission( 'p_liberty_attach_attachments' )}
 			<li><a class="item" href="{$smarty.const.LIBERTY_PKG_URL}attachments.php">{biticon iname="mail-attachment" iexplain="My Files" ilocation=$location}</a></li>
 		{/if}
+		{if $gBitUser->hasPermission('p_liberty_list_content')}
+			<li><a class="item" href="{$smarty.const.LIBERTY_PKG_URL}list_content.php">{biticon iname=format-justify-fill iexplain="List Site Content"}</a></li>
+		{/if}
+		{if $gBitUser->hasPermission('p_users_view_user_list')}
+			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}index.php">{biticon ipackage="icons" iname="system-users" iexplain="List Site Users"}</a></li>
+		{/if}
 		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}logout.php">{biticon iname=system-log-out iexplain="Log out" ilocation=$location}</a></li>
 	{else}
 		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}login.php">{biticon iname=go-next iexplain="Login" ilocation=$location}</a></li>
