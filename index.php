@@ -17,7 +17,6 @@ if( !defined( 'ACTIVE_PACKAGE' )) {
 }
 
 require_once( '../kernel/setup_inc.php' );
-require_once( LIBERTY_PKG_PATH."LibertyStructure.php" );
 
 // custom userfields
 if( $gBitSystem->getConfig( 'custom_user_fields' )) {
