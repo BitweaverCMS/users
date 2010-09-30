@@ -1,4 +1,3 @@
-{* $Header$ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -15,7 +14,7 @@
 
 			{jstab title="Add User"}
 				{formfeedback success=$addSuccess}
-				{form legend="Add a new user"}
+				{form legend="Add a new user" secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 					<input type="hidden" name="tab" value="useradd" />
 					<div class="row">
 						{formlabel label="Real Name" for="real_name"}

@@ -8,7 +8,7 @@
 And you can login at:{/tr} {$smarty.const.USERS_PKG_URI}login.php
 {else}
 {tr}You may use the following URL to reset your password for this account:{/tr}
-{$smarty.const.USERS_PKG_URI}confirm.php?v={$mailUserId}:{$mailProvPass}
+{$linkUri}confirm.php?v={$mailUserId}:{$mailProvPass}
 
 {tr}This link will remain active only for the next 3 days or until one of the following occurs:
 * The first sucessful use of this link.

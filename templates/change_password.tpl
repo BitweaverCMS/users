@@ -6,7 +6,7 @@
 	</div>
 
 	<div class="body">
-		{form ipackage=users ifile="change_password.php"}
+		{form ipackage=users ifile="change_password.php" secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 			<input type="hidden" name="user_id" value="{$userInfo.user_id}" />
 			{if $userInfo.provpass}
 				<input type="hidden" name="provpass" value="{$userInfo.provpass|escape}" />

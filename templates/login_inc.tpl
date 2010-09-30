@@ -1,6 +1,5 @@
 {strip}
-{assign var=force_secure value=$gBitSystem->isFeatureActive("site_https_login_required")}
-{form name="login" legend="Sign in with your username or email to continue" ipackage=users ifile='validate.php' secure=$force_secure}
+{form name="login" legend="Please sign in to continue" ipackage=users ifile='validate.php' secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 	<div class="row">
 		{formfeedback error="$error"}
 		{formlabel label="Username or Email" for="user"}
@@ -32,7 +31,7 @@
 		<div class="row">
 			{formlabel label="" for=""}
 			{forminput}
-				<a href="{$gBitSystem->getConfig('http_login_url')}" title="{tr}Click here to login using the default security protocol{/tr}">{tr}Standard{/tr}</a> | <a href="{$gBitSystem->getConfig('https_login_url')}" title="{tr}Click here to login using a secure protocol{/tr}">{tr}Secure{/tr}</a>
+				<a href="{$gBitSystem->getConfig('http_login_url')}" title="{tr}Login using the default security protocol{/tr}">{tr}Standard{/tr}</a> | <a href="{$gBitSystem->getConfig('https_login_url')}" title="{tr}Login using a secure protocol{/tr}">{tr}Secure{/tr}</a>
 				{formhelp note=""}
 			{/forminput}
 		</div>

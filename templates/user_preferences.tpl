@@ -163,7 +163,7 @@
 				{/form}
 
 				<div>
-				{form legend="Change your email address"}
+				{form legend="Change your email address" secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 					<input type="hidden" name="view_user" value="{$editUser->mUserId}" />
 					<div class="row">
 						{formlabel label="Email" for="email"}
@@ -188,7 +188,7 @@
 				</div>
 
 				<div>
-				{form legend="Change your password"}
+				{form legend="Change your password" secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 					<input type="hidden" name="view_user" value="{$editUser->mUserId}" />
 					{* Users with admin priv can change password without knowing the old one *}
 					{if !$view_user or ( !$gBitUser->hasPermission('p_users_admin') and $view_user )}
