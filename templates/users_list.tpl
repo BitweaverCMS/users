@@ -61,6 +61,9 @@
 				{if $gBitUser->hasPermission( 'p_users_admin' )}
 					<strong>{tr}Email:{/tr}</strong> {if !empty($users[user].email)}{mailto address=$users[user].email encode="javascript"}{/if}<br/> 
 					<strong>{tr}User ID{/tr}:</strong> {$users[user].user_id}<br/>
+					{if $users[user].referer_url}
+						<a href="{$users[user].referer_url}">{$users[user].referer_url|truncate:100}</a><br/>
+					{/if}
 				{/if}
 
 				<strong>{tr}Member since{/tr}:</strong> {$users[user].registration_date|bit_short_date}<br/>

@@ -12,7 +12,6 @@
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
  *
- * $Id$
  * @package users
  */
 
@@ -42,7 +41,6 @@ define( "ACCOUNT_DISABLED", -6 );
  * Class that holds all information for a given user
  *
  * @author   spider <spider@steelsun.com>
- * @version  $Revision$
  * @package  users
  * @subpackage  BitUser
  */
@@ -2376,6 +2374,12 @@ class BitUser extends LibertyMime {
 			$bindVars[] = '%'.strtoupper( $pParamHash['find'] ).'%';
 			$bindVars[] = '%'.strtoupper( $pParamHash['find'] ).'%';
 			$bindVars[] = '%'.strtoupper( $pParamHash['find'] ).'%';
+		}
+
+		if( $gBitSystem->isPackageActive( 'stats' ) ) {
+			$joinSql .= " LEFT OUTER JOIN `".BIT_DB_PREFIX."stats_referer_users_map` srum ON (srum.`user_id`=uu.`user_id`) 
+						  LEFT OUTER JOIN `".BIT_DB_PREFIX."stats_referer_urls` sru ON (srum.`referer_url_id`=sru.`referer_url_id`)";
+			$selectSql .= ", sru.`referer_url`";
 		}
 
 		// Return an array of users indicating name, email, last changed pages, versions, last_login
