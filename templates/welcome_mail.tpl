@@ -5,6 +5,7 @@ Welcome to {$siteName}!
 To login, visit http://{$mail_site}{$smarty.const.USERS_PKG_URL}login.php
 
 Your login email is: {$mailEmail}
-Your password is: {$mailPassword}
+
+If you forget your password, visit {$smarty.const.USERS_PKG_URI}remind_password.php
 
 Enjoy the site!{/tr}

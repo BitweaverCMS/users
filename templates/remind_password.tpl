@@ -20,7 +20,7 @@
 					{formfeedback warning=$msg.error}
 					{formlabel label="Username or email" for="username"}
 					{forminput}
-						<input type="text" name="username" id="username" />
+						<input type="text" name="username" id="username" value="{$smarty.request.username}"/>
 					{/forminput}
 				</div>
 
