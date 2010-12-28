@@ -62,7 +62,7 @@
 					<strong>{tr}Email:{/tr}</strong> {if !empty($users[user].email)}{mailto address=$users[user].email encode="javascript"}{/if}<br/> 
 					<strong>{tr}User ID{/tr}:</strong> {$users[user].user_id}<br/>
 					{if $users[user].referer_url}
-						<a href="{$users[user].referer_url}">{$users[user].referer_url|truncate:100}</a><br/>
+						<a href="{$users[user].referer_url}">{$users[user].referer_url|stats_referer_display_short}</a><br/>
 					{/if}
 				{/if}
 
