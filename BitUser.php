@@ -1,7 +1,5 @@
 <?php
 /**
- * $Header$
- *
  * Lib for user administration, groups and permissions
  * This lib uses pear so the constructor requieres
  * a pear DB object
@@ -2283,7 +2281,7 @@ class BitUser extends LibertyMime {
 			}
 
 			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' )) {
-				$ret = '<a class="username" title="'.( !empty( $pHash['link_title'] ) ? $pHash['link_title'] : tra( 'Visit the userpage of' ).': '.htmlspecialchars( $displayName ))
+				$ret = '<a class="username" title="'.( !empty( $pHash['link_title'] ) ? $pHash['link_title'] : tra( 'Profile for' ).' '.htmlspecialchars( $displayName ))
 					.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'
 					. htmlspecialchars( isset( $pHash['link_label'] ) ? $pHash['link_label'] : $displayName )
 					.'</a>';
