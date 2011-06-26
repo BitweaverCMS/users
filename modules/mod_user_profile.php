@@ -33,7 +33,6 @@ if( !empty( $module_params['user_id'] )) {
 	$userInfo = &$gBitUser->mInfo;
 	$userPrefs = &$gBitUser->mPrefs;
 }
-$userInfo['portrait_url']  = liberty_fetch_thumbnail_url( array( 'storage_path' => $userInfo['portrait_storage_path'], 'size' => 'small', 'mime_image' => FALSE ));
 
 $gBitSmarty->assign_by_ref( 'userInfo', $userInfo );
 $gBitSmarty->assign_by_ref( 'userPrefs', $userPrefs );
