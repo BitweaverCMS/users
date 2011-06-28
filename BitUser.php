@@ -2384,7 +2384,7 @@ class BitUser extends LibertyMime {
 
 		// Return an array of users indicating name, email, last changed pages, versions, last_login
 		$query = "
-			SELECT uu.*, lc.`content_status_id`, lf_ava.`file_name` AS `avatar_file_name`, la_ava.`attachment_id` AS `avatar_attachment_id` $selectSql
+			SELECT uu.*, lc.`content_status_id`, lf_ava.`file_name` AS `avatar_file_name`, lf_ava.`mime_type` AS `avatar_mime_type`, la_ava.`attachment_id` AS `avatar_attachment_id` $selectSql
 			FROM `".BIT_DB_PREFIX."users_users` uu
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (uu.`content_id`=lc.`content_id`)
 				$joinSql
@@ -2414,7 +2414,7 @@ class BitUser extends LibertyMime {
 			if( !empty( $res['avatar_file_name'] )) {
 				$res['avatar_url'] = $this->getSourceUrl( array( 'attachment_id'=>$res['avatar_attachment_id'], 'file_name'=>$res['avatar_file_name'] ) );
 				$res['thumbnail_url'] = liberty_fetch_thumbnail_url( array(
-					'source_file' => $this->getSourceFile( array( 'attachment_id'=>$res['avatar_attachment_id'], 'file_name'=>$res['avatar_file_name'] ) ),
+					'source_file' => $this->getSourceFile( array( 'sub_dir'=>$res['avatar_attachment_id'], 'user_id' => $res['user_id'], 'file_name'=>$res['avatar_file_name'], 'package'=>liberty_mime_get_storage_sub_dir_name( array( 'type'=>$res['avatar_mime_type'], 'name'=>$res['avatar_file_name'] ) ) ) ),
 					'file_name' => $res['avatar_url'],
 					// TODO: Make this a preference
 					'size'         => 'avatar'
