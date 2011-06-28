@@ -1903,7 +1903,7 @@ class BitUser extends LibertyMime {
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `{$pType}_attachment_id` = ? WHERE `user_id`=?";
 					$result = $this->mDb->query( $query, array( $file['attachment_id'], $this->mUserId ) );
 					$this->mInfo["{$pType}_attachment_id"] = $file['attachment_id'];
-					$pStorageHash["{$pType}_file_name"] = $file['upload']['dest_path'];
+					$pStorageHash["{$pType}_file_name"] = $file['upload']['dest_branch'];
 				}
 			} else {
 				$this->mErrors["{$pType}_file"] = 'File '.$pStorageHash['upload_store']['files'][$pType]['name'].' could not be stored.';
