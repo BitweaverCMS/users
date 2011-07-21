@@ -2248,11 +2248,11 @@ class BitUser extends LibertyMime {
 	 * @param pHash todo - need explanation on how to use this...
 	 * @return display name or link to user information page
 	 **/
-	static function getDisplayName( $pUseLink = FALSE, $pHash=NULL ) {
+	function getDisplayName( $pUseLink = FALSE, $pHash=NULL ) {
 		global $gBitSystem, $gBitUser;
 		$ret = NULL;
 		if( empty( $pHash ) && !empty( $this ) && !empty( $this->mInfo )) {
-			$pHash = &$this->mInfo;
+			$pHash = $this->mInfo;
 		}
 
 		if( !empty( $pHash )) {
