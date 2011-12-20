@@ -123,8 +123,8 @@
 					{formlabel label="User information" for="users_information"}
 					{forminput}
 						<select name="users_information" id="users_information">
-							<option value="private">{tr}private{/tr}</option>
-							<option value="public" selected="selected">{tr}public{/tr}</option>
+							<option value="private" selected="selected">{tr}private{/tr}</option>
+							<option value="public">{tr}public{/tr}</option>
 						</select>
 						{formhelp note="Please select whether you would like to be a public or private user (you can change this later)"}
 					{/forminput}
