@@ -90,7 +90,7 @@
 						<td>{$group.group_name}</td>
 						<td>{$group.group_desc}</td>
 						<td class="actionicon">
-							<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">
+							<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;{tk}">
 								{biticon ipackage="icons" iname="emblem-shared" iexplain="assign" iforce="icon"}
 							</a>
 						</td>
