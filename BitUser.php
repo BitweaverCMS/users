@@ -2356,8 +2356,12 @@ class BitUser extends LibertyMime {
 
 		// limit search to users with a specific IP
 		if( !empty( $pParamHash['ip'] ) ) {
-			$joinSql .= " LEFT OUTER JOIN `".BIT_DB_PREFIX."users_cnxn` uc ON ( uu.`user_id`=uc.`user_id`)";
-			$whereSql = " AND uc.`ip`=? ";
+			$joinSql .= " LEFT OUTER JOIN `".BIT_DB_PREFIX."users_cnxn` uc ON ( uu.`user_id`=uc.`user_id`) ";
+			if( strpos( $pParamHash['ip'], '%' ) ) {
+				$whereSql = " AND uc.`ip` LIKE ? ";
+			} else {
+				$whereSql = " AND uc.`ip`=? ";
+			}
 			$bindVars[] = $pParamHash['ip'];
 		}
 
