@@ -26,7 +26,6 @@ if( !empty( $userId ) && !empty( $provPass ) && $userInfo = $gBitUser->confirmRe
 	$gBitSmarty->assign_by_ref( 'userInfo', $userInfo );
 	$gBitSystem->display( 'bitpackage:users/change_password.tpl', 'Confirm Password Change' , array( 'display_mode' => 'display' ));
 } else {
-	$gBitSystem->setHttpStatus( 410 );
-	$gBitSystem->fatalError( tra("This confirmation link is no longer valid.  Please Login or <a href=\"".USERS_PKG_URL."remind_password.php\">request a new password change</a>") );
+	$gBitSystem->fatalError( tra("This confirmation link is no longer valid.  Please Login or <a href=\"".USERS_PKG_URL."remind_password.php\">request a new password change</a>"), NULL, NULL, HttpStatusCodes::HTTP_GONE );
 }
 ?>
