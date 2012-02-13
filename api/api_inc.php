@@ -13,7 +13,7 @@ function bituser_api_handler( $pMethod, $pRequest, $pData ) {
 			if( $newUser->register( $pData ) ) {
 				$gApi->outputJson( 200, $newUser->mInfo );
 			} else {
-				$gApi->outputJson( HttpStatusCodes::HTTP_BAD_REQUEST, $newUser->mErrors );
+				$gApi->outputJson( HttpStatusCodes::HTTP_CONFLICT, $newUser->mErrors );
 			}
 			break;
 
