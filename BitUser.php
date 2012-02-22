@@ -1551,15 +1551,15 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return boolean if user is publically visible
 	 */
-	function isUserPublic( $pUserId=NULL ) {
+	function isUserPrivate( $pUserId=NULL ) {
 		$infoPref = NULL;
-		if( empty( $pUserId ) ) {
-			$infoPref = BitBase::getUserPreference( '', NULL, $pUserId );
+		if( BitBase::verifyId( $pUserId ) ) {
+			$infoPref = BitUser::getUserPreference( 'users_information', NULL, $pUserId );
 		} elseif( isset( $this ) && $this->isValid() ) {
 			$infoPref = $this->getPreference( 'users_information' );
 		}
 
-		return $infoPref == 'public';
+		return $infoPref == 'private';
 	}
 
 	/**
