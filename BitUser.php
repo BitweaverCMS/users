@@ -1545,6 +1545,24 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
+	 * isUserPublic Determine if an arbitrary user can be viewed by non-permissioned users.
+	 * 
+	 * @param array $pUserId user_id of user to query visibility, if NULL will use this object
+	 * @access public
+	 * @return boolean if user is publically visible
+	 */
+	function isUserPublic( $pUserId=NULL ) {
+		$infoPref = NULL;
+		if( empty( $pUserId ) ) {
+			$infoPref = BitBase::getUserPreference( '', NULL, $pUserId );
+		} elseif( $this && $this->isValid() ) {
+			$infoPref = $this->getPreference( 'users_information' );
+		}
+
+		return $infoPref == 'public';
+	}
+
+	/**
 	 * getByHash get user from cookie hash
 	 * 
 	 * @param array $pHash 
