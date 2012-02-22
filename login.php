@@ -34,6 +34,7 @@ if( $gBitUser->isRegistered() ) {
 
 if( !empty( $_REQUEST['error'] ) ) {
 	$gBitSmarty->assign( 'error', $_REQUEST['error'] );
+	$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_FORBIDDEN );
 }
 
 $gBitSystem->display( 'bitpackage:users/login.tpl', $gBitSystem->getConfig( 'site_title' ).' Login' , array( 'display_mode' => 'display' ));
