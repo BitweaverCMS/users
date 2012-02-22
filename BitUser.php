@@ -1554,7 +1554,7 @@ class BitUser extends LibertyMime {
 	function isUserPublic( $pUserId=NULL ) {
 		$infoPref = NULL;
 		if( empty( $pUserId ) ) {
-			$infoPref = BitBase::getUserPreference( '', NULL, $pUserId );
+			$infoPref = BitUser::getUserPreference( 'users_information', NULL, $pUserId );
 		} elseif( $this && $this->isValid() ) {
 			$infoPref = $this->getPreference( 'users_information' );
 		}
