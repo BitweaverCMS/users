@@ -1532,8 +1532,8 @@ class BitUser extends LibertyMime {
 					$val = strtoupper( $val );
 				} else {
 					$col = " uu.`".key( $pUserMixed )."` ";
-					if( $val > 0xFFFFFFFF ) {
-						// 32 bit overflow, set to zero to avoid fatal error in databases with 32 bit integer columns
+					if( $val > 0x1FFFFFFF ) {
+						// 32 bit overflow, set to zero to avoid fatal error in databases with 32 bit signed integer columns
 						$val = 0;
 					}
 				}
