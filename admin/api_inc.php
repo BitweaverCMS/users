@@ -4,13 +4,13 @@ global $gApi;
 
 $gApi->registerRoute( 'user', 'bituser_api_handler' );
 
-function bituser_api_handler( $pMethod, $pRequest, $pData ) {
+function bituser_api_handler( $pMethod, $pRequest ) {
 	global $gApi, $gBitSystem, $gBitSmarty, $gBitUser;
 
 	switch( $pMethod ) {
 		case 'PUT':
 			$newUser = new BitUser();
-			if( $newUser->register( $pData ) ) {
+			if( $newUser->register( $pRequest ) ) {
 				$gApi->outputJson( 200, $newUser->mInfo );
 			} else {
 				$gApi->outputJson( HttpStatusCodes::HTTP_CONFLICT, $newUser->mErrors );
