@@ -2,7 +2,7 @@
 
 global $gApi;
 
-$gApi->registerRoute( 'user', 'bituser_api_handler' );
+$gApi->registerRoute( USERS_PKG_DIR, 'bituser_api_handler' );
 
 function bituser_api_handler( $pMethod, $pRequest ) {
 	global $gApi, $gBitSystem, $gBitSmarty, $gBitUser;
