@@ -113,7 +113,7 @@ class LocateAuth extends BaseAuth {
 
 	function canManageAuth() {
 		global $gBitSystem;
-		if( $gBitSystem->isPackageActive( 'citizen' ) ) {
+		if( $gBitSystem->isPackageActive( 'contact' ) ) {
 			return TRUE;
 		} else {
 			return FALSE;
@@ -122,7 +122,7 @@ class LocateAuth extends BaseAuth {
 
 	function isSupported() {
 		global $gBitSystem;
-		if( $gBitSystem->isPackageActive( 'citizen' ) ) {
+		if( $gBitSystem->isPackageActive( 'contact' ) ) {
 			return TRUE;
 		} else {
 			return FALSE;
