@@ -36,7 +36,7 @@ $_REQUEST["user_id"] = $gQueryUser->mUserId;
 // Upload avatar is processed here
 if( !empty( $_REQUEST['store'] )) {
 	$gQueryUser->storeImages( $_REQUEST );
-	bit_redirect( $gQueryUser->getDisplayUrl( $gQueryUser->mInfo['login'] ));
+	bit_redirect( $gQueryUser->getContentUrl( $gQueryUser->mInfo['login'] ));
 } elseif( !empty( $_REQUEST['delete_portrait'] )) {
 	$gQueryUser->purgePortrait();
 	$gQueryUser->load();

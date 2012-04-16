@@ -43,7 +43,7 @@ if( !$gBitUser->hasPermission( 'p_users_view_user_list' ) ) {
 		$item = new FeedItem();
 
 		$item->title = tra( "New user registration" ).": ".$feed['login'];
-		$item->link = $gBitUser->getDisplayUrl( $feed['login'] );
+		$item->link = $gBitUser->getContentUrl( $feed['login'] );
 
 		$item->description = '';
 
@@ -53,7 +53,7 @@ if( !$gBitUser->hasPermission( 'p_users_view_user_list' ) ) {
 		if( !empty( $feed['real_name'] ) ) {
 			$item->description .= tra( "Real Name" ).": ".$feed['real_name'].'<br />';
 		}
-		$item->description .= tra( "Login" ).': <a href="'.$gBitUser->getDisplayUrl( $feed['login'] ).'">'.$feed['login'].'</a><br />';
+		$item->description .= tra( "Login" ).': <a href="'.$gBitUser->getContentUrl( $feed['login'] ).'">'.$feed['login'].'</a><br />';
 		if( $gBitUser->hasPermission( 'p_users_admin' ) ) {
 			$item->description .= tra( "Email Address" ).': <a href="mailto:'.$feed['email'].'">'.$feed['email'].'</a><br />';
 		}
