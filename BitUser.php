@@ -2213,10 +2213,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return URL to users homepage
 	 */
-	function getDisplayUrl( $pUserName=NULL, $pMixed=NULL ) {
-		if( ( $pUserName === NULL) && !empty( $this ) && !empty( $this->mUsername ) ) {
-			$pUserName = $this->mUsername;
-		}
+	public static function getDisplayUrl( $pUserName=NULL, $pMixed=NULL ) {
 		if( function_exists( 'override_user_url' ) ) {
 			$ret = override_user_url( $pUserName );
 		} else {
@@ -2236,6 +2233,13 @@ class BitUser extends LibertyMime {
 		return $ret;
 	}
 
+	function getContentUrl( $pUserName=NULL ) {
+		if( ( $pUserName === NULL) && !empty( $this ) && !empty( $this->mUsername ) ) {
+			$pUserName = $this->mUsername;
+		}
+		return self::getDisplayUrl( $pUserName );
+	}
+
 	/**
 	 * getDisplayLink 
 	 * 
@@ -2244,8 +2248,8 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return get a link to the the users homepage
 	 */
-	function getDisplayLink( $pUserName, $pDisplayHash ) {
-		return BitUser::getDisplayName( TRUE, $pDisplayHash );
+	function getDisplayLink( $pLinkText=NULL, $pMixed=NULL, $pAnchor=NULL ) {
+		return BitUser::getDisplayName( TRUE, $pMixed );
 	}
 
 	/**
@@ -2255,7 +2259,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return get the users display name
 	 */
-	function getTitle( $pHash = NULL ) {
+	function getTitle( $pHash = NULL, $pDefault=TRUE ) {
 		return BitUser::getDisplayName( FALSE, $pHash );
 	}
 
@@ -2266,11 +2270,11 @@ class BitUser extends LibertyMime {
 	 * @param pHash todo - need explanation on how to use this...
 	 * @return display name or link to user information page
 	 **/
-	function getDisplayName( $pUseLink = FALSE, $pHash=NULL ) {
+	public static function getDisplayName( $pUseLink = FALSE, $pHash=NULL ) {
 		global $gBitSystem, $gBitUser;
 		$ret = NULL;
 		if( empty( $pHash ) && !empty( $this ) && !empty( $this->mInfo )) {
-			$pHash = $this->mInfo;
+			$pHash = &$this->mInfo;
 		}
 
 		if( !empty( $pHash )) {
