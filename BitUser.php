@@ -1796,7 +1796,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
-	function getThumbnailUrl( $pSize = 'small', $pInfoHash = NULL ) {
+	function getThumbnailUrl( $pSize = 'small', $pInfoHash = NULL, $pSecondaryId = NULL, $pDefault=TRUE ) {
 		$ret = '';
 		if( $pInfoHash ) {
 			// do some stuff if we are passed a hash-o-crap, not implemented currently
@@ -2436,7 +2436,7 @@ class BitUser extends LibertyMime {
 					continue;
 				}
 			}
-			
+
 			if( !empty( $res['avatar_file_name'] )) {
 				$res['avatar_url'] = $this->getSourceUrl( array( 'attachment_id'=>$res['avatar_attachment_id'], 'file_name'=>$res['avatar_file_name'] ) );
 				$res['thumbnail_url'] = liberty_fetch_thumbnail_url( array(
