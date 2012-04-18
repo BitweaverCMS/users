@@ -88,7 +88,7 @@ if( isset( $_REQUEST["register"] ) ) {
 				if ( $newUser->verifyId( $groupInfo['after_registration_page'] ) ) {
 					$url = BIT_ROOT_URI."index.php?content_id=".$groupInfo['after_registration_page'];
 				} elseif( strpos( $groupInfo['after_registration_page'], '/' ) === FALSE ) {
-					$url = BitPage::getDisplayUrl( $groupInfo['after_registration_page'] );
+					$url = BitPage::getDisplayUrlFromHash( $groupInfo['after_registration_page'] );
 				} else {
 					$url = $groupInfo['after_registration_page'];
 				}
