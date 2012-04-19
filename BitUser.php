@@ -2213,7 +2213,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return URL to users homepage
 	 */
-	public static function getDisplayUrl( $pUserName=NULL, $pMixed=NULL ) {
+	public static function getDisplayUrlFromHash( $pUserName=NULL, $pMixed=NULL ) {
 		if( function_exists( 'override_user_url' ) ) {
 			$ret = override_user_url( $pUserName );
 		} else {
@@ -2237,7 +2237,7 @@ class BitUser extends LibertyMime {
 		if( ( $pUserName === NULL) && !empty( $this ) && !empty( $this->mUsername ) ) {
 			$pUserName = $this->mUsername;
 		}
-		return self::getDisplayUrl( $pUserName );
+		return self::getDisplayUrlFromHash( $pUserName );
 	}
 
 	/**
@@ -2306,7 +2306,7 @@ class BitUser extends LibertyMime {
 
 			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' )) {
 				$ret = '<a class="username" title="'.( !empty( $pHash['link_title'] ) ? $pHash['link_title'] : tra( 'Profile for' ).' '.htmlspecialchars( $displayName ))
-					.'" href="'.BitUser::getDisplayUrl( $iHomepage ).'">'
+					.'" href="'.BitUser::getDisplayUrlFromHash( $iHomepage ).'">'
 					. htmlspecialchars( isset( $pHash['link_label'] ) ? $pHash['link_label'] : $displayName )
 					.'</a>';
 			} else {

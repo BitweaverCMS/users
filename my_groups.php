@@ -158,7 +158,7 @@ if ( ( !empty( $_REQUEST['add_public_group'] ) || !empty( $_REQUEST['remove_publ
 		if ( $gBitUser->verifyId( $groupInfo['after_registration_page'] ) ) {
 			$url = BIT_ROOT_URL."index.php?content_id=".$groupInfo['after_registration_page'];
 		} elseif( strpos( $groupInfo['after_registration_page'], '/' ) === FALSE ) {
-			$url = BitPage::getDisplayUrl( $groupInfo['after_registration_page'] );
+			$url = BitPage::getDisplayUrlFromHash( $groupInfo['after_registration_page'] );
 		} else {
 			$url = $groupInfo['after_registration_page'];
 		}
