@@ -2213,9 +2213,9 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return URL to users homepage
 	 */
-	public static function getDisplayUrlFromHash( $pUserName=NULL, $pMixed=NULL ) {
+	public static function getDisplayUrlFromHash( &$pParamHash ) {
 		if( function_exists( 'override_user_url' ) ) {
-			$ret = override_user_url( $pUserName );
+			$ret = override_user_url( $pParamHash['title'] );
 		} else {
 			global $gBitSystem;
 
@@ -2224,10 +2224,10 @@ class BitUser extends LibertyMime {
 			if ($gBitSystem->isFeatureActive( 'pretty_urls' )
 			|| $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$ret =  USERS_PKG_URL . $rewrite_tag;
-				$ret .= urlencode( $pUserName );
+				$ret .= urlencode( $pParamHash['title'] );
 			} else {
 				$ret =  USERS_PKG_URL . 'index.php?home=';
-				$ret .= urlencode( $pUserName );
+				$ret .= urlencode( $pParamHash['title'] );
 			}
 		}
 		return $ret;
@@ -2298,6 +2298,7 @@ class BitUser extends LibertyMime {
 			}
 
 			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' )) {
+				$hash = array( 'title' => $iHomepage );
 				$ret = '<a class="username" title="'.( !empty( $pHash['link_title'] ) ? $pHash['link_title'] : tra( 'Profile for' ).' '.htmlspecialchars( $displayName ))
 					.'" href="'.BitUser::getDisplayUrlFromHash( $iHomepage ).'">'
 					. htmlspecialchars( isset( $pHash['link_label'] ) ? $pHash['link_label'] : $displayName )
