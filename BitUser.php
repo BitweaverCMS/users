@@ -2233,13 +2233,6 @@ class BitUser extends LibertyMime {
 		return $ret;
 	}
 
-	function getContentUrl( $pUserName=NULL ) {
-		if( ( $pUserName === NULL) && !empty( $this ) && !empty( $this->mUsername ) ) {
-			$pUserName = $this->mUsername;
-		}
-		return self::getDisplayUrlFromHash( $pUserName );
-	}
-
 	/**
 	 * getDisplayLink
 	 *
@@ -2403,7 +2396,7 @@ class BitUser extends LibertyMime {
 		}
 
 		if( $gBitSystem->isPackageActive( 'stats' ) ) {
-			$joinSql .= " LEFT OUTER JOIN `".BIT_DB_PREFIX."stats_referer_users_map` srum ON (srum.`user_id`=uu.`user_id`) 
+			$joinSql .= " LEFT OUTER JOIN `".BIT_DB_PREFIX."stats_referer_users_map` srum ON (srum.`user_id`=uu.`user_id`)
 						  LEFT OUTER JOIN `".BIT_DB_PREFIX."stats_referer_urls` sru ON (srum.`referer_url_id`=sru.`referer_url_id`)";
 			$selectSql .= ", sru.`referer_url`";
 		}
@@ -2416,7 +2409,7 @@ class BitUser extends LibertyMime {
 				$joinSql
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content_hits` lch ON ( lc.`content_id` = lch.`content_id` )
 				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_attachments` la_ava ON ( uu.`avatar_attachment_id`=la_ava.`attachment_id` )
-				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf_ava ON ( lf_ava.`file_id`=la_ava.`foreign_id` ) 
+				LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_files` lf_ava ON ( lf_ava.`file_id`=la_ava.`foreign_id` )
 			WHERE lc.`content_type_guid` = ? $whereSql ORDER BY ".$this->mDb->convertSortmode( $pParamHash['sort_mode'] );
 		$result = $this->mDb->query( $query, $bindVars, $pParamHash['max_records'], $pParamHash['offset'] );
 
@@ -2541,9 +2534,9 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * userExists 
-	 * 
-	 * @param array $pUserMixed 
+	 * userExists
+	 *
+	 * @param array $pUserMixed
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
