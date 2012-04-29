@@ -133,8 +133,8 @@ class BitUser extends LibertyMime {
 				}
 
 				// break the real name into first and last name using the last space as the beginning of the last name
-				// for people who really want to use first and last name fields 
-				if( preg_match( '/ /', $this->mInfo['real_name'] ) ) { 
+				// for people who really want to use first and last name fields
+				if( preg_match( '/ /', $this->mInfo['real_name'] ) ) {
 					$this->mInfo['first_name'] = substr( $this->mInfo['real_name'], 0, strrpos($this->mInfo['real_name'], ' ') );
 					$this->mInfo['last_name'] = substr( $this->mInfo['real_name'], strrpos($this->mInfo['real_name'], ' ')+1 );
 				}else{
@@ -189,7 +189,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * defaults set a default set of preferences in mPrefs for new users
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
@@ -206,7 +206,7 @@ class BitUser extends LibertyMime {
 		}
 /*
  * site_display_timezone is not used for 'Local' time display so daylight saving offset is not available
- * both of these should pick up the 'site default' values 
+ * both of these should pick up the 'site default' values
 		if( !$this->getPreference( 'site_display_timezone' ) ) {
 			$this->setPreference( 'site_display_timezone', 'UTC' );
 		}
@@ -221,7 +221,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * verify store hash
-	 * 
+	 *
 	 * @param array $pParamHash Data to be verified
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
@@ -248,7 +248,7 @@ class BitUser extends LibertyMime {
 				$pParamHash['user_store']['login'] = $pParamHash['login'];
 			}
 		}
-		// some people really like using first and last names 
+		// some people really like using first and last names
 		// push them into real_name
 		if( !empty( $pParamHash['first_name'] ) ) {
 			$pParamHash['real_name'] = $pParamHash['first_name'];
@@ -314,7 +314,7 @@ class BitUser extends LibertyMime {
 		if( isset( $pParamHash['password'] ) ) {
             if( isset( $pParamHash["password2"] ) && $pParamHash["password"] != $pParamHash["password2"] ) {
                 $passwordErrors['password2'] = tra("The passwords didn't match");
-            } 
+            }
 			if( ( !$this->isValid() || isset( $pParamHash['password'] ) ) && $error = $this->verifyPasswordFormat( $pParamHash['password'] ) ) {
 				$passwordErrors['password'] = $error;
 			}
@@ -326,7 +326,7 @@ class BitUser extends LibertyMime {
 				$pParamHash['user_store']['hash'] = md5( $pParamHash['password'] );
 				$now = $gBitSystem->getUTCTime();
 				// set password due date
-				// if no pass_due and no user_pass_due value user will never have to update the password 
+				// if no pass_due and no user_pass_due value user will never have to update the password
 				if( empty( $pParamHash['pass_due'] ) && $gBitSystem->getConfig('users_pass_due') ) {
 					// renew password according to config value
 					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $gBitSystem->getConfig('users_pass_due') );
@@ -353,7 +353,7 @@ class BitUser extends LibertyMime {
 	 *
 	 * A collection of values to verify before a user can register
 	 * Separated from BitUser::verify so that import verification can
-	 * be processed with less rigor than user submitted requests 
+	 * be processed with less rigor than user submitted requests
 	 */
 	function preRegisterVerify( &$pParamHash ){
 		global $gBitSystem;
@@ -377,10 +377,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * verifyPasswordFormat 
-	 * 
-	 * @param array $pPassword 
-	 * @param array $pPassword2 
+	 * verifyPasswordFormat
+	 *
+	 * @param array $pPassword
+	 * @param array $pPassword2
 	 * @access public
 	 * @return FALSE on success, Error string on failure
 	 */
@@ -402,9 +402,9 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * getSmtpResponse 
-	 * 
-	 * @param array $pConnect 
+	 * getSmtpResponse
+	 *
+	 * @param array $pConnect
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -421,9 +421,9 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * verifyEmail 
-	 * 
-	 * @param array $pEmail 
+	 * verifyEmail
+	 *
+	 * @param array $pEmail
 	 * @access public
 	 * @return TRUE on success, FALSE on failure, or -1 if verifyMX had a connection failure - mErrors will contain reason for failure
 	 */
@@ -447,7 +447,7 @@ class BitUser extends LibertyMime {
 			}
 		}
 
-		if( !isset( $ret ) ) { 
+		if( !isset( $ret ) ) {
 			$ret = ( count( $pErrors ) == 0 )  ;
 		}
 
@@ -455,10 +455,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * verifyMX 
-	 * 
-	 * @param array $pEmail 
-	 * @param array $pValidate 
+	 * verifyMX
+	 *
+	 * @param array $pEmail
+	 * @param array $pValidate
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -480,24 +480,24 @@ class BitUser extends LibertyMime {
 				getmxrr ( $domain, $MXHost, $MXWeights );
 				$hosts = array();
 
-				//create an array that combines the MXWeights with their associated hosts	
+				//create an array that combines the MXWeights with their associated hosts
 				for( $i = 0; $i < count( $MXHost ); $i++ ) {
 					$hosts[$MXHost[$i]] = $MXWeights[$i];
 				}
-				
+
 				//sorts the hosts by weight
 				asort($hosts);
 
 				if( !empty($hosts)) {	//hosts shouldn't be empty here, since we passed the checkdnsrr check, but the server COULD have died between the first and second check.
-					$Connect = '' ; 	
+					$Connect = '' ;
 					foreach ($hosts as $host=>$priority){
-						
+
 						$Connect = @fsockopen ( $host, 25, $errNo, $errStr, 10 ); // 10 second timeout to open each MX server, seems adequate to me, increase as necessary
-						// Success in fsockopen 
-					
+						// Success in fsockopen
+
 						if( $Connect ) {
 							bitdebug( "Connection succeeded to {$host} SMTP." );
-							
+
 
 							stream_set_timeout( $Connect, 30 );
 							$out = $this->getSmtpResponse( $Connect );
@@ -528,7 +528,7 @@ class BitUser extends LibertyMime {
 									fputs( $Connect, "QUIT\r\n" );
 									bitdebug( "Run : QUIT" );
 									fclose( $Connect );
-									
+
 									//Checks if we received a 250 OK from the server. If we did not, the server is telling us that this address is not a valid mailbox.
 									if( !preg_match ( "/^250/", $from ) || ( !preg_match ( "/^250/", $to ) && !preg_match( "/Please use your ISP relay/", $to ))) {
 										$pErrors['email']   = $pEmail." is not recognized by the mail server. Try double checking the address for typos." ;
@@ -552,18 +552,18 @@ class BitUser extends LibertyMime {
 						} else {
 							//fsockopen failed
 							if(!$gBitSystem->getConfig('users_validate_email_group')){ //will ONLY stuff mErrors if you have not set a default group for verifiable emails, otherwise this is not a game breaking case
-								$pErrors['email'] = "One or more mail servers not responding";	
+								$pErrors['email'] = "One or more mail servers not responding";
 							}
 							$ret = -1; //-1 implies ambiguity, MX servers found, but unable to be reached.
 						}
-					} 
+					}
 				}else{
 					$pErrors['email'] = "Mail server not found";
 					$ret = false;
-				}					
+				}
 			} else {
-				$pErrors['email'] = "Mail server not found"; 
-				$ret = false;	
+				$pErrors['email'] = "Mail server not found";
+				$ret = false;
 			}
 		} else {
 			$pErrors['email'] = "Invalid email syntax";
@@ -607,7 +607,7 @@ class BitUser extends LibertyMime {
 			$ret = TRUE;
 
 			$this->load( FALSE, $pParamHash['login'] );
-			
+
 			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
 			$notificationlib->post_new_user_event( $pParamHash['login'] );
 
@@ -667,9 +667,9 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * verifyCaptcha 
-	 * 
-	 * @param array $pCaptcha 
+	 * verifyCaptcha
+	 *
+	 * @param array $pCaptcha
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -688,9 +688,9 @@ class BitUser extends LibertyMime {
 
 
 	/**
-	 * store 
-	 * 
-	 * @param array $pParamHash 
+	 * store
+	 *
+	 * @param array $pParamHash
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -717,7 +717,7 @@ class BitUser extends LibertyMime {
 			// Don't let LA snarf these now so we can do extra things.
 			$pParamHash['_files_override'] = array();
 			if( LibertyMime::store( $pParamHash ) ) {
-				
+
 				if( empty( $this->mInfo['content_id'] ) || ($pParamHash['content_id'] != $this->mInfo['content_id']) ) {
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `content_id`=? WHERE `user_id`=?";
 					$result = $this->mDb->query( $query, array( $pParamHash['content_id'], $this->mUserId ) );
@@ -942,7 +942,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * expunge removes user and associated private data
-	 * 
+	 *
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -993,9 +993,9 @@ class BitUser extends LibertyMime {
 
 	// {{{ ==================== Sessions and logging in and out methods ====================
 	/**
-	 * updateSession 
-	 * 
-	 * @param array $pSessionId 
+	 * updateSession
+	 *
+	 * @param array $pSessionId
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -1045,9 +1045,9 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * countSessions 
-	 * 
-	 * @param array $pActive 
+	 * countSessions
+	 *
+	 * @param array $pActive
 	 * @access public
 	 * @return count of sessions
 	 */
@@ -1060,8 +1060,8 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * logout 
-	 * 
+	 * logout
+	 *
 	 * @access public
 	 * @return void
 	 */
@@ -1110,10 +1110,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * verifyTicket 
-	 * 
-	 * @param array $pFatalOnError 
-	 * @param array $pForceCheck 
+	 * verifyTicket
+	 *
+	 * @param array $pFatalOnError
+	 * @param array $pForceCheck
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -1134,7 +1134,7 @@ class BitUser extends LibertyMime {
 	// {{{ ==================== Banning ====================
 	/**
 	 * ban sets the user account status to -201 suspended
-	 * 
+	 *
 	 * @access public
 	 * @return TRUE on success, Display error message on failure
 	 */
@@ -1150,7 +1150,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * ban unban the user
-	 * 
+	 *
 	 * @access public
 	 * @return TRUE on success
 	 */
@@ -1163,7 +1163,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * genPass generate random password
-	 * 
+	 *
 	 * @param array $pLength Length of final password
 	 * @access public
 	 * @return password
@@ -1187,8 +1187,8 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * generateChallenge 
-	 * 
+	 * generateChallenge
+	 *
 	 * @access public
 	 * @return md5 string
 	 */
@@ -1197,12 +1197,12 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * login 
-	 * 
-	 * @param array $pLogin 
-	 * @param array $pPassword 
-	 * @param array $pChallenge 
-	 * @param array $pResponse 
+	 * login
+	 *
+	 * @param array $pLogin
+	 * @param array $pPassword
+	 * @param array $pChallenge
+	 * @param array $pResponse
 	 * @access public
 	 * @return URL the user should be sent to after login
 	 */
@@ -1235,7 +1235,7 @@ class BitUser extends LibertyMime {
 				// set post-login url
 				// if group home is set for this user we get that
 				// default to general post-login
-				// @see BitSystem::getIndexPage 
+				// @see BitSystem::getIndexPage
 				$indexType = 'my_page';
 				// getGroupHome is BitPermUser method
 				if( method_exists( $this, 'getGroupHome' ) && 
@@ -1254,7 +1254,7 @@ class BitUser extends LibertyMime {
 		} else {
 			// before we give up lets see if the user exists and if the password is expired
 			$query = "select `email`, `user_id`, `user_password` from `".BIT_DB_PREFIX."users_users` where " . $this->mDb->convertBinary(). " $loginCol = ?";
-			$result = $this->mDb->getRow( $query, array( $pLogin ) ); 
+			$result = $this->mDb->getRow( $query, array( $pLogin ) );
 			if( !empty( $result['user_id'] ) && $this->isPasswordDue( $result['user_id'] ) ) {
 				// user needs email password reset so send it and let them know
 				$url = USERS_PKG_URL.'remind_password.php?remind=y&required=y&username='.$pLogin;
@@ -1291,12 +1291,12 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * validate 
-	 * 
-	 * @param array $pUser 
-	 * @param array $pPass 
-	 * @param array $pChallenge 
-	 * @param array $pResponse 
+	 * validate
+	 *
+	 * @param array $pUser
+	 * @param array $pPass
+	 * @param array $pChallenge
+	 * @param array $pResponse
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 * @todo rewrite this mess. this is horrible stuff. - xing - Thursday Oct 16, 2008   09:47:20 CEST
@@ -1405,9 +1405,9 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * updateLastLogin 
-	 * 
-	 * @param array $pUserId 
+	 * updateLastLogin
+	 *
+	 * @param array $pUserId
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -1423,10 +1423,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * confirmRegistration 
-	 * 
-	 * @param array $pUserId 
-	 * @param array $pProvpass 
+	 * confirmRegistration
+	 *
+	 * @param array $pUserId
+	 * @param array $pProvpass
 	 * @access public
 	 * @return registered user, empty array on failure
 	 */
@@ -1439,10 +1439,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * changeUserEmail 
-	 * 
-	 * @param array $pUserId 
-	 * @param array $pEmail 
+	 * changeUserEmail
+	 *
+	 * @param array $pUserId
+	 * @param array $pEmail
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -1464,9 +1464,9 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * lookupHomepage 
-	 * 
-	 * @param array $iHomepage 
+	 * lookupHomepage
+	 *
+	 * @param array $iHomepage
 	 * @access public
 	 * @return user_id that can be used to point to users homepage
 	 */
@@ -1492,11 +1492,11 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * getUserPreference 
-	 * 
-	 * @param array $pPrefName 
-	 * @param array $pPrefDefault 
-	 * @param array $pUserId 
+	 * getUserPreference
+	 *
+	 * @param array $pPrefName
+	 * @param array $pPrefDefault
+	 * @param array $pUserId
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -1518,7 +1518,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * getUserInfo will fetch the user info of a given user
-	 * 
+	 *
 	 * @param array $pUserMixed hash key can be any column in users_users table e.g.: 'login', 'user_id', 'email', 'content_id'
 	 * @access public
 	 * @return user info on success, NULL on failure
@@ -1546,7 +1546,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * isUserPublic Determine if an arbitrary user can be viewed by non-permissioned users.
-	 * 
+	 *
 	 * @param array $pUserId user_id of user to query visibility, if NULL will use this object
 	 * @access public
 	 * @return boolean if user is publically visible
@@ -1564,8 +1564,8 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * getByHash get user from cookie hash
-	 * 
-	 * @param array $pHash 
+	 *
+	 * @param array $pHash
 	 * @access public
 	 * @return user info
 	 */
@@ -1576,7 +1576,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * isPasswordDue work out if a user has to change their password
-	 * 
+	 *
 	 * @access public
 	 * @return TRUE when the password is due, FALSE if it isn't, NULL when no due time is set
 	 * @note NULL password due means *no* expiration
@@ -1602,10 +1602,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * createTempPassword 
-	 * 
-	 * @param array $pLogin 
-	 * @param array $pPass 
+	 * createTempPassword
+	 *
+	 * @param array $pLogin
+	 * @param array $pPass
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -1632,10 +1632,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * storePassword 
-	 * 
-	 * @param array $pPass 
-	 * @param array $pLogin 
+	 * storePassword
+	 *
+	 * @param array $pPass
+	 * @param array $pLogin
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -1668,9 +1668,9 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * getUserActivity 
-	 * 
-	 * @param array $pListHash 
+	 * getUserActivity
+	 *
+	 * @param array $pListHash
 	 * @access public
 	 * @return array of users and what they have been up to
 	 */
@@ -1725,9 +1725,9 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * getUserDomain 
-	 * 
-	 * @param array $pLogin 
+	 * getUserDomain
+	 *
+	 * @param array $pLogin
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -1748,9 +1748,9 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * getDomain 
-	 * 
-	 * @param array $pContentId 
+	 * getDomain
+	 *
+	 * @param array $pContentId
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -1765,7 +1765,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * canCustomizeTheme check if a user can customise their theme
-	 * 
+	 *
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -1776,7 +1776,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * canCustomizeLayout  check if a user can customise their layout
-	 * 
+	 *
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -1954,7 +1954,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * purgePortrait
-	 * 
+	 *
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -1964,8 +1964,8 @@ class BitUser extends LibertyMime {
 
 
 	/**
-	 * purgeAvatar 
-	 * 
+	 * purgeAvatar
+	 *
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -1975,8 +1975,8 @@ class BitUser extends LibertyMime {
 
 
 	/**
-	 * purgeLogo 
-	 * 
+	 * purgeLogo
+	 *
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -1988,13 +1988,13 @@ class BitUser extends LibertyMime {
 	// {{{ ==================== Watches ====================
 	// TODO: clean up all watch functions. these are old and messy. - xing - Thursday Oct 16, 2008   11:07:55 CEST
 	/**
-	 * storeWatch 
-	 * 
-	 * @param array $pEvent 
-	 * @param array $pObject 
-	 * @param array $pType 
-	 * @param array $pTitle 
-	 * @param array $pUrl 
+	 * storeWatch
+	 *
+	 * @param array $pEvent
+	 * @param array $pObject
+	 * @param array $pType
+	 * @param array $pTitle
+	 * @param array $pUrl
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -2011,9 +2011,9 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * getWatches 
-	 * 
-	 * @param string $pEvent 
+	 * getWatches
+	 *
+	 * @param string $pEvent
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -2039,10 +2039,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * getEventWatches 
-	 * 
-	 * @param array $pEvent 
-	 * @param array $object 
+	 * getEventWatches
+	 *
+	 * @param array $pEvent
+	 * @param array $object
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -2059,10 +2059,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * get_event_watches 
-	 * 
-	 * @param array $pEvent 
-	 * @param array $pObject 
+	 * get_event_watches
+	 *
+	 * @param array $pEvent
+	 * @param array $pObject
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -2084,9 +2084,9 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * remove_user_watch_by_hash 
-	 * 
-	 * @param array $pHash 
+	 * remove_user_watch_by_hash
+	 *
+	 * @param array $pHash
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -2096,10 +2096,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * expungeWatch 
-	 * 
-	 * @param array $pEvent 
-	 * @param array $pObject 
+	 * expungeWatch
+	 *
+	 * @param array $pEvent
+	 * @param array $pObject
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -2111,8 +2111,8 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * get_watches_events 
-	 * 
+	 * get_watches_events
+	 *
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -2128,9 +2128,9 @@ class BitUser extends LibertyMime {
 	// }}}
 
 	/**
-	 * getUserAttachments 
-	 * 
-	 * @param array $pListHash 
+	 * getUserAttachments
+	 *
+	 * @param array $pListHash
 	 * @access public
 	 * @return list of attachments
 	 */
@@ -2142,9 +2142,9 @@ class BitUser extends LibertyMime {
 
 	// {{{ ==================== Favorites ====================
 	/**
-	 * storeFavorite 
-	 * 
-	 * @param array $pContentId 
+	 * storeFavorite
+	 *
+	 * @param array $pContentId
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
@@ -2177,9 +2177,9 @@ class BitUser extends LibertyMime {
 		return $ret;
 	}
 
-	/** 
+	/**
 	 * getFavorites
-	 * 
+	 *
 	 * @see LibertyContent::getContentList
 	 * @return Array of content data
 	 */
@@ -2196,8 +2196,8 @@ class BitUser extends LibertyMime {
 	// }}}
 
 	/**
-	 * getUserId 
-	 * 
+	 * getUserId
+	 *
 	 * @access public
 	 * @return user id of currently loaded user
 	 */
@@ -2206,10 +2206,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * getDisplayUrl 
-	 * 
-	 * @param array $pUserName 
-	 * @param array $pMixed 
+	 * getDisplayUrl
+	 *
+	 * @param array $pUserName
+	 * @param array $pMixed
 	 * @access public
 	 * @return URL to users homepage
 	 */
@@ -2241,10 +2241,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * getDisplayLink 
-	 * 
-	 * @param array $pUserName 
-	 * @param array $pDisplayHash 
+	 * getDisplayLink
+	 *
+	 * @param array $pUserName
+	 * @param array $pDisplayHash
 	 * @access public
 	 * @return get a link to the the users homepage
 	 */
@@ -2253,9 +2253,9 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * getTitle 
-	 * 
-	 * @param array $pHash 
+	 * getTitle
+	 *
+	 * @param array $pHash
 	 * @access public
 	 * @return get the users display name
 	 */
@@ -2321,7 +2321,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * getRenderFile Returns include file that will
-	 * 
+	 *
 	 * @access public
 	 * @return the fully specified path to file to be included
 	 */
@@ -2331,7 +2331,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * getSelectionList get a list of users that can be used in dropdown lists in forms to choose from
-	 * 
+	 *
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -2351,8 +2351,8 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * getList get a list of users
-	 * 
-	 * @param array $pParamHash 
+	 *
+	 * @param array $pParamHash
 	 * @access public
 	 * @return array of users
 	 */
@@ -2382,7 +2382,7 @@ class BitUser extends LibertyMime {
 			if( strpos( $pParamHash['ip'], '%' ) ) {
 				$whereSql = " AND uc.`ip` LIKE ? ";
 			} else {
-				$whereSql = " AND uc.`ip`=? ";
+			$whereSql = " AND uc.`ip`=? ";
 			}
 			$bindVars[] = $pParamHash['ip'];
 		}
@@ -2497,8 +2497,8 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * isValid 
-	 * 
+	 * isValid
+	 *
 	 * @access public
 	 * @return TRUE if user is loaded
 	 */
@@ -2508,7 +2508,7 @@ class BitUser extends LibertyMime {
 
 	/**
 	 * isAdmin "PURE VIRTUAL BASE FUNCTION";
-	 * 
+	 *
 	 * @access public
 	 * @return FALSE
 	 */
@@ -2517,8 +2517,8 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * isRegistered 
-	 * 
+	 * isRegistered
+	 *
 	 * @access public
 	 * @return TRUE if user is registered, FALSE otherwise
 	 */
@@ -2527,8 +2527,8 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * verifyRegistered 
-	 * 
+	 * verifyRegistered
+	 *
 	 * @access public
 	 * @return TRUE if user is registered, otherwise a login dialog is displayed
 	 */
