@@ -2242,7 +2242,7 @@ class BitUser extends LibertyMime {
 	 * @return get a link to the the users homepage
 	 */
 	function getDisplayLink( $pLinkText=NULL, $pMixed=NULL, $pAnchor=NULL ) {
-		return BitUser::getDisplayName( TRUE, $pMixed );
+		return BitUser::getDisplayNameFromHash( TRUE, $pMixed );
 	}
 
 	/**
@@ -2253,7 +2253,7 @@ class BitUser extends LibertyMime {
 	 * @return get the users display name
 	 */
 	function getTitle( $pHash = NULL, $pDefault=TRUE ) {
-		return BitUser::getDisplayName( FALSE, $pHash );
+		return BitUser::getDisplayNameFromHash( FALSE, $pHash );
 	}
 
 	/**
@@ -2263,13 +2263,8 @@ class BitUser extends LibertyMime {
 	 * @param pHash todo - need explanation on how to use this...
 	 * @return display name or link to user information page
 	 **/
-	public static function getDisplayName( $pUseLink = FALSE, $pHash=NULL ) {
+	public static function getDisplayNameFromHash( $pUseLink=FALSE, $pHash ) {
 		global $gBitSystem, $gBitUser;
-		$ret = NULL;
-		if( empty( $pHash ) && !empty( $this ) && !empty( $this->mInfo )) {
-			$pHash = &$this->mInfo;
-		}
-
 		if( !empty( $pHash )) {
 			if( !empty( $pHash['real_name'] ) && $gBitSystem->getConfig( 'users_display_name', 'real_name' ) == 'real_name' ) {
 				$displayName = $pHash['real_name'];
@@ -2300,7 +2295,7 @@ class BitUser extends LibertyMime {
 			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' )) {
 				$hash = array( 'title' => $iHomepage );
 				$ret = '<a class="username" title="'.( !empty( $pHash['link_title'] ) ? $pHash['link_title'] : tra( 'Profile for' ).' '.htmlspecialchars( $displayName ))
-					.'" href="'.BitUser::getDisplayUrlFromHash( $iHomepage ).'">'
+					.'" href="'.BitUser::getDisplayUrlFromHash( $hash ).'">'
 					. htmlspecialchars( isset( $pHash['link_label'] ) ? $pHash['link_label'] : $displayName )
 					.'</a>';
 			} else {
@@ -2311,6 +2306,21 @@ class BitUser extends LibertyMime {
 		}
 
 		return $ret;
+	}
+
+	/**
+	 * Get user information for a particular user
+	 *
+	 * @param pUseLink return the information in the form of a url that links to the users information page
+	 * @param pHash todo - need explanation on how to use this...
+	 * @return display name or link to user information page
+	 **/
+	function getDisplayName( $pUseLink=FALSE, $pHash=NULL ) {
+		$ret = NULL;
+		if( empty( $pHash ) && !empty( $this ) && !empty( $this->mInfo )) {
+			$pHash = &$this->mInfo;
+		}
+		return self::getDisplayNameFromHash( $pUseLink, $pHash );
 	}
 
 	/**
