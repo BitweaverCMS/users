@@ -23,7 +23,7 @@ class BaseAuth {
 	var $mCfg;
 	var $mErrors =array();
 
-	function &getAuthMethods() {
+	public static function &getAuthMethods() {
 		static $authMethod = array();
 		static $scaned = false;
 		if (!$scaned) {
@@ -60,7 +60,7 @@ class BaseAuth {
 
 	function scanAuthPlugins() {
 		global $gBitSystem;
-		
+
 		$authDir = $gBitSystem->getConfig( 'users_auth_plugins_dir', USERS_PKG_PATH.'auth/' );
 		if( is_dir( $authDir ) && $authScan = scandir( $authDir ) ) {
 			foreach( $authScan as $plugDir ) {
@@ -109,7 +109,7 @@ class BaseAuth {
 		print( $warning );
 	}
 
-	function getAuthMethodCount() {
+	public static function getAuthMethodCount() {
 		$methods = BaseAuth::getAuthMethods();
 		if (empty($methods)) return 0;
 		return count($methods);
@@ -173,7 +173,7 @@ class BaseAuth {
 			if ($pAuthMixed==0) {
 				$default="bit";
 			}
-			$authPlugin = $gBitSystem->getConfig("users_auth_method_$pAuthMixed",$default);			
+			$authPlugin = $gBitSystem->getConfig("users_auth_method_$pAuthMixed",$default);
 			if (!empty( $authPlugin ) ) {
 				return BaseAuth::init( $authPlugin );
 			}
