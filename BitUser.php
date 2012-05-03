@@ -2320,7 +2320,7 @@ class BitUser extends LibertyMime {
 		if( empty( $pHash ) && !empty( $this ) && !empty( $this->mInfo )) {
 			$pHash = &$this->mInfo;
 		}
-		return self::getDisplayNameFromHash( $pUseLink, $pHash );
+		return static::getDisplayNameFromHash( $pUseLink, $pHash );
 	}
 
 	/**
