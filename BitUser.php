@@ -2406,6 +2406,14 @@ class BitUser extends LibertyMime {
 			$joinSql .= " LEFT OUTER JOIN `".BIT_DB_PREFIX."stats_referer_users_map` srum ON (srum.`user_id`=uu.`user_id`) 
 						  LEFT OUTER JOIN `".BIT_DB_PREFIX."stats_referer_urls` sru ON (srum.`referer_url_id`=sru.`referer_url_id`)";
 			$selectSql .= ", sru.`referer_url`";
+			if( !empty( $pParamHash['referer'] ) ) {
+				if( $pParamHash['referer'] == 'none' ) {
+					$whereSql .= " AND `referer_url` IS NULL";
+				} else {
+					$whereSql .= " AND `referer_url` LIKE ?";
+					$bindVars[] = '%'.strtolower( $pParamHash['find'] ).'%';
+				}
+			}
 		}
 
 		// Return an array of users indicating name, email, last changed pages, versions, last_login
