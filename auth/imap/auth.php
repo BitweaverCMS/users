@@ -14,7 +14,7 @@
 class IMAPAuth extends BaseAuth {
 
 	function IMAPAuth() {
-		parent::BaseAuth('imap');
+		parent::__construct('imap');
 	}
 
 	function validate($user,$pass,$challenge,$response) {

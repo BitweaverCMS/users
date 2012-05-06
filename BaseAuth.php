@@ -23,6 +23,20 @@ class BaseAuth {
 	var $mCfg;
 	var $mErrors =array();
 
+	function __construct($pAuthId) {
+		global $gBitSystem;
+		$this->mCfg = BaseAuth::getAuthMethod($pAuthId);
+		$this->mCfg['auth_id'] = $pAuthId;
+		foreach ($this->getSettings() as $op_id => $op) {
+			$var_id = substr($op_id,strrpos($op_id,"_")+1);
+			$var = $gBitSystem->getConfig($op_id, $op['default']);
+			if ($op['type']=="checkbox") {
+				$var = ($var== "y");
+			}
+			$this->mConfig[$var_id]=$var;
+		}
+	}
+
 	public static function &getAuthMethods() {
 		static $authMethod = array();
 		static $scaned = false;
@@ -42,20 +56,6 @@ class BaseAuth {
 	function setAuthMethod($pAuthId,&$method) {
 		$authMethod =& BaseAuth::getAuthMethods();
 		$authMethod[$pAuthId]=$method;
-	}
-
-	function BaseAuth($pAuthId) {
-		global $gBitSystem;
-		$this->mCfg = BaseAuth::getAuthMethod($pAuthId);
-		$this->mCfg['auth_id'] = $pAuthId;
-		foreach ($this->getSettings() as $op_id => $op) {
-			$var_id = substr($op_id,strrpos($op_id,"_")+1);
-			$var = $gBitSystem->getConfig($op_id, $op['default']);
-			if ($op['type']=="checkbox") {
-				$var = ($var== "y");
-			}
-			$this->mConfig[$var_id]=$var;
-		}
 	}
 
 	function scanAuthPlugins() {

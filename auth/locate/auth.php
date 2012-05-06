@@ -17,7 +17,7 @@
 class LocateAuth extends BaseAuth {
 
 	function LocateAuth() {
-		parent::BaseAuth('locate');
+		parent::__construct('locate');
 	}
 
 	function validate($user,$pass,$challenge,$response) {
