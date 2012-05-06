@@ -58,7 +58,7 @@ class BitUser extends LibertyMime {
 	 * @return returnString
 	 */
 	function BitUser( $pUserId=NULL, $pContentId=NULL ) {
-		LibertyMime::LibertyMime();
+		parent::__construct();
 		$this->mContentTypeGuid = BITUSER_CONTENT_TYPE_GUID;
 		$this->registerContentType(
 			BITUSER_CONTENT_TYPE_GUID, array(
