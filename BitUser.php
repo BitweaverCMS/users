@@ -2574,6 +2574,30 @@ class BitUser extends LibertyMime {
 		}
 		return $ret;
 	}
+
+	/**
+	 * userCollection
+	 *
+	 * @param array $pInput
+	 * @param array $pReturn
+	 * @access public
+	 * @return $pReturn
+	 */
+	public static function userCollection( $pInput, &$pReturn ) {
+		global $gQueryUserId;
+
+		if( empty( $pReturn['user_id'] )) {
+			if( !empty( $gQueryUserId )) {
+				$pReturn['user_id'] = $gQueryUserId;
+			} elseif( isset( $pInput['user_id'] ) ) {
+				$pReturn['user_id'] = $pInput['user_id'];
+			}
+		}
+		if( @BitBase::verifyId( $pInput['role_id'] ) ) {
+			$pReturn['role_id'] = $pInput['role_id'];
+		}
+		return;
+	}
 }
 
 function get_user_content_count( $pUserId ) {
@@ -2592,6 +2616,17 @@ function users_favs_content_list_sql( &$pObject, $pParamHash=NULL ){
 		$ret['join_sql'] = " INNER JOIN `".BIT_DB_PREFIX."users_favorites_map` ufm ON ( ufm.`favorite_content_id`=lc.`content_id` )";
 		$ret['where_sql'] = " AND ufm.`user_id` = ?";
 		$ret['bind_vars'][] = $pObject->mUserId;
+	}
+	return $ret;
+}
+
+function users_collection_sql( &$pObject, $pParamHash=NULL ){
+    $ret = array();
+	if( !empty( $pParamHash['group_id'] ) and BitBase::verifyId( $pParamHash['group_id'] ) ){
+		// $ret['select_sql'] = "";
+		$ret['join_sql'] = " INNER JOIN `".BIT_DB_PREFIX."users_groups_map` ugm ON (ugm.`user_id`=uu.`user_id`)";
+		$ret['where_sql'] = ' AND ugm.`group_id` = ? ';
+		$ret['bind_vars'][] = $pParamHash['group_id'];
 	}
 	return $ret;
 }
