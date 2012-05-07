@@ -2622,11 +2622,11 @@ function users_favs_content_list_sql( &$pObject, $pParamHash=NULL ){
 
 function users_collection_sql( &$pObject, $pParamHash=NULL ){
     $ret = array();
-		if( !empty( $pParamHash['role_id'] ) and BitBase::verifyId( $pParamHash['role_id'] ) ){
+	if( !empty( $pParamHash['group_id'] ) and BitBase::verifyId( $pParamHash['group_id'] ) ){
 		// $ret['select_sql'] = "";
-		$ret['join_sql'] = " INNER JOIN `".BIT_DB_PREFIX."users_roles_map` urm ON (ugm.`user_id`=uu.`user_id`)";
-		$ret['where_sql'] = ' AND urm.`role_id` = ? ';
-		$ret['bind_vars'][] = $pParamHash['role_id'];
+		$ret['join_sql'] = " INNER JOIN `".BIT_DB_PREFIX."users_groups_map` ugm ON (ugm.`user_id`=uu.`user_id`)";
+		$ret['where_sql'] = ' AND ugm.`group_id` = ? ';
+		$ret['bind_vars'][] = $pParamHash['group_id'];
 	}
 	return $ret;
 }
