@@ -816,9 +816,10 @@ class BitPermUser extends BitUser {
 				array_push( $bindvars, $pPackage );
 			}
 			$query = "SELECT `perm_name` FROM `".BIT_DB_PREFIX."users_permissions` WHERE `perm_level` = ? $whereSql";
-			$result = $this->mDb->query( $query, $bindvars );
-			while( $row = $result->fetchRow() ) {
-				$this->assignPermissionToGroup( $row['perm_name'], $pGroupId );
+			if( $result = $this->mDb->query( $query, $bindvars ) ) {
+				while( $row = $result->fetchRow() ) {
+					$this->assignPermissionToGroup( $row['perm_name'], $pGroupId );
+				}
 			}
 		}
 	}
