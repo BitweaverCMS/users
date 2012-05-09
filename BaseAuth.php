@@ -23,7 +23,21 @@ class BaseAuth {
 	var $mCfg;
 	var $mErrors =array();
 
-	function &getAuthMethods() {
+	function __construct($pAuthId) {
+		global $gBitSystem;
+		$this->mCfg = BaseAuth::getAuthMethod($pAuthId);
+		$this->mCfg['auth_id'] = $pAuthId;
+		foreach ($this->getSettings() as $op_id => $op) {
+			$var_id = substr($op_id,strrpos($op_id,"_")+1);
+			$var = $gBitSystem->getConfig($op_id, $op['default']);
+			if ($op['type']=="checkbox") {
+				$var = ($var== "y");
+			}
+			$this->mConfig[$var_id]=$var;
+		}
+	}
+
+	public static function &getAuthMethods() {
 		static $authMethod = array();
 		static $scaned = false;
 		if (!$scaned) {
@@ -44,23 +58,9 @@ class BaseAuth {
 		$authMethod[$pAuthId]=$method;
 	}
 
-	function BaseAuth($pAuthId) {
-		global $gBitSystem;
-		$this->mCfg = BaseAuth::getAuthMethod($pAuthId);
-		$this->mCfg['auth_id'] = $pAuthId;
-		foreach ($this->getSettings() as $op_id => $op) {
-			$var_id = substr($op_id,strrpos($op_id,"_")+1);
-			$var = $gBitSystem->getConfig($op_id, $op['default']);
-			if ($op['type']=="checkbox") {
-				$var = ($var== "y");
-			}
-			$this->mConfig[$var_id]=$var;
-		}
-	}
-
 	function scanAuthPlugins() {
 		global $gBitSystem;
-		
+
 		$authDir = $gBitSystem->getConfig( 'users_auth_plugins_dir', USERS_PKG_PATH.'auth/' );
 		if( is_dir( $authDir ) && $authScan = scandir( $authDir ) ) {
 			foreach( $authScan as $plugDir ) {
@@ -109,7 +109,7 @@ class BaseAuth {
 		print( $warning );
 	}
 
-	function getAuthMethodCount() {
+	public static function getAuthMethodCount() {
 		$methods = BaseAuth::getAuthMethods();
 		if (empty($methods)) return 0;
 		return count($methods);
@@ -173,7 +173,7 @@ class BaseAuth {
 			if ($pAuthMixed==0) {
 				$default="bit";
 			}
-			$authPlugin = $gBitSystem->getConfig("users_auth_method_$pAuthMixed",$default);			
+			$authPlugin = $gBitSystem->getConfig("users_auth_method_$pAuthMixed",$default);
 			if (!empty( $authPlugin ) ) {
 				return BaseAuth::init( $authPlugin );
 			}

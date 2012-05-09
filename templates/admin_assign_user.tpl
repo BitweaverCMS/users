@@ -52,7 +52,7 @@
 						<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$groupId}">{$group.group_name}</a>
 						{if $groupId eq $assignUser->mInfo.default_group_id}</strong>{/if}
 						{if $groupId != -1}
-							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="icons" iname="edit-delete" iexplain="remove from group" iforce="icon"}</a>
+							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;tk={$gBitUser->mTicket}">{biticon ipackage="icons" iname="edit-delete" iexplain="remove from group" iforce="icon"}</a>
 						{/if}
 						<br />
 					{/foreach}

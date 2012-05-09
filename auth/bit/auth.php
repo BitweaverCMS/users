@@ -14,7 +14,7 @@
 class BitAuth extends BaseAuth {
 
 	function BitAuth() {
-		parent::BaseAuth('bit');
+		parent::__construct('bit');
 	}
 
 	function validate($user,$pass,$challenge,$response) {

@@ -31,7 +31,7 @@ $gBitSystem->verifyFeature( 'users_allow_register' );
 require_once( USERS_PKG_PATH.'BaseAuth.php' );
 
 if( isset( $_REQUEST['returnto'] ) ) {
-	$_SESSION['returnto'] = $_REQUEST['returnto']; 
+	$_SESSION['returnto'] = $_REQUEST['returnto'];
 }
 
 if( $gBitUser->isRegistered() ) {
@@ -47,16 +47,16 @@ if( isset( $_REQUEST["register"] ) ) {
 	if( $newUser->preRegisterVerify( $reg ) && $newUser->register( $reg ) ) {
 		$gBitUser->mUserId = $newUser->mUserId;
 
-		// add user to user-selected group
-		if ( !empty( $_REQUEST['group'] ) ) {
-			$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group'] );
-			if ( empty($groupInfo) || $groupInfo['is_public'] != 'y' ) {
-				$errors[] = "You can't use this group";
+		// add user to user-selected role
+		if ( !empty( $_REQUEST['role'] ) ) {
+			$roleInfo = $gBitUser->getRoleInfo( $_REQUEST['role'] );
+			if ( empty($roleInfo) || $roleInfo['is_public'] != 'y' ) {
+				$errors[] = "You can't use this role";
 				$gBitSmarty->assign_by_ref( 'errors', $errors );
 			} else {
 				$userId = $newUser->getUserId();
-				$gBitUser->addUserToGroup( $userId, $_REQUEST['group'] );
-				$gBitUser->storeUserDefaultGroup( $userId, $_REQUEST['group'] );
+				$gBitUser->addUserToRole( $userId, $_REQUEST['role'] );
+				$gBitUser->storeUserDefaultRole( $userId, $_REQUEST['role'] );
 			}
 		}
 
@@ -65,7 +65,7 @@ if( isset( $_REQUEST["register"] ) ) {
 			$newUser->storePreference('users_information','private');
 		}
 
-		// requires validation by email 
+		// requires validation by email
 		if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 			$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
 			$gBitSmarty->assign('showmsg','y');
@@ -83,14 +83,14 @@ if( isset( $_REQUEST["register"] ) ) {
 			// return to referring page
 			if( !empty( $_SESSION['returnto'] ) ) {
 				$url = $_SESSION['returnto'];
-			// forward to group post-registration page 
-			} elseif ( !empty( $_REQUEST['group'] ) && !empty( $groupInfo['after_registration_page'] ) ) {
-				if ( $newUser->verifyId( $groupInfo['after_registration_page'] ) ) {
-					$url = BIT_ROOT_URI."index.php?content_id=".$groupInfo['after_registration_page'];
-				} elseif( strpos( $groupInfo['after_registration_page'], '/' ) === FALSE ) {
-					$url = BitPage::getDisplayUrlFromHash( $groupInfo['after_registration_page'] );
+			// forward to role post-registration page
+			} elseif ( !empty( $_REQUEST['role'] ) && !empty( $roleInfo['after_registration_page'] ) ) {
+				if ( $newUser->verifyId( $roleInfo['after_registration_page'] ) ) {
+					$url = BIT_ROOT_URI."index.php?content_id=".$roleInfo['after_registration_page'];
+				} elseif( strpos( $roleInfo['after_registration_page'], '/' ) === FALSE ) {
+					$url = BitPage::getDisplayUrlFromHash( $roleInfo['after_registration_page'] );
 				} else {
-					$url = $groupInfo['after_registration_page'];
+					$url = $roleInfo['after_registration_page'];
 				}
 			}
 			header( 'Location: '.$url );
@@ -142,10 +142,10 @@ $gBitSmarty->assign('flags', $flags);
 
 $listHash = array(
 	'is_public' => 'y',
-	'sort_mode' => array( 'is_default_asc', 'group_desc_asc' ),
+	'sort_mode' => array( 'is_default_asc', 'role_desc_asc' ),
 );
-$groupList = $gBitUser->getAllGroups( $listHash );
-$gBitSmarty->assign_by_ref( 'groupList', $groupList );
+$roleList = $gBitUser->getAllRoles( $listHash );
+$gBitSmarty->assign_by_ref( 'roleList', $roleList );
 
 // invoke edit services
 $gBitUser->invokeServices( 'content_edit_function' );
@@ -168,5 +168,5 @@ foreach( $gBitSystem->mPackages as $package ) {
 }
 $gBitSmarty->assign_by_ref('packages',$packages );
 
-$gBitSystem->display('bitpackage:users/register.tpl', 'Register' , array( 'display_mode' => 'display' ));
+$gBitSystem->display('bitpackage:users/role_register.tpl', 'Register' , array( 'display_mode' => 'display' ));
 ?>

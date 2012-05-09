@@ -23,7 +23,7 @@ if (file_exists(UTIL_PKG_PATH."pear/Auth/Auth.php")) {
  */
 class LDAPAuth extends BaseAuth {
 	function LDAPAuth() {
-		parent::BaseAuth('ldap');
+		parent::__construct('ldap');
 	}
 
 	function validate($user,$pass,$challenge,$response) {

@@ -8,11 +8,13 @@ function bituser_api_handler( $pMethod, $pRequest ) {
 	global $gApi, $gBitSystem, $gBitSmarty, $gBitUser;
 
 	switch( $pMethod ) {
-		case 'PUT':
+		case 'POST':
+//		case 'PUT':
 			$newUser = new BitUser();
 			if( $newUser->register( $pRequest ) ) {
 				$gApi->outputJson( 200, $newUser->mInfo );
 			} else {
+bit_error_log( $newUser->mErrors );
 				$gApi->outputJson( HttpStatusCodes::HTTP_CONFLICT, $newUser->mErrors );
 			}
 			break;
@@ -31,11 +33,6 @@ function bituser_api_handler( $pMethod, $pRequest ) {
 				$gContent->verifyExpungePermission();
 //  }
 			}
-			break;
-
-		case 'POST':
-			$gApi->verifyAuthorization();
-			$gContent->verifyCreatePermission();
 			break;
 	}
 

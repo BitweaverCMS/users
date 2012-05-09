@@ -15,13 +15,14 @@ $gBitSystem->registerPackage( $registerHash );
 
 /* ---- services ----- */
 define( 'CONTENT_SERVICE_USERS_FAVS', 'users_favorites' );
-$gLibertySystem->registerService( CONTENT_SERVICE_USERS_FAVS, 
-	USERS_PKG_NAME, 
+$gLibertySystem->registerService( CONTENT_SERVICE_USERS_FAVS,
+	USERS_PKG_NAME,
 	array(
 		'content_icon_tpl' => 'bitpackage:users/user_favs_service_icon_inc.tpl',
 		'content_list_sql_function' => 'users_favs_content_list_sql',
+		'content_user_collection_function' => 'users_collection_sql',
 	),
-	array( 
+	array(
 		'description' => tra( 'Provides a ajax service enabling users to bookmark any content as a favorite.' ),
 	)
 );
@@ -38,11 +39,10 @@ if( !defined( 'LOGO_MAX_DIM' )) {
 	define( 'LOGO_MAX_DIM', 600 );
 }
 
-require_once( USERS_PKG_PATH . 'BitPermUser.php' );
 // a package can decide to override the default user class
 $userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+require_once( USERS_PKG_PATH . $userClass .'.php' );
 $gBitUser = new $userClass();
-
 
 // set session lifetime
 if( $gBitSystem->isFeatureActive( 'site_session_lifetime' )) {

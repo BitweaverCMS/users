@@ -14,7 +14,7 @@
 class MultisitesAuth extends BaseAuth {
 
 	function MultisitesAuth() {
-		parent::BaseAuth('multisites');
+		parent::__construct('multisites');
 	}
 
 	function validate($user,$pass,$challenge,$response) {
