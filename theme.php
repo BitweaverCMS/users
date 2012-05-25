@@ -285,7 +285,7 @@ if( count( $imageList ) ) {
 
 $gBitSmarty->assign('imagesCount', count($themeImages));
 $gBitSmarty->assign_by_ref('themeImages',$themeImages);
-$gBitSmarty->assign('PHP_SELF', $_SERVER['PHP_SELF']);
+$gBitSmarty->assign('SCRIPT_NAME', $_SERVER['SCRIPT_NAME']);
 $gBitSmarty->assign_by_ref('gQueryUser', $gQueryUser);
 
 $gBitSystem->display( 'bitpackage:users/user_theme.tpl', NULL, array( 'display_mode' => 'display' ));

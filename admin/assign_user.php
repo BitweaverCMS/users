@@ -28,7 +28,7 @@ if( isset( $_REQUEST["action"] ) ) {
 	} elseif ($_REQUEST["action"] == 'removegroup') {
 		$gBitUser->removeUserFromGroup($_REQUEST["assign_user"], $_REQUEST["group_id"]);
 	}
-	header( 'Location: '.$_SERVER['PHP_SELF'].'?assign_user='.$assignUser->mUserId );
+	header( 'Location: '.$_SERVER['SCRIPT_NAME'].'?assign_user='.$assignUser->mUserId );
 	die;
 }elseif(isset($_REQUEST['set_default'])) {
 	$gBitUser->verifyTicket();

@@ -1004,7 +1004,7 @@ class BitUser extends LibertyMime {
 		if ( !$this->isDatabaseValid() ) return true;
 		global $gBitSystem, $gBitUser;
 		$update['last_get'] = $gBitSystem->getUTCTime();
-		$update['current_view'] = $_SERVER['PHP_SELF'];
+		$update['current_view'] = $_SERVER['SCRIPT_NAME'];
 
 		if( empty( $gLightWeightScan ) ) {
 			$row = $this->mDb->getRow( "SELECT `last_get`, `connect_time`, `get_count`, `user_agent`, `current_view` FROM `".BIT_DB_PREFIX."users_cnxn` WHERE `cookie`=? ", array( $pSessionId ) );
