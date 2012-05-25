@@ -39,11 +39,10 @@ if( !defined( 'LOGO_MAX_DIM' )) {
 	define( 'LOGO_MAX_DIM', 600 );
 }
 
-require_once( USERS_PKG_PATH . 'BitPermUser.php' );
 // a package can decide to override the default user class
 $userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+require_once( USERS_PKG_PATH . $userClass .'.php' );
 $gBitUser = new $userClass();
-
 
 // set session lifetime
 if( $gBitSystem->isFeatureActive( 'site_session_lifetime' )) {
