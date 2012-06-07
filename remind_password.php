@@ -26,6 +26,7 @@ if( $gBitUser->isRegistered() ) {
 	die;
 } elseif (isset($_REQUEST["remind"])) {
 	$userInfo = '';
+	$_REQUEST["username"] = strip_tags( urldecode( $_REQUEST["username"]) );
 	$pLogin = trim( $_REQUEST["username"] );
     if ( strlen ( $pLogin ) ) {
 		$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
