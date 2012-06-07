@@ -69,7 +69,7 @@ Some of the many features in bitweaver
 <li>FAQs</li>
 <li>Polls</li>
 <li>Send and receive objects to/from other bitweaver sites</li>
-<li>Powerful permission system with users/groups for all the sections and features</li>
+<li>Powerful permission system with users/groups/roles for all the sections and features</li>
 </ul>
 </div>
 </div>
