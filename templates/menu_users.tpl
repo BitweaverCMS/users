@@ -17,6 +17,9 @@
 		{if $gBitUser->hasPermission( 'p_users_create_personal_groups' )}
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}my_groups.php">{biticon iname="preferences-desktop" iexplain="My Groups" ilocation=$location}</a></li>
 		{/if}
+		{if $gBitUser->hasPermission( 'p_users_create_personal_roles' )}
+			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}my_roles.php">{biticon iname="preferences-desktop" iexplain="My Roles" ilocation=$location}</a></li>
+		{/if}
 		{if $gBitSystem->isFeatureActive( 'users_watches' )}
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}watches.php">{biticon iname="weather-clear" iexplain="My Watches" ilocation=$location}</a></li>
 		{/if}
