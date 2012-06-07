@@ -28,7 +28,7 @@ require_once( USERS_PKG_PATH.'/RoleUser.php' );
  * @package  users
  * @subpackage  RolePermUser
  */
-class RolePermUser extends BitUser {
+class RolePermUser extends RoleUser {
 	// change this to an email address to receive debug emails from the LDAP code
 	// does this work? - xing - Saturday Oct 18, 2008   09:47:20 CEST
 	var $debug = FALSE;

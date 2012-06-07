@@ -600,7 +600,7 @@ class BitUser extends LibertyMime {
 			}
 
 			if( !empty( $pParamHash['verified_email'] ) && $pParamHash['verified_email'] && $gBitSystem->getConfig('users_validate_email_role') ) {
-				BitPermUser::addUserToRole( $this->mUserId, $gBitSystem->getConfig('users_validate_email_role') );
+				RolePermUser::addUserToRole( $this->mUserId, $gBitSystem->getConfig('users_validate_email_role') );
 			}
 
 			$this->mLogs['register'] = 'New user registered.';
@@ -750,7 +750,7 @@ class BitUser extends LibertyMime {
 			$pParamHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
 			if( !empty( $pParamHash['user_store'] ) && count( $pParamHash['user_store'] ) ) {
 				// lookup and asign the default role for user
-				$defaultRoles = BitPermUser::getDefaultRole();
+				$defaultRoles = RolePermUser::getDefaultRole();
 				if( !empty( $defaultRoles ) ) {
 					$pParamHash['user_store']['default_role_id'] = key( $defaultRoles );
 				}
@@ -766,7 +766,7 @@ class BitUser extends LibertyMime {
 				}
 				// make sure user is added into the default role map
 				if( !empty( $pParamHash['user_store']['default_role_id'] ) ) {
-					BitPermUser::addUserToRole( $pParamHash['user_store']['user_id'],$pParamHash['user_store']['default_role_id'] );
+					RolePermUser::addUserToRole( $pParamHash['user_store']['user_id'],$pParamHash['user_store']['default_role_id'] );
 				}
 
 			}
@@ -1237,7 +1237,7 @@ class BitUser extends LibertyMime {
 				// default to general post-login
 				// @see BitSystem::getIndexPage
 				$indexType = 'my_page';
-				// getHomeRole is BitPermUser method
+				// getHomeRole is RolePermUser method
 				if( method_exists( $this, 'getHomeRole' ) &&
 					(( @$this->verifyId( $this->mInfo['default_role_id'] ) && ( $role_home = $this->getHomeRole( $this->mInfo['default_role_id'] ) ) ) ||
 					( $gBitSystem->getConfig( 'default_home_role' ) && ( $role_home = $this->getHomeRole( $gBitSystem->getConfig( 'default_home_role' ) ) ) )) ){
