@@ -2293,9 +2293,8 @@ class BitUser extends LibertyMime {
 			}
 
 			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' )) {
-				$hash = array( 'title' => $iHomepage );
 				$ret = '<a class="username" title="'.( !empty( $pHash['link_title'] ) ? $pHash['link_title'] : tra( 'Profile for' ).' '.htmlspecialchars( $displayName ))
-					.'" href="'.BitUser::getDisplayUrlFromHash( $hash ).'">'
+					.'" href="'.BitUser::getDisplayUrlFromHash( $pHash ).'">'
 					. htmlspecialchars( isset( $pHash['link_label'] ) ? $pHash['link_label'] : $displayName )
 					.'</a>';
 			} else {
