@@ -2215,7 +2215,7 @@ class BitUser extends LibertyMime {
 	 */
 	public static function getDisplayUrlFromHash( &$pParamHash ) {
 		if( function_exists( 'override_user_url' ) ) {
-			$ret = override_user_url( $pParamHash['title'] );
+			$ret = override_user_url( $pParamHash );
 		} else {
 			global $gBitSystem;
 
