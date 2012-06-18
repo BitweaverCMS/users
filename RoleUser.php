@@ -442,7 +442,7 @@ class BitUser extends LibertyMime {
 			$mxErrors;
 			$ret = $this->verifyMX( $pEmail, $mxErrors ) ;
 			if ($ret === false)	{
-				bit_log_error('INVALID EMAIL : '.$pEmail.' by '. $_SERVER['REMOTE_ADDR'] .' for '. $mxErrors['email']);
+				bit_error_log('INVALID EMAIL : '.$pEmail.' by '. $_SERVER['REMOTE_ADDR'] .' for '. $mxErrors['email']);
 				$pErrors = array_merge( $pErrors, $mxErrors );
 			}
 		}
@@ -532,7 +532,7 @@ class BitUser extends LibertyMime {
 									//Checks if we received a 250 OK from the server. If we did not, the server is telling us that this address is not a valid mailbox.
 									if( !preg_match ( "/^250/", $from ) || ( !preg_match ( "/^250/", $to ) && !preg_match( "/Please use your ISP relay/", $to ))) {
 										$pErrors['email']   = $pEmail." is not recognized by the mail server. Try double checking the address for typos." ;
-										bit_log_error("INVALID EMAIL : ".$pEmail." SMTP FROM : ".$from." SMTP TO: ".$to);
+										bit_error_log("INVALID EMAIL : ".$pEmail." SMTP FROM : ".$from." SMTP TO: ".$to);
 										$ret = false;
 										break; //break out of foreach and fall through to the end of function
 									}else{
@@ -542,11 +542,11 @@ class BitUser extends LibertyMime {
 								}
 							} elseif( preg_match ( "/^420/", $out ) ) {
 								// Yahoo has a bad, bad habit of issuing 420's
-								bit_log_error("UNKNOWN EMAIL : ".$pEmail." SMTP response: ".$out);
+								bit_error_log("UNKNOWN EMAIL : ".$pEmail." SMTP response: ".$out);
 								$ret = true;
 							} else {
 								$pErrors['email'] = 'Connection rejected by MX server';
-								bit_log_error("INVALID EMAIL : ".$pEmail." SMTP response: ".$out);
+								bit_error_log("INVALID EMAIL : ".$pEmail." SMTP response: ".$out);
 								$ret = false;
 							}
 						} else {
@@ -2215,7 +2215,7 @@ class BitUser extends LibertyMime {
 	 */
 	public static function getDisplayUrlFromHash( &$pParamHash ) {
 		if( function_exists( 'override_user_url' ) ) {
-			$ret = override_user_url( $pParamHash['title'] );
+			$ret = override_user_url( $pParamHash );
 		} else {
 			global $gBitSystem;
 
@@ -2293,9 +2293,8 @@ class BitUser extends LibertyMime {
 			}
 
 			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' )) {
-				$hash = array( 'title' => $iHomepage );
 				$ret = '<a class="username" title="'.( !empty( $pHash['link_title'] ) ? $pHash['link_title'] : tra( 'Profile for' ).' '.htmlspecialchars( $displayName ))
-					.'" href="'.BitUser::getDisplayUrlFromHash( $hash ).'">'
+					.'" href="'.BitUser::getDisplayUrlFromHash( $pHash ).'">'
 					. htmlspecialchars( isset( $pHash['link_label'] ) ? $pHash['link_label'] : $displayName )
 					.'</a>';
 			} else {
