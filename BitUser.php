@@ -259,7 +259,7 @@ class BitUser extends LibertyMime {
 		}
 		// real_name
 		if( !empty( $pParamHash['real_name'] ) ) {
-			$pParamHash['user_store']['real_name'] = substr( $pParamHash['real_name'], 0, 64 );
+			$pParamHash['user_store']['real_name'] = substr( strip_tags($pParamHash['real_name']), 0, 64 );
 		}
 		// require email
 		if( !empty( $pParamHash['email'] ) ) {
