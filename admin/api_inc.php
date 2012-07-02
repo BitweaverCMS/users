@@ -14,7 +14,6 @@ function bituser_api_handler( $pMethod, $pRequest ) {
 			if( $newUser->register( $pRequest ) ) {
 				$gApi->outputJson( 200, $newUser->mInfo );
 			} else {
-bit_error_log( $newUser->mErrors );
 				$gApi->outputJson( HttpStatusCodes::HTTP_CONFLICT, $newUser->mErrors );
 			}
 			break;
