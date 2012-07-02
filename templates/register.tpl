@@ -67,10 +67,10 @@
 					BitUser = {
 						"updateUserUrl": function(){
 							var loginEle = document.getElementById('login');
-							loginEle.value = loginEle.value.replace( /[^_a-zA-Z0-9]/, "" );
-							if( loginEle.value ) {
+							stripUsername = loginEle.value.replace( /[^_a-zA-Z0-9]/g, '' );
+							if( stripUsername ) {
 								var baseUrl = "{/literal}{$gBitUser->getDisplayUri('')}{literal}";
-								document.getElementById('loginurl').innerHTML = baseUrl + loginEle.value;
+								document.getElementById('loginurl').innerHTML = baseUrl + stripUsername;
 							}
 						}
 					};
