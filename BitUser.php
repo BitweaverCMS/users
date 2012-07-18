@@ -128,7 +128,7 @@ class BitUser extends LibertyMime {
 				$this->mInfo['user_id']       = $this->mInfo['uu_user_id'];
 				$this->mInfo['is_registered'] = $this->isRegistered();
 				foreach( array( 'portrait', 'avatar', 'logo' ) as $img ) {
-					$this->mInfo[$img.'_path']   = $this->getSourceFile( array( 'user_id'=>$this->getField( 'user_id' ), 'package'=>liberty_mime_get_storage_sub_dir_name( array( 'type' => $this->getField( $img.'_mime_type' ), 'name' =>  $this->getField( $img.'_file_name' ) ) ), 'file_name' => basename( $this->mInfo[$img.'_file_name'] ), 'sub_dir' =>  $this->getField( $img.'_attachment_id' ) ) );
+					$this->mInfo[$img.'_path']   = $this->getSourceFile( array( 'user_id'=>$this->getField( 'user_id' ), 'package'=>liberty_mime_get_storage_sub_dir_name( array( 'mime_type' => $this->getField( $img.'_mime_type' ), 'name' =>  $this->getField( $img.'_file_name' ) ) ), 'file_name' => basename( $this->mInfo[$img.'_file_name'] ), 'sub_dir' =>  $this->getField( $img.'_attachment_id' ), 'mime_type' => $this->getField( $img.'_mime_type' ) ) );
 					$this->mInfo[$img.'_url']    = liberty_fetch_thumbnail_url( array( 'source_file'=>$this->mInfo[$img.'_path'], 'size' => 'small', 'mime_image' => FALSE ));
 				}
 
@@ -2451,7 +2451,7 @@ class BitUser extends LibertyMime {
 			if( !empty( $res['avatar_file_name'] )) {
 				$res['avatar_url'] = $this->getSourceUrl( array( 'attachment_id'=>$res['avatar_attachment_id'], 'file_name'=>$res['avatar_file_name'] ) );
 				$res['thumbnail_url'] = liberty_fetch_thumbnail_url( array(
-					'source_file' => $this->getSourceFile( array( 'sub_dir'=>$res['avatar_attachment_id'], 'user_id' => $res['user_id'], 'file_name'=>$res['avatar_file_name'], 'package'=>liberty_mime_get_storage_sub_dir_name( array( 'type'=>$res['avatar_mime_type'], 'name'=>$res['avatar_file_name'] ) ) ) ),
+					'source_file' => $this->getSourceFile( array( 'sub_dir'=>$res['avatar_attachment_id'], 'user_id' => $res['user_id'], 'file_name'=>$res['avatar_file_name'], 'package'=>liberty_mime_get_storage_sub_dir_name( array( 'mime_type'=>$res['avatar_mime_type'], 'name'=>$res['avatar_file_name'] ) ) ) ),
 					'file_name' => $res['avatar_url'],
 					// TODO: Make this a preference
 					'size'         => 'avatar'
