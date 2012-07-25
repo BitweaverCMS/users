@@ -2449,9 +2449,9 @@ class BitUser extends LibertyMime {
 			}
 
 			if( !empty( $res['avatar_file_name'] )) {
-				$res['avatar_url'] = $this->getSourceUrl( array( 'attachment_id'=>$res['avatar_attachment_id'], 'file_name'=>$res['avatar_file_name'] ) );
+				$res['avatar_url'] = $this->getSourceUrl( array( 'attachment_id'=>$res['avatar_attachment_id'], 'mime_type'=>$res['avatar_mime_type'], 'file_name'=>$res['avatar_file_name'] ) );
 				$res['thumbnail_url'] = liberty_fetch_thumbnail_url( array(
-					'source_file' => $this->getSourceFile( array( 'sub_dir'=>$res['avatar_attachment_id'], 'user_id' => $res['user_id'], 'file_name'=>$res['avatar_file_name'], 'package'=>liberty_mime_get_storage_sub_dir_name( array( 'mime_type'=>$res['avatar_mime_type'], 'name'=>$res['avatar_file_name'] ) ) ) ),
+					'source_file' => $this->getSourceFile( array( 'sub_dir'=>$res['avatar_attachment_id'], 'user_id' => $res['user_id'], 'file_name'=>$res['avatar_file_name'], 'mime_type'=>$res['avatar_mime_type'], 'package'=>liberty_mime_get_storage_sub_dir_name( array( 'mime_type'=>$res['avatar_mime_type'], 'name'=>$res['avatar_file_name'] ) ) ) ),
 					'file_name' => $res['avatar_url'],
 					// TODO: Make this a preference
 					'size'         => 'avatar'
