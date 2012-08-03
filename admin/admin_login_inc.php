@@ -266,7 +266,7 @@ if( !empty( $_REQUEST["httpprefs"] ) ) {
 }
 
 $listHash = array();
-$gBitSmarty->assign_by_ref( 'groupList', $gBitUser->getAllGroups( $listHash ));
+$gBitSmarty->assign( 'roleList', $gBitUser->getAllRoles( $listHash ));
 
 // This needs to be made more generic so that it picks up all plugins
 // Could not see where the 'auth_ldap' was defined in the $options['avail'] array
@@ -282,5 +282,5 @@ if( !empty( $_REQUEST["auth_ldap"] ) ) {
 	}
 }
 
-$gBitSmarty->assign_by_ref( 'authSettings', BaseAuth::getConfig() );
+$gBitSmarty->assign( 'authSettings', BaseAuth::getConfig() );
 ?>

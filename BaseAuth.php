@@ -47,18 +47,18 @@ class BaseAuth {
 		return $authMethod;
 	}
 
-	function getAuthMethod( $pAuthId ) {
+	public static function getAuthMethod( $pAuthId ) {
 		$authMethod =& BaseAuth::getAuthMethods();
 		if (empty($authMethod[$pAuthId])) return null;
 		return $authMethod[$pAuthId];
 	}
 
-	function setAuthMethod($pAuthId,&$method) {
+	public static function setAuthMethod($pAuthId,&$method) {
 		$authMethod =& BaseAuth::getAuthMethods();
 		$authMethod[$pAuthId]=$method;
 	}
 
-	function scanAuthPlugins() {
+	public static function scanAuthPlugins() {
 		global $gBitSystem;
 
 		$authDir = $gBitSystem->getConfig( 'users_auth_plugins_dir', USERS_PKG_PATH.'auth/' );
@@ -75,7 +75,7 @@ class BaseAuth {
 		}
 	}
 
-	function register($id,$hash) {
+	public static function register($id,$hash) {
 		global $gBitSystem;
 		$err = false;
 		$method = BaseAuth::getAuthMethod($id);
@@ -104,7 +104,7 @@ class BaseAuth {
 		}
 	}
 
-	function authError($str) {
+	public static function authError($str) {
 		$warning = '<div class="error">'.$str.'</div>';
 		print( $warning );
 	}
@@ -149,10 +149,10 @@ class BaseAuth {
 		return array();
 	}
 
-	function isActive($package = '') {
+	public static function isActive($package) {
 		global $gBitSystem;
-		if (empty($package) && !empty($this->mCfg['auth_id'])) {
-			$package = $this->mCfg['auth_id'];
+		if (empty($package) ) {
+			return false;
 		}
 		for ($i=0;$i<BaseAuth::getAuthMethodCount();$i++) {
 			$default="";
@@ -166,7 +166,7 @@ class BaseAuth {
 		return false;
 	}
 
-	function init( $pAuthMixed ) {
+	public static function init( $pAuthMixed ) {
 		global $gBitSystem;
 		if( is_numeric( $pAuthMixed ) ) {
 			$default="";
@@ -191,7 +191,7 @@ class BaseAuth {
 		return false;
 	}
 
-	function getConfig() {
+	public static function getConfig() {
 		global $gBitSystem;
 		$authSettings = array();
 		foreach( BaseAuth::getAuthMethods() as $meth_name => $method ) {
