@@ -244,7 +244,7 @@ class BitUser extends LibertyMime {
 				$this->mErrors['login'] = tra( "Your username can only contain numbers, characters, underscores and hyphens." );
 			} else {
 				// LOWER CASE all logins
-				$pParamHash['login'] = strtolower( $pParamHash['login'] );
+				$pParamHash['login'] = strtolower( strip_tags($pParamHash['login']) );
 				$pParamHash['user_store']['login'] = $pParamHash['login'];
 			}
 		}
