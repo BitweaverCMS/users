@@ -19,7 +19,6 @@ $gEditMode = 'theme';
  * required setup
  */
 include_once( '../kernel/setup_inc.php' );
-include_once( USERS_PKG_PATH.'BitUser.php' );
 include_once( THEMES_PKG_PATH.'css_lib.php' );
 include_once( KERNEL_PKG_PATH.'BitSystem.php' );
 
