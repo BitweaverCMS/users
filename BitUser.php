@@ -2224,10 +2224,10 @@ class BitUser extends LibertyMime {
 			if ($gBitSystem->isFeatureActive( 'pretty_urls' )
 			|| $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$ret =  USERS_PKG_URL . $rewrite_tag;
-				$ret .= urlencode( $pParamHash['user'] );
+				$ret .= urlencode( $pParamHash['login'] );
 			} else {
 				$ret =  USERS_PKG_URL . 'index.php?home=';
-				$ret .= urlencode( $pParamHash['user'] );
+				$ret .= urlencode( $pParamHash['login'] );
 			}
 		}
 		return $ret;
