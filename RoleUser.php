@@ -424,10 +424,9 @@ class BitUser extends LibertyMime {
 	 * verifyEmail
 	 *
 	 * @param array $pEmail
-	 * @access public
 	 * @return TRUE on success, FALSE on failure, or -1 if verifyMX had a connection failure - mErrors will contain reason for failure
 	 */
-	function verifyEmail( $pEmail , &$pErrors ) {
+	public function verifyEmail( $pEmail , &$pErrors ) {
 		global $gBitSystem;
 
 		// check for existing user first, so root@localhost doesn't get attempted to re-register
@@ -445,6 +444,29 @@ class BitUser extends LibertyMime {
 				bit_error_log('INVALID EMAIL : '.$pEmail.' by '. $_SERVER['REMOTE_ADDR'] .' for '. $mxErrors['email']);
 				$pErrors = array_merge( $pErrors, $mxErrors );
 			}
+		}
+
+		if( !isset( $ret ) ) {
+			$ret = ( count( $pErrors ) == 0 )  ;
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * verifyAnonEmail
+	 *
+	 * @param array $pEmail
+	 * @return TRUE on success, FALSE on failure, or -1 if verifyMX had a connection failure - mErrors will contain reason for failure
+	 */
+	public static function verifyAnonEmail( $pEmail , &$pErrors ) {
+		global $gBitSystem;
+
+		// check for existing user first, so root@localhost doesn't get attempted to re-register
+		if( $pEmail == 'root@localhost' || $pEmail == 'guest@localhost' ) {
+			// nothing to do
+		} elseif( !validate_email_syntax( $pEmail ) ) {
+			$pErrors['email'] = 'The email address "'.$pEmail.'" is invalid.';
 		}
 
 		if( !isset( $ret ) ) {
@@ -2224,10 +2246,10 @@ class BitUser extends LibertyMime {
 			if ($gBitSystem->isFeatureActive( 'pretty_urls' )
 			|| $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$ret =  USERS_PKG_URL . $rewrite_tag;
-				$ret .= urlencode( $pParamHash['user'] );
+				$ret .= urlencode( $pParamHash['login'] );
 			} else {
 				$ret =  USERS_PKG_URL . 'index.php?home=';
-				$ret .= urlencode( $pParamHash['user'] );
+				$ret .= urlencode( $pParamHash['login'] );
 			}
 		}
 		return $ret;
@@ -2489,7 +2511,7 @@ class BitUser extends LibertyMime {
 			$query = "
 				SELECT ur.`role_id`, ur.`role_name`, ur.`user_id` as role_owner_user_id
 				FROM `".BIT_DB_PREFIX."users_roles_map` urm INNER JOIN `".BIT_DB_PREFIX."users_roles` ur ON (ur.`role_id`=urm.`role_id`)
-				WHERE urm.`user_id`=? OR urm.`role_id`=".ANONYMOUS_ROLE_ID;
+				WHERE urm.`user_id`=? OR urm.`role_id`=".ANONYMOUS_TEAM_ID;
 			$ret = $this->mDb->getAssoc( $query, array(( int )$pUserId ));
 			if( $ret ) {
 				foreach( array_keys( $ret ) as $roleId ) {
