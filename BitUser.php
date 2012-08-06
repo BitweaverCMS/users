@@ -424,10 +424,9 @@ class BitUser extends LibertyMime {
 	 * verifyEmail
 	 *
 	 * @param array $pEmail
-	 * @access public
 	 * @return TRUE on success, FALSE on failure, or -1 if verifyMX had a connection failure - mErrors will contain reason for failure
 	 */
-	function verifyEmail( $pEmail , &$pErrors ) {
+	public function verifyEmail( $pEmail , &$pErrors ) {
 		global $gBitSystem;
 
 		// check for existing user first, so root@localhost doesn't get attempted to re-register
@@ -445,6 +444,29 @@ class BitUser extends LibertyMime {
 				bit_error_log('INVALID EMAIL : '.$pEmail.' by '. $_SERVER['REMOTE_ADDR'] .' for '. $mxErrors['email']);
 				$pErrors = array_merge( $pErrors, $mxErrors );
 			}
+		}
+
+		if( !isset( $ret ) ) {
+			$ret = ( count( $pErrors ) == 0 )  ;
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * verifyAnonEmail
+	 *
+	 * @param array $pEmail
+	 * @return TRUE on success, FALSE on failure, or -1 if verifyMX had a connection failure - mErrors will contain reason for failure
+	 */
+	public static function verifyAnonEmail( $pEmail , &$pErrors ) {
+		global $gBitSystem;
+
+		// check for existing user first, so root@localhost doesn't get attempted to re-register
+		if( $pEmail == 'root@localhost' || $pEmail == 'guest@localhost' ) {
+			// nothing to do
+		} elseif( !validate_email_syntax( $pEmail ) ) {
+			$pErrors['email'] = 'The email address "'.$pEmail.'" is invalid.';
 		}
 
 		if( !isset( $ret ) ) {
