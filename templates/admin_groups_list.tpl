@@ -24,7 +24,7 @@
 					<div class="floaticon">
 						{smartlink ititle="Edit" ipackage="users" ifile="admin/edit_group.php" ibiticon="icons/accessories-text-editor" group_id=$groupId}
 						{smartlink ititle="Group Members" ipackage="users" ifile="admin/edit_group.php" ibiticon="icons/system-users" members=$groupId}
-						{if $groupId ne $smarty.const.ANONYMOUS_GROUP_ID}
+						{if $groupId ne $smarty.const.ANONYMOUS_TEAM_ID}
 							{smartlink ititle="Batch assign" ipackage="users" ifile="admin/edit_group.php" ibiticon="icons/application-x-executable" batch_assign=$groupId}
 							{smartlink ititle="Remove" ipackage="users" ifile="admin/edit_group.php" ibiticon="icons/edit-delete" action=delete group_id=$groupId}
 						{/if}
