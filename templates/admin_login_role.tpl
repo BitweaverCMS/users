@@ -68,7 +68,7 @@
 							<option value="{$role.role_id}" {if $gBitSystem->getConfig('users_validate_email_role') eq $role.role_id} selected="selected"{/if}>{$role.role_name}</option>
 						{/foreach}
 					</select>
-					<div class="formhelp">Selecting (none) will prevent the user from registering with a non responsive email. Click <a href='{$smarty.const.USERS_PKG_URL}admin/verify_emails.php?tk={$gBitUser->mTicket}'>here</a> to validate all of your current users emails.</div>
+					<div class="formhelp">Selecting (none) will prevent the user from registering with a non responsive email. Click <a href='{$smarty.const.USERS_PKG_URL}admin/verify_emails_role.php?tk={$gBitUser->mTicket}'>here</a> to validate all of your current users emails.</div>
 				{/forminput}
 			</div>
 			<div class="row">
