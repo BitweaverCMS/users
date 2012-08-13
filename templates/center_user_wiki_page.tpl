@@ -13,7 +13,7 @@
 					{smartlink ipackage=users ifile="admin/index.php" action=delete user_id=$userInfo.user_id ititle="Remove" ibiticon="icons/edit-delete" iforce="icon"}
 				{/if}
 			{/if}
-			
+
 			<a href="" onclick="BitBase.toggleElementDisplay('userinformation','block',true);return false;">{biticon iname="contact-new" iforce="icon" ipackage="icons" iexplain="User Information"}</a>
 
 			{if $gBitUser->isRegistered() && $gBitUser->mUserId eq $gQueryUser->mUserId}
@@ -43,7 +43,7 @@
 		{include file="bitpackage:users/my_bitweaver_bar.tpl"}
 	{/if}
 
-	<div>	
+	<div>
 		{if !$parsed}
 			{if $gBitUser->mUserId ne $gQueryUser->mUserId}
 				<p>{tr}This user has not entered any information yet.{/tr}</p>
@@ -58,7 +58,7 @@
 				{$parsed}
 			</div>
 		{/if}
-	</div>	
+	</div>
 </div>
 {/strip}
 
