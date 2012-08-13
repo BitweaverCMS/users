@@ -14,7 +14,7 @@ if (!$gBitUser->userExists( array( 'user_id' => $_REQUEST["assign_user"] ) ) ) {
 	$gBitSystem->fatalError( tra( "User doesnt exist" ));
 }
 
-$assignUser = new BitPermUser( $_REQUEST["assign_user"] );
+$assignUser = new RolePermUser( $_REQUEST["assign_user"] );
 $assignUser->load( TRUE );
 
 if( $assignUser->isAdmin() && !$gBitUser->isAdmin() ) {
