@@ -157,7 +157,7 @@ if( !empty( $_REQUEST["loginprefs"] ) ) {
 		$in = array();
 		$out = array();
 		foreach( $groupList as $gr ) {
-			if( $gr['group_id'] == ANONYMOUS_TEAM_ID ) {
+			if( $gr['group_id'] == ANONYMOUS_GROUP_ID ) {
 				continue;
 			}
 

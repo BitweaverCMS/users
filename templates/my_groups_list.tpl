@@ -116,7 +116,7 @@
 
 								<td class="actionicon">
 									<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?group_id={$groupId}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="edit"}</a>
-									{if $groupId ne -1}{* sorry for hardcoding, really need php define ANONYMOUS_TEAM_ID - spiderr *}
+									{if $groupId ne ANONYMOUS_GROUP_ID}
 										<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=delete&amp;group_id={$groupId}" 
 										onclick="return confirm('{tr}Are you sure you want to delete this group?{/tr}')">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Group"}</a>
 									{/if}
