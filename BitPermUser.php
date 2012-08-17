@@ -357,7 +357,7 @@ class BitPermUser extends BitUser {
 	 */
 	function expungeGroup( $pGroupId ) {
 		// we cannot remove the anonymous group
-		if( $pGroupId != ANONYMOUS_TEAM_ID ) {
+		if( $pGroupId != ANONYMOUS_GROUP_ID ) {
 			$query = "DELETE FROM `".BIT_DB_PREFIX."users_groups_map` WHERE `group_id` = ?";
 			$result = $this->mDb->query( $query, array( $pGroupId ));
 			$query = "DELETE FROM `".BIT_DB_PREFIX."users_group_permissions` WHERE `group_id` = ?";
@@ -661,7 +661,7 @@ class BitPermUser extends BitUser {
 					INNER JOIN `".BIT_DB_PREFIX."users_group_permissions` ugp ON ( ugp.`perm_name`=up.`perm_name` )
 					INNER JOIN `".BIT_DB_PREFIX."users_groups` ug ON ( ug.`group_id`=ugp.`group_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."users_groups_map` ugm ON ( ugm.`group_id`=ugp.`group_id` AND ugm.`user_id` = ? )
-				WHERE ug.`group_id`= ".ANONYMOUS_TEAM_ID." OR ugm.`group_id`=ug.`group_id`";
+				WHERE ug.`group_id`= ".ANONYMOUS_GROUP_ID." OR ugm.`group_id`=ug.`group_id`";
 			$this->mPerms = $this->mDb->getAssoc( $query, array( $this->mUserId ));
 			// Add in override permissions
 			if( !empty( $this->mPermsOverride ) ) {

@@ -2511,7 +2511,7 @@ class BitUser extends LibertyMime {
 			$query = "
 				SELECT ug.`group_id`, ug.`group_name`, ug.`user_id` as group_owner_user_id
 				FROM `".BIT_DB_PREFIX."users_groups_map` ugm INNER JOIN `".BIT_DB_PREFIX."users_groups` ug ON (ug.`group_id`=ugm.`group_id`)
-				WHERE ugm.`user_id`=? OR ugm.`group_id`=".ANONYMOUS_TEAM_ID;
+				WHERE ugm.`user_id`=? OR ugm.`group_id`=".ANONYMOUS_GROUP_ID;
 			$ret = $this->mDb->getAssoc( $query, array(( int )$pUserId ));
 			if( $ret ) {
 				foreach( array_keys( $ret ) as $groupId ) {
