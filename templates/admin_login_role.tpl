@@ -59,16 +59,16 @@
 			{/foreach}
 
 			<div class="row">
-				{formlabel label="Default group for users with verifiable emails" for="users_validate_email_group"}
+				{formlabel label="Default role for users with verifiable emails" for="users_validate_email_role"}
 				{forminput}
 
-					<select name="users_validate_email_group" id="users_validate_email_group">
-						<option value="(none)" {if $gBitSystem->getConfig('users_validate_email_group') eq ''} selected="selected"{/if}>(none)</option>
-						{foreach from=$groups item='group'}
-							<option value="{$group.group_id}" {if $gBitSystem->getConfig('users_validate_email_group') eq $group.group_id} selected="selected"{/if}>{$group.group_name}</option>
+					<select name="users_validate_email_role" id="users_validate_email_role">
+						<option value="(none)" {if $gBitSystem->getConfig('users_validate_email_role') eq ''} selected="selected"{/if}>(none)</option>
+						{foreach from=$roles item='role'}
+							<option value="{$role.role_id}" {if $gBitSystem->getConfig('users_validate_email_role') eq $role.role_id} selected="selected"{/if}>{$role.role_name}</option>
 						{/foreach}
 					</select>
-					<div class="formhelp">Selecting (none) will prevent the user from registering with a non responsive email. Click <a href='{$smarty.const.USERS_PKG_URL}admin/verify_emails.php?tk={$gBitUser->mTicket}'>here</a> to validate all of your current users emails.</div>
+					<div class="formhelp">Selecting (none) will prevent the user from registering with a non responsive email. Click <a href='{$smarty.const.USERS_PKG_URL}admin/verify_emails_role.php?tk={$gBitUser->mTicket}'>here</a> to validate all of your current users emails.</div>
 				{/forminput}
 			</div>
 			<div class="row">
@@ -92,33 +92,18 @@
 			</div>
 
 			<div class="row">
-				{if $roleList }
-					{formlabel label="Roles choice at registration" for="registration_role_choice"}
-					{forminput}
-						<select name="registration_role_choice[]" multiple="multiple" size="5">
-							<option value="">&nbsp;</option>
-							{foreach key=r item=ro from=$roleList}
-								{if $ro.role_id ne -1}
-									<option value="{$ro.role_id}" {if $ro.is_public eq 'y'} selected="selected"{/if}>{$ro.role_name|truncate:"52":" ..."}</option>
-								{/if}
-							{/foreach}
-						</select>
-						{formhelp note="A user will be able to select one of the selected roles at registration. If you select the default role (Registered), he will not be obliged to select a role."}
-					{/forminput}
-				{else}
-					{formlabel label="Groups choice at registration" for="registration_group_choice"}
-					{forminput}
-						<select name="registration_group_choice[]" multiple="multiple" size="5">
-							<option value="">&nbsp;</option>
-							{foreach key=g item=gr from=$groupList}
-								{if $gr.group_id ne -1}
-									<option value="{$gr.group_id}" {if $gr.is_public eq 'y'} selected="selected"{/if}>{$gr.group_name|truncate:"52":" ..."}</option>
-								{/if}
-							{/foreach}
-						</select>
-						{formhelp note="A user will be able to select one of the selected group at registration. If you select the default group (Registered), he will not be obliged to select a group."}
-					{/forminput}
-				{/if}
+				{formlabel label="Roles choice at registration" for="registration_role_choice"}
+				{forminput}
+					<select name="registration_role_choice[]" multiple="multiple" size="5">
+						<option value="">&nbsp;</option>
+						{foreach key=r item=ro from=$roleList}
+							{if $ro.role_id ne -1}
+								<option value="{$ro.role_id}" {if $ro.is_public eq 'y'} selected="selected"{/if}>{$ro.role_name|truncate:"52":" ..."}</option>
+							{/if}
+						{/foreach}
+					</select>
+					{formhelp note="A user will be able to select one of the selected roles at registration. If you select the default role (Registered), he will not be obliged to select a role."}
+				{/forminput}
 			</div>
 
 			<div class="row submit">

@@ -357,7 +357,7 @@ class RolePermUser extends BitUser {
 	 */
 	function expungeRole( $pRoleId ) {
 		// we cannot remove the anonymous role
-		if( $pRoleId != ANONYMOUS_ROLE_ID ) {
+		if( $pRoleId != ANONYMOUS_TEAM_ID ) {
 			$query = "DELETE FROM `".BIT_DB_PREFIX."users_roles_map` WHERE `role_id` = ?";
 			$result = $this->mDb->query( $query, array( $pRoleId ));
 			$query = "DELETE FROM `".BIT_DB_PREFIX."users_role_permissions` WHERE `role_id` = ?";
@@ -661,7 +661,7 @@ class RolePermUser extends BitUser {
 					INNER JOIN `".BIT_DB_PREFIX."users_role_permissions` urp ON ( urp.`perm_name`=up.`perm_name` )
 					INNER JOIN `".BIT_DB_PREFIX."users_roles` ur ON ( ur.`role_id`=urp.`role_id` )
 					LEFT OUTER JOIN `".BIT_DB_PREFIX."users_roles_map` urm ON ( urm.`role_id`=urp.`role_id` AND urm.`user_id` = ? )
-				WHERE ur.`role_id`= ".ANONYMOUS_ROLE_ID." OR urm.`role_id`=ur.`role_id`";
+				WHERE ur.`role_id`= ".ANONYMOUS_TEAM_ID." OR urm.`role_id`=ur.`role_id`";
 			$this->mPerms = $this->mDb->getAssoc( $query, array( $this->mUserId ));
 			// Add in override permissions
 			if( !empty( $this->mPermsOverride ) ) {

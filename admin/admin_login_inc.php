@@ -116,9 +116,14 @@ $loginSettings = array(
 );
 $gBitSmarty->assign( 'loginSettings', $loginSettings );
 
-$listHash = array( 'sort_mode' => 'group_name_asc' );
 
-$gBitSmarty->assign('groups', $gBitUser->getAllGroups( $listHash ));
+if (defined ('ROLE_MODEL') ) {
+	$listHash = array( 'sort_mode' => 'role_name_asc' );
+	$gBitSmarty->assign( 'roleList', $gBitUser->getAllRoles( $listHash ));
+} else {
+	$listHash = array( 'sort_mode' => 'group_name_asc' );
+	$gBitSmarty->assign('groups', $gBitUser->getAllGroups( $listHash ));
+}
 
 if( !function_exists("gd_info" ) ) {
 	$gBitSmarty->assign( 'warning', 'PHP GD library is required for this feature (not found on your system)' );
@@ -152,7 +157,7 @@ if( !empty( $_REQUEST["loginprefs"] ) ) {
 		$in = array();
 		$out = array();
 		foreach( $groupList as $gr ) {
-			if( $gr['group_id'] == ANONYMOUS_GROUP_ID ) {
+			if( $gr['group_id'] == ANONYMOUS_TEAM_ID ) {
 				continue;
 			}
 
@@ -266,7 +271,6 @@ if( !empty( $_REQUEST["httpprefs"] ) ) {
 }
 
 $listHash = array();
-$gBitSmarty->assign_by_ref( 'groupList', $gBitUser->getAllGroups( $listHash ));
 
 // This needs to be made more generic so that it picks up all plugins
 // Could not see where the 'auth_ldap' was defined in the $options['avail'] array
@@ -282,5 +286,5 @@ if( !empty( $_REQUEST["auth_ldap"] ) ) {
 	}
 }
 
-$gBitSmarty->assign_by_ref( 'authSettings', BaseAuth::getConfig() );
+$gBitSmarty->assign( 'authSettings', BaseAuth::getConfig() );
 ?>

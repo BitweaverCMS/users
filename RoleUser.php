@@ -128,7 +128,7 @@ class BitUser extends LibertyMime {
 				$this->mInfo['user_id']       = $this->mInfo['uu_user_id'];
 				$this->mInfo['is_registered'] = $this->isRegistered();
 				foreach( array( 'portrait', 'avatar', 'logo' ) as $img ) {
-					$this->mInfo[$img.'_path']   = $this->getSourceFile( array( 'user_id'=>$this->getField( 'user_id' ), 'package'=>liberty_mime_get_storage_sub_dir_name( array( 'type' => $this->getField( $img.'_mime_type' ), 'name' =>  $this->getField( $img.'_file_name' ) ) ), 'file_name' => basename( $this->mInfo[$img.'_file_name'] ), 'sub_dir' =>  $this->getField( $img.'_attachment_id' ) ) );
+					$this->mInfo[$img.'_path']   = $this->getSourceFile( array( 'user_id'=>$this->getField( 'user_id' ), 'package'=>liberty_mime_get_storage_sub_dir_name( array( 'mime_type' => $this->getField( $img.'_mime_type' ), 'name' =>  $this->getField( $img.'_file_name' ) ) ), 'file_name' => basename( $this->mInfo[$img.'_file_name'] ), 'sub_dir' =>  $this->getField( $img.'_attachment_id' ), 'mime_type' => $this->getField( $img.'_mime_type' ) ) );
 					$this->mInfo[$img.'_url']    = liberty_fetch_thumbnail_url( array( 'source_file'=>$this->mInfo[$img.'_path'], 'size' => 'small', 'mime_image' => FALSE ));
 				}
 
@@ -424,10 +424,9 @@ class BitUser extends LibertyMime {
 	 * verifyEmail
 	 *
 	 * @param array $pEmail
-	 * @access public
 	 * @return TRUE on success, FALSE on failure, or -1 if verifyMX had a connection failure - mErrors will contain reason for failure
 	 */
-	function verifyEmail( $pEmail , &$pErrors ) {
+	public function verifyEmail( $pEmail , &$pErrors ) {
 		global $gBitSystem;
 
 		// check for existing user first, so root@localhost doesn't get attempted to re-register
@@ -445,6 +444,29 @@ class BitUser extends LibertyMime {
 				bit_error_log('INVALID EMAIL : '.$pEmail.' by '. $_SERVER['REMOTE_ADDR'] .' for '. $mxErrors['email']);
 				$pErrors = array_merge( $pErrors, $mxErrors );
 			}
+		}
+
+		if( !isset( $ret ) ) {
+			$ret = ( count( $pErrors ) == 0 )  ;
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * verifyAnonEmail
+	 *
+	 * @param array $pEmail
+	 * @return TRUE on success, FALSE on failure, or -1 if verifyMX had a connection failure - mErrors will contain reason for failure
+	 */
+	public static function verifyAnonEmail( $pEmail , &$pErrors ) {
+		global $gBitSystem;
+
+		// check for existing user first, so root@localhost doesn't get attempted to re-register
+		if( $pEmail == 'root@localhost' || $pEmail == 'guest@localhost' ) {
+			// nothing to do
+		} elseif( !validate_email_syntax( $pEmail ) ) {
+			$pErrors['email'] = 'The email address "'.$pEmail.'" is invalid.';
 		}
 
 		if( !isset( $ret ) ) {
@@ -2224,10 +2246,10 @@ class BitUser extends LibertyMime {
 			if ($gBitSystem->isFeatureActive( 'pretty_urls' )
 			|| $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$ret =  USERS_PKG_URL . $rewrite_tag;
-				$ret .= urlencode( $pParamHash['title'] );
+				$ret .= urlencode( $pParamHash['login'] );
 			} else {
 				$ret =  USERS_PKG_URL . 'index.php?home=';
-				$ret .= urlencode( $pParamHash['title'] );
+				$ret .= urlencode( $pParamHash['login'] );
 			}
 		}
 		return $ret;
@@ -2241,7 +2263,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return get a link to the the users homepage
 	 */
-	function getDisplayLink( $pLinkText=NULL, $pMixed=NULL, $pAnchor=NULL ) {
+	public function getDisplayLink( $pLinkText=NULL, $pMixed=NULL, $pAnchor=NULL ) {
 		return BitUser::getDisplayNameFromHash( TRUE, $pMixed );
 	}
 
@@ -2252,7 +2274,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return get the users display name
 	 */
-	function getTitle( $pHash = NULL, $pDefault=TRUE ) {
+	public function getTitle( $pHash = NULL, $pDefault=TRUE ) {
 		return BitUser::getDisplayNameFromHash( FALSE, $pHash );
 	}
 
@@ -2449,9 +2471,9 @@ class BitUser extends LibertyMime {
 			}
 
 			if( !empty( $res['avatar_file_name'] )) {
-				$res['avatar_url'] = $this->getSourceUrl( array( 'attachment_id'=>$res['avatar_attachment_id'], 'file_name'=>$res['avatar_file_name'] ) );
+				$res['avatar_url'] = $this->getSourceUrl( array( 'attachment_id'=>$res['avatar_attachment_id'], 'mime_type'=>$res['avatar_mime_type'], 'file_name'=>$res['avatar_file_name'] ) );
 				$res['thumbnail_url'] = liberty_fetch_thumbnail_url( array(
-					'source_file' => $this->getSourceFile( array( 'sub_dir'=>$res['avatar_attachment_id'], 'user_id' => $res['user_id'], 'file_name'=>$res['avatar_file_name'], 'package'=>liberty_mime_get_storage_sub_dir_name( array( 'type'=>$res['avatar_mime_type'], 'name'=>$res['avatar_file_name'] ) ) ) ),
+					'source_file' => $this->getSourceFile( array( 'sub_dir'=>$res['avatar_attachment_id'], 'user_id' => $res['user_id'], 'file_name'=>$res['avatar_file_name'], 'mime_type'=>$res['avatar_mime_type'], 'package'=>liberty_mime_get_storage_sub_dir_name( array( 'mime_type'=>$res['avatar_mime_type'], 'name'=>$res['avatar_file_name'] ) ) ) ),
 					'file_name' => $res['avatar_url'],
 					// TODO: Make this a preference
 					'size'         => 'avatar'
@@ -2489,7 +2511,7 @@ class BitUser extends LibertyMime {
 			$query = "
 				SELECT ur.`role_id`, ur.`role_name`, ur.`user_id` as role_owner_user_id
 				FROM `".BIT_DB_PREFIX."users_roles_map` urm INNER JOIN `".BIT_DB_PREFIX."users_roles` ur ON (ur.`role_id`=urm.`role_id`)
-				WHERE urm.`user_id`=? OR urm.`role_id`=".ANONYMOUS_ROLE_ID;
+				WHERE urm.`user_id`=? OR urm.`role_id`=".ANONYMOUS_TEAM_ID;
 			$ret = $this->mDb->getAssoc( $query, array(( int )$pUserId ));
 			if( $ret ) {
 				foreach( array_keys( $ret ) as $roleId ) {

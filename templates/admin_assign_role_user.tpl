@@ -10,7 +10,7 @@
 	</div>
 
 	<div class="body">
-		{form legend="User Information" action="`$smarty.const.USERS_PKG_URL`admin/assign_user.php"}
+		{form legend="User Information" action="`$smarty.const.USERS_PKG_URL`admin/assign_role_user.php"}
 			<input type="hidden" value="{$assignUser->mUserId}" name="assign_user" />
 
 			<div class="row">
@@ -52,7 +52,7 @@
 						<a href="{$smarty.const.USERS_PKG_URL}admin/edit_role.php?role_id={$roleId}">{$role.role_name}</a>
 						{if $roleId eq $assignUser->mInfo.default_role_id}</strong>{/if}
 						{if $roleId != -1}
-							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removerole&amp;role_id={$roleId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="icons" iname="edit-delete" iexplain="remove from role" iforce="icon"}</a>
+							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_role_user.php?action=removerole&amp;role_id={$roleId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="icons" iname="edit-delete" iexplain="remove from role" iforce="icon"}</a>
 						{/if}
 						<br />
 					{/foreach}
@@ -79,8 +79,8 @@
 
 		<table class="data">
 			<tr>
-				<th><a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?assign_user={$assignUser->mUserId}&amp;offset={$offset}&amp;sort_mode={if $sort_mode eq 'role_name_desc'}role_name_asc{else}role_name_desc{/if}">{tr}Role Name{/tr}</a></th>
-				<th><a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?assign_user={$assignUser->mUserId}&amp;offset={$offset}&amp;sort_mode={if $sort_mode eq 'role_desc_desc'}role_desc_asc{else}role_desc_desc{/if}">{tr}Description{/tr}</a></th>
+				<th><a href="{$smarty.const.USERS_PKG_URL}admin/assign_role_user.php?assign_user={$assignUser->mUserId}&amp;offset={$offset}&amp;sort_mode={if $sort_mode eq 'role_name_desc'}role_name_asc{else}role_name_desc{/if}">{tr}Role Name{/tr}</a></th>
+				<th><a href="{$smarty.const.USERS_PKG_URL}admin/assign_role_user.php?assign_user={$assignUser->mUserId}&amp;offset={$offset}&amp;sort_mode={if $sort_mode eq 'role_desc_desc'}role_desc_asc{else}role_desc_desc{/if}">{tr}Description{/tr}</a></th>
 				<th>{tr}action{/tr}</th>
 			</tr>
 			{cycle values="even,odd" print=false}
@@ -90,7 +90,7 @@
 						<td>{$role.role_name}</td>
 						<td>{$role.role_desc}</td>
 						<td class="actionicon">
-							<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;role_id={$roleId}&amp;assign_user={$assignUser->mUserId}">
+							<a href="{$smarty.const.USERS_PKG_URL}admin/assign_role_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;role_id={$roleId}&amp;assign_user={$assignUser->mUserId}">
 								{biticon ipackage="icons" iname="emblem-shared" iexplain="assign" iforce="icon"}
 							</a>
 						</td>

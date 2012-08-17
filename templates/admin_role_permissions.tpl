@@ -90,7 +90,7 @@
 					<li><em>{$gLibertySystem->getContentTypeName($content_type_guid)}</em>
 						<ul>
 							{foreach from=$content item=perms key=content_id}
-								<li><a href="{$smarty.const.LIBERTY_PKG_URL}content_permissions.php?content_id={$content_id}">{$perms.0.title}</a>
+								<li><a href="{$smarty.const.LIBERTY_PKG_URL}content_role_permissions.php?content_id={$content_id}">{$perms.0.title}</a>
 									<ul>
 										{foreach from=$perms item=perm}
 											<li>

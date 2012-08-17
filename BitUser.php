@@ -244,7 +244,7 @@ class BitUser extends LibertyMime {
 				$this->mErrors['login'] = tra( "Your username can only contain numbers, characters, underscores and hyphens." );
 			} else {
 				// LOWER CASE all logins
-				$pParamHash['login'] = strtolower( $pParamHash['login'] );
+				$pParamHash['login'] = strtolower( strip_tags($pParamHash['login']) );
 				$pParamHash['user_store']['login'] = $pParamHash['login'];
 			}
 		}
@@ -424,10 +424,9 @@ class BitUser extends LibertyMime {
 	 * verifyEmail
 	 *
 	 * @param array $pEmail
-	 * @access public
 	 * @return TRUE on success, FALSE on failure, or -1 if verifyMX had a connection failure - mErrors will contain reason for failure
 	 */
-	function verifyEmail( $pEmail , &$pErrors ) {
+	public function verifyEmail( $pEmail , &$pErrors ) {
 		global $gBitSystem;
 
 		// check for existing user first, so root@localhost doesn't get attempted to re-register
@@ -445,6 +444,29 @@ class BitUser extends LibertyMime {
 				bit_error_log('INVALID EMAIL : '.$pEmail.' by '. $_SERVER['REMOTE_ADDR'] .' for '. $mxErrors['email']);
 				$pErrors = array_merge( $pErrors, $mxErrors );
 			}
+		}
+
+		if( !isset( $ret ) ) {
+			$ret = ( count( $pErrors ) == 0 )  ;
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * verifyAnonEmail
+	 *
+	 * @param array $pEmail
+	 * @return TRUE on success, FALSE on failure, or -1 if verifyMX had a connection failure - mErrors will contain reason for failure
+	 */
+	public static function verifyAnonEmail( $pEmail , &$pErrors ) {
+		global $gBitSystem;
+
+		// check for existing user first, so root@localhost doesn't get attempted to re-register
+		if( $pEmail == 'root@localhost' || $pEmail == 'guest@localhost' ) {
+			// nothing to do
+		} elseif( !validate_email_syntax( $pEmail ) ) {
+			$pErrors['email'] = 'The email address "'.$pEmail.'" is invalid.';
 		}
 
 		if( !isset( $ret ) ) {
@@ -2224,10 +2246,10 @@ class BitUser extends LibertyMime {
 			if ($gBitSystem->isFeatureActive( 'pretty_urls' )
 			|| $gBitSystem->isFeatureActive( 'pretty_urls_extended' ) ) {
 				$ret =  USERS_PKG_URL . $rewrite_tag;
-				$ret .= urlencode( $pParamHash['title'] );
+				$ret .= urlencode( $pParamHash['login'] );
 			} else {
 				$ret =  USERS_PKG_URL . 'index.php?home=';
-				$ret .= urlencode( $pParamHash['title'] );
+				$ret .= urlencode( $pParamHash['login'] );
 			}
 		}
 		return $ret;
@@ -2241,7 +2263,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return get a link to the the users homepage
 	 */
-	function getDisplayLink( $pLinkText=NULL, $pMixed=NULL, $pAnchor=NULL ) {
+	public function getDisplayLink( $pLinkText=NULL, $pMixed=NULL, $pAnchor=NULL ) {
 		return BitUser::getDisplayNameFromHash( TRUE, $pMixed );
 	}
 
@@ -2252,7 +2274,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return get the users display name
 	 */
-	function getTitle( $pHash = NULL, $pDefault=TRUE ) {
+	public function getTitle( $pHash = NULL, $pDefault=TRUE ) {
 		return BitUser::getDisplayNameFromHash( FALSE, $pHash );
 	}
 
@@ -2489,7 +2511,7 @@ class BitUser extends LibertyMime {
 			$query = "
 				SELECT ug.`group_id`, ug.`group_name`, ug.`user_id` as group_owner_user_id
 				FROM `".BIT_DB_PREFIX."users_groups_map` ugm INNER JOIN `".BIT_DB_PREFIX."users_groups` ug ON (ug.`group_id`=ugm.`group_id`)
-				WHERE ugm.`user_id`=? OR ugm.`group_id`=".ANONYMOUS_GROUP_ID;
+				WHERE ugm.`user_id`=? OR ugm.`group_id`=".ANONYMOUS_TEAM_ID;
 			$ret = $this->mDb->getAssoc( $query, array(( int )$pUserId ));
 			if( $ret ) {
 				foreach( array_keys( $ret ) as $groupId ) {

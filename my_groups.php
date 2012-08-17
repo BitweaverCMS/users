@@ -22,12 +22,11 @@ global $gBitUser, $gBitSystem;
 
 // PERMISSIONS: registered user required
 if ( !$gBitUser->isRegistered() ) {
-	$gBitSystem->fatalError( tra( "You are not logged in." ));	
+	$gBitSystem->fatalError( tra( "You are not logged in." ));
 }
 
 if( !empty( $_REQUEST["cancel"] ) ) {
-	header( 'Location: '.USERS_PKG_URL.'my_groups.php' );
-	die;
+	bit_redirect( USERS_PKG_URL.'my_groups.php' );
 }
 
 if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
@@ -41,7 +40,7 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 		$listHash = array( 'sort_mode' => !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : 'group_name_asc' );
 		$groupList = $gBitUser->getAllGroups( $listHash );
 	}
-	
+
 	// Remember a package limit if it is set.
 	$gBitSmarty->assign( 'package',isset( $_REQUEST['package'] ) ? $_REQUEST['package'] : 'all' );
 
@@ -119,7 +118,7 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
 	$listHash = array( 'sort_mode' => 'group_name_asc' );
 	$groupList = $gBitUser->getAllUserGroups();
-	
+
 	if( !empty( $_REQUEST['group_id'] ) ) {
 		// we don't want our own group listed when editing
 		if( !empty( $groupList[$_REQUEST['group_id']] ) ) {
@@ -132,7 +131,7 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 		$gBitSmarty->assign_by_ref( 'allPerms', $allPerms );
 		$gBitSystem->setBrowserTitle( 'Admininster Group: '.$groupInfo['group_name'].' '.(isset( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : '') );
 		$mid = 'bitpackage:users/my_group_edit.tpl';
-	} 
+	}
 
 	$gBitSmarty->assign('groups', $groupList);
 	//	$gBitSmarty->assign( (!empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'edit').'TabSelect', 'tdefault' );
@@ -147,7 +146,7 @@ if ( ( !empty( $_REQUEST['add_public_group'] ) || !empty( $_REQUEST['remove_publ
 		}
 		else {
 			$errorMsg[] = tra("You can't leave this group.");
-		}			
+		}
 	} elseif ( !empty( $_REQUEST['add_public_group'] ) ) {
 		$gBitUser->addUserToGroup( $gBitUser->mUserId, $_REQUEST['public_group_id'] );
 	} elseif ( !empty( $_REQUEST['remove_public_group'] ) ) {
@@ -162,8 +161,7 @@ if ( ( !empty( $_REQUEST['add_public_group'] ) || !empty( $_REQUEST['remove_publ
 		} else {
 			$url = $groupInfo['after_registration_page'];
 		}
-		header( 'Location: '.$url );
-		exit;
+		bit_redirect( $url );
 	}
 }
 
@@ -174,7 +172,7 @@ $listHash = array(
 	'is_public'=>'y',
 	'sort_mode' => array( 'is_default_asc', 'group_desc_asc' ),
 );
-$publicGroups = $gBitUser->getAllGroups( $listHash );	
+$publicGroups = $gBitUser->getAllGroups( $listHash );
 if( count( $publicGroups )) {
 	foreach ( $systemGroups as $groupId=>$groupInfo ) {
 		foreach ( $publicGroups as $key=>$publicGroup) {
@@ -200,7 +198,7 @@ if( count( $publicGroups )) {
 	}
 }
 
-// Remember error and success messages.	
+// Remember error and success messages.
 if (!empty($errorMsg)) {
 	$gBitSmarty->assign('errorMsg',$errorMsg);
 }

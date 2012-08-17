@@ -58,6 +58,15 @@ if( isset( $_REQUEST["batchimport"])) {
 						}
 					}
 				}
+				if( !empty( $userRecord['roles'] ) ) {
+					// roles need to be separated by spaces since this is a csv file
+					$roles = explode( " ", $userRecord['roles'] );
+					foreach( $roles as $role ) {
+						if( $roleId = $gBitUser->roleExists( $role, ROOT_USER_ID ) ) {
+							$newUser->addUserToRole( $newUser->mUserId, $roleId );
+						}
+					}
+				}
 				if( empty( $_REQUEST['admin_noemail_user'] ) ) {
 					$ret = users_admin_email_user( $userRecord );
 					if( is_array( $ret ) ) {
@@ -84,10 +93,18 @@ if( isset( $_REQUEST["batchimport"])) {
 	}
 }
 
-// get default group and pass it to tpl
-foreach( $gBitUser->getDefaultGroup() as $defaultGroupId => $defaultGroupName ) {
-	$gBitSmarty->assign('defaultGroupId', $defaultGroupId );
-	$gBitSmarty->assign('defaultGroupName', $defaultGroupName );
+if ( defined( 'ROLE_MODEL' ) ) {
+	// get default role and pass it to tpl
+	foreach( $gBitUser->getDefaultRole() as $defaultRoleId => $defaultRoleName ) {
+		$gBitSmarty->assign('defaultRoleId', $defaultRoleId );
+		$gBitSmarty->assign('defaultRoleName', $defaultRoleName );
+	}
+} else {
+	// get default group and pass it to tpl
+	foreach( $gBitUser->getDefaultGroup() as $defaultGroupId => $defaultGroupName ) {
+		$gBitSmarty->assign('defaultGroupId', $defaultGroupId );
+		$gBitSmarty->assign('defaultGroupName', $defaultGroupName );
+	}
 }
 
 // Display the template

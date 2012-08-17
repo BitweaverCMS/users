@@ -29,31 +29,31 @@ class LDAPAuth extends BaseAuth {
 	function validate($user,$pass,$challenge,$response) {
 		parent::validate($user,$pass,$challenge,$response);
 		global $gBitDb;
-		
+
 		if ( empty($user) or empty($pass) ) {
 			return USER_NOT_FOUND;
 		}
 
 		$this->mInfo["real_name"] = '';  // This needs fixing in the base code - real_name will only exist if a user has been identiied
-		
+
 		// Use V3, which requires UTF-8:
 		$this->mConfig['version'] = 3;
 		$user_utf8 = utf8_encode( $user );
-		
+
 		if ( $this->mConfig['reqcert'] ) {
 			// Skip the SSL certificate check:
 			// (This assumes PHP is using the OpenLDAP client library.)
 			putenv('LDAPTLS_REQCERT=never');
 		}
-		
-		if ( $this->mConfig['activedirectory'] ) {	
+
+		if ( $this->mConfig['activedirectory'] ) {
 			$this->mConfig['attributes'] = (array) null;
 			$this->mConfig['userfilter'] = '(objectClass='.$this->mConfig['useroc'].')';
 			$this->mConfig['groupfilter'] = '(objectClass='.$this->mConfig['groupoc'].')';
 			$this->mConfig['groupscope'] = $this->mConfig['userscope'];
 		} else {
 			// Using bitweaver groups with LDAP still needs completing so disable for now
-			unset($this->mConfig['group']);		
+			unset($this->mConfig['group']);
 		}
 
 		$a = new Auth('LDAP', $this->mConfig, "", false);
@@ -77,9 +77,9 @@ class LDAPAuth extends BaseAuth {
 				return PASSWORD_INCORRECT;
 			}
 		}
-		
-		// At this point, there was a successful ldap_bind() using the 
-		// user's Distinguished Name (DN) and password for login.  
+
+		// At this point, there was a successful ldap_bind() using the
+		// user's Distinguished Name (DN) and password for login.
 		// The call to ldap_get_attributes() has been saved into $a->getAuthData('attributes')
 
 		if ( $this->mConfig['activedirectory'] ) {
@@ -88,21 +88,21 @@ class LDAPAuth extends BaseAuth {
 			// Warning: ldap_get_attributes() uses case-sensitive array keys
 			$this->mInfo["login"] = $attributes[ $this->mConfig['userattr'] ];
 			$this->mInfo["email"] = $attributes[ $this->mConfig['email'] ];
-			$this->mInfo["real_name"] = empty($attributes[$this->mConfig['name']]) ? $this->mInfo["login"] : $attributes[$this->mConfig['name']];	
+			$this->mInfo["real_name"] = empty($attributes[$this->mConfig['name']]) ? $this->mInfo["login"] : $attributes[$this->mConfig['name']];
 		}
 		else {
 			$attributes = $a->getAuthData('attributes');
 			// Warning: ldap_get_attributes() uses case-sensitive array keys
 			$this->mInfo["login"] = $attributes[ $this->mConfig['userattr'] ][0];
 			$this->mInfo["email"] = $attributes[ $this->mConfig['email'] ][0];
-			$this->mInfo["real_name"] = empty($attributes[$this->mConfig['name']][0]) ? $this->mInfo["login"] : $attributes[$this->mConfig['name']][0];	
+			$this->mInfo["real_name"] = empty($attributes[$this->mConfig['name']][0]) ? $this->mInfo["login"] : $attributes[$this->mConfig['name']][0];
 		}
 		// Note, the new (or updated) SQL user will be created by the calling BitUser class.
 
 		return USER_VALID;  // Success!
-		
+
 	}
-	
+
 	function isSupported() {
 		$ret = true;
 		if (!class_exists("Auth")) {
@@ -142,8 +142,12 @@ class LDAPAuth extends BaseAuth {
 	function getSettings() {
 		global $gBitUser;
 		$listHash = array();
-		$groups = $gBitUser->getAllGroups($listHash);
-		$groupsD =array();
+
+		// Roles are not inteneded to match with ldap groups
+		// This area needs a closer look if it needs to be used
+		$groups = array();
+		if ( !defined ('ROLE_MODEL') ) $groups = $gBitUser->getAllGroups($listHash);
+		$groupsD = array();
 		foreach ($groups as $g) {
 			$groupsD[$g['group_id']]= "{$g['group_name']} ( {$g['group_desc']} )";
 		}
