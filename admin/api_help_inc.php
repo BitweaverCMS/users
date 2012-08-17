@@ -32,7 +32,7 @@ Connection: close
 Date: Fri, 20 Jul 2012 01:36:13 GMT
 Pragma: no-cache
 Server: Apache/2.2.3 (CentOS)
-Set-Cookie: BWSESSION=2ishv84g637mrp7o07hd8829f6; path='.$gBitSystem->getConfig( 'cookie_path', '/' ).'; domain='.$gBitSystem->getConfig( 'cookie_domain', $cookieDomain ).'
+Set-Cookie: BWSESSION=2ishv84g637mrp7o07hd8829f6; path='.$gBitSystem->getConfig( 'cookie_path', '/' ).'; domain='.$gBitSystem->getConfig( 'cookie_domain' ).'
 Set-Cookie: <strong>'.$gBitUser->getSiteCookieName().'=2ishv84g637mrp7o07hd8829f6M</strong>; path=/
 </code>',
 	),
@@ -84,7 +84,7 @@ Access-Control-Allow-Origin: *
 Client-Date: Thu, 19 Jul 2012 21:50:07 GMT
 Client-Peer: 66.179.240.119:443
 Client-Response-Num: 1
-Set-Cookie: BWSESSION=2ishv84g637mrp7o07hd8829f6; path='.$gBitSystem->getConfig( 'cookie_path', '/' ).'; domain='.$gBitSystem->getConfig( 'cookie_domain', $cookieDomain ).'
+Set-Cookie: BWSESSION=2ishv84g637mrp7o07hd8829f6; path='.$gBitSystem->getConfig( 'cookie_path', '/' ).'; domain='.$gBitSystem->getConfig( 'cookie_domain' ).'
 Set-Cookie: <strong>'.$gBitUser->getSiteCookieName().'=2ishv84g637mrp7o07hd8829f6M</strong>; path=/
 X-Powered-By: PHP/5.3.1
 
