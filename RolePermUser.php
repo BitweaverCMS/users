@@ -274,7 +274,7 @@ class RolePermUser extends BitUser {
 		if( empty(  $pListHash['sort_mode'] ) || $pListHash['sort_mode'] == 'name_asc' ) {
 			$pListHash['sort_mode'] = 'role_name_asc';
 		}
-		$this->prepGetList( $pListHash );
+		LibertyContent::prepGetList( $pListHash );
 		$sortMode = $this->mDb->convertSortmode( $pListHash['sort_mode'] );
 		if( !empty( $pListHash['find_roles'] ) ) {
 			$mid = " AND UPPER(`role_name`) like ?";

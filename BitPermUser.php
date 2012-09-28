@@ -274,7 +274,7 @@ class BitPermUser extends BitUser {
 		if( empty(  $pListHash['sort_mode'] ) || $pListHash['sort_mode'] == 'name_asc' ) {
 			$pListHash['sort_mode'] = 'group_name_asc';
 		}
-		$this->prepGetList( $pListHash );
+		LibertyContent::prepGetList( $pListHash );
 		$sortMode = $this->mDb->convertSortmode( $pListHash['sort_mode'] );
 		if( !empty( $pListHash['find_groups'] ) ) {
 			$mid = " AND UPPER(`group_name`) like ?";
