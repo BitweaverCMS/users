@@ -2470,6 +2470,11 @@ class BitUser extends LibertyMime {
 				}
 			}
 
+			if( !empty( $res['referer_url'] )) {
+				if ( isPackageActive('stats') ) {
+					$res['referer_url'] = stats_referer_display_short($res['referer_url']);
+				}
+			}
 			if( !empty( $res['avatar_file_name'] )) {
 				$res['avatar_url'] = $this->getSourceUrl( array( 'attachment_id'=>$res['avatar_attachment_id'], 'mime_type'=>$res['avatar_mime_type'], 'file_name'=>$res['avatar_file_name'] ) );
 				$res['thumbnail_url'] = liberty_fetch_thumbnail_url( array(

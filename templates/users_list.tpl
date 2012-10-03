@@ -66,11 +66,7 @@
 					<strong>{tr}Email:{/tr}</strong> {if !empty($users[user].email)}{mailto address=$users[user].email encode="javascript"}{/if}<br/>
 					<strong>{tr}User ID{/tr}:</strong> {$users[user].user_id}<br/>
 					{if $users[user].referer_url}
-						{if $gBitSystem->isPackageActive('stats')}
-							<a href="{$users[user].referer_url}">{$users[user].referer_url|stats_referer_display_short}</a><br/>
-						{else}
-							<a href="{$users[user].referer_url}">{$users[user].referer_url}</a><br/>
-						{/if}
+						<a href="{$users[user].referer_url}">{$users[user].referer_url}</a><br/>
 					{/if}
 				{/if}
 
