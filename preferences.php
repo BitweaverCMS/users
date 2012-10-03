@@ -91,72 +91,75 @@ if( $gBitSystem->getConfig( 'users_themes' ) == 'y' ) {
 
 // process the preferences form
 if( isset( $_REQUEST["prefs"] )) {
-	$editUser->store( $_REQUEST );
+	if ( !$editUser->store( $_REQUEST ) ) {
+		$feedback['error'] = $editUser->mErrors;
+	} else {
+		// preferences
+		$prefs = array(
+			'users_homepage'        => NULL,
+			'site_display_utc'	=> 'Local',
+			'site_display_timezone' => 'UTC',
+			'users_country'         => NULL,
+			'users_information'     => 'public',
+			'users_email_display'   => 'n',
+		);
 
-	// preferences
-	$prefs = array(
-		'users_homepage'        => NULL,
-		'site_display_utc'		=> 'Local',
-		'site_display_timezone' => 'UTC',
-		'users_country'         => NULL,
-		'users_information'     => 'public',
-		'users_email_display'   => 'n',
-	);
-
-	if( $_REQUEST['site_display_utc'] != 'Fixed' ) {
-		unset( $_REQUEST['site_display_timezone'] );
-		$editUser->storePreference( 'site_display_timezone', NULL, USERS_PKG_NAME );
-	}
-
-	// we don't have to store http:// in the db
-	if( empty( $_REQUEST['users_homepage'] ) || $_REQUEST['users_homepage'] == 'http://' ) {
-		unset( $_REQUEST['users_homepage'] );
-	} elseif( !preg_match( '/^http:\/\//', $_REQUEST['users_homepage'] )) {
-		$_REQUEST['users_homepage'] = 'http://'.$_REQUEST['users_homepage'];
-	}
-
-	foreach( $prefs as $pref => $default ) {
-		if( !empty( $_REQUEST[$pref] ) && $_REQUEST[$pref] != $default ) {
-			//vd( "storePreference( $pref, $_REQUEST[$pref], USERS_PKG_NAME )" );
-			$editUser->storePreference( $pref, $_REQUEST[$pref], USERS_PKG_NAME );
+		if( $_REQUEST['site_display_utc'] != 'Fixed' ) {
+			unset( $_REQUEST['site_display_timezone'] );
+			$editUser->storePreference( 'site_display_timezone', NULL, USERS_PKG_NAME );
 		} else {
-			$editUser->storePreference( $pref, NULL, USERS_PKG_NAME );
+			$editUser->storePreference( 'site_display_timezone', $_REQUEST['site_display_timezone'], USERS_PKG_NAME );
 		}
-	}
 
-	if( $gBitSystem->isFeatureActive( 'users_change_language' )) {
-		$editUser->storePreference( 'bitlanguage', ( $_REQUEST['bitlanguage'] != $gBitLanguage->mLanguage ) ? $_REQUEST['bitlanguage'] : NULL, LANGUAGES_PKG_NAME );
-	}
-
-	// toggles
-	$toggles = array(
-		'users_double_click'  => USERS_PKG_NAME,
-	);
-
-	foreach( $toggles as $toggle => $package ) {
-		if( isset( $_REQUEST[$toggle] )) {
-			$editUser->storePreference( $toggle, 'y', $package );
-		} else {
-			$editUser->storePreference( $toggle, NULL, $package );
+		// we don't have to store http:// in the db
+		if( empty( $_REQUEST['users_homepage'] ) || $_REQUEST['users_homepage'] == 'http://' ) {
+			unset( $_REQUEST['users_homepage'] );
+		} elseif( !preg_match( '/^http:\/\//', $_REQUEST['users_homepage'] )) {
+			$_REQUEST['users_homepage'] = 'http://'.$_REQUEST['users_homepage'];
 		}
-	}
 
-	// process custom fields
-	if( isset( $customFields ) && is_array( $customFields )) {
-		foreach( $customFields as $f ) {
-			if( isset( $_REQUEST['CUSTOM'][$f] )) {
-				$editUser->storePreference( trim( $f ), trim( $_REQUEST['CUSTOM'][$f] ), USERS_PKG_NAME );
+		foreach( $prefs as $pref => $default ) {
+			if( !empty( $_REQUEST[$pref] ) && $_REQUEST[$pref] != $default ) {
+				//vd( "storePreference( $pref, $_REQUEST[$pref], USERS_PKG_NAME )" );
+				$editUser->storePreference( $pref, $_REQUEST[$pref], USERS_PKG_NAME );
+			} else {
+				$editUser->storePreference( $pref, NULL, USERS_PKG_NAME );
 			}
 		}
-	}
 
-	// we need to reload the page for all the included user preferences
-	if( isset( $_REQUEST['view_user'] )) {
-		header ("location: ".USERS_PKG_URL."preferences.php?view_user=$editUser->mUserId");
-	} else {
-		header ("location: ".USERS_PKG_URL."preferences.php");
+		if( $gBitSystem->isFeatureActive( 'users_change_language' )) {
+			$editUser->storePreference( 'bitlanguage', ( $_REQUEST['bitlanguage'] != $gBitLanguage->mLanguage ) ? $_REQUEST['bitlanguage'] : NULL, LANGUAGES_PKG_NAME );
+		}
+
+		// toggles
+		$toggles = array(
+			'users_double_click'  => USERS_PKG_NAME,
+		);
+
+		foreach( $toggles as $toggle => $package ) {
+			if( isset( $_REQUEST[$toggle] )) {
+				$editUser->storePreference( $toggle, 'y', $package );
+			} else {
+				$editUser->storePreference( $toggle, NULL, $package );
+			}
+		}
+
+		// process custom fields
+		if( isset( $customFields ) && is_array( $customFields )) {
+			foreach( $customFields as $f ) {
+				if( isset( $_REQUEST['CUSTOM'][$f] )) {
+					$editUser->storePreference( trim( $f ), trim( $_REQUEST['CUSTOM'][$f] ), USERS_PKG_NAME );
+				}
+			}
+		}
+
+		// we need to reload the page for all the included user preferences
+		if( isset( $_REQUEST['view_user'] )) {
+			bit_redirect ( USERS_PKG_URL."preferences.php?view_user=$editUser->mUserId" );
+		} else {
+			bit_redirect ( USERS_PKG_URL."preferences.php" );
+		}
 	}
-	die;
 }
 
 // change email address
