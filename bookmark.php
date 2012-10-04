@@ -15,12 +15,11 @@ $error = TRUE;
 $msg = "";
 
 if( $gBitUser->isRegistered() ){
-	if( !empty( $_REQUEST['content_id'] ) ){
+	if( !empty( $_REQUEST['content_id'] ) && $gContent = LibertyBase::getLibertyObject( $_REQUEST['content_id'] ) ) {
 		// verify user has access to view this content
-		$Content = LibertyBase::getLibertyObject( $_REQUEST['content_id'] );
-		$Content->load();
-		if( $Content->hasViewPermission() ){
-			if( $Content->hasService( CONTENT_SERVICE_USERS_FAVS ) ){
+		$gContent->load();
+		if( $gContent->hasViewPermission() ){
+			if( $gContent->hasService( CONTENT_SERVICE_USERS_FAVS ) ){
 				// default action is to add the favorite
 				$_REQUEST['action'] = empty( $_REQUEST['action'] )?'add':$_REQUEST['action']; 
 				// add or remove 

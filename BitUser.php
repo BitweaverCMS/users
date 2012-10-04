@@ -2471,7 +2471,7 @@ class BitUser extends LibertyMime {
 			}
 
 			if( !empty( $res['referer_url'] )) {
-				if ( isPackageActive('stats') ) {
+				if ( $gBitSystem->isPackageActive('stats') ) {
 					$res['referer_url'] = stats_referer_display_short($res['referer_url']);
 				}
 			}
