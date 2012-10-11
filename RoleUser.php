@@ -238,13 +238,14 @@ class BitUser extends LibertyMime {
 		}
 		// require login
 		if( !empty( $pParamHash['login'] ) ) {
-			if( $this->userExists( array( 'login' => $pParamHash['login'] ) ) and !isset( $pParamHash['prefs'] ) ) {
+			$pParamHash['login'] = strip_tags($pParamHash['login']);
+			if( $this->userExists( array( 'login' => $pParamHash['login'] ) ) ) {
 				$this->mErrors['login'] = 'The username "'.$pParamHash['login'].'" is already in use';
 			} elseif( preg_match( '/[^A-Za-z0-9_.-]/', $pParamHash["login"] ) ) {
 				$this->mErrors['login'] = tra( "Your username can only contain numbers, characters, underscores and hyphens." );
 			} else {
 				// LOWER CASE all logins
-				$pParamHash['login'] = strtolower( strip_tags($pParamHash['login']) );
+				$pParamHash['login'] = strtolower( $pParamHash['login']);
 				$pParamHash['user_store']['login'] = $pParamHash['login'];
 			}
 		}

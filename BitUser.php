@@ -238,13 +238,14 @@ class BitUser extends LibertyMime {
 		}
 		// require login
 		if( !empty( $pParamHash['login'] ) ) {
-			if( $this->userExists( array( 'login' => $pParamHash['login'] ) ) and !isset( $pParamHash['prefs'] ) ) {
+			$pParamHash['login'] = strip_tags($pParamHash['login']);
+			if( $this->userExists( array( 'login' => $pParamHash['login'] ) ) ) {
 				$this->mErrors['login'] = 'The username "'.$pParamHash['login'].'" is already in use';
 			} elseif( preg_match( '/[^A-Za-z0-9_.-]/', $pParamHash["login"] ) ) {
 				$this->mErrors['login'] = tra( "Your username can only contain numbers, characters, underscores and hyphens." );
 			} else {
 				// LOWER CASE all logins
-				$pParamHash['login'] = strtolower( strip_tags($pParamHash['login']) );
+				$pParamHash['login'] = strtolower( $pParamHash['login'] );
 				$pParamHash['user_store']['login'] = $pParamHash['login'];
 			}
 		}
@@ -1260,7 +1261,7 @@ class BitUser extends LibertyMime {
 				// @see BitSystem::getIndexPage
 				$indexType = 'my_page';
 				// getGroupHome is BitPermUser method
-				if( method_exists( $this, 'getGroupHome' ) && 
+				if( method_exists( $this, 'getGroupHome' ) &&
 					(( @$this->verifyId( $this->mInfo['default_group_id'] ) && ( $group_home = $this->getGroupHome( $this->mInfo['default_group_id'] ) ) ) ||
 					( $gBitSystem->getConfig( 'default_home_group' ) && ( $group_home = $this->getGroupHome( $gBitSystem->getConfig( 'default_home_group' ) ) ) )) ){
 					$indexType = 'group_home';
@@ -2503,10 +2504,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * getGroups 
-	 * 
-	 * @param array $pUserId 
-	 * @param array $pForceRefresh 
+	 * getGroups
+	 *
+	 * @param array $pUserId
+	 * @param array $pForceRefresh
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
