@@ -28,8 +28,7 @@ if( isset( $_REQUEST["action"] ) ) {
 	} elseif ($_REQUEST["action"] == 'removerole') {
 		$gBitUser->removeUserFromRole($_REQUEST["assign_user"], $_REQUEST["role_id"]);
 	}
-	header( 'Location: '.$_SERVER['SCRIPT_NAME'].'?assign_user='.$assignUser->mUserId );
-	die;
+	bit_redirect( 'assign_role_user.php?assign_user='.$assignUser->mUserId );
 }elseif(isset($_REQUEST['set_default'])) {
 	$gBitUser->verifyTicket();
 	$assignUser->storeUserDefaultRole( $assignUser->mUserId, $_REQUEST['default_role'] );
