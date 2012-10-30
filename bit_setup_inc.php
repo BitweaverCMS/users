@@ -51,15 +51,21 @@ if( $gBitSystem->isFeatureActive( 'site_session_lifetime' )) {
 
 // is session data stored in DB or in filesystem?
 if( $gBitSystem->isFeatureActive( 'site_store_session_db' ) && !empty( $gBitDbType )) {
-	include_once( UTIL_PKG_PATH . 'adodb/session/adodb-session.php' );
-	ADODB_Session::dataFieldName( 'session_data' );
-	ADODB_Session::driver( $gBitDbType );
-	ADODB_Session::host( $gBitDbHost );
-	ADODB_Session::user( $gBitDbUser );
-	ADODB_Session::password( $gBitDbPassword );
-	ADODB_Session::database( $gBitDbName );
-	ADODB_Session::table( BIT_DB_PREFIX.'sessions' );
-	ini_set( 'session.save_handler', 'user' );
+	if( file_exists( EXTERNAL_LIBS_PATH.'adodb/session/adodb-session.php' )) {
+		include_once( EXTERNAL_LIBS_PATH . 'adodb/session/adodb-session.php' );
+	} elseif( file_exists( UTIL_PKG_PATH.'adodb/session/adodb-session.php' )) {
+		include_once( UTIL_PKG_PATH.'adodb/session/adodb-session.php' );
+	}
+	if ( class_exists( 'ADODB_Session' ) ) {
+		ADODB_Session::dataFieldName( 'session_data' );
+		ADODB_Session::driver( $gBitDbType );
+		ADODB_Session::host( $gBitDbHost );
+		ADODB_Session::user( $gBitDbUser );
+		ADODB_Session::password( $gBitDbPassword );
+		ADODB_Session::database( $gBitDbName );
+		ADODB_Session::table( BIT_DB_PREFIX.'sessions' );
+		ini_set( 'session.save_handler', 'user' );
+	}
 }
 
 session_name( BIT_SESSION_NAME );
