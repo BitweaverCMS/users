@@ -1716,8 +1716,17 @@ class BitUser extends LibertyMime {
 		}
 
 		if( !empty( $pListHash['ip'] ) ) {
-			$whereSql .= ' AND uc.`ip` = ? ';
-			$bindVars[] = $pListHash['ip'];
+			$ips = split( $pListHash['ip'], ',' );
+			$whereSql .= ' AND ( ';
+			do {
+				$ip = array_pop( $ips );
+				$whereSql .= ' uc.`ip` = ? ';
+				$bindVars[] = $ip;
+				if( !empty( $ips ) ) {
+					$whereSql .= ' OR ';
+				}
+			} while( $ips );
+			$whereSql .= ' ) ';
 		}
 
 		if( !empty( $pListHash['online'] ) ) {
@@ -2405,12 +2414,21 @@ class BitUser extends LibertyMime {
 		// limit search to users with a specific IP
 		if( !empty( $pParamHash['ip'] ) ) {
 			$joinSql .= " LEFT OUTER JOIN `".BIT_DB_PREFIX."users_cnxn` uc ON ( uu.`user_id`=uc.`user_id`) ";
-			if( strpos( $pParamHash['ip'], '%' ) ) {
-				$whereSql = " AND uc.`ip` LIKE ? ";
-			} else {
-			$whereSql = " AND uc.`ip`=? ";
-			}
-			$bindVars[] = $pParamHash['ip'];
+			$ips = explode( ',', $pParamHash['ip'] );
+			$whereSql .= ' AND ( ';
+			do {
+				$ip = array_pop( $ips );
+				if( strpos( $ip, '%' ) ) {
+					$whereSql .= " uc.`ip` LIKE ? ";
+				} else {
+					$whereSql .= " uc.`ip`=? ";
+				}
+				$bindVars[] = $ip;
+				if( !empty( $ips ) ) {
+					$whereSql .= ' OR ';
+				}
+			} while( $ips );
+			$whereSql .= ' ) ';
 		}
 
 		// limit to registrations over a time period like 'YYYY-MM-DD' or 'Y \Week W' or anything convertible by SQLDate

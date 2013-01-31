@@ -74,7 +74,7 @@ if( isset( $_REQUEST["action"] ) ) {
 				if( $expungeUser->load() && $expungeUser->expunge() ) {
 					$delUsers .= "<li>{$userInfo['real_name']} ({$userInfo['login']})</li>";
 				} else {
-					$errDelUsers .= "<li>{$userInfo['real_name']} ({$userInfo['login']})</li>";
+					$errDelUsers .= "<li>User $uid could not be deleted</li>";
 				}
 			}
 
@@ -86,7 +86,7 @@ if( isset( $_REQUEST["action"] ) ) {
 		} else {
 			foreach( $_REQUEST['batch_user_ids'] as $uid ) {
 				$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $uid ) );
-				$formHash['input'][] = '<input type="hidden" name="batch_user_ids[]" value="'.$uid.'"/>'."{$userInfo['real_name']} ({$userInfo['login']})";
+				$formHash['input'][] = '<input type="hidden" name="batch_user_ids[]" value="'.$uid.'"/>'."{$userInfo['real_name']} ({$userInfo['login']})<br/>&lt;{$userInfo['email']}&gt;";
 			}
 			$gBitSystem->setBrowserTitle( 'Delete users' );
 			$msgHash = array(
@@ -107,7 +107,7 @@ if( isset( $_REQUEST["action"] ) ) {
 					case 'delete':
 						$reqUser->mDb->StartTrans();
 						if( $reqUser->load(TRUE) && $reqUser->expunge( !empty( $_REQUEST['delete_user_content'] ) ? $_REQUEST['delete_user_content'] : NULL ) ) {
-							$feedback['success'][] = tra( 'User deleted' )." <strong>{$userInfo['real_name']} ({$userInfo['login']})</strong>";
+							$feedback['success'][] = tra( 'User deleted' )." <strong>{$userInfo['real_name']} ({$userInfo['login']}) &lt;{$userInfo['email']}&gt;</strong>";
 						}
 						$reqUser->mDb->CompleteTrans();
 						break;
@@ -133,7 +133,7 @@ if( isset( $_REQUEST["action"] ) ) {
 						$gBitSystem->setBrowserTitle( tra( 'Delete user' ) );
 						$msgHash = array(
 							'confirm_item' => tra( 'Are you sure you want to remove the user?' ),
-							'warning' => tra( 'This will permentally delete the user' )." <strong>$userInfo[real_name] ($userInfo[login])</strong>",
+							'warning' => tra( 'This will permentally delete the user' )." <strong>$userInfo[real_name] ($userInfo[login]) &lt;$userInfo[email]&gt;</strong>",
 						);
 						break;
 					case 'ban':
