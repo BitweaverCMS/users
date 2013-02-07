@@ -104,8 +104,11 @@ if( isset( $_REQUEST["action"] ) ) {
 			}
 		} else {
 			foreach( $_REQUEST['batch_user_ids'] as $uid ) {
-				$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $uid ) );
-				$formHash['input'][] = '<input type="hidden" name="batch_user_ids[]" value="'.$uid.'"/>'."{$userInfo['real_name']} ({$userInfo['login']})<br/>&lt;{$userInfo['email']}&gt;";
+				if( $userInfo = $gBitUser->getUserInfo( array( 'user_id' => $uid ) ) ) {
+					$formHash['input'][] = '<input type="hidden" name="batch_user_ids[]" value="'.$uid.'"/>'."{$userInfo['real_name']} ({$userInfo['login']})<br/>&lt;{$userInfo['email']}&gt;";
+				} else {
+					$formHash['input'][] = '<span class="error"/>'.$uid.' '.tra('not found').'</span>';
+				}
 			}
 			$gBitSystem->setBrowserTitle( 'Delete users' );
 			$msgHash = array(
@@ -114,7 +117,6 @@ if( isset( $_REQUEST["action"] ) ) {
 			);
 			$gBitSystem->confirmDialog( $formHash, $msgHash );
 		}
-vd( $_REQUEST ); die;
 	} elseif( $_REQUEST["action"] == 'delete' ||  $_REQUEST["action"] == 'ban' ||  $_REQUEST["action"] == 'unban'  ) {
 		$formHash['user_id'] = $_REQUEST['user_id'];
 		$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST["user_id"] ) );
