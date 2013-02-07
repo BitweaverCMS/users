@@ -1,9 +1,45 @@
 {strip}
 
-{minifind}
-
-{if $gBitUser->hasPermission( 'p_users_admin' ) && $gBitSystem->isFeatureActive('users_validate_email')}
-
+{if $gBitUser->hasPermission( 'p_users_admin' )}
+<div class="width100p">
+{form}
+	<div class="row floatleft width20p">
+		{formlabel label="Search"}
+		{forminput}
+			<input type="text" name="find" value="{$smarty.request.find}"/>
+		{/forminput}
+		{formhelp note="Search full name, username, and email"}
+	</div>
+	<div class="row floatleft width20p">
+		{formlabel label="IP"}
+		<textarea rows="2" name="ip" style="height:25px">{$smarty.request.ip}</textarea>
+		{formhelp note="Comma separated list"}
+	</div>
+	<div class="row floatleft width20p">
+		{formlabel label="Results per Page"}
+		<input type="text" name="max_records" value="{$smarty.request.max_records}"/>
+	</div>
+	<div class="row floatleft width20p">
+		{formlabel label="Max Content Count"}
+		<input type="text" name="max_content_count" value="{$smarty.request.max_content_count}"/>
+	</div>
+	<div class="row floatleft width20p">
+		{formlabel label="Min Content Count"}
+		<input type="text" name="min_content_count" value="{$smarty.request.min_content_count}"/>
+	</div>
+	{if $gBitSystem->isPackageActive('stats')}
+	<div class="row floatleft width20p">
+		{formlabel label="Registration Referer"}
+		<input type="text" name="referer" value="{$smarty.request.referer}"/>
+		{formhelp note="Enter partial URL or 'none'"}
+	</div>
+	{/if}
+	<input type="submit" name="search" value="{tr}Find{/tr}">
+	<input type="reset" name="reset" value="{tr}Reset{/tr}">
+{/form}
+</div>
+{else}
+	{minifind}
 {/if}
 <div class="navbar">
 	<ul>
@@ -21,65 +57,65 @@
 
 {form id=checkform action=$smarty.server.REQUEST_URI}
 	<ol class="clear data userslist" start="{$listInfo.offset+1}">
-		{section name=user loop=$users}
+		{foreach from=$users item=userHash key=userId}
 			<li class="item {cycle values='even,odd'}">
 				{if $gBitUser->hasPermission( 'p_users_admin' )}
 					<div class="floaticon">
-						{smartlink ipackage=users ifile="admin/index.php" assume_user=$users[user].user_id ititle="Assume User Identity" ibiticon="users/assume_user" iforce=icon}
-						{smartlink ipackage=users ifile="preferences.php" view_user=$users[user].user_id ititle="Edit User Information" ibiticon="icons/accessories-text-editor" iforce=icon}
+						{smartlink ipackage=users ifile="admin/index.php" assume_user=$userHash.user_id ititle="Assume User Identity" ibiticon="users/assume_user" iforce=icon}
+						{smartlink ipackage=users ifile="preferences.php" view_user=$userHash.user_id ititle="Edit User Information" ibiticon="icons/accessories-text-editor" iforce=icon}
 						{if $gBitSystem->isPackageActive('protector')}
-							{smartlink ipackage=users ifile="admin/assign_role_user.php" assign_user=$users[user].user_id ititle="Assign Group" ibiticon="icons/emblem-shared" iforce=icon}
+							{smartlink ipackage=users ifile="admin/assign_role_user.php" assign_user=$userHash.user_id ititle="Assign Group" ibiticon="icons/emblem-shared" iforce=icon}
 						{else}
-							{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$users[user].user_id ititle="Assign Role" ibiticon="icons/emblem-shared" iforce=icon}
+							{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userHash.user_id ititle="Assign Role" ibiticon="icons/emblem-shared" iforce=icon}
 						{/if}
-						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$users[user].user_id ititle="User Activity" ibiticon="icons/preferences-desktop-sound" iforce="icon"}
-						{smartlink ipackage=liberty ifile="list_content.php" user_id=$users[user].user_id ititle="User Content" ibiticon="icons/format-justify-fill" iforce="icon"}
+						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userHash.user_id ititle="User Activity" ibiticon="icons/preferences-desktop-sound" iforce="icon"}
+						{smartlink ipackage=liberty ifile="list_content.php" user_id=$userHash.user_id ititle="User Content" ibiticon="icons/format-justify-fill" iforce="icon"}
 						{if $gBitUser->hasPermission( 'p_users_admin' )}
-							<span title="{tr}Content Count{/tr}">{$users[user].user_id|get_user_content_count}</span>
+							<span title="{tr}Content Count{/tr}">{$userHash.user_id|get_user_content_count}</span>
 						{/if}
-						{if $users[user].user_id != $smarty.const.ANONYMOUS_USER_ID && $users[user].user_id != $smarty.const.ROOT_USER_ID && $users[user].user_id != $gBitUser->mUserId}
-							{if $users[user].content_status_id > 0}
-								{smartlink ipackage=users ifile="admin/index.php" user_id=$users[user].user_id action=ban ititle="Ban User" ibiticon="icons/dialog-cancel" iforce=icon}
+						{if $userHash.user_id != $smarty.const.ANONYMOUS_USER_ID && $userHash.user_id != $smarty.const.ROOT_USER_ID && $userHash.user_id != $gBitUser->mUserId}
+							{if $userHash.content_status_id > 0}
+								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=ban ititle="Ban User" ibiticon="icons/dialog-cancel" iforce=icon}
 							{else}
-								{smartlink ipackage=users ifile="admin/index.php" user_id=$users[user].user_id action=unban ititle="Restore the User Account" ibiticon="icons/view-refresh" iforce=icon}
+								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=unban ititle="Restore the User Account" ibiticon="icons/view-refresh" iforce=icon}
 							{/if}
-							{smartlink ipackage=users ifile="admin/index.php" user_id=$users[user].user_id action=delete ititle="Remove" ibiticon="icons/edit-delete" iforce=icon}
-							<input type="checkbox" name="batch_user_ids[]" value="{$users[user].user_id}" />
+							{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=delete ititle="Remove" ibiticon="icons/edit-delete" iforce=icon}
+							<input type="checkbox" name="batch_user_ids[]" value="{$userHash.user_id}" />
 						{/if}
 					</div>
 				{/if}
 
-				<img alt="{tr}user portrait{/tr}" title="{$users[user].login} {tr}user portrait{/tr}" src="{$users[user].thumbnail_url|default:"`$smarty.const.USERS_PKG_URL`icons/silhouette_100.png"}" class="thumb" />
+				<img alt="{tr}user portrait{/tr}" title="{$userHash.login} {tr}user portrait{/tr}" src="{$userHash.thumbnail_url|default:"`$smarty.const.USERS_PKG_URL`icons/silhouette_100.png"}" class="thumb" />
 
 				<div class="usersinfo">
-				{if $users[user].real_name}
+				{if $userHash.real_name}
 					{if $gBitSystem->getConfig('users_display_name') == 'login'}
-						<h2>{$users[user].real_name} <small>[ {displayname hash=$users[user]} ]</small></h2>
+						<h2>{$userHash.real_name} <small>[ {displayname hash=$userHash} ]</small></h2>
 					{else}
-						<h2>{displayname hash=$users[user]} <small>[ {$users[user].login} ]</small></h2>
+						<h2>{displayname hash=$userHash} <small>[ {$userHash.login} ]</small></h2>
 					{/if}
 				{else}
-					<h2>{displayname hash=$users[user]}</h2>
+					<h2>{displayname hash=$userHash}</h2>
 				{/if}
 
 				{if $gBitUser->hasPermission( 'p_users_admin' )}
-					<strong>{tr}Email:{/tr}</strong> {if !empty($users[user].email)}{mailto address=$users[user].email encode="javascript"}{/if}<br/>
-					<strong>{tr}User ID{/tr}:</strong> {$users[user].user_id}<br/>
-					{if $users[user].referer_url}
-						<a href="{$users[user].referer_url}">{$users[user].referer_url}</a><br/>
+					<strong>{tr}Email:{/tr}</strong> {if !empty($userHash.email)}{mailto address=$userHash.email encode="javascript"}{/if}<br/>
+					<strong>{tr}User ID{/tr}:</strong> {$userHash.user_id}<br/>
+					{if $userHash.referer_url}
+					<strong>{tr}Referrer{/tr}:</strong>	<a href="{$userHash.referer_url}">{$userHash.short_referer_url}</a><br/>
 					{/if}
 				{/if}
 
-				<strong>{tr}Member since{/tr}:</strong> {$users[user].registration_date|bit_short_date}<br/>
+				<strong>{tr}Member since{/tr}:</strong> {$userHash.registration_date|bit_short_date}<br/>
 
-				{if $users[user].current_login }
-					<strong>{tr}Last logged in on{/tr}:</strong> {$users[user].current_login|bit_short_date}<br/>
+				{if $userHash.current_login }
+					<strong>{tr}Last logged in on{/tr}:</strong> {$userHash.current_login|bit_short_date}<br/>
 				{/if}
 
 				</div>
 				<div class="clear"></div>
 			</li>
-		{/section}
+		{/foreach}
 	</ol>
 
 	{if $gBitUser->hasPermission( 'p_users_admin' )}
@@ -92,6 +128,7 @@
 			<select name="action" onchange="this.form.submit();">
 				<option value="">{tr}with checked{/tr}:</option>
 				<option value="delete">{tr}Remove{/tr}</option>
+				<option value="export">{tr}Export List{/tr}</option>
 			</select>
 
 			<noscript>

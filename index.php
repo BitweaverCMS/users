@@ -96,8 +96,8 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 
 } else {
 	$gBitSystem->verifyPermission( 'p_users_view_user_list' );
-	$gQueryUser->getList( $_REQUEST );
-	$gBitSmarty->assign_by_ref( 'users', $_REQUEST["data"] );
+	$users = $gQueryUser->getList( $_REQUEST );
+	$gBitSmarty->assign_by_ref( 'users', $users );
 	$gBitSmarty->assign_by_ref( 'usercount', $_REQUEST["cant"] );
 	// display an error message
 	if( !empty( $_REQUEST['home'] )) {

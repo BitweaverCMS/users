@@ -1716,7 +1716,7 @@ class BitUser extends LibertyMime {
 		}
 
 		if( !empty( $pListHash['ip'] ) ) {
-			$ips = split( $pListHash['ip'], ',' );
+			$ips = split( ',', $pListHash['ip'] );
 			$whereSql .= ' AND ( ';
 			do {
 				$ip = array_pop( $ips );
@@ -2285,6 +2285,9 @@ class BitUser extends LibertyMime {
 	 * @return get the users display name
 	 */
 	public function getTitle( $pHash = NULL, $pDefault=TRUE ) {
+		if( empty( $pHash ) && $this && $this->isValid() ) {
+			$pHash = $this->mInfo;
+		}
 		return BitUser::getDisplayNameFromHash( FALSE, $pHash );
 	}
 
@@ -2432,10 +2435,10 @@ class BitUser extends LibertyMime {
 		}
 
 		// limit to registrations over a time period like 'YYYY-MM-DD' or 'Y \Week W' or anything convertible by SQLDate
-		if( !empty( $pParamHash['registration_period'] ) ) {
-			$sqlPeriod = $this->mDb->SQLDate( $pParamHash['registration_period_format'], $this->mDb->SQLIntToTimestamp( 'registration_date' ));
+		if( !empty( $pParamHash['period'] ) ) {
+			$sqlPeriod = $this->mDb->SQLDate( $this->mDb->getPeriodFormat( $pParamHash['period'] ), $this->mDb->SQLIntToTimestamp( 'registration_date' ));
 			$whereSql .= ' AND '.$sqlPeriod.'=?';
-			$bindVars[] = $pParamHash['registration_period'];
+			$bindVars[] = $pParamHash['timeframe'];
 		}
 
 		// lets search for a user
@@ -2475,14 +2478,15 @@ class BitUser extends LibertyMime {
 		$ret = array();
 		while( $res = $result->fetchRow() ) {
 			// Used for pulling out dead/empty/spam accounts
-			if( isset( $pParamHash['max_content_count'] ) ) {
+			if( isset( $pParamHash['max_content_count'] ) && is_numeric( $pParamHash['max_content_count'] ) ) {
 				$contentCount = $this->mDb->getOne( "SELECT COUNT(*) FROM  `".BIT_DB_PREFIX."liberty_content` lc INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON ( lc.`user_id`=uu.`user_id` ) WHERE uu.`user_id`=? AND `content_type_guid` != 'bituser'", array( $res['user_id'] ) );
 				if( $contentCount >  $pParamHash['max_content_count'] ) {
 					continue;
 				}
 			}
+
 			// Used for pulling out non-idle accounts or pigs
-			if( isset( $pParamHash['min_content_count'] ) ) {
+			if( isset( $pParamHash['min_content_count'] ) && is_numeric( $pParamHash['min_content_count'] ) ) {
 				$contentCount = $this->mDb->getOne( "SELECT COUNT(*) FROM  `".BIT_DB_PREFIX."liberty_content` lc INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON ( lc.`user_id`=uu.`user_id` ) WHERE uu.`user_id`=? AND `content_type_guid` != 'bituser'", array( $res['user_id'] ) );
 				if( $contentCount <  $pParamHash['min_content_count'] ) {
 					continue;
@@ -2491,7 +2495,7 @@ class BitUser extends LibertyMime {
 
 			if( !empty( $res['referer_url'] )) {
 				if ( $gBitSystem->isPackageActive('stats') ) {
-					$res['referer_url'] = stats_referer_display_short($res['referer_url']);
+					$res['short_referer_url'] = stats_referer_display_short($res['referer_url']);
 				}
 			}
 			if( !empty( $res['avatar_file_name'] )) {
@@ -2504,11 +2508,9 @@ class BitUser extends LibertyMime {
 				));
 			}
 			$res["groups"] = $this->getGroups( $res['user_id'] );
-			array_push( $ret, $res );
+			$ret[$res['user_id']] = $res;
 		}
 		$retval = array();
-		// TODO: update this to not put all the results in 'data' key
-		$pParamHash["data"] = $ret;
 
 		$query = "
 			SELECT COUNT(*) FROM `".BIT_DB_PREFIX."users_users` uu
@@ -2621,6 +2623,34 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
+	 * Create an export hash from the data
+	 *
+	 * @access public
+	 * @return export data
+	 */
+	function exportHash() {
+		global $gBitSystem;
+		$ret = array();
+		if( $this->isValid() ) {
+			$ret = array(
+				'user_id' 		=> $this->mUserId,
+				'content_id' 	=> $this->mContentId,
+				'real_name' 	=> $this->getField( 'real_name' ),
+				'email'	 		=> $this->getField( 'email' ),
+				'uri'        	=> $this->getDisplayUri(),
+				'registration_date' 	=> date( DateTime::W3C, $this->getField('registration_date') ),
+				'last_login' => date( DateTime::W3C, $this->getField('last_login') ),
+			);
+			$ret['content_count'] = get_user_content_count( $this->mUserId );
+			if( $gBitSystem->isPackageActive( 'stats' ) ) {
+				$ret['referer'] = $this->mDb->getOne( "SELECT sru.`referer_url` FROM `".BIT_DB_PREFIX."stats_referer_urls` sru INNER JOIN `".BIT_DB_PREFIX."stats_referer_users_map` srum ON (srum.`referer_url_id`=sru.`referer_url_id`) WHERE `user_id`=?", $this->mUserId );
+			}
+			$ret['ips'] = implode( ',', $this->mDb->getCol( "SELECT DISTINCT(`ip`) FROM `".BIT_DB_PREFIX."users_cnxn` uc WHERE `user_id`=?", $this->mUserId ) );
+		}
+		return $ret;
+	}
+
+	/**
 	 * userCollection
 	 *
 	 * @param array $pInput
@@ -2642,6 +2672,15 @@ class BitUser extends LibertyMime {
 			$pReturn['group_id'] = $pInput['group_id'];
 		}
 		return;
+	}
+
+	public static function getUserObject( $pUserId ) {
+		global $gBitSystem;
+		$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+		if( $ret = new $userClass( $pUserId ) ) {
+			$ret->load();
+		}
+		return $ret;
 	}
 }
 

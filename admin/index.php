@@ -64,12 +64,31 @@ if( isset($_REQUEST["newuser"] ) ) {
 if( isset( $_REQUEST["action"] ) ) {
 	$formHash['action'] = $_REQUEST['action'];
 	if( !empty( $_REQUEST['batch_user_ids'] ) && is_array( $_REQUEST['batch_user_ids'] ) ) {
-		if( isset( $_REQUEST["confirm"] ) ) {
+		if( $formHash['action'] == 'export' ) {
+			$file = tempnam( sys_get_temp_dir(), 'users' );
+			$fp = fopen($file, 'w');
+			$printHeader = TRUE;
+			foreach( $_REQUEST['batch_user_ids'] as $uid ) {
+				$listUser = BitUser::getUserObject( $uid );
+				$hash = $listUser->exportHash();
+				if( $printHeader ) {
+					fputcsv( $fp, array_keys( $hash ) );
+					$printHeader = FALSE;
+				}
+				fputcsv( $fp, $hash );
+			}
+			fclose( $fp );
+		    header( "Content-Type: text/csv" );
+			header('Content-disposition: attachment;filename='.$gBitSystem->getConfig('site_title', 'Site').'-users-export-'.date('Y-m-d_Hi').'.csv');
+			readfile( $file );
+			flush();
+			unlink( $file );
+			exit;
+		} elseif( isset( $_REQUEST["confirm"] ) ) {
 			$gBitUser->verifyTicket();
 			$delUsers = $errDelUsers = "";
-			$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
 			foreach( $_REQUEST['batch_user_ids'] as $uid ) {
-				$expungeUser = new $userClass( $uid );
+				$expungeUser = BitUser::getUserObject( $uid );
 				$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $uid ) );
 				if( $expungeUser->load() && $expungeUser->expunge() ) {
 					$delUsers .= "<li>{$userInfo['real_name']} ({$userInfo['login']})</li>";
@@ -95,6 +114,7 @@ if( isset( $_REQUEST["action"] ) ) {
 			);
 			$gBitSystem->confirmDialog( $formHash, $msgHash );
 		}
+vd( $_REQUEST ); die;
 	} elseif( $_REQUEST["action"] == 'delete' ||  $_REQUEST["action"] == 'ban' ||  $_REQUEST["action"] == 'unban'  ) {
 		$formHash['user_id'] = $_REQUEST['user_id'];
 		$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST["user_id"] ) );
@@ -180,17 +200,18 @@ if ( defined( 'ROLE_MODEL' ) ) {
 }
 
 // override default max_records
-$_REQUEST['max_records'] = !empty( $_REQUEST['max_records'] ) ? $_REQUEST['max_records'] : $gBitSystem->getConfig('max_records');
-$gBitUser->getList( $_REQUEST );
-$gBitSmarty->assign_by_ref('users', $_REQUEST["data"]);
-$gBitSmarty->assign_by_ref('usercount', $_REQUEST["cant"]);
-if (isset($_REQUEST["numrows"])) {
-	$_REQUEST['listInfo']["numrows"] = $_REQUEST["numrows"];
+$listHash = $_REQUEST;
+$listHash['max_records'] = !empty( $_REQUEST['max_records'] ) ? $_REQUEST['max_records'] : $gBitSystem->getConfig('max_records');
+$users = $gBitUser->getList( $listHash );
+$gBitSmarty->assign_by_ref('users', $users );
+$gBitSmarty->assign_by_ref('usercount', $listHash["cant"]);
+if (isset($listHash["numrows"])) {
+	$listHash['listInfo']["numrows"] = $listHash["numrows"];
 } else {
-	$_REQUEST['listInfo']["numrows"] = 10;
+	$listHash['listInfo']["numrows"] = 10;
 }
-$_REQUEST['listInfo']["URL"] = USERS_PKG_URL."admin/index.php";
-$gBitSmarty->assign_by_ref('listInfo', $_REQUEST['listInfo']);
+$listHash['listInfo']["URL"] = USERS_PKG_URL."admin/index.php";
+$gBitSmarty->assign_by_ref('listInfo', $listHash['listInfo']);
 
 if ( defined( 'ROLE_MODEL' ) ) {
 	// invoke edit service for the add user feature
@@ -211,5 +232,4 @@ $gBitSmarty->assign( 'feedback', $feedback );
 $gBitSmarty->assign( (!empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'userlist').'TabSelect', 'tdefault' );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:users/users_admin.tpl', (!empty( $title ) ? $title : 'Edit Users' ) , array( 'display_mode' => 'admin' ));
-?>
+$gBitSystem->display( 'bitpackage:users/admin_list_users.tpl', (!empty( $title ) ? $title : 'Edit Users' ) , array( 'display_mode' => 'admin' ));
