@@ -368,6 +368,13 @@ class BitUser extends LibertyMime {
 			}
 		}
 
+		if( $gBitSystem->isFeatureActive( 'users_register_recpatcha' ) ) {
+			$resp = recaptcha_check_answer ( $gBitSystem->getConfig( 'users_register_recpatcha_private_key' ), $_SERVER["REMOTE_ADDR"], $pParamHash["recaptcha_challenge_field"], $pParamHash["recaptcha_response_field"] );
+			if( !$resp->is_valid ) {
+				$this->mErrors['recaptcha'] = $resp->error;
+			}
+		}
+
 		// require passcode
 		if( $gBitSystem->isFeatureActive( 'users_register_require_passcode' ) ) {
 			if( $pParamHash["passcode"] != $gBitSystem->getConfig( "users_register_passcode",md5( $this->genPass() ) ) ) {
@@ -880,7 +887,7 @@ class BitUser extends LibertyMime {
 				}
 				if( !empty( $_REQUEST['admin_verify_email'] ) ) {
 					if( !$this->verifyMX( $pParamHash['email'] ) ) {
-						$this->mErrors['email'] = 'Cannot find a valid MX host';
+						$this->mErrors['email'] = 'Cannot find a valid mail server';
 					}
 				}
 				if( !isset($this->mErrors['email']) ) {

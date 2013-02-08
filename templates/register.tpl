@@ -24,7 +24,7 @@
 
 				<div class="row">
 					{formfeedback error=$errors.validate}
-					{formlabel label="Username" for="email"}
+					{formlabel label="Email" for="email"}
 					{forminput}
 						<input type="text" size="50" name="email" id="email" value="{$reg.email}"/>
 					{/forminput}
@@ -213,12 +213,6 @@
 					</div>
 				{/foreach}
 
-				{if $gBitSystem->isFeatureActive('users_random_number_reg')}
-					<hr />
-					{formfeedback error=$errors.captcha}
-					{captcha force=true variant=row}
-				{/if}
-
 				{if count($groupList) > 1}
 					<hr />
 					{formlabel label="Group" for="group"}
@@ -243,6 +237,23 @@
 					{include file=$package.template }
 				{/foreach}
 
+				{if $gBitSystem->isFeatureActive('users_random_number_reg')}
+					<hr />
+					{formfeedback error=$errors.captcha}
+					{captcha force=true variant=row}
+				{/if}
+
+				{if $gBitSystem->isFeatureActive('users_register_recpatcha')}
+					<div class="row">
+						{formfeedback error=$errors.recaptcha}
+						{formlabel label="Are you human?" for="recaptcha"}
+						{forminput}
+							{$gBitSystem->getConfig('users_register_recpatcha_public_key')|recaptcha_get_html:$errors.recaptcha}
+							{formhelp note="Sorry, we have to ask."}
+						{/forminput}
+					</div>
+				{/if}
+
 				<div class="row submit">
 					<input type="submit" name="register" value="{tr}Register{/tr}" />
 				</div>
@@ -257,3 +268,4 @@
 </div><!-- end .login -->
 
 {/strip}
+

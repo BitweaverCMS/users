@@ -37,21 +37,6 @@ $loginSettings = array(
 		'type' => "checkbox",
 		'note' => "This will create a group for each user with the same name as the user. This might be useful if you want to assign different permission settings to every user.",
 	),
-	'users_register_require_passcode' => array(
-		'label' => "Request passcode to register",
-		'type' => "checkbox",
-		'note' => "",
-	),
-	'users_register_passcode' => array(
-		'label' => "Passcode",
-		'type' => "text",
-		'note' => "Enter the Passcode that is required for users to register with your site.",
-	),
-	'users_random_number_reg' => array(
-		'label' => "Use captcha to prevent automatic/robot registration",
-		'type' => "checkbox",
-		'note' => "This will generate an image with text that the user has to confirm during the registration step.",
-	),
 	'users_validate_user' => array(
 		'label' => "Validate users by email",
 		'type' => "checkbox",
@@ -199,9 +184,39 @@ $registerSettings = array(
 		'note' => "Allow users to enter the url to their own homepage.",
 	),
 	'reg_portrait' => array(
-		'label' => "Self Portrait",
+		'label' => "Profile Picture",
 		'type' => "checkbox",
-		'note' => "Allow users to upload a self portrait.",
+		'note' => "Allow users to upload a profile picture.",
+	),
+	'users_register_require_passcode' => array(
+		'label' => "Request passcode to register",
+		'type' => "checkbox",
+		'note' => "",
+	),
+	'users_register_passcode' => array(
+		'label' => "Passcode",
+		'type' => "text",
+		'note' => "Enter the Passcode that is required for users to register with your site.",
+	),
+	'users_random_number_reg' => array(
+		'label' => "Use basic captcha to prevent automatic/robot registration",
+		'type' => "checkbox",
+		'note' => "This will generate an image with a word that the user has to confirm during the registration step.",
+	),
+	'users_register_recpatcha' => array(
+		'label' => "Use advanced reCAPTCHA to prevent automatic/robot registration",
+		'type' => "checkbox",
+		'note' => "To use reCAPTCHA you must get your API keys from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a> and enter them below.",
+	),
+	'users_register_recpatcha_public_key' => array(
+		'label' => "reCAPTCHA Public Key",
+		'type' => "text",
+		'note' => "This will be given to you after registering your site with Google",
+	),
+	'users_register_recpatcha_private_key' => array(
+		'label' => "reCAPTCHA Private Key",
+		'type' => "text",
+		'note' => "This will be given to you after registering your site with Google",
 	),
 );
 $gBitSmarty->assign( 'registerSettings', $registerSettings );
