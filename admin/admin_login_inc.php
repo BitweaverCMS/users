@@ -203,17 +203,17 @@ $registerSettings = array(
 		'type' => "checkbox",
 		'note' => "This will generate an image with a word that the user has to confirm during the registration step.",
 	),
-	'users_register_recpatcha' => array(
+	'users_register_recaptcha' => array(
 		'label' => "Use advanced reCAPTCHA to prevent automatic/robot registration",
 		'type' => "checkbox",
 		'note' => "To use reCAPTCHA you must get your API keys from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a> and enter them below.",
 	),
-	'users_register_recpatcha_public_key' => array(
+	'users_register_recaptcha_public_key' => array(
 		'label' => "reCAPTCHA Public Key",
 		'type' => "text",
 		'note' => "This will be given to you after registering your site with Google",
 	),
-	'users_register_recpatcha_private_key' => array(
+	'users_register_recaptcha_private_key' => array(
 		'label' => "reCAPTCHA Private Key",
 		'type' => "text",
 		'note' => "This will be given to you after registering your site with Google",

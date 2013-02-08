@@ -243,12 +243,12 @@
 					{captcha force=true variant=row}
 				{/if}
 
-				{if $gBitSystem->isFeatureActive('users_register_recpatcha')}
+				{if $gBitSystem->isFeatureActive('users_register_recaptcha')}
 					<div class="row">
 						{formfeedback error=$errors.recaptcha}
 						{formlabel label="Are you human?" for="recaptcha"}
 						{forminput}
-							{$gBitSystem->getConfig('users_register_recpatcha_public_key')|recaptcha_get_html:$errors.recaptcha}
+							{$gBitSystem->getConfig('users_register_recaptcha_public_key')|recaptcha_get_html:$errors.recaptcha}
 							{formhelp note="Sorry, we have to ask."}
 						{/forminput}
 					</div>

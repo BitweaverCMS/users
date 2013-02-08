@@ -24,7 +24,7 @@ if( isset( $_REQUEST['tk'] ) ) {
 require_once( '../kernel/setup_inc.php' );
 require_once( KERNEL_PKG_PATH.'BitBase.php' );
 include_once( KERNEL_PKG_PATH.'notification_lib.php' );
-if( $gBitSystem->getConfig( 'users_register_recpatcha' ) ) {
+if( $gBitSystem->getConfig( 'users_register_recaptcha' ) ) {
 	require_once( USERS_PKG_PATH.'classes/recaptchalib.php' );
 }
 
@@ -100,6 +100,7 @@ if( isset( $_REQUEST["register"] ) ) {
 			exit;
 		}
 	} else {
+		$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_BAD_REQUEST );
 		$gBitSmarty->assign_by_ref( 'errors', $newUser->mErrors );
 	}
 

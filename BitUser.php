@@ -368,10 +368,14 @@ class BitUser extends LibertyMime {
 			}
 		}
 
-		if( $gBitSystem->isFeatureActive( 'users_register_recpatcha' ) ) {
-			$resp = recaptcha_check_answer ( $gBitSystem->getConfig( 'users_register_recpatcha_private_key' ), $_SERVER["REMOTE_ADDR"], $pParamHash["recaptcha_challenge_field"], $pParamHash["recaptcha_response_field"] );
-			if( !$resp->is_valid ) {
-				$this->mErrors['recaptcha'] = $resp->error;
+		if( $gBitSystem->isFeatureActive( 'users_register_recaptcha' ) && (empty( $pParamHash['novalidation'] ) || $pParamHash['novalidation'] != 'yes') ) {
+			if( !empty( $pParamHash["recaptcha_challenge_field"] ) && !empty( $pParamHash["recaptcha_response_field"] ) ) {
+				$resp = recaptcha_check_answer ( $gBitSystem->getConfig( 'users_register_recaptcha_private_key' ), $_SERVER["REMOTE_ADDR"], $pParamHash["recaptcha_challenge_field"], $pParamHash["recaptcha_response_field"] );
+				if( !$resp->is_valid ) {
+					$this->mErrors['recaptcha'] = $resp->error;
+				}
+			} else {
+					$this->mErrors['recaptcha'] = 'incorrect-captcha-sol';
 			}
 		}
 
