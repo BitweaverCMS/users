@@ -24,9 +24,7 @@ if( isset( $_REQUEST['tk'] ) ) {
 require_once( '../kernel/setup_inc.php' );
 require_once( KERNEL_PKG_PATH.'BitBase.php' );
 include_once( KERNEL_PKG_PATH.'notification_lib.php' );
-if( $gBitSystem->getConfig( 'users_register_recaptcha' ) ) {
-	require_once( USERS_PKG_PATH.'classes/recaptchalib.php' );
-}
+require_once( USERS_PKG_PATH.'classes/recaptchalib.php' );
 
 // Permission: needs p_register
 $gBitSystem->verifyFeature( 'users_allow_register' );
