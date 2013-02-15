@@ -3,39 +3,44 @@
 {if $gBitUser->hasPermission( 'p_users_admin' )}
 <div class="width100p">
 {form}
-	<div class="row floatleft width20p">
+	<div class="row floatleft clearnone width20p">
 		{formlabel label="Search"}
 		{forminput}
 			<input type="text" name="find" value="{$smarty.request.find}"/>
 		{/forminput}
-		{formhelp note="Search full name, username, and email"}
+		{formhelp note="Full name, username, and email"}
 	</div>
-	<div class="row floatleft width20p">
-		{formlabel label="IP"}
-		<textarea rows="2" name="ip" style="height:25px">{$smarty.request.ip}</textarea>
-		{formhelp note="Comma separated list"}
+	<div class="row floatleft clearnone width10p">
+		{formlabel label="# Results"}
+		<input type="text" name="max_records" value="{$smarty.request.max_records}" style="width:3em"/>
+		{formhelp note="Per page"}
 	</div>
-	<div class="row floatleft width20p">
-		{formlabel label="Results per Page"}
-		<input type="text" name="max_records" value="{$smarty.request.max_records}"/>
+	<div class="row floatleft clearnone width10p">
+		{formlabel label="Max Content"}
+		<input type="text" name="max_content_count" value="{$smarty.request.max_content_count}" style="width:3em"/>
+		{formhelp note="# objects created"}
 	</div>
-	<div class="row floatleft width20p">
-		{formlabel label="Max Content Count"}
-		<input type="text" name="max_content_count" value="{$smarty.request.max_content_count}"/>
-	</div>
-	<div class="row floatleft width20p">
-		{formlabel label="Min Content Count"}
-		<input type="text" name="min_content_count" value="{$smarty.request.min_content_count}"/>
+	<div class="row floatleft clearnone width10p">
+		{formlabel label="Min Content"}
+		<input type="text" name="min_content_count" value="{$smarty.request.min_content_count}" style="width:3em"/>
+		{formhelp note="# objects created"}
 	</div>
 	{if $gBitSystem->isPackageActive('stats')}
-	<div class="row floatleft width20p">
+	<div class="row floatleft clearnone width20p">
 		{formlabel label="Registration Referer"}
-		<input type="text" name="referer" value="{$smarty.request.referer}"/>
+		<input type="text" name="referer" value="{$smarty.request.referer}" class="width90p"/>
 		{formhelp note="Enter partial URL or 'none'"}
 	</div>
 	{/if}
-	<input type="submit" name="search" value="{tr}Find{/tr}">
-	<input type="reset" name="reset" value="{tr}Reset{/tr}">
+	<div class="row floatleft clearnone width15p">
+		{formlabel label="IP"}
+		<textarea rows="1" name="ip" style="height:15px">{$smarty.request.ip}</textarea>
+		{formhelp note="Comma separated list"}
+	</div>
+	<div class="row submit">
+		<input type="submit" name="search" value="{tr}Find{/tr}">
+		<input type="reset" name="reset" value="{tr}Reset{/tr}">
+	</div>
 {/form}
 </div>
 {else}
