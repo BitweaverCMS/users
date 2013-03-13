@@ -101,7 +101,7 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 	$gBitSmarty->assign_by_ref( 'usercount', $_REQUEST["cant"] );
 	// display an error message
 	if( !empty( $_REQUEST['home'] )) {
-		$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_NOT_FOUND );
+		$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_GONE );
 		$feedback['error'] = tra( 'The following user could not be found' ).': '.$_REQUEST['home'];
 		$gBitSmarty->assign( 'feedback', $feedback );
 	}
