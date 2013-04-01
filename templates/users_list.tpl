@@ -3,41 +3,41 @@
 {if $gBitUser->hasPermission( 'p_users_admin' )}
 <div class="width100p">
 {form}
-	<div class="row floatleft clearnone width20p">
+	<div class="control-group floatleft clearnone width20p">
 		{formlabel label="Search"}
 		{forminput}
 			<input type="text" name="find" value="{$smarty.request.find}"/>
 		{/forminput}
 		{formhelp note="Full name, username, and email"}
 	</div>
-	<div class="row floatleft clearnone width10p">
+	<div class="control-group floatleft clearnone width10p">
 		{formlabel label="# Results"}
 		<input type="text" name="max_records" value="{$smarty.request.max_records}" style="width:3em"/>
 		{formhelp note="Per page"}
 	</div>
-	<div class="row floatleft clearnone width10p">
+	<div class="control-group floatleft clearnone width10p">
 		{formlabel label="Max Content"}
 		<input type="text" name="max_content_count" value="{$smarty.request.max_content_count}" style="width:3em"/>
 		{formhelp note="# objects created"}
 	</div>
-	<div class="row floatleft clearnone width10p">
+	<div class="control-group floatleft clearnone width10p">
 		{formlabel label="Min Content"}
 		<input type="text" name="min_content_count" value="{$smarty.request.min_content_count}" style="width:3em"/>
 		{formhelp note="# objects created"}
 	</div>
 	{if $gBitSystem->isPackageActive('stats')}
-	<div class="row floatleft clearnone width20p">
+	<div class="control-group floatleft clearnone width20p">
 		{formlabel label="Registration Referer"}
 		<input type="text" name="referer" value="{$smarty.request.referer}" class="width90p"/>
 		{formhelp note="Enter partial URL or 'none'"}
 	</div>
 	{/if}
-	<div class="row floatleft clearnone width15p">
+	<div class="control-group floatleft clearnone width15p">
 		{formlabel label="IP"}
 		<textarea rows="1" name="ip" style="height:15px">{$smarty.request.ip}</textarea>
 		{formhelp note="Comma separated list"}
 	</div>
-	<div class="row submit">
+	<div class="control-group submit">
 		<input type="submit" name="search" value="{tr}Find{/tr}">
 		<input type="reset" name="reset" value="{tr}Reset{/tr}">
 	</div>
@@ -46,16 +46,13 @@
 {else}
 	{minifind}
 {/if}
-<div class="navbar">
-	<ul>
-		<li>{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="sort by"}</li>
-		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Username" isort="login"}</li>
-		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Real name" isort="real_name"}</li>
-		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Registration Date" isort="registration_date"}</li>
-		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Last Login" isort="current_login"}</li>
-	</ul>
-
-</div>
+<ul class="inline navbar">
+	<li>{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="sort by"}</li>
+	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Username" isort="login"}</li>
+	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Real name" isort="real_name"}</li>
+	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Registration Date" isort="registration_date"}</li>
+	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Last Login" isort="current_login"}</li>
+</ul>
 
 
 {formfeedback hash=$feedback}

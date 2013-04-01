@@ -7,14 +7,12 @@
 	<div class="body">
 		{smartlink ititle="Add a new role" ipackage=users ifile="admin/edit_role.php" action=create}
 
-		<div class="navbar">
-			<ul>
-				<li>{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="sort by"}</li>
-				<li>{smartlink ititle="Name" isort="role_name" offset=$offset idefault=1}</li>
-				<li>{smartlink ititle="Description" isort="role_desc" offset=$offset}</li>
-				<li>{smartlink ititle="Home Page" isort="role_home" offset=$offset}</li>
-			</ul>
-		</div><!-- end .navbar -->
+		<ul class="inline navbar">
+			<li>{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="sort by"}</li>
+			<li>{smartlink ititle="Name" isort="role_name" offset=$offset idefault=1}</li>
+			<li>{smartlink ititle="Description" isort="role_desc" offset=$offset}</li>
+			<li>{smartlink ititle="Home Page" isort="role_home" offset=$offset}</li>
+		</ul>
 
 		{formfeedback success=$successMsg error=$errorMsg}
 

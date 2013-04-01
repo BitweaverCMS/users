@@ -39,10 +39,6 @@
 		</div>
 	{/if}
 
-	{if $gBitUser->mUserId == $gQueryUser->mUserId}
-		{include file="bitpackage:users/my_bitweaver_bar.tpl"}
-	{/if}
-
 	<div>
 		{if !$parsed}
 			{if $gBitUser->mUserId ne $gQueryUser->mUserId}

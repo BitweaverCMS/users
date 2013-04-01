@@ -29,7 +29,7 @@
 		{jstabs}
 			{jstab title="Advanced"}
 				{form legend="Batch user addition" enctype="multipart/form-data"}
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Batch upload (CSV file)" for="csvlist"}
 						{forminput}
 							<input type="file" name="csvlist" id="csvlist" />
@@ -37,7 +37,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Delimiter" for="delimiter"}
 						{forminput}
 							<input type="text" size="3" name="delimiter" id="delimiter" value="," />
@@ -45,7 +45,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Overwrite existing users" for="overwrite"}
 						{forminput}
 							<input type="checkbox" name="overwrite" id="overwrite" />
@@ -53,7 +53,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Validate users by email" for="admin_verify_user"}
 						{forminput}
 							<input type="checkbox" name="admin_verify_user" id="admin_verify_user" />
@@ -61,7 +61,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Validate email address" for="admin_verify_email"}
 						{forminput}
 							<input type="checkbox" name="admin_verify_email" id="admin_verify_email" />
@@ -69,7 +69,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Don't email imported users" for="admin_noemail_user"}
 						{forminput}
 							<input type="checkbox" name="admin_noemail_user" id="admin_noemail_user" />
@@ -77,7 +77,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row submit">
+					<div class="control-group submit">
 						<input type="submit" name="batchimport" value="{tr}Import{/tr}" />
 					</div>
 				{/form}

@@ -7,8 +7,6 @@
 		<h1>{tr}My {$gBitSystem->getConfig('site_title')|default:'Site'}{/tr}</h1>
 	</div>
 
-	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
-
 	<div class="body">
 
 {*
@@ -44,7 +42,7 @@
 					{include file="bitpackage:users/user_information_inc.tpl" userData=$gBitUser}
 
 					{if $gBitUser->mInfo.avatar_url}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Avatar"}
 							{forminput}
 								<img src="{$gBitUser->mInfo.avatar_url}" alt="{tr}avatar{/tr}" />
@@ -53,7 +51,7 @@
 					{/if}
 
 					{if $gBitUser->mInfo.portrait_url}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Portrait"}
 							{forminput}
 								<img src="{$gBitUser->mInfo.portrait_url}" alt="{tr}portrait{/tr}" />
@@ -62,7 +60,7 @@
 					{/if}
 
 					{if $gBitUser->mInfo.logo_url}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Logo"}
 							{forminput}
 								<img src="{$gBitUser->mInfo.logo_url}" alt="{tr}logo{/tr}" />

@@ -22,7 +22,7 @@
 				<input type="hidden" name="password" value="{$reg.password}"/>
 				<input type="hidden" name="novalidation" value="yes"/>
 
-				<div class="row">
+				<div class="control-group">
 					{formfeedback error=$errors.validate}
 					{formlabel label="Email" for="email"}
 					{forminput}
@@ -30,12 +30,12 @@
 					{/forminput}
 				</div>
 
-				<div class="row submit">
+				<div class="control-group submit">
 					<input type="submit" name="register" value="{tr}register{/tr}" />
 				</div>
 			{elseif $showmsg ne 'y'}
 				{if $gBitSystem->isFeatureActive('users_register_passcode')}
-					<div class="row">
+					<div class="control-group">
 						{formfeedback error=$errors.passcode}
 						{formlabel label="Passcode to register" for="passcode"}
 						{forminput}
@@ -46,7 +46,7 @@
 				{/if}
 
 				{if $gBitSystem->isFeatureActive( 'reg_real_name' )}
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Your Name" for="real_name"}
 						{forminput}
 							<input type="text" name="real_name" id="real_name" value="{$smarty.request.real_name}" />
@@ -55,7 +55,7 @@
 					</div>
 				{/if}
 
-				<div class="row">
+				<div class="control-group">
 					{formfeedback error=$errors.login}
 					{formlabel label="Username" for="login"}
 					{forminput}
@@ -82,7 +82,7 @@
 					{formfeedback warning="{tr}A confirmation email will be sent to you with instructions on how to login{/tr}"}
 				{/if}
 
-				<div class="row">
+				<div class="control-group">
 					{formfeedback error=$errors.email}
 					{formlabel label="Email" for="email"}
 					{forminput}
@@ -91,7 +91,7 @@
 				</div>
 
 				{if !$gBitSystem->isFeatureActive( 'users_validate_user' )}
-					<div class="row">
+					<div class="control-group">
 						{formfeedback error=$errors.password}
 						{formlabel label="Password" for="pass"}
 						{forminput}
@@ -99,7 +99,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formfeedback error=$errors.password2}
 						{formlabel label="Repeat password" for="password2"}
 						{forminput}
@@ -108,7 +108,7 @@
 					</div>
 
 					{if $gBitSystem->isFeatureActive( 'user_password_generator' )}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="<a href=\"javascript:BitBase.genPass('genepass','pass1','pass2');\">{tr}Generate a password{/tr}</a>" for="email"}
 							{forminput}
 								<input id="genepass" type="text" />
@@ -119,7 +119,7 @@
 				{/if}
 				{if $gBitUser->hasPermission( 'p_users_view_user_homepage' ) }
 				{*For public sites, get user approval to display information*}
-				<div class="row">
+				<div class="control-group">
 					{formlabel label="User information" for="users_information"}
 					{forminput}
 						<select name="users_information" id="users_information">
@@ -132,7 +132,7 @@
 				{/if}
 				{if $gBitSystem->isFeatureActive( 'reg_real_name' ) or $gBitSystem->isFeatureActive( 'reg_homepage' ) or $gBitSystem->isFeatureActive( 'reg_country' ) or $gBitSystem->isFeatureActive( 'reg_language' ) or $gBitSystem->isFeatureActive( 'reg_portrait' )}
 					{if $gBitSystem->isFeatureActive( 'reg_homepage' )}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="HomePage" for="users_homepage"}
 							{forminput}
 								<input size="50" type="text" name="prefs[users_homepage]" id="users_homepage" value="{$smarty.request.prefs.users_homepage}" />
@@ -142,7 +142,7 @@
 					{/if}
 
 					{if $gBitSystem->isFeatureActive( 'reg_country' )}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Country" for="country"}
 							{forminput}
 								<select name="prefs[users_country]" id="country">
@@ -157,7 +157,7 @@
 					{/if}
 
 					{if $gBitSystem->isFeatureActive( 'reg_language' )}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Language" for="language"}
 							{forminput}
 								<select name="prefs[bitlanguage]" id="language">
@@ -173,7 +173,7 @@
 					{/if}
 
 					{if $gBitSystem->isFeatureActive( 'reg_portrait' )}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Self Portrait" for="user_portrait_file"}
 							{forminput}
 								<input name="user_portrait_file" id="user_portrait_file" type="file" />
@@ -184,7 +184,7 @@
 				{/if}
 
 				{section name=f loop=$customFields}
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="$customFields[f]}
 						{forminput}
 							<input type="text" name="CUSTOM[{$customFields[f]|escape}]" value="{$smarty.request.CUSTOM.$customFields[f]}" />
@@ -194,7 +194,7 @@
 
 				{foreach from=$auth_reg_fields item='output' key='op_id'}
 				{assign var=op_name value="auth[$op_id]"}
-					<div class="row">
+					<div class="control-group">
 						{formlabel label=$output.label for=$op_id}
 						{forminput}
 							{if $output.type == 'checkbox'}
@@ -244,7 +244,7 @@
 				{/if}
 
 				{if $gBitSystem->isFeatureActive('users_register_recaptcha')}
-					<div class="row">
+					<div class="control-group">
 						{formfeedback error=$errors.recaptcha}
 						{formlabel label="Are you human?" for="recaptcha"}
 						{forminput}
@@ -254,7 +254,7 @@
 					</div>
 				{/if}
 
-				<div class="row submit">
+				<div class="control-group submit">
 					<input type="submit" name="register" value="{tr}Register{/tr}" />
 				</div>
 

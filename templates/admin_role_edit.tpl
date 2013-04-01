@@ -20,21 +20,21 @@
 			{jstab title="Edit Role"}
 				{form legend="Add or Edit a Role"}
 					<input type="hidden" name="role_id" value="{$roleInfo.role_id}" />
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Role" for="roles_role"}
 						{forminput}
 							<input type="text" name="name" id="roles_role" size="30" maxlength="30" value="{$roleInfo.role_name}" />
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Description" for="role_desc"}
 						{forminput}
 							<textarea rows="5" cols="20" name="desc" id="role_desc">{$roleInfo.role_desc}</textarea>
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Role home page" for="role_home"}
 						{forminput}
 							<input type="text" name="home" id="role_home" value="{$roleInfo.role_home|escape}" />
@@ -54,7 +54,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="After registration page" for="after_registration_page"}
 						{forminput}
 							<input type="text" name="after_registration_page" id="after_registration_page" value="{$roleInfo.after_registration_page|escape}" />
@@ -62,7 +62,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 					{formlabel label="Default home page" for="default_home"}
 						{forminput}
 							<input type="checkbox" id="default_home" name="default_home_role" {if $roleInfo.role_id eq $defaultRoleId}checked="checked"{/if} value="y" />
@@ -70,7 +70,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Auto members" for="is_default"}
 						{forminput}
 							<input type="checkbox" name="is_default" value="y" {if $roleInfo.is_default eq 'y'}checked="checked"{/if} id="is_default" />
@@ -78,7 +78,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Is public" for="is_public"}
 						{forminput}
 							<input type="checkbox" name="is_public" value="y" {if $roleInfo.is_public eq 'y'}checked="checked"{/if} id="is_public" />
@@ -86,7 +86,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row submit">
+					<div class="control-group submit">
 						<input type="submit" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
 						<input type="submit" name="save" value="{tr}Save Role{/tr}" />
 					</div>
@@ -100,7 +100,7 @@
 						<input type="hidden" name="package" value="{$smarty.request.package|escape}" />
 						<input type="hidden" name="perm_name[{$perms[user].perm_name}]" />
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Display permissions of package"}
 							{forminput}
 								{smartlink ititle="All packages" role_id=$roleInfo.role_id}
@@ -112,7 +112,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							<table class="data">
 								<tr>
 									<th>&nbsp;</th>
@@ -133,7 +133,7 @@
 							</table>
 						</div>
 
-						<div class="row submit">
+						<div class="control-group submit">
 							<input type="submit" name="updateperms" value="{tr}Update{/tr}" />
 						</div>
 					{/form}

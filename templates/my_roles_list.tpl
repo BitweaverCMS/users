@@ -4,8 +4,6 @@
 		<h1>{tr}My Roles{/tr}</h1>
 	</div>
 
-	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
-
 	<div class="body">
 		{formfeedback success=$successMsg error=$errorMsg}
 

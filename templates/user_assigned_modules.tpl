@@ -6,8 +6,6 @@
 		<h1>{tr}Configure Homepage Layout{/tr}</h1>
 	</div>
 
-	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
-
 	<div class="body">
 
 		{if $gBitUser->canCustomizeLayout()}
@@ -61,7 +59,7 @@
 						{if $fEdit && $fAssign.name}
 							<input type="hidden" name="assign_name" value="{$fAssign.name}" />{$assign.name}
 						{else}
-							<div class="row">
+							<div class="control-group">
 								{formlabel label="Module" for="module_rsrc"}
 								{forminput}
 									<select name="fAssign[module_rsrc]">
@@ -75,7 +73,7 @@
 							</div>
 						{/if}
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Position" for="pos"}
 							{forminput}
 								<select name="fAssign[pos]" id="pos">
@@ -86,7 +84,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Order" for="ord"}
 							{forminput}
 								<select name="fAssign[ord]" id="ord">
@@ -98,7 +96,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row submit">
+						<div class="control-group submit">
 							<input type="submit" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
 						</div>
 					{/form}
@@ -108,7 +106,7 @@
 					{form legend="Assign center piece"}
 						<input type="hidden" name="fAssign[pos]" value="c" />
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Center Piece" for="module"}
 							{forminput}
 								<select name="fAssign[module_rsrc]">
@@ -122,14 +120,14 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Position"}
 							{forminput}
 								{tr}Center{/tr}
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Order" for="c_ord"}
 							{forminput}
 								<select name="fAssign[ord]" id="c_ord">
@@ -141,7 +139,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row submit">
+						<div class="control-group submit">
 							<input type="submit" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
 						</div>
 					{/form}
@@ -151,7 +149,7 @@
 			{if $gBitUser->canCustomizeTheme()}
 				{jstab title="Select Theme"}
 					{form legend="Select Theme"}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Theme" for="style"}
 							{forminput}
 								<select name="style" id="style">
@@ -167,7 +165,7 @@
 							{/forminput}
 						</div>
 
-					<div class="row submit">
+					<div class="control-group submit">
 						<input type="submit" value="{tr}Apply Theme{/tr}" name="fSubmitSetTheme">
 					</div>
 					{/form}

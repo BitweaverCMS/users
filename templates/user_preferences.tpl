@@ -6,8 +6,6 @@
 		<h1>{tr}User Preferences{/tr}</h1>
 	</div>
 
-	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
-
 	<div class="body">
 		{formfeedback hash=$feedback}
 		{jstabs}
@@ -16,7 +14,7 @@
 					{legend legend="User Information"}
 						<input type="hidden" name="view_user" value="{$editUser->mUserId}" />
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Real Name" for="real_name"}
 							{forminput}
 								<input type="text" name="real_name" id="real_name" value="{$editUser->mInfo.real_name|escape}" />
@@ -26,7 +24,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Username"}
 							{forminput}
 								{if $gBitUser->hasPermission('p_users_admin')}
@@ -40,7 +38,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Last login"}
 							{forminput}
 								{$editUser->mInfo.last_login|bit_long_datetime}
@@ -48,7 +46,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Is email public?" for="users_email_display"}
 							{forminput}
 								<select name="users_email_display" id="users_email_display">
@@ -60,7 +58,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Country" for="country"}
 							{forminput}
 								<select name="users_country" id="country">
@@ -75,7 +73,7 @@
 						</div>
 
 						{if $gBitSystem->isFeatureActive('users_change_language')}
-							<div class="row">
+							<div class="control-group">
 								{formlabel label="Language" for="language"}
 								{forminput}
 									<select name="bitlanguage" id="bitlanguage">
@@ -91,7 +89,7 @@
 						{/if}
 
 						{foreach from=$customFields key=i item=field}
-							<div class="row">
+							<div class="control-group">
 								{formlabel label="$field}
 								{forminput}
 									<input type="text" name="CUSTOM[{$field}]" value="{$editUser->mPrefs.$field}" maxlength="250" />
@@ -99,7 +97,7 @@
 							</div>
 						{/foreach}
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="User information" for="users_information"}
 							{forminput}
 								<select name="users_information" id="users_information">
@@ -110,7 +108,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="HomePage" for="users_homepage"}
 							{forminput}
 								<input size="50" type="text" name="users_homepage" id="users_homepage" value="{$editUser->mInfo.users_homepage|escape|default:'http://'}" />
@@ -119,7 +117,7 @@
 						</div>
 
 						{if $gBitSystem->getConfig('users_themes') == 'y'}
-							<div class="row">
+							<div class="control-group">
 								{formlabel label="Theme" for="style"}
 								{forminput}
 									<select name="style" id="style">
@@ -132,7 +130,7 @@
 							</div>
 						{/if}
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Displayed time zone"}
 							{forminput}
 								<label><input type="radio" name="site_display_utc" value="UTC" {if $editUser->mPrefs.site_display_utc eq 'UTC'}checked="checked"{/if} />{tr}UTC{/tr}</label>
@@ -148,7 +146,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Use double-click to edit pages" for="users_double_click"}
 							{forminput}
 								<input type="checkbox" name="users_double_click" id="users_double_click" {if $editUser->mPrefs.users_double_click eq 'y'}checked="checked"{/if} />
@@ -156,7 +154,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row submit">
+						<div class="control-group submit">
 							<input type="submit" name="prefs" value="{tr}Change preferences{/tr}" />
 						</div>
 					{/legend}
@@ -165,7 +163,7 @@
 				<div>
 				{form legend="Change your email address" secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 					<input type="hidden" name="view_user" value="{$editUser->mUserId}" />
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Email" for="email"}
 						{forminput}
 							<input size="50" type="text" name="email" id="email" value="{$editUser->mInfo.email|escape}" />
@@ -173,7 +171,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Password" for="pass"}
 						{forminput}
 							<input type="password" name="pass" id="pass" />
@@ -181,7 +179,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row submit">
+					<div class="control-group submit">
 						<input type="submit" name="chgemail" value="{tr}Change email{/tr}" />
 					</div>
 				{/form}
@@ -192,7 +190,7 @@
 					<input type="hidden" name="view_user" value="{$editUser->mUserId}" />
 					{* Users with admin priv can change password without knowing the old one *}
 					{if !$view_user or ( !$gBitUser->hasPermission('p_users_admin') and $view_user )}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Old password" for="old"}
 							{forminput}
 								<input type="password" name="old" id="old" />
@@ -203,7 +201,7 @@
 						<input type="hidden" name="old" value="" />
 					{/if}
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="New password" for="pass1"}
 						{forminput}
 							<input type="password" name="pass1" id="pass1" />
@@ -211,7 +209,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Again please" for="pass2"}
 						{forminput}
 							<input type="password" name="pass2" id="pass2" />
@@ -219,7 +217,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row submit">
+					<div class="control-group submit">
 						<input type="submit" name="chgpswd" value="{tr}Change Password{/tr}" />
 					</div>
 				{/form}
@@ -228,7 +226,7 @@
 				{* this should go in tidbits *}
 				{if $gBitSystem->isFeatureActive( 'feature_tasks' )}
 					{form legend="User Tasks"}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Tasks per page" for="tasks_max_records"}
 							{forminput}
 								<select name="tasks_max_records" id="tasks_max_records">
@@ -244,7 +242,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Use dates" for="tasks_use_dates"}
 							{forminput}
 								<input type="checkbox" name="tasks_use_dates" id="tasks_use_dates" {if $tasks_use_dates eq 'y'}checked="checked"{/if} />
@@ -252,7 +250,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row submit">
+						<div class="control-group submit">
 							<input type="submit" name="tasksprefs" value="{tr}Change preferences{/tr}" />
 						</div>
 					{/form}
@@ -261,7 +259,7 @@
 
 			{jstab title="Pictures"}
 				{legend legend="Pictures and Icons"}
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Pictures"}
 						{forminput}
 							<a href="{$smarty.const.USERS_PKG_URL}my_images.php{if $editUser->mUserId ne $gBitUser->mUserId}?user_id={$editUser->mUserId}{/if}">{tr}Change pictures{/tr}</a>
@@ -269,7 +267,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Avatar"}
 						{forminput}
 							{if $editUser->mInfo.avatar_url}
@@ -279,7 +277,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Self Portrait"} {forminput}
 							{if $editUser->mInfo.portrait_url}
 								<img src="{$editUser->mInfo.portrait_url}" />
@@ -288,7 +286,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Logo" for=""}
 						{forminput}
 							{if $editUser->mInfo.logo_url}

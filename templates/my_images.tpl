@@ -6,8 +6,6 @@
 
 	{formfeedback error=$errorMsg success=$successMsg}
 
-	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
-
 	<div class="body">
 		{form enctype="multipart/form-data" legend="Upload personal Portrait, Avatar and Logo"}
 			{if $gQueryUser->mUserId ne $gBitUser->mUserId}
@@ -16,7 +14,7 @@
 			{if $fHomepage}
 				<input type="hidden" name="fHomepage" value="{$fHomepage}"/>
 			{/if}
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Self Portrait" for="user_portrait_file"}
 				{if $gQueryUser->mInfo.portrait_attachment_id}
 					{forminput}
@@ -31,7 +29,7 @@
 				{/forminput}
 			</div>
 
-			<div class="row" id="avatarfilerow">
+			<div class="control-group" id="avatarfilerow">
 				{formlabel label="Upload Avatar" for="avatarfile"}
 				{forminput}
 					<input name="user_avatar_file" type="file" id="avatarfile" />
@@ -39,7 +37,7 @@
 				{/forminput}
 			</div>
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Avatar" for="user_auto_avatar"}
 				{if $gQueryUser->mInfo.avatar_attachment_id}
 					{forminput}
@@ -54,7 +52,7 @@
 				{/forminput}
 			</div>
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Logo" for="user_logo_file"}
 				{if $gQueryUser->mInfo.logo_attachment_id}
 					{forminput}
@@ -69,7 +67,7 @@
 				{/forminput}
 			</div>
 
-			<div class="row submit">
+			<div class="control-group submit">
 				<input type="submit" name="store" value="{tr}Save Changes{/tr}" />
 			</div>
 		{/form}

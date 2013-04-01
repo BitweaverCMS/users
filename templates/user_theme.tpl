@@ -16,7 +16,7 @@
 			</p>
 
 			{form legend="CSS File Data"}
-				<div class="row">
+				<div class="control-group">
 					{formlabel label="Load CSS File" for="reset"}
 					{forminput}
 						<select name="resetStyle">
@@ -28,15 +28,15 @@
 					{/forminput}
 				</div>
 
-				<div class="row submit">
+				<div class="control-group submit">
 					<input type="submit" name="fResetCSS" id="reset" value="Reset CSS File" onclick="return confirm('{tr}Are you sure you want to reset your CSS back to the defaults? Any changes you have made will be lost.{/tr}');" />
 				</div>
 
-				<div class="row">
+				<div class="control-group">
 					<textarea name="textData" rows="42" cols="50">{$data|escape}</textarea>
 				</div>
 
-				<div class="row submit">
+				<div class="control-group submit">
 					<input type="submit" name="fSaveCSS" value="Save" />
 					<input type="submit" name="fCancelCSS" value="Cancel" />
 				</div>
@@ -44,7 +44,7 @@
 
 			{form enctype="multipart/form-data"}
 				{legend legend="Upload new Image"}
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Upload Image" for="upload"}
 						{forminput}
 							<input type="hidden" name="MAX_FILE_SIZE" value="1024000" />
@@ -53,7 +53,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row submit">
+					<div class="control-group submit">
 						<input type="submit" value="Upload Image" name="fUpload" id="upload" />
 					</div>
 				{/legend}

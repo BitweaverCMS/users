@@ -7,14 +7,12 @@
 	<div class="body">
 		{smartlink ititle="Add a new group" ipackage=users ifile="admin/edit_group.php" action=create}
 
-		<div class="navbar">
-			<ul>
-				<li>{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="sort by"}</li>
-				<li>{smartlink ititle="Name" isort="group_name" offset=$offset idefault=1}</li>
-				<li>{smartlink ititle="Description" isort="group_desc" offset=$offset}</li>
-				<li>{smartlink ititle="Home Page" isort="group_home" offset=$offset}</li>
-			</ul>
-		</div><!-- end .navbar -->
+		<ul class="inline navbar">
+			<li>{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="sort by"}</li>
+			<li>{smartlink ititle="Name" isort="group_name" offset=$offset idefault=1}</li>
+			<li>{smartlink ititle="Description" isort="group_desc" offset=$offset}</li>
+			<li>{smartlink ititle="Home Page" isort="group_home" offset=$offset}</li>
+		</ul>
 
 		{formfeedback success=$successMsg error=$errorMsg}
 
