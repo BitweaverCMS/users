@@ -199,10 +199,6 @@ if ($usingCustomTheme) {
 		if (!ereg(".JPG$|.PNG$|.GIF$|.BMP$",strtoupper($_FILES['fImgUpload']['name']))) {
 			$errorMsg[] = "Your image must be one of the following types: .jpg, .png, .gif, .bmp";
 		} else {
-		//vd($_FILES['fImgUpload']['tmp_name']." -- ".$customCSSPath.'/images/'.$_FILES['fImgUpload']['name']);
-			/*vd($_FILES['fImgUpload']['error'] == UPLOAD_ERR_OK);
-			vd($_FILES['fImgUpload']['tmp_name']);
-			vd($customCSSPath.'/images/'.$_FILES['fImgUpload']['name']);*/
 			if (!file_exists($customCSSPath.'/images')) {
 				mkdir_p($customCSSPath.'/images');
 			}
