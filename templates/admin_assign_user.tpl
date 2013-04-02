@@ -52,7 +52,7 @@
 						<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$groupId}">{$group.group_name}</a>
 						{if $groupId eq $assignUser->mInfo.default_group_id}</strong>{/if}
 						{if $groupId != -1}
-							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;tk={$gBitUser->mTicket}">{biticon ipackage="icons" iname="edit-delete" iexplain="remove from group" iforce="icon"}</a>
+							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;tk={$gBitUser->mTicket}">{booticon iname="icon-trash" ipackage="icons" iexplain="remove from group" iforce="icon"}</a>
 						{/if}
 						<br />
 					{/foreach}
@@ -91,7 +91,7 @@
 						<td>{$group.group_desc}</td>
 						<td class="actionicon">
 							<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;{tk}">
-								{biticon ipackage="icons" iname="emblem-shared" iexplain="assign" iforce="icon"}
+								{booticon iname="icon-key" ipackage="icons" iexplain="assign" iforce="icon"}
 							</a>
 						</td>
 					</tr>

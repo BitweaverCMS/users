@@ -1,5 +1,5 @@
 {strip}
-<div class="display login">
+<div class="width50p floatleft display login">
 	<div class="body">
 
 		{include file=bitpackage:users/login_inc.tpl}

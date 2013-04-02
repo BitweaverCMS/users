@@ -10,7 +10,7 @@
 	{if $isBookmarked eq 'true'}
 		{biticon ipackage="icons" iname="user-bookmarks" iexplain="Remove Bookmark"}
 	{else}
-		{biticon ipackage="icons" iname="bookmark-new" iexplain="Bookmark"}
+		{booticon iname="icon-bookmark" ipackage="icons" iexplain="Bookmark"}
 	{/if}
 </a>
 	<script type="text/javascript">/* <![CDATA[ */

@@ -61,7 +61,7 @@
 							{/if}
 							{formlabel label="User will be added to the following role" for=""}
 							{forminput}
-								{$defaultRoleName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_role.php?role_id={$defaultRoleId}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="change settings"}</a>
+								{$defaultRoleName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_role.php?role_id={$defaultRoleId}">{booticon iname="icon-edit" ipackage="icons" iexplain="change settings"}</a>
 								{formhelp note="This is the role that is selected as the default role. If you would like to change the default role, please click on the edit icon and set a different role as default role."}
 							{/forminput}
 						{else}
@@ -70,7 +70,7 @@
 							{/if}
 							{formlabel label="User will be added to the following group" for=""}
 							{forminput}
-								{$defaultGroupName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$defaultGroupId}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="change settings"}</a>
+								{$defaultGroupName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$defaultGroupId}">{booticon iname="icon-edit" ipackage="icons" iexplain="change settings"}</a>
 								{formhelp note="This is the group that is selected as the default group. If you would like to change the default group, please click on the edit icon and set a different group as default group."}
 							{/forminput}
 						{/if}
