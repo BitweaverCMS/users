@@ -24,8 +24,8 @@
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}watches.php">{booticon iname="icon-asterisk"   iexplain="My Watches" ilocation=$location}</a></li>
 		{/if}
 		{if $gBitSystem->isPackageActive( 'messages' ) && $gBitUser->hasPermission( 'p_messages_send' )}
-			<li><a class="item" {if $unreadMsgs}title="{tr}You have unread messages{/tr}"{/if} href="{$smarty.const.MESSAGES_PKG_URL}message_box.php">{biticon iname="emblem-mail" iexplain="Message Box" ilocation=$location}{if $unreadMsgs}<strong> [{$unreadMsgs}]</strong>{/if}</a></li>
-			<li><a class="item" href="{$smarty.const.MESSAGES_PKG_URL}compose.php">{biticon iname="mail-send-receive" iexplain="Compose Message" ilocation=$location}</a></li>
+			<li><a class="item" {if $unreadMsgs}title="{tr}You have unread messages{/tr}"{/if} href="{$smarty.const.MESSAGES_PKG_URL}message_box.php">{booticon iname="icon-inbox" iexplain="Message Box" ilocation=$location}{if $unreadMsgs}<strong> [{$unreadMsgs}]</strong>{/if}</a></li>
+			<li><a class="item" href="{$smarty.const.MESSAGES_PKG_URL}compose.php">{booticon iname="icon-envelope" iexplain="Compose Message" ilocation=$location}</a></li>
 		{/if}
 		{if $gBitSystem->isPackageActive( 'gatekeeper' )}
 			<li><a class="item" href="{$smarty.const.GATEKEEPER_PKG_URL}">{booticon iname="icon-lock" iexplain="Security Settings" ilocation=$location}</a></li>
