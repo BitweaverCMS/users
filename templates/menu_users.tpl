@@ -4,7 +4,7 @@
 {/if}
 <ul>
 	{if $gBitUser->isRegistered()}
-		<li><a class="item" href="{$gBitSystem->getConfig('users_login_homepage',"`$smarty.const.USERS_PKG_URL`my.php")}">{biticon iname="emblem-symbolic-link" iexplain="My Personal Page" ilocation=$location}</a></li>
+		<li><a class="item" href="{$gBitSystem->getConfig('users_login_homepage',"`$smarty.const.USERS_PKG_URL`my.php")}">{booticon iname="icon-circle-arrow-right"   iexplain="My Personal Page" ilocation=$location}</a></li>
 		{if $gBitUser->hasPermission( 'p_users_view_user_homepage' )}
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}index.php?home={$gBitUser->mInfo.login}">{booticon iname="icon-home" iexplain="My Homepage" ilocation=$location}</a></li>
 		{/if}
@@ -12,13 +12,13 @@
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">{booticon iname="icon-edit" iexplain="Edit My Homepage" ilocation=$location}</a></li>
 		{/if}
 		{if $gBitSystem->isFeatureActive( 'users_preferences' )}
-			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}preferences.php">{biticon iname="emblem-system" iexplain=Preferences ilocation=$location}</a></li>
+			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}preferences.php">{booticon iname="icon-cogs"   iexplain=Preferences ilocation=$location}</a></li>
 		{/if}
 		{if $gBitUser->hasPermission( 'p_users_create_personal_groups' )}
-			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}my_groups.php">{biticon iname="preferences-desktop" iexplain="My Groups" ilocation=$location}</a></li>
+			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}my_groups.php">{booticon iname="icon-group"   iexplain="My Groups" ilocation=$location}</a></li>
 		{/if}
 		{if $gBitUser->hasPermission( 'p_users_create_personal_roles' )}
-			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}my_roles.php">{biticon iname="preferences-desktop" iexplain="My Roles" ilocation=$location}</a></li>
+			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}my_roles.php">{booticon iname="icon-group"   iexplain="My Roles" ilocation=$location}</a></li>
 		{/if}
 		{if $gBitSystem->isFeatureActive( 'users_watches' )}
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}watches.php">{biticon iname="weather-clear" iexplain="My Watches" ilocation=$location}</a></li>
@@ -31,13 +31,13 @@
 			<li><a class="item" href="{$smarty.const.GATEKEEPER_PKG_URL}">{booticon iname="icon-lock" iexplain="Security Settings" ilocation=$location}</a></li>
 		{/if}
 		{if $gBitSystem->isPackageActive( 'quota' )}
-			<li><a class="item" href="{$smarty.const.QUOTA_PKG_URL}">{biticon iname="drive-harddisk" iexplain="My quota and usage" ilocation=$location}</a></li>
+			<li><a class="item" href="{$smarty.const.QUOTA_PKG_URL}">{booticon iname="icon-hdd"   iexplain="My quota and usage" ilocation=$location}</a></li>
 		{/if}
 		{if $gBitUser->hasPermission( 'p_liberty_attach_attachments' )}
 			<li><a class="item" href="{$smarty.const.LIBERTY_PKG_URL}attachments.php">{booticon iname="icon-paper-clip" iexplain="My Files" ilocation=$location}</a></li>
 		{/if}
 		{if $gBitUser->hasPermission('p_liberty_list_content')}
-			<li><a class="item" href="{$smarty.const.LIBERTY_PKG_URL}list_content.php">{biticon iname=format-justify-fill iexplain="List Site Content"}</a></li>
+			<li><a class="item" href="{$smarty.const.LIBERTY_PKG_URL}list_content.php">{booticon iname="icon-list"   iexplain="List Site Content"}</a></li>
 		{/if}
 		{if $gBitUser->hasPermission('p_users_view_user_list')}
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}index.php">{biticon ipackage="icons" iname="system-users" iexplain="List Site Users"}</a></li>

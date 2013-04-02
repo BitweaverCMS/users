@@ -116,7 +116,7 @@
 									{foreach from=$groupInfo.perms key=permName item=perm}
 										<tr class="{cycle values="odd,even"}">
 											<td>
-												{smartlink ititle="Remove" ibiticon="icons/edit-delete" package=$package group_id=$groupInfo.group_id action=remove permission=$permName}
+												{smartlink ititle="Remove" booticon="icon-trash" package=$package group_id=$groupInfo.group_id action=remove permission=$permName}
 												&nbsp;{$permName}
 											</td>
 											<td>{$perm.perm_desc}</td>

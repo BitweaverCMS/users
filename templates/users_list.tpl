@@ -47,7 +47,7 @@
 	{minifind}
 {/if}
 <ul class="inline navbar">
-	<li>{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="sort by"}</li>
+	<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
 	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Username" isort="login"}</li>
 	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Real name" isort="real_name"}</li>
 	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Registration Date" isort="registration_date"}</li>
@@ -64,14 +64,14 @@
 				{if $gBitUser->hasPermission( 'p_users_admin' )}
 					<div class="floaticon">
 						{smartlink ipackage=users ifile="admin/index.php" assume_user=$userHash.user_id ititle="Assume User Identity" ibiticon="users/assume_user" iforce=icon}
-						{smartlink ipackage=users ifile="preferences.php" view_user=$userHash.user_id ititle="Edit User Information" ibiticon="icons/accessories-text-editor" iforce=icon}
+						{smartlink ipackage=users ifile="preferences.php" view_user=$userHash.user_id ititle="Edit User Information" booticon="icon-edit" iforce=icon}
 						{if $gBitSystem->isPackageActive('protector')}
-							{smartlink ipackage=users ifile="admin/assign_role_user.php" assign_user=$userHash.user_id ititle="Assign Group" ibiticon="icons/emblem-shared" iforce=icon}
+							{smartlink ipackage=users ifile="admin/assign_role_user.php" assign_user=$userHash.user_id ititle="Assign Group" booticon="icon-key" iforce=icon}
 						{else}
-							{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userHash.user_id ititle="Assign Role" ibiticon="icons/emblem-shared" iforce=icon}
+							{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userHash.user_id ititle="Assign Role" booticon="icon-key" iforce=icon}
 						{/if}
-						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userHash.user_id ititle="User Activity" ibiticon="icons/preferences-desktop-sound" iforce="icon"}
-						{smartlink ipackage=liberty ifile="list_content.php" user_id=$userHash.user_id ititle="User Content" ibiticon="icons/format-justify-fill" iforce="icon"}
+						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userHash.user_id ititle="User Activity" booticon="icon-volume-up" iforce="icon"}
+						{smartlink ipackage=liberty ifile="list_content.php" user_id=$userHash.user_id ititle="User Content" booticon="icon-list" iforce="icon"}
 						{if $gBitUser->hasPermission( 'p_users_admin' )}
 							<span title="{tr}Content Count{/tr}">{$userHash.user_id|get_user_content_count}</span>
 						{/if}
@@ -79,9 +79,9 @@
 							{if $userHash.content_status_id > 0}
 								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=ban ititle="Ban User" ibiticon="icons/dialog-cancel" iforce=icon}
 							{else}
-								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=unban ititle="Restore the User Account" ibiticon="icons/view-refresh" iforce=icon}
+								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=unban ititle="Restore the User Account" booticon="icon-recycle" iforce=icon}
 							{/if}
-							{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=delete ititle="Remove" ibiticon="icons/edit-delete" iforce=icon}
+							{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=delete ititle="Remove" booticon="icon-trash" iforce=icon}
 							<input type="checkbox" name="batch_user_ids[]" value="{$userHash.user_id}" />
 						{/if}
 					</div>

@@ -33,7 +33,7 @@
 													{smartlink ititle="Move to Right" ibiticon="liberty/move_right" fMove=right fPackage=$fPackage fModule=`$modules.$area[ix].module_id`}
 												{/if}
 												{if $column[ix].type ne 'P'}
-													{smartlink ititle="Unassign" ibiticon="icons/edit-delete" ionclick="return confirm('Are you sure you want to remove `$modules.$area[ix].name`?');" fMove=unassign fPackage=$fPackage fModule=`$modules.$area[ix].module_id`}
+													{smartlink ititle="Unassign" booticon="icon-trash" ionclick="return confirm('Are you sure you want to remove `$modules.$area[ix].name`?');" fMove=unassign fPackage=$fPackage fModule=`$modules.$area[ix].module_id`}
 												{/if}
 											</div>
 										</td>
