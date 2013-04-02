@@ -50,11 +50,20 @@
 	{/if}
 
 	<div class="control-group submit">
-		<input type="submit" name="login" value="{tr}Log in to {$gBitSystem->getConfig('site_title')|default:"this site"}{/tr}" />
+		{forminput}
+			<input type="submit" class="btn btn-primary" name="login" value="{tr}Log in to {$gBitSystem->getConfig('site_title')|default:"this site"}{/tr}" />
 		{if $gBitSystem->isFeatureActive('site_https_login_required') || $smarty.server.HTTPS=='on'}
 			{booticon iname="icon-lock" ipackage="icons" iexplain="Secure Login"}
 		{/if}
+		{/forminput}
 	</div>
+	{if $gBitSystem->isFeatureActive('users_forgot_pass')}
+	<div class="control-group submit">
+		{forminput}
+			<span class="help-block"><a href="{$smarty.const.USERS_PKG_URL}remind_password.php">{tr}Retrieve your password.{/tr}</a></span>
+		{/forminput}
+	</div>
+	{/if}
 {/form}
 <script type="text/javascript">
      document.getElementById("user").focus();
