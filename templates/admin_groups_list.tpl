@@ -21,7 +21,7 @@
 				<li class="item {cycle values='odd,even'}">
 					<div class="floaticon">
 						{smartlink ititle="Edit" ipackage="users" ifile="admin/edit_group.php" booticon="icon-edit" group_id=$groupId}
-						{smartlink ititle="Group Members" ipackage="users" ifile="admin/edit_group.php" ibiticon="icons/system-users" members=$groupId}
+						{smartlink ititle="Group Members" ipackage="users" ifile="admin/edit_group.php" booticon="icon-group" members=$groupId}
 						{if $groupId ne $smarty.const.ANONYMOUS_GROUP_ID}
 							{smartlink ititle="Batch assign" ipackage="users" ifile="admin/edit_group.php" ibiticon="icons/application-x-executable" batch_assign=$groupId}
 							{smartlink ititle="Remove" ipackage="users" ifile="admin/edit_group.php" booticon="icon-trash" action=delete group_id=$groupId}

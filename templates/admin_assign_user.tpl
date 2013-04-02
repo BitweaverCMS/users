@@ -1,7 +1,7 @@
 {* $Header$ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
-<div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{biticon ipackage="icons" iname="go-previous" iexplain="back to users"}</a></div>
+<div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{booticon iname="icon-arrow-left"  ipackage="icons"  iexplain="back to users"}</a></div>
 
 <div class="admin users">
 	<div class="header">

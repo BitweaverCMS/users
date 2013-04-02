@@ -35,7 +35,7 @@
 						{assign var=prev_package value=$perm.package}
 					{/if}
 					<tr class="{cycle values="odd,even"}{if $unassignedPerms.$p} prio5{/if}">
-						<td>{if $unassignedPerms.$p}{biticon iname=dialog-warning iexplain="Unassigned Permission"}{/if}</td>
+						<td>{if $unassignedPerms.$p}{booticon iname="icon-warning-sign"   iexplain="Unassigned Permission"}{/if}</td>
 						<td title="{$perm.perm_desc}"><abbr title="{$perm.perm_desc}">{$p}</abbr></td>
 						{foreach from=$allRoles item=role}
 							{if     $perm.perm_level == 'admin'     }{assign var=id value=1}
@@ -59,7 +59,7 @@
 
 							{if $role.role_id lt 4}
 								<td class="alignleft {$class} width5p">
-									{if $id == $role.role_id}<label for="{$p}{$role.role_id}">{biticon iname=dialog-ok iexplain="Default"}</label>{/if}
+									{if $id == $role.role_id}<label for="{$p}{$role.role_id}">{booticon iname="icon-ok"   iexplain="Default"}</label>{/if}
 								</td>
 							{/if}
 						{/foreach}
@@ -67,7 +67,7 @@
 				{/foreach}
 			</table>
 
-			<p class="formhelp">{tr}Default permissions set after installation are marked with:{/tr} {biticon iname=dialog-ok iexplain="Default"}</p>
+			<p class="formhelp">{tr}Default permissions set after installation are marked with:{/tr} {booticon iname="icon-ok"   iexplain="Default"}</p>
 
 			<div class="submit">
 				<input type="submit" name="save" value="{tr}Apply Changes{/tr}" />
@@ -95,9 +95,9 @@
 										{foreach from=$perms item=perm}
 											<li>
 												{$perm.role_name}: {if $perm.is_revoked}
-													{biticon iname=list-remove iexplain="Removed Permission"}
+													{booticon iname="icon-minus-sign"   iexplain="Removed Permission"}
 												{else}
-													{biticon iname=list-add iexplain="Added Permission"}
+													{booticon iname="icon-plus-sign"   iexplain="Added Permission"}
 												{/if} {$perm.perm_name}
 											</li>
 										{/foreach}

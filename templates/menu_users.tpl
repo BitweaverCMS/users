@@ -21,7 +21,7 @@
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}my_roles.php">{booticon iname="icon-group"   iexplain="My Roles" ilocation=$location}</a></li>
 		{/if}
 		{if $gBitSystem->isFeatureActive( 'users_watches' )}
-			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}watches.php">{biticon iname="weather-clear" iexplain="My Watches" ilocation=$location}</a></li>
+			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}watches.php">{booticon iname="icon-asterisk"   iexplain="My Watches" ilocation=$location}</a></li>
 		{/if}
 		{if $gBitSystem->isPackageActive( 'messages' ) && $gBitUser->hasPermission( 'p_messages_send' )}
 			<li><a class="item" {if $unreadMsgs}title="{tr}You have unread messages{/tr}"{/if} href="{$smarty.const.MESSAGES_PKG_URL}message_box.php">{biticon iname="emblem-mail" iexplain="Message Box" ilocation=$location}{if $unreadMsgs}<strong> [{$unreadMsgs}]</strong>{/if}</a></li>
@@ -40,7 +40,7 @@
 			<li><a class="item" href="{$smarty.const.LIBERTY_PKG_URL}list_content.php">{booticon iname="icon-list"   iexplain="List Site Content"}</a></li>
 		{/if}
 		{if $gBitUser->hasPermission('p_users_view_user_list')}
-			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}index.php">{biticon ipackage="icons" iname="system-users" iexplain="List Site Users"}</a></li>
+			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}index.php">{booticon iname="icon-group"  ipackage="icons"  iexplain="List Site Users"}</a></li>
 		{/if}
 		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}logout.php">{booticon iname="icon-signout" iexplain="Log out" ilocation=$location}</a></li>
 	{else}
