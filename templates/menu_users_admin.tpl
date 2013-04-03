@@ -1,5 +1,5 @@
 {strip}
-<ul>
+<ul class="dropdown-menu sub-menu">
 	<li><a class="item" href="{$smarty.const.USERS_PKG_URL}admin/index.php">{tr}Edit Users{/tr}</a></li>
 	<li><a class="item" href="{$smarty.const.KERNEL_PKG_URL}admin/index.php?page=users">{tr}Users Settings{/tr}</a></li>
 	{if $gBitSystem->isPackageActive('tidbits')}
