@@ -14,8 +14,6 @@
 				{/if}
 			{/if}
 			
-			<a href="" onclick="BitBase.toggleElementDisplay('userinformation','block',true);return false;">{biticon iname="contact-new" iforce="icon" ipackage="icons" iexplain="User Information"}</a>
-
 			{if $gBitUser->isRegistered() && $gBitUser->mUserId eq $gQueryUser->mUserId}
 				{if $gBitSystem->isFeatureActive('users_preferences')}
 					{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" booticon="icon-file"}
