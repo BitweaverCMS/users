@@ -97,7 +97,7 @@
 						</div>
 
 						<div class="control-group submit">
-							<input type="submit" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
+							<input type="submit" class="btn" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
 						</div>
 					{/form}
 				{/jstab}
@@ -140,7 +140,7 @@
 						</div>
 
 						<div class="control-group submit">
-							<input type="submit" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
+							<input type="submit" class="btn" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
 						</div>
 					{/form}
 				{/jstab}
@@ -166,7 +166,7 @@
 						</div>
 
 					<div class="control-group submit">
-						<input type="submit" value="{tr}Apply Theme{/tr}" name="fSubmitSetTheme">
+						<input type="submit" class="btn" value="{tr}Apply Theme{/tr}" name="fSubmitSetTheme">
 					</div>
 					{/form}
 				{/jstab}
@@ -221,7 +221,7 @@ for instance, i don't know where the page heading stuff is used.
 	</td>
 </tr>
 <tr class="panelsubmitrow">
-	<td colspan="2"><input type="submit" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
+	<td colspan="2"><input type="submit" class="btn" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
 </tr>
 </table>
 </form>
@@ -261,7 +261,7 @@ for instance, i don't know where the page heading stuff is used.
 	</td>
 </tr>
 <tr class="panelsubmitrow">
-	<td colspan="2"><input type="submit" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
+	<td colspan="2"><input type="submit" class="btn" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
 </tr>
 </table>
 </form>
@@ -302,7 +302,7 @@ for instance, i don't know where the page heading stuff is used.
 	</td>
 </tr>
 <tr class="panelsubmitrow">
-	<td colspan="2"><input type="submit" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
+	<td colspan="2"><input type="submit" class="btn" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
 </tr>
 </table>
 </form>
@@ -324,7 +324,7 @@ for instance, i don't know where the page heading stuff is used.
 	<td><textarea name="homeHeaderData" cols="50" rows="3">{$homeHeaderData}</textarea></td>
 </tr>
 <tr class="panelsubmitrow">
-	<td><input type="submit" name="fSubmitSetHeading" value="{tr}Set Heading{/tr}" /></td>
+	<td><input type="submit" class="btn" name="fSubmitSetHeading" value="{tr}Set Heading{/tr}" /></td>
 </tr>
 </table>
 	</form>
@@ -342,7 +342,7 @@ for instance, i don't know where the page heading stuff is used.
 		{/section}
 		</select>
 		</td><td>
-		<input type="submit" value="Change Theme" name="fSubmitSetTheme">
+		<input type="submit" class="btn" value="Change Theme" name="fSubmitSetTheme">
 		</td></tr></table>
 	</form>
 {/if}

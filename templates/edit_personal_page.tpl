@@ -130,9 +130,9 @@
 						{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_mini_tpl"}
 
 						<div class="control-group submit">
-							<input type="submit" name="fCancel" value="{tr}Cancel{/tr}" />&nbsp;
-							<input type="submit" name="preview" value="{tr}Preview{/tr}" />&nbsp;
-							<input type="submit" name="fSavePage" value="{tr}Save{/tr}" />
+							<input type="submit" class="btn" name="fCancel" value="{tr}Cancel{/tr}" />&nbsp;
+							<input type="submit" class="btn" name="preview" value="{tr}Preview{/tr}" />&nbsp;
+							<input type="submit" class="btn" name="fSavePage" value="{tr}Save{/tr}" />
 						</div>
 
 						{if $gBitSystem->isFeatureActive( 'wiki_attachments' )}
@@ -228,7 +228,7 @@
 						*}
 
 							<div class="control-group submit">
-								<input type="submit" name="do_suck" value="{tr}Import{/tr}" />
+								<input type="submit" class="btn" name="do_suck" value="{tr}Import{/tr}" />
 							</div>
 						{/legend}
 					{/jstab}

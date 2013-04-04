@@ -38,7 +38,7 @@
 		{formhelp note="Comma separated list"}
 	</div>
 	<div class="control-group submit">
-		<input type="submit" name="search" value="{tr}Find{/tr}">
+		<input type="submit" class="btn" name="search" value="{tr}Find{/tr}">
 		<input type="reset" name="reset" value="{tr}Reset{/tr}">
 	</div>
 {/form}
@@ -134,7 +134,7 @@
 			</select>
 
 			<noscript>
-				<div><input type="submit" value="{tr}Submit{/tr}" /></div>
+				<div><input type="submit" class="btn" value="{tr}Submit{/tr}" /></div>
 			</noscript>
 		</div>
 	{/if}

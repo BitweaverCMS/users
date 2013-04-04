@@ -24,7 +24,7 @@
 		</div>
 
 		<div class="control-group submit">
-			<input type="submit" name="register" value="{tr}register{/tr}" />
+			<input type="submit" class="btn" name="register" value="{tr}register{/tr}" />
 		</div>
 	{elseif $showmsg ne 'y'}
 		{if $gBitSystem->isFeatureActive('users_register_passcode')}
@@ -248,7 +248,7 @@
 		{/if}
 
 		<div class="control-group submit">
-			<input type="submit" name="register" value="{tr}Register{/tr}" />
+			<input type="submit" class="btn" name="register" value="{tr}Register{/tr}" />
 		</div>
 
 		{required legend=1}

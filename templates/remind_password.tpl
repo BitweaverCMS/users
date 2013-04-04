@@ -25,7 +25,7 @@
 				</div>
 
 				<div class="control-group submit">
-					<input type="submit" name="remind" id="remind" value="{tr}{$passVerb}{/tr} ({tr}password{/tr})" />
+					<input type="submit" class="btn" name="remind" id="remind" value="{tr}{$passVerb}{/tr} ({tr}password{/tr})" />
 				</div>
 			{/form}
 		{/if}

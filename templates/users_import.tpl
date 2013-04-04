@@ -78,7 +78,7 @@
 					</div>
 
 					<div class="control-group submit">
-						<input type="submit" name="batchimport" value="{tr}Import{/tr}" />
+						<input type="submit" class="btn" name="batchimport" value="{tr}Import{/tr}" />
 					</div>
 				{/form}
 			{/jstab}

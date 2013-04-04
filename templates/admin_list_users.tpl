@@ -112,9 +112,9 @@
 
 					<div class="control-group submit">
 						{if $gBitSystem->isPackageActive('protector')}
-							<input type="submit" name="newuser" value="{tr}Add User{/tr}"{if $defaultRoleId eq ''} disabled="disabled"{/if} />
+							<input type="submit" class="btn" name="newuser" value="{tr}Add User{/tr}"{if $defaultRoleId eq ''} disabled="disabled"{/if} />
 						{else}
-							<input type="submit" name="newuser" value="{tr}Add User{/tr}"{if $defaultGroupId eq ''} disabled="disabled"{/if} />
+							<input type="submit" class="btn" name="newuser" value="{tr}Add User{/tr}"{if $defaultGroupId eq ''} disabled="disabled"{/if} />
 						{/if}	
 					</div>
 				{/form}

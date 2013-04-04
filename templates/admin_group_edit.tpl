@@ -48,7 +48,7 @@
 {*
 							{html_options name="dummy" id="content-list" values=$contentList options=$contentList onchange="document.getElementById('group_home').value=options[selectedIndex].value;"}
 							<input type="text" size="30" name="find" value="{$smarty.request.find}" />
-							<input type="submit" value="{tr}Apply filter{/tr}" name="search_objects" />
+							<input type="submit" class="btn" value="{tr}Apply filter{/tr}" name="search_objects" />
 							<br />
 *}
 						{/forminput}
@@ -87,8 +87,8 @@
 					</div>
 
 					<div class="control-group submit">
-						<input type="submit" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
-						<input type="submit" name="save" value="{tr}Save Group{/tr}" />
+						<input type="submit" class="btn" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
+						<input type="submit" class="btn" name="save" value="{tr}Save Group{/tr}" />
 					</div>
 				{/form}
 			{/jstab}
@@ -134,7 +134,7 @@
 						</div>
 
 						<div class="control-group submit">
-							<input type="submit" name="updateperms" value="{tr}Update{/tr}" />
+							<input type="submit" class="btn" name="updateperms" value="{tr}Update{/tr}" />
 						</div>
 					{/form}
 				{/jstab}
