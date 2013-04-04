@@ -37,10 +37,10 @@
 			<li><a class="item" href="{$smarty.const.LIBERTY_PKG_URL}attachments.php">{booticon iname="icon-paper-clip" iexplain="My Files" ilocation=$location}</a></li>
 		{/if}
 		{if $gBitUser->hasPermission('p_liberty_list_content')}
-			<li><a class="item" href="{$smarty.const.LIBERTY_PKG_URL}list_content.php">{booticon iname="icon-list"   iexplain="List Site Content"}</a></li>
+			<li><a class="item" href="{$smarty.const.LIBERTY_PKG_URL}list_content.php">{booticon iname="icon-list" iexplain="List Site Content" ilocation=$location}</a></li>
 		{/if}
 		{if $gBitUser->hasPermission('p_users_view_user_list')}
-			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}index.php">{booticon iname="icon-group"  ipackage="icons"  iexplain="List Site Users"}</a></li>
+			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}index.php">{booticon iname="icon-group" ipackage="icons" iexplain="List Site Users" ilocation=$location}</a></li>
 		{/if}
 		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}logout.php">{booticon iname="icon-signout" iexplain="Log out" ilocation=$location}</a></li>
 	{else}
