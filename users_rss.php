@@ -57,7 +57,7 @@ if( !$gBitUser->hasPermission( 'p_users_view_user_list' ) ) {
 		if( $gBitUser->hasPermission( 'p_users_admin' ) ) {
 			$item->description .= tra( "Email Address" ).': <a href="mailto:'.$feed['email'].'">'.$feed['email'].'</a><br />';
 		}
-		require_once $gBitSmarty->_get_plugin_filepath( 'modifier', 'bit_short_datetime' );
+		$gBitSmarty->loadPlugin( 'smarty_modifier_bit_short_datetime' );
 		$item->description .= tra( "Member Since" ).": ".smarty_modifier_bit_short_datetime( $feed['registration_date'] ).'<br />';
 
 		$item->date = ( int )$feed['registration_date'];

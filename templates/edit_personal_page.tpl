@@ -22,7 +22,7 @@
 		<script type="text/javascript">/* <![CDATA[ */
 			alert( "{$errors.edit_conflict|strip_tags}" );
 		/* ]]> */</script>
-		{formfeedback warning=`$errors.edit_conflict`}
+		{formfeedback warning=$errors.edit_conflict}
 	{/if}
 
 	<div class="body">
@@ -70,7 +70,7 @@
 						<input type="hidden" name="page_id" value="{$pageInfo.page_id}" />
 
 						<div class="control-group">
-							{formfeedback warning=`$errors.title`}
+							{formfeedback warning=$errors.title}
 							{formlabel label="$conDescr Title" for="title"}
 							{forminput}
 								{if $gBitUser->hasPermission( 'p_wiki_rename_page' ) || !$pageInfo.page_id}

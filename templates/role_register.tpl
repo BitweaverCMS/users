@@ -208,7 +208,7 @@
 							{else}
 								<input type="text" size="50" name="{$op_name}" id="{$op_id}" value="{$output.value|escape}" />
 							{/if}
-							{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
+							{formhelp note=$output.note page=$output.page link=$output.link}
 						{/forminput}
 					</div>
 				{/foreach}

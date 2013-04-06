@@ -2,7 +2,8 @@
 {if !$icons_only}
 	{assign var=location value=menu}
 {/if}
-<ul>
+<a class="dropdown-toggle" data-toggle="dropdown" href="#"> {tr}{$packageMenuTitle}{/tr} <b class="caret"></b></a>
+<ul class="dropdown-menu">
 	{if $gBitUser->isRegistered()}
 		<li><a class="item" href="{$gBitSystem->getConfig('users_login_homepage',"`$smarty.const.USERS_PKG_URL`my.php")}">{booticon iname="icon-circle-arrow-right"   iexplain="My Personal Page" ilocation=$location}</a></li>
 		{if $gBitUser->hasPermission( 'p_users_view_user_homepage' )}

@@ -95,7 +95,7 @@
 									<td>{$foundUsers[ix].login}</td>
 									<td>{$foundUsers[ix].real_name}</td>
 									<td>{$foundUsers[ix].user_id}</td>
-									<td class="actionicon">{smartlink ititle="Select User" role_id=`$roleInfo.role_id` assignuser=`$foundUsers[ix].user_id`}</td>
+									<td class="actionicon">{smartlink ititle="Select User" role_id=$roleInfo.role_id assignuser=$foundUsers[ix].user_id}</td>
 								</tr>
 							{/section}
 						</table>
