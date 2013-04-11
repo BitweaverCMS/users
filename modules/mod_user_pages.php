@@ -29,7 +29,7 @@ if( empty( $module_title ) ) {
 }
 
 if( !empty( $module_params['show_date'] ) ) {
-	$gBitSmarty->assign( 'userShowDate' , TRUE );
+	$_template->tpl_vars['userShowDate'] = new Smarty_variable(  TRUE  );
 }
 
 $listHash = array(
@@ -40,6 +40,6 @@ $listHash = array(
 	'user_id' => $userId,
 );
 $modLastPages = $gBitUser->getContentList( $listHash );
-$gBitSmarty->assign_by_ref( 'modLastPages', $modLastPages );
+$_template->tpl_vars['modLastPages'] = new Smarty_variable( $modLastPages );
 ?>
 

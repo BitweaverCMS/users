@@ -16,6 +16,6 @@
 $listHash['online' ] = true; 
 $listHash['last_get'] = !empty( $module_params['time_buffer'] ) ? $module_params['time_buffer'] : 900;
 $online_users = $gBitUser->getUserActivity( $listHash );
-$gBitSmarty->assign('online_users', $online_users);
-$gBitSmarty->assign('logged_users', count( $online_users ) );
+$_template->tpl_vars['online_users'] = new Smarty_variable( $online_users);
+$_template->tpl_vars['logged_users'] = new Smarty_variable( count( $online_users ) );
 ?>
