@@ -95,7 +95,7 @@
 							<input type="hidden" name="section" value="{$pageInfo.section}" />
 						{/if}
 
-						{textarea}{$pageInfo.data}{/textarea}
+						{textarea edit=$pageInfo.data}
 
 						{if $footnote}
 							<div class="control-group">

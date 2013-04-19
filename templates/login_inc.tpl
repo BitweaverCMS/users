@@ -52,9 +52,7 @@
 	<div class="control-group submit">
 		{forminput}
 			<input type="submit" class="btn btn-primary" name="login" value="{tr}Sign In{/tr}" />
-		{if $gBitSystem->isFeatureActive('site_https_login_required') || $smarty.server.HTTPS=='on'}
-			{booticon iname="icon-lock" ipackage="icons" iexplain="Secure Login"}
-		{/if}
+			{if $gBitSystem->isFeatureActive('site_https_login_required') || $smarty.server.HTTPS=='on'} {booticon iname="icon-lock" ipackage="icons" iexplain="Secure Login" class="icon-large"}{/if}
 		{/forminput}
 	</div>
 {/form}
