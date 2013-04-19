@@ -1,6 +1,5 @@
 {strip}
-<li class="dropdown-submenu favorite">
-{if $packageMenuTitle}<a href="#" onclick="return(false);" tabindex="-1" class="sub-menu-root">{tr}{$smarty.const.USERS_PKG_DIR|capitalize}{/tr}</a>{/if}
+{if $packagemenutitle}<a href="#" onclick="return(false);" tabindex="-1" class="sub-menu-root">{tr}{$smarty.const.users_pkg_dir|capitalize}{/tr}</a>{/if}
 <ul class="{$packageMenuClass}">
 	<li><a class="item" href="{$smarty.const.USERS_PKG_URL}admin/index.php">{tr}Edit Users{/tr}</a></li>
 	<li><a class="item" href="{$smarty.const.KERNEL_PKG_URL}admin/index.php?page=users">{tr}Users{/tr}</a></li>
