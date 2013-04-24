@@ -68,7 +68,7 @@
 										{/section}
 								</select>
 								&nbsp;
-								{if $editUser->mPrefs.flag}{biticon iforce=icon ipackage=users ipath=flags/ iname=$editUser->mPrefs.flag iexplain=$editUser->mPrefs.flag}{/if}
+								{if $editUser->getPreference('flag')}{biticon iforce=icon ipackage=users ipath="flags/" iname=$editUser->getPreference('flag') iexplain=$editUser->getPreference('flag')}{/if}
 							{/forminput}
 						</div>
 
@@ -90,7 +90,7 @@
 
 						{foreach from=$customFields key=i item=field}
 							<div class="control-group">
-								{formlabel label="$field}
+								{formlabel label=$field}
 								{forminput}
 									<input type="text" name="CUSTOM[{$field}]" value="{$editUser->mPrefs.$field}" maxlength="250" />
 								{/forminput}
