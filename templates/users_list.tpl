@@ -63,7 +63,7 @@
 			<li class="item {cycle values='even,odd'}">
 				{if $gBitUser->hasPermission( 'p_users_admin' )}
 					<div class="floaticon">
-						{smartlink ipackage=users ifile="admin/index.php" assume_user=$userHash.user_id ititle="Assume User Identity" ibiticon="users/assume_user" iforce=icon}
+						{smartlink ipackage=users ifile="admin/index.php" assume_user=$userHash.user_id ititle="Assume User Identity" booticon="icon-user-md" iforce=icon}
 						{smartlink ipackage=users ifile="preferences.php" view_user=$userHash.user_id ititle="Edit User Information" booticon="icon-edit" iforce=icon}
 						{if $gBitSystem->isPackageActive('protector')}
 							{smartlink ipackage=users ifile="admin/assign_role_user.php" assign_user=$userHash.user_id ititle="Assign Group" booticon="icon-key" iforce=icon}
@@ -77,7 +77,7 @@
 						{/if}
 						{if $userHash.user_id != $smarty.const.ANONYMOUS_USER_ID && $userHash.user_id != $smarty.const.ROOT_USER_ID && $userHash.user_id != $gBitUser->mUserId}
 							{if $userHash.content_status_id > 0}
-								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=ban ititle="Ban User" ibiticon="icons/dialog-cancel" iforce=icon}
+								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=ban ititle="Ban User" booticon="icon-minus-sign" iforce=icon}
 							{else}
 								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=unban ititle="Restore the User Account" booticon="icon-recycle" iforce=icon}
 							{/if}

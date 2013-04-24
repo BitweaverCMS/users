@@ -8,7 +8,7 @@
 {/foreach}
 <a title="{if $isBookmarked eq 'true'}{tr}Remove from your favorites{/tr}{else}{tr}Add to your favorites{/tr}{/if}" onclick="BitUser.toggleBookmark({$gContent->mContentId});" href="javascript:void(0); {* {$smarty.const.USERS_PKG_URL}bookmark.php?content_id={$gContent->mContentId} *}" >
 	{if $isBookmarked eq 'true'}
-		{biticon ipackage="icons" iname="user-bookmarks" iexplain="Remove Bookmark"}
+		{booticon iname="icon-bookmark-empty" ipackage="icons" iexplain="Remove Bookmark"}
 	{else}
 		{booticon iname="icon-bookmark" ipackage="icons" iexplain="Bookmark"}
 	{/if}

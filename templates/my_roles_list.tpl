@@ -25,7 +25,7 @@
 								<td>
 									{if $role.public eq 'y'}
 										<a href="{$smarty.const.USERS_PKG_URL}my_roles.php?remove_public_role=y&amp;public_role_id={$roleId}" 
-											onclick="return confirm('{tr}Are you sure you want to leave this role?{/tr}')">{biticon ipackage="icons" iname="edit-cut" iexplain="Leave Role"}</a>
+											onclick="return confirm('{tr}Are you sure you want to leave this role?{/tr}')">{booticon ipackage="icons" iname="icon-cut" iexplain="Leave Role"}</a>
 									{else}
 										&nbsp;
 									{/if}

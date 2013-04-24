@@ -25,7 +25,7 @@
 								<td>
 									{if $group.public eq 'y'}
 										<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?remove_public_group=y&amp;public_group_id={$groupId}" 
-											onclick="return confirm('{tr}Are you sure you want to leave this group?{/tr}')">{biticon ipackage="icons" iname="edit-cut" iexplain="Leave Group"}</a>
+											onclick="return confirm('{tr}Are you sure you want to leave this group?{/tr}')">{booticon ipackage="icons" iname="icon-cut" iexplain="Leave Group"}</a>
 									{else}
 										&nbsp;
 									{/if}
