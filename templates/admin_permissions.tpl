@@ -19,7 +19,7 @@
 				{/foreach}
 			</p>
 
-			<table class="data">
+			<table class="table data">
 				<caption>{tr}Available Permissions{/tr}</caption>
 				{foreach from=$allPerms item=perm key=p name=perms}
 					{if $prev_package != $perm.package}

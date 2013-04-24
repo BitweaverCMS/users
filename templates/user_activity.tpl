@@ -6,7 +6,7 @@
 	</div>
 
 	<div class="body">
-		<table class="data">
+		<table class="table data">
 			<caption>{tr}Active users{/tr}</caption>
 			<tr>
 				<th class="item">{tr}Name{/tr} ({tr}ID{/tr})</th>

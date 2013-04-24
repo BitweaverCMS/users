@@ -108,7 +108,7 @@
 					{if $roleInfo.perms}
 						{jstab title="Permissions"}
 							{form legend="Permissions currently assigned to `$roleInfo.role_name`"}
-								<table class="data">
+								<table class="table data">
 									<tr>
 										<th>{tr}Permission{/tr}</th>
 										<th>{tr}Description{/tr}</th>
@@ -147,7 +147,7 @@
 							</div>
 
 							<div class="control-group">
-								<table class="data">
+								<table class="table data">
 									<tr>
 										<th>&nbsp;</th>
 										<th>{smartlink ititle="Name" isort=perm_name role_id=$roleInfo.role_id offset=$offset package=$package}</th>

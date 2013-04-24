@@ -77,7 +77,7 @@
 
 		{minifind}
 
-		<table class="data">
+		<table class="table data">
 			<tr>
 				<th><a href="{$smarty.const.USERS_PKG_URL}admin/assign_role_user.php?assign_user={$assignUser->mUserId}&amp;offset={$offset}&amp;sort_mode={if $sort_mode eq 'role_name_desc'}role_name_asc{else}role_name_desc{/if}">{tr}Role Name{/tr}</a></th>
 				<th><a href="{$smarty.const.USERS_PKG_URL}admin/assign_role_user.php?assign_user={$assignUser->mUserId}&amp;offset={$offset}&amp;sort_mode={if $sort_mode eq 'role_desc_desc'}role_desc_asc{else}role_desc_desc{/if}">{tr}Description{/tr}</a></th>

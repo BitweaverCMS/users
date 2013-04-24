@@ -63,27 +63,24 @@
 					</div>
 
 					<div class="control-group">
-					{formlabel label="Default home page" for="default_home"}
-						{forminput}
-							<input type="checkbox" id="default_home" name="default_home_role" {if $roleInfo.role_id eq $defaultRoleId}checked="checked"{/if} value="y" />
+					<label class="checkbox">
+							<input type="checkbox" id="default_home" name="default_home_role" {if $roleInfo.role_id eq $defaultRoleId}checked="checked"{/if} value="y" />Default home page
 							{formhelp note="This is the home page if a user belongs to many roles. Only one role may be the default home. If none is selected, users/my.php is the default."}
-						{/forminput}
+						</label>
 					</div>
 
 					<div class="control-group">
-						{formlabel label="Auto members" for="is_default"}
-						{forminput}
-							<input type="checkbox" name="is_default" value="y" {if $roleInfo.is_default eq 'y'}checked="checked"{/if} id="is_default" />
+						<label class="checkbox">
+							<input type="checkbox" name="is_default" value="y" {if $roleInfo.is_default eq 'y'}checked="checked"{/if} id="is_default" />Auto members
 							{formhelp note="Users are automatically added to this role when registering at your site."}
-						{/forminput}
+						</label>
 					</div>
 
 					<div class="control-group">
-						{formlabel label="Is public" for="is_public"}
-						{forminput}
-							<input type="checkbox" name="is_public" value="y" {if $roleInfo.is_public eq 'y'}checked="checked"{/if} id="is_public" />
+						<label class="checkbox">
+							<input type="checkbox" name="is_public" value="y" {if $roleInfo.is_public eq 'y'}checked="checked"{/if} id="is_public" />Is public
 							{formhelp note="A user will be able to select this role at registration."}
-						{/forminput}
+						</label>
 					</div>
 
 					<div class="control-group submit">
@@ -113,7 +110,7 @@
 						</div>
 
 						<div class="control-group">
-							<table class="data">
+							<table class="table data">
 								<tr>
 									<th>&nbsp;</th>
 									<th>{smartlink ititle="Name" isort="up.perm_name" role_id=$roleInfo.role_id offset=$offset package=$smarty.request.package}</th>

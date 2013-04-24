@@ -14,7 +14,7 @@
 				<tr>
 					{foreach from=$layoutAreas item=area key=colkey }
 						<td style="width:33%" valign="top">
-							<table class="data" style="width:100%">
+							<table class="table data" style="width:100%">
 								<caption>{tr}{$colkey} column{/tr}</caption>
 								<tr>
 									<th>{tr}Module{/tr}</th>
