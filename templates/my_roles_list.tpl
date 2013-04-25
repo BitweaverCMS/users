@@ -9,7 +9,7 @@
 
 		{jstabs}
 			{jstab title="My System Roles"}
-				<table class="data">
+				<table class="table data">
 					<tr>
 						<th>{tr}My Roles{/tr}</th>
 						<th>{tr}Description{/tr}</th>
@@ -37,7 +37,7 @@
 
 				{if $canAddPublic}
 					<br />
-					<table class="data">
+					<table class="table data">
 						<tr>
 							<th>{tr}Public Roles{/tr}</th>
 							<th>{tr}Description{/tr}</th>
@@ -61,7 +61,7 @@
 				{jstab title="My User Roles"}
 					<a href="{$smarty.const.USERS_PKG_URL}my_roles.php?action=create">{tr}Add new role{/tr}</a>
 
-					<table class="data">
+					<table class="table data">
 						<tr>
 							<th>
 								<a href="{$smarty.const.USERS_PKG_URL}my_roles.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'role_name_desc'}role_name_asc{else}role_name_desc{/if}">{tr}Name{/tr}</a>, &amp; 

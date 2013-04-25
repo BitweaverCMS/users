@@ -119,11 +119,10 @@
 
 						{if $gBitUser->hasPermission( 'p_wiki_save_minor' )}
 							<div class="control-group">
-								{formlabel label="Minor save" for="isminor"}
-								{forminput}
-									<input type="checkbox" name="isminor" id="isminor" value="on" />
+								<label class="checkbox">
+									<input type="checkbox" name="isminor" id="isminor" value="on" />Minor save
 									{formhelp note="This will prevent the generation of a new version. You can use this, if your changes are minor."}
-								{/forminput}
+								</label>
 							</div>
 						{/if}
 
@@ -204,11 +203,10 @@
 							</div>
 
 							<div class="control-group">
-								{formlabel label="Try to convert HTML to wiki" for="parsehtml"}
-								{forminput}
-									<input type="checkbox" name="parsehtml" id="parsehtml" {if $parsehtml eq 'y'}checked="checked"{/if} />
+								<label class="checkbox">
+									<input type="checkbox" name="parsehtml" id="parsehtml" {if $parsehtml eq 'y'}checked="checked"{/if} />Try to convert HTML to wiki
 									{formhelp note=""}
-								{/forminput}
+								</label>
 							</div>
 
 							<div class="control-group submit">

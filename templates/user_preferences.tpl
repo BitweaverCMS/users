@@ -68,7 +68,7 @@
 										{/section}
 								</select>
 								&nbsp;
-								{if $editUser->mPrefs.flag}{biticon iforce=icon ipackage=users ipath=flags/ iname=$editUser->mPrefs.flag iexplain=$editUser->mPrefs.flag}{/if}
+								{if $editUser->getPreference('flag')}{biticon iforce=icon ipackage=users ipath="flags/" iname=$editUser->getPreference('flag') iexplain=$editUser->getPreference('flag')}{/if}
 							{/forminput}
 						</div>
 
@@ -90,7 +90,7 @@
 
 						{foreach from=$customFields key=i item=field}
 							<div class="control-group">
-								{formlabel label="$field}
+								{formlabel label=$field}
 								{forminput}
 									<input type="text" name="CUSTOM[{$field}]" value="{$editUser->mPrefs.$field}" maxlength="250" />
 								{/forminput}
@@ -147,11 +147,10 @@
 						</div>
 
 						<div class="control-group">
-							{formlabel label="Use double-click to edit pages" for="users_double_click"}
-							{forminput}
-								<input type="checkbox" name="users_double_click" id="users_double_click" {if $editUser->mPrefs.users_double_click eq 'y'}checked="checked"{/if} />
+							<label class="checkbox">
+								<input type="checkbox" name="users_double_click" id="users_double_click" {if $editUser->mPrefs.users_double_click eq 'y'}checked="checked"{/if} />Use double-click to edit pages
 								{formhelp note="Enabling this feature will allow you to double click on any wiki page and it will automatically take you to the edit page. Note that this does not work in all browsers."}
-							{/forminput}
+							</label>
 						</div>
 
 						<div class="control-group submit">
@@ -243,11 +242,10 @@
 						</div>
 
 						<div class="control-group">
-							{formlabel label="Use dates" for="tasks_use_dates"}
-							{forminput}
-								<input type="checkbox" name="tasks_use_dates" id="tasks_use_dates" {if $tasks_use_dates eq 'y'}checked="checked"{/if} />
+							<label class="checkbox">
+								<input type="checkbox" name="tasks_use_dates" id="tasks_use_dates" {if $tasks_use_dates eq 'y'}checked="checked"{/if} />Use dates
 								{formhelp note=""}
-							{/forminput}
+							</label>
 						</div>
 
 						<div class="control-group submit">
@@ -300,7 +298,7 @@
 
 			{if $watches}
 				{jstab title="Watches"}
-					<table class="data">
+					<table class="table data">
 						<caption>{tr}Watches{/tr}</caption>
 						<tr>
 							<th>Event</th>

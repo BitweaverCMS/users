@@ -9,7 +9,7 @@
 
 		{jstabs}
 			{jstab title="My System Groups"}
-				<table class="data">
+				<table class="table data">
 					<tr>
 						<th>{tr}My Groups{/tr}</th>
 						<th>{tr}Description{/tr}</th>
@@ -37,7 +37,7 @@
 
 				{if $canAddPublic}
 					<br />
-					<table class="data">
+					<table class="table data">
 						<tr>
 							<th>{tr}Public Groups{/tr}</th>
 							<th>{tr}Description{/tr}</th>
@@ -61,7 +61,7 @@
 				{jstab title="My User Groups"}
 					<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?action=create">{tr}Add new group{/tr}</a>
 
-					<table class="data">
+					<table class="table data">
 						<tr>
 							<th>
 								<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'group_name_desc'}group_name_asc{else}group_name_desc{/if}">{tr}Name{/tr}</a>, &amp; 
