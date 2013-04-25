@@ -129,12 +129,6 @@
 
 						{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_mini_tpl"}
 
-						<div class="control-group submit">
-							<input type="submit" class="btn" name="fCancel" value="{tr}Cancel{/tr}" />&nbsp;
-							<input type="submit" class="btn" name="preview" value="{tr}Preview{/tr}" />&nbsp;
-							<input type="submit" class="btn" name="fSavePage" value="{tr}Save{/tr}" />
-						</div>
-
 						{if $gBitSystem->isFeatureActive( 'wiki_attachments' )}
 							{include file="bitpackage:liberty/edit_storage_list.tpl" primary_label=Avatar}
 						{/if}
@@ -217,16 +211,6 @@
 								{/forminput}
 							</div>
 
-						{* SPIDERKILL - disable wiki Import
-							{if $gBitUser->hasPermission( 'p_wiki_admin' )}
-								<tr><td>
-									{tr}Import file{/tr}:</td><td>
-									<input name="userfile1" type="file" />
-									{ * <a href="{$smarty.const.WIKI_PKG_URL}export_wiki_pages.php?page_id={$pageInfo.page_id}&amp;all=1">{tr}export all versions{/tr}</a> * }
-								</td></tr>
-							{/if} { * end upload file row * }
-						*}
-
 							<div class="control-group submit">
 								<input type="submit" class="btn" name="do_suck" value="{tr}Import{/tr}" />
 							</div>
@@ -234,6 +218,13 @@
 					{/jstab}
 				{/if}
 			{/jstabs}
+
+			<div class="control-group submit">
+				<input type="submit" class="btn" name="fCancel" value="{tr}Cancel{/tr}" />&nbsp;
+				<input type="submit" class="btn" name="preview" value="{tr}Preview{/tr}" />&nbsp;
+				<input type="submit" class="btn btn-primary" name="fSavePage" value="{tr}Save{/tr}" />
+			</div>
+
 		{/form}
 	</div><!-- end .body -->
 </div><!-- end .admin -->
