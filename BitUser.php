@@ -76,6 +76,16 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
+	 * Validate inbound sort_mode parameter
+	 * @return array of fields which are valid sorts
+	 */
+	public static function getSortModeFields() {
+		$fields = parent::getSortModeFields();
+		$fields[] = 'map_position';
+		return $fields;
+	}
+
+	/**
 	 * load - loads all settings & preferences for this user
 	 *
 	 * @param boolean $pFull Load additional user data like
