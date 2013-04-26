@@ -20,16 +20,16 @@ if( !empty( $gQueryUser->mUserId ) ) {
 if( empty( $module_title ) ) {
 	if( !empty( $module_params['content_type_guid'] ) && !empty( $gLibertySystem->mContentTypes[$module_params['content_type_guid']] ) ) {
 		$title = tra( "Last Changes" ).': '.$gLibertySystem->getContentTypeName( $module_params['content_type_guid'], TRUE );
-		$gBitSmarty->assign( 'contentType', $module_params['content_type_guid'] );
+		$_template->tpl_vars['contentType'] = new Smarty_variable( $module_params['content_type_guid'] );
 	} else {
-		$gBitSmarty->assign( 'contentType', FALSE );
+		$_template->tpl_vars['contentType'] = new Smarty_variable( FALSE );
 		$title = tra( "Last Changes" );
 	}
-	$gBitSmarty->assign( 'moduleTitle', $title );
+	$_template->tpl_vars['moduleTitle'] = new Smarty_variable( $title );
 }
 
 if( !empty( $module_params['show_date'] ) ) {
-	$gBitSmarty->assign( 'userShowDate' , TRUE );
+	$_template->tpl_vars['userShowDate'] = new Smarty_variable(  TRUE  );
 }
 
 $listHash = array(
@@ -40,6 +40,6 @@ $listHash = array(
 	'user_id' => $userId,
 );
 $modLastPages = $gBitUser->getContentList( $listHash );
-$gBitSmarty->assign_by_ref( 'modLastPages', $modLastPages );
+$_template->tpl_vars['modLastPages'] = new Smarty_variable( $modLastPages );
 ?>
 

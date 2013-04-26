@@ -16,14 +16,14 @@
 				{formfeedback success=$addSuccess}
 				{form legend="Add a new user" secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 					<input type="hidden" name="tab" value="useradd" />
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Real Name" for="real_name"}
 						{forminput}
 							<input type="text" name="real_name" id="real_name" value="{$newUser.real_name}" />
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formfeedback error=$errors.login}
 						{formlabel label="User" for="login"}
 						{forminput}
@@ -31,7 +31,7 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formfeedback error=$errors.password}
 						{formlabel label="Password" for="password"}
 						{forminput}
@@ -39,14 +39,14 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Repeat Password" for="password2"}
 						{forminput}
 							<input type="password" name="password2" id="password2" value="{$newUser.password2}"  />
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formfeedback error=$errors.email}
 						{formlabel label="Email" for="email"}
 						{forminput}
@@ -54,14 +54,14 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{if $gBitSystem->isPackageActive('protector')}
 							{if $defaultRoleId eq ''}
 								{formfeedback error="No default role is currently set. Please set one in the Administration --&gt; Users --&gt; <a href=\"`$smarty.const.USERS_PKG_URL`admin/edit_role.php\">Roles and Permissions</a> page"}
 							{/if}
 							{formlabel label="User will be added to the following role" for=""}
 							{forminput}
-								{$defaultRoleName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_role.php?role_id={$defaultRoleId}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="change settings"}</a>
+								{$defaultRoleName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_role.php?role_id={$defaultRoleId}">{booticon iname="icon-edit" ipackage="icons" iexplain="change settings"}</a>
 								{formhelp note="This is the role that is selected as the default role. If you would like to change the default role, please click on the edit icon and set a different role as default role."}
 							{/forminput}
 						{else}
@@ -70,13 +70,13 @@
 							{/if}
 							{formlabel label="User will be added to the following group" for=""}
 							{forminput}
-								{$defaultGroupName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$defaultGroupId}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="change settings"}</a>
+								{$defaultGroupName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$defaultGroupId}">{booticon iname="icon-edit" ipackage="icons" iexplain="change settings"}</a>
 								{formhelp note="This is the group that is selected as the default group. If you would like to change the default group, please click on the edit icon and set a different group as default group."}
 							{/forminput}
 						{/if}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="<a href=\"javascript:BitBase.genPass('genepass','password','password2');\">{tr}Generate a password{/tr}</a>" for="email"}
 						{forminput}
 							<input id="genepass" type="text" />
@@ -84,37 +84,40 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
-						{formlabel label="Validate user by email" for="admin_verify_user"}
+					<div class="control-group">
 						{forminput}
-							<input type="checkbox" name="admin_verify_user" id="admin_verify_user" />
-							{formhelp note="This will email the user a validation url with a temporary one time password. On validation the user is forced to choose a new password."}
+							<label class="checkbox">
+								<input type="checkbox" name="admin_verify_user" id="admin_verify_user" /> {tr}Validate user by email{/tr}
+								{formhelp note="This will email the user a validation url with a temporary one time password. On validation the user is forced to choose a new password."}
+							</label>
 						{/forminput}
 					</div>
 
-					<div class="row">
-						{formlabel label="Validate email address" for="admin_verify_email"}
+					<div class="control-group">
 						{forminput}
-							<input type="checkbox" name="admin_verify_email" id="admin_verify_email" />
-							{formhelp note="This feature should be used only when you need the maximum security and should be used with discretion. If a visitor's email server is not responding, they will not be able to register. You also must have a valid sender email to use this feature."}
+							<label class="checkbox">
+								<input type="checkbox" name="admin_verify_email" id="admin_verify_email" /> {tr}Validate email address{/tr}
+								{formhelp note="This feature should be used only when you need the maximum security and should be used with discretion. If a visitor's email server is not responding, they will not be able to register. You also must have a valid sender email to use this feature."}
+							</label>
 						{/forminput}
 					</div>
 
-					<div class="row">
-						{formlabel label="Don't email added user" for="admin_noemail_user"}
+					<div class="control-group">
 						{forminput}
-							<input type="checkbox" name="admin_noemail_user" id="admin_noemail_user" />
+						<label class="checkbox">
+							<input type="checkbox" name="admin_noemail_user" id="admin_noemail_user" /> {tr}Don't email added user" for="admin_noemail_user{/tr}
 							{formhelp note="If you for some reason don't want to email the added user the login and password, or validation url."}
+						</label>
 						{/forminput}
 					</div>
 
 					{*include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_mini_tpl"*}
 
-					<div class="row submit">
+					<div class="control-group submit">
 						{if $gBitSystem->isPackageActive('protector')}
-							<input type="submit" name="newuser" value="{tr}Add User{/tr}"{if $defaultRoleId eq ''} disabled="disabled"{/if} />
+							<input type="submit" class="btn" name="newuser" value="{tr}Add User{/tr}"{if $defaultRoleId eq ''} disabled="disabled"{/if} />
 						{else}
-							<input type="submit" name="newuser" value="{tr}Add User{/tr}"{if $defaultGroupId eq ''} disabled="disabled"{/if} />
+							<input type="submit" class="btn" name="newuser" value="{tr}Add User{/tr}"{if $defaultGroupId eq ''} disabled="disabled"{/if} />
 						{/if}	
 					</div>
 				{/form}

@@ -1,7 +1,7 @@
 {* $Header$ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
-<div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{biticon ipackage="icons" iname="go-previous" iexplain="back to users"}</a></div>
+<div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{booticon iname="icon-arrow-left"  ipackage="icons"  iexplain="back to users"}</a></div>
 
 <div class="admin users">
 	<div class="header">
@@ -13,21 +13,21 @@
 		{form legend="User Information" action="`$smarty.const.USERS_PKG_URL`admin/assign_user.php"}
 			<input type="hidden" value="{$assignUser->mUserId}" name="assign_user" />
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Username"}
 				{forminput}
 					{$assignUser->getDisplayName(TRUE)}
 				{/forminput}
 			</div>
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Email"}
 				{forminput}
 					{$assignUser->mInfo.email}
 				{/forminput}
 			</div>
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="User ID"}
 				{forminput}
 					{$assignUser->mUserId}
@@ -36,7 +36,7 @@
 
 			{if $gBitSystem->isPackageActive('quota')}
 			{include_php file="`$smarty.const.QUOTA_PKG_PATH`quota_inc.php"}
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Quota"}
 				{forminput}
 					{$usage} / {$quota}MB ( {$quotaPercent}% )
@@ -44,7 +44,7 @@
 			</div>
 			{/if}
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Groups"}
 				{forminput}
 					{foreach from=$assignUser->mGroups key=groupId item=group}
@@ -52,14 +52,14 @@
 						<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$groupId}">{$group.group_name}</a>
 						{if $groupId eq $assignUser->mInfo.default_group_id}</strong>{/if}
 						{if $groupId != -1}
-							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;tk={$gBitUser->mTicket}">{biticon ipackage="icons" iname="edit-delete" iexplain="remove from group" iforce="icon"}</a>
+							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;tk={$gBitUser->mTicket}">{booticon iname="icon-trash" ipackage="icons" iexplain="remove from group" iforce="icon"}</a>
 						{/if}
 						<br />
 					{/foreach}
 				{/forminput}
 			</div>
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Default Group" for="default_group"}
 				{forminput}
 					<select name="default_group" id="default_group">
@@ -70,14 +70,14 @@
 				{/forminput}
 			</div>
 
-			<div class="row submit">
-				<input type="submit" value="{tr}set{/tr}" name="set_default" />
+			<div class="control-group submit">
+				<input type="submit" class="btn" value="{tr}set{/tr}" name="set_default" />
 			</div>
 		{/form}
 
 		{minifind}
 
-		<table class="data">
+		<table class="table data">
 			<tr>
 				<th><a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?assign_user={$assignUser->mUserId}&amp;offset={$offset}&amp;sort_mode={if $sort_mode eq 'group_name_desc'}group_name_asc{else}group_name_desc{/if}">{tr}Group Name{/tr}</a></th>
 				<th><a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?assign_user={$assignUser->mUserId}&amp;offset={$offset}&amp;sort_mode={if $sort_mode eq 'group_desc_desc'}group_desc_asc{else}group_desc_desc{/if}">{tr}Description{/tr}</a></th>
@@ -91,7 +91,7 @@
 						<td>{$group.group_desc}</td>
 						<td class="actionicon">
 							<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;{tk}">
-								{biticon ipackage="icons" iname="emblem-shared" iexplain="assign" iforce="icon"}
+								{booticon iname="icon-key" ipackage="icons" iexplain="assign" iforce="icon"}
 							</a>
 						</td>
 					</tr>

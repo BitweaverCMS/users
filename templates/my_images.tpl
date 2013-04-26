@@ -6,8 +6,6 @@
 
 	{formfeedback error=$errorMsg success=$successMsg}
 
-	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
-
 	<div class="body">
 		{form enctype="multipart/form-data" legend="Upload personal Portrait, Avatar and Logo"}
 			{if $gQueryUser->mUserId ne $gBitUser->mUserId}
@@ -16,12 +14,12 @@
 			{if $fHomepage}
 				<input type="hidden" name="fHomepage" value="{$fHomepage}"/>
 			{/if}
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Self Portrait" for="user_portrait_file"}
 				{if $gQueryUser->mInfo.portrait_attachment_id}
 					{forminput}
 						<img src="{$gQueryUser->mInfo.portrait_url}?{php}print time();{/php}" alt="{tr}self portrait{/tr}" /><br />
-						<input type="submit" value="{tr}delete self portrait{/tr}" name="delete_portrait" id="delete_portrait"/>
+						<input type="submit" class="btn" value="{tr}delete self portrait{/tr}" name="delete_portrait" id="delete_portrait"/>
 					{/forminput}
 				{/if}
 
@@ -31,7 +29,7 @@
 				{/forminput}
 			</div>
 
-			<div class="row" id="avatarfilerow">
+			<div class="control-group" id="avatarfilerow">
 				{formlabel label="Upload Avatar" for="avatarfile"}
 				{forminput}
 					<input name="user_avatar_file" type="file" id="avatarfile" />
@@ -39,12 +37,12 @@
 				{/forminput}
 			</div>
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Avatar" for="user_auto_avatar"}
 				{if $gQueryUser->mInfo.avatar_attachment_id}
 					{forminput}
 						<img src="{$gQueryUser->mInfo.avatar_url}?{php}print time();{/php}" alt="{tr}avatar{/tr}" /><br />
-						<input type="submit" value="{tr}delete avatar{/tr}" name="delete_avatar" />
+						<input type="submit" class="btn" value="{tr}delete avatar{/tr}" name="delete_avatar" />
 					{/forminput}
 				{/if}
 
@@ -54,12 +52,12 @@
 				{/forminput}
 			</div>
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Logo" for="user_logo_file"}
 				{if $gQueryUser->mInfo.logo_attachment_id}
 					{forminput}
 						<img src="{$gQueryUser->mInfo.logo_url}?{php}print time();{/php}" alt="{tr}logo{/tr}" /><br />
-						<input type="submit" value="{tr}delete logo{/tr}" id="delete_logo" name="delete_logo" />
+						<input type="submit" class="btn" value="{tr}delete logo{/tr}" id="delete_logo" name="delete_logo" />
 					{/forminput}
 				{/if}
 
@@ -69,8 +67,8 @@
 				{/forminput}
 			</div>
 
-			<div class="row submit">
-				<input type="submit" name="store" value="{tr}Save Changes{/tr}" />
+			<div class="control-group submit">
+				<input type="submit" class="btn" name="store" value="{tr}Save Changes{/tr}" />
 			</div>
 		{/form}
 	</div><!-- end .body -->

@@ -5,11 +5,9 @@
 		<h1>{tr}User Watches{/tr}</h1>
 	</div>
 
-	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
-
 	<div class="body">
 		{form id='formi' legend="Content type selection"}
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="List content type" for="event"}
 				{forminput}
 					<select name="event" id="event" onchange="javascript:document.getElementById('formi').submit();">
@@ -46,7 +44,7 @@
 
 				{if $watches}
 					<tr>
-						<td><input src="{biticon ipackage="icons" iname="edit-delete" iexplain=remove url=TRUE}" type="image" name="delete" value="{tr}delete{/tr}" /></td>
+						<td><input src="{booticon iname="icon-trash" ipackage="icons" iexplain=remove url=TRUE}" type="image" name="delete" value="{tr}delete{/tr}" /></td>
 					</tr>
 				{/if}
 			</table>

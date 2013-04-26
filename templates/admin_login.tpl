@@ -3,7 +3,7 @@
 		{form legend="User Registration and Login"}
 			<input type="hidden" name="page" value="{$page}" />
 
-			<div class="row">
+			<div class="control-group">
 				{formfeedback hash=$authSettings.err}
 
 				{formlabel label="Authentication method"}
@@ -33,14 +33,14 @@
 			</div>
 
 			{foreach from=$loginSettings key=feature item=output}
-				<div class="row">
+				<div class="control-group">
 					{if $feature == 'users_validate_email' && !$gBitSystem->hasValidSenderEmail()}
 						{formfeedback error="Site <a href=\"`$smarty.const.BIT_ROOT_URL`kernel/admin/index.php?page=server\">emailer return address</a> is not valid!"}
 					{/if}
 					{if $feature == 'users_random_number_reg'}
 						{formfeedback warning=$warning}
 					{/if}
-					{formlabel label=`$output.label` for=$feature}
+					{formlabel label=$output.label for=$feature}
 					{forminput}
 						{if $output.type == 'text'}
 							{if $feature eq 'cookie_domain' && $gBitSystem->getConfig($feature) eq ''}
@@ -53,12 +53,12 @@
 						{else}
 							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
 						{/if}
-						{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
+						{formhelp note=$output.note page=$output.page link=$output.link}
 					{/forminput}
 				</div>
 			{/foreach}
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Default group for users with verifiable emails" for="users_validate_email_group"}
 				{forminput}
 
@@ -71,7 +71,7 @@
 					<div class="formhelp">Selecting (none) will prevent the user from registering with a non responsive email. Click <a href='{$smarty.const.USERS_PKG_URL}admin/verify_emails.php?tk={$gBitUser->mTicket}'>here</a> to validate all of your current users emails.</div>
 				{/forminput}
 			</div>
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Duration of 'Remember me' feature" for="users_remember_time"}
 				{forminput}
 					<select name="users_remember_time" id="users_remember_time">
@@ -91,7 +91,7 @@
 				{/forminput}
 			</div>
 
-			<div class="row">
+			<div class="control-group">
 				{if $roleList }
 					{formlabel label="Roles choice at registration" for="registration_role_choice"}
 					{forminput}
@@ -121,8 +121,8 @@
 				{/if}
 			</div>
 
-			<div class="row submit">
-				<input type="submit" name="loginprefs" value="{tr}Change preferences{/tr}" />
+			<div class="control-group submit">
+				<input type="submit" class="btn" name="loginprefs" value="{tr}Change preferences{/tr}" />
 			</div>
 		{/form}
 	{/jstab}
@@ -134,21 +134,21 @@
 			<p class="formhelp">{tr}Here you can specify what the registration page should look like. All these settings will still be available from the users preferences page.{/tr}</p>
 
 			{foreach from=$registerSettings key=feature item=output}
-				<div class="row">
-					{formlabel label=`$output.label` for=$feature}
+				<div class="control-group">
+					{formlabel label=$output.label for=$feature}
 					{forminput}
 						{if $output.type == 'text'}
 							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
 						{else}
 							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
 						{/if}
-						{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
+						{formhelp note=$output.note page=$output.page link=$output.link}
 					{/forminput}
 				</div>
 			{/foreach}
 
-			<div class="row submit">
-				<input type="submit" name="registerprefs" value="{tr}Change preferences{/tr}" />
+			<div class="control-group submit">
+				<input type="submit" class="btn" name="registerprefs" value="{tr}Change preferences{/tr}" />
 			</div>
 		{/form}
 	{/jstab}
@@ -157,24 +157,24 @@
 		{form legend="HTTP Settings"}
 			<input type="hidden" name="page" value="{$page}" />
 
-			<div class="row warning">{tr}If you turn on any secure login features you must set the HTTP and HTTPS server name.{/tr}</div>
+			<div class="control-group warning">{tr}If you turn on any secure login features you must set the HTTP and HTTPS server name.{/tr}</div>
 
 			{foreach from=$httpSettings key=feature item=output}
-				<div class="row">
-					{formlabel label=`$output.label` for=$feature}
+				<div class="control-group">
+					{formlabel label=$output.label for=$feature}
 					{forminput}
 						{if $output.type == 'text'}
 							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
 						{else}
 							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
 						{/if}
-						{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
+						{formhelp note=$output.note page=$output.page link=$output.link}
 					{/forminput}
 				</div>
 			{/foreach}
 
-			<div class="row submit">
-				<input type="submit" name="httpprefs" value="{tr}Change preferences{/tr}" />
+			<div class="control-group submit">
+				<input type="submit" class="btn" name="httpprefs" value="{tr}Change preferences{/tr}" />
 			</div>
 		{/form}
 	{/jstab}
@@ -184,7 +184,7 @@
 				{form legend=$method.name}
 					<input type="hidden" name="page" value="{$page}" />
 					{foreach from=$method.options item='output' key='op_id'}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label=$output.label for=$op_id}
 							{forminput}
 								{if $output.type == 'checkbox'}
@@ -198,12 +198,12 @@
 								{else}
 									<input type="text" size="50" name="{$op_id}" id="{$op_id}" value="{$output.value|escape}" />
 								{/if}
-								{formhelp note=`$output.note` page=`$output.page` link=`$output.link`}
+								{formhelp note=$output.note page=$output.page link=$output.link}
 							{/forminput}
 						</div>
 					{/foreach}
-					<div class="row submit">
-						<input type="submit" name="auth_{$meth_name}" value="{tr}Change {$method.name} preferences{/tr}" />
+					<div class="control-group submit">
+						<input type="submit" class="btn" name="auth_{$meth_name}" value="{tr}Change {$method.name} preferences{/tr}" />
 					</div>
 				{/form}
 			{/jstab}

@@ -1,6 +1,6 @@
 {strip}
 {form legend="User Settings"}
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Display" for="users_display_name"}
 		{forminput}
 			<select name="settings[users_display_name]" id="users_display_name">
@@ -13,16 +13,16 @@
 
 	<input type="hidden" name="page" value="{$page}" />
 	{foreach from=$formFeatures key=feature item=output}
-		<div class="row">
-			{formlabel label=`$output.label` for=$feature}
+		<div class="control-group">
+			{formlabel label=$output.label for=$feature}
 			{forminput}
 				{html_checkboxes name="settings[$feature]" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
-				{formhelp note=`$output.note` page=`$output.link`}
+				{formhelp note=$output.note page=$output.link}
 			{/forminput}
 		</div>
 	{/foreach}
 
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Users Can Customize Their Layout" for="users_layouts"}
 		{forminput}
 			<select name="settings[users_layouts]" id="users_layouts">
@@ -33,7 +33,7 @@
 		{/forminput}
 	</div>
 
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Users Can Change Their Theme" for="users_themes"}
 		{forminput}
 			<select name="settings[users_themes]" id="users_themes">
@@ -45,7 +45,7 @@
 		{/forminput}
 	</div>
 
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Custom User Fields" for="custom_user_fields"}
 		{forminput}
 			<textarea name="settings[custom_user_fields]" id="custom_user_fields" cols="50" rows="2">{$gBitSystem->getConfig('custom_user_fields')}</textarea>
@@ -54,8 +54,8 @@
 	</div>
 
 
-	<div class="row submit">
-		<input type="submit" name="features" value="{tr}Change preferences{/tr}" />
+	<div class="control-group submit">
+		<input type="submit" class="btn" name="features" value="{tr}Change preferences{/tr}" />
 	</div>
 {/form}
 {/strip}

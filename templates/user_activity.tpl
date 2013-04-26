@@ -6,7 +6,7 @@
 	</div>
 
 	<div class="body">
-		<table class="data">
+		<table class="table data">
 			<caption>{tr}Active users{/tr}</caption>
 			<tr>
 				<th class="item">{tr}Name{/tr} ({tr}ID{/tr})</th>
@@ -28,7 +28,7 @@
 
 			{if $watches}
 				<tr>
-					<td><input src="{biticon ipackage="icons" iname="edit-delete" iexplain=remove url=TRUE}" type="image" name="delete" value="{tr}delete{/tr}" /></td>
+					<td><input src="{booticon iname="icon-trash" ipackage="icons" iexplain=remove url=TRUE}" type="image" name="delete" value="{tr}delete{/tr}" /></td>
 				</tr>
 			{/if}
 		</table>

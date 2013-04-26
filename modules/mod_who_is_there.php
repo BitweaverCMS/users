@@ -13,6 +13,6 @@
  * @subpackage modules
  */
 $listHash['online'] = TRUE;
-$gBitSmarty->assign( 'online_users', $gBitUser->getUserActivity( $listHash ));
-$gBitSmarty->assign( 'logged_users', $gBitUser->countSessions( TRUE ));
+$_template->tpl_vars['online_users'] = new Smarty_variable( $gBitUser->getUserActivity( $listHash );
+$_template->tpl_vars['logged_users'] = new Smarty_variable( $gBitUser->countSessions( TRUE );
 ?>

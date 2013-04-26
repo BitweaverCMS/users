@@ -7,14 +7,12 @@
 	<div class="body">
 		{smartlink ititle="Add a new role" ipackage=users ifile="admin/edit_role.php" action=create}
 
-		<div class="navbar">
-			<ul>
-				<li>{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="sort by"}</li>
-				<li>{smartlink ititle="Name" isort="role_name" offset=$offset idefault=1}</li>
-				<li>{smartlink ititle="Description" isort="role_desc" offset=$offset}</li>
-				<li>{smartlink ititle="Home Page" isort="role_home" offset=$offset}</li>
-			</ul>
-		</div><!-- end .navbar -->
+		<ul class="inline navbar">
+			<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
+			<li>{smartlink ititle="Name" isort="role_name" offset=$offset idefault=1}</li>
+			<li>{smartlink ititle="Description" isort="role_desc" offset=$offset}</li>
+			<li>{smartlink ititle="Home Page" isort="role_home" offset=$offset}</li>
+		</ul>
 
 		{formfeedback success=$successMsg error=$errorMsg}
 
@@ -22,11 +20,11 @@
 			{foreach from=$roleList key=roleId item=grp}
 				<li class="item {cycle values='odd,even'}">
 					<div class="floaticon">
-						{smartlink ititle="Edit" ipackage="users" ifile="admin/edit_role.php" ibiticon="icons/accessories-text-editor" role_id=$roleId}
-						{smartlink ititle="Role Members" ipackage="users" ifile="admin/edit_role.php" ibiticon="icons/system-users" members=$roleId}
+						{smartlink ititle="Edit" ipackage="users" ifile="admin/edit_role.php" booticon="icon-edit" role_id=$roleId}
+						{smartlink ititle="Role Members" ipackage="users" ifile="admin/edit_role.php" booticon="icon-group" members=$roleId}
 						{if $roleId ne $smarty.const.ANONYMOUS_TEAM_ID}
-							{smartlink ititle="Batch assign" ipackage="users" ifile="admin/edit_role.php" ibiticon="icons/application-x-executable" batch_assign=$roleId}
-							{smartlink ititle="Remove" ipackage="users" ifile="admin/edit_role.php" ibiticon="icons/edit-delete" action=delete role_id=$roleId}
+							{smartlink ititle="Batch assign" ipackage="users" ifile="admin/edit_role.php" booticon="icon-cogs" batch_assign=$roleId}
+							{smartlink ititle="Remove" ipackage="users" ifile="admin/edit_role.php" booticon="icon-trash" action=delete role_id=$roleId}
 						{/if}
 					</div>
 

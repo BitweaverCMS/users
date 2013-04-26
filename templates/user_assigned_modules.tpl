@@ -6,8 +6,6 @@
 		<h1>{tr}Configure Homepage Layout{/tr}</h1>
 	</div>
 
-	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
-
 	<div class="body">
 
 		{if $gBitUser->canCustomizeLayout()}
@@ -16,7 +14,7 @@
 				<tr>
 					{foreach from=$layoutAreas item=area key=colkey }
 						<td style="width:33%" valign="top">
-							<table class="data" style="width:100%">
+							<table class="table data" style="width:100%">
 								<caption>{tr}{$colkey} column{/tr}</caption>
 								<tr>
 									<th>{tr}Module{/tr}</th>
@@ -27,15 +25,15 @@
 											{tr}Position {$modules.$area[ix].ord}{/tr}<br />
 											{$modules.$area[ix].name}
 											<div style="text-align:center;">
-												{smartlink ititle="Up" ibiticon="liberty/move_up" fMove=up fPackage=$fPackage fModule=`$modules.$area[ix].module_id`}
-												{smartlink ititle="Down" ibiticon="liberty/move_down" fMove=down fPackage=$fPackage fModule=`$modules.$area[ix].module_id`}
+												{smartlink ititle="Up" booticon="icon-arrow-up" fMove=up fPackage=$fPackage fModule=$modules.$area[ix].module_id}
+												{smartlink ititle="Down" booticon="icon-arrow-down" fMove=down fPackage=$fPackage fModule=$modules.$area[ix].module_id}
 												{if $colkey eq 'right'}
-													{smartlink ititle="Move to Left" ibiticon="liberty/move_left" fMove=left fPackage=$fPackage fModule=`$modules.$area[ix].module_id`}
+													{smartlink ititle="Move to Left" booticon="icon-arrow-left" fMove=left fPackage=$fPackage fModule=$modules.$area[ix].module_id}
 												{elseif $colkey eq 'left'}
-													{smartlink ititle="Move to Right" ibiticon="liberty/move_right" fMove=right fPackage=$fPackage fModule=`$modules.$area[ix].module_id`}
+													{smartlink ititle="Move to Right" booticon="icon-arrow-right" fMove=right fPackage=$fPackage fModule=$modules.$area[ix].module_id}
 												{/if}
 												{if $column[ix].type ne 'P'}
-													{smartlink ititle="Unassign" ibiticon="icons/edit-delete" ionclick="return confirm('Are you sure you want to remove `$modules.$area[ix].name`?');" fMove=unassign fPackage=$fPackage fModule=`$modules.$area[ix].module_id`}
+													{smartlink ititle="Unassign" booticon="icon-trash" ionclick="return confirm('Are you sure you want to remove `$modules.$area[ix].name`?');" fMove=unassign fPackage=$fPackage fModule=$modules.$area[ix].module_id}
 												{/if}
 											</div>
 										</td>
@@ -61,7 +59,7 @@
 						{if $fEdit && $fAssign.name}
 							<input type="hidden" name="assign_name" value="{$fAssign.name}" />{$assign.name}
 						{else}
-							<div class="row">
+							<div class="control-group">
 								{formlabel label="Module" for="module_rsrc"}
 								{forminput}
 									<select name="fAssign[module_rsrc]">
@@ -75,7 +73,7 @@
 							</div>
 						{/if}
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Position" for="pos"}
 							{forminput}
 								<select name="fAssign[pos]" id="pos">
@@ -86,7 +84,7 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Order" for="ord"}
 							{forminput}
 								<select name="fAssign[ord]" id="ord">
@@ -98,8 +96,8 @@
 							{/forminput}
 						</div>
 
-						<div class="row submit">
-							<input type="submit" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
+						<div class="control-group submit">
+							<input type="submit" class="btn" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
 						</div>
 					{/form}
 				{/jstab}
@@ -108,7 +106,7 @@
 					{form legend="Assign center piece"}
 						<input type="hidden" name="fAssign[pos]" value="c" />
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Center Piece" for="module"}
 							{forminput}
 								<select name="fAssign[module_rsrc]">
@@ -122,14 +120,14 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Position"}
 							{forminput}
 								{tr}Center{/tr}
 							{/forminput}
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Order" for="c_ord"}
 							{forminput}
 								<select name="fAssign[ord]" id="c_ord">
@@ -141,8 +139,8 @@
 							{/forminput}
 						</div>
 
-						<div class="row submit">
-							<input type="submit" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
+						<div class="control-group submit">
+							<input type="submit" class="btn" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
 						</div>
 					{/form}
 				{/jstab}
@@ -151,7 +149,7 @@
 			{if $gBitUser->canCustomizeTheme()}
 				{jstab title="Select Theme"}
 					{form legend="Select Theme"}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Theme" for="style"}
 							{forminput}
 								<select name="style" id="style">
@@ -167,8 +165,8 @@
 							{/forminput}
 						</div>
 
-					<div class="row submit">
-						<input type="submit" value="{tr}Apply Theme{/tr}" name="fSubmitSetTheme">
+					<div class="control-group submit">
+						<input type="submit" class="btn" value="{tr}Apply Theme{/tr}" name="fSubmitSetTheme">
 					</div>
 					{/form}
 				{/jstab}
@@ -223,7 +221,7 @@ for instance, i don't know where the page heading stuff is used.
 	</td>
 </tr>
 <tr class="panelsubmitrow">
-	<td colspan="2"><input type="submit" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
+	<td colspan="2"><input type="submit" class="btn" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
 </tr>
 </table>
 </form>
@@ -263,7 +261,7 @@ for instance, i don't know where the page heading stuff is used.
 	</td>
 </tr>
 <tr class="panelsubmitrow">
-	<td colspan="2"><input type="submit" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
+	<td colspan="2"><input type="submit" class="btn" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
 </tr>
 </table>
 </form>
@@ -304,7 +302,7 @@ for instance, i don't know where the page heading stuff is used.
 	</td>
 </tr>
 <tr class="panelsubmitrow">
-	<td colspan="2"><input type="submit" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
+	<td colspan="2"><input type="submit" class="btn" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
 </tr>
 </table>
 </form>
@@ -326,7 +324,7 @@ for instance, i don't know where the page heading stuff is used.
 	<td><textarea name="homeHeaderData" cols="50" rows="3">{$homeHeaderData}</textarea></td>
 </tr>
 <tr class="panelsubmitrow">
-	<td><input type="submit" name="fSubmitSetHeading" value="{tr}Set Heading{/tr}" /></td>
+	<td><input type="submit" class="btn" name="fSubmitSetHeading" value="{tr}Set Heading{/tr}" /></td>
 </tr>
 </table>
 	</form>
@@ -344,7 +342,7 @@ for instance, i don't know where the page heading stuff is used.
 		{/section}
 		</select>
 		</td><td>
-		<input type="submit" value="Change Theme" name="fSubmitSetTheme">
+		<input type="submit" class="btn" value="Change Theme" name="fSubmitSetTheme">
 		</td></tr></table>
 	</form>
 {/if}

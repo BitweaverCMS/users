@@ -10,8 +10,6 @@
 		<h1>{if $roleInfo.role_name}{tr}Administer Role{/tr}: {$roleInfo.role_name}{else}{tr}Create New Role{/tr}{/if}</h1>
 	</div>
 
-	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
-
 	<div class="body">
 		{formfeedback success=$successMsg error=$errorMsg}
 
@@ -19,14 +17,14 @@
 			{jstab title="Edit Role"}
 				{form legend="Add or Edit a Role"}
 					<input type="hidden" name="role_id" value="{$roleInfo.role_id}" />
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Role" for="roles_role"}
 						{forminput}
 							<input type="text" name="name" id="roles_role" value="{$roleInfo.role_name}" />
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Description" for="role_desc"}
 						{forminput}
 							<textarea rows="5" cols="20" name="desc" id="role_desc">{$roleInfo.role_desc}</textarea>
@@ -34,7 +32,7 @@
 					</div>
 					
 					{if $roles && $gBitUser->hasPermission( 'p_users_role_subroles' )}
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Include" for="roles_inc"}
 							{forminput}
 								<select name="include_roles[]" id="roles_inc" multiple="multiple" size="4">
@@ -49,9 +47,9 @@
 						</div>
 					{/if}
 
-					<div class="row submit">
-						<input type="submit" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
-						<input type="submit" name="save" value="{tr}Save Role{/tr}" />
+					<div class="control-group submit">
+						<input type="submit" class="btn" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
+						<input type="submit" class="btn" name="save" value="{tr}Save Role{/tr}" />
 					</div>
 				{/form}
 			{/jstab}
@@ -70,15 +68,15 @@
 						{form legend="User Search"}
 							<input type="hidden" name="role_id" value="{$roleInfo.role_id}" />
 							<input type="hidden" name="tab" value="members" />
-							<div class="row">
+							<div class="control-group">
 								{formlabel label="Username" for="username"}
 								{forminput}
 									<input type="text" id="username" name="find" value="{$find}"/>
 								{/forminput}
 							</div>
 								
-							<div class="row submit">
-								<input type="submit" name="submitUserSearch" value="Search"/>
+							<div class="control-group submit">
+								<input type="submit" class="btn" name="submitUserSearch" value="Search"/>
 							</div>
 						{/form}
 					</div>
@@ -97,7 +95,7 @@
 									<td>{$foundUsers[ix].login}</td>
 									<td>{$foundUsers[ix].real_name}</td>
 									<td>{$foundUsers[ix].user_id}</td>
-									<td class="actionicon">{smartlink ititle="Select User" role_id=`$roleInfo.role_id` assignuser=`$foundUsers[ix].user_id`}</td>
+									<td class="actionicon">{smartlink ititle="Select User" role_id=$roleInfo.role_id assignuser=$foundUsers[ix].user_id}</td>
 								</tr>
 							{/section}
 						</table>
@@ -110,7 +108,7 @@
 					{if $roleInfo.perms}
 						{jstab title="Permissions"}
 							{form legend="Permissions currently assigned to `$roleInfo.role_name`"}
-								<table class="data">
+								<table class="table data">
 									<tr>
 										<th>{tr}Permission{/tr}</th>
 										<th>{tr}Description{/tr}</th>
@@ -118,7 +116,7 @@
 									{foreach from=$roleInfo.perms key=permName item=perm}
 										<tr class="{cycle values="odd,even"}">
 											<td>
-												{smartlink ititle="Remove" ibiticon="icons/edit-delete" package=$package role_id=$roleInfo.role_id action=remove permission=$permName}
+												{smartlink ititle="Remove" booticon="icon-trash" package=$package role_id=$roleInfo.role_id action=remove permission=$permName}
 												&nbsp;{$permName}
 											</td>
 											<td>{$perm.perm_desc}</td>
@@ -136,7 +134,7 @@
 							<input type="hidden" name="tab" value="assign" />
 							<input type="hidden" name="perm_name[{$perms[user].perm_name}]" />
 
-							<div class="row">
+							<div class="control-group">
 								{formlabel label="Display permissions of package"}
 								{forminput}
 									{smartlink ititle="All packages" role_id=$roleInfo.role_id}
@@ -148,8 +146,8 @@
 								{/forminput}
 							</div>
 
-							<div class="row">
-								<table class="data">
+							<div class="control-group">
+								<table class="table data">
 									<tr>
 										<th>&nbsp;</th>
 										<th>{smartlink ititle="Name" isort=perm_name role_id=$roleInfo.role_id offset=$offset package=$package}</th>
@@ -170,8 +168,8 @@
 								</table>
 							</div>
 
-							<div class="row submit">
-								<input type="submit" name="updateperms" value="{tr}Update{/tr}" />
+							<div class="control-group submit">
+								<input type="submit" class="btn" name="updateperms" value="{tr}Update{/tr}" />
 							</div>
 						{/form}
 					{/jstab}

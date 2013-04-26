@@ -1,7 +1,7 @@
 {strip}
 <div class="floaticon">
 	<a href="{$smarty.const.USERS_PKG_URL}admin/edit_role.php">
-		{biticon ipackage="icons" iname="system-users" iexplain="Role List"}
+		{booticon iname="icon-group"  ipackage="icons"  iexplain="Role List"}
 	</a>
 	{bithelp}
 </div>
@@ -18,7 +18,7 @@
 			{foreach from=$roleMembers key=userId item=member}
 				<li>{displayname hash=$member}
 					{if $member.user_id != $smarty.const.ANONYMOUS_USER_ID && $roleInfo.role_id != $smarty.const.ANONYMOUS_TEAM_ID}
-						&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removerole&amp;role_id={$roleInfo.role_id}&amp;assign_user={$member.user_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="remove from role"}</a>
+						&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removerole&amp;role_id={$roleInfo.role_id}&amp;assign_user={$member.user_id}">{booticon iname="icon-trash" ipackage="icons" iexplain="remove from role"}</a>
 					{/if}
 				</li>
 			{foreachelse}

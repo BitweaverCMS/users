@@ -3,42 +3,42 @@
 {if $gBitUser->hasPermission( 'p_users_admin' )}
 <div class="width100p">
 {form}
-	<div class="row floatleft clearnone width20p">
+	<div class="control-group floatleft clearnone width20p">
 		{formlabel label="Search"}
 		{forminput}
 			<input type="text" name="find" value="{$smarty.request.find}"/>
 		{/forminput}
 		{formhelp note="Full name, username, and email"}
 	</div>
-	<div class="row floatleft clearnone width10p">
+	<div class="control-group floatleft clearnone width10p">
 		{formlabel label="# Results"}
 		<input type="text" name="max_records" value="{$smarty.request.max_records}" style="width:3em"/>
 		{formhelp note="Per page"}
 	</div>
-	<div class="row floatleft clearnone width10p">
+	<div class="control-group floatleft clearnone width10p">
 		{formlabel label="Max Content"}
 		<input type="text" name="max_content_count" value="{$smarty.request.max_content_count}" style="width:3em"/>
 		{formhelp note="# objects created"}
 	</div>
-	<div class="row floatleft clearnone width10p">
+	<div class="control-group floatleft clearnone width10p">
 		{formlabel label="Min Content"}
 		<input type="text" name="min_content_count" value="{$smarty.request.min_content_count}" style="width:3em"/>
 		{formhelp note="# objects created"}
 	</div>
 	{if $gBitSystem->isPackageActive('stats')}
-	<div class="row floatleft clearnone width20p">
+	<div class="control-group floatleft clearnone width20p">
 		{formlabel label="Registration Referer"}
 		<input type="text" name="referer" value="{$smarty.request.referer}" class="width90p"/>
 		{formhelp note="Enter partial URL or 'none'"}
 	</div>
 	{/if}
-	<div class="row floatleft clearnone width15p">
+	<div class="control-group floatleft clearnone width15p">
 		{formlabel label="IP"}
 		<textarea rows="1" name="ip" style="height:15px">{$smarty.request.ip}</textarea>
 		{formhelp note="Comma separated list"}
 	</div>
-	<div class="row submit">
-		<input type="submit" name="search" value="{tr}Find{/tr}">
+	<div class="control-group submit">
+		<input type="submit" class="btn" name="search" value="{tr}Find{/tr}">
 		<input type="reset" name="reset" value="{tr}Reset{/tr}">
 	</div>
 {/form}
@@ -46,16 +46,13 @@
 {else}
 	{minifind}
 {/if}
-<div class="navbar">
-	<ul>
-		<li>{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="sort by"}</li>
-		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Username" isort="login"}</li>
-		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Real name" isort="real_name"}</li>
-		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Registration Date" isort="registration_date"}</li>
-		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Last Login" isort="current_login"}</li>
-	</ul>
-
-</div>
+<ul class="inline navbar">
+	<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
+	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Username" isort="login"}</li>
+	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Real name" isort="real_name"}</li>
+	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Registration Date" isort="registration_date"}</li>
+	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Last Login" isort="current_login"}</li>
+</ul>
 
 
 {formfeedback hash=$feedback}
@@ -66,25 +63,25 @@
 			<li class="item {cycle values='even,odd'}">
 				{if $gBitUser->hasPermission( 'p_users_admin' )}
 					<div class="floaticon">
-						{smartlink ipackage=users ifile="admin/index.php" assume_user=$userHash.user_id ititle="Assume User Identity" ibiticon="users/assume_user" iforce=icon}
-						{smartlink ipackage=users ifile="preferences.php" view_user=$userHash.user_id ititle="Edit User Information" ibiticon="icons/accessories-text-editor" iforce=icon}
+						{smartlink ipackage=users ifile="admin/index.php" assume_user=$userHash.user_id ititle="Assume User Identity" booticon="icon-user-md" iforce=icon}
+						{smartlink ipackage=users ifile="preferences.php" view_user=$userHash.user_id ititle="Edit User Information" booticon="icon-edit" iforce=icon}
 						{if $gBitSystem->isPackageActive('protector')}
-							{smartlink ipackage=users ifile="admin/assign_role_user.php" assign_user=$userHash.user_id ititle="Assign Group" ibiticon="icons/emblem-shared" iforce=icon}
+							{smartlink ipackage=users ifile="admin/assign_role_user.php" assign_user=$userHash.user_id ititle="Assign Group" booticon="icon-key" iforce=icon}
 						{else}
-							{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userHash.user_id ititle="Assign Role" ibiticon="icons/emblem-shared" iforce=icon}
+							{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userHash.user_id ititle="Assign Role" booticon="icon-key" iforce=icon}
 						{/if}
-						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userHash.user_id ititle="User Activity" ibiticon="icons/preferences-desktop-sound" iforce="icon"}
-						{smartlink ipackage=liberty ifile="list_content.php" user_id=$userHash.user_id ititle="User Content" ibiticon="icons/format-justify-fill" iforce="icon"}
+						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userHash.user_id ititle="User Activity" booticon="icon-volume-up" iforce="icon"}
+						{smartlink ipackage=liberty ifile="list_content.php" user_id=$userHash.user_id ititle="User Content" booticon="icon-list" iforce="icon"}
 						{if $gBitUser->hasPermission( 'p_users_admin' )}
 							<span title="{tr}Content Count{/tr}">{$userHash.user_id|get_user_content_count}</span>
 						{/if}
 						{if $userHash.user_id != $smarty.const.ANONYMOUS_USER_ID && $userHash.user_id != $smarty.const.ROOT_USER_ID && $userHash.user_id != $gBitUser->mUserId}
 							{if $userHash.content_status_id > 0}
-								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=ban ititle="Ban User" ibiticon="icons/dialog-cancel" iforce=icon}
+								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=ban ititle="Ban User" booticon="icon-minus-sign" iforce=icon}
 							{else}
-								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=unban ititle="Restore the User Account" ibiticon="icons/view-refresh" iforce=icon}
+								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=unban ititle="Restore the User Account" booticon="icon-recycle" iforce=icon}
 							{/if}
-							{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=delete ititle="Remove" ibiticon="icons/edit-delete" iforce=icon}
+							{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=delete ititle="Remove" booticon="icon-trash" iforce=icon}
 							<input type="checkbox" name="batch_user_ids[]" value="{$userHash.user_id}" />
 						{/if}
 					</div>
@@ -137,7 +134,7 @@
 			</select>
 
 			<noscript>
-				<div><input type="submit" value="{tr}Submit{/tr}" /></div>
+				<div><input type="submit" class="btn" value="{tr}Submit{/tr}" /></div>
 			</noscript>
 		</div>
 	{/if}

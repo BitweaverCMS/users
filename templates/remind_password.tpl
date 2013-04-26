@@ -16,7 +16,7 @@
 			{tr}Please follow the instructions in the email.{/tr}
 		{else}
 			{form legend="`$passVerb` my password"}
-				<div class="row">
+				<div class="control-group">
 					{formfeedback warning=$msg.error}
 					{formlabel label="Username or email" for="username"}
 					{forminput}
@@ -24,8 +24,8 @@
 					{/forminput}
 				</div>
 
-				<div class="row submit">
-					<input type="submit" name="remind" id="remind" value="{tr}{$passVerb}{/tr} ({tr}password{/tr})" />
+				<div class="control-group submit">
+					<input type="submit" class="btn" name="remind" id="remind" value="{tr}{$passVerb}{/tr} ({tr}password{/tr})" />
 				</div>
 			{/form}
 		{/if}

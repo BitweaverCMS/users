@@ -1,20 +1,18 @@
 {strip}
 <div class="listing users">
 	<div class="header">
+		<a class="btn btn-primary btn-mini pull-right" href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?action=create"><i class="icon-group"></i> {tr}Add a new group{/tr}</a>
 		<h1>{tr}List of existing groups{/tr}</h1>
 	</div>
 
 	<div class="body">
-		{smartlink ititle="Add a new group" ipackage=users ifile="admin/edit_group.php" action=create}
 
-		<div class="navbar">
-			<ul>
-				<li>{biticon ipackage="icons" iname="emblem-symbolic-link" iexplain="sort by"}</li>
-				<li>{smartlink ititle="Name" isort="group_name" offset=$offset idefault=1}</li>
-				<li>{smartlink ititle="Description" isort="group_desc" offset=$offset}</li>
-				<li>{smartlink ititle="Home Page" isort="group_home" offset=$offset}</li>
-			</ul>
-		</div><!-- end .navbar -->
+		<ul class="inline navbar">
+			<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
+			<li>{smartlink ititle="Name" isort="group_name" offset=$offset idefault=1}</li>
+			<li>{smartlink ititle="Description" isort="group_desc" offset=$offset}</li>
+			<li>{smartlink ititle="Home Page" isort="group_home" offset=$offset}</li>
+		</ul>
 
 		{formfeedback success=$successMsg error=$errorMsg}
 
@@ -22,11 +20,11 @@
 			{foreach from=$groupList key=groupId item=grp}
 				<li class="item {cycle values='odd,even'}">
 					<div class="floaticon">
-						{smartlink ititle="Edit" ipackage="users" ifile="admin/edit_group.php" ibiticon="icons/accessories-text-editor" group_id=$groupId}
-						{smartlink ititle="Group Members" ipackage="users" ifile="admin/edit_group.php" ibiticon="icons/system-users" members=$groupId}
+						{smartlink ititle="Edit" ipackage="users" ifile="admin/edit_group.php" booticon="icon-edit" group_id=$groupId}
+						{smartlink ititle="Group Members" ipackage="users" ifile="admin/edit_group.php" booticon="icon-group" members=$groupId}
 						{if $groupId ne $smarty.const.ANONYMOUS_GROUP_ID}
-							{smartlink ititle="Batch assign" ipackage="users" ifile="admin/edit_group.php" ibiticon="icons/application-x-executable" batch_assign=$groupId}
-							{smartlink ititle="Remove" ipackage="users" ifile="admin/edit_group.php" ibiticon="icons/edit-delete" action=delete group_id=$groupId}
+							{smartlink ititle="Batch assign" ipackage="users" ifile="admin/edit_group.php" booticon="icon-cogs" batch_assign=$groupId}
+							{smartlink ititle="Remove" ipackage="users" ifile="admin/edit_group.php" booticon="icon-trash" action=delete group_id=$groupId}
 						{/if}
 					</div>
 

@@ -4,14 +4,12 @@
 		<h1>{tr}My Groups{/tr}</h1>
 	</div>
 
-	{include file="bitpackage:users/my_bitweaver_bar.tpl"}
-
 	<div class="body">
 		{formfeedback success=$successMsg error=$errorMsg}
 
 		{jstabs}
 			{jstab title="My System Groups"}
-				<table class="data">
+				<table class="table data">
 					<tr>
 						<th>{tr}My Groups{/tr}</th>
 						<th>{tr}Description{/tr}</th>
@@ -27,7 +25,7 @@
 								<td>
 									{if $group.public eq 'y'}
 										<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?remove_public_group=y&amp;public_group_id={$groupId}" 
-											onclick="return confirm('{tr}Are you sure you want to leave this group?{/tr}')">{biticon ipackage="icons" iname="edit-cut" iexplain="Leave Group"}</a>
+											onclick="return confirm('{tr}Are you sure you want to leave this group?{/tr}')">{booticon ipackage="icons" iname="icon-cut" iexplain="Leave Group"}</a>
 									{else}
 										&nbsp;
 									{/if}
@@ -39,7 +37,7 @@
 
 				{if $canAddPublic}
 					<br />
-					<table class="data">
+					<table class="table data">
 						<tr>
 							<th>{tr}Public Groups{/tr}</th>
 							<th>{tr}Description{/tr}</th>
@@ -50,7 +48,7 @@
 								<tr class="{cycle values="odd,even"}">
 									<td>{$group.group_name}</td>
 									<td>{$group.group_desc}</td>
-									<td><a href="{$smarty.const.USERS_PKG_URL}my_groups.php?add_public_group=y&amp;public_group_id={$group.group_id}"  title="{tr}Assign Group{/tr}">{biticon ipackage="icons" iname="emblem-shared" iexplain="join group"}</a></td>								
+									<td><a href="{$smarty.const.USERS_PKG_URL}my_groups.php?add_public_group=y&amp;public_group_id={$group.group_id}"  title="{tr}Assign Group{/tr}">{booticon iname="icon-key" ipackage="icons" iexplain="join group"}</a></td>								
 								</tr>
 							{/if}
 						{/foreach}
@@ -63,7 +61,7 @@
 				{jstab title="My User Groups"}
 					<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?action=create">{tr}Add new group{/tr}</a>
 
-					<table class="data">
+					<table class="table data">
 						<tr>
 							<th>
 								<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?offset={$offset}&amp;sort_mode={if $sort_mode eq 'group_name_desc'}group_name_asc{else}group_name_desc{/if}">{tr}Name{/tr}</a>, &amp; 
@@ -115,10 +113,10 @@
 								{/if}
 
 								<td class="actionicon">
-									<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?group_id={$groupId}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="edit"}</a>
+									<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?group_id={$groupId}">{booticon iname="icon-edit" ipackage="icons" iexplain="edit"}</a>
 									{if $groupId ne ANONYMOUS_GROUP_ID}
 										<a href="{$smarty.const.USERS_PKG_URL}my_groups.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=delete&amp;group_id={$groupId}" 
-										onclick="return confirm('{tr}Are you sure you want to delete this group?{/tr}')">{biticon ipackage="icons" iname="edit-delete" iexplain="Delete Group"}</a>
+										onclick="return confirm('{tr}Are you sure you want to delete this group?{/tr}')">{booticon iname="icon-trash" ipackage="icons" iexplain="Delete Group"}</a>
 									{/if}
 								</td>
 							</tr>

@@ -1,7 +1,7 @@
 {* $Header$ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
-<div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{biticon ipackage="icons" iname="go-previous" iexplain="back to users"}</a></div>
+<div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{booticon iname="icon-arrow-left"  ipackage="icons"  iexplain="back to users"}</a></div>
 
 <div class="admin users">
 	<div class="header">
@@ -13,21 +13,21 @@
 		{form legend="User Information" action="`$smarty.const.USERS_PKG_URL`admin/assign_role_user.php"}
 			<input type="hidden" value="{$assignUser->mUserId}" name="assign_user" />
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Username"}
 				{forminput}
 					{$assignUser->getDisplayName(TRUE)}
 				{/forminput}
 			</div>
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Email"}
 				{forminput}
 					{$assignUser->mInfo.email}
 				{/forminput}
 			</div>
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="User ID"}
 				{forminput}
 					{$assignUser->mUserId}
@@ -36,7 +36,7 @@
 
 			{if $gBitSystem->isPackageActive('quota')}
 			{include_php file="`$smarty.const.QUOTA_PKG_PATH`quota_inc.php"}
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Quota"}
 				{forminput}
 					{$usage} / {$quota}MB ( {$quotaPercent}% )
@@ -44,7 +44,7 @@
 			</div>
 			{/if}
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Roles"}
 				{forminput}
 					{foreach from=$assignUser->mRoles key=roleId item=role}
@@ -52,14 +52,14 @@
 						<a href="{$smarty.const.USERS_PKG_URL}admin/edit_role.php?role_id={$roleId}">{$role.role_name}</a>
 						{if $roleId eq $assignUser->mInfo.default_role_id}</strong>{/if}
 						{if $roleId != -1}
-							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_role_user.php?action=removerole&amp;role_id={$roleId}&amp;assign_user={$assignUser->mUserId}">{biticon ipackage="icons" iname="edit-delete" iexplain="remove from role" iforce="icon"}</a>
+							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_role_user.php?action=removerole&amp;role_id={$roleId}&amp;assign_user={$assignUser->mUserId}">{booticon iname="icon-trash" ipackage="icons" iexplain="remove from role" iforce="icon"}</a>
 						{/if}
 						<br />
 					{/foreach}
 				{/forminput}
 			</div>
 
-			<div class="row">
+			<div class="control-group">
 				{formlabel label="Default Role" for="default_role"}
 				{forminput}
 					<select name="default_role" id="default_role">
@@ -70,14 +70,14 @@
 				{/forminput}
 			</div>
 
-			<div class="row submit">
-				<input type="submit" value="{tr}set{/tr}" name="set_default" />
+			<div class="control-group submit">
+				<input type="submit" class="btn" value="{tr}set{/tr}" name="set_default" />
 			</div>
 		{/form}
 
 		{minifind}
 
-		<table class="data">
+		<table class="table data">
 			<tr>
 				<th><a href="{$smarty.const.USERS_PKG_URL}admin/assign_role_user.php?assign_user={$assignUser->mUserId}&amp;offset={$offset}&amp;sort_mode={if $sort_mode eq 'role_name_desc'}role_name_asc{else}role_name_desc{/if}">{tr}Role Name{/tr}</a></th>
 				<th><a href="{$smarty.const.USERS_PKG_URL}admin/assign_role_user.php?assign_user={$assignUser->mUserId}&amp;offset={$offset}&amp;sort_mode={if $sort_mode eq 'role_desc_desc'}role_desc_asc{else}role_desc_desc{/if}">{tr}Description{/tr}</a></th>
@@ -91,7 +91,7 @@
 						<td>{$role.role_desc}</td>
 						<td class="actionicon">
 							<a href="{$smarty.const.USERS_PKG_URL}admin/assign_role_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;role_id={$roleId}&amp;assign_user={$assignUser->mUserId}">
-								{biticon ipackage="icons" iname="emblem-shared" iexplain="assign" iforce="icon"}
+								{booticon iname="icon-key" ipackage="icons" iexplain="assign" iforce="icon"}
 							</a>
 						</td>
 					</tr>

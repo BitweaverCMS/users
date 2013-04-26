@@ -3,7 +3,7 @@
 
 <div class="floaticon">
 	<a href="{$smarty.const.USERS_PKG_URL}admin/edit_role.php">
-		{biticon ipackage="icons" iname="system-users" iexplain="Role List"}
+		{booticon iname="icon-group"  ipackage="icons"  iexplain="Role List"}
 	</a>
 	{bithelp}
 </div>
@@ -20,21 +20,21 @@
 			{jstab title="Edit Role"}
 				{form legend="Add or Edit a Role"}
 					<input type="hidden" name="role_id" value="{$roleInfo.role_id}" />
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Role" for="roles_role"}
 						{forminput}
 							<input type="text" name="name" id="roles_role" size="30" maxlength="30" value="{$roleInfo.role_name}" />
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Description" for="role_desc"}
 						{forminput}
 							<textarea rows="5" cols="20" name="desc" id="role_desc">{$roleInfo.role_desc}</textarea>
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="Role home page" for="role_home"}
 						{forminput}
 							<input type="text" name="home" id="role_home" value="{$roleInfo.role_home|escape}" />
@@ -48,13 +48,13 @@
 {*
 							{html_options name="dummy" id="content-list" values=$contentList options=$contentList onchange="document.getElementById('role_home').value=options[selectedIndex].value;"}
 							<input type="text" size="30" name="find" value="{$smarty.request.find}" />
-							<input type="submit" value="{tr}Apply filter{/tr}" name="search_objects" />
+							<input type="submit" class="btn" value="{tr}Apply filter{/tr}" name="search_objects" />
 							<br />
 *}
 						{/forminput}
 					</div>
 
-					<div class="row">
+					<div class="control-group">
 						{formlabel label="After registration page" for="after_registration_page"}
 						{forminput}
 							<input type="text" name="after_registration_page" id="after_registration_page" value="{$roleInfo.after_registration_page|escape}" />
@@ -62,33 +62,30 @@
 						{/forminput}
 					</div>
 
-					<div class="row">
-					{formlabel label="Default home page" for="default_home"}
-						{forminput}
-							<input type="checkbox" id="default_home" name="default_home_role" {if $roleInfo.role_id eq $defaultRoleId}checked="checked"{/if} value="y" />
+					<div class="control-group">
+					<label class="checkbox">
+							<input type="checkbox" id="default_home" name="default_home_role" {if $roleInfo.role_id eq $defaultRoleId}checked="checked"{/if} value="y" />Default home page
 							{formhelp note="This is the home page if a user belongs to many roles. Only one role may be the default home. If none is selected, users/my.php is the default."}
-						{/forminput}
+						</label>
 					</div>
 
-					<div class="row">
-						{formlabel label="Auto members" for="is_default"}
-						{forminput}
-							<input type="checkbox" name="is_default" value="y" {if $roleInfo.is_default eq 'y'}checked="checked"{/if} id="is_default" />
+					<div class="control-group">
+						<label class="checkbox">
+							<input type="checkbox" name="is_default" value="y" {if $roleInfo.is_default eq 'y'}checked="checked"{/if} id="is_default" />Auto members
 							{formhelp note="Users are automatically added to this role when registering at your site."}
-						{/forminput}
+						</label>
 					</div>
 
-					<div class="row">
-						{formlabel label="Is public" for="is_public"}
-						{forminput}
-							<input type="checkbox" name="is_public" value="y" {if $roleInfo.is_public eq 'y'}checked="checked"{/if} id="is_public" />
+					<div class="control-group">
+						<label class="checkbox">
+							<input type="checkbox" name="is_public" value="y" {if $roleInfo.is_public eq 'y'}checked="checked"{/if} id="is_public" />Is public
 							{formhelp note="A user will be able to select this role at registration."}
-						{/forminput}
+						</label>
 					</div>
 
-					<div class="row submit">
-						<input type="submit" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
-						<input type="submit" name="save" value="{tr}Save Role{/tr}" />
+					<div class="control-group submit">
+						<input type="submit" class="btn" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
+						<input type="submit" class="btn" name="save" value="{tr}Save Role{/tr}" />
 					</div>
 				{/form}
 			{/jstab}
@@ -100,7 +97,7 @@
 						<input type="hidden" name="package" value="{$smarty.request.package|escape}" />
 						<input type="hidden" name="perm_name[{$perms[user].perm_name}]" />
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Display permissions of package"}
 							{forminput}
 								{smartlink ititle="All packages" role_id=$roleInfo.role_id}
@@ -112,8 +109,8 @@
 							{/forminput}
 						</div>
 
-						<div class="row">
-							<table class="data">
+						<div class="control-group">
+							<table class="table data">
 								<tr>
 									<th>&nbsp;</th>
 									<th>{smartlink ititle="Name" isort="up.perm_name" role_id=$roleInfo.role_id offset=$offset package=$smarty.request.package}</th>
@@ -133,8 +130,8 @@
 							</table>
 						</div>
 
-						<div class="row submit">
-							<input type="submit" name="updateperms" value="{tr}Update{/tr}" />
+						<div class="control-group submit">
+							<input type="submit" class="btn" name="updateperms" value="{tr}Update{/tr}" />
 						</div>
 					{/form}
 				{/jstab}
