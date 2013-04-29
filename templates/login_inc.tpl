@@ -1,6 +1,5 @@
 {strip}
-<div class="span4">
-{form class="form-horizontal" name="login" legend="Please sign in to continue" ipackage=users ifile='validate.php' secure=$gBitSystem->isFeatureActive("site_https_login_required")}
+{form class="form-horizontal span6" name="login" legend="Please sign in to continue" ipackage=users ifile='validate.php' secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 	<div class="control-group">
 		{formfeedback error="$error"}
 		{formlabel label="Username or Email" for="user"}
@@ -23,8 +22,10 @@
 	{if $gBitSystem->isFeatureActive('users_remember_me')}
 		<div class="control-group">
 			{forminput}
+			<label class="checkbox">
 				<input type="checkbox" name="rme" id="rme" value="on" checked="checked" />
 				{tr}Remember Me{/tr}
+			</label>
 			{/forminput}
 		</div>
 	{/if}
@@ -56,7 +57,7 @@
 		{/forminput}
 	</div>
 {/form}
-</div>
+
 <script type="text/javascript">
      document.getElementById("user").focus();
 </script>

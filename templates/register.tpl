@@ -2,7 +2,7 @@
 
 {if $showmsg ne 'y'}
 
-{form enctype="multipart/form-data" legend="or register as a new user"}
+{form class="form-horizontal" enctype="multipart/form-data" legend="Register as a new user"}
 	{foreach from=$reg.CUSTOM item='custom' key='custom_name'}
 		<input type="hidden" name="CUSTOM[{$custom_name}]" value="{$custom}"/>
 	{/foreach}
@@ -32,7 +32,7 @@
 				{formfeedback error=$errors.passcode}
 				{formlabel label="Passcode to register" for="passcode"}
 				{forminput}
-					<input type="password" name="passcode" id="passcode" />{required}
+					<input type="password" name="passcode" id="passcode" required />
 					{formhelp note="This is not your user password. It is a code required for registration. Contact your site administrator for details."}
 				{/forminput}
 			</div>
@@ -52,7 +52,7 @@
 			{formfeedback error=$errors.login}
 			{formlabel label="Username" for="login"}
 			{forminput}
-				<input type="text" name="login" id="login" value="{$reg.login}" onkeyup="BitUser.updateUserUrl();"/>{required}
+				<input type="text" name="login" id="login" value="{$reg.login}" onkeyup="BitUser.updateUserUrl();" required />
 				{formhelp note="This will be used in links to your profile. Your username can only contain numbers, characters, and underscores."}
 				<div class="formfeedback" id="loginurl"></div>
 			{/forminput}
@@ -79,7 +79,7 @@
 			{formfeedback error=$errors.email}
 			{formlabel label="Email" for="email"}
 			{forminput}
-				<input type="text" size="50" name="email" id="email" value="{$reg.email}" />{required}
+				<input type="text" size="50" name="email" id="email" value="{$reg.email}" required />
 			{/forminput}
 		</div>
 
@@ -88,7 +88,7 @@
 				{formfeedback error=$errors.password}
 				{formlabel label="Password" for="pass"}
 				{forminput}
-					<input id="pass1" type="password" name="password" />{required}
+					<input id="pass1" type="password" name="password" required />
 				{/forminput}
 			</div>
 
@@ -96,7 +96,7 @@
 				{formfeedback error=$errors.password2}
 				{formlabel label="Repeat password" for="password2"}
 				{forminput}
-					<input id="password2" type="password" name="password2" />{required}
+					<input id="password2" type="password" name="password2" required />
 				{/forminput}
 			</div>
 
@@ -178,7 +178,7 @@
 
 		{section name=f loop=$customFields}
 			<div class="control-group">
-				{formlabel label="$customFields[f]}
+				{formlabel label=$customFields[f]}
 				{forminput}
 					<input type="text" name="CUSTOM[{$customFields[f]|escape}]" value="{$smarty.request.CUSTOM.$customFields[f]}" />
 				{/forminput}
@@ -248,10 +248,11 @@
 		{/if}
 
 		<div class="control-group submit">
-			<input type="submit" class="btn" name="register" value="{tr}Register{/tr}" />
+			{forminput}
+				<input type="submit" class="btn btn-primary" name="register" value="{tr}Register{/tr}" />
+			{/forminput}
 		</div>
 
-		{required legend=1}
 	{/if}
 {/form}
 
