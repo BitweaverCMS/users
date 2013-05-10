@@ -1,11 +1,15 @@
 {strip}
 {form class="form-horizontal span6" name="login" legend="Please sign in to continue" ipackage=users ifile='validate.php' secure=$gBitSystem->isFeatureActive("site_https_login_required")}
+
+	{formfeedback error=$error}
+
 	<div class="control-group">
-		{formfeedback error="$error"}
 		{formlabel label="Username or Email" for="user"}
 		{forminput}
 			<input type="text" name="user" id="user" size="25" />
-			{formhelp note=""}
+			{if $gBitSystem->isFeatureActive('users_allow_register')}
+				{formhelp note="<a href='`$smarty.const.USERS_PKG_URL`regsiter.php'>Need to register?</a>"}
+			{/if}
 		{/forminput}
 	</div>
 

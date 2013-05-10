@@ -111,13 +111,12 @@
 			{/if}
 		{/if}
 		{if $gBitUser->hasPermission( 'p_users_view_user_homepage' ) }
-		{*For public sites, get user approval to display information*}
 		<div class="control-group">
 			{formlabel label="User information" for="users_information"}
 			{forminput}
 				<select name="users_information" id="users_information">
-					<option value="private" selected="selected">{tr}private{/tr}</option>
-					<option value="public">{tr}public{/tr}</option>
+					<option value="private" selected="selected">{tr}Private{/tr}</option>
+					<option value="public">{tr}Public{/tr}</option>
 				</select>
 				{formhelp note="Please select whether you would like to be a public or private user (you can change this later)"}
 			{/forminput}
@@ -186,12 +185,14 @@
 		{/section}
 
 		{foreach from=$auth_reg_fields item='output' key='op_id'}
-		{assign var=op_name value="auth[$op_id]"}
+		{assign var=op_name value="auth[`$op_id`]"}
 			<div class="control-group">
 				{formlabel label=$output.label for=$op_id}
 				{forminput}
 					{if $output.type == 'checkbox'}
-						{html_checkboxes name="$op_name" values="y" selected=$output.value labels=false id=$op_id}
+						<label class="checkbox">
+							{html_checkboxes name="$op_name" values="y" selected=$output.value labels=false id=$op_id}
+						</label>
 					{elseif $output.type == 'option'}
 						<select name="{$op_name}" id="{$op_id}">
 							{foreach from=$output.options item='op_text' key='op_value'}
