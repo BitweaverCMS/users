@@ -39,9 +39,7 @@
 
 	<div>
 		{if !$parsed}
-			{if $gBitUser->mUserId ne $gQueryUser->mUserId}
-				<p>{tr}This user has not entered any information yet.{/tr}</p>
-			{elseif $gBitUser->hasPermission('p_users_edit_user_homepage')}
+			{if $gBitUser->mUserId == $gQueryUser->mUserId && $gBitUser->hasPermission('p_users_edit_user_homepage')}
 				<p>{tr}To enter some information here, please <a href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">edit your personal homepage</a>.{/tr}</p>
 			{/if}
 		{else}
