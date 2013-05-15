@@ -8,7 +8,7 @@
 		{forminput}
 			<input type="text" name="user" id="user" size="25" />
 			{if $gBitSystem->isFeatureActive('users_allow_register')}
-				{formhelp note="<a href='`$smarty.const.USERS_PKG_URL`regsiter.php'>Need to register?</a>"}
+				{formhelp note="<a href='`$smarty.const.USERS_PKG_URL`register.php'>Need to register?</a>"}
 			{/if}
 		{/forminput}
 	</div>
