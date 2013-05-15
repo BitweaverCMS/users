@@ -2,7 +2,7 @@
 
 {if $showmsg ne 'y'}
 
-{form class="form-horizontal" enctype="multipart/form-data" legend="Register as a new user"}
+{form class="form-horizontal" enctype="multipart/form-data" legend="Register as a new user" secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 	{foreach from=$reg.CUSTOM item='custom' key='custom_name'}
 		<input type="hidden" name="CUSTOM[{$custom_name}]" value="{$custom}"/>
 	{/foreach}
