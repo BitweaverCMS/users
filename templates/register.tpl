@@ -62,7 +62,7 @@
 					var loginEle = document.getElementById('login');
 					stripUsername = loginEle.value.replace( /[^_a-zA-Z0-9]/g, '' );
 					if( stripUsername ) {
-						var baseUrl = "{/literal}{$gBitUser->getDisplayUri('')}{literal}";
+						var baseUrl = "{/literal}{$smarty.const.BIT_ROOT_URI}{literal}";
 						document.getElementById('loginurl').innerHTML = baseUrl + stripUsername;
 					}
 				}
