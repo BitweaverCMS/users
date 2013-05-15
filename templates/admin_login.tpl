@@ -40,9 +40,9 @@
 					{if $feature == 'users_random_number_reg'}
 						{formfeedback warning=$warning}
 					{/if}
-					{formlabel label=$output.label for=$feature}
 					{forminput}
 						{if $output.type == 'text'}
+							{formlabel label=$output.label for=$feature}
 							{if $feature eq 'cookie_domain' && $gBitSystem->getConfig($feature) eq ''}
 								<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$smarty.server.SERVER_NAME}" />
 							{elseif $feature eq 'cookie_path' && $gBitSystem->getConfig($feature) eq ''}
@@ -50,10 +50,13 @@
 							{else}
 								<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
 							{/if}
+							{formhelp note=$output.note page=$output.page link=$output.link}
 						{else}
-							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
+							<label class="checkbox">
+								{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature} {tr}{$output.label}{/tr}
+								{formhelp note=$output.note page=$output.page link=$output.link}
+							</label>
 						{/if}
-						{formhelp note=$output.note page=$output.page link=$output.link}
 					{/forminput}
 				</div>
 			{/foreach}
@@ -135,14 +138,17 @@
 
 			{foreach from=$registerSettings key=feature item=output}
 				<div class="control-group">
-					{formlabel label=$output.label for=$feature}
 					{forminput}
 						{if $output.type == 'text'}
+							{formlabel label=$output.label for=$feature}
 							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
+							{formhelp note=$output.note page=$output.page link=$output.link}
 						{else}
-							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
+							<label class="checkbox">
+								{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature} {tr}{$output.label}{/tr}
+								{formhelp note=$output.note page=$output.page link=$output.link}
+							</label>
 						{/if}
-						{formhelp note=$output.note page=$output.page link=$output.link}
 					{/forminput}
 				</div>
 			{/foreach}
@@ -161,14 +167,17 @@
 
 			{foreach from=$httpSettings key=feature item=output}
 				<div class="control-group">
-					{formlabel label=$output.label for=$feature}
 					{forminput}
 						{if $output.type == 'text'}
+							{formlabel label=$output.label for=$feature}
 							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
+							{formhelp note=$output.note page=$output.page link=$output.link}
 						{else}
-							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature}
+							<label class="checkbox">
+								{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature} {tr}{$output.label}{/tr}
+								{formhelp note=$output.note page=$output.page link=$output.link}
+							</label>
 						{/if}
-						{formhelp note=$output.note page=$output.page link=$output.link}
 					{/forminput}
 				</div>
 			{/foreach}

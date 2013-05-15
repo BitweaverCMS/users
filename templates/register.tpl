@@ -231,22 +231,7 @@
 			{include file=$package.template }
 		{/foreach}
 
-		{if $gBitSystem->isFeatureActive('users_random_number_reg')}
-			<hr />
-			{formfeedback error=$errors.captcha}
-			{captcha force=true variant=row}
-		{/if}
-
-		{if $gBitSystem->isFeatureActive('users_register_recaptcha')}
-			<div class="control-group">
-				{formfeedback error=$errors.recaptcha}
-				{formlabel label="Are you human?" for="recaptcha"}
-				{forminput}
-					{$gBitSystem->getConfig('users_register_recaptcha_public_key')|recaptcha_get_html:$errors.recaptcha}
-					{formhelp note="Sorry, we have to ask."}
-				{/forminput}
-			</div>
-		{/if}
+		{captcha force=true variant=row}
 
 		<div class="control-group submit">
 			{forminput}
