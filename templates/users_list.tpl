@@ -3,7 +3,7 @@
 {if $gBitUser->hasPermission( 'p_users_admin' )}
 <div class="width100p">
 {form}
-	<div class="control-group floatleft clearnone width20p">
+	<div class="control-group floatleft clearnone width25p">
 		{formlabel label="Search"}
 		{forminput}
 			<input type="text" name="find" value="{$smarty.request.find}"/>
@@ -38,21 +38,22 @@
 		{formhelp note="Comma separated list"}
 	</div>
 	<div class="control-group submit">
-		<input type="submit" class="btn" name="search" value="{tr}Find{/tr}">
-		<input type="reset" name="reset" value="{tr}Reset{/tr}">
+		<input class="btn btn-mini" type="submit" name="search" value="{tr}Find{/tr}"> <input class="btn btn-mini" type="reset" name="reset" value="{tr}Reset{/tr}">
 	</div>
 {/form}
 </div>
 {else}
 	{minifind}
 {/if}
-<ul class="inline navbar">
-	<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
-	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Username" isort="login"}</li>
-	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Real name" isort="real_name"}</li>
-	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Registration Date" isort="registration_date"}</li>
-	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Last Login" isort="current_login"}</li>
-</ul>
+<div class="clear">
+	<ul class="inline navbar">
+		<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
+		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Username" isort="login"}</li>
+		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Real name" isort="real_name"}</li>
+		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Registration Date" isort="registration_date"}</li>
+		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Last Login" isort="current_login"}</li>
+	</ul>
+</div>
 
 
 {formfeedback hash=$feedback}
