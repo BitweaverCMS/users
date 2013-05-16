@@ -149,9 +149,6 @@ $listHash = array(
 $groupList = $gBitUser->getAllGroups( $listHash );
 $gBitSmarty->assign_by_ref( 'groupList', $groupList );
 
-// invoke edit services
-$gBitUser->invokeServices( 'content_edit_function' );
-
 // include preferences settings from other packages - these will be included as individual tabs
 $packages = array();
 foreach( $gBitSystem->mPackages as $package ) {
