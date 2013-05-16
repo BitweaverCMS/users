@@ -1326,7 +1326,7 @@ class BitUser extends LibertyMime {
 		// check for HTTPS mode and redirect back to non-ssl when not requested, or a  SSL login was forced
 		if( isset( $_SERVER['HTTPS'] ) && strtolower( $_SERVER['HTTPS'] ) == 'on' ) {
 			$refererSsl = isset( $_SERVER['HTTP_REFERER'] ) && substr( $_SERVER['HTTP_REFERER'], 0, 5 ) == 'https';
-			if( ($gBitSystem->getConfig( 'site_https_login_required' ) && !$refererSsl) || ($refererSsl && empty( $_REQUEST['stay_in_ssl_mode'] )) ) {
+			if( ($gBitSystem->getConfig( 'site_https_login_required' ) && !$refererSsl) ) {
 				// start setting up the URL redirect without SSL
 				$prefix = 'http://' . $gBitSystem->getConfig( 'site_http_domain', $_SERVER['HTTP_HOST'] );
 
