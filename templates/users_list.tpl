@@ -6,7 +6,7 @@
 	<div class="control-group floatleft clearnone width20p">
 		{formlabel label="Search"}
 		{forminput}
-			<input type="text" name="find" value="{$smarty.request.find}"/>
+			<input type="text" name="find" class="width90p" value="{$smarty.request.find}"/>
 		{/forminput}
 		{formhelp note="Full name, username, and email"}
 	</div>
@@ -46,6 +46,7 @@
 {else}
 	{minifind}
 {/if}
+<nav class="clear">
 <ul class="inline navbar">
 	<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
 	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Username" isort="login"}</li>
@@ -53,16 +54,40 @@
 	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Registration Date" isort="registration_date"}</li>
 	<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Last Login" isort="current_login"}</li>
 </ul>
-
+</nav>
 
 {formfeedback hash=$feedback}
 
 {form id=checkform action=$smarty.server.REQUEST_URI}
-	<ol class="clear data userslist" start="{$listInfo.offset+1}">
+	<ul class="clear data inline userslist media-grid" start="{$listInfo.offset+1}">
 		{foreach from=$users item=userHash key=userId}
-			<li class="item {cycle values='even,odd'}">
+			<li class="item {cycle values='even,odd'} pull-left" style="width:31%;padding:0 0 0 1%;background:url('{$userHash.thumbnail_url|default:"`$smarty.const.USERS_PKG_URL`icons/silhouette_100.png"|escape}') no-repeat scroll top right transparent;">
+					{if $gBitUser->hasPermission( 'p_users_admin' )}
+					<label class="checkbox">
+						<input type="checkbox" name="batch_user_ids[]" value="{$userHash.user_id}" /> 
+<small>{$listInfo.offset+$userHash@iteration}.</small> <strong>{$userHash.real_name|default:$userHash.login|escape}</strong> 
+					</label>
+						<div>{$userHash.login}</div>
+					{else}
+					<h4>{displayname hash=$userHash}</h4>
+					{/if}
+
+				<div class="usersinfo">
 				{if $gBitUser->hasPermission( 'p_users_admin' )}
-					<div class="floaticon">
+					<div>{if !empty($userHash.email)}{mailto address=$userHash.email encode="javascript"}{else}&nbsp;{/if}</div>
+				{/if}
+
+
+				<strong>{tr}Registered{/tr}:</strong> {$userHash.registration_date|bit_short_date}<br/>
+				<div><strong>{tr}Last Login{/tr}:</strong> {$userHash.current_login|bit_short_date}</div>
+
+				{if $gBitUser->hasPermission( 'p_users_admin' )}
+					<div class="icon pull-right">
+						{assign var=contentCount value=$userHash.user_id|get_user_content_count}
+						{if $gBitUser->hasPermission( 'p_users_admin' ) && $contentCount}
+							<strong title="{tr}Content Count{/tr}">{$contentCount} </strong>
+						{/if}
+						{smartlink ipackage=liberty ifile="list_content.php" user_id=$userHash.user_id ititle="User Content" booticon="icon-list" iforce="icon"}
 						{smartlink ipackage=users ifile="admin/index.php" assume_user=$userHash.user_id ititle="Assume User Identity" booticon="icon-user-md" iforce=icon}
 						{smartlink ipackage=users ifile="preferences.php" view_user=$userHash.user_id ititle="Edit User Information" booticon="icon-edit" iforce=icon}
 						{if $gBitSystem->isPackageActive('protector')}
@@ -70,11 +95,7 @@
 						{else}
 							{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userHash.user_id ititle="Assign Role" booticon="icon-key" iforce=icon}
 						{/if}
-						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userHash.user_id ititle="User Activity" booticon="icon-volume-up" iforce="icon"}
-						{smartlink ipackage=liberty ifile="list_content.php" user_id=$userHash.user_id ititle="User Content" booticon="icon-list" iforce="icon"}
-						{if $gBitUser->hasPermission( 'p_users_admin' )}
-							<span title="{tr}Content Count{/tr}">{$userHash.user_id|get_user_content_count}</span>
-						{/if}
+						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userHash.user_id ititle="User Activity" booticon="icon-lightbulb" iforce="icon"}
 						{if $userHash.user_id != $smarty.const.ANONYMOUS_USER_ID && $userHash.user_id != $smarty.const.ROOT_USER_ID && $userHash.user_id != $gBitUser->mUserId}
 							{if $userHash.content_status_id > 0}
 								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=ban ititle="Ban User" booticon="icon-minus-sign" iforce=icon}
@@ -82,43 +103,22 @@
 								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=unban ititle="Restore the User Account" booticon="icon-recycle" iforce=icon}
 							{/if}
 							{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=delete ititle="Remove" booticon="icon-trash" iforce=icon}
-							<input type="checkbox" name="batch_user_ids[]" value="{$userHash.user_id}" />
 						{/if}
+					</div>
+					<div>{tr}User ID{/tr}: {$userHash.user_id}</div>
+					<div class="small clear">
+					{if $userHash.referer_url}
+						<a href="{$userHash.referer_url}" title="{$userHash.short_referer_url|escape}">{$userHash.short_referer_url|truncate:50}</a>
+					{else}
+						&nbsp;
+					{/if}
 					</div>
 				{/if}
 
-				<img alt="{tr}user portrait{/tr}" title="{$userHash.login} {tr}user portrait{/tr}" src="{$userHash.thumbnail_url|default:"`$smarty.const.USERS_PKG_URL`icons/silhouette_100.png"}" class="thumb" />
-
-				<div class="usersinfo">
-				{if $userHash.real_name}
-					{if $gBitSystem->getConfig('users_display_name') == 'login'}
-						<h2>{$userHash.real_name} <small>[ {displayname hash=$userHash} ]</small></h2>
-					{else}
-						<h2>{displayname hash=$userHash} <small>[ {$userHash.login} ]</small></h2>
-					{/if}
-				{else}
-					<h2>{displayname hash=$userHash}</h2>
-				{/if}
-
-				{if $gBitUser->hasPermission( 'p_users_admin' )}
-					<strong>{tr}Email:{/tr}</strong> {if !empty($userHash.email)}{mailto address=$userHash.email encode="javascript"}{/if}<br/>
-					<strong>{tr}User ID{/tr}:</strong> {$userHash.user_id}<br/>
-					{if $userHash.referer_url}
-					<strong>{tr}Referrer{/tr}:</strong>	<a href="{$userHash.referer_url}">{$userHash.short_referer_url}</a><br/>
-					{/if}
-				{/if}
-
-				<strong>{tr}Member since{/tr}:</strong> {$userHash.registration_date|bit_short_date}<br/>
-
-				{if $userHash.current_login }
-					<strong>{tr}Last logged in on{/tr}:</strong> {$userHash.current_login|bit_short_date}<br/>
-				{/if}
-
 				</div>
-				<div class="clear"></div>
 			</li>
 		{/foreach}
-	</ol>
+	</ul>
 
 	{if $gBitUser->hasPermission( 'p_users_admin' )}
 		<div style="text-align:right;">

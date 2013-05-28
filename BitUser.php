@@ -2428,7 +2428,7 @@ class BitUser extends LibertyMime {
 	 * @return array of users
 	 */
 	function getList( &$pParamHash ) {
-		global $gBitSystem;
+		global $gBitSystem, $gBitUser;
 		if( empty( $pParamHash['sort_mode'] )) {
 			$pParamHash['sort_mode'] = 'registration_date_desc';
 		}
@@ -2442,9 +2442,14 @@ class BitUser extends LibertyMime {
 
 		// limit search to users with a specific language
 		if( !empty( $pParamHash['lang_code'] ) ) {
-			$joinSql .= " INNER JOIN `".BIT_DB_PREFIX."liberty_content_prefs` lcp ON ( lcp.`content_id`=uu.`content_id` AND lcp.`pref_name`='bitlanguage')";
-			$whereSql = " AND lcp.`pref_value`=? ";
+			$joinSql .= " INNER JOIN `".BIT_DB_PREFIX."liberty_content_prefs` lcp ON ( lcp.`content_id`=uu.`content_id` AND lcp.`pref_name`='bitlanguage' )";
+			$whereSql .= " AND lcp.`pref_value`=? ";
 			$bindVars[] = $pParamHash['lang_code'];
+		}
+
+		if( !$gBitUser->hasPermission( 'p_users_admin' ) ) {
+			$joinSql .= " LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content_prefs` lcp2 ON ( lcp2.`content_id`=uu.`content_id` AND lcp2.`pref_name`='users_information' )";
+			$whereSql .= " AND (lcp2.`pref_value` IS NULL OR lcp2.`pref_value`='public')";
 		}
 
 		// limit search to users with a specific IP
