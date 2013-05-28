@@ -35,14 +35,6 @@
 				</div>
 			{/if}
 
-			{if $smarty.server.HTTPS == 'on'}
-				<div class="row">
-					<label>{tr}Stay in ssl mode{/tr} <input type="checkbox" name="stay_in_ssl_mode" id="stay_in_ssl_mode" {if $smarty.server.HTTPS == 'on'}checked="checked"{/if} /></label>
-				</div>
-			{else}
-				<input type="hidden" name="stay_in_ssl_mode" value="on" />
-			{/if}
-
 			<div class="row submit">
 				<input type="submit" name="login" value="{tr}Log in{/tr}" />
 			</div>

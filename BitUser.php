@@ -379,6 +379,7 @@ class BitUser extends LibertyMime {
 		}
 
 		if( $gBitSystem->isFeatureActive( 'users_register_recaptcha' ) && (empty( $pParamHash['novalidation'] ) || $pParamHash['novalidation'] != 'yes') ) {
+			require_once( USERS_PKG_PATH.'classes/recaptchalib.php' );
 			if( !empty( $pParamHash["recaptcha_challenge_field"] ) && !empty( $pParamHash["recaptcha_response_field"] ) ) {
 				$resp = recaptcha_check_answer ( $gBitSystem->getConfig( 'users_register_recaptcha_private_key' ), $_SERVER["REMOTE_ADDR"], $pParamHash["recaptcha_challenge_field"], $pParamHash["recaptcha_response_field"] );
 				if( !$resp->is_valid ) {
@@ -636,7 +637,7 @@ class BitUser extends LibertyMime {
 	 * @return TRUE on success, FALSE on failure
 	 */
 	function register( &$pParamHash, $pNotifyRegistrant=TRUE ) {
-		global $notificationlib, $gBitSmarty, $gBitSystem, $gBitUser;
+		global $notificationlib, $gBitSmarty, $gBitSystem;
 		$ret = FALSE;
 		if( !empty( $_FILES['user_portrait_file'] ) && empty( $_FILES['user_avatar_file'] ) ) {
 			$pParamHash['user_auto_avatar'] = TRUE;
@@ -1326,7 +1327,7 @@ class BitUser extends LibertyMime {
 		// check for HTTPS mode and redirect back to non-ssl when not requested, or a  SSL login was forced
 		if( isset( $_SERVER['HTTPS'] ) && strtolower( $_SERVER['HTTPS'] ) == 'on' ) {
 			$refererSsl = isset( $_SERVER['HTTP_REFERER'] ) && substr( $_SERVER['HTTP_REFERER'], 0, 5 ) == 'https';
-			if( ($gBitSystem->getConfig( 'site_https_login_required' ) && !$refererSsl) || ($refererSsl && empty( $_REQUEST['stay_in_ssl_mode'] )) ) {
+			if( ($gBitSystem->getConfig( 'site_https_login_required' ) && !$refererSsl) ) {
 				// start setting up the URL redirect without SSL
 				$prefix = 'http://' . $gBitSystem->getConfig( 'site_http_domain', $_SERVER['HTTP_HOST'] );
 

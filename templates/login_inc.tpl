@@ -44,16 +44,6 @@
 		</div>
 	{/if}
 
-	{if $smarty.server.HTTPS == 'on'}
-		<div class="control-group">
-			{forminput}
-				<input type="checkbox" name="stay_in_ssl_mode" id="stay_in_ssl_mode" {if $smarty.server.HTTPS == 'on'}checked="checked"{/if} />{tr}Stay in Secure mode{/tr}
-			{/forminput}
-		</div>
-	{else}
-		<input type="hidden" name="stay_in_ssl_mode" value="on" />
-	{/if}
-
 	<div class="control-group submit">
 		{forminput}
 			<input type="submit" class="btn btn-primary" name="login" value="{tr}Sign In{/tr}" />
