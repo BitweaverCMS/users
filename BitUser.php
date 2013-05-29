@@ -360,13 +360,11 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * preRegisterVerify
+	 * answerCaptcha
 	 *
-	 * A collection of values to verify before a user can register
-	 * Separated from BitUser::verify so that import verification can
-	 * be processed with less rigor than user submitted requests
+	 * Determine if the submitted answer for the captcha is valid
 	 */
-	function preRegisterVerify( &$pParamHash ){
+	function answerCaptcha( $pParamHash ) {
 		global $gBitSystem;
 		// require catpcha
 		// novalidation is set to yes if a user confirms his email is correct after tiki fails to validate it
@@ -374,7 +372,7 @@ class BitUser extends LibertyMime {
 			if( ( empty( $pParamHash['novalidation'] ) || $pParamHash['novalidation'] != 'yes' )
 				&&( !isset( $_SESSION['captcha'] ) || $_SESSION['captcha'] != md5( $pParamHash['captcha'] ) ) )
 			{
-				$this->mErrors['captcha'] = "Wrong registration code";
+				$this->mErrors['captcha'] = "Wrong Answer";
 			}
 		}
 
@@ -386,7 +384,7 @@ class BitUser extends LibertyMime {
 					$this->mErrors['recaptcha'] = $resp->error;
 				}
 			} else {
-				$this->mErrors['recaptcha'] = 'wrong answer';
+				$this->mErrors['recaptcha'] = 'Wrong Answer';
 			}
 		}
 
@@ -398,9 +396,24 @@ class BitUser extends LibertyMime {
 					$this->mErrors['smcaptcha'] = $solvemediaResponse->error;
 				}
 			} else {
-				$this->mErrors['smcaptcha'] = 'wrong answer';
+				$this->mErrors['smcaptcha'] = 'Wrong Answer';
 			}
 		}
+
+		return ( count($this->mErrors) == 0 );
+	}
+
+	/**
+	 * preRegisterVerify
+	 *
+	 * A collection of values to verify before a user can register
+	 * Separated from BitUser::verify so that import verification can
+	 * be processed with less rigor than user submitted requests
+	 */
+	function preRegisterVerify( &$pParamHash ) {
+		global $gBitSystem;
+
+		$this->answerCaptcha( $pParamHash );
 
 		// require passcode
 		if( $gBitSystem->isFeatureActive( 'users_register_require_passcode' ) ) {
