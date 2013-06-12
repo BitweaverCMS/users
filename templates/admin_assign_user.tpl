@@ -35,7 +35,6 @@
 			</div>
 
 			{if $gBitSystem->isPackageActive('quota')}
-			{include_php file="`$smarty.const.QUOTA_PKG_PATH`quota_inc.php"}
 			<div class="control-group">
 				{formlabel label="Quota"}
 				{forminput}

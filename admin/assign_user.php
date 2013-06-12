@@ -42,6 +42,12 @@ $gBitSmarty->assign('groups', $gBitUser->getAllGroups( $listHash ));
 
 $gBitSystem->setBrowserTitle( 'Edit User: '.$assignUser->mUsername );
 
+if($gBitSystem->isPackageActive("quota")) {
+	include(QUOTA_PKG_PATH.'quota_inc.php');	
+}
+
+
+
 // Display the template
 $gBitSystem->display( 'bitpackage:users/admin_assign_user.tpl', NULL, array( 'display_mode' => 'admin' ));
 ?>
