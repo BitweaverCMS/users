@@ -1,8 +1,9 @@
 {strip}
 
-{if $showmsg ne 'y'}
-
-{form class="form-horizontal" enctype="multipart/form-data" legend="Register as a new user" secure=$gBitSystem->isFeatureActive("site_https_login_required")}
+{if $msg}
+	<div class="alert alert-info">{$msg|escape}</div>
+{else}
+{form class="span6 form-horizontal" enctype="multipart/form-data" legend="Register as a new user" secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 	{foreach from=$reg.CUSTOM item='custom' key='custom_name'}
 		<input type="hidden" name="CUSTOM[{$custom_name}]" value="{$custom}"/>
 	{/foreach}
@@ -10,23 +11,6 @@
 		<input type="hidden" name="auth[{$auth_name}]" value="{$auth}"/>
 	{/foreach}
 	{formfeedback error=$errors.create}
-	{if $notrecognized eq 'y'}
-		<input type="hidden" name="login" value="{$reg.login}"/>
-		<input type="hidden" name="password" value="{$reg.password}"/>
-		<input type="hidden" name="novalidation" value="yes"/>
-
-		<div class="control-group">
-			{formfeedback error=$errors.validate}
-			{formlabel label="Email" for="email"}
-			{forminput}
-				<input type="text" size="50" name="email" id="email" value="{$reg.email}"/>
-			{/forminput}
-		</div>
-
-		<div class="control-group submit">
-			<input type="submit" class="btn" name="register" value="{tr}register{/tr}" />
-		</div>
-	{elseif $showmsg ne 'y'}
 		{if $gBitSystem->isFeatureActive('users_register_passcode')}
 			<div class="control-group">
 				{formfeedback error=$errors.passcode}
@@ -54,7 +38,7 @@
 			{forminput}
 				<input type="text" name="login" id="login" value="{$reg.login}" onkeyup="BitUser.updateUserUrl();" required />
 				{formhelp note="This will be used in links to your profile. Your username can only contain numbers, characters, and underscores."}
-				<div class="formfeedback" id="loginurl"></div>
+				<div class="alert alert-info nomargin" id="loginurl">{$smarty.const.BIT_ROOT_URI}</div>
 			{/forminput}
 			<script type="text/javascript">/* <![CDATA[ */ {literal}
 			BitUser = {
@@ -238,8 +222,6 @@
 				<input type="submit" class="btn btn-primary" name="register" value="{tr}Register{/tr}" />
 			{/forminput}
 		</div>
-
-	{/if}
 {/form}
 
 {/if}

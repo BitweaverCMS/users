@@ -28,7 +28,8 @@ if( !empty( $_REQUEST['returnto'] ) ) {
 }
 
 if( $gBitUser->isRegistered() ) {
-	bit_redirect( $gBitSystem->getDefaultPage() );
+	header( 'Location: '.$gBitSystem->getConfig( 'users_login_homepage', USERS_PKG_URL.'my.php' ) );
+	die;
 }
 
 if( !empty( $_REQUEST['error'] ) ) {
@@ -36,5 +37,5 @@ if( !empty( $_REQUEST['error'] ) ) {
 	$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_FORBIDDEN );
 }
 
-$gBitSystem->display( 'bitpackage:users/login.tpl', $gBitSystem->getConfig( 'site_title' ).' Login' , array( 'display_mode' => 'display' ));
+$gBitSystem->display( 'bitpackage:users/signin.tpl', $gBitSystem->getConfig( 'site_title' ).' Login' , array( 'display_mode' => 'display' ));
 ?>

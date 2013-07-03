@@ -26,13 +26,19 @@ require_once( KERNEL_PKG_PATH.'BitBase.php' );
 include_once( KERNEL_PKG_PATH.'notification_lib.php' );
 require_once( USERS_PKG_PATH.'classes/recaptchalib.php' );
 
-// Permission: needs p_register
 $gBitSystem->verifyFeature( 'users_allow_register' );
+
+// Everything below here is needed for registration
 
 require_once( USERS_PKG_PATH.'BaseAuth.php' );
 
-if( isset( $_REQUEST['returnto'] ) ) {
-	$_SESSION['returnto'] = $_REQUEST['returnto']; 
+if( !empty( $_REQUEST['returnto'] ) ) {
+	$_SESSION['returnto'] = $_REQUEST['returnto'];
+} elseif( !empty( $_SERVER['HTTP_REFERER'] ) && !strpos( $_SERVER['HTTP_REFERER'], 'login.php' )  && !strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) ) {
+	$from = parse_url( $_SERVER['HTTP_REFERER'] );
+	if( !empty( $from['path'] ) && $from['host'] == $_SERVER['SERVER_NAME'] ) {
+		$_SESSION['loginfrom'] = $from['path'].'?'.( !empty( $from['query'] ) ? $from['query'] : '' );
+	}
 }
 
 if( $gBitUser->isRegistered() ) {
@@ -166,6 +172,11 @@ foreach( $gBitSystem->mPackages as $package ) {
 	}
 }
 $gBitSmarty->assign_by_ref('packages',$packages );
+
+if( !empty( $_REQUEST['error'] ) ) {
+	$gBitSmarty->assign( 'error', $_REQUEST['error'] );
+	$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_FORBIDDEN );
+}
 
 $gBitSystem->display('bitpackage:users/register.tpl', 'Register' , array( 'display_mode' => 'display' ));
 ?>
