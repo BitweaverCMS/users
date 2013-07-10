@@ -3,7 +3,7 @@
 {if $msg}
 	<div class="alert alert-info">{$msg|escape}</div>
 {else}
-{form class="span6 form-horizontal" enctype="multipart/form-data" legend="Register as a new user" secure=$gBitSystem->isFeatureActive("site_https_login_required")}
+{form action="`$smarty.const.USERS_PKG_URL`register.php" class="span6 form-horizontal" enctype="multipart/form-data" legend="Register as a new user" secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 	{foreach from=$reg.CUSTOM item='custom' key='custom_name'}
 		<input type="hidden" name="CUSTOM[{$custom_name}]" value="{$custom}"/>
 	{/foreach}
