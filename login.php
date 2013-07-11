@@ -36,5 +36,6 @@ if( !empty( $_REQUEST['error'] ) ) {
 	$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_FORBIDDEN );
 }
 
+$gBitSmarty->assign( 'metaKeywords', 'Login, Sign in, Registration, Register, Create new account' );
 $gBitSystem->display( 'bitpackage:users/login.tpl', $gBitSystem->getConfig( 'site_title' ).' Login' , array( 'display_mode' => 'display' ));
 ?>
