@@ -30,6 +30,9 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
+ *
+ * @package users
+ * @subpackage functions
  */
 
 /**
@@ -133,6 +136,8 @@ function recaptcha_get_html ($pubkey, $error = null, $use_ssl = false)
 
 /**
  * A ReCaptchaResponse is returned from recaptcha_check_answer()
+ *
+ * @package users
  */
 class ReCaptchaResponse {
         var $is_valid;

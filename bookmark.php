@@ -3,6 +3,8 @@
  * A universal helper to bookmark any content object for a user
  * Currently only accessible through ajax/json
  * Those wishing for a non-js implementation feel free to modify
+ *
+ * @package users
  */
 
 /**

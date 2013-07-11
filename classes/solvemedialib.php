@@ -12,6 +12,9 @@
  *          http://www.solvemedia.com/
  *    - Get a SolveMedia API Keys
  *          http://api.solvemedia.com/public/signup
+ *
+ * @package users
+ * @subpackage functions
  */
 
 /* This code is based on code from,
@@ -143,6 +146,8 @@ function solvemedia_get_html ($pubkey, $error = null, $use_ssl = false)
 
 /**
  * A SolveMediaResponse is returned from solvemedia_check_answer()
+ *
+ * @package users
  */
 class SolveMediaResponse {
         var $is_valid;
