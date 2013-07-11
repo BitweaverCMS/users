@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Copyright (c) 2009 by Jeff Weisberg
  * Author: Jeff Weisberg
  * Created: 2009-Jun-22 16:44 (EDT)
