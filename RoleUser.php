@@ -2210,7 +2210,7 @@ class BitUser extends LibertyMime {
 		$ret = NULL;
 		if( $this->isRegistered() ){
 			$listHash['user_favs'] = TRUE;
-			$listHash['order_table'] = 'ufm.';
+			$listHash['order_table'] = 'lc.';
 			$listHash['sort_mode'] = 'map_position_desc';
 			$ret = $this->getContentList( $listHash );
 		}
