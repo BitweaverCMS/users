@@ -28,8 +28,7 @@ if( !empty( $_REQUEST['returnto'] ) ) {
 }
 
 if( $gBitUser->isRegistered() ) {
-	header( 'Location: '.$gBitSystem->getConfig( 'users_login_homepage', USERS_PKG_URL.'my.php' ) );
-	die;
+	bit_redirect( $gBitSystem->getDefaultPage() );
 }
 
 if( !empty( $_REQUEST['error'] ) ) {
