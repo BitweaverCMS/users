@@ -38,7 +38,7 @@ if( !empty( $_REQUEST['home'] ) && $gQueryUser->isValid() && (( $gBitUser->hasPe
 		require( STARS_PKG_PATH."templates/user_ratings.php" );
 	}
 
-	$gBitSystem->setCanonicalLink( $gQueryUser->getDisplayUri() );
+	$gBitSystem->setCanonicalLink( $gQueryUser->getDisplayUrl() );
 
 	if( $gQueryUser->canCustomizeTheme() ) {
 		$userHomeStyle = $gQueryUser->getPreference( 'theme' );
