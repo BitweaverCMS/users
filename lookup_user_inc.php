@@ -39,7 +39,7 @@ if( isset( $_REQUEST['home'] )) {
 if( !$gBitUser->hasPermission( 'p_users_admin' ) ) {
 	if( $gQueryUser->mUserId != $gBitUser->mUserId && $gQueryUser->getPreference( 'users_information' ) == 'private' ) {
 		// don't spit error for SEO reasons
-		$gBitSystem->fatalError( tra( "This information is private" ) ); // , NULL, NULL, HttpStatusCodes::HTTP_FORBIDDEN );
+		$gBitSystem->fatalError( tra( "This information is private" ) , NULL, NULL, HttpStatusCodes::HTTP_UNAUTHORIZED );
 	}
 }
 

@@ -33,7 +33,7 @@ if( $gBitUser->isRegistered() ) {
 
 if( !empty( $_REQUEST['error'] ) ) {
 	$gBitSmarty->assign( 'error', $_REQUEST['error'] );
-	$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_FORBIDDEN );
+	$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_UNAUTHORIZED );
 }
 
 $languages = array();
