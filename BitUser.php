@@ -2373,8 +2373,11 @@ class BitUser extends LibertyMime {
 				// this won't work right now, we need to alter userslib::interpret_home() to interpret a real name
 				$iHomepage = $pHash['real_name'];
 			}
+			if( empty( $pHash['users_information'] ) ) {
+				$pHash['users_information'] = $gBitSystem->mDb->getOne( "SELECT pref_value FROM liberty_content_prefs lcp INNER JOIN users_users uu ON (lcp.content_id=uu.content_id) WHERE uu.login=? AND pref_name='users_information'", array( $pHash['login'] ), 1, NULL, 86400 );
+			}
 
-			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' )) {
+			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' ) && (empty( $pHash['users_information'] ) || $pHash['users_information'] == 'public') ) {
 				$ret = '<a class="username" title="'.( !empty( $pHash['link_title'] ) ? $pHash['link_title'] : tra( 'Profile for' ).' '.htmlspecialchars( $displayName ))
 					.'" href="'.BitUser::getDisplayUrlFromHash( $pHash ).'">'
 					. htmlspecialchars( isset( $pHash['link_label'] ) ? $pHash['link_label'] : $displayName )
