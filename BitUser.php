@@ -247,7 +247,7 @@ class BitUser extends LibertyMime {
 			$pParamHash['user_store']['user_id'] = $pParamHash['user_id'];
 		}
 		// require login
-		if( !empty( $pParamHash['login'] ) ) {
+		if( !empty( $pParamHash['login'] ) && $pParamHash['login'] != $this->getField( 'login' ) ) {
 			$pParamHash['login'] = strip_tags($pParamHash['login']);
 			if( $this->userExists( array( 'login' => $pParamHash['login'] ) ) ) {
 				$this->mErrors['login'] = 'The username "'.$pParamHash['login'].'" is already in use';
