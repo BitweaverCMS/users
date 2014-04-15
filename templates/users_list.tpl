@@ -66,7 +66,7 @@
 						<input type="checkbox" name="batch_user_ids[]" value="{$userHash.user_id}" /> 
 <small>{$listInfo.offset+$userHash@iteration}.</small> <strong>{$userHash.real_name|default:$userHash.login|escape}</strong> 
 					</label>
-						<div>{$userHash.login}</div>
+						<div><a href="/{$userHash.login}">{$userHash.login}</a></div>
 					{else}
 					<h4>{displayname hash=$userHash}</h4>
 					{/if}
@@ -94,7 +94,7 @@
 						{else}
 							{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userHash.user_id ititle="Assign Role" booticon="icon-key" iforce=icon}
 						{/if}
-						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userHash.user_id ititle="User Activity" booticon="icon-lightbulb" iforce="icon"}
+						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userHash.user_id ititle="User Activity" booticon="icon-bolt" iforce="icon"}
 						{if $userHash.user_id != $smarty.const.ANONYMOUS_USER_ID && $userHash.user_id != $smarty.const.ROOT_USER_ID && $userHash.user_id != $gBitUser->mUserId}
 							{if $userHash.content_status_id > 0}
 								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=ban ititle="Ban User" booticon="icon-minus-sign" iforce=icon}
