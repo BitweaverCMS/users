@@ -89,6 +89,14 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
+	 * Determines if a user object is cacheable. Out of paranoia, admin's are never cached.
+	 * @return boolean if object can be cached
+	 */
+	public function isCacheableObject() {
+		return parent::isCacheableObject() && !$this->isAdmin();
+	}
+
+	/**
 	 * Validate inbound sort_mode parameter
 	 * @return array of fields which are valid sorts
 	 */
