@@ -517,9 +517,11 @@ class BitPermUser extends BitUser {
 			$currentUserGroups = $this->getGroups( $pUserId );
 			foreach( $addGroups AS $groupId ) {
 				$isInGroup = FALSE;
-				foreach( $currentUserGroups as $curGroupId => $curGroupInfo ) {
-					if( $curGroupId == $groupId ) {
-						$isInGroup = TRUE;
+				if( $currentUserGroups ) {
+					foreach( $currentUserGroups as $curGroupId => $curGroupInfo ) {
+						if( $curGroupId == $groupId ) {
+							$isInGroup = TRUE;
+						}
 					}
 				}
 				if( !$isInGroup ) {
