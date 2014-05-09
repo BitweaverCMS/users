@@ -84,7 +84,7 @@ class BitUser extends LibertyMime {
 	}
 
 	public static function isCacheableClass() {
-		return true;
+		return false;
 	}
 
 	/**
