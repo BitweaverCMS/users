@@ -29,13 +29,8 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  * @subpackage  BitPermUser
  */
 class BitPermUser extends BitUser {
-	// change this to an email address to receive debug emails from the LDAP code
-	// does this work? - xing - Saturday Oct 18, 2008   09:47:20 CEST
-	var $debug = FALSE;
 
-	// we use these to cache data
-	var $cUserGroups = array();
-	var $cGroupPerms = array( array() );
+	var $mPerms;
 
 	/**
 	 * BitPermUser Initialise class
@@ -50,6 +45,13 @@ class BitPermUser extends BitUser {
 
 		// Permission setup
 		$this->mAdminContentPerm = 'p_users_admin';
+	}
+
+	public function __wakeup() {
+		parent::__wakeup();
+		if( empty( $this->mPerms ) ) {
+			$this->loadPermissions();
+		}
 	}
 
 	/**
@@ -86,7 +88,7 @@ class BitPermUser extends BitUser {
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
-	function load( $pFull=FALSE, $pUserName=NULL ) {
+	function load( $pFull=TRUE, $pUserName=NULL ) {
 		if( BitUser::load( $pFull, $pUserName ) ) {
 			if( $pFull ) {
 				unset( $this->mPerms );

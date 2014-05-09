@@ -46,7 +46,6 @@ class BitUser extends LibertyMime {
 	var $mUserId;
 	var $mUsername;
 	var $mGroups;
-	var $mInfo;
 	var $mTicket;
 	var $mAuth;
 
@@ -115,7 +114,7 @@ class BitUser extends LibertyMime {
 	 * @author Chrstian Fowler <spider@steelsun.com>
 	 * @return returnString
 	 */
-	function load( $pFull=FALSE, $pUserName=NULL ) {
+	function load( $pFull=TRUE, $pUserName=NULL ) {
 		global $gBitSystem;
 		$this->mInfo = NULL;
 		if( isset( $this->mUserId ) ) {
@@ -1157,6 +1156,8 @@ class BitUser extends LibertyMime {
 	 * @return void
 	 */
 	function logout() {
+		// This must come first
+		$this->clearFromCache();
 
 		$this->sendSessionCookie( FALSE );
 
@@ -1164,7 +1165,6 @@ class BitUser extends LibertyMime {
 		$this->mUserId = NULL;
 		// ensure Guest default page is loaded if required
 		$this->mInfo['default_group_id'] = -1;
-		$this->clearFromCache();
 	}
 
 	function sendSessionCookie( $pCookie=TRUE ) {

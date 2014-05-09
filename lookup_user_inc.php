@@ -30,6 +30,7 @@ if( isset( $_REQUEST['home'] )) {
 	require_once( USERS_PKG_PATH . $userClass .'.php' );
 	$gQueryUser = new $userClass( $queryUserId );
 	$gQueryUser->load( TRUE );
+	$gQueryUser->setCacheableObject( FALSE );
 } elseif( $gBitUser->isValid() ) {
 	// We are looking at ourself, use our existing BitUser
 	global $gBitUser;
