@@ -1593,7 +1593,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
-	function getUserPreference( $pPrefName, $pPrefDefault, $pUserId ) {
+	static function getUserPreference( $pPrefName, $pPrefDefault, $pUserId ) {
 		// Alternate to LibertyContent::getPreference when all you have is a user_id and a pref_name, and you need a value...
 		global $gBitDb;
 		$ret = NULL;
