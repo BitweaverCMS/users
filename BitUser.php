@@ -1177,17 +1177,20 @@ class BitUser extends LibertyMime {
 
 		if( $pCookie === TRUE ) {
 			$pCookie = session_id();
-			// Now if the remember me feature is on and the user checked the user_remember_me checkbox then ...
-			if( $gBitSystem->isFeatureActive( 'users_remember_me' ) && isset( $_REQUEST['rme'] ) && $_REQUEST['rme'] == 'on' ) {
-				$cookieTime = ( int )( time() + (int)$gBitSystem->getConfig( 'users_remember_time', 86400 ));
-				$cookiePath = $gBitSystem->getConfig( 'cookie_path', $cookiePath );
-				$cookieDomain = $gBitSystem->getConfig( 'cookie_domain', $cookieDomain );
-			}
 		} elseif( $pCookie==FALSE ) {
 			$pCookie = ''; // unset the cookie, eg logout
 			if( !empty( $_COOKIE[$siteCookie] ) ) {
 				$this->mDb->query( "UPDATE `".BIT_DB_PREFIX."users_cnxn` SET `cookie`=NULL WHERE `cookie`=?", array( $_COOKIE[$siteCookie] ) );
 				unset( $_COOKIE[$siteCookie] );
+			}
+		}
+
+		if( $pCookie ) {
+			// Now if the remember me feature is on and the user checked the user_remember_me checkbox then ...
+			if( $gBitSystem->isFeatureActive( 'users_remember_me' ) && isset( $_REQUEST['rme'] ) && $_REQUEST['rme'] == 'on' ) {
+				$cookieTime = ( int )( time() + (int)$gBitSystem->getConfig( 'users_remember_time', 86400 ));
+				$cookiePath = $gBitSystem->getConfig( 'cookie_path', $cookiePath );
+				$cookieDomain = $gBitSystem->getConfig( 'cookie_domain', $cookieDomain );
 			}
 		}
 
