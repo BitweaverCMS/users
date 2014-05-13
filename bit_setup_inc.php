@@ -89,6 +89,7 @@ if( !isset( $_SERVER['HTTP_USER_AGENT'] )) {
 // load the user
 global $gOverrideLoginFunction;
 $siteCookie = $userClass::getSiteCookieName();
+
 if( !empty( $gOverrideLoginFunction )) {
 	$gBitUser = new $userClass();
 	$gBitUser->mUserId = $gOverrideLoginFunction();
@@ -101,7 +102,7 @@ if( !empty( $gOverrideLoginFunction )) {
 //		var_dump( 'load from cache' ); die;
 	} else {
 		$gBitUser = new $userClass();
-		if( $gBitUser->mUserId = $gBitUser->getUserIdFromCookieHash( $_COOKIE[$gBitUser->getSiteCookieName()] ) ) {
+		if( $gBitUser->mUserId = $gBitUser->getUserIdFromCookieHash( $_COOKIE[$siteCookie] ) ) {
 			// we have user with this cookie.
 			if( $gBitUser->load( TRUE ) ) {
 				// maybe do something...
