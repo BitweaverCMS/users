@@ -1185,15 +1185,14 @@ class BitUser extends LibertyMime {
 			}
 		}
 
-		if( $pCookie ) {
+		if( !empty( $pCookie ) ) {
 			// Now if the remember me feature is on and the user checked the user_remember_me checkbox then ...
 			if( $gBitSystem->isFeatureActive( 'users_remember_me' ) && isset( $_REQUEST['rme'] ) && $_REQUEST['rme'] == 'on' ) {
-				$cookieTime = ( int )( time() + (int)$gBitSystem->getConfig( 'users_remember_time', 86400 ));
+				$cookieTime = (int)( time() + (int)$gBitSystem->getConfig( 'users_remember_time', 86400 ));
 				$cookiePath = $gBitSystem->getConfig( 'cookie_path', $cookiePath );
 				$cookieDomain = $gBitSystem->getConfig( 'cookie_domain', $cookieDomain );
 			}
 		}
-
 		setcookie( $siteCookie, $pCookie, $cookieTime , $cookiePath, $cookieDomain );
 		$_COOKIE[$siteCookie] = $pCookie;
 	}
