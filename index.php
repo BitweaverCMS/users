@@ -33,6 +33,7 @@ if( !empty( $_REQUEST['home'] ) ) {
 		$gQueryUserId = $gQueryUser->mUserId;
 		if( $gQueryUser->isValid() ) {
 			$gBitSmarty->assign( 'gQueryUserId', $gQueryUserId );
+			$gQueryUser->verifyPermission( 'p_users_edit_user_homepage' );
 		}
 
 		if( $gBitSystem->isPackageActive('stars') && $gBitSystem->isFeatureActive('stars_user_ratings')) {
