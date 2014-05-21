@@ -85,7 +85,7 @@
 
 					<div class="control-group submit">
 						<input type="submit" class="btn" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
-						<input type="submit" class="btn" name="delete" value="{tr}Delete Group{/tr}" />&nbsp;
+						{if $groupInfo.group_name}<input type="submit" class="btn" name="delete" value="{tr}Delete Group{/tr}" />&nbsp;{/if}
 						<input type="submit" class="btn" name="save" value="{tr}Save Group{/tr}" />
 					</div>
 				{/form}
