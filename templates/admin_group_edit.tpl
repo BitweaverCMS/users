@@ -18,7 +18,7 @@
 
 		{jstabs}
 			{jstab title="Edit Group"}
-				{form legend="Add or Edit a Group"}
+				{form}
 					<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
 					<div class="control-group">
 						{formlabel label="Group" for="groups_group"}
@@ -85,6 +85,7 @@
 
 					<div class="control-group submit">
 						<input type="submit" class="btn" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
+						<input type="submit" class="btn" name="delete" value="{tr}Delete Group{/tr}" />&nbsp;
 						<input type="submit" class="btn" name="save" value="{tr}Save Group{/tr}" />
 					</div>
 				{/form}
@@ -92,7 +93,7 @@
 
 			{if $groupInfo.group_id}
 				{jstab title="Assign Permissions"}
-					{form legend="Assign permissions"}
+					{form}
 						<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
 						<input type="hidden" name="package" value="{$smarty.request.package|escape}" />
 						<input type="hidden" name="perm_name[{$perms[user].perm_name}]" />
@@ -110,7 +111,7 @@
 						</div>
 
 						<div class="control-group">
-							<table class="table data">
+							<table class="table data table-hover">
 								<tr>
 									<th>&nbsp;</th>
 									<th>{smartlink ititle="Name" isort="up.perm_name" group_id=$groupInfo.group_id offset=$offset package=$smarty.request.package}</th>

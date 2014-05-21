@@ -621,6 +621,23 @@ class BitPermUser extends BitUser {
 	}
 
 	/**
+	 * getGroupNameFromId
+	 * 
+	 * @param array $pGroupId 
+	 * @param array $pColumns 
+	 * @access public
+	 * @return array of group data
+	 */
+	public static function getGroupNameFromId( $pGroupId ) {
+		$ret = '';
+		if( static::verifyId( $pGroupId ) ) {
+			global $gBitDb;
+			$ret = $gBitDb->getOne( "SELECT `group_name` FROM `".BIT_DB_PREFIX."users_groups` WHERE `group_id`=?", array( $pGroupId ) );
+		}
+		return $ret;
+	}
+
+	/**
 	 * getGroupUserData 
 	 * 
 	 * @param array $pGroupId 
