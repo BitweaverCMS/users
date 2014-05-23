@@ -70,7 +70,7 @@
 			</div>
 
 			<div class="control-group submit">
-				<input type="submit" class="btn" value="{tr}set{/tr}" name="set_default" />
+				<input type="submit" class="btn btn-default" value="{tr}set{/tr}" name="set_default" />
 			</div>
 		{/form}
 

@@ -154,7 +154,7 @@
 						</div>
 
 						<div class="control-group submit">
-							<input type="submit" class="btn" name="prefs" value="{tr}Change preferences{/tr}" />
+							<input type="submit" class="btn btn-default" name="prefs" value="{tr}Change preferences{/tr}" />
 						</div>
 					{/legend}
 				{/form}
@@ -179,7 +179,7 @@
 					</div>
 
 					<div class="control-group submit">
-						<input type="submit" class="btn" name="chgemail" value="{tr}Change email{/tr}" />
+						<input type="submit" class="btn btn-default" name="chgemail" value="{tr}Change email{/tr}" />
 					</div>
 				{/form}
 				</div>
@@ -217,7 +217,7 @@
 					</div>
 
 					<div class="control-group submit">
-						<input type="submit" class="btn" name="chgpswd" value="{tr}Change Password{/tr}" />
+						<input type="submit" class="btn btn-default" name="chgpswd" value="{tr}Change Password{/tr}" />
 					</div>
 				{/form}
 				</div>
@@ -249,7 +249,7 @@
 						</div>
 
 						<div class="control-group submit">
-							<input type="submit" class="btn" name="tasksprefs" value="{tr}Change preferences{/tr}" />
+							<input type="submit" class="btn btn-default" name="tasksprefs" value="{tr}Change preferences{/tr}" />
 						</div>
 					{/form}
 				{/if}

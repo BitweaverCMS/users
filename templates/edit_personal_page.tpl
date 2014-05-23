@@ -210,7 +210,7 @@
 							</div>
 
 							<div class="control-group submit">
-								<input type="submit" class="btn" name="do_suck" value="{tr}Import{/tr}" />
+								<input type="submit" class="btn btn-default" name="do_suck" value="{tr}Import{/tr}" />
 							</div>
 						{/legend}
 					{/jstab}
@@ -218,8 +218,8 @@
 			{/jstabs}
 
 			<div class="control-group submit">
-				<input type="submit" class="btn" name="fCancel" value="{tr}Cancel{/tr}" />&nbsp;
-				<input type="submit" class="btn" name="preview" value="{tr}Preview{/tr}" />&nbsp;
+				<input type="submit" class="btn btn-default" name="fCancel" value="{tr}Cancel{/tr}" />&nbsp;
+				<input type="submit" class="btn btn-default" name="preview" value="{tr}Preview{/tr}" />&nbsp;
 				<input type="submit" class="btn btn-primary" name="fSavePage" value="{tr}Save{/tr}" />
 			</div>
 

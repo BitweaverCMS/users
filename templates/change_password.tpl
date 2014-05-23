@@ -43,7 +43,7 @@
 			</div>
 
 			<div class="submit">
-				<input type="submit" class="btn" name="change" value="{tr}Change Password{/tr}" />
+				<input type="submit" class="btn btn-default" name="change" value="{tr}Change Password{/tr}" />
 			</div>
 		{/form}
 	</div><!-- end .body -->

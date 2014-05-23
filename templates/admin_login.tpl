@@ -125,7 +125,7 @@
 			</div>
 
 			<div class="control-group submit">
-				<input type="submit" class="btn" name="loginprefs" value="{tr}Change preferences{/tr}" />
+				<input type="submit" class="btn btn-default" name="loginprefs" value="{tr}Change preferences{/tr}" />
 			</div>
 		{/form}
 	{/jstab}
@@ -154,7 +154,7 @@
 			{/foreach}
 
 			<div class="control-group submit">
-				<input type="submit" class="btn" name="registerprefs" value="{tr}Change preferences{/tr}" />
+				<input type="submit" class="btn btn-default" name="registerprefs" value="{tr}Change preferences{/tr}" />
 			</div>
 		{/form}
 	{/jstab}
@@ -183,7 +183,7 @@
 			{/foreach}
 
 			<div class="control-group submit">
-				<input type="submit" class="btn" name="httpprefs" value="{tr}Change preferences{/tr}" />
+				<input type="submit" class="btn btn-default" name="httpprefs" value="{tr}Change preferences{/tr}" />
 			</div>
 		{/form}
 	{/jstab}
@@ -212,7 +212,7 @@
 						</div>
 					{/foreach}
 					<div class="control-group submit">
-						<input type="submit" class="btn" name="auth_{$meth_name}" value="{tr}Change {$method.name} preferences{/tr}" />
+						<input type="submit" class="btn btn-default" name="auth_{$meth_name}" value="{tr}Change {$method.name} preferences{/tr}" />
 					</div>
 				{/form}
 			{/jstab}

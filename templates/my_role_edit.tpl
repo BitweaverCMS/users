@@ -48,8 +48,8 @@
 					{/if}
 
 					<div class="control-group submit">
-						<input type="submit" class="btn" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
-						<input type="submit" class="btn" name="save" value="{tr}Save Role{/tr}" />
+						<input type="submit" class="btn btn-default" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
+						<input type="submit" class="btn btn-default" name="save" value="{tr}Save Role{/tr}" />
 					</div>
 				{/form}
 			{/jstab}
@@ -76,7 +76,7 @@
 							</div>
 								
 							<div class="control-group submit">
-								<input type="submit" class="btn" name="submitUserSearch" value="Search"/>
+								<input type="submit" class="btn btn-default" name="submitUserSearch" value="Search"/>
 							</div>
 						{/form}
 					</div>
@@ -169,7 +169,7 @@
 							</div>
 
 							<div class="control-group submit">
-								<input type="submit" class="btn" name="updateperms" value="{tr}Update{/tr}" />
+								<input type="submit" class="btn btn-default" name="updateperms" value="{tr}Update{/tr}" />
 							</div>
 						{/form}
 					{/jstab}

@@ -29,7 +29,7 @@
 				</div>
 
 				<div class="control-group submit">
-					<input type="submit" class="btn" name="fResetCSS" id="reset" value="Reset CSS File" onclick="return confirm('{tr}Are you sure you want to reset your CSS back to the defaults? Any changes you have made will be lost.{/tr}');" />
+					<input type="submit" class="btn btn-default" name="fResetCSS" id="reset" value="Reset CSS File" onclick="return confirm('{tr}Are you sure you want to reset your CSS back to the defaults? Any changes you have made will be lost.{/tr}');" />
 				</div>
 
 				<div class="control-group">
@@ -37,8 +37,8 @@
 				</div>
 
 				<div class="control-group submit">
-					<input type="submit" class="btn" name="fSaveCSS" value="Save" />
-					<input type="submit" class="btn" name="fCancelCSS" value="Cancel" />
+					<input type="submit" class="btn btn-default" name="fSaveCSS" value="Save" />
+					<input type="submit" class="btn btn-default" name="fCancelCSS" value="Cancel" />
 				</div>
 			{/form}
 
@@ -54,7 +54,7 @@
 					</div>
 
 					<div class="control-group submit">
-						<input type="submit" class="btn" value="Upload Image" name="fUpload" id="upload" />
+						<input type="submit" class="btn btn-default" value="Upload Image" name="fUpload" id="upload" />
 					</div>
 				{/legend}
 
