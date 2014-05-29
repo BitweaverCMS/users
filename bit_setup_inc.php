@@ -167,7 +167,7 @@ if( !empty( $theme )) {
 }
 
 // register 'my' menu
-if( $gBitUser->isValid() && ( $gBitUser->isRegistered() || !$gBitSystem->isFeatureActive( 'site_hide_my_top_bar_link' ))) {
+if( $gBitUser->isValid() && $gBitUser->isRegistered() ) {
 	$menuHash = array(
 		'package_name'  => USERS_PKG_NAME,
 		'index_url'     => ( $gBitSystem->isFeatureActive( 'users_preferences' ) ? $gBitSystem->getConfig( 'users_login_homepage', USERS_PKG_URL.'my.php' ) : '' ),
