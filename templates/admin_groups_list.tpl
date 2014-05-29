@@ -1,7 +1,7 @@
 {strip}
 <div class="listing users">
 	<div class="header">
-		<a class="btn btn-primary btn-mini pull-right" href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?action=create"><i class="icon-group"></i> {tr}Add a new group{/tr}</a>
+		<a class="btn btn-primary btn-xs pull-right" href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?action=create"><i class="icon-group"></i> {tr}Add a new group{/tr}</a>
 		<h1>{tr}List of existing groups{/tr}</h1>
 	</div>
 

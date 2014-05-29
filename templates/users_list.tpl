@@ -38,7 +38,7 @@
 		{formhelp note="Comma separated list"}
 	</div>
 	<div class="control-group submit">
-		<input class="btn btn-mini" type="submit" name="search" value="{tr}Find{/tr}"> <input class="btn btn-mini" type="reset" name="reset" value="{tr}Reset{/tr}">
+		<input class="btn btn-xs" type="submit" name="search" value="{tr}Find{/tr}"> <input class="btn btn-xs" type="reset" name="reset" value="{tr}Reset{/tr}">
 	</div>
 {/form}
 </div>
