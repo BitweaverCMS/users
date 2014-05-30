@@ -46,7 +46,7 @@
 	{minifind}
 {/if}
 <nav class="clear">
-	<ul class="inline navbar">
+	<ul class="list-inline navbar">
 		<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
 		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Username" isort="login"}</li>
 		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Real name" isort="real_name"}</li>
