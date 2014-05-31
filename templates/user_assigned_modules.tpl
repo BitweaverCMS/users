@@ -59,7 +59,7 @@
 						{if $fEdit && $fAssign.name}
 							<input type="hidden" name="assign_name" value="{$fAssign.name}" />{$assign.name}
 						{else}
-							<div class="control-group">
+							<div class="control-group column-group gutters">
 								{formlabel label="Module" for="module_rsrc"}
 								{forminput}
 									<select name="fAssign[module_rsrc]">
@@ -73,7 +73,7 @@
 							</div>
 						{/if}
 
-						<div class="control-group">
+						<div class="control-group column-group gutters">
 							{formlabel label="Position" for="pos"}
 							{forminput}
 								<select name="fAssign[pos]" id="pos">
@@ -84,7 +84,7 @@
 							{/forminput}
 						</div>
 
-						<div class="control-group">
+						<div class="control-group column-group gutters">
 							{formlabel label="Order" for="ord"}
 							{forminput}
 								<select name="fAssign[ord]" id="ord">
@@ -97,7 +97,7 @@
 						</div>
 
 						<div class="control-group submit">
-							<input type="submit" class="btn btn-default" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
+							<input type="submit" class="ink-button" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
 						</div>
 					{/form}
 				{/jstab}
@@ -106,7 +106,7 @@
 					{form legend="Assign center piece"}
 						<input type="hidden" name="fAssign[pos]" value="c" />
 
-						<div class="control-group">
+						<div class="control-group column-group gutters">
 							{formlabel label="Center Piece" for="module"}
 							{forminput}
 								<select name="fAssign[module_rsrc]">
@@ -120,14 +120,14 @@
 							{/forminput}
 						</div>
 
-						<div class="control-group">
+						<div class="control-group column-group gutters">
 							{formlabel label="Position"}
 							{forminput}
 								{tr}Center{/tr}
 							{/forminput}
 						</div>
 
-						<div class="control-group">
+						<div class="control-group column-group gutters">
 							{formlabel label="Order" for="c_ord"}
 							{forminput}
 								<select name="fAssign[ord]" id="c_ord">
@@ -140,7 +140,7 @@
 						</div>
 
 						<div class="control-group submit">
-							<input type="submit" class="btn btn-default" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
+							<input type="submit" class="ink-button" name="fSubmitAssign" value="{tr}Add Module{/tr}" />
 						</div>
 					{/form}
 				{/jstab}
@@ -149,7 +149,7 @@
 			{if $gBitUser->canCustomizeTheme()}
 				{jstab title="Select Theme"}
 					{form legend="Select Theme"}
-						<div class="control-group">
+						<div class="control-group column-group gutters">
 							{formlabel label="Theme" for="style"}
 							{forminput}
 								<select name="style" id="style">
@@ -166,7 +166,7 @@
 						</div>
 
 					<div class="control-group submit">
-						<input type="submit" class="btn btn-default" value="{tr}Apply Theme{/tr}" name="fSubmitSetTheme">
+						<input type="submit" class="ink-button" value="{tr}Apply Theme{/tr}" name="fSubmitSetTheme">
 					</div>
 					{/form}
 				{/jstab}
@@ -221,7 +221,7 @@ for instance, i don't know where the page heading stuff is used.
 	</td>
 </tr>
 <tr class="panelsubmitrow">
-	<td colspan="2"><input type="submit" class="btn btn-default" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
+	<td colspan="2"><input type="submit" class="ink-button" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
 </tr>
 </table>
 </form>
@@ -261,7 +261,7 @@ for instance, i don't know where the page heading stuff is used.
 	</td>
 </tr>
 <tr class="panelsubmitrow">
-	<td colspan="2"><input type="submit" class="btn btn-default" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
+	<td colspan="2"><input type="submit" class="ink-button" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
 </tr>
 </table>
 </form>
@@ -302,7 +302,7 @@ for instance, i don't know where the page heading stuff is used.
 	</td>
 </tr>
 <tr class="panelsubmitrow">
-	<td colspan="2"><input type="submit" class="btn btn-default" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
+	<td colspan="2"><input type="submit" class="ink-button" name="fSubmitAssign" value="{tr}assign{/tr}" /></td>
 </tr>
 </table>
 </form>
@@ -324,7 +324,7 @@ for instance, i don't know where the page heading stuff is used.
 	<td><textarea name="homeHeaderData" cols="50" rows="3">{$homeHeaderData}</textarea></td>
 </tr>
 <tr class="panelsubmitrow">
-	<td><input type="submit" class="btn btn-default" name="fSubmitSetHeading" value="{tr}Set Heading{/tr}" /></td>
+	<td><input type="submit" class="ink-button" name="fSubmitSetHeading" value="{tr}Set Heading{/tr}" /></td>
 </tr>
 </table>
 	</form>
@@ -342,7 +342,7 @@ for instance, i don't know where the page heading stuff is used.
 		{/section}
 		</select>
 		</td><td>
-		<input type="submit" class="btn btn-default" value="Change Theme" name="fSubmitSetTheme">
+		<input type="submit" class="ink-button" value="Change Theme" name="fSubmitSetTheme">
 		</td></tr></table>
 	</form>
 {/if}

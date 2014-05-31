@@ -1,8 +1,10 @@
 {strip}
 <div class="row">
-	{include file="bitpackage:users/login_inc.tpl"}
-	{if $gBitSystem->isFeatureActive( 'users_allow_register' )}
+	<div class="span6 display login ">
+		{include file="bitpackage:users/login_inc.tpl"}
+	</div>
+	<div class="span6 display login ">
 		{include file="bitpackage:users/register.tpl"}
-	{/if}
-</div>
+	</div>
 {/strip}
+</div>

@@ -7,7 +7,7 @@
 
 	<div class="body">
 		{form id='formi' legend="Content type selection"}
-			<div class="control-group">
+			<div class="control-group column-group gutters">
 				{formlabel label="List content type" for="event"}
 				{forminput}
 					<select name="event" id="event" onchange="javascript:document.getElementById('formi').submit();">

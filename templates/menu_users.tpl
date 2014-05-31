@@ -3,7 +3,7 @@
 	{assign var=location value=menu}
 {/if}
 {if $packageMenuTitle}<a class="dropdown-toggle" data-toggle="dropdown" href="#"> {tr}{$packageMenuTitle}{/tr} <b class="caret"></b></a>{/if}
-<ul class="dropdown-menu">
+<ul class="{$packageMenuClass}">
 	{if $gBitUser->isRegistered()}
 		<li><a class="item" href="{$gBitSystem->getConfig('users_login_homepage',"`$smarty.const.USERS_PKG_URL`my.php")}">{booticon iname="icon-circle-arrow-right"   iexplain="My Personal Page" ilocation=$location}</a></li>
 		{if $gBitUser->hasPermission( 'p_users_view_user_homepage' )}
@@ -13,7 +13,7 @@
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">{booticon iname="icon-edit" iexplain="Edit My Homepage" ilocation=$location}</a></li>
 		{/if}
 		{if $gBitSystem->isFeatureActive( 'users_preferences' )}
-			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}preferences.php">{booticon iname="icon-cogs"   iexplain=Preferences ilocation=$location}</a></li>
+			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}preferences.php">{booticon iname="icon-inbox"   iexplain=Preferences ilocation=$location}</a></li>
 		{/if}
 		{if $gBitUser->hasPermission( 'p_users_create_personal_groups' )}
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}my_groups.php">{booticon iname="icon-group"   iexplain="My Groups" ilocation=$location}</a></li>

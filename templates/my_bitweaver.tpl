@@ -15,14 +15,14 @@
 	listing of submitted / edited stuff - similar to the old tiki personal tiki stuff.
 *}
 
-	<table class="width100p menutable">
+	<table class="large-100 menutable">
 		<tr>
 			{assign var="i" value="1"}
 			{foreach key=key item=menu from=$gBitSystem->mAppMenu}
 				{if $menu.menu_title && $menu.index_url && $menu.menu_template && !$menu.is_disabled}
-					<td style="width:33%;vertical-align:top;">
-						<strong>{$menu.menu_title}</strong>
-							{include file=$menu.menu_template}
+					<td style="large-33;vertical-align:top;">
+						<h1>{$menu.menu_title}</h1>
+							{include file=$menu.menu_template packageMenuClass="unstyled"}
 					</td>
 					{if not ($i++ mod 3)}
 						</tr><tr>

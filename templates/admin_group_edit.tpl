@@ -18,23 +18,23 @@
 
 		{jstabs}
 			{jstab title="Edit Group"}
-				{form}
+				{form legend="Add or Edit a Group"}
 					<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						{formlabel label="Group" for="groups_group"}
 						{forminput}
 							<input type="text" name="name" id="groups_group" size="30" maxlength="30" value="{$groupInfo.group_name}" />
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						{formlabel label="Description" for="group_desc"}
 						{forminput}
 							<textarea rows="5" cols="20" name="desc" id="group_desc">{$groupInfo.group_desc}</textarea>
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						{formlabel label="Group home page" for="group_home"}
 						{forminput}
 							<input type="text" name="home" id="group_home" value="{$groupInfo.group_home|escape}" />
@@ -48,13 +48,13 @@
 {*
 							{html_options name="dummy" id="content-list" values=$contentList options=$contentList onchange="document.getElementById('group_home').value=options[selectedIndex].value;"}
 							<input type="text" size="30" name="find" value="{$smarty.request.find}" />
-							<input type="submit" class="btn btn-default" value="{tr}Apply filter{/tr}" name="search_objects" />
+							<input type="submit" class="ink-button" value="{tr}Apply filter{/tr}" name="search_objects" />
 							<br />
 *}
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						{formlabel label="After registration page" for="after_registration_page"}
 						{forminput}
 							<input type="text" name="after_registration_page" id="after_registration_page" value="{$groupInfo.after_registration_page|escape}" />
@@ -62,21 +62,21 @@
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						<label class="checkbox">
 							<input type="checkbox" id="default_home" name="default_home_group" {if $groupInfo.group_id eq $defaultGroupId}checked="checked"{/if} value="y" />Default home page
 							{formhelp note="This is the home page if a user belongs to many groups. Only one group may be the default home. If none is selected, users/my.php is the default."}
 						</label>
 					</div>
 
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						<label class="checkbox">
 							<input type="checkbox" name="is_default" value="y" {if $groupInfo.is_default eq 'y'}checked="checked"{/if} id="is_default" />Auto members
 							{formhelp note="Users are automatically added to this group when registering at your site."}
 						</label>
 					</div>
 
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						<label class="checkbox">
 							<input type="checkbox" name="is_public" value="y" {if $groupInfo.is_public eq 'y'}checked="checked"{/if} id="is_public" />Is public
 							{formhelp note="A user will be able to select this group at registration."}
@@ -84,21 +84,20 @@
 					</div>
 
 					<div class="control-group submit">
-						<input type="submit" class="btn btn-default" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
-						{if $groupInfo.group_name}<input type="submit" class="btn btn-default" name="delete" value="{tr}Delete Group{/tr}" />&nbsp;{/if}
-						<input type="submit" class="btn btn-default" name="save" value="{tr}Save Group{/tr}" />
+						<input type="submit" class="ink-button" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
+						<input type="submit" class="ink-button" name="save" value="{tr}Save Group{/tr}" />
 					</div>
 				{/form}
 			{/jstab}
 
 			{if $groupInfo.group_id}
 				{jstab title="Assign Permissions"}
-					{form}
+					{form legend="Assign permissions"}
 						<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
 						<input type="hidden" name="package" value="{$smarty.request.package|escape}" />
 						<input type="hidden" name="perm_name[{$perms[user].perm_name}]" />
 
-						<div class="control-group">
+						<div class="control-group column-group gutters">
 							{formlabel label="Display permissions of package"}
 							{forminput}
 								{smartlink ititle="All packages" group_id=$groupInfo.group_id}
@@ -110,8 +109,8 @@
 							{/forminput}
 						</div>
 
-						<div class="control-group">
-							<table class="table data table-hover">
+						<div class="control-group column-group gutters">
+							<table class="table data">
 								<tr>
 									<th>&nbsp;</th>
 									<th>{smartlink ititle="Name" isort="up.perm_name" group_id=$groupInfo.group_id offset=$offset package=$smarty.request.package}</th>
@@ -132,7 +131,7 @@
 						</div>
 
 						<div class="control-group submit">
-							<input type="submit" class="btn btn-default" name="updateperms" value="{tr}Update{/tr}" />
+							<input type="submit" class="ink-button" name="updateperms" value="{tr}Update{/tr}" />
 						</div>
 					{/form}
 				{/jstab}

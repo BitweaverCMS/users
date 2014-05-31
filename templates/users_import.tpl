@@ -29,7 +29,7 @@
 		{jstabs}
 			{jstab title="Advanced"}
 				{form legend="Batch user addition" enctype="multipart/form-data"}
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						{formlabel label="Batch upload (CSV file)" for="csvlist"}
 						{forminput}
 							<input type="file" name="csvlist" id="csvlist" />
@@ -37,7 +37,7 @@
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						{formlabel label="Delimiter" for="delimiter"}
 						{forminput}
 							<input type="text" size="3" name="delimiter" id="delimiter" value="," />
@@ -45,28 +45,28 @@
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						<label class="checkbox">
 							<input type="checkbox" name="overwrite" id="overwrite" />Overwrite existing users
 							{formhelp note=""}
 						</label>
 					</div>
 
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						<label class="checkbox">
 							<input type="checkbox" name="admin_verify_user" id="admin_verify_user" />Validate users by email
 							{formhelp note="This will email the user a validation url with a temporary one time password. On validation the user is forced to choose a new password."}
 						</label>
 					</div>
 
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						<label class="checkbox">
 							<input type="checkbox" name="admin_verify_email" id="admin_verify_email" />Validate email address
 							{formhelp note="This feature should be used only when you need the maximum security and should be used with discretion. If a visitor's email server is not responding, they will not be able to register. You also must have a valid sender email to use this feature."}
 						</label>
 					</div>
 
-					<div class="control-group">
+					<div class="control-group column-group gutters">
 						<label class="checkbox">
 							<input type="checkbox" name="admin_noemail_user" id="admin_noemail_user" />Don't email imported users
 							{formhelp note="If you for some reason don't want to email imported users the login and password, or validation url."}
@@ -74,7 +74,7 @@
 					</div>
 
 					<div class="control-group submit">
-						<input type="submit" class="btn btn-default" name="batchimport" value="{tr}Import{/tr}" />
+						<input type="submit" class="ink-button" name="batchimport" value="{tr}Import{/tr}" />
 					</div>
 				{/form}
 			{/jstab}
