@@ -7,7 +7,7 @@
 	<div class="body">
 		{smartlink ititle="Add a new role" ipackage=users ifile="admin/edit_role.php" action=create}
 
-		<ul class="inline navbar">
+		<ul class="list-inline navbar">
 			<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
 			<li>{smartlink ititle="Name" isort="role_name" offset=$offset idefault=1}</li>
 			<li>{smartlink ititle="Description" isort="role_desc" offset=$offset}</li>
