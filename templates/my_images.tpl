@@ -14,7 +14,7 @@
 			{if $fHomepage}
 				<input type="hidden" name="fHomepage" value="{$fHomepage}"/>
 			{/if}
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="Self Portrait" for="user_portrait_file"}
 				{if $gQueryUser->mInfo.portrait_attachment_id}
 					{forminput}
@@ -29,7 +29,7 @@
 				{/forminput}
 			</div>
 
-			<div class="control-group" id="avatarfilerow">
+			<div class="form-group" id="avatarfilerow">
 				{formlabel label="Upload Avatar" for="avatarfile"}
 				{forminput}
 					<input name="user_avatar_file" type="file" id="avatarfile" />
@@ -37,7 +37,7 @@
 				{/forminput}
 			</div>
 
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="Avatar" for="user_auto_avatar"}
 				{if $gQueryUser->mInfo.avatar_attachment_id}
 					{forminput}
@@ -52,7 +52,7 @@
 				{/forminput}
 			</div>
 
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="Logo" for="user_logo_file"}
 				{if $gQueryUser->mInfo.logo_attachment_id}
 					{forminput}
@@ -67,7 +67,7 @@
 				{/forminput}
 			</div>
 
-			<div class="control-group submit">
+			<div class="form-group submit">
 				<input type="submit" class="btn btn-default" name="store" value="{tr}Save Changes{/tr}" />
 			</div>
 		{/form}

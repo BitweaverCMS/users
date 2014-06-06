@@ -16,14 +16,14 @@
 				{formfeedback success=$addSuccess}
 				{form legend="Add a new user" secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 					<input type="hidden" name="tab" value="useradd" />
-					<div class="control-group">
+					<div class="form-group">
 						{formlabel label="Real Name" for="real_name"}
 						{forminput}
 							<input type="text" name="real_name" id="real_name" value="{$newUser.real_name}" />
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="form-group">
 						{formfeedback error=$errors.login}
 						{formlabel label="User" for="login"}
 						{forminput}
@@ -31,7 +31,7 @@
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="form-group">
 						{formfeedback error=$errors.password}
 						{formlabel label="Password" for="password"}
 						{forminput}
@@ -39,14 +39,14 @@
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="form-group">
 						{formlabel label="Repeat Password" for="password2"}
 						{forminput}
 							<input type="password" name="password2" id="password2" value="{$newUser.password2}"  />
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="form-group">
 						{formfeedback error=$errors.email}
 						{formlabel label="Email" for="email"}
 						{forminput}
@@ -54,7 +54,7 @@
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="form-group">
 						{if $gBitSystem->isPackageActive('protector')}
 							{if $defaultRoleId eq ''}
 								{formfeedback error="No default role is currently set. Please set one in the Administration --&gt; Users --&gt; <a href=\"`$smarty.const.USERS_PKG_URL`admin/edit_role.php\">Roles and Permissions</a> page"}
@@ -76,7 +76,7 @@
 						{/if}
 					</div>
 
-					<div class="control-group">
+					<div class="form-group">
 						{formlabel label="<a href=\"javascript:BitBase.genPass('genepass','password','password2');\">{tr}Generate a password{/tr}</a>" for="email"}
 						{forminput}
 							<input id="genepass" type="text" />
@@ -84,7 +84,7 @@
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="form-group">
 						{forminput}
 							<label class="checkbox">
 								<input type="checkbox" name="admin_verify_user" id="admin_verify_user" /> {tr}Validate user by email{/tr}
@@ -93,7 +93,7 @@
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="form-group">
 						{forminput}
 							<label class="checkbox">
 								<input type="checkbox" name="admin_verify_email" id="admin_verify_email" /> {tr}Validate email address{/tr}
@@ -102,7 +102,7 @@
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="form-group">
 						{forminput}
 						<label class="checkbox">
 							<input type="checkbox" name="admin_noemail_user" id="admin_noemail_user" /> {tr}Don't email added user" for="admin_noemail_user{/tr}
@@ -113,7 +113,7 @@
 
 					{*include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_mini_tpl"*}
 
-					<div class="control-group submit">
+					<div class="form-group submit">
 						{if $gBitSystem->isPackageActive('protector')}
 							<input type="submit" class="btn btn-default" name="newuser" value="{tr}Add User{/tr}"{if $defaultRoleId eq ''} disabled="disabled"{/if} />
 						{else}

@@ -17,14 +17,14 @@
 			{jstab title="Edit Group"}
 				{form legend="Add or Edit a Group"}
 					<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
-					<div class="control-group">
+					<div class="form-group">
 						{formlabel label="Group" for="groups_group"}
 						{forminput}
 							<input type="text" name="name" id="groups_group" value="{$groupInfo.group_name}" />
 						{/forminput}
 					</div>
 
-					<div class="control-group">
+					<div class="form-group">
 						{formlabel label="Description" for="group_desc"}
 						{forminput}
 							<textarea rows="5" cols="20" name="desc" id="group_desc">{$groupInfo.group_desc}</textarea>
@@ -32,7 +32,7 @@
 					</div>
 					
 					{if $groups && $gBitUser->hasPermission( 'p_users_group_subgroups' )}
-						<div class="control-group">
+						<div class="form-group">
 							{formlabel label="Include" for="groups_inc"}
 							{forminput}
 								<select name="include_groups[]" id="groups_inc" multiple="multiple" size="4">
@@ -47,7 +47,7 @@
 						</div>
 					{/if}
 
-					<div class="control-group submit">
+					<div class="form-group submit">
 						<input type="submit" class="btn btn-default" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
 						<input type="submit" class="btn btn-default" name="save" value="{tr}Save Group{/tr}" />
 					</div>
@@ -68,14 +68,14 @@
 						{form legend="User Search"}
 							<input type="hidden" name="group_id" value="{$groupInfo.group_id}" />
 							<input type="hidden" name="tab" value="members" />
-							<div class="control-group">
+							<div class="form-group">
 								{formlabel label="Username" for="username"}
 								{forminput}
 									<input type="text" id="username" name="find" value="{$find}"/>
 								{/forminput}
 							</div>
 								
-							<div class="control-group submit">
+							<div class="form-group submit">
 								<input type="submit" class="btn btn-default" name="submitUserSearch" value="Search"/>
 							</div>
 						{/form}
@@ -134,7 +134,7 @@
 							<input type="hidden" name="tab" value="assign" />
 							<input type="hidden" name="perm_name[{$perms[user].perm_name}]" />
 
-							<div class="control-group">
+							<div class="form-group">
 								{formlabel label="Display permissions of package"}
 								{forminput}
 									{smartlink ititle="All packages" group_id=$groupInfo.group_id}
@@ -146,7 +146,7 @@
 								{/forminput}
 							</div>
 
-							<div class="control-group">
+							<div class="form-group">
 								<table class="table data">
 									<tr>
 										<th>&nbsp;</th>
@@ -168,7 +168,7 @@
 								</table>
 							</div>
 
-							<div class="control-group submit">
+							<div class="form-group submit">
 								<input type="submit" class="btn btn-default" name="updateperms" value="{tr}Update{/tr}" />
 							</div>
 						{/form}
