@@ -1,5 +1,5 @@
 {strip}
-{form class="col-md-6 col-xs-12 form-horizontal" name="login" legend="Please sign in to continue" ipackage=users ifile='validate.php' secure=$gBitSystem->isFeatureActive("site_https_login_required")}
+{form class="col-md-6 col-xs-12" name="login" legend="Please sign in to continue" ipackage=users ifile='validate.php' secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 
 	{formfeedback error=$error}
 
