@@ -70,7 +70,7 @@
 			<p class="formhelp">{tr}Default permissions set after installation are marked with:{/tr} {booticon iname="icon-ok"   iexplain="Default"}</p>
 
 			<div class="submit">
-				<input type="submit" class="ink-button" name="save" value="{tr}Apply Changes{/tr}" />
+				<input type="submit" class="btn btn-default" name="save" value="{tr}Apply Changes{/tr}" />
 			</div>
 		{/form}
 

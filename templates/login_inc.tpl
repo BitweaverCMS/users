@@ -3,7 +3,7 @@
 
 	{formfeedback error=$error}
 
-	<div class="control-group column-group gutters">
+	<div class="form-group">
 		{formlabel label="Username or Email" for="user"}
 		{forminput}
 			<input type="text" name="user" id="user" size="25" />
@@ -13,7 +13,7 @@
 		{/forminput}
 	</div>
 
-	<div class="control-group column-group gutters">
+	<div class="form-group">
 		{formlabel label="Password" for="pass"}
 		{forminput}
 			<input type="password" name="pass" id="pass" size="25" />
@@ -24,7 +24,7 @@
 	</div>
 
 	{if $gBitSystem->isFeatureActive('users_remember_me')}
-		<div class="control-group column-group gutters">
+		<div class="form-group">
 			{forminput}
 			<label class="checkbox">
 				<input type="checkbox" name="rme" id="rme" value="on" checked="checked" />
@@ -36,7 +36,7 @@
 
 	
 	{if !$gBitSystem->getConfig('site_https_login_required') && $gBitSystem->isFeatureActive('http_login_url') or $gBitSystem->isFeatureActive('https_login_url')}
-		<div class="control-group column-group gutters">
+		<div class="form-group">
 			{formlabel label="" for=""}
 			{forminput}
 				<a href="{$gBitSystem->getConfig('http_login_url')}" title="{tr}Login using the default security protocol{/tr}">{tr}Standard{/tr}</a> | <a href="{$gBitSystem->getConfig('https_login_url')}" title="{tr}Login using a secure protocol{/tr}">{tr}Secure{/tr}</a>
@@ -44,7 +44,7 @@
 		</div>
 	{/if}
 
-	<div class="control-group submit">
+	<div class="form-group submit">
 		{forminput}
 			<input type="submit" class="btn btn-primary" name="login" value="{tr}Sign In{/tr}" />
 			{if $gBitSystem->isFeatureActive('site_https_login_required') || $smarty.server.HTTPS=='on'} {booticon iname="icon-lock" ipackage="icons" iexplain="Secure Login" class="icon-large"}{/if}

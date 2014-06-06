@@ -12,7 +12,7 @@
 	{/foreach}
 	{formfeedback error=$errors.create}
 		{if $gBitSystem->isFeatureActive('users_register_passcode')}
-			<div class="control-group column-group gutters">
+			<div class="form-group">
 				{formfeedback error=$errors.passcode}
 				{formlabel label="Passcode to register" for="passcode"}
 				{forminput}
@@ -23,7 +23,7 @@
 		{/if}
 
 		{if $gBitSystem->isFeatureActive( 'reg_real_name' )}
-			<div class="control-group column-group gutters">
+			<div class="form-group">
 				{formlabel label="Your Name" for="real_name"}
 				{forminput}
 					<input type="text" name="real_name" id="real_name" value="{$smarty.request.real_name}" />
@@ -32,7 +32,7 @@
 			</div>
 		{/if}
 
-		<div class="control-group column-group gutters">
+		<div class="form-group">
 			{formfeedback error=$errors.login}
 			{formlabel label="Username" for="login"}
 			{forminput}
@@ -59,7 +59,7 @@
 			{formfeedback warning="{tr}A confirmation email will be sent to you with instructions on how to login{/tr}"}
 		{/if}
 
-		<div class="control-group column-group gutters">
+		<div class="form-group">
 			{formfeedback error=$errors.email}
 			{formlabel label="Email" for="email"}
 			{forminput}
@@ -68,7 +68,7 @@
 		</div>
 
 		{if !$gBitSystem->isFeatureActive( 'users_validate_user' )}
-			<div class="control-group column-group gutters">
+			<div class="form-group">
 				{formfeedback error=$errors.password}
 				{formlabel label="Password" for="pass"}
 				{forminput}
@@ -76,7 +76,7 @@
 				{/forminput}
 			</div>
 
-			<div class="control-group column-group gutters">
+			<div class="form-group">
 				{formfeedback error=$errors.password2}
 				{formlabel label="Repeat password" for="password2"}
 				{forminput}
@@ -85,7 +85,7 @@
 			</div>
 
 			{if $gBitSystem->isFeatureActive( 'user_password_generator' )}
-				<div class="control-group column-group gutters">
+				<div class="form-group">
 					{formlabel label="<a href=\"javascript:BitBase.genPass('genepass','pass1','pass2');\">{tr}Generate a password{/tr}</a>" for="email"}
 					{forminput}
 						<input id="genepass" type="text" />
@@ -95,7 +95,7 @@
 			{/if}
 		{/if}
 		{if $gBitUser->hasPermission( 'p_users_view_user_homepage' ) }
-		<div class="control-group column-group gutters">
+		<div class="form-group">
 			{formlabel label="User information" for="users_information"}
 			{forminput}
 				<select name="users_information" id="users_information">
@@ -108,7 +108,7 @@
 		{/if}
 		{if $gBitSystem->isFeatureActive( 'reg_real_name' ) or $gBitSystem->isFeatureActive( 'reg_homepage' ) or $gBitSystem->isFeatureActive( 'reg_country' ) or $gBitSystem->isFeatureActive( 'reg_language' ) or $gBitSystem->isFeatureActive( 'reg_portrait' )}
 			{if $gBitSystem->isFeatureActive( 'reg_homepage' )}
-				<div class="control-group column-group gutters">
+				<div class="form-group">
 					{formlabel label="HomePage" for="users_homepage"}
 					{forminput}
 						<input size="50" type="text" name="prefs[users_homepage]" id="users_homepage" value="{$smarty.request.prefs.users_homepage}" />
@@ -118,7 +118,7 @@
 			{/if}
 
 			{if $gBitSystem->isFeatureActive( 'reg_country' )}
-				<div class="control-group column-group gutters">
+				<div class="form-group">
 					{formlabel label="Country" for="country"}
 					{forminput}
 						<select name="prefs[users_country]" id="country">
@@ -133,7 +133,7 @@
 			{/if}
 
 			{if $gBitSystem->isFeatureActive( 'reg_language' )}
-				<div class="control-group column-group gutters">
+				<div class="form-group">
 					{formlabel label="Language" for="language"}
 					{forminput}
 						<select name="prefs[bitlanguage]" id="language">
@@ -149,7 +149,7 @@
 			{/if}
 
 			{if $gBitSystem->isFeatureActive( 'reg_portrait' )}
-				<div class="control-group column-group gutters">
+				<div class="form-group">
 					{formlabel label="Self Portrait" for="user_portrait_file"}
 					{forminput}
 						<input name="user_portrait_file" id="user_portrait_file" type="file" />
@@ -160,7 +160,7 @@
 		{/if}
 
 		{section name=f loop=$customFields}
-			<div class="control-group column-group gutters">
+			<div class="form-group">
 				{formlabel label=$customFields[f]}
 				{forminput}
 					<input type="text" name="CUSTOM[{$customFields[f]|escape}]" value="{$smarty.request.CUSTOM.$customFields[f]}" />
@@ -170,7 +170,7 @@
 
 		{foreach from=$auth_reg_fields item='output' key='op_id'}
 		{assign var=op_name value="auth[`$op_id`]"}
-			<div class="control-group column-group gutters">
+			<div class="form-group">
 				{formlabel label=$output.label for=$op_id}
 				{forminput}
 					{if $output.type == 'checkbox'}
@@ -217,7 +217,7 @@
 
 		{captcha force=true variant=row}
 
-		<div class="control-group submit">
+		<div class="form-group submit">
 			{forminput}
 				<input type="submit" class="btn btn-primary" name="register" value="{tr}Register{/tr}" />
 			{/forminput}

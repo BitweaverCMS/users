@@ -17,14 +17,14 @@
 			{jstab title="Edit Role"}
 				{form legend="Add or Edit a Role"}
 					<input type="hidden" name="role_id" value="{$roleInfo.role_id}" />
-					<div class="control-group column-group gutters">
+					<div class="form-group">
 						{formlabel label="Role" for="roles_role"}
 						{forminput}
 							<input type="text" name="name" id="roles_role" value="{$roleInfo.role_name}" />
 						{/forminput}
 					</div>
 
-					<div class="control-group column-group gutters">
+					<div class="form-group">
 						{formlabel label="Description" for="role_desc"}
 						{forminput}
 							<textarea rows="5" cols="20" name="desc" id="role_desc">{$roleInfo.role_desc}</textarea>
@@ -32,7 +32,7 @@
 					</div>
 					
 					{if $roles && $gBitUser->hasPermission( 'p_users_role_subroles' )}
-						<div class="control-group column-group gutters">
+						<div class="form-group">
 							{formlabel label="Include" for="roles_inc"}
 							{forminput}
 								<select name="include_roles[]" id="roles_inc" multiple="multiple" size="4">
@@ -47,9 +47,9 @@
 						</div>
 					{/if}
 
-					<div class="control-group submit">
-						<input type="submit" class="ink-button" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
-						<input type="submit" class="ink-button" name="save" value="{tr}Save Role{/tr}" />
+					<div class="form-group submit">
+						<input type="submit" class="btn btn-default" name="cancel" value="{tr}Cancel{/tr}" />&nbsp;
+						<input type="submit" class="btn btn-default" name="save" value="{tr}Save Role{/tr}" />
 					</div>
 				{/form}
 			{/jstab}
@@ -68,15 +68,15 @@
 						{form legend="User Search"}
 							<input type="hidden" name="role_id" value="{$roleInfo.role_id}" />
 							<input type="hidden" name="tab" value="members" />
-							<div class="control-group column-group gutters">
+							<div class="form-group">
 								{formlabel label="Username" for="username"}
 								{forminput}
 									<input type="text" id="username" name="find" value="{$find}"/>
 								{/forminput}
 							</div>
 								
-							<div class="control-group submit">
-								<input type="submit" class="ink-button" name="submitUserSearch" value="Search"/>
+							<div class="form-group submit">
+								<input type="submit" class="btn btn-default" name="submitUserSearch" value="Search"/>
 							</div>
 						{/form}
 					</div>
@@ -134,7 +134,7 @@
 							<input type="hidden" name="tab" value="assign" />
 							<input type="hidden" name="perm_name[{$perms[user].perm_name}]" />
 
-							<div class="control-group column-group gutters">
+							<div class="form-group">
 								{formlabel label="Display permissions of package"}
 								{forminput}
 									{smartlink ititle="All packages" role_id=$roleInfo.role_id}
@@ -146,7 +146,7 @@
 								{/forminput}
 							</div>
 
-							<div class="control-group column-group gutters">
+							<div class="form-group">
 								<table class="table data">
 									<tr>
 										<th>&nbsp;</th>
@@ -168,8 +168,8 @@
 								</table>
 							</div>
 
-							<div class="control-group submit">
-								<input type="submit" class="ink-button" name="updateperms" value="{tr}Update{/tr}" />
+							<div class="form-group submit">
+								<input type="submit" class="btn btn-default" name="updateperms" value="{tr}Update{/tr}" />
 							</div>
 						{/form}
 					{/jstab}

@@ -3,7 +3,7 @@
 		{form legend="User Registration and Login"}
 			<input type="hidden" name="page" value="{$page}" />
 
-			<div class="control-group column-group gutters">
+			<div class="form-group">
 				{formfeedback hash=$authSettings.err}
 
 				{formlabel label="Authentication method"}
@@ -33,7 +33,7 @@
 			</div>
 
 			{foreach from=$loginSettings key=feature item=output}
-				<div class="control-group column-group gutters">
+				<div class="form-group">
 					{if $feature == 'users_validate_email' && !$gBitSystem->hasValidSenderEmail()}
 						{formfeedback error="Site <a href=\"`$smarty.const.BIT_ROOT_URL`kernel/admin/index.php?page=server\">emailer return address</a> is not valid!"}
 					{/if}
@@ -61,7 +61,7 @@
 				</div>
 			{/foreach}
 
-			<div class="control-group column-group gutters">
+			<div class="form-group">
 				{formlabel label="Default group for users with verifiable emails" for="users_validate_email_group"}
 				{forminput}
 
@@ -74,7 +74,7 @@
 					<div class="formhelp">Selecting (none) will prevent the user from registering with a non responsive email. Click <a href='{$smarty.const.USERS_PKG_URL}admin/verify_emails.php?tk={$gBitUser->mTicket}'>here</a> to validate all of your current users emails.</div>
 				{/forminput}
 			</div>
-			<div class="control-group column-group gutters">
+			<div class="form-group">
 				{formlabel label="Duration of 'Remember me' feature" for="users_remember_time"}
 				{forminput}
 					<select name="users_remember_time" id="users_remember_time">
@@ -94,7 +94,7 @@
 				{/forminput}
 			</div>
 
-			<div class="control-group column-group gutters">
+			<div class="form-group">
 				{if $roleList }
 					{formlabel label="Roles choice at registration" for="registration_role_choice"}
 					{forminput}
@@ -124,8 +124,8 @@
 				{/if}
 			</div>
 
-			<div class="control-group submit">
-				<input type="submit" class="ink-button" name="loginprefs" value="{tr}Change preferences{/tr}" />
+			<div class="form-group submit">
+				<input type="submit" class="btn btn-default" name="loginprefs" value="{tr}Change preferences{/tr}" />
 			</div>
 		{/form}
 	{/jstab}
@@ -137,7 +137,7 @@
 			<p class="formhelp">{tr}Here you can specify what the registration page should look like. All these settings will still be available from the users preferences page.{/tr}</p>
 
 			{foreach from=$registerSettings key=feature item=output}
-				<div class="control-group column-group gutters">
+				<div class="form-group">
 					{forminput}
 						{if $output.type == 'text'}
 							{formlabel label=$output.label for=$feature}
@@ -153,8 +153,8 @@
 				</div>
 			{/foreach}
 
-			<div class="control-group submit">
-				<input type="submit" class="ink-button" name="registerprefs" value="{tr}Change preferences{/tr}" />
+			<div class="form-group submit">
+				<input type="submit" class="btn btn-default" name="registerprefs" value="{tr}Change preferences{/tr}" />
 			</div>
 		{/form}
 	{/jstab}
@@ -163,10 +163,10 @@
 		{form legend="HTTP Settings"}
 			<input type="hidden" name="page" value="{$page}" />
 
-			<div class="control-group warning">{tr}If you turn on any secure login features you must set the HTTP and HTTPS server name.{/tr}</div>
+			<div class="form-group warning">{tr}If you turn on any secure login features you must set the HTTP and HTTPS server name.{/tr}</div>
 
 			{foreach from=$httpSettings key=feature item=output}
-				<div class="control-group column-group gutters">
+				<div class="form-group">
 					{forminput}
 						{if $output.type == 'text'}
 							{formlabel label=$output.label for=$feature}
@@ -182,8 +182,8 @@
 				</div>
 			{/foreach}
 
-			<div class="control-group submit">
-				<input type="submit" class="ink-button" name="httpprefs" value="{tr}Change preferences{/tr}" />
+			<div class="form-group submit">
+				<input type="submit" class="btn btn-default" name="httpprefs" value="{tr}Change preferences{/tr}" />
 			</div>
 		{/form}
 	{/jstab}
@@ -193,7 +193,7 @@
 				{form legend=$method.name}
 					<input type="hidden" name="page" value="{$page}" />
 					{foreach from=$method.options item='output' key='op_id'}
-						<div class="control-group column-group gutters">
+						<div class="form-group">
 							{formlabel label=$output.label for=$op_id}
 							{forminput}
 								{if $output.type == 'checkbox'}
@@ -211,8 +211,8 @@
 							{/forminput}
 						</div>
 					{/foreach}
-					<div class="control-group submit">
-						<input type="submit" class="ink-button" name="auth_{$meth_name}" value="{tr}Change {$method.name} preferences{/tr}" />
+					<div class="form-group submit">
+						<input type="submit" class="btn btn-default" name="auth_{$meth_name}" value="{tr}Change {$method.name} preferences{/tr}" />
 					</div>
 				{/form}
 			{/jstab}
