@@ -6,7 +6,7 @@
 	<div class="form-group">
 		{formlabel label="Username or Email" for="user"}
 		{forminput}
-			<input type="text" name="user" id="user" size="25" />
+			<input class="form-control" type="text" name="user" id="user" />
 			{if $gBitSystem->isFeatureActive('users_allow_register')}
 				{formhelp note="<a href='`$smarty.const.USERS_PKG_URL`register.php'>Need to register?</a>"}
 			{/if}
@@ -16,7 +16,7 @@
 	<div class="form-group">
 		{formlabel label="Password" for="pass"}
 		{forminput}
-			<input type="password" name="pass" id="pass" size="25" />
+			<input class="form-control" type="password" name="pass" id="pass" />
 			{if $gBitSystem->isFeatureActive('users_forgot_pass')}
 				{formhelp note="<a href='`$smarty.const.USERS_PKG_URL`remind_password.php'>Forgot your password?</a>"}
 			{/if}
@@ -27,7 +27,7 @@
 		<div class="form-group">
 			{forminput}
 			<label class="checkbox">
-				<input type="checkbox" name="rme" id="rme" value="on" checked="checked" />
+				<input class="form-control" type="checkbox" name="rme" id="rme" value="on" checked="checked" />
 				{tr}Remember Me{/tr}
 			</label>
 			{/forminput}
@@ -44,8 +44,8 @@
 		</div>
 	{/if}
 
-	<div class="form-group submit">
-		{forminput}
+	<div class="form-group">
+		{forminput class="submit"}
 			<input type="submit" class="btn btn-primary" name="login" value="{tr}Sign In{/tr}" />
 			{if !$gBitSystem->isFeatureActive('site_https_login_required') && empty($smarty.server.HTTPS)} {booticon iname="icon-unlock" iexplain="Insecure" class="icon-large"}{/if}
 		{/forminput}
