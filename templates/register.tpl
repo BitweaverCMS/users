@@ -16,7 +16,7 @@
 				{formfeedback error=$errors.passcode}
 				{formlabel label="Passcode to register" for="passcode"}
 				{forminput}
-					<input type="password" name="passcode" id="passcode" required />
+					<input class="form-control" type="password" name="passcode" id="passcode" required />
 					{formhelp note="This is not your user password. It is a code required for registration. Contact your site administrator for details."}
 				{/forminput}
 			</div>
@@ -26,7 +26,7 @@
 			<div class="form-group">
 				{formlabel label="Your Name" for="real_name"}
 				{forminput}
-					<input type="text" name="real_name" id="real_name" value="{$smarty.request.real_name}" />
+					<input class="form-control" type="text" name="real_name" id="real_name" value="{$smarty.request.real_name}" />
 					{formhelp note="This will be displayed in links to your information."}
 				{/forminput}
 			</div>
@@ -36,7 +36,7 @@
 			{formfeedback error=$errors.login}
 			{formlabel label="Username" for="login"}
 			{forminput}
-				<input type="text" name="login" id="login" value="{$reg.login}" onkeyup="BitUser.updateUserUrl();" required />
+				<input class="form-control" type="text" name="login" id="login" value="{$reg.login}" onkeyup="BitUser.updateUserUrl();" required />
 				{formhelp note="This will be used in links to your profile. Your username can only contain numbers, characters, and underscores."}
 				<div class="alert alert-info nomargin" id="loginurl">{$smarty.const.BIT_ROOT_URI}</div>
 			{/forminput}
@@ -63,7 +63,7 @@
 			{formfeedback error=$errors.email}
 			{formlabel label="Email" for="email"}
 			{forminput}
-				<input type="text" size="50" name="email" id="email" value="{$reg.email}" required />
+				<input class="form-control" type="text" name="email" id="email" value="{$reg.email}" required />
 			{/forminput}
 		</div>
 
@@ -72,7 +72,7 @@
 				{formfeedback error=$errors.password}
 				{formlabel label="Password" for="pass"}
 				{forminput}
-					<input id="pass1" type="password" name="password" required />
+					<input class="form-control" type="password" id="pass1" name="password" required />
 				{/forminput}
 			</div>
 
@@ -80,7 +80,7 @@
 				{formfeedback error=$errors.password2}
 				{formlabel label="Repeat password" for="password2"}
 				{forminput}
-					<input id="password2" type="password" name="password2" required />
+					<input class="form-control" type="password" id="password2" name="password2" required />
 				{/forminput}
 			</div>
 
@@ -98,7 +98,7 @@
 		<div class="form-group">
 			{formlabel label="User information" for="users_information"}
 			{forminput}
-				<select name="users_information" id="users_information">
+				<select class="form-control" name="users_information" id="users_information">
 					<option value="private" selected="selected">{tr}Private{/tr}</option>
 					<option value="public">{tr}Public{/tr}</option>
 				</select>
@@ -111,7 +111,7 @@
 				<div class="form-group">
 					{formlabel label="HomePage" for="users_homepage"}
 					{forminput}
-						<input size="50" type="text" name="prefs[users_homepage]" id="users_homepage" value="{$smarty.request.prefs.users_homepage}" />
+						<input class="form-control" type="text" name="prefs[users_homepage]" id="users_homepage" value="{$smarty.request.prefs.users_homepage}" />
 						{formhelp note="If you have a personal or professional homepage, enter it here."}
 					{/forminput}
 				</div>
@@ -152,7 +152,7 @@
 				<div class="form-group">
 					{formlabel label="Self Portrait" for="user_portrait_file"}
 					{forminput}
-						<input name="user_portrait_file" id="user_portrait_file" type="file" />
+						<input type="file" class="form-control" name="user_portrait_file" id="user_portrait_file" />
 						{formhelp note="Upload a personal photo to be displayed on your personal page."}
 					{/forminput}
 				</div>
@@ -163,7 +163,7 @@
 			<div class="form-group">
 				{formlabel label=$customFields[f]}
 				{forminput}
-					<input type="text" name="CUSTOM[{$customFields[f]|escape}]" value="{$smarty.request.CUSTOM.$customFields[f]}" />
+					<input class="form-control" type="text" name="CUSTOM[{$customFields[f]|escape}]" value="{$smarty.request.CUSTOM.$customFields[f]}" />
 				{/forminput}
 			</div>
 		{/section}
@@ -184,7 +184,7 @@
 							{/foreach}
 						</select>
 					{else}
-						<input type="text" size="50" name="{$op_name}" id="{$op_id}" value="{$output.value|escape}" />
+						<input class="form-control" type="text" name="{$op_name}" id="{$op_id}" value="{$output.value|escape}" />
 					{/if}
 					{formhelp note=$output.note page=$output.page link=$output.link}
 				{/forminput}
@@ -196,7 +196,7 @@
 			{formlabel label="Group" for="group"}
 			{forminput}
 				{foreach item=gr from=$groupList name=group}
-					<input type="radio" name="group" value="{$gr.group_id|escape}"{if ($reg.group eq '' and $smarty.foreach.group.last) or $reg.group eq $gr.group_id} checked="checked"{/if}>
+					<input class="form-control" type="radio" name="group" value="{$gr.group_id|escape}"{if ($reg.group eq '' and $smarty.foreach.group.last) or $reg.group eq $gr.group_id} checked="checked"{/if}>
 						{if $gr.is_default eq "y"}
 							{tr}None{/tr}
 						{elseif $gr.group_desc}
@@ -217,8 +217,8 @@
 
 		{captcha force=true variant=row}
 
-		<div class="form-group submit">
-			{forminput}
+		<div class="form-group">
+			{forminput class="submit"}
 				<input type="submit" class="btn btn-primary" name="register" value="{tr}Register{/tr}" />
 			{/forminput}
 		</div>
