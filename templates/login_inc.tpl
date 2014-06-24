@@ -25,9 +25,9 @@
 
 	{if $gBitSystem->isFeatureActive('users_remember_me')}
 		<div class="form-group">
-			{forminput}
+			{forminput class="offset"}
 			<label class="checkbox">
-				<input class="form-control" type="checkbox" name="rme" id="rme" value="on" checked="checked" />
+				<input type="checkbox" name="rme" id="rme" value="on" checked="checked" />
 				{tr}Remember Me{/tr}
 			</label>
 			{/forminput}
@@ -37,8 +37,7 @@
 	
 	{if !$gBitSystem->getConfig('site_https_login_required') && $gBitSystem->isFeatureActive('http_login_url') or $gBitSystem->isFeatureActive('https_login_url')}
 		<div class="form-group">
-			{formlabel label="" for=""}
-			{forminput}
+			{forminput class="offset"}
 				<a href="{$gBitSystem->getConfig('http_login_url')}" title="{tr}Login using the default security protocol{/tr}">{tr}Standard{/tr}</a> | <a href="{$gBitSystem->getConfig('https_login_url')}" title="{tr}Login using a secure protocol{/tr}">{tr}Secure{/tr}</a>
 			{/forminput}
 		</div>
