@@ -18,7 +18,7 @@
 	<table class="menutable">
 		<tr>
 			{assign var="i" value="1"}
-			{foreach key=key item=menu from=$gBitSystem->mAppMenu}
+			{foreach key=key item=menu from=$gBitSystem->mAppMenu.bar}
 				{if $menu.menu_title && $menu.index_url && $menu.menu_template && !$menu.is_disabled}
 					<td class="col-md-4">
 						<h1>{$menu.menu_title}</h1>
