@@ -15,7 +15,7 @@
 	listing of submitted / edited stuff - similar to the old tiki personal tiki stuff.
 *}
 
-	<table class="menutable">
+	<table class="menutable col-xs-12">
 		<tr>
 			{assign var="i" value="1"}
 			{foreach key=key item=menu from=$gBitSystem->mAppMenu.bar}
