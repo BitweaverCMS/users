@@ -41,7 +41,7 @@ if( !$gBitUser->hasPermission( 'p_users_admin' ) ) {
 	if( $gQueryUser->mUserId != $gBitUser->mUserId && $gQueryUser->getPreference( 'users_information' ) == 'private' ) {
 		// don't spit error for SEO reasons
 		$gBitSmarty->assign( 'metaNoIndex', TRUE );
-		$gBitSystem->fatalError( tra( "This information is private" ) , NULL, NULL, HttpStatusCodes::HTTP_UNAUTHORIZED );
+		$gBitSystem->fatalError( tra( "This information is private" ) , NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
 	}
 }
 
