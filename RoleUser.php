@@ -2275,7 +2275,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return get the users display name
 	 */
-	public function getTitle( $pHash = NULL, $pDefault=TRUE ) {
+	public function getTitleFromHash( $pHash, $pDefault=TRUE ) {
 		return BitUser::getDisplayNameFromHash( FALSE, $pHash );
 	}
 
