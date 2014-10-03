@@ -23,41 +23,29 @@
 					<div class="form-group">
 						{formlabel label="Group" for="groups_group"}
 						{forminput}
-							<input type="text" name="name" id="groups_group" size="30" maxlength="30" value="{$groupInfo.group_name}" />
+							<input type="text" class="form-control" name="name" id="groups_group" size="30" maxlength="30" value="{$groupInfo.group_name}" />
 						{/forminput}
 					</div>
 
 					<div class="form-group">
 						{formlabel label="Description" for="group_desc"}
 						{forminput}
-							<textarea rows="5" cols="20" name="desc" id="group_desc">{$groupInfo.group_desc}</textarea>
+							<textarea rows="5" class="form-control" name="desc" id="group_desc">{$groupInfo.group_desc}</textarea>
 						{/forminput}
 					</div>
 
 					<div class="form-group">
 						{formlabel label="Group home page" for="group_home"}
 						{forminput}
-							<input type="text" name="home" id="group_home" value="{$groupInfo.group_home|escape}" />
+							<input type="text" class="form-control" name="home" id="group_home" value="{$groupInfo.group_home|escape}" />
 							{formhelp note="Here you can enter the content id of any page, the wiki page name or the absolute path of any page you wish to use as a group home page. For this to work set the site homepage to <strong>Group Home</strong>" link="kernel/admin/index.php?page=features/General Settings"}
-
-							Search for Content:<br/>
-							{html_options options=$contentTypes name=content_type_guid selected=$contentSelect}
-							<input type="hidden" name="group_home_lookup_hidden" id="group_home_lookup_hidden" value="{$groupInfo.group_home|escape}" />
-							<input type="text" id="group_home_lookup" name="group_home_name">
-						{formhelp note="Enter the title of the content you are looking for to receive an auto-suggest list of possibilities."}
-{*
-							{html_options name="dummy" id="content-list" values=$contentList options=$contentList onchange="document.getElementById('group_home').value=options[selectedIndex].value;"}
-							<input type="text" size="30" name="find" value="{$smarty.request.find}" />
-							<input type="submit" class="btn btn-default" value="{tr}Apply filter{/tr}" name="search_objects" />
-							<br />
-*}
 						{/forminput}
 					</div>
 
 					<div class="form-group">
 						{formlabel label="After registration page" for="after_registration_page"}
 						{forminput}
-							<input type="text" name="after_registration_page" id="after_registration_page" value="{$groupInfo.after_registration_page|escape}" />
+							<input type="text" class="form-control" name="after_registration_page" id="after_registration_page" value="{$groupInfo.after_registration_page|escape}" />
 							{formhelp note="The same format than the Group home page. Used to redirect a user after his registration if other that the default after login page."}
 						{/forminput}
 					</div>
@@ -65,22 +53,18 @@
 					<div class="form-group">
 						<label class="checkbox">
 							<input type="checkbox" id="default_home" name="default_home_group" {if $groupInfo.group_id eq $defaultGroupId}checked="checked"{/if} value="y" />Default home page
-							{formhelp note="This is the home page if a user belongs to many groups. Only one group may be the default home. If none is selected, users/my.php is the default."}
 						</label>
-					</div>
+						{formhelp note="This is the home page if a user belongs to many groups. Only one group may be the default home. If none is selected, users/my.php is the default."}
 
-					<div class="form-group">
 						<label class="checkbox">
 							<input type="checkbox" name="is_default" value="y" {if $groupInfo.is_default eq 'y'}checked="checked"{/if} id="is_default" />Auto members
-							{formhelp note="Users are automatically added to this group when registering at your site."}
 						</label>
-					</div>
+						{formhelp note="Users are automatically added to this group when registering at your site."}
 
-					<div class="form-group">
 						<label class="checkbox">
 							<input type="checkbox" name="is_public" value="y" {if $groupInfo.is_public eq 'y'}checked="checked"{/if} id="is_public" />Is public
-							{formhelp note="A user will be able to select this group at registration."}
 						</label>
+						{formhelp note="A user will be able to select this group at registration."}
 					</div>
 
 					<div class="form-group submit">
