@@ -321,7 +321,7 @@ $gBitInstaller->registerUserPermissions( USERS_PKG_NAME, array(
 	//array('p_tidbits_custom_home_layout', 'Can modify user homepage layout', 'editors', USERS_PKG_NAME),
 	//array('p_tidbits_use_custom_css', 'Can create custom style sheets', 'editors', USERS_PKG_NAME),
 	array('p_users_create_personal_roles', 'Can create personal user roles', 'editors', USERS_PKG_NAME),
-	array('p_users_view_user_list', 'Can view list of registered users', 'registered', USERS_PKG_NAME),
+	array('p_users_view_user_list', 'Can view list of registered users', 'editors', USERS_PKG_NAME),
 	array('p_users_view_user_homepage', 'Can view personalized homepages', 'basic', USERS_PKG_NAME),
 	array('p_users_edit_user_homepage', 'Can create and display a personalized homepage', 'editors', USERS_PKG_NAME),
 	array('p_users_bypass_captcha', 'Can bypass spam validation mechanisms', 'registered', USERS_PKG_NAME),
