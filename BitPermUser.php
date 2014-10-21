@@ -81,14 +81,14 @@ class BitPermUser extends BitUser {
 	}
 
 	/**
-	 * load 
-	 * 
+	 * load
+	 *
 	 * @param boolean $pFull Load all permissions
 	 * @param string $pUserName User login name
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
-	function load( $pFull=TRUE, $pUserName=NULL ) {
+	function load( $pFull=FALSE, $pUserName=NULL ) {
 		if( BitUser::load( $pFull, $pUserName ) ) {
 			if( $pFull ) {
 				unset( $this->mPerms );
