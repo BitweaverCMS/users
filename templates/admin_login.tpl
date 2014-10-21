@@ -66,7 +66,7 @@
 				{forminput}
 
 					<select name="users_validate_email_group" id="users_validate_email_group">
-						<option value="(none)" {if $gBitSystem->getConfig('users_validate_email_group') eq ''} selected="selected"{/if}>(none)</option>
+						<option value="" {if $gBitSystem->getConfig('users_validate_email_group') eq ''} selected="selected"{/if}>(none)</option>
 						{foreach from=$groups item='group'}
 							<option value="{$group.group_id}" {if $gBitSystem->getConfig('users_validate_email_group') eq $group.group_id} selected="selected"{/if}>{$group.group_name}</option>
 						{/foreach}
