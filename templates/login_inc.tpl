@@ -25,11 +25,9 @@
 
 	{if $gBitSystem->isFeatureActive('users_remember_me')}
 		<div class="form-group">
-			{forminput class="offset"}
-			<label class="checkbox">
+			{forminput label="checkbox"}
 				<input type="checkbox" name="rme" id="rme" value="on" checked="checked" />
 				{tr}Remember Me{/tr}
-			</label>
 			{/forminput}
 		</div>
 	{/if}

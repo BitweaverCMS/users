@@ -63,24 +63,24 @@
 					</div>
 
 					<div class="form-group">
-					<label class="checkbox">
+						{forminput label="checkbox"}
 							<input type="checkbox" id="default_home" name="default_home_role" {if $roleInfo.role_id eq $defaultRoleId}checked="checked"{/if} value="y" />Default home page
 							{formhelp note="This is the home page if a user belongs to many roles. Only one role may be the default home. If none is selected, users/my.php is the default."}
-						</label>
+						{/forminput}
 					</div>
 
 					<div class="form-group">
-						<label class="checkbox">
+						{forminput label="checkbox"}
 							<input type="checkbox" name="is_default" value="y" {if $roleInfo.is_default eq 'y'}checked="checked"{/if} id="is_default" />Auto members
 							{formhelp note="Users are automatically added to this role when registering at your site."}
-						</label>
+						{/forminput}
 					</div>
 
 					<div class="form-group">
-						<label class="checkbox">
+						{forminput label="checkbox"}
 							<input type="checkbox" name="is_public" value="y" {if $roleInfo.is_public eq 'y'}checked="checked"{/if} id="is_public" />Is public
 							{formhelp note="A user will be able to select this role at registration."}
-						</label>
+						{/forminput}
 					</div>
 
 					<div class="form-group submit">

@@ -174,9 +174,9 @@
 				{formlabel label=$output.label for=$op_id}
 				{forminput}
 					{if $output.type == 'checkbox'}
-						<label class="checkbox">
+						{forminput label="checkbox"}
 							{html_checkboxes name="$op_name" values="y" selected=$output.value labels=false id=$op_id}
-						</label>
+						{/forminput}
 					{elseif $output.type == 'option'}
 						<select name="{$op_name}" id="{$op_id}">
 							{foreach from=$output.options item='op_text' key='op_value'}
