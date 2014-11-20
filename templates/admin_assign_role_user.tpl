@@ -13,21 +13,21 @@
 		{form legend="User Information" action="`$smarty.const.USERS_PKG_URL`admin/assign_role_user.php"}
 			<input type="hidden" value="{$assignUser->mUserId}" name="assign_user" />
 
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="Username"}
 				{forminput}
 					{$assignUser->getDisplayName(TRUE)}
 				{/forminput}
 			</div>
 
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="Email"}
 				{forminput}
 					{$assignUser->mInfo.email}
 				{/forminput}
 			</div>
 
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="User ID"}
 				{forminput}
 					{$assignUser->mUserId}
@@ -36,7 +36,7 @@
 
 			{if $gBitSystem->isPackageActive('quota')}
 			{include_php file="`$smarty.const.QUOTA_PKG_PATH`quota_inc.php"}
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="Quota"}
 				{forminput}
 					{$usage} / {$quota}MB ( {$quotaPercent}% )
@@ -44,7 +44,7 @@
 			</div>
 			{/if}
 
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="Roles"}
 				{forminput}
 					{foreach from=$assignUser->mRoles key=roleId item=role}
@@ -59,7 +59,7 @@
 				{/forminput}
 			</div>
 
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="Default Role" for="default_role"}
 				{forminput}
 					<select name="default_role" id="default_role">
@@ -70,8 +70,8 @@
 				{/forminput}
 			</div>
 
-			<div class="control-group submit">
-				<input type="submit" class="btn" value="{tr}set{/tr}" name="set_default" />
+			<div class="form-group submit">
+				<input type="submit" class="btn btn-default" value="{tr}set{/tr}" name="set_default" />
 			</div>
 		{/form}
 

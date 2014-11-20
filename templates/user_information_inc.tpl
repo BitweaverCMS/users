@@ -1,7 +1,7 @@
 {* $Header$ *}
 {strip}
 {if $userData->getPreference('users_information') eq 'public' or $gBitUser->mUserId eq $userData->mUserId}
-	<div class="control-group">
+	<div class="form-group">
 		{formlabel label="Login"}
 		{forminput}
 			{if $gBitSystem->getConfig('users_display_name') eq 'login'}<strong>{/if}
@@ -10,7 +10,7 @@
 		{/forminput}
 	</div>
 
-	<div class="control-group">
+	<div class="form-group">
 		{formlabel label="Real Name"}
 		{forminput}
 			{if $gBitSystem->getConfig('users_display_name') eq 'real_name'}<strong>{/if}
@@ -20,14 +20,14 @@
 	</div>
 
 	{if $userData->getPreference('users_country')}
-		<div class="control-group">
+		<div class="form-group">
 			{formlabel label="Country"}
 			{forminput}
 				{biticon ipackage="users" ipath="flags/" iname=$userData->getPreference('flag') iexplain=$userData->getPreference('flag') iforce="icon"} {$userData->getPreference('users_country')}
 			{/forminput}
 		</div>
 
-		<div class="control-group">
+		<div class="form-group">
 			{formlabel label="Language"}
 			{forminput}
 				{assign var=langcode value=$userData->getPreference('bitlanguage')}
@@ -37,7 +37,7 @@
 	{/if}
 
 	{foreach from=$customFields key=i item=field}
-		<div class="control-group">
+		<div class="form-group">
 			{formlabel label=$field}
 			{forminput}
 				{$userData->getPreference($field)}
@@ -46,14 +46,14 @@
 	{/foreach}
 
 	{if $gBitUser->hasPermission( 'p_users_admin' )}
-		<div class="control-group">
+		<div class="form-group">
 			{formlabel label="User ID"}
 			{forminput}
 				{$userData->mInfo.user_id}
 			{/forminput}
 		</div>
 
-		<div class="control-group">
+		<div class="form-group">
 			{formlabel label="Registered Email"}
 			{forminput}
 				{$userData->mInfo.email}
@@ -62,7 +62,7 @@
 	{/if}
 
 	{if $userData->mInfo.publicEmail}
-		<div class="control-group">
+		<div class="form-group">
 			{formlabel label="Email Address"}
 			{forminput}
 				{$userData->mInfo.publicEmail}
@@ -70,7 +70,7 @@
 		</div>
 	{/if}
 
-	<div class="control-group">
+	<div class="form-group">
 		{formlabel label="Member since"}
 		{forminput}
 			{$userData->mInfo.registration_date|bit_long_date}
@@ -78,7 +78,7 @@
 	</div>
 
 	{if $userData->mUserId ne $smarty.const.ANONYMOUS_USER_ID}
-		<div class="control-group">
+		<div class="form-group">
 			{formlabel label="Last Login"}
 			{forminput}
 				{$userData->mInfo.last_login|bit_long_datetime}
@@ -86,7 +86,7 @@
 		</div>
 
 		{if $gBitSystem->isPackageActive( 'messages' ) and $userData->getPreference('messages_allow_messages') ne 'n' and $gBitUser->mUserId ne $userData->mUserId}
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="Send Message"}
 				{forminput}
 					{tr}Send a <a href="{$smarty.const.MESSAGES_PKG_URL}compose.php?to={$userInfo.login}">personal message</a> to this user{/tr}

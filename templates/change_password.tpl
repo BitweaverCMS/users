@@ -12,7 +12,7 @@
 				<input type="hidden" name="provpass" value="{$userInfo.provpass|escape}" />
 			{/if}
 
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="User" for="user"}
 				{forminput}
 					{$userInfo.login}
@@ -20,7 +20,7 @@
 			</div>
 
 			{if !$userInfo.provpass}
-				<div class="control-group">
+				<div class="form-group">
 					{formlabel label="Old Password" for="oldpass"}
 					{forminput}
 						<input type="password" name="oldpass" id="oldpass" />
@@ -28,14 +28,14 @@
 				</div>
 			{/if}
 
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="New Password" for="pass"}
 				{forminput}
 					<input type="password" name="pass" id="pass" />
 				{/forminput}
 			</div>
 
-			<div class="control-group">
+			<div class="form-group">
 				{formlabel label="Again Please" for="pass2"}
 				{forminput}
 					<input type="password" name="pass2" id="pass2" />
@@ -43,7 +43,7 @@
 			</div>
 
 			<div class="submit">
-				<input type="submit" class="btn" name="change" value="{tr}Change Password{/tr}" />
+				<input type="submit" class="btn btn-default" name="change" value="{tr}Change Password{/tr}" />
 			</div>
 		{/form}
 	</div><!-- end .body -->

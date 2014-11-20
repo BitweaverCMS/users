@@ -16,7 +16,7 @@
 			</p>
 
 			{form legend="CSS File Data"}
-				<div class="control-group">
+				<div class="form-group">
 					{formlabel label="Load CSS File" for="reset"}
 					{forminput}
 						<select name="resetStyle">
@@ -28,23 +28,23 @@
 					{/forminput}
 				</div>
 
-				<div class="control-group submit">
-					<input type="submit" class="btn" name="fResetCSS" id="reset" value="Reset CSS File" onclick="return confirm('{tr}Are you sure you want to reset your CSS back to the defaults? Any changes you have made will be lost.{/tr}');" />
+				<div class="form-group submit">
+					<input type="submit" class="btn btn-default" name="fResetCSS" id="reset" value="Reset CSS File" onclick="return confirm('{tr}Are you sure you want to reset your CSS back to the defaults? Any changes you have made will be lost.{/tr}');" />
 				</div>
 
-				<div class="control-group">
+				<div class="form-group">
 					<textarea name="textData" rows="42" cols="50">{$data|escape}</textarea>
 				</div>
 
-				<div class="control-group submit">
-					<input type="submit" class="btn" name="fSaveCSS" value="Save" />
-					<input type="submit" class="btn" name="fCancelCSS" value="Cancel" />
+				<div class="form-group submit">
+					<input type="submit" class="btn btn-default" name="fSaveCSS" value="Save" />
+					<input type="submit" class="btn btn-default" name="fCancelCSS" value="Cancel" />
 				</div>
 			{/form}
 
 			{form enctype="multipart/form-data"}
 				{legend legend="Upload new Image"}
-					<div class="control-group">
+					<div class="form-group">
 						{formlabel label="Upload Image" for="upload"}
 						{forminput}
 							<input type="hidden" name="MAX_FILE_SIZE" value="1024000" />
@@ -53,8 +53,8 @@
 						{/forminput}
 					</div>
 
-					<div class="control-group submit">
-						<input type="submit" class="btn" value="Upload Image" name="fUpload" id="upload" />
+					<div class="form-group submit">
+						<input type="submit" class="btn btn-default" value="Upload Image" name="fUpload" id="upload" />
 					</div>
 				{/legend}
 

@@ -24,14 +24,21 @@ if( isset( $_REQUEST['tk'] ) ) {
 require_once( '../kernel/setup_inc.php' );
 require_once( KERNEL_PKG_PATH.'BitBase.php' );
 include_once( KERNEL_PKG_PATH.'notification_lib.php' );
+require_once( USERS_PKG_PATH.'classes/recaptchalib.php' );
 
-// Permission: needs p_register
 $gBitSystem->verifyFeature( 'users_allow_register' );
+
+// Everything below here is needed for registration
 
 require_once( USERS_PKG_PATH.'BaseAuth.php' );
 
-if( isset( $_REQUEST['returnto'] ) ) {
+if( !empty( $_REQUEST['returnto'] ) ) {
 	$_SESSION['returnto'] = $_REQUEST['returnto'];
+} elseif( !empty( $_SERVER['HTTP_REFERER'] ) && !strpos( $_SERVER['HTTP_REFERER'], 'login.php' )  && !strpos( $_SERVER['HTTP_REFERER'], 'role_register.php' ) ) {
+	$from = parse_url( $_SERVER['HTTP_REFERER'] );
+	if( !empty( $from['path'] ) && $from['host'] == $_SERVER['SERVER_NAME'] ) {
+		$_SESSION['loginfrom'] = $from['path'].'?'.( !empty( $from['query'] ) ? $from['query'] : '' );
+	}
 }
 
 if( $gBitUser->isRegistered() ) {
@@ -65,7 +72,7 @@ if( isset( $_REQUEST["register"] ) ) {
 			$newUser->storePreference('users_information','private');
 		}
 
-		// requires validation by email
+		// requires validation by email 
 		if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 			$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
 			$gBitSmarty->assign('showmsg','y');
@@ -97,6 +104,7 @@ if( isset( $_REQUEST["register"] ) ) {
 			exit;
 		}
 	} else {
+		$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_BAD_REQUEST );
 		$gBitSmarty->assign_by_ref( 'errors', $newUser->mErrors );
 	}
 
@@ -147,9 +155,6 @@ $listHash = array(
 $roleList = $gBitUser->getAllRoles( $listHash );
 $gBitSmarty->assign_by_ref( 'roleList', $roleList );
 
-// invoke edit services
-$gBitUser->invokeServices( 'content_edit_function' );
-
 // include preferences settings from other packages - these will be included as individual tabs
 $packages = array();
 foreach( $gBitSystem->mPackages as $package ) {
@@ -168,5 +173,11 @@ foreach( $gBitSystem->mPackages as $package ) {
 }
 $gBitSmarty->assign_by_ref('packages',$packages );
 
+if( !empty( $_REQUEST['error'] ) ) {
+	$gBitSmarty->assign( 'error', $_REQUEST['error'] );
+	$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_UNAUTHORIZED );
+}
+
+$gBitSmarty->assign( 'metaKeywords', 'Login, Sign in, Registration, Register, Create new account' );
 $gBitSystem->display('bitpackage:users/role_register.tpl', 'Register' , array( 'display_mode' => 'display' ));
 ?>

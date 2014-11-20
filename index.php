@@ -33,6 +33,7 @@ if( !empty( $_REQUEST['home'] ) ) {
 		$gQueryUserId = $gQueryUser->mUserId;
 		if( $gQueryUser->isValid() ) {
 			$gBitSmarty->assign( 'gQueryUserId', $gQueryUserId );
+			$gQueryUser->verifyPermission( 'p_users_edit_user_homepage' );
 		}
 
 		if( $gBitSystem->isPackageActive('stars') && $gBitSystem->isFeatureActive('stars_user_ratings')) {
@@ -97,7 +98,8 @@ if( !empty( $_REQUEST['home'] ) ) {
 		$gBitSmarty->assign( 'pageCssId', 'userhomepage' );
 		$centerDisplay = ( count( $gCenterPieces ) ? 'bitpackage:kernel/dynamic.tpl' : 'bitpackage:users/center_user_wiki_page.tpl' );
 	} else {
-		$gBitSystem->fatalError( tra( "Page not found." ) , NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
+		$gBitSmarty->assign( 'metaNoIndex', TRUE );
+		$gBitSystem->fatalError( tra( "Page not found." ), NULL, NULL, HttpStatusCodes::HTTP_NOT_FOUND );
 	}
 } else {
 	$gBitSystem->verifyPermission( 'p_users_view_user_list' );

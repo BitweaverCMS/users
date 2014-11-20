@@ -53,7 +53,7 @@
 								{assign var=class value=""}
 							{/if}
 
-							<td class="{if $group.group_id lt 4}alignright{else}aligncenter{/if} {$class}">
+							<td class="{if $group.group_id lt 4}alignright{else}content-center{/if} {$class}">
 								<input id="{$p}{$group.group_id}" type="checkbox" value="{$p}" name="perms[{$group.group_id}][{$p}]" title="{$group.group_name}" {if $group.perms.$p}checked="checked"{/if}/>
 							</td>
 
@@ -70,7 +70,7 @@
 			<p class="formhelp">{tr}Default permissions set after installation are marked with:{/tr} {booticon iname="icon-ok"   iexplain="Default"}</p>
 
 			<div class="submit">
-				<input type="submit" class="btn" name="save" value="{tr}Apply Changes{/tr}" />
+				<input type="submit" class="btn btn-default" name="save" value="{tr}Apply Changes{/tr}" />
 			</div>
 		{/form}
 

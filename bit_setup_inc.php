@@ -42,7 +42,6 @@ if( !defined( 'LOGO_MAX_DIM' )) {
 // a package can decide to override the default user class
 $userClass = $gBitSystem->getConfig( 'user_class', (defined('ROLE_MODEL') ) ?  'RolePermUser' : 'BitPermUser' );
 require_once( USERS_PKG_PATH . $userClass .'.php' );
-$gBitUser = new $userClass();
 
 // set session lifetime
 if( $gBitSystem->isFeatureActive( 'site_session_lifetime' )) {
@@ -89,23 +88,37 @@ if( !isset( $_SERVER['HTTP_USER_AGENT'] )) {
 
 // load the user
 global $gOverrideLoginFunction;
+$siteCookie = $userClass::getSiteCookieName();
+
 if( !empty( $gOverrideLoginFunction )) {
+	$gBitUser = new $userClass();
 	$gBitUser->mUserId = $gOverrideLoginFunction();
 	if( $gBitUser->mUserId ) {
 		$gBitUser->load();
 		$gBitUser->loadPermissions();
 	}
-} elseif( !empty( $_COOKIE[$gBitUser->getSiteCookieName()] ) && ( $gBitUser->mUserId = $gBitUser->getUserIdFromCookieHash( $_COOKIE[$gBitUser->getSiteCookieName()] ))) {
-	// we have user with this cookie.
-	if( $gBitUser->load( TRUE ) ) {
-		// maybe do something...
+} elseif( !empty( $_COOKIE[$siteCookie] ) ) {
+	if( $gBitUser = $userClass::loadFromCache( $_COOKIE[$siteCookie] ) ) {
+//		var_dump( 'load from cache' ); die;
+	} else {
+		$gBitUser = new $userClass();
+		if( $gBitUser->mUserId = $gBitUser->getUserIdFromCookieHash( $_COOKIE[$siteCookie] ) ) {
+			// we have user with this cookie.
+			if( $gBitUser->load( TRUE ) ) {
+				// maybe do something...
+			}
+		}
 	}
 }
 
 // if we still don't have a user loaded, we'll load the anonymous user
-if( !$gBitUser->isValid() ) {
-	$gBitUser->mUserId = ANONYMOUS_USER_ID;
-	$gBitUser->load( TRUE );
+if( empty( $gBitUser ) || !$gBitUser->isValid() ) {
+	if( !($gBitUser = $userClass::loadFromCache( ANONYMOUS_USER_ID ) ) ) {
+		$gBitUser = new $userClass( ANONYMOUS_USER_ID );
+		if( $gBitUser->load( TRUE ) ) {
+			// maybe do something...
+		}
+	}
 }
 
 $gBitSmarty->assign_by_ref( 'gBitUser', $gBitUser );
@@ -154,7 +167,7 @@ if( !empty( $theme )) {
 }
 
 // register 'my' menu
-if( $gBitUser->isValid() && ( $gBitUser->isRegistered() || !$gBitSystem->isFeatureActive( 'site_hide_my_top_bar_link' ))) {
+if( $gBitUser->isValid() && $gBitUser->isRegistered() ) {
 	$menuHash = array(
 		'package_name'  => USERS_PKG_NAME,
 		'index_url'     => ( $gBitSystem->isFeatureActive( 'users_preferences' ) ? $gBitSystem->getConfig( 'users_login_homepage', USERS_PKG_URL.'my.php' ) : '' ),

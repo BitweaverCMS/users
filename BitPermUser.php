@@ -29,13 +29,8 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  * @subpackage  BitPermUser
  */
 class BitPermUser extends BitUser {
-	// change this to an email address to receive debug emails from the LDAP code
-	// does this work? - xing - Saturday Oct 18, 2008   09:47:20 CEST
-	var $debug = FALSE;
 
-	// we use these to cache data
-	var $cUserGroups = array();
-	var $cGroupPerms = array( array() );
+	var $mPerms;
 
 	/**
 	 * BitPermUser Initialise class
@@ -50,6 +45,13 @@ class BitPermUser extends BitUser {
 
 		// Permission setup
 		$this->mAdminContentPerm = 'p_users_admin';
+	}
+
+	public function __wakeup() {
+		parent::__wakeup();
+		if( empty( $this->mPerms ) ) {
+			$this->loadPermissions();
+		}
 	}
 
 	/**
@@ -79,8 +81,8 @@ class BitPermUser extends BitUser {
 	}
 
 	/**
-	 * load 
-	 * 
+	 * load
+	 *
 	 * @param boolean $pFull Load all permissions
 	 * @param string $pUserName User login name
 	 * @access public
@@ -616,6 +618,23 @@ class BitPermUser extends BitUser {
 			$this->mDb->CompleteTrans();
 		}
 		return ( count( $this->mErrors ) == 0 );
+	}
+
+	/**
+	 * getGroupNameFromId
+	 * 
+	 * @param array $pGroupId 
+	 * @param array $pColumns 
+	 * @access public
+	 * @return array of group data
+	 */
+	public static function getGroupNameFromId( $pGroupId ) {
+		$ret = '';
+		if( static::verifyId( $pGroupId ) ) {
+			global $gBitDb;
+			$ret = $gBitDb->getOne( "SELECT `group_name` FROM `".BIT_DB_PREFIX."users_groups` WHERE `group_id`=?", array( $pGroupId ) );
+		}
+		return $ret;
 	}
 
 	/**

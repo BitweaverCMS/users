@@ -22,12 +22,11 @@ global $gBitUser, $gBitSystem;
 
 // PERMISSIONS: registered user required
 if ( !$gBitUser->isRegistered() ) {
-	$gBitSystem->fatalError( tra( "You are not logged in." ));	
+	$gBitSystem->fatalError( tra( "You are not logged in." ));
 }
 
 if( !empty( $_REQUEST["cancel"] ) ) {
-	header( 'Location: '.USERS_PKG_URL.'my_roles.php' );
-	die;
+	bit_redirect( USERS_PKG_URL.'my_roles.php' );
 }
 
 if ( $gBitUser->hasPermission('p_users_create_personal_roles' ) ) {

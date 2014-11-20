@@ -65,7 +65,27 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 		// the default home group was unchecked.
 		$gBitSystem->storeConfig( 'default_home_group', NULL, USERS_PKG_NAME );
 	}
-
+} elseif( isset( $_REQUEST['delete'] ) ) {
+	// Process a form to remove a group
+	$formHash['group_id'] = $_REQUEST['group_id'];
+	$formHash['delete'] = 1;
+	$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group_id'] );
+	if( isset( $_REQUEST["confirm"] ) ) {
+		$gBitUser->verifyTicket();
+		if( $_REQUEST['group_id'] == $gBitSystem->getConfig( 'default_home_group' ) ) {
+			$gBitSystem->storeConfig( 'default_home_group', NULL, USERS_PKG_NAME );
+		}
+		$gBitUser->expungeGroup( $_REQUEST['group_id'] );
+		$successMsg = "The group ".$groupInfo['group_name']." was deleted.";
+		unset( $_REQUEST['group_id'] );
+	} else {
+		$gBitSystem->setBrowserTitle( tra('Delete group') );
+		$msgHash = array(
+			'confirm_item' => tra( 'Are you sure you want to permantly remove the group' )." <strong>$groupInfo[group_name]</strong>".'?',
+			'warning' => tra( 'This cannot be undone.' ),
+		);
+		$gBitSystem->confirmDialog( $formHash,$msgHash );
+	}
 //	$mid = 'bitpackage:users/admin_groups_list.tpl';
 } elseif( isset( $_REQUEST['updateperms'] )) {
 	foreach( array_keys( $allPerms ) as $perm ) {
@@ -80,27 +100,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 	$allPerms = $gBitUser->getGroupPermissions( $permListHash );
 } elseif( isset( $_REQUEST["action"] )) {
 	$formHash['action'] = $_REQUEST['action'];
-	// Process a form to remove a group
-	if( $_REQUEST["action"] == 'delete' ) {
-		$formHash['group_id'] = $_REQUEST['group_id'];
-		$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group_id'] );
-		if( isset( $_REQUEST["confirm"] ) ) {
-			$gBitUser->verifyTicket();
-			if( $_REQUEST['group_id'] == $gBitSystem->getConfig( 'default_home_group' ) ) {
-				$gBitSystem->storeConfig( 'default_home_group', NULL, USERS_PKG_NAME );
-			}
-			$gBitUser->expungeGroup( $_REQUEST['group_id'] );
-			$successMsg = "The group ".$groupInfo['group_name']." was deleted.";
-			unset( $_REQUEST['group_id'] );
-		} else {
-			$gBitSystem->setBrowserTitle( tra('Delete group') );
-			$msgHash = array(
-				'confirm_item' => tra( 'Are you sure you want to remove the group?' ),
-				'warning' => tra( 'This will permentally delete the group' )." <strong>$groupInfo[group_name]</strong>",
-			);
-			$gBitSystem->confirmDialog( $formHash,$msgHash );
-		}
-	} elseif ($_REQUEST["action"] == 'remove') {
+	if ($_REQUEST["action"] == 'remove') {
 		$gBitUser->removePermissionFromGroup( $_REQUEST["permission"], $_REQUEST['group_id'] );
 		$successMsg = 'The permission '.$_REQUEST['permission'].' was removed successflly. <a href="'.USERS_PKG_URL.'admin/edit_group.php?action=assign&amp;perm='.$_REQUEST['permission'].'&amp;group_id='.$_REQUEST['group_id'].'&amp;pacakge='.$_REQUEST['package'].'">Undo last action.</a>';
 	} elseif( $_REQUEST["action"] == 'create' ) {

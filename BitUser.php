@@ -46,7 +46,6 @@ class BitUser extends LibertyMime {
 	var $mUserId;
 	var $mUsername;
 	var $mGroups;
-	var $mInfo;
 	var $mTicket;
 	var $mAuth;
 
@@ -75,6 +74,27 @@ class BitUser extends LibertyMime {
 		$this->mContentId = $pContentId;
 	}
 
+	public function getCacheKey() {
+		$siteCookie = static::getSiteCookieName();
+		if( $this->isRegistered() && !empty( $_COOKIE[$siteCookie] ) ) { 
+			return $_COOKIE[$siteCookie];
+		} else {
+			return ANONYMOUS_USER_ID;
+		}
+	}
+
+	public static function isCacheableClass() {
+		return false;
+	}
+
+	/**
+	 * Determines if a user object is cacheable. Out of paranoia, admin's are never cached.
+	 * @return boolean if object can be cached
+	 */
+	public function isCacheableObject() {
+		return parent::isCacheableObject() && !$this->isAdmin();
+	}
+
 	/**
 	 * Validate inbound sort_mode parameter
 	 * @return array of fields which are valid sorts
@@ -94,7 +114,7 @@ class BitUser extends LibertyMime {
 	 * @author Chrstian Fowler <spider@steelsun.com>
 	 * @return returnString
 	 */
-	function load( $pFull=FALSE, $pUserName=NULL ) {
+	function load( $pFull=TRUE, $pUserName=NULL ) {
 		global $gBitSystem;
 		$this->mInfo = NULL;
 		if( isset( $this->mUserId ) ) {
@@ -1136,6 +1156,8 @@ class BitUser extends LibertyMime {
 	 * @return void
 	 */
 	function logout() {
+		// This must come first
+		$this->clearFromCache();
 
 		$this->sendSessionCookie( FALSE );
 
@@ -1148,31 +1170,34 @@ class BitUser extends LibertyMime {
 	function sendSessionCookie( $pCookie=TRUE ) {
 		global $gBitSystem;
 
-		$siteCookie = $this->getSiteCookieName();
+		$siteCookie = static::getSiteCookieName();
+		$cookieTime = 0;
+		$cookiePath = BIT_ROOT_URL;
+		$cookieDomain = '';
+
 		if( $pCookie === TRUE ) {
 			$pCookie = session_id();
 		} elseif( $pCookie==FALSE ) {
 			$pCookie = ''; // unset the cookie, eg logout
 			if( !empty( $_COOKIE[$siteCookie] ) ) {
 				$this->mDb->query( "UPDATE `".BIT_DB_PREFIX."users_cnxn` SET `cookie`=NULL WHERE `cookie`=?", array( $_COOKIE[$siteCookie] ) );
+				unset( $_COOKIE[$siteCookie] );
 			}
 		}
 
-		$cookieTime = 0;
-		$cookiePath = BIT_ROOT_URL;
-		$cookieDomain = '';
-		// Now if the remember me feature is on and the user checked the user_remember_me checkbox then ...
-		if( $gBitSystem->isFeatureActive( 'users_remember_me' ) && isset( $_REQUEST['rme'] ) && $_REQUEST['rme'] == 'on' ) {
-			$cookieTime = ( int )( time() + (int)$gBitSystem->getConfig( 'users_remember_time', 86400 ));
-			$cookiePath = $gBitSystem->getConfig( 'cookie_path', $cookiePath );
-			$cookieDomain = $gBitSystem->getConfig( 'cookie_domain', $cookieDomain );
+		if( !empty( $pCookie ) ) {
+			// Now if the remember me feature is on and the user checked the user_remember_me checkbox then ...
+			if( $gBitSystem->isFeatureActive( 'users_remember_me' ) && isset( $_REQUEST['rme'] ) && $_REQUEST['rme'] == 'on' ) {
+				$cookieTime = (int)( time() + (int)$gBitSystem->getConfig( 'users_remember_time', 86400 ));
+				$cookiePath = $gBitSystem->getConfig( 'cookie_path', $cookiePath );
+				$cookieDomain = $gBitSystem->getConfig( 'cookie_domain', $cookieDomain );
+			}
 		}
-
 		setcookie( $siteCookie, $pCookie, $cookieTime , $cookiePath, $cookieDomain );
 		$_COOKIE[$siteCookie] = $pCookie;
 	}
 
-	function getSiteCookieName() {
+	public static function getSiteCookieName() {
 		global $gBitSystem;
 
 		$cookie_site = strtolower( preg_replace( "/[^a-zA-Z0-9]/", "", $gBitSystem->getConfig( 'site_title', 'bitweaver' )));
@@ -1570,7 +1595,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
-	function getUserPreference( $pPrefName, $pPrefDefault, $pUserId ) {
+	static function getUserPreference( $pPrefName, $pPrefDefault, $pUserId ) {
 		// Alternate to LibertyContent::getPreference when all you have is a user_id and a pref_name, and you need a value...
 		global $gBitDb;
 		$ret = NULL;
@@ -2331,10 +2356,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return get the users display name
 	 */
-	public function getTitle( $pHash = NULL, $pDefault=TRUE ) {
-		if( empty( $pHash ) && $this && $this->isValid() ) {
-			$pHash = $this->mInfo;
-		}
+	public static function getTitleFromHash( $pHash, $pDefault=TRUE ) {
 		return BitUser::getDisplayNameFromHash( FALSE, $pHash );
 	}
 

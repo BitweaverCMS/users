@@ -41,8 +41,8 @@ if( !empty( $_SESSION['returnto'] ) ) {
 
 // Added check for IIS $_SERVER['HTTPS'] uses 'off' value - wolff_borg
 $https_mode = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off';
-if ($gBitSystem->isFeatureActive( 'site_https_login_required' ) && !$https_mode) {
-	$url = $gBitSystem->getConfig( 'site_https_domain' );
+if( $gBitSystem->isLive() && $gBitSystem->isFeatureActive( 'site_https_login_required' ) && !$https_mode) {
+	$url = $gBitSystem->getConfig( 'site_https_domain', $_SERVER['HTTP_HOST'] );
 	$site_https_port = $gBitSystem->getConfig('site_https_port', $site_https_port);
 	if ($site_https_port != 443) {
 		$url .= ':' . $site_https_port;
