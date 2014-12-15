@@ -518,15 +518,7 @@ class BitPermUser extends BitUser {
 			}
 			$currentUserGroups = $this->getGroups( $pUserId );
 			foreach( $addGroups AS $groupId ) {
-				$isInGroup = FALSE;
-				if( !empty( $currentUserGroups ) ) {
-					foreach( $currentUserGroups as $curGroupId => $curGroupInfo ) {
-						if( $curGroupId == $groupId ) {
-							$isInGroup = TRUE;
-						}
-					}
-				}
-				if( !$isInGroup ) {
+				if( !$this->mDb->getOne( "SELECT group_id FROM `".BIT_DB_PREFIX."users_groups_map` WHERE `user_id` = ? AND `group_id` = ?", array( $pUserId, $groupId ) ) ) {
 					$query = "INSERT INTO `".BIT_DB_PREFIX."users_groups_map` (`user_id`,`group_id`) VALUES(?,?)";
 					$result = $this->mDb->query( $query, array( $pUserId, $groupId ));
 				}
