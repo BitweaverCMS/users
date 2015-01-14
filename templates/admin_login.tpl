@@ -17,8 +17,7 @@
 									<option value="{$meth_name}" {if $auth_method.value eq $meth_name} selected="selected"{/if}>{$method.name}</option>
 								{/foreach}
 							</select>
-						{/forminput}
-						<br />
+						</label>
 					{/foreach}
 					{*
 					{if $gBitSystem->getConfig("users_auth_method_`$smarty.section.auth_select_outer.iteration-1`") eq 'tiki'} selected="selected"{/if}
