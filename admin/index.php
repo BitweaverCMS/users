@@ -147,7 +147,7 @@ if( isset( $_REQUEST["action"] ) ) {
 			} else {
 				switch( $_REQUEST["action"] ){
 					case 'delete':
-						$formHash['input'][] = "<input type='checkbox' name='delete_user_content' value='all' checked='checked'/>".tra( 'Delete all content created by this user' );
+						$formHash['input'][] = "<div class='checkbox'><label><input type='checkbox' name='delete_user_content' value='all' checked='checked'/>".tra( 'Delete all content created by this user' ).'</label></div>';
 						foreach( $gLibertySystem->mContentTypes as $contentTypeGuid => $contentTypeHash ) {
 //							$formHash['input'][] = "<input type='checkbox' name='delete_user_content' checked='checked' value='$contentTypeGuid'/>Delete All User's $gLibertySystem->getContentTypeName($contentTypeHash['content_type_guid'],TRUE)";
 						}
