@@ -28,7 +28,7 @@ $feedback = array();
 // set up the user we're editing
 if( !empty( $_REQUEST["view_user"] ) && $_REQUEST["view_user"] <> $gBitUser->mUserId ) {
 	$gBitSystem->verifyPermission( 'p_users_admin' );
-	$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+	$userClass = $gBitSystem->getConfig( 'user_class', (defined('ROLE_MODEL') ) ?  'RolePermUser' : 'BitPermUser' );
 	$editUser = new $userClass( $_REQUEST["view_user"] );
 	$editUser->load( TRUE );
 	$gBitSmarty->assign('view_user', $_REQUEST["view_user"]);
