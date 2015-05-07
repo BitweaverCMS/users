@@ -28,7 +28,7 @@ if( !empty( $_REQUEST['returnto'] ) ) {
 }
 
 if( $gBitUser->isRegistered() ) {
-	bit_redirect( $gBitSystem->getDefaultPage() );
+	bit_redirect( $gBitSystem->getConfig( 'users_login_homepage', $gBitSystem->getDefaultPage() ) );
 }
 
 if( !empty( $_REQUEST['error'] ) ) {
