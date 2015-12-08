@@ -2,16 +2,11 @@
 /**
  * assigned_modules
  *
- * @author   spider <spider@steelsun.com>
- * @version  $Revision$
- * @package  users
- * @subpackage  functions
- * @copyright Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * @license Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
+ * @copyright (c) 2004-15 bitweaver.org
+ *
+ * @package users
+ * @subpackage functions
  */
-// $Header$
-// All Rights Reserved. See below for details and a complete list of authors.
-// Initialization
 
 global $gEditMode;
 $gEditMode = 'layout';

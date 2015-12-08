@@ -2399,7 +2399,7 @@ class BitUser extends LibertyMime {
 				$iHomepage = $pHash['real_name'];
 			}
 			if( empty( $pHash['users_information'] ) ) {
-				$pHash['users_information'] = $gBitSystem->mDb->getOne( "SELECT pref_value FROM liberty_content_prefs lcp INNER JOIN users_users uu ON (lcp.content_id=uu.content_id) WHERE uu.login=? AND pref_name='users_information'", array( $pHash['login'] ), 1, NULL, 86400 );
+				$pHash['users_information'] = $gBitSystem->mDb->getOne( "SELECT pref_value FROM liberty_content_prefs lcp INNER JOIN users_users uu ON (lcp.content_id=uu.content_id) WHERE uu.login=? AND pref_name='users_information'", array( $pHash['user_id'] ), 1, NULL, 86400 );
 			}
 
 			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' ) && (empty( $pHash['users_information'] ) || $pHash['users_information'] == 'public') ) {
