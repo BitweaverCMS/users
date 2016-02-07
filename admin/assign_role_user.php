@@ -34,7 +34,7 @@ if( isset( $_REQUEST["action"] ) ) {
 	$assignUser->storeUserDefaultRole( $assignUser->mUserId, $_REQUEST['default_role'] );
 	$assignUser->load();
 }
-$gBitSmarty->assign_by_ref( 'assignUser', $assignUser );
+$gBitSmarty->assignByRef( 'assignUser', $assignUser );
 
 $listHash = array( 'sort_mode' => 'role_name_asc' );
 $gBitSmarty->assign('roles', $gBitUser->getAllRoles( $listHash ));

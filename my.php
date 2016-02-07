@@ -46,7 +46,7 @@ if( $gBitSystem->isFeatureActive( 'display_users_content_list' ) ) {
 	$numPages = ceil( $contentListHash['cant'] / $gBitSystem->getConfig( 'max_records' ) );
 	$gBitSmarty->assign( 'numPages', $numPages );
 
-	//$gBitSmarty->assign_by_ref('offset', $offset);
+	//$gBitSmarty->assignByRef('offset', $offset);
 	$gBitSmarty->assign( 'contentSelect', $contentSelect );
 	$gBitSmarty->assign( 'contentTypes', $contentTypes );
 	$gBitSmarty->assign( 'contentList', $contentList );

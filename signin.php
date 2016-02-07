@@ -33,8 +33,8 @@ if( !empty( $_REQUEST['error'] ) ) {
 
 $languages = array();
 $languages = $gBitLanguage->listLanguages();
-$gBitSmarty->assign_by_ref( 'languages', $languages );
-$gBitSmarty->assign_by_ref( 'gBitLanguage', $gBitLanguage );
+$gBitSmarty->assignByRef( 'languages', $languages );
+$gBitSmarty->assignByRef( 'gBitLanguage', $gBitLanguage );
 
 $gBitSmarty->assign( 'metaKeywords', 'Login, Sign in, Registration, Register, Create new account' );
 $gBitSystem->display( 'bitpackage:users/signin.tpl', $gBitSystem->getConfig( 'site_title' ).' Login' , array( 'display_mode' => 'display' ));

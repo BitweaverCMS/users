@@ -54,7 +54,7 @@ if( isset( $_REQUEST["register"] ) ) {
 			$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group'] );
 			if ( empty($groupInfo) || $groupInfo['is_public'] != 'y' ) {
 				$errors[] = "You can't use this group";
-				$gBitSmarty->assign_by_ref( 'errors', $errors );
+				$gBitSmarty->assignByRef( 'errors', $errors );
 			} else {
 				$userId = $newUser->getUserId();
 				$gBitUser->addUserToGroup( $userId, $_REQUEST['group'] );
@@ -100,10 +100,10 @@ if( isset( $_REQUEST["register"] ) ) {
 		}
 	} else {
 		$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_BAD_REQUEST );
-		$gBitSmarty->assign_by_ref( 'errors', $newUser->mErrors );
+		$gBitSmarty->assignByRef( 'errors', $newUser->mErrors );
 	}
 
-	$gBitSmarty->assign_by_ref( 'reg', $reg );
+	$gBitSmarty->assignByRef( 'reg', $reg );
 
 } else {
 	if( $gBitSystem->isFeatureActive( 'custom_user_fields' ) ) {
@@ -127,8 +127,8 @@ if( isset( $_REQUEST["register"] ) ) {
 
 $languages = array();
 $languages = $gBitLanguage->listLanguages();
-$gBitSmarty->assign_by_ref( 'languages', $languages );
-$gBitSmarty->assign_by_ref( 'gBitLanguage', $gBitLanguage );
+$gBitSmarty->assignByRef( 'languages', $languages );
+$gBitSmarty->assignByRef( 'gBitLanguage', $gBitLanguage );
 
 // Get flags here
 $flags = array();
@@ -148,7 +148,7 @@ $listHash = array(
 	'sort_mode' => array( 'is_default_asc', 'group_desc_asc' ),
 );
 $groupList = $gBitUser->getAllGroups( $listHash );
-$gBitSmarty->assign_by_ref( 'groupList', $groupList );
+$gBitSmarty->assignByRef( 'groupList', $groupList );
 
 // include preferences settings from other packages - these will be included as individual tabs
 $packages = array();
@@ -166,7 +166,7 @@ foreach( $gBitSystem->mPackages as $package ) {
 		}
 	}
 }
-$gBitSmarty->assign_by_ref('packages',$packages );
+$gBitSmarty->assignByRef('packages',$packages );
 
 if( !empty( $_REQUEST['error'] ) ) {
 	$gBitSmarty->assign( 'error', $_REQUEST['error'] );

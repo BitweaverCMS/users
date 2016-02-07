@@ -76,7 +76,7 @@ if( $gBitSystem->getConfig( 'users_themes' ) == 'y' ) {
 		$assignStyle = $_REQUEST["style"];
 	}
 	$styles = $gBitThemes->getStyles( NULL, TRUE, TRUE );
-	$gBitSmarty->assign_by_ref( 'styles', $styles );
+	$gBitSmarty->assignByRef( 'styles', $styles );
 
 	if( !isset( $_REQUEST["style"] )) {
 		$assignStyle = $editUser->getPreference( 'theme' );
@@ -220,7 +220,7 @@ if( isset( $_REQUEST['tasksprefs'] )) {
 // get available languages
 $languages = array();
 $languages = $gBitLanguage->listLanguages();
-$gBitSmarty->assign_by_ref( 'languages', $languages );
+$gBitSmarty->assignByRef( 'languages', $languages );
 
 // Get flags
 $flags = array();
@@ -252,14 +252,14 @@ $gBitSmarty->assign( 'userTimezones', $user_timezones);
 
 // email scrambling methods
 $scramblingMethods = array( "n", "strtr", "unicode", "x" );
-$gBitSmarty->assign_by_ref( 'scramblingMethods', $scramblingMethods );
+$gBitSmarty->assignByRef( 'scramblingMethods', $scramblingMethods );
 $scramblingEmails = array(
 	tra( "no" ),
 	scramble_email( $editUser->mInfo['email'], 'strtr' ),
 	scramble_email( $editUser->mInfo['email'], 'unicode' )."-".tra( "unicode" ),
 	scramble_email( $editUser->mInfo['email'], 'x' )
 );
-$gBitSmarty->assign_by_ref( 'scramblingEmails', $scramblingEmails );
+$gBitSmarty->assignByRef( 'scramblingEmails', $scramblingEmails );
 
 // edit services
 $editUser->invokeServices( 'content_edit_function' );

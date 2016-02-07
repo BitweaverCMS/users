@@ -56,7 +56,7 @@ if (isset($_REQUEST['fSubmitSetTheme'] ) ) {
 	$fAssign['user_id'] = $gQueryUser->mUserId;
 	$fAssign['layout'] = $_REQUEST['fLayout'];
 	$gBitThemes->storeLayout( $fAssign );
-	$gBitSmarty->assign_by_ref( 'fAssign', $fAssign );
+	$gBitSmarty->assignByRef( 'fAssign', $fAssign );
 } elseif (isset($_REQUEST["fMove"])) {
 
 	if( isset( $_REQUEST["fMove"] ) && isset( $_REQUEST["fModule"] ) ) {
@@ -83,12 +83,12 @@ $orders = array();
 for ($i = 1; $i < 20; $i++) {
 	$orders[] = $i;
 }
-$gBitSmarty->assign_by_ref('orders', $orders);
+$gBitSmarty->assignByRef('orders', $orders);
 $gBitSmarty->assign( 'homeHeaderData', $gQueryUser->getPreference( 'homepage_header' ) );
 // get styles
 if( $gBitUser->canCustomizeTheme() ) {
 	$styles = $gBitThemes->getStyles( NULL, TRUE, TRUE );
-	$gBitSmarty->assign_by_ref( 'styles', $styles );
+	$gBitSmarty->assignByRef( 'styles', $styles );
 	if(!isset($_REQUEST["style"])){
 		$assignStyle = $gQueryUser->getPreference( 'theme' );
 	}
@@ -103,10 +103,10 @@ if (count($assignables) > 0) {
 $modules = $gBitSystem->getLayout( $gQueryUser->mUserId, HOMEPAGE_LAYOUT, FALSE );
 $gBitThemes->generateModuleNames( $modules );
 //print_r($modules);
-$gBitSmarty->assign_by_ref('assignables', $assignables);
+$gBitSmarty->assignByRef('assignables', $assignables);
 $layoutAreas = array( 'left'=>'l', 'center'=>'c', 'right'=>'r' );
-$gBitSmarty->assign_by_ref( 'layoutAreas', $layoutAreas );
-$gBitSmarty->assign_by_ref('modules', $modules);
+$gBitSmarty->assignByRef( 'layoutAreas', $layoutAreas );
+$gBitSmarty->assignByRef('modules', $modules);
 //print_r($modules);
 
 $gBitSystem->display( 'bitpackage:users/user_assigned_modules.tpl', 'Edit Layout', array( 'display_mode' => 'display' ));

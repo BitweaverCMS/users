@@ -30,7 +30,7 @@ $gBitSmarty->assign( 'oldpass', $_REQUEST["oldpass"] );
 $gBitSmarty->assign( 'provpass', $_REQUEST["provpass"] );
 
 $userInfo = $gBitUser->getUserInfo( array( 'user_id' => $_REQUEST['user_id'] ));
-$gBitSmarty->assign_by_ref( 'userInfo', $userInfo );
+$gBitSmarty->assignByRef( 'userInfo', $userInfo );
 
 if( isset( $_REQUEST["change"] )) {
 

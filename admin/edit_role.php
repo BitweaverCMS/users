@@ -42,9 +42,9 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 	}
 } elseif( isset($_REQUEST["members"] ) ) {
 	$roleInfo = $gBitUser->getRoleInfo( $_REQUEST["members"] );
-	$gBitSmarty->assign_by_ref( 'roleInfo', $roleInfo );
+	$gBitSmarty->assignByRef( 'roleInfo', $roleInfo );
 	$roleMembers = $gBitUser->getRoleUsers( $_REQUEST["members"] );
-	$gBitSmarty->assign_by_ref( 'roleMembers', $roleMembers );
+	$gBitSmarty->assignByRef( 'roleMembers', $roleMembers );
 	$mid = "bitpackage:users/role_list_members.tpl";
 	$gBitSystem->setBrowserTitle( tra( 'Role Members' ).': '.$roleInfo['role_name'] );
 } elseif( isset($_REQUEST["save"] ) ) {
@@ -113,7 +113,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 
 if( !empty( $_REQUEST['role_id'] ) || (!empty( $_REQUEST["action"] ) && $_REQUEST["action"] == 'create' ) ) {
 	$permPackages = $gBitUser->getPermissionPackages();
-	$gBitSmarty->assign_by_ref( 'permPackages', $permPackages );
+	$gBitSmarty->assignByRef( 'permPackages', $permPackages );
 
 	// get role list separately from the $users stuff to avoid splitting of data due to pagination
 	$listHash = array( 'sort_mode' => 'role_name_asc' );
@@ -144,9 +144,9 @@ if( empty( $mid ) ) {
 		$roleInfo = $gBitUser->getRoleInfo( $_REQUEST['role_id'] );
 
 		$defaultRoleId = $gBitSystem->getConfig( 'default_home_role' );
-		$gBitSmarty->assign_by_ref( 'defaultRoleId', $defaultRoleId );
-		$gBitSmarty->assign_by_ref( 'roleInfo', $roleInfo );
-		$gBitSmarty->assign_by_ref( 'allPerms', $allPerms );
+		$gBitSmarty->assignByRef( 'defaultRoleId', $defaultRoleId );
+		$gBitSmarty->assignByRef( 'roleInfo', $roleInfo );
+		$gBitSmarty->assignByRef( 'allPerms', $allPerms );
 
 		$gBitSystem->setBrowserTitle( tra( 'Admininster Role' ).': '.$roleInfo['role_name'] );
 		$mid = 'bitpackage:users/admin_role_edit.tpl';

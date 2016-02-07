@@ -45,7 +45,7 @@ if( !empty( $_REQUEST['store'] )) {
 
 // For some reason, we have to reassign here to make our changes to gBitUser->mInfo present in smarty.
 // dunno why, but this fixes the bug. XOXO spiderr
-$gBitSmarty->assign_by_ref( 'gQueryUser', $gQueryUser );
+$gBitSmarty->assignByRef( 'gQueryUser', $gQueryUser );
 
 $gBitSystem->display( 'bitpackage:users/my_images.tpl', tra( 'Personal Images' ), array( 'display_mode' => 'display' ));
 ?>

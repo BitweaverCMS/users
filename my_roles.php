@@ -96,7 +96,7 @@ if ( $gBitUser->hasPermission('p_users_create_personal_roles' ) ) {
 		$gBitUser->getList($searchParams);
 		$foundUsers = $searchParams['data'];
 		$mid = 'bitpackage:users/my_role_edit.tpl';
-		$gBitSmarty->assign_by_ref('foundUsers', $foundUsers);
+		$gBitSmarty->assignByRef('foundUsers', $foundUsers);
 	} elseif (!empty($_REQUEST['assignuser'])) {
 		if( !empty($_REQUEST['role_id'] ) ) {
 			if ($_REQUEST['role_id'] != -1 && $roleList[$_REQUEST['role_id']]['user_id'] == $gBitUser->mUserId) {
@@ -121,9 +121,9 @@ if ( $gBitUser->hasPermission('p_users_create_personal_roles' ) ) {
 		}
 		$roleInfo = $gBitUser->getRoleInfo( $_REQUEST['role_id'] );
 		$roleUsers = $gBitUser->getRoleUsers( $_REQUEST['role_id'] );
-		$gBitSmarty->assign_by_ref('roleUsers', $roleUsers);
-		$gBitSmarty->assign_by_ref('roleInfo', $roleInfo);
-		$gBitSmarty->assign_by_ref( 'allPerms', $allPerms );
+		$gBitSmarty->assignByRef('roleUsers', $roleUsers);
+		$gBitSmarty->assignByRef('roleInfo', $roleInfo);
+		$gBitSmarty->assignByRef( 'allPerms', $allPerms );
 		$gBitSystem->setBrowserTitle( 'Admininster Role: '.$roleInfo['role_name'].' '.(isset( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : '') );
 		$mid = 'bitpackage:users/my_role_edit.tpl';
 	} 
@@ -163,7 +163,7 @@ if ( ( !empty( $_REQUEST['add_public_role'] ) || !empty( $_REQUEST['remove_publi
 
 /* Load up public roles and check if the user can join or leave them */
 $systemRoles = $gBitUser->getRoles( $gBitUser->mUserId, TRUE );
-$gBitSmarty->assign_by_ref( 'systemRoles', $systemRoles);
+$gBitSmarty->assignByRef( 'systemRoles', $systemRoles);
 $listHash = array(
 	'is_public'=>'y',
 	'sort_mode' => array( 'is_default_asc', 'role_desc_asc' ),
@@ -188,7 +188,7 @@ if( count( $publicRoles )) {
 			break;
 		}
 	}
-	$gBitSmarty->assign_by_ref( 'publicRoles', $publicRoles );
+	$gBitSmarty->assignByRef( 'publicRoles', $publicRoles );
 	if (isset($canRemovePublic)) {
 		$gBitSmarty->assign( 'canRemovePublic' , 'y');
 	}

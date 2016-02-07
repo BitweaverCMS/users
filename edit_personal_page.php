@@ -47,15 +47,15 @@ if(isset($_REQUEST["preview"])) {
 	$gBitUser->mInfo['parsed_data'] = $parsed;
 	/* SPELLCHECKING INITIAL ATTEMPT */
 	//This nice function does all the job!
-	$gBitSmarty->assign_by_ref( 'pageInfo', $gBitUser->mInfo );
+	$gBitSmarty->assignByRef( 'pageInfo', $gBitUser->mInfo );
 	$gBitUser->invokeServices( 'content_preview_function' );
 }
 else {
 	$gBitUser->invokeServices( 'content_edit_function' );
 }
 
-$gBitSmarty->assign_by_ref( 'pageInfo', $gBitUser->mInfo );
-$gBitSmarty->assign_by_ref( 'gContent', $gBitUser );
+$gBitSmarty->assignByRef( 'pageInfo', $gBitUser->mInfo );
+$gBitSmarty->assignByRef( 'gContent', $gBitUser );
 
 $gBitSmarty->assign( 'show_page_bar', 'y' );
 $gBitSystem->setConfig( 'wiki_description', 'n' );

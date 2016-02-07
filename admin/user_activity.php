@@ -21,7 +21,7 @@ if( @BitBase::verifyId( $_REQUEST['user_id'] ) ) {
 }
 
 $gBitSmarty->assign( 'userActivity', $gBitUser->getUserActivity( $listHash ));
-$gBitSmarty->assign_by_ref( 'listInfo', $listHash['listInfo'] );
+$gBitSmarty->assignByRef( 'listInfo', $listHash['listInfo'] );
 $gBitSystem->display( 'bitpackage:users/user_activity.tpl', 'User Activity' , array( 'display_mode' => 'admin' ));
 
 ?>

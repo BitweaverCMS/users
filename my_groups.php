@@ -96,7 +96,7 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 		$gBitUser->getList($searchParams);
 		$foundUsers = $searchParams['data'];
 		$mid = 'bitpackage:users/my_group_edit.tpl';
-		$gBitSmarty->assign_by_ref('foundUsers', $foundUsers);
+		$gBitSmarty->assignByRef('foundUsers', $foundUsers);
 	} elseif (!empty($_REQUEST['assignuser'])) {
 		if( !empty($_REQUEST['group_id'] ) ) {
 			if ($_REQUEST['group_id'] != -1 && $groupList[$_REQUEST['group_id']]['user_id'] == $gBitUser->mUserId) {
@@ -121,9 +121,9 @@ if ( $gBitUser->hasPermission('p_users_create_personal_groups' ) ) {
 		}
 		$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group_id'] );
 		$groupUsers = $gBitUser->getGroupUsers( $_REQUEST['group_id'] );
-		$gBitSmarty->assign_by_ref('groupUsers', $groupUsers);
-		$gBitSmarty->assign_by_ref('groupInfo', $groupInfo);
-		$gBitSmarty->assign_by_ref( 'allPerms', $allPerms );
+		$gBitSmarty->assignByRef('groupUsers', $groupUsers);
+		$gBitSmarty->assignByRef('groupInfo', $groupInfo);
+		$gBitSmarty->assignByRef( 'allPerms', $allPerms );
 		$gBitSystem->setBrowserTitle( 'Admininster Group: '.$groupInfo['group_name'].' '.(isset( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : '') );
 		$mid = 'bitpackage:users/my_group_edit.tpl';
 	}
@@ -162,7 +162,7 @@ if ( ( !empty( $_REQUEST['add_public_group'] ) || !empty( $_REQUEST['remove_publ
 
 /* Load up public groups and check if the user can join or leave them */
 $systemGroups = $gBitUser->getGroups( $gBitUser->mUserId, TRUE );
-$gBitSmarty->assign_by_ref( 'systemGroups', $systemGroups);
+$gBitSmarty->assignByRef( 'systemGroups', $systemGroups);
 $listHash = array(
 	'is_public'=>'y',
 	'sort_mode' => array( 'is_default_asc', 'group_desc_asc' ),
@@ -187,7 +187,7 @@ if( count( $publicGroups )) {
 			break;
 		}
 	}
-	$gBitSmarty->assign_by_ref( 'publicGroups', $publicGroups );
+	$gBitSmarty->assignByRef( 'publicGroups', $publicGroups );
 	if (isset($canRemovePublic)) {
 		$gBitSmarty->assign( 'canRemovePublic' , 'y');
 	}
