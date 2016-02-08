@@ -150,7 +150,7 @@
 
 			{if $gBitSystem->isFeatureActive( 'reg_portrait' )}
 				<div class="form-group">
-					{formlabel label="Self Portrait" for="user_portrait_file"}
+					{formlabel label="Profile Picture" for="user_portrait_file"}
 					{forminput}
 						<input type="file" class="form-control" name="user_portrait_file" id="user_portrait_file" />
 						{formhelp note="Upload a personal photo to be displayed on your personal page."}
