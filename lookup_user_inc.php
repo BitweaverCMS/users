@@ -47,9 +47,9 @@ if( !$gBitUser->hasPermission( 'p_users_admin' ) ) {
 
 if( $gQueryUser->isValid() ) {
 	$gQueryUser->sanitizeUserInfo();
-	$gBitSmarty->assign_by_ref( 'gQueryUser', $gQueryUser );
-	$gBitSmarty->assign_by_ref( 'userInfo', $gQueryUser->mInfo );
-	$gBitSmarty->assign_by_ref( 'userPrefs', $gQueryUser->mPrefs );
+	$gBitSmarty->assignByRef( 'gQueryUser', $gQueryUser );
+	$gBitSmarty->assignByRef( 'userInfo', $gQueryUser->mInfo );
+	$gBitSmarty->assignByRef( 'userPrefs', $gQueryUser->mPrefs );
 	$gBitSmarty->assign( 'homepage_header', $gQueryUser->getPreference( 'homepage_header' ) );
 }
 ?>

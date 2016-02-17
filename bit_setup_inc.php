@@ -123,7 +123,7 @@ if( empty( $gBitUser ) || !$gBitUser->isValid() ) {
 	}
 }
 
-$gBitSmarty->assign_by_ref( 'gBitUser', $gBitUser );
+$gBitSmarty->assignByRef( 'gBitUser', $gBitUser );
 
 // If we are processing a login then do not generate the challenge
 // if we are in any other case then yes.

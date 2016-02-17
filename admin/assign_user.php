@@ -35,7 +35,7 @@ if( isset( $_REQUEST["action"] ) ) {
 	$assignUser->storeUserDefaultGroup( $assignUser->mUserId, $_REQUEST['default_group'] );
 	$assignUser->load();
 }
-$gBitSmarty->assign_by_ref( 'assignUser', $assignUser );
+$gBitSmarty->assignByRef( 'assignUser', $assignUser );
 
 $listHash = array( 'sort_mode' => 'group_name_asc' );
 $gBitSmarty->assign('groups', $gBitUser->getAllGroups( $listHash ));

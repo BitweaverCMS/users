@@ -31,7 +31,7 @@ if( isset($_REQUEST["newuser"] ) ) {
 			$newUser->storeActionLog( $logHash );
 		}
 	} else {
-		$gBitSmarty->assign_by_ref( 'newUser', $_REQUEST );
+		$gBitSmarty->assignByRef( 'newUser', $_REQUEST );
 		$gBitSmarty->assign( 'errors', $newUser->mErrors );
 	}
 } elseif( isset( $_REQUEST["assume_user"]) && $gBitUser->hasPermission( 'p_users_admin' ) ) {
@@ -205,15 +205,15 @@ if ( defined( 'ROLE_MODEL' ) ) {
 $listHash = $_REQUEST;
 $listHash['max_records'] = !empty( $_REQUEST['max_records'] ) ? $_REQUEST['max_records'] : $gBitSystem->getConfig('max_records');
 $users = $gBitUser->getList( $listHash );
-$gBitSmarty->assign_by_ref('users', $users );
-$gBitSmarty->assign_by_ref('usercount', $listHash["cant"]);
+$gBitSmarty->assignByRef('users', $users );
+$gBitSmarty->assignByRef('usercount', $listHash["cant"]);
 if (isset($listHash["numrows"])) {
 	$listHash['listInfo']["numrows"] = $listHash["numrows"];
 } else {
 	$listHash['listInfo']["numrows"] = 10;
 }
 $listHash['listInfo']["URL"] = USERS_PKG_URL."admin/index.php";
-$gBitSmarty->assign_by_ref('listInfo', $listHash['listInfo']);
+$gBitSmarty->assignByRef('listInfo', $listHash['listInfo']);
 
 if ( defined( 'ROLE_MODEL' ) ) {
 	// invoke edit service for the add user feature

@@ -1,14 +1,9 @@
 <?php
 /**
- * $Header$
+ * my images
  *
- * Copyright (c) 2004 bitweaver.org
- * Copyright (c) 2003 tikwiki.org
- * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * All Rights Reserved. See below for details and a complete list of authors.
- * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
+ * @copyright (c) 2004-15 bitweaver.org
  *
- * $Id$
  * @package users
  * @subpackage functions
  */
@@ -50,7 +45,7 @@ if( !empty( $_REQUEST['store'] )) {
 
 // For some reason, we have to reassign here to make our changes to gBitUser->mInfo present in smarty.
 // dunno why, but this fixes the bug. XOXO spiderr
-$gBitSmarty->assign_by_ref( 'gQueryUser', $gQueryUser );
+$gBitSmarty->assignByRef( 'gQueryUser', $gQueryUser );
 
 $gBitSystem->display( 'bitpackage:users/my_images.tpl', tra( 'Personal Images' ), array( 'display_mode' => 'display' ));
 ?>

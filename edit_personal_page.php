@@ -1,14 +1,9 @@
 <?php
 /**
- * $Header$
+ * personal dashboard
  *
- * Copyright (c) 2004 bitweaver.org
- * Copyright (c) 2003 tikwiki.org
- * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * All Rights Reserved. See below for details and a complete list of authors.
- * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
+ * @copyright (c) 2004-15 bitweaver.org
  *
- * $Id$
  * @package users
  * @subpackage functions
  */
@@ -52,15 +47,15 @@ if(isset($_REQUEST["preview"])) {
 	$gBitUser->mInfo['parsed_data'] = $parsed;
 	/* SPELLCHECKING INITIAL ATTEMPT */
 	//This nice function does all the job!
-	$gBitSmarty->assign_by_ref( 'pageInfo', $gBitUser->mInfo );
+	$gBitSmarty->assignByRef( 'pageInfo', $gBitUser->mInfo );
 	$gBitUser->invokeServices( 'content_preview_function' );
 }
 else {
 	$gBitUser->invokeServices( 'content_edit_function' );
 }
 
-$gBitSmarty->assign_by_ref( 'pageInfo', $gBitUser->mInfo );
-$gBitSmarty->assign_by_ref( 'gContent', $gBitUser );
+$gBitSmarty->assignByRef( 'pageInfo', $gBitUser->mInfo );
+$gBitSmarty->assignByRef( 'gContent', $gBitUser );
 
 $gBitSmarty->assign( 'show_page_bar', 'y' );
 $gBitSystem->setConfig( 'wiki_description', 'n' );
