@@ -41,7 +41,7 @@ class BitPermUser extends BitUser {
 	 * @return void
 	 */
 	function BitPermUser( $pUserId=NULL, $pContentId=NULL ) {
-		BitUser::BitUser( $pUserId, $pContentId );
+		parent::__construct( $pUserId, $pContentId );
 
 		// Permission setup
 		$this->mAdminContentPerm = 'p_users_admin';

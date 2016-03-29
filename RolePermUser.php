@@ -41,7 +41,7 @@ class RolePermUser extends BitUser {
 	 * @return void
 	 */
 	function RolePermUser( $pUserId=NULL, $pContentId=NULL ) {
-		BitUser::BitUser( $pUserId, $pContentId );
+		parent::__construct( $pUserId, $pContentId );
 
 		// Permission setup
 		$this->mAdminContentPerm = 'p_users_admin';
