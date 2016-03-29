@@ -8,7 +8,6 @@
 		{forminput}
 			<input class="form-control" type="text" name="user" id="user" />
 			{if $gBitSystem->isFeatureActive('users_allow_register')}
-				{formhelp note="<a href='`$smarty.const.USERS_PKG_URL`register.php'>Need to register?</a>"}
 			{/if}
 		{/forminput}
 	</div>
@@ -18,7 +17,7 @@
 		{forminput}
 			<input class="form-control" type="password" name="pass" id="pass" />
 			{if $gBitSystem->isFeatureActive('users_forgot_pass')}
-				{formhelp note="<a href='`$smarty.const.USERS_PKG_URL`remind_password.php'>Forgot your password?</a>"}
+				{formhelp note="<a href='`$smarty.const.USERS_PKG_URL`remind_password.php'>Forgot your password?</a> or <a href='`$smarty.const.USERS_PKG_URL`register.php'>Need to register?</a>"}
 			{/if}
 		{/forminput}
 	</div>
