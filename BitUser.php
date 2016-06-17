@@ -74,6 +74,14 @@ class BitUser extends LibertyMime {
 		$this->mContentId = $pContentId;
 	}
 
+	public function __wakeup() {
+		return parent::__wakeup();
+	}
+
+	public function __sleep() {
+		return array_merge( parent::__sleep(), array( 'mUserId', 'mUsername', 'mGroups', 'mTicket', 'mAuth' ) );
+	}
+
 	public function getCacheKey() {
 		$siteCookie = static::getSiteCookieName();
 		if( $this->isRegistered() && !empty( $_COOKIE[$siteCookie] ) ) { 
@@ -1044,7 +1052,7 @@ class BitUser extends LibertyMime {
 			if( $pExpungeContent == 'all' ) {
 				if( $userContent = $this->mDb->getAssoc( "SELECT content_id, content_type_guid FROM `".BIT_DB_PREFIX."liberty_content` WHERE `user_id`=? AND `content_type_guid` != 'bituser'", array( $this->mUserId ) ) ) {
 					foreach( $userContent as $contentId=>$contentTypeGuid ) {
-						if( $delContent = LibertyBase::getLibertyObject( $contentId, $contentTypeGuid ) ) {
+						if( $delContent = static::getLibertyObject( $contentId, $contentTypeGuid ) ) {
 							$delContent->expunge();
 						}
 					}
@@ -2426,7 +2434,7 @@ class BitUser extends LibertyMime {
 		if( empty( $pHash ) && !empty( $this ) && !empty( $this->mInfo )) {
 			$pHash = &$this->mInfo;
 		}
-		return self::getDisplayNameFromHash( $pUseLink, $pHash );
+		return static::getDisplayNameFromHash( $pUseLink, $pHash );
 	}
 
 	/**
