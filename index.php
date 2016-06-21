@@ -12,9 +12,7 @@ global $gQueryUserId, $gBitSystem;
  * required setup
  */
 // Todo: use a different $_SERVER variable to properly determine the active package
-if( !defined( 'ACTIVE_PACKAGE' )) {
-	define( 'ACTIVE_PACKAGE', 'users' );
-}
+$gBitSystem->setActivePackage( 'users' );
 
 require_once( '../kernel/setup_inc.php' );
 
