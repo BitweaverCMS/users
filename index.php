@@ -11,10 +11,9 @@ global $gQueryUserId, $gBitSystem;
 /**
  * required setup
  */
-// Todo: use a different $_SERVER variable to properly determine the active package
-$gBitSystem->setActivePackage( 'users' );
-
 require_once( '../kernel/setup_inc.php' );
+
+$gBitSystem->setActivePackage( 'users' );
 
 // custom userfields
 if( $gBitSystem->getConfig( 'custom_user_fields' )) {
