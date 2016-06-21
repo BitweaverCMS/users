@@ -28,7 +28,7 @@ require_once( USERS_PKG_PATH.'lookup_user_inc.php' );
 if( !empty( $_REQUEST['home'] ) ) {
 	if( $gQueryUser->isValid() && (( $gBitUser->hasPermission( 'p_users_view_user_homepage' ) || $gBitUser->hasPermission( 'p_users_admin' )) || $gQueryUser->mUserId == $gBitUser->mUserId )) {
 		$gQueryUserId = $gQueryUser->mUserId;
-		if( $gQueryUser->isValid() ) {
+		if( !$gBitUser->hasPermission('p_user_admin') && $gQueryUser->isValid() ) {
 			$gBitSmarty->assign( 'gQueryUserId', $gQueryUserId );
 			$gQueryUser->verifyPermission( 'p_users_edit_user_homepage' );
 		}
