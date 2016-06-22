@@ -3,12 +3,18 @@
 #	Uncomment this if mod_rewrites are not working for you. some hosting services have cranky mod_rewrite
 #	RewriteBase		/users/
 
-#	These should pass existing files on through, but do not for some reason. needs to be debugged, 
-#	and then \. can be added to regex's below
-#    RewriteCond %{DOCUMENT_ROOT}%{SCRIPT_FILENAME}  -f [OR]
-#    RewriteCond %{DOCUMENT_ROOT}%{SCRIPT_FILENAME}/index.php    -f
-#    RewriteRule ^/.*        - [L]
+	# default route catcher for *.php in package dir
+	RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI}.php  -f
+	RewriteRule ^(.*?)$					$1.php [L,QSA]
 
+	# pass directories through
+	RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI}  -d
+	RewriteRule ^						- [L,QSA]
+
+#	rule to support users/view/alan
 	RewriteRule		^view/([-A-Za-z0-9_]+)$		index.php?home=$1 [L,QSA]
-	RewriteRule		^([-A-Za-z0-9_]+)$		index.php?home=$1 [L,QSA]
+
+#	rule to support users/grace
+	RewriteRule	^([-A-Za-z0-9_]+)$		index.php?home=$1 [L,QSA]
+
 </IfModule>
