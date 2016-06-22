@@ -127,7 +127,7 @@ class BitPermUser extends BitUser {
 		global $gBitSystem;
 		// keep track of newUser before calling base class
 		$newUser = !$this->isRegistered();
-		$this->mDb->StartTrans();
+		$this->StartTrans();
 		if( BitUser::store( $pParamHash ) && $newUser ) {
 			$defaultGroups = $this->getDefaultGroup();
 			$this->addUserToGroup( $this->mUserId, $defaultGroups );
@@ -148,7 +148,7 @@ class BitPermUser extends BitUser {
 			$pParamHash['upload']['thumbnail'] = FALSE;   // i don't think this does anything - perhaps replace it by setting thumbnail_sizes
 			$this->storeImages( $pParamHash );
 		}
-		$this->mDb->CompleteTrans();
+		$this->CompleteTrans();
 		return( count( $this->mErrors ) == 0 );
 	}
 
@@ -195,7 +195,7 @@ class BitPermUser extends BitUser {
 	function expunge( $pExpungeContent=NULL) {
 		global $gBitSystem, $gBitUser;
 		if( $this->isValid() ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			if( $this->mUserId == $gBitUser->mUserId ) {
 				$this->mDb->RollbackTrans();
 				$gBitSystem->fatalError( tra( 'You cannot delete yourself' ) );
@@ -210,7 +210,7 @@ class BitPermUser extends BitUser {
 				}
 
 				if( parent::expunge( $pExpungeContent ) ) {
-					$this->mDb->CompleteTrans();
+					$this->CompleteTrans();
 					return TRUE;
 				} else {
 					$this->mDb->RollbackTrans();
@@ -587,7 +587,7 @@ class BitPermUser extends BitUser {
 	function storeGroup( &$pParamHash ) {
 		global $gBitSystem;
 		if ($this->verifyGroup( $pParamHash)) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			if( empty( $pParamHash['group_id'] ) ) {
 				$pParamHash['group_id'] = $this->mDb->GenID( 'users_groups_id_seq' );
 				$pParamHash['group_store']['group_id'] = $pParamHash['group_id'];
@@ -607,7 +607,7 @@ class BitPermUser extends BitUser {
 			if( isset( $_REQUEST['batch_set_default'] ) and $_REQUEST['batch_set_default'] == 'on' ) {
 				$gBitUser->batchSetUserDefaultGroup( $pParamHash['group_id'] );
 			}
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 		}
 		return ( count( $this->mErrors ) == 0 );
 	}

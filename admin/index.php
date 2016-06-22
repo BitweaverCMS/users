@@ -127,11 +127,11 @@ if( isset( $_REQUEST["action"] ) ) {
 				$reqUser = new $userClass( $_REQUEST["user_id"] );
 				switch(  $_REQUEST["action"] ){
 					case 'delete':
-						$reqUser->mDb->StartTrans();
+						$reqUser->StartTrans();
 						if( $reqUser->load(TRUE) && $reqUser->expunge( !empty( $_REQUEST['delete_user_content'] ) ? $_REQUEST['delete_user_content'] : NULL ) ) {
 							$feedback['success'][] = tra( 'User deleted' )." <strong>{$userInfo['real_name']} ({$userInfo['login']}) &lt;{$userInfo['email']}&gt;</strong>";
 						}
-						$reqUser->mDb->CompleteTrans();
+						$reqUser->CompleteTrans();
 						break;
 					case 'ban':
 						if( $reqUser->load() && $reqUser->ban() ) {

@@ -127,7 +127,7 @@ class RolePermUser extends BitUser {
 		global $gBitSystem;
 		// keep track of newUser before calling base class
 		$newUser = !$this->isRegistered();
-		$this->mDb->StartTrans();
+		$this->StartTrans();
 		if( BitUser::store( $pParamHash ) && $newUser ) {
 			$defaultRoles = $this->getDefaultRole();
 			$this->addUserToRole( $this->mUserId, $defaultRoles );
@@ -148,7 +148,7 @@ class RolePermUser extends BitUser {
 			$pParamHash['upload']['thumbnail'] = FALSE;   // i don't think this does anything - perhaps replace it by setting thumbnail_sizes
 			$this->storeImages( $pParamHash );
 		}
-		$this->mDb->CompleteTrans();
+		$this->CompleteTrans();
 		return( count( $this->mErrors ) == 0 );
 	}
 
@@ -195,7 +195,7 @@ class RolePermUser extends BitUser {
 	function expunge( $pExpungeContent=NULL) {
 		global $gBitSystem, $gBitUser;
 		if( $this->isValid() ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			if( $this->mUserId == $gBitUser->mUserId ) {
 				$this->mDb->RollbackTrans();
 				$gBitSystem->fatalError( tra( 'You cannot delete yourself' ) );
@@ -210,7 +210,7 @@ class RolePermUser extends BitUser {
 				}
 
 				if( parent::expunge( $pExpungeContent ) ) {
-					$this->mDb->CompleteTrans();
+					$this->CompleteTrans();
 					return TRUE;
 				} else {
 					$this->mDb->RollbackTrans();
@@ -595,7 +595,7 @@ class RolePermUser extends BitUser {
 	function storeRole( &$pParamHash ) {
 		global $gBitSystem;
 		if ($this->verifyRole( $pParamHash)) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			if( empty( $pParamHash['role_id'] ) ) {
 				$pParamHash['role_id'] = $this->mDb->GenID( 'users_roles_id_seq' );
 				$pParamHash['role_store']['role_id'] = $pParamHash['role_id'];
@@ -615,7 +615,7 @@ class RolePermUser extends BitUser {
 			if( isset( $_REQUEST['batch_set_default'] ) and $_REQUEST['batch_set_default'] == 'on' ) {
 				$gBitUser->batchSetUserDefaultRole( $pParamHash['role_id'] );
 			}
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 		}
 		return ( count( $this->mErrors ) == 0 );
 	}

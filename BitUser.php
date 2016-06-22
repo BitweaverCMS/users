@@ -794,7 +794,7 @@ class BitUser extends LibertyMime {
 	 */
 	function store( &$pParamHash ) {
 		if( $this->verify( $pParamHash ) ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			$pParamHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
 
 			if( !empty( $pParamHash['user_store'] ) && count( $pParamHash['user_store'] ) ) {
@@ -823,7 +823,7 @@ class BitUser extends LibertyMime {
 				}
 			}
 
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 
 			$this->load( TRUE );
 		}
@@ -844,7 +844,7 @@ class BitUser extends LibertyMime {
 			return FALSE;
 		}
 		if( $this->verifyUserImport( $pParamHash ) ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			$pParamHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
 			if( !empty( $pParamHash['user_store'] ) && count( $pParamHash['user_store'] ) ) {
 				// lookup and asign the default group for user
@@ -878,7 +878,7 @@ class BitUser extends LibertyMime {
 				}
 			}
 
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 
 			// store any uploaded images
 			$this->storeImages( $pParamHash );
@@ -1046,7 +1046,7 @@ class BitUser extends LibertyMime {
 	 */
 	function expunge( $pExpungeContent = NULL ) {
 		global $gBitSystem;
-		$this->mDb->StartTrans();
+		$this->StartTrans();
 
 		if( !empty( $pExpungeContent ) ) {
 			if( $pExpungeContent == 'all' ) {
@@ -1081,7 +1081,7 @@ class BitUser extends LibertyMime {
 			$logHash['action_log']['title'] = $this->mInfo['login'];
 			$this->mLogs['user_del'] = 'User deleted';
 			$this->storeActionLog( $logHash );
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 			return TRUE;
 		} else {
 			$this->mDb->RollbackTrans();
@@ -1315,7 +1315,7 @@ class BitUser extends LibertyMime {
 
 		$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
 
-		$this->mDb->StartTrans();
+		$this->StartTrans();
 		// Verify user is valid
 		if( $this->validate( $pLogin, $pPassword, $pChallenge, $pResponse )) {
 			$userInfo = $this->getUserInfo( array( $loginCol => $pLogin ));
@@ -1368,7 +1368,7 @@ class BitUser extends LibertyMime {
 				$url = USERS_PKG_URL.'login.php?error=' . urlencode( $this->mErrors['login'] );
 			}
 		}
-		$this->mDb->CompleteTrans();
+		$this->CompleteTrans();
 
 		// check for HTTPS mode and redirect back to non-ssl when not requested, or a  SSL login was forced
 		if( isset( $_SERVER['HTTPS'] ) && strtolower( $_SERVER['HTTPS'] ) == 'on' ) {
@@ -2051,7 +2051,7 @@ class BitUser extends LibertyMime {
 	 */
 	function purgeImage( $pType ) {
 		if( $this->isValid() && @$this->verifyId( $this->mInfo[$pType.'_attachment_id'] ) ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `".$pType."_attachment_id` = NULL WHERE `user_id`=?";
 			$result = $this->mDb->query( $query, array( $this->mUserId ) );
 			if( $this->expungeAttachment( $this->getField( $pType.'_attachment_id' ) ) ) {
@@ -2059,7 +2059,7 @@ class BitUser extends LibertyMime {
 				unset( $this->mInfo[$pType.'_attachment_id'] );
 				unset( $this->mInfo[$pType.'_url'] );
 			}
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 			return TRUE;
 		}
 	}
