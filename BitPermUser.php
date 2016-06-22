@@ -30,7 +30,7 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  */
 class BitPermUser extends BitUser {
 
-	var $mPerms;
+	public $mPerms;
 
 	/**
 	 * BitPermUser Initialise class

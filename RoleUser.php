@@ -43,11 +43,11 @@ define( "ACCOUNT_DISABLED", -6 );
  * @subpackage  BitUser
  */
 class BitUser extends LibertyMime {
-	var $mUserId;
-	var $mUsername;
-	var $mRoles;
-	var $mTicket;
-	var $mAuth;
+	public $mUserId;
+	public $mUsername;
+	public $mRoles;
+	public $mTicket;
+	public $mAuth;
 
 	/**
 	 * Constructor - will automatically load all relevant data if passed a user string

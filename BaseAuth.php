@@ -17,11 +17,11 @@ require_once(UTIL_PKG_PATH . "PHP_Compat/Compat/Function/scandir.php");
  * @subpackage auth
  */
 class BaseAuth {
-	var $mLogin;
-	var $mConfig;
-	var $mInfo;
-	var $mCfg;
-	var $mErrors =array();
+	public $mLogin;
+	public $mConfig;
+	public $mInfo;
+	public $mCfg;
+	public $mErrors =array();
 
 	function __construct($pAuthId) {
 		global $gBitSystem;

@@ -30,7 +30,7 @@ require_once( USERS_PKG_PATH.'/RoleUser.php' );
  */
 class RolePermUser extends BitUser {
 
-	var $mPerms;
+	public $mPerms;
 
 	/**
 	 * RolePermUser Initialise class
