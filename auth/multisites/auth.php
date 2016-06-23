@@ -13,7 +13,7 @@
  */
 class MultisitesAuth extends BaseAuth {
 
-	function MultisitesAuth() {
+	function __construct() {
 		parent::__construct('multisites');
 	}
 

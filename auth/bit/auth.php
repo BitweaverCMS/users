@@ -13,7 +13,7 @@
  */
 class BitAuth extends BaseAuth {
 
-	function BitAuth() {
+	function __construct() {
 		parent::__construct('bit');
 	}
 

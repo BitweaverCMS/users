@@ -56,7 +56,7 @@ class BitUser extends LibertyMime {
 	 * @author Christian Fowler <spider@viovio.com>
 	 * @return returnString
 	 */
-	function BitUser( $pUserId=NULL, $pContentId=NULL ) {
+	function __construct( $pUserId=NULL, $pContentId=NULL ) {
 		parent::__construct();
 		$this->mContentTypeGuid = BITUSER_CONTENT_TYPE_GUID;
 		$this->registerContentType(

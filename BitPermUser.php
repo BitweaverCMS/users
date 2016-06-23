@@ -40,7 +40,7 @@ class BitPermUser extends BitUser {
 	 * @access public
 	 * @return void
 	 */
-	function BitPermUser( $pUserId=NULL, $pContentId=NULL ) {
+	function __construct( $pUserId=NULL, $pContentId=NULL ) {
 		parent::__construct( $pUserId, $pContentId );
 
 		// Permission setup

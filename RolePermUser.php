@@ -40,7 +40,7 @@ class RolePermUser extends BitUser {
 	 * @access public
 	 * @return void
 	 */
-	function RolePermUser( $pUserId=NULL, $pContentId=NULL ) {
+	function __construct( $pUserId=NULL, $pContentId=NULL ) {
 		parent::__construct( $pUserId, $pContentId );
 
 		// Permission setup

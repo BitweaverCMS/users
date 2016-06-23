@@ -22,7 +22,7 @@ if (file_exists(UTIL_PKG_PATH."pear/Auth/Auth.php")) {
  * @subpackage auth
  */
 class LDAPAuth extends BaseAuth {
-	function LDAPAuth() {
+	function __construct() {
 		parent::__construct('ldap');
 	}
 
