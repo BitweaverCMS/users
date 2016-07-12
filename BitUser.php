@@ -74,10 +74,6 @@ class BitUser extends LibertyMime {
 		$this->mContentId = $pContentId;
 	}
 
-	public function __wakeup() {
-		return parent::__wakeup();
-	}
-
 	public function __sleep() {
 		return array_merge( parent::__sleep(), array( 'mUserId', 'mUsername', 'mGroups', 'mTicket', 'mAuth' ) );
 	}
@@ -92,7 +88,8 @@ class BitUser extends LibertyMime {
 	}
 
 	public static function isCacheableClass() {
-		return false;
+		global $gBitSystem;
+		return !$gBitSystem->isLive(); // only cache user objects in test mode for now
 	}
 
 	/**
@@ -100,7 +97,8 @@ class BitUser extends LibertyMime {
 	 * @return boolean if object can be cached
 	 */
 	public function isCacheableObject() {
-		return parent::isCacheableObject() && !$this->isAdmin();
+		global $gBitSystem;
+		return parent::isCacheableObject() && (!$this->isAdmin() || $gBitSystem->isLive()); // Do not cache admin object for live sites per paranoia
 	}
 
 	/**
@@ -2404,7 +2402,7 @@ class BitUser extends LibertyMime {
 				$iHomepage = $pHash['real_name'];
 			}
 			if( empty( $pHash['users_information'] ) ) {
-				$pHash['users_information'] = $gBitSystem->mDb->getOne( "SELECT pref_value FROM liberty_content_prefs lcp INNER JOIN users_users uu ON (lcp.content_id=uu.content_id) WHERE uu.login=? AND pref_name='users_information'", array( $pHash['login'] ), 1, NULL, 86400 );
+				$pHash['users_information'] = $gBitSystem->mDb->getOne( "SELECT pref_value FROM liberty_content_prefs lcp INNER JOIN users_users uu ON (lcp.content_id=uu.content_id) WHERE uu.login=? AND pref_name='users_information'", array( $pHash['login'] ), NULL, NULL, 3600 );
 			}
 
 			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' ) && (empty( $pHash['users_information'] ) || $pHash['users_information'] == 'public') ) {

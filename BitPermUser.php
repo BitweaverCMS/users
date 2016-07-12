@@ -47,6 +47,10 @@ class BitPermUser extends BitUser {
 		$this->mAdminContentPerm = 'p_users_admin';
 	}
 
+	public function __sleep() {
+		return array_merge( parent::__sleep(), array( 'mPerms' ) );
+	}
+
 	public function __wakeup() {
 		parent::__wakeup();
 		if( empty( $this->mPerms ) ) {
