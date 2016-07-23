@@ -68,6 +68,7 @@ class BitPermUser extends BitUser {
 	function assumeUser( $pUserId ) {
 		global $gBitUser;
 		$ret = FALSE;
+
 		// make double sure the current logged in user has permission, check for p_users_admin, not admin, as that is all you need for assuming another user.
 		// this enables creating of a non technical site adminstrators group, eg customer support representatives.
 		if( $gBitUser->hasPermission( 'p_users_admin' ) ) {
@@ -198,6 +199,7 @@ class BitPermUser extends BitUser {
 	 */
 	function expunge( $pExpungeContent=NULL) {
 		global $gBitSystem, $gBitUser;
+		$this->clearFromCache();
 		if( $this->isValid() ) {
 			$this->StartTrans();
 			if( $this->mUserId == $gBitUser->mUserId ) {
@@ -528,6 +530,7 @@ class BitPermUser extends BitUser {
 				}
 			}
 		}
+		$this->clearFromCache();
 		return $result;
 	}
 
@@ -549,6 +552,7 @@ class BitPermUser extends BitUser {
 				$this->mDb->query( $query, array( $pUserId ));
 			}
 		}
+		$this->clearFromCache();
 	}
 
 	/**
