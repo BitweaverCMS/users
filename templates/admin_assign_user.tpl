@@ -46,15 +46,17 @@
 			<div class="form-group">
 				{formlabel label="Groups"}
 				{forminput}
+					<ul>
 					{foreach from=$assignUser->mGroups key=groupId item=group}
 						{if $groupId eq $assignUser->mInfo.default_group_id}<strong>{/if}
-						<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$groupId}">{$group.group_name}</a>
 						{if $groupId eq $assignUser->mInfo.default_group_id}</strong>{/if}
 						{if $groupId != -1}
-							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;tk={$gBitUser->mTicket}">{booticon iname="icon-trash" ipackage="icons" iexplain="remove from group" iforce="icon"}</a>
+							&nbsp;<a class="btn btn-xs btn-danger" href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;tk={$gBitUser->mTicket}">{booticon iname="icon-trash" ipackage="icons" iexplain="remove from group" iforce="icon"}</a>
 						{/if}
+						<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$groupId}">{$group.group_name}</a>
 						<br />
 					{/foreach}
+					</li>
 				{/forminput}
 			</div>
 
