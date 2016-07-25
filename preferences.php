@@ -264,5 +264,3 @@ $gBitSmarty->assignByRef( 'scramblingEmails', $scramblingEmails );
 // edit services
 $editUser->invokeServices( 'content_edit_function' );
 $gBitSystem->display( 'bitpackage:users/user_preferences.tpl', 'Edit User Preferences' , array( 'display_mode' => 'display' ));
-vd( $_SERVER );
-?>
