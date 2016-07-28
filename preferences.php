@@ -115,7 +115,6 @@ if( isset( $_REQUEST["prefs"] )) {
 
 		foreach( $prefs as $pref => $default ) {
 			if( !empty( $_REQUEST[$pref] ) && $_REQUEST[$pref] != $default ) {
-				//vd( "storePreference( $pref, $_REQUEST[$pref], USERS_PKG_NAME )" );
 				$editUser->storePreference( $pref, $_REQUEST[$pref], USERS_PKG_NAME );
 			} else {
 				$editUser->storePreference( $pref, NULL, USERS_PKG_NAME );
@@ -264,3 +263,4 @@ $gBitSmarty->assignByRef( 'scramblingEmails', $scramblingEmails );
 // edit services
 $editUser->invokeServices( 'content_edit_function' );
 $gBitSystem->display( 'bitpackage:users/user_preferences.tpl', 'Edit User Preferences' , array( 'display_mode' => 'display' ));
+
