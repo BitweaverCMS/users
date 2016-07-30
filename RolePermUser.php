@@ -47,6 +47,10 @@ class RolePermUser extends BitUser {
 		$this->mAdminContentPerm = 'p_users_admin';
 	}
 
+	public function __sleep() {
+		return array_merge( parent::__sleep(), array( 'mPerms' ) );
+	}
+
 	public function __wakeup() {
 		parent::__wakeup();
 		if( empty( $this->mPerms ) ) {
@@ -64,6 +68,7 @@ class RolePermUser extends BitUser {
 	function assumeUser( $pUserId ) {
 		global $gBitUser;
 		$ret = FALSE;
+
 		// make double sure the current logged in user has permission, check for p_users_admin, not admin, as that is all you need for assuming another user.
 		// this enables creating of a non technical site adminstrators role, eg customer support representatives.
 		if( $gBitUser->hasPermission( 'p_users_admin' ) ) {
@@ -194,6 +199,7 @@ class RolePermUser extends BitUser {
 	 */
 	function expunge( $pExpungeContent=NULL) {
 		global $gBitSystem, $gBitUser;
+		$this->clearFromCache();
 		if( $this->isValid() ) {
 			$this->StartTrans();
 			if( $this->mUserId == $gBitUser->mUserId ) {
@@ -532,6 +538,7 @@ class RolePermUser extends BitUser {
 				}
 			}
 		}
+		$this->clearFromCache();
 		return $result;
 	}
 
@@ -553,6 +560,7 @@ class RolePermUser extends BitUser {
 				$this->mDb->query( $query, array( $pUserId ));
 			}
 		}
+		$this->clearFromCache();
 	}
 
 	/**

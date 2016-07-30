@@ -74,6 +74,10 @@ class BitUser extends LibertyMime {
 		$this->mContentId = $pContentId;
 	}
 
+	public function __sleep() {
+		return array_merge( parent::__sleep(), array( 'mUserId', 'mUsername', 'mRoles', 'mTicket', 'mAuth' ) );
+	}
+
 	public function getCacheKey() {
 		$siteCookie = static::getSiteCookieName();
 		if( $this->isRegistered() && !empty( $_COOKIE[$siteCookie] ) ) { 
@@ -84,7 +88,8 @@ class BitUser extends LibertyMime {
 	}
 
 	public static function isCacheableClass() {
-		return false;
+		global $gBitSystem;
+		return !$gBitSystem->isLive(); // only cache user objects in test mode for now
 	}
 
 	/**
@@ -92,7 +97,8 @@ class BitUser extends LibertyMime {
 	 * @return boolean if object can be cached
 	 */
 	public function isCacheableObject() {
-		return parent::isCacheableObject() && !$this->isAdmin();
+		global $gBitSystem;
+		return parent::isCacheableObject() && (!$this->isAdmin() || $gBitSystem->isLive()); // Do not cache admin object for live sites per paranoia
 	}
 
 	/**
@@ -114,7 +120,7 @@ class BitUser extends LibertyMime {
 	 * @author Chrstian Fowler <spider@steelsun.com>
 	 * @return returnString
 	 */
-	function load( $pFull=FALSE, $pUserName=NULL ) {
+	function load( $pFull=TRUE, $pUserName=NULL ) {
 		global $gBitSystem;
 		$this->mInfo = NULL;
 		if( isset( $this->mUserId ) ) {
@@ -2426,7 +2432,7 @@ class BitUser extends LibertyMime {
 		if( empty( $pHash ) && !empty( $this ) && !empty( $this->mInfo )) {
 			$pHash = &$this->mInfo;
 		}
-		return self::getDisplayNameFromHash( $pUseLink, $pHash );
+		return static::getDisplayNameFromHash( $pUseLink, $pHash );
 	}
 
 	/**

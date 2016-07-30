@@ -47,15 +47,17 @@
 			<div class="form-group">
 				{formlabel label="Roles"}
 				{forminput}
+					<ul>
 					{foreach from=$assignUser->mRoles key=roleId item=role}
 						{if $roleId eq $assignUser->mInfo.default_role_id}<strong>{/if}
 						<a href="{$smarty.const.USERS_PKG_URL}admin/edit_role.php?role_id={$roleId}">{$role.role_name}</a>
 						{if $roleId eq $assignUser->mInfo.default_role_id}</strong>{/if}
 						{if $roleId != -1}
-							&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_role_user.php?action=removerole&amp;role_id={$roleId}&amp;assign_user={$assignUser->mUserId}">{booticon iname="icon-trash" ipackage="icons" iexplain="remove from role" iforce="icon"}</a>
+							&nbsp;<a class="btn btn-xs btn-danger" href="{$smarty.const.USERS_PKG_URL}admin/assign_role_user.php?action=removerole&amp;role_id={$roleId}&amp;assign_user={$assignUser->mUserId}&amp;tk={$gBitUser->mTicket}">{booticon iname="icon-trash" ipackage="icons" iexplain="remove from role" iforce="icon"}</a>
 						{/if}
 						<br />
 					{/foreach}
+					</ul>
 				{/forminput}
 			</div>
 
