@@ -310,7 +310,7 @@ $gBitInstaller->registerUserPermissions( USERS_PKG_NAME, array(
 	array('p_users_assign_role_perms', 'Can assign permissions to personal roles', 'editors', USERS_PKG_NAME),
 	array('p_users_assign_role_members', 'Can assign users to personal roles', 'registered', USERS_PKG_NAME),
 	array('p_users_role_subroles', 'Can include other roles in roles', 'editors', USERS_PKG_NAME),
-	//array('p_tidbits_create_bookmarks', 'Can create user bookmarksche user bookmarks', 'registered', USERS_PKG_NAME),
+	array('p_users_create_bookmarks', 'Can create user bookmarksche user bookmarks', 'registered', USERS_PKG_NAME),
 	//array('p_tidbits_configure_modules', 'Can configure modules', 'registered', USERS_PKG_NAME),
 	//array('p_tidbits_cache_bookmarks', 'Can cache user bookmarks', 'admin', USERS_PKG_NAME),
 	//array('p_tidbits_use_usermenu', 'Can create items in personal menu', 'registered', USERS_PKG_NAME),

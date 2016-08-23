@@ -1,4 +1,4 @@
-{if $gContent && $gContent->isValid() && $gBitUser->isRegistered() && $gContent->hasService($smarty.const.CONTENT_SERVICE_USERS_FAVS) && $gBitThemes->isJavascriptEnabled()}
+{if $gContent && $gContent->isValid() && $gBitUser->isRegistered() && $gBitUser->hasPermission('p_users_create_bookmarks') && $gContent->hasService($smarty.const.CONTENT_SERVICE_USERS_FAVS)}
 {strip}
 {assign var=isBookmarked value='false'}
 {foreach from=$gBitUser->getFavorites() item=fav}
@@ -36,14 +36,5 @@
 			alert( obj.Status.message );
 		};
 	{/literal} /* ]]> */</script>
-{*
-
-     * var fnWhenDone = function ( pResponse ) {
-     *       alert( pResponse.responseText );
-     *     };
-     *     var ajax = new BitBase.SimpleAjax();
-     *     ajax.connect("mypage.php", "POST", "foo=bar&baz=qux", fnWhenDone);
-     * };
-	 *}
 {/strip}
 {/if}
