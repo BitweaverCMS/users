@@ -31,7 +31,7 @@ if( isset($_REQUEST["newuser"] ) ) {
 			$newUser->storeActionLog( $logHash );
 		}
 	} else {
-		$gBitSmarty->assign_by_ref( 'newUser', $_REQUEST );
+		$gBitSmarty->assignByRef( 'newUser', $_REQUEST );
 		$gBitSmarty->assign( 'errors', $newUser->mErrors );
 	}
 } elseif( isset( $_REQUEST["assume_user"]) && $gBitUser->hasPermission( 'p_users_admin' ) ) {
@@ -127,11 +127,11 @@ if( isset( $_REQUEST["action"] ) ) {
 				$reqUser = new $userClass( $_REQUEST["user_id"] );
 				switch(  $_REQUEST["action"] ){
 					case 'delete':
-						$reqUser->mDb->StartTrans();
+						$reqUser->StartTrans();
 						if( $reqUser->load(TRUE) && $reqUser->expunge( !empty( $_REQUEST['delete_user_content'] ) ? $_REQUEST['delete_user_content'] : NULL ) ) {
 							$feedback['success'][] = tra( 'User deleted' )." <strong>{$userInfo['real_name']} ({$userInfo['login']}) &lt;{$userInfo['email']}&gt;</strong>";
 						}
-						$reqUser->mDb->CompleteTrans();
+						$reqUser->CompleteTrans();
 						break;
 					case 'ban':
 						if( $reqUser->load() && $reqUser->ban() ) {
@@ -147,7 +147,7 @@ if( isset( $_REQUEST["action"] ) ) {
 			} else {
 				switch( $_REQUEST["action"] ){
 					case 'delete':
-						$formHash['input'][] = "<input type='checkbox' name='delete_user_content' value='all' checked='checked'/>".tra( 'Delete all content created by this user' );
+						$formHash['input'][] = "<div class='checkbox'><label><input type='checkbox' name='delete_user_content' value='all' checked='checked'/>".tra( 'Delete all content created by this user' ).'</label></div>';
 						foreach( $gLibertySystem->mContentTypes as $contentTypeGuid => $contentTypeHash ) {
 //							$formHash['input'][] = "<input type='checkbox' name='delete_user_content' checked='checked' value='$contentTypeGuid'/>Delete All User's $gLibertySystem->getContentTypeName($contentTypeHash['content_type_guid'],TRUE)";
 						}
@@ -205,15 +205,15 @@ if ( defined( 'ROLE_MODEL' ) ) {
 $listHash = $_REQUEST;
 $listHash['max_records'] = !empty( $_REQUEST['max_records'] ) ? $_REQUEST['max_records'] : $gBitSystem->getConfig('max_records');
 $users = $gBitUser->getList( $listHash );
-$gBitSmarty->assign_by_ref('users', $users );
-$gBitSmarty->assign_by_ref('usercount', $listHash["cant"]);
+$gBitSmarty->assignByRef('users', $users );
+$gBitSmarty->assignByRef('usercount', $listHash["cant"]);
 if (isset($listHash["numrows"])) {
 	$listHash['listInfo']["numrows"] = $listHash["numrows"];
 } else {
 	$listHash['listInfo']["numrows"] = 10;
 }
 $listHash['listInfo']["URL"] = USERS_PKG_URL."admin/index.php";
-$gBitSmarty->assign_by_ref('listInfo', $listHash['listInfo']);
+$gBitSmarty->assignByRef('listInfo', $listHash['listInfo']);
 
 if ( defined( 'ROLE_MODEL' ) ) {
 	// invoke edit service for the add user feature

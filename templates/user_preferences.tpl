@@ -147,10 +147,10 @@
 						</div>
 
 						<div class="form-group">
-							<label class="checkbox">
+							{forminput label="checkbox"}
 								<input type="checkbox" name="users_double_click" id="users_double_click" {if $editUser->mPrefs.users_double_click eq 'y'}checked="checked"{/if} />Use double-click to edit pages
 								{formhelp note="Enabling this feature will allow you to double click on any wiki page and it will automatically take you to the edit page. Note that this does not work in all browsers."}
-							</label>
+							{/forminput}
 						</div>
 
 						<div class="form-group submit">
@@ -242,10 +242,10 @@
 						</div>
 
 						<div class="form-group">
-							<label class="checkbox">
+							{forminput label="checkbox"}
 								<input type="checkbox" name="tasks_use_dates" id="tasks_use_dates" {if $tasks_use_dates eq 'y'}checked="checked"{/if} />Use dates
 								{formhelp note=""}
-							</label>
+							{/forminput}
 						</div>
 
 						<div class="form-group submit">

@@ -18,7 +18,6 @@
 								{/foreach}
 							</select>
 						</label>
-						<br />
 					{/foreach}
 					{*
 					{if $gBitSystem->getConfig("users_auth_method_`$smarty.section.auth_select_outer.iteration-1`") eq 'tiki'} selected="selected"{/if}
@@ -52,10 +51,10 @@
 							{/if}
 							{formhelp note=$output.note page=$output.page link=$output.link}
 						{else}
-							<label class="checkbox">
+							{forminput label="checkbox"}
 								{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature} {tr}{$output.label}{/tr}
 								{formhelp note=$output.note page=$output.page link=$output.link}
-							</label>
+							{/forminput}
 						{/if}
 					{/forminput}
 				</div>
@@ -66,7 +65,7 @@
 				{forminput}
 
 					<select name="users_validate_email_group" id="users_validate_email_group">
-						<option value="(none)" {if $gBitSystem->getConfig('users_validate_email_group') eq ''} selected="selected"{/if}>(none)</option>
+						<option value="" {if $gBitSystem->getConfig('users_validate_email_group') eq ''} selected="selected"{/if}>(none)</option>
 						{foreach from=$groups item='group'}
 							<option value="{$group.group_id}" {if $gBitSystem->getConfig('users_validate_email_group') eq $group.group_id} selected="selected"{/if}>{$group.group_name}</option>
 						{/foreach}
@@ -138,18 +137,18 @@
 
 			{foreach from=$registerSettings key=feature item=output}
 				<div class="form-group">
-					{forminput}
-						{if $output.type == 'text'}
+					{if $output.type == 'text'}
+						{forminput}
 							{formlabel label=$output.label for=$feature}
 							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
 							{formhelp note=$output.note page=$output.page link=$output.link}
-						{else}
-							<label class="checkbox">
-								{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature} {tr}{$output.label}{/tr}
-								{formhelp note=$output.note page=$output.page link=$output.link}
-							</label>
-						{/if}
-					{/forminput}
+						{/forminput}
+					{else}
+						{forminput label="checkbox"}
+							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature} {tr}{$output.label}{/tr}
+							{formhelp note=$output.note page=$output.page link=$output.link}
+						{/forminput}
+					{/if}
 				</div>
 			{/foreach}
 
@@ -167,18 +166,18 @@
 
 			{foreach from=$httpSettings key=feature item=output}
 				<div class="form-group">
-					{forminput}
-						{if $output.type == 'text'}
+					{if $output.type == 'text'}
+						{forminput}
 							{formlabel label=$output.label for=$feature}
-							<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
+							<input type="text" class="form-control" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
 							{formhelp note=$output.note page=$output.page link=$output.link}
-						{else}
-							<label class="checkbox">
-								{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature} {tr}{$output.label}{/tr}
-								{formhelp note=$output.note page=$output.page link=$output.link}
-							</label>
-						{/if}
-					{/forminput}
+						{/forminput}
+					{else}
+						{forminput label="checkbox"}
+							{html_checkboxes name="$feature" values="y" checked=$gBitSystem->getConfig($feature) labels=false id=$feature} {tr}{$output.label}{/tr}
+							{formhelp note=$output.note page=$output.page link=$output.link}
+						{/forminput}
+					{/if}
 				</div>
 			{/foreach}
 

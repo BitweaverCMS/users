@@ -43,11 +43,11 @@ define( "ACCOUNT_DISABLED", -6 );
  * @subpackage  BitUser
  */
 class BitUser extends LibertyMime {
-	var $mUserId;
-	var $mUsername;
-	var $mGroups;
-	var $mTicket;
-	var $mAuth;
+	public $mUserId;
+	public $mUsername;
+	public $mGroups;
+	public $mTicket;
+	public $mAuth;
 
 	/**
 	 * Constructor - will automatically load all relevant data if passed a user string
@@ -56,7 +56,7 @@ class BitUser extends LibertyMime {
 	 * @author Christian Fowler <spider@viovio.com>
 	 * @return returnString
 	 */
-	function BitUser( $pUserId=NULL, $pContentId=NULL ) {
+	function __construct( $pUserId=NULL, $pContentId=NULL ) {
 		parent::__construct();
 		$this->mContentTypeGuid = BITUSER_CONTENT_TYPE_GUID;
 		$this->registerContentType(
@@ -74,6 +74,10 @@ class BitUser extends LibertyMime {
 		$this->mContentId = $pContentId;
 	}
 
+	public function __sleep() {
+		return array_merge( parent::__sleep(), array( 'mUserId', 'mUsername', 'mGroups', 'mTicket', 'mAuth' ) );
+	}
+
 	public function getCacheKey() {
 		$siteCookie = static::getSiteCookieName();
 		if( $this->isRegistered() && !empty( $_COOKIE[$siteCookie] ) ) { 
@@ -84,7 +88,8 @@ class BitUser extends LibertyMime {
 	}
 
 	public static function isCacheableClass() {
-		return false;
+		global $gBitSystem;
+		return !$gBitSystem->isLive(); // only cache user objects in test mode for now
 	}
 
 	/**
@@ -92,7 +97,8 @@ class BitUser extends LibertyMime {
 	 * @return boolean if object can be cached
 	 */
 	public function isCacheableObject() {
-		return parent::isCacheableObject() && !$this->isAdmin();
+		global $gBitSystem;
+		return parent::isCacheableObject() && (!$this->isAdmin() || $gBitSystem->isLive()); // Do not cache admin object for live sites per paranoia
 	}
 
 	/**
@@ -786,7 +792,7 @@ class BitUser extends LibertyMime {
 	 */
 	function store( &$pParamHash ) {
 		if( $this->verify( $pParamHash ) ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			$pParamHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
 
 			if( !empty( $pParamHash['user_store'] ) && count( $pParamHash['user_store'] ) ) {
@@ -815,7 +821,7 @@ class BitUser extends LibertyMime {
 				}
 			}
 
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 
 			$this->load( TRUE );
 		}
@@ -836,7 +842,7 @@ class BitUser extends LibertyMime {
 			return FALSE;
 		}
 		if( $this->verifyUserImport( $pParamHash ) ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			$pParamHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
 			if( !empty( $pParamHash['user_store'] ) && count( $pParamHash['user_store'] ) ) {
 				// lookup and asign the default group for user
@@ -870,7 +876,7 @@ class BitUser extends LibertyMime {
 				}
 			}
 
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 
 			// store any uploaded images
 			$this->storeImages( $pParamHash );
@@ -1038,13 +1044,13 @@ class BitUser extends LibertyMime {
 	 */
 	function expunge( $pExpungeContent = NULL ) {
 		global $gBitSystem;
-		$this->mDb->StartTrans();
+		$this->StartTrans();
 
 		if( !empty( $pExpungeContent ) ) {
 			if( $pExpungeContent == 'all' ) {
 				if( $userContent = $this->mDb->getAssoc( "SELECT content_id, content_type_guid FROM `".BIT_DB_PREFIX."liberty_content` WHERE `user_id`=? AND `content_type_guid` != 'bituser'", array( $this->mUserId ) ) ) {
 					foreach( $userContent as $contentId=>$contentTypeGuid ) {
-						if( $delContent = LibertyBase::getLibertyObject( $contentId, $contentTypeGuid ) ) {
+						if( $delContent = static::getLibertyObject( $contentId, $contentTypeGuid ) ) {
 							$delContent->expunge();
 						}
 					}
@@ -1073,7 +1079,7 @@ class BitUser extends LibertyMime {
 			$logHash['action_log']['title'] = $this->mInfo['login'];
 			$this->mLogs['user_del'] = 'User deleted';
 			$this->storeActionLog( $logHash );
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 			return TRUE;
 		} else {
 			$this->mDb->RollbackTrans();
@@ -1307,7 +1313,7 @@ class BitUser extends LibertyMime {
 
 		$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
 
-		$this->mDb->StartTrans();
+		$this->StartTrans();
 		// Verify user is valid
 		if( $this->validate( $pLogin, $pPassword, $pChallenge, $pResponse )) {
 			$userInfo = $this->getUserInfo( array( $loginCol => $pLogin ));
@@ -1360,7 +1366,7 @@ class BitUser extends LibertyMime {
 				$url = USERS_PKG_URL.'login.php?error=' . urlencode( $this->mErrors['login'] );
 			}
 		}
-		$this->mDb->CompleteTrans();
+		$this->CompleteTrans();
 
 		// check for HTTPS mode and redirect back to non-ssl when not requested, or a  SSL login was forced
 		if( isset( $_SERVER['HTTPS'] ) && strtolower( $_SERVER['HTTPS'] ) == 'on' ) {
@@ -1639,7 +1645,7 @@ class BitUser extends LibertyMime {
 				}
 				if( !empty( $col ) ) {
 					$query = "SELECT  uu.* FROM `".BIT_DB_PREFIX."users_users` uu LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lc.`content_id`=uu.`content_id`) WHERE $col = ?";
-					$ret = $this->mDb->getRow( $query, array( $val ));
+					$ret = $this->mDb->getRow( $query, array( $val ), 600 );
 				}
 			}
 		}
@@ -2050,7 +2056,7 @@ class BitUser extends LibertyMime {
 	 */
 	function purgeImage( $pType ) {
 		if( $this->isValid() && @$this->verifyId( $this->mInfo[$pType.'_attachment_id'] ) ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `".$pType."_attachment_id` = NULL WHERE `user_id`=?";
 			$result = $this->mDb->query( $query, array( $this->mUserId ) );
 			if( $this->expungeAttachment( $this->getField( $pType.'_attachment_id' ) ) ) {
@@ -2058,7 +2064,7 @@ class BitUser extends LibertyMime {
 				unset( $this->mInfo[$pType.'_attachment_id'] );
 				unset( $this->mInfo[$pType.'_url'] );
 			}
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 			return TRUE;
 		}
 	}
@@ -2363,7 +2369,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return get the users display name
 	 */
-	public static function getTitleFromHash( $pHash, $pDefault=TRUE ) {
+	public static function getTitleFromHash( &$pHash, $pDefault=TRUE ) {
 		return BitUser::getDisplayNameFromHash( FALSE, $pHash );
 	}
 
@@ -2402,6 +2408,7 @@ class BitUser extends LibertyMime {
 				// this won't work right now, we need to alter userslib::interpret_home() to interpret a real name
 				$iHomepage = $pHash['real_name'];
 			}
+
 			if( empty( $pHash['users_information'] ) && !empty( $pHash['login'] ) ) {
 				$pHash['users_information'] = $gBitSystem->mDb->getOne( "SELECT pref_value FROM liberty_content_prefs lcp INNER JOIN users_users uu ON (lcp.content_id=uu.content_id) WHERE uu.login=? AND pref_name='users_information'", array( $pHash['login'] ), 1, NULL, 86400 );
 			}
@@ -2433,7 +2440,7 @@ class BitUser extends LibertyMime {
 		if( empty( $pHash ) && !empty( $this ) && !empty( $this->mInfo )) {
 			$pHash = &$this->mInfo;
 		}
-		return self::getDisplayNameFromHash( $pUseLink, $pHash );
+		return static::getDisplayNameFromHash( $pUseLink, $pHash );
 	}
 
 	/**

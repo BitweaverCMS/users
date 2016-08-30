@@ -150,7 +150,7 @@
 
 			{if $gBitSystem->isFeatureActive( 'reg_portrait' )}
 				<div class="form-group">
-					{formlabel label="Self Portrait" for="user_portrait_file"}
+					{formlabel label="Profile Picture" for="user_portrait_file"}
 					{forminput}
 						<input type="file" class="form-control" name="user_portrait_file" id="user_portrait_file" />
 						{formhelp note="Upload a personal photo to be displayed on your personal page."}
@@ -174,9 +174,9 @@
 				{formlabel label=$output.label for=$op_id}
 				{forminput}
 					{if $output.type == 'checkbox'}
-						<label class="checkbox">
+						{forminput label="checkbox"}
 							{html_checkboxes name="$op_name" values="y" selected=$output.value labels=false id=$op_id}
-						</label>
+						{/forminput}
 					{elseif $output.type == 'option'}
 						<select name="{$op_name}" id="{$op_id}">
 							{foreach from=$output.options item='op_text' key='op_value'}

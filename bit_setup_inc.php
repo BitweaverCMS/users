@@ -78,7 +78,9 @@ if( $gBitSystem->isFeatureActive( 'users_remember_me' )) {
 // This way, nuking rows in the users_cnxn table can log people out and is much more reliable than SESSIONS
 global $gShellScript;
 if( empty( $gShellScript ) ) {
-	session_start();
+	if (session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
 }
 
 // Init USER AGENT if empty so reliant methods don't need gobs of empty checking
@@ -121,7 +123,7 @@ if( empty( $gBitUser ) || !$gBitUser->isValid() ) {
 	}
 }
 
-$gBitSmarty->assign_by_ref( 'gBitUser', $gBitUser );
+$gBitSmarty->assignByRef( 'gBitUser', $gBitUser );
 
 // If we are processing a login then do not generate the challenge
 // if we are in any other case then yes.

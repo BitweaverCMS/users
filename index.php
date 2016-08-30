@@ -11,12 +11,9 @@ global $gQueryUserId, $gBitSystem;
 /**
  * required setup
  */
-// Todo: use a different $_SERVER variable to properly determine the active package
-if( !defined( 'ACTIVE_PACKAGE' )) {
-	define( 'ACTIVE_PACKAGE', 'users' );
-}
-
 require_once( '../kernel/setup_inc.php' );
+
+$gBitSystem->setActivePackage( 'users' );
 
 // custom userfields
 if( $gBitSystem->getConfig( 'custom_user_fields' )) {
@@ -31,7 +28,7 @@ require_once( USERS_PKG_PATH.'lookup_user_inc.php' );
 if( !empty( $_REQUEST['home'] ) ) {
 	if( $gQueryUser->isValid() && (( $gBitUser->hasPermission( 'p_users_view_user_homepage' ) || $gBitUser->hasPermission( 'p_users_admin' )) || $gQueryUser->mUserId == $gBitUser->mUserId )) {
 		$gQueryUserId = $gQueryUser->mUserId;
-		if( $gQueryUser->isValid() ) {
+		if( !$gBitUser->hasPermission('p_user_admin') && $gQueryUser->isValid() ) {
 			$gBitSmarty->assign( 'gQueryUserId', $gQueryUserId );
 			$gQueryUser->verifyPermission( 'p_users_edit_user_homepage' );
 		}
@@ -73,7 +70,7 @@ if( !empty( $_REQUEST['home'] ) ) {
 			// now that we have all the offsets, we can get the content list
 			include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
 
-			//$gBitSmarty->assign_by_ref('offset', $offset);
+			//$gBitSmarty->assignByRef('offset', $offset);
 			$gBitSmarty->assign( 'contentSelect', $contentSelect );
 			$gBitSmarty->assign( 'contentTypes', $contentTypes );
 			$gBitSmarty->assign( 'contentList', $contentList );
@@ -104,8 +101,8 @@ if( !empty( $_REQUEST['home'] ) ) {
 } else {
 	$gBitSystem->verifyPermission( 'p_users_view_user_list' );
 	$users = $gQueryUser->getList( $_REQUEST );
-	$gBitSmarty->assign_by_ref( 'users', $users );
-	$gBitSmarty->assign_by_ref( 'usercount', $_REQUEST["cant"] );
+	$gBitSmarty->assignByRef( 'users', $users );
+	$gBitSmarty->assignByRef( 'usercount', $_REQUEST["cant"] );
 	// display an error message
 	if( !empty( $_REQUEST['home'] )) {
 		$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_GONE );
@@ -113,8 +110,8 @@ if( !empty( $_REQUEST['home'] ) ) {
 		$gBitSmarty->assign( 'feedback', $feedback );
 	}
 	$_REQUEST['listInfo']["URL"] = USERS_PKG_URL."index.php";
-	$gBitSmarty->assign_by_ref( 'control', $_REQUEST['listInfo'] );
-	$gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
+	$gBitSmarty->assignByRef( 'control', $_REQUEST['listInfo'] );
+	$gBitSmarty->assignByRef( 'listInfo', $_REQUEST['listInfo'] );
 	$browserTitle = $gBitSystem->getConfig( 'site_title' ).' '.tra( 'Members' );
 	$centerDisplay = 'bitpackage:users/index_list.tpl';
 }

@@ -42,9 +42,9 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 	}
 } elseif( isset($_REQUEST["members"] ) ) {
 	$groupInfo = $gBitUser->getGroupInfo( $_REQUEST["members"] );
-	$gBitSmarty->assign_by_ref( 'groupInfo', $groupInfo );
+	$gBitSmarty->assignByRef( 'groupInfo', $groupInfo );
 	$groupMembers = $gBitUser->getGroupUsers( $_REQUEST["members"] );
-	$gBitSmarty->assign_by_ref( 'groupMembers', $groupMembers );
+	$gBitSmarty->assignByRef( 'groupMembers', $groupMembers );
 	$mid = "bitpackage:users/group_list_members.tpl";
 	$gBitSystem->setBrowserTitle( tra( 'Group Members' ).': '.$groupInfo['group_name'] );
 } elseif( isset($_REQUEST["save"] ) ) {
@@ -113,7 +113,7 @@ if( !empty( $_REQUEST["cancel"] ) ) {
 
 if( !empty( $_REQUEST['group_id'] ) || (!empty( $_REQUEST["action"] ) && $_REQUEST["action"] == 'create' ) ) {
 	$permPackages = $gBitUser->getPermissionPackages();
-	$gBitSmarty->assign_by_ref( 'permPackages', $permPackages );
+	$gBitSmarty->assignByRef( 'permPackages', $permPackages );
 
 	// get grouplist separately from the $users stuff to avoid splitting of data due to pagination
 	$listHash = array( 'sort_mode' => 'group_name_asc' );
@@ -144,9 +144,9 @@ if( empty( $mid ) ) {
 		$groupInfo = $gBitUser->getGroupInfo( $_REQUEST['group_id'] );
 
 		$defaultGroupId = $gBitSystem->getConfig( 'default_home_group' );
-		$gBitSmarty->assign_by_ref( 'defaultGroupId', $defaultGroupId );
-		$gBitSmarty->assign_by_ref( 'groupInfo', $groupInfo );
-		$gBitSmarty->assign_by_ref( 'allPerms', $allPerms );
+		$gBitSmarty->assignByRef( 'defaultGroupId', $defaultGroupId );
+		$gBitSmarty->assignByRef( 'groupInfo', $groupInfo );
+		$gBitSmarty->assignByRef( 'allPerms', $allPerms );
 
 		$gBitSystem->setBrowserTitle( tra( 'Admininster Group' ).': '.$groupInfo['group_name'] );
 		$mid = 'bitpackage:users/admin_group_edit.tpl';

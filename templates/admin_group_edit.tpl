@@ -51,20 +51,20 @@
 					</div>
 
 					<div class="form-group">
-						<label class="checkbox">
+						{forminput label="checkbox"}
 							<input type="checkbox" id="default_home" name="default_home_group" {if $groupInfo.group_id eq $defaultGroupId}checked="checked"{/if} value="y" />Default home page
-						</label>
-						{formhelp note="This is the home page if a user belongs to many groups. Only one group may be the default home. If none is selected, users/my.php is the default."}
+							{formhelp note="This is the home page if a user belongs to many groups. Only one group may be the default home. If none is selected, users/my.php is the default."}
+						{/forminput}
 
-						<label class="checkbox">
+						{forminput label="checkbox"}
 							<input type="checkbox" name="is_default" value="y" {if $groupInfo.is_default eq 'y'}checked="checked"{/if} id="is_default" />Auto members
-						</label>
-						{formhelp note="Users are automatically added to this group when registering at your site."}
+							{formhelp note="Users are automatically added to this group when registering at your site."}
+						{/forminput}
 
-						<label class="checkbox">
+						{forminput label="checkbox"}
 							<input type="checkbox" name="is_public" value="y" {if $groupInfo.is_public eq 'y'}checked="checked"{/if} id="is_public" />Is public
-						</label>
-						{formhelp note="A user will be able to select this group at registration."}
+							{formhelp note="A user will be able to select this group at registration."}
+						{/forminput}
 					</div>
 
 					<div class="form-group submit">

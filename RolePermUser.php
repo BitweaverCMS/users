@@ -29,32 +29,38 @@ require_once( USERS_PKG_PATH.'/RoleUser.php' );
  * @subpackage  RolePermUser
  */
 class RolePermUser extends BitUser {
-	// change this to an email address to receive debug emails from the LDAP code
-	// does this work? - xing - Saturday Oct 18, 2008   09:47:20 CEST
-	var $debug = FALSE;
 
-	// we use these to cache data
-	var $cUserRoles = array();
-	var $cRolePerms = array( array() );
+	public $mPerms;
 
 	/**
 	 * RolePermUser Initialise class
-	 *
+	 * 
 	 * @param numeric $pUserId User ID of the user we wish to load
 	 * @param numeric $pContentId Content ID of the user we wish to load
 	 * @access public
 	 * @return void
 	 */
-	function RolePermUser( $pUserId=NULL, $pContentId=NULL ) {
-		BitUser::BitUser( $pUserId, $pContentId );
+	function __construct( $pUserId=NULL, $pContentId=NULL ) {
+		parent::__construct( $pUserId, $pContentId );
 
 		// Permission setup
 		$this->mAdminContentPerm = 'p_users_admin';
 	}
 
+	public function __sleep() {
+		return array_merge( parent::__sleep(), array( 'mPerms' ) );
+	}
+
+	public function __wakeup() {
+		parent::__wakeup();
+		if( empty( $this->mPerms ) ) {
+			$this->loadPermissions();
+		}
+	}
+
 	/**
 	 * assumeUser Assume the identity of anothre user - Only admins may do this
-	 *
+	 * 
 	 * @param numeric $pUserId User ID of the user you want to hijack
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
@@ -62,6 +68,7 @@ class RolePermUser extends BitUser {
 	function assumeUser( $pUserId ) {
 		global $gBitUser;
 		$ret = FALSE;
+
 		// make double sure the current logged in user has permission, check for p_users_admin, not admin, as that is all you need for assuming another user.
 		// this enables creating of a non technical site adminstrators role, eg customer support representatives.
 		if( $gBitUser->hasPermission( 'p_users_admin' ) ) {
@@ -99,7 +106,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * sanitizeUserInfo Used to remove sensitive information from $this->mInfo when it is unneccessary (i.e. $gQueryUser)
-	 *
+	 * 
 	 * @access public
 	 * @return void
 	 */
@@ -115,9 +122,9 @@ class RolePermUser extends BitUser {
 	}
 
 	/**
-	 * store
-	 *
-	 * @param array $pParamHash
+	 * store 
+	 * 
+	 * @param array $pParamHash 
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -125,7 +132,7 @@ class RolePermUser extends BitUser {
 		global $gBitSystem;
 		// keep track of newUser before calling base class
 		$newUser = !$this->isRegistered();
-		$this->mDb->StartTrans();
+		$this->StartTrans();
 		if( BitUser::store( $pParamHash ) && $newUser ) {
 			$defaultRoles = $this->getDefaultRole();
 			$this->addUserToRole( $this->mUserId, $defaultRoles );
@@ -146,15 +153,15 @@ class RolePermUser extends BitUser {
 			$pParamHash['upload']['thumbnail'] = FALSE;   // i don't think this does anything - perhaps replace it by setting thumbnail_sizes
 			$this->storeImages( $pParamHash );
 		}
-		$this->mDb->CompleteTrans();
+		$this->CompleteTrans();
 		return( count( $this->mErrors ) == 0 );
 	}
 
 	/**
 	 * roleExists work out if a given role exists
-	 *
+	 * 
 	 * @param string $pRoleName
-	 * @param numeric $pUserId
+	 * @param numeric $pUserId 
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -192,8 +199,9 @@ class RolePermUser extends BitUser {
 	 */
 	function expunge( $pExpungeContent=NULL) {
 		global $gBitSystem, $gBitUser;
+		$this->clearFromCache();
 		if( $this->isValid() ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			if( $this->mUserId == $gBitUser->mUserId ) {
 				$this->mDb->RollbackTrans();
 				$gBitSystem->fatalError( tra( 'You cannot delete yourself' ) );
@@ -208,7 +216,7 @@ class RolePermUser extends BitUser {
 				}
 
 				if( parent::expunge( $pExpungeContent ) ) {
-					$this->mDb->CompleteTrans();
+					$this->CompleteTrans();
 					return TRUE;
 				} else {
 					$this->mDb->RollbackTrans();
@@ -226,8 +234,8 @@ class RolePermUser extends BitUser {
 	// =-=-=-=-=-=-=-=-=-=-=-= Role Functions =-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 	/**
 	 * loadRoles load roles into $this->mRoles
-	 *
-	 * @param boolean $pForceRefresh
+	 * 
+	 * @param boolean $pForceRefresh 
 	 * @access public
 	 * @return void
 	 */
@@ -239,7 +247,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * isInRole work out if a given user is assigned to a role
-	 *
+	 * 
 	 * @param mixed $pRoleMixed Role ID or Role Name (deprecated)
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
@@ -265,7 +273,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * getAllRoless Get a list of all Roles
-	 *
+	 * 
 	 * @param array $pListHash List Hash
 	 * @access public
 	 * @return array of roles
@@ -331,8 +339,8 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * getAllUserRoles
-	 *
-	 * @param numeric $pUserId
+	 * 
+	 * @param numeric $pUserId 
 	 * @access public
 	 * @return array of roles a user belongs to
 	 */
@@ -350,7 +358,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * expungeRole remove a role
-	 *
+	 * 
 	 * @param numeric $pRoleId
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
@@ -370,7 +378,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * getDefaultRole get the default role of a given user
-	 *
+	 * 
 	 * @param array $pRoleId pass in a Role ID to make conditional function
 	 * @access public
 	 * @return Default Role ID if one is set
@@ -387,7 +395,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * getRoleUsers Get a list of users who share a given role id
-	 *
+	 * 
 	 * @param array $pRoleId
 	 * @access public
 	 * @return list of users who are in the role id
@@ -407,7 +415,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * getHomeRole get the URL where a user of that role should be sent
-	 *
+	 * 
 	 * @param array $pRoleId
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
@@ -423,8 +431,8 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * storeUserDefaultRole
-	 *
-	 * @param array $pUserId
+	 * 
+	 * @param array $pUserId 
 	 * @param array $pRoleId
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
@@ -438,7 +446,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * batchAssignUsersToRole assign all users to a given role
-	 *
+	 * 
 	 * @param array $pRoleId
 	 * @access public
 	 * @return void
@@ -457,7 +465,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * batchSetUserDefaultRole
-	 *
+	 * 
 	 * @param array $pRoleId
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
@@ -473,7 +481,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * getRoleInfo
-	 *
+	 * 
 	 * @param array $pRoleId
 	 * @access public
 	 * @return role information
@@ -498,7 +506,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * addUserToRole Adds user pUserId to role(s) pRoleMixed.
-	 *
+	 * 
 	 * @param numeric $pUserId User ID
 	 * @param mixed $pRoleMixed A single role ID or an array of role IDs
 	 * @access public
@@ -517,9 +525,11 @@ class RolePermUser extends BitUser {
 			$currentUserRoles = $this->getRoles( $pUserId );
 			foreach( $addRoles AS $roleId ) {
 				$isInRole = FALSE;
-				foreach( $currentUserRoles as $curRoleId => $curRoleInfo ) {
-					if( $curRoleId == $roleId ) {
-						$isInRole = TRUE;
+				if( $currentUserRoles ) {
+					foreach( $currentUserRoles as $curRoleId => $curRoleInfo ) {
+						if( $curRoleId == $roleId ) {
+							$isInRole = TRUE;
+						}
 					}
 				}
 				if( !$isInRole ) {
@@ -528,13 +538,14 @@ class RolePermUser extends BitUser {
 				}
 			}
 		}
+		$this->clearFromCache();
 		return $result;
 	}
 
 	/**
 	 * removeUserFromRole
-	 *
-	 * @param array $pUserId
+	 * 
+	 * @param array $pUserId 
 	 * @param array $pRoleId
 	 * @access public
 	 * @return void
@@ -549,12 +560,13 @@ class RolePermUser extends BitUser {
 				$this->mDb->query( $query, array( $pUserId ));
 			}
 		}
+		$this->clearFromCache();
 	}
 
 	/**
 	 * verifyRole
-	 *
-	 * @param array $pParamHash
+	 * 
+	 * @param array $pParamHash 
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -583,15 +595,15 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * storeRole
-	 *
-	 * @param array $pParamHash
+	 * 
+	 * @param array $pParamHash 
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
 	function storeRole( &$pParamHash ) {
 		global $gBitSystem;
 		if ($this->verifyRole( $pParamHash)) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			if( empty( $pParamHash['role_id'] ) ) {
 				$pParamHash['role_id'] = $this->mDb->GenID( 'users_roles_id_seq' );
 				$pParamHash['role_store']['role_id'] = $pParamHash['role_id'];
@@ -611,16 +623,33 @@ class RolePermUser extends BitUser {
 			if( isset( $_REQUEST['batch_set_default'] ) and $_REQUEST['batch_set_default'] == 'on' ) {
 				$gBitUser->batchSetUserDefaultRole( $pParamHash['role_id'] );
 			}
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 		}
 		return ( count( $this->mErrors ) == 0 );
 	}
 
 	/**
+	 * getRoleNameFromId
+	 * 
+	 * @param array $pRoleId 
+	 * @param array $pColumns 
+	 * @access public
+	 * @return array of group data
+	 */
+	public static function getRoleNameFromId( $pRoleId ) {
+		$ret = '';
+		if( static::verifyId( $pRoleId ) ) {
+			global $gBitDb;
+			$ret = $gBitDb->getOne( "SELECT `role_name` FROM `".BIT_DB_PREFIX."users_roles` WHERE `role_id`=?", array( $pRoleId ) );
+		}
+		return $ret;
+	}
+
+	/**
 	 * getRoleUserData
-	 *
+	 * 
 	 * @param array $pRoleId
-	 * @param array $pColumns
+	 * @param array $pColumns 
 	 * @access public
 	 * @return array of role data
 	 */
@@ -646,8 +675,8 @@ class RolePermUser extends BitUser {
 
 	// =-=-=-=-=-=-=-=-=-=-=-= PERMISSION FUNCTIONS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 	/**
-	 * loadPermissions
-	 *
+	 * loadPermissions 
+	 * 
 	 * @access public
 	 * @return TRUE on success, FALSE if no perms were loaded
 	 */
@@ -674,8 +703,8 @@ class RolePermUser extends BitUser {
 	}
 
 	/**
-	 * getUnassignedPerms
-	 *
+	 * getUnassignedPerms 
+	 * 
 	 * @access public
 	 * @return array of permissions that have not been assigned to any role yet
 	 */
@@ -689,9 +718,9 @@ class RolePermUser extends BitUser {
 	}
 
 	/**
-	 * isAdmin
-	 *
-	 * @param array $pCheckTicket
+	 * isAdmin 
+	 * 
+	 * @param array $pCheckTicket 
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
@@ -702,7 +731,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * hasPermission check to see if a user has a given permission
-	 *
+	 * 
 	 * @param array $pPerm Perm name
 	 * @access public
 	 * @return TRUE if the user has a permission, FALSE if they don't
@@ -718,7 +747,7 @@ class RolePermUser extends BitUser {
 	}
 
 	/**
-	 * verifyPermission check if a user has a given permission and if not
+	 * verifyPermission check if a user has a given permission and if not 
 	 * it will display the error template and die()
 	 * @param $pPermission value of a given permission
 	 * @return none
@@ -735,7 +764,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * getRolePermissions
-	 *
+	 * 
 	 * @param array $pRoleId Role id, if unset, all roles are returned
 	 * @param string $pPackage permissions to give role, if unset, all permissions are returned
 	 * @param string $find search for a particular permission
@@ -800,7 +829,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * assignLevelPermissions Assign the permissions of a given level to a given role
-	 *
+	 * 
 	 * @param array $pRoleId Role we want to assign permissions to
 	 * @param array $pLevel permission level we wish to assign from
 	 * @param array $pPackage limit set of permissions to a given package
@@ -816,16 +845,17 @@ class RolePermUser extends BitUser {
 				array_push( $bindvars, $pPackage );
 			}
 			$query = "SELECT `perm_name` FROM `".BIT_DB_PREFIX."users_permissions` WHERE `perm_level` = ? $whereSql";
-			$result = $this->mDb->query( $query, $bindvars );
-			while( $row = $result->fetchRow() ) {
-				$this->assignPermissionToRole( $row['perm_name'], $pRoleId );
+			if( $result = $this->mDb->query( $query, $bindvars ) ) {
+				while( $row = $result->fetchRow() ) {
+					$this->assignPermissionToRole( $row['perm_name'], $pRoleId );
+				}
 			}
 		}
 	}
 
 	/**
 	 * getPermissionPackages Get a list of packages that have their own set of permissions
-	 *
+	 * 
 	 * @access public
 	 * @return array of packages
 	 */
@@ -835,8 +865,8 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * assignPermissionToRole
-	 *
-	 * @param array $perm
+	 * 
+	 * @param array $perm 
 	 * @param array $pRoleId
 	 * @access public
 	 * @return TRUE on success
@@ -853,7 +883,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * removePermissionFromRole
-	 *
+	 * 
 	 * @param string $pPerm Perm name
 	 * @param numeric $pRoleId Role ID
 	 * @access public
@@ -869,7 +899,7 @@ class RolePermUser extends BitUser {
 
 	/**
 	 * storeRegistrationChoice
-	 *
+	 * 
 	 * @param mixed $pRoleMixed A single role ID or an array of role IDs
 	 * @param array $pValue Value you wish to store - use NULL to delete a value
 	 * @access public

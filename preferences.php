@@ -1,14 +1,9 @@
 <?php
 /**
- * $Header$
+ * user preferences
  *
- * Copyright (c) 2004 bitweaver.org
- * Copyright (c) 2003 tikwiki.org
- * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * All Rights Reserved. See below for details and a complete list of authors.
- * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
+ * @copyright (c) 2004-15 bitweaver.org
  *
- * $Id$
  * @package users
  * @subpackage functions
  */
@@ -28,7 +23,7 @@ $feedback = array();
 // set up the user we're editing
 if( !empty( $_REQUEST["view_user"] ) && $_REQUEST["view_user"] <> $gBitUser->mUserId ) {
 	$gBitSystem->verifyPermission( 'p_users_admin' );
-	$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+	$userClass = $gBitSystem->getConfig( 'user_class', (defined('ROLE_MODEL') ) ?  'RolePermUser' : 'BitPermUser' );
 	$editUser = new $userClass( $_REQUEST["view_user"] );
 	$editUser->load( TRUE );
 	$gBitSmarty->assign('view_user', $_REQUEST["view_user"]);
@@ -81,7 +76,7 @@ if( $gBitSystem->getConfig( 'users_themes' ) == 'y' ) {
 		$assignStyle = $_REQUEST["style"];
 	}
 	$styles = $gBitThemes->getStyles( NULL, TRUE, TRUE );
-	$gBitSmarty->assign_by_ref( 'styles', $styles );
+	$gBitSmarty->assignByRef( 'styles', $styles );
 
 	if( !isset( $_REQUEST["style"] )) {
 		$assignStyle = $editUser->getPreference( 'theme' );
@@ -120,7 +115,6 @@ if( isset( $_REQUEST["prefs"] )) {
 
 		foreach( $prefs as $pref => $default ) {
 			if( !empty( $_REQUEST[$pref] ) && $_REQUEST[$pref] != $default ) {
-				//vd( "storePreference( $pref, $_REQUEST[$pref], USERS_PKG_NAME )" );
 				$editUser->storePreference( $pref, $_REQUEST[$pref], USERS_PKG_NAME );
 			} else {
 				$editUser->storePreference( $pref, NULL, USERS_PKG_NAME );
@@ -225,7 +219,7 @@ if( isset( $_REQUEST['tasksprefs'] )) {
 // get available languages
 $languages = array();
 $languages = $gBitLanguage->listLanguages();
-$gBitSmarty->assign_by_ref( 'languages', $languages );
+$gBitSmarty->assignByRef( 'languages', $languages );
 
 // Get flags
 $flags = array();
@@ -257,16 +251,16 @@ $gBitSmarty->assign( 'userTimezones', $user_timezones);
 
 // email scrambling methods
 $scramblingMethods = array( "n", "strtr", "unicode", "x" );
-$gBitSmarty->assign_by_ref( 'scramblingMethods', $scramblingMethods );
+$gBitSmarty->assignByRef( 'scramblingMethods', $scramblingMethods );
 $scramblingEmails = array(
 	tra( "no" ),
 	scramble_email( $editUser->mInfo['email'], 'strtr' ),
 	scramble_email( $editUser->mInfo['email'], 'unicode' )."-".tra( "unicode" ),
 	scramble_email( $editUser->mInfo['email'], 'x' )
 );
-$gBitSmarty->assign_by_ref( 'scramblingEmails', $scramblingEmails );
+$gBitSmarty->assignByRef( 'scramblingEmails', $scramblingEmails );
 
 // edit services
 $editUser->invokeServices( 'content_edit_function' );
 $gBitSystem->display( 'bitpackage:users/user_preferences.tpl', 'Edit User Preferences' , array( 'display_mode' => 'display' ));
-?>
+

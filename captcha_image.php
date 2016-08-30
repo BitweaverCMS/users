@@ -1,14 +1,9 @@
 <?php
 /**
- * $Header$
+ * captcha image
  *
- * Copyright (c) 2004 bitweaver.org
- * Copyright (c) 2003 tikwiki.org
- * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * All Rights Reserved. See below for details and a complete list of authors.
- * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
+ * @copyright (c) 2004-15 bitweaver.org
  *
- * $Id$
  * @package users
  * @subpackage functions
  */
@@ -16,7 +11,6 @@
 /**
  * required setup
  */
-// hmm. too many session tweaks in setup_smarty ... we need to call this
 require_once( '../kernel/setup_inc.php' );
 
 // dimensions

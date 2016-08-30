@@ -62,10 +62,10 @@
 		{foreach from=$users item=userHash key=userId}
 			<li class="item {cycle values='even,odd'} pull-left" style="width:31%;padding:0 0 0 1%;background:url('{$userHash.thumbnail_url|default:"`$smarty.const.USERS_PKG_URL`icons/silhouette_100.png"|escape}') no-repeat scroll top right transparent;">
 					{if $gBitUser->hasPermission( 'p_users_admin' )}
-					<label class="checkbox">
+					{forminput label="checkbox"}
 						<input type="checkbox" name="batch_user_ids[]" value="{$userHash.user_id}" /> 
 <small>{$listInfo.offset+$userHash@iteration}.</small> <strong>{$userHash.real_name|default:$userHash.login|escape}</strong> 
-					</label>
+					{/forminput}
 						<div><a href="/{$userHash.login}">{$userHash.login}</a></div>
 					{else}
 					<h4>{displayname hash=$userHash}</h4>

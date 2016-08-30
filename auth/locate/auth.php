@@ -16,7 +16,7 @@
  */
 class LocateAuth extends BaseAuth {
 
-	function LocateAuth() {
+	function __construct() {
 		parent::__construct('locate');
 	}
 

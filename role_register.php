@@ -1,14 +1,9 @@
 <?php
 /**
- * $Header$
+ * register new user - role model
  *
- * Copyright (c) 2004 bitweaver.org
- * Copyright (c) 2003 tikwiki.org
- * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * All Rights Reserved. See below for details and a complete list of authors.
- * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
+ * @copyright (c) 2004-15 bitweaver.org
  *
- * $Id$
  * @package users
  * @subpackage functions
  */
@@ -24,14 +19,21 @@ if( isset( $_REQUEST['tk'] ) ) {
 require_once( '../kernel/setup_inc.php' );
 require_once( KERNEL_PKG_PATH.'BitBase.php' );
 include_once( KERNEL_PKG_PATH.'notification_lib.php' );
+require_once( USERS_PKG_PATH.'classes/recaptchalib.php' );
 
-// Permission: needs p_register
 $gBitSystem->verifyFeature( 'users_allow_register' );
+
+// Everything below here is needed for registration
 
 require_once( USERS_PKG_PATH.'BaseAuth.php' );
 
-if( isset( $_REQUEST['returnto'] ) ) {
+if( !empty( $_REQUEST['returnto'] ) ) {
 	$_SESSION['returnto'] = $_REQUEST['returnto'];
+} elseif( !empty( $_SERVER['HTTP_REFERER'] ) && !strpos( $_SERVER['HTTP_REFERER'], 'login.php' )  && !strpos( $_SERVER['HTTP_REFERER'], 'role_register.php' ) ) {
+	$from = parse_url( $_SERVER['HTTP_REFERER'] );
+	if( !empty( $from['path'] ) && $from['host'] == $_SERVER['SERVER_NAME'] ) {
+		$_SESSION['loginfrom'] = $from['path'].'?'.( !empty( $from['query'] ) ? $from['query'] : '' );
+	}
 }
 
 if( $gBitUser->isRegistered() ) {
@@ -52,7 +54,7 @@ if( isset( $_REQUEST["register"] ) ) {
 			$roleInfo = $gBitUser->getRoleInfo( $_REQUEST['role'] );
 			if ( empty($roleInfo) || $roleInfo['is_public'] != 'y' ) {
 				$errors[] = "You can't use this role";
-				$gBitSmarty->assign_by_ref( 'errors', $errors );
+				$gBitSmarty->assignByRef( 'errors', $errors );
 			} else {
 				$userId = $newUser->getUserId();
 				$gBitUser->addUserToRole( $userId, $_REQUEST['role'] );
@@ -65,7 +67,7 @@ if( isset( $_REQUEST["register"] ) ) {
 			$newUser->storePreference('users_information','private');
 		}
 
-		// requires validation by email
+		// requires validation by email 
 		if( $gBitSystem->isFeatureActive( 'users_validate_user' ) ) {
 			$gBitSmarty->assign('msg',tra('You will receive an email with information to login for the first time into this site'));
 			$gBitSmarty->assign('showmsg','y');
@@ -97,10 +99,11 @@ if( isset( $_REQUEST["register"] ) ) {
 			exit;
 		}
 	} else {
-		$gBitSmarty->assign_by_ref( 'errors', $newUser->mErrors );
+		$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_BAD_REQUEST );
+		$gBitSmarty->assignByRef( 'errors', $newUser->mErrors );
 	}
 
-	$gBitSmarty->assign_by_ref( 'reg', $reg );
+	$gBitSmarty->assignByRef( 'reg', $reg );
 
 } else {
 	if( $gBitSystem->isFeatureActive( 'custom_user_fields' ) ) {
@@ -124,8 +127,8 @@ if( isset( $_REQUEST["register"] ) ) {
 
 $languages = array();
 $languages = $gBitLanguage->listLanguages();
-$gBitSmarty->assign_by_ref( 'languages', $languages );
-$gBitSmarty->assign_by_ref( 'gBitLanguage', $gBitLanguage );
+$gBitSmarty->assignByRef( 'languages', $languages );
+$gBitSmarty->assignByRef( 'gBitLanguage', $gBitLanguage );
 
 // Get flags here
 $flags = array();
@@ -145,10 +148,7 @@ $listHash = array(
 	'sort_mode' => array( 'is_default_asc', 'role_desc_asc' ),
 );
 $roleList = $gBitUser->getAllRoles( $listHash );
-$gBitSmarty->assign_by_ref( 'roleList', $roleList );
-
-// invoke edit services
-$gBitUser->invokeServices( 'content_edit_function' );
+$gBitSmarty->assignByRef( 'roleList', $roleList );
 
 // include preferences settings from other packages - these will be included as individual tabs
 $packages = array();
@@ -166,7 +166,13 @@ foreach( $gBitSystem->mPackages as $package ) {
 		}
 	}
 }
-$gBitSmarty->assign_by_ref('packages',$packages );
+$gBitSmarty->assignByRef('packages',$packages );
 
+if( !empty( $_REQUEST['error'] ) ) {
+	$gBitSmarty->assign( 'error', $_REQUEST['error'] );
+	$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_UNAUTHORIZED );
+}
+
+$gBitSmarty->assign( 'metaKeywords', 'Login, Sign in, Registration, Register, Create new account' );
 $gBitSystem->display('bitpackage:users/role_register.tpl', 'Register' , array( 'display_mode' => 'display' ));
 ?>

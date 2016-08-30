@@ -26,7 +26,7 @@ if( isset( $_REQUEST['fHomepage'] )) {
 if( isset( $_REQUEST['home'] )) {
 	// this allows for a numeric user_id or alpha_numeric user_id
 	$queryUserId = $gBitUser->lookupHomepage( $_REQUEST['home'], $gBitSystem->getConfig( 'users_case_sensitive_login', 'y' ) == 'y' );
-	$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
+	$userClass = $gBitSystem->getConfig( 'user_class', (defined('ROLE_MODEL') ) ?  'RolePermUser' : 'BitPermUser' );
 	require_once( USERS_PKG_PATH . $userClass .'.php' );
 	$gQueryUser = new $userClass( $queryUserId );
 	$gQueryUser->load( TRUE );
@@ -47,9 +47,9 @@ if( !$gBitUser->hasPermission( 'p_users_admin' ) ) {
 
 if( $gQueryUser->isValid() ) {
 	$gQueryUser->sanitizeUserInfo();
-	$gBitSmarty->assign_by_ref( 'gQueryUser', $gQueryUser );
-	$gBitSmarty->assign_by_ref( 'userInfo', $gQueryUser->mInfo );
-	$gBitSmarty->assign_by_ref( 'userPrefs', $gQueryUser->mPrefs );
+	$gBitSmarty->assignByRef( 'gQueryUser', $gQueryUser );
+	$gBitSmarty->assignByRef( 'userInfo', $gQueryUser->mInfo );
+	$gBitSmarty->assignByRef( 'userPrefs', $gQueryUser->mPrefs );
 	$gBitSmarty->assign( 'homepage_header', $gQueryUser->getPreference( 'homepage_header' ) );
 }
 ?>

@@ -88,7 +88,7 @@ if( isset( $_REQUEST["batchimport"])) {
 		$gBitSmarty->assign( 'added', $added );
 		if( @is_array( $discarded ) ) {
 			$gBitSmarty->assign( 'discarded', count( $discarded ) );
-			$gBitSmarty->assign_by_ref( 'discardlist', $discarded );
+			$gBitSmarty->assignByRef( 'discardlist', $discarded );
 		}
 	}
 }

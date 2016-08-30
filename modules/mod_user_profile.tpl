@@ -4,9 +4,9 @@
 <div style="text-align:center;">
 
 	{if $userInfo.portrait_url}
-	    <img src="{$userInfo.portrait_url}" class="userportrait" title="{tr}Portrait{/tr}" alt="{tr}Portrait{/tr}" />
+	    <img src="{$userInfo.portrait_url}" class="userportrait img-responsive" title="{tr}Portrait{/tr}" alt="{tr}Portrait{/tr}" />
 	{elseif $userInfo.avatar_url}
-		<img src="{$userInfo.avatar_url}" class="userportrait" title="{tr}Avatar{/tr}" alt="{tr}Avatar{/tr}"/>
+		<img src="{$userInfo.avatar_url}" class="userportrait img-responsive" title="{tr}Avatar{/tr}" alt="{tr}Avatar{/tr}"/>
 	{else}
 	    {biticon ipackage="users" iname="silhouette" iexplain="" class="userportrait"}
 	{/if}

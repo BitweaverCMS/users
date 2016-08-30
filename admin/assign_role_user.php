@@ -26,7 +26,7 @@ if( isset( $_REQUEST["action"] ) ) {
 	if ($_REQUEST["action"] == 'assign') {
 		$assignUser->addUserToRole( $assignUser->mUserId, $_REQUEST["role_id"] );
 	} elseif ($_REQUEST["action"] == 'removerole') {
-		$gBitUser->removeUserFromRole($_REQUEST["assign_user"], $_REQUEST["role_id"]);
+		$assignUser->removeUserFromRole($_REQUEST["assign_user"], $_REQUEST["role_id"]);
 	}
 	bit_redirect( 'assign_role_user.php?assign_user='.$assignUser->mUserId );
 }elseif(isset($_REQUEST['set_default'])) {
@@ -34,7 +34,7 @@ if( isset( $_REQUEST["action"] ) ) {
 	$assignUser->storeUserDefaultRole( $assignUser->mUserId, $_REQUEST['default_role'] );
 	$assignUser->load();
 }
-$gBitSmarty->assign_by_ref( 'assignUser', $assignUser );
+$gBitSmarty->assignByRef( 'assignUser', $assignUser );
 
 $listHash = array( 'sort_mode' => 'role_name_asc' );
 $gBitSmarty->assign('roles', $gBitUser->getAllRoles( $listHash ));

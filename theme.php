@@ -1,14 +1,9 @@
 <?php
 /**
- * $Header$
+ * user theme selection
  *
- * Copyright (c) 2004 bitweaver.org
- * Copyright (c) 2003 tikwiki.org
- * Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
- * All Rights Reserved. See below for details and a complete list of authors.
- * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details
+ * @copyright (c) 2004-15 bitweaver.org
  *
- * $Id$
  * @package users
  * @subpackage functions
  */
@@ -111,7 +106,7 @@ if ($gQueryUser->getPreference( 'theme' ) == 'custom' && !$gBitUser->canCustomiz
 
 $usingCustomTheme = ($gQueryUser->getPreference( 'theme' ) == 'custom' ? true : false);
 
-$gBitSmarty->assign_by_ref('usingCustomTheme', $usingCustomTheme);
+$gBitSmarty->assignByRef('usingCustomTheme', $usingCustomTheme);
 
 if( !$gBitUser->canCustomizeTheme() ) {
 	$gBitSmarty->assign('msg', tra("Feature disabled"));
@@ -123,7 +118,7 @@ $customCSSPath = $gQueryUser->getStoragePath('theme', $gQueryUser->mUserId, NULL
 
 $customCSSFile = $customCSSPath.'custom.css';	// Path to this user's custom stylesheet
 $customCSSImageURL = $gQueryUser->getStorageURL( '/theme/images/', $gQueryUser->mUserId );
-$gBitSmarty->assign_by_ref('customCSSImageURL',$customCSSImageURL);
+$gBitSmarty->assignByRef('customCSSImageURL',$customCSSImageURL);
 
 // Create a custom.css for this user if they do not already have one
 if (!file_exists($customCSSFile)) {
@@ -244,13 +239,13 @@ if ($usingCustomTheme) {
 
 // Get the list of themes the user can choose to derive from (aka Reset to)
 $styles = $gBitThemes->getStyles( NULL, ($usingCustomTheme ? FALSE : TRUE), FALSE );
-$gBitSmarty->assign_by_ref( 'styles', $styles );
+$gBitSmarty->assignByRef( 'styles', $styles );
 
 // $assignStyle is the default style which will be selected in the drop down list
 if (!isset($assignStyle)) {
 	$assignStyle = $gQueryUser->getPreference('theme', 'basic');
 }
-$gBitSmarty->assign_by_ref( 'assignStyle', $assignStyle);
+$gBitSmarty->assignByRef( 'assignStyle', $assignStyle);
 
 // Read in this user's custom.css to display in the textarea
 $lines = file($customCSSFile);
@@ -263,9 +258,9 @@ $gBitSmarty->assign('data', $data);
 
 // Export success/error messages for display in the tpl.
 if (isset($successMsg))
-	$gBitSmarty->assign_by_ref('successMsg',$successMsg);
+	$gBitSmarty->assignByRef('successMsg',$successMsg);
 if (isset($errorMsg))
-	$gBitSmarty->assign_by_ref('errorMsg', $errorMsg);
+	$gBitSmarty->assignByRef('errorMsg', $errorMsg);
 
 // Get the list of images used by this user's custom theme
 $imageList = ls_a($customCSSPath.'images/');
@@ -279,9 +274,9 @@ if( count( $imageList ) ) {
 }
 
 $gBitSmarty->assign('imagesCount', count($themeImages));
-$gBitSmarty->assign_by_ref('themeImages',$themeImages);
+$gBitSmarty->assignByRef('themeImages',$themeImages);
 $gBitSmarty->assign('SCRIPT_NAME', $_SERVER['SCRIPT_NAME']);
-$gBitSmarty->assign_by_ref('gQueryUser', $gQueryUser);
+$gBitSmarty->assignByRef('gQueryUser', $gQueryUser);
 
 $gBitSystem->display( 'bitpackage:users/user_theme.tpl', NULL, array( 'display_mode' => 'display' ));
 ?>

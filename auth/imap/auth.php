@@ -13,7 +13,7 @@
  */
 class IMAPAuth extends BaseAuth {
 
-	function IMAPAuth() {
+	function __construct() {
 		parent::__construct('imap');
 	}
 

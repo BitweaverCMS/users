@@ -26,7 +26,7 @@ if( isset( $_REQUEST["action"] ) ) {
 	if ($_REQUEST["action"] == 'assign') {
 		$assignUser->addUserToGroup( $assignUser->mUserId, $_REQUEST["group_id"] );
 	} elseif ($_REQUEST["action"] == 'removegroup') {
-		$gBitUser->removeUserFromGroup($_REQUEST["assign_user"], $_REQUEST["group_id"]);
+		$assignUser->removeUserFromGroup($_REQUEST["assign_user"], $_REQUEST["group_id"]);
 	}
 	header( 'Location: '.$_SERVER['SCRIPT_NAME'].'?assign_user='.$assignUser->mUserId );
 	die;
@@ -35,7 +35,7 @@ if( isset( $_REQUEST["action"] ) ) {
 	$assignUser->storeUserDefaultGroup( $assignUser->mUserId, $_REQUEST['default_group'] );
 	$assignUser->load();
 }
-$gBitSmarty->assign_by_ref( 'assignUser', $assignUser );
+$gBitSmarty->assignByRef( 'assignUser', $assignUser );
 
 $listHash = array( 'sort_mode' => 'group_name_asc' );
 $gBitSmarty->assign('groups', $gBitUser->getAllGroups( $listHash ));

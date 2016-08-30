@@ -30,7 +30,7 @@ require_once( USERS_PKG_PATH.'/BitUser.php' );
  */
 class BitPermUser extends BitUser {
 
-	var $mPerms;
+	public $mPerms;
 
 	/**
 	 * BitPermUser Initialise class
@@ -40,11 +40,15 @@ class BitPermUser extends BitUser {
 	 * @access public
 	 * @return void
 	 */
-	function BitPermUser( $pUserId=NULL, $pContentId=NULL ) {
-		BitUser::BitUser( $pUserId, $pContentId );
+	function __construct( $pUserId=NULL, $pContentId=NULL ) {
+		parent::__construct( $pUserId, $pContentId );
 
 		// Permission setup
 		$this->mAdminContentPerm = 'p_users_admin';
+	}
+
+	public function __sleep() {
+		return array_merge( parent::__sleep(), array( 'mPerms' ) );
 	}
 
 	public function __wakeup() {
@@ -64,6 +68,7 @@ class BitPermUser extends BitUser {
 	function assumeUser( $pUserId ) {
 		global $gBitUser;
 		$ret = FALSE;
+
 		// make double sure the current logged in user has permission, check for p_users_admin, not admin, as that is all you need for assuming another user.
 		// this enables creating of a non technical site adminstrators group, eg customer support representatives.
 		if( $gBitUser->hasPermission( 'p_users_admin' ) ) {
@@ -81,14 +86,14 @@ class BitPermUser extends BitUser {
 	}
 
 	/**
-	 * load 
-	 * 
+	 * load
+	 *
 	 * @param boolean $pFull Load all permissions
 	 * @param string $pUserName User login name
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
-	function load( $pFull=TRUE, $pUserName=NULL ) {
+	function load( $pFull=FALSE, $pUserName=NULL ) {
 		if( BitUser::load( $pFull, $pUserName ) ) {
 			if( $pFull ) {
 				unset( $this->mPerms );
@@ -127,7 +132,7 @@ class BitPermUser extends BitUser {
 		global $gBitSystem;
 		// keep track of newUser before calling base class
 		$newUser = !$this->isRegistered();
-		$this->mDb->StartTrans();
+		$this->StartTrans();
 		if( BitUser::store( $pParamHash ) && $newUser ) {
 			$defaultGroups = $this->getDefaultGroup();
 			$this->addUserToGroup( $this->mUserId, $defaultGroups );
@@ -148,7 +153,7 @@ class BitPermUser extends BitUser {
 			$pParamHash['upload']['thumbnail'] = FALSE;   // i don't think this does anything - perhaps replace it by setting thumbnail_sizes
 			$this->storeImages( $pParamHash );
 		}
-		$this->mDb->CompleteTrans();
+		$this->CompleteTrans();
 		return( count( $this->mErrors ) == 0 );
 	}
 
@@ -194,8 +199,9 @@ class BitPermUser extends BitUser {
 	 */
 	function expunge( $pExpungeContent=NULL) {
 		global $gBitSystem, $gBitUser;
+		$this->clearFromCache();
 		if( $this->isValid() ) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			if( $this->mUserId == $gBitUser->mUserId ) {
 				$this->mDb->RollbackTrans();
 				$gBitSystem->fatalError( tra( 'You cannot delete yourself' ) );
@@ -210,7 +216,7 @@ class BitPermUser extends BitUser {
 				}
 
 				if( parent::expunge( $pExpungeContent ) ) {
-					$this->mDb->CompleteTrans();
+					$this->CompleteTrans();
 					return TRUE;
 				} else {
 					$this->mDb->RollbackTrans();
@@ -518,20 +524,13 @@ class BitPermUser extends BitUser {
 			}
 			$currentUserGroups = $this->getGroups( $pUserId );
 			foreach( $addGroups AS $groupId ) {
-				$isInGroup = FALSE;
-				if( $currentUserGroups ) {
-					foreach( $currentUserGroups as $curGroupId => $curGroupInfo ) {
-						if( $curGroupId == $groupId ) {
-							$isInGroup = TRUE;
-						}
-					}
-				}
-				if( !$isInGroup ) {
+				if( !$this->mDb->getOne( "SELECT group_id FROM `".BIT_DB_PREFIX."users_groups_map` WHERE `user_id` = ? AND `group_id` = ?", array( $pUserId, $groupId ) ) ) {
 					$query = "INSERT INTO `".BIT_DB_PREFIX."users_groups_map` (`user_id`,`group_id`) VALUES(?,?)";
 					$result = $this->mDb->query( $query, array( $pUserId, $groupId ));
 				}
 			}
 		}
+		$this->clearFromCache();
 		return $result;
 	}
 
@@ -553,6 +552,7 @@ class BitPermUser extends BitUser {
 				$this->mDb->query( $query, array( $pUserId ));
 			}
 		}
+		$this->clearFromCache();
 	}
 
 	/**
@@ -595,7 +595,7 @@ class BitPermUser extends BitUser {
 	function storeGroup( &$pParamHash ) {
 		global $gBitSystem;
 		if ($this->verifyGroup( $pParamHash)) {
-			$this->mDb->StartTrans();
+			$this->StartTrans();
 			if( empty( $pParamHash['group_id'] ) ) {
 				$pParamHash['group_id'] = $this->mDb->GenID( 'users_groups_id_seq' );
 				$pParamHash['group_store']['group_id'] = $pParamHash['group_id'];
@@ -615,7 +615,7 @@ class BitPermUser extends BitUser {
 			if( isset( $_REQUEST['batch_set_default'] ) and $_REQUEST['batch_set_default'] == 'on' ) {
 				$gBitUser->batchSetUserDefaultGroup( $pParamHash['group_id'] );
 			}
-			$this->mDb->CompleteTrans();
+			$this->CompleteTrans();
 		}
 		return ( count( $this->mErrors ) == 0 );
 	}
