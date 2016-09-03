@@ -1628,18 +1628,25 @@ class BitUser extends LibertyMime {
 		$ret = NULL;
 		if( is_array( $pUserMixed ) ) {
 			if( $val =  current( $pUserMixed ) ) {
-				if( !is_numeric( $val ) ) {
-					$col = "UPPER( uu.`".key( $pUserMixed )."` ) ";
-					$val = strtoupper( $val );
-				} else {
-					$col = " uu.`".key( $pUserMixed )."` ";
+				$key = $this->mDb->sanitizeColumnString( key( $pUserMixed ) );
+				if( preg_match( '/_id$/', $key ) ) {
+					$col = " uu.`".$key."` ";
+					$val = (int)$val;
 					if( $val > 0x1FFFFFFF ) {
 						// 32 bit overflow, set to zero to avoid fatal error in databases with 32 bit signed integer columns
 						$val = 0;
 					}
+				} elseif( is_numeric( $val ) ) {
+					$col = " uu.`".$key."` ";
+					$val = $val;
+				} else {
+					$col = "UPPER( uu.`".$key."` ) ";
+					$val = strtoupper( $val );
 				}
-				$query = "SELECT  uu.* FROM `".BIT_DB_PREFIX."users_users` uu LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lc.`content_id`=uu.`content_id`) WHERE $col = ?";
-				$ret = $this->mDb->getRow( $query, array( $val ));
+				if( !empty( $col ) ) {
+					$query = "SELECT  uu.* FROM `".BIT_DB_PREFIX."users_users` uu LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lc.`content_id`=uu.`content_id`) WHERE $col = ?";
+					$ret = $this->mDb->getRow( $query, array( $val ), 600 );
+				}
 			}
 		}
 		return $ret;
@@ -2401,8 +2408,9 @@ class BitUser extends LibertyMime {
 				// this won't work right now, we need to alter userslib::interpret_home() to interpret a real name
 				$iHomepage = $pHash['real_name'];
 			}
-			if( empty( $pHash['users_information'] ) ) {
-				$pHash['users_information'] = $gBitSystem->mDb->getOne( "SELECT pref_value FROM liberty_content_prefs lcp INNER JOIN users_users uu ON (lcp.content_id=uu.content_id) WHERE uu.login=? AND pref_name='users_information'", array( $pHash['user_id'] ), 1, NULL, 86400 );
+
+			if( empty( $pHash['users_information'] ) && !empty( $pHash['login'] ) ) {
+				$pHash['users_information'] = $gBitSystem->mDb->getOne( "SELECT pref_value FROM liberty_content_prefs lcp INNER JOIN users_users uu ON (lcp.content_id=uu.content_id) WHERE uu.login=? AND pref_name='users_information'", array( $pHash['login'] ), 1, NULL, 86400 );
 			}
 
 			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' ) && (empty( $pHash['users_information'] ) || $pHash['users_information'] == 'public') ) {
