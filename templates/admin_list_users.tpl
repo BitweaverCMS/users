@@ -50,7 +50,7 @@
 						{formfeedback error=$errors.email}
 						{formlabel label="Email" for="email"}
 						{forminput}
-							<input type="text" name="email" id="email" size="30" value="{$newUser.email}" />
+							<input type="email" name="email" id="email" size="30" value="{$newUser.email}" />
 						{/forminput}
 					</div>
 

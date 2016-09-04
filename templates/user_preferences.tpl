@@ -165,7 +165,7 @@
 					<div class="form-group">
 						{formlabel label="Email" for="email"}
 						{forminput}
-							<input size="50" type="text" name="email" id="email" value="{$editUser->mInfo.email|escape}" />
+							<input size="50" type="email" name="email" id="email" value="{$editUser->mInfo.email|escape}"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
 							{formhelp note=""}
 						{/forminput}
 					</div>

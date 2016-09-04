@@ -26,7 +26,7 @@
 					{formfeedback error=$errors.validate}
 					{formlabel label="Username" for="email"}
 					{forminput}
-						<input type="text" size="50" name="email" id="email" value="{$reg.email}"/>
+						<input type="email" size="50" name="email" id="email" value="{$reg.email}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
 					{/forminput}
 				</div>
 

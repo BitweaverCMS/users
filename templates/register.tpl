@@ -63,7 +63,7 @@
 			{formfeedback error=$errors.email}
 			{formlabel label="Email" for="email"}
 			{forminput}
-				<input class="form-control" type="text" name="email" id="email" value="{$reg.email}" required />
+				<input class="form-control" type="email" name="email" id="email" value="{$reg.email}" required  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
 			{/forminput}
 		</div>
 

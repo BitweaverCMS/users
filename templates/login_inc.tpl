@@ -6,7 +6,7 @@
 	<div class="form-group">
 		{formlabel label="Username or Email" for="user"}
 		{forminput}
-			<input class="form-control" type="text" name="user" id="user" />
+			<input class="form-control" type="text" name="user" id="user" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
 			{if $gBitSystem->isFeatureActive('users_allow_register')}
 			{/if}
 		{/forminput}

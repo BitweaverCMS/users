@@ -1,47 +1,39 @@
 {strip}
 
 {if $gBitUser->hasPermission( 'p_users_admin' )}
-<div class="width100p">
-{form}
-	<div class="form-group floatleft clearnone width25p">
-		{formlabel label="Search"}
+{form class=""}
+	<div class="form-group col-xs-12 col-sm-6">
 		{forminput}
-			<input type="text" name="find" class="width90p" value="{$smarty.request.find}"/>
+			<input type="text" class="form-control" name="find" value="{$smarty.request.find}"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
 		{/forminput}
-		{formhelp note="Full name, username, and email"}
-	</div>
-	<div class="form-group floatleft clearnone width10p">
-		{formlabel label="# Results"}
-		<input type="text" name="max_records" value="{$smarty.request.max_records}" style="width:3em"/>
-		{formhelp note="Per page"}
-	</div>
-	<div class="form-group floatleft clearnone width10p">
-		{formlabel label="Max Content"}
-		<input type="text" name="max_content_count" value="{$smarty.request.max_content_count}" style="width:3em"/>
-		{formhelp note="# objects created"}
-	</div>
-	<div class="form-group floatleft clearnone width10p">
-		{formlabel label="Min Content"}
-		<input type="text" name="min_content_count" value="{$smarty.request.min_content_count}" style="width:3em"/>
-		{formhelp note="# objects created"}
+		{formhelp note="Search full name, username, or email"}
 	</div>
 	{if $gBitSystem->isPackageActive('stats')}
-	<div class="form-group floatleft clearnone width20p">
-		{formlabel label="Registration Referer"}
-		<input type="text" name="referer" value="{$smarty.request.referer}" class="width90p"/>
-		{formhelp note="Enter partial URL or 'none'"}
+	<div class="form-group col-xs-12 col-sm-6">
+		<input type="text" name="referer" class="form-control" value="{$smarty.request.referer}"/>
+		{formhelp note="Referrer. Enter partial URL or 'none'"}
 	</div>
 	{/if}
-	<div class="form-group floatleft clearnone width15p">
-		{formlabel label="IP"}
-		<textarea rows="1" name="ip" style="height:15px">{$smarty.request.ip}</textarea>
-		{formhelp note="Comma separated list"}
+	<div class="form-group col-xs-4 col-md-2">
+		<input class="form-control" type="number" name="max_records" value="{$smarty.request.max_records}"/>
+		{formhelp note="# / Page"}
+	</div>
+	<div class="form-group col-xs-4 col-md-2">
+		<input type="number" min="0" step="1" class="form-control" name="max_content_count" value="{$smarty.request.max_content_count}" />
+		{formhelp note="Max # objects created"}
+	</div>
+	<div class="form-group col-xs-4 col-md-2">
+		<input type="number" min="0" step="1" class="form-control" name="min_content_count" value="{$smarty.request.min_content_count}"/>
+		{formhelp note="Min # objects created"}
+	</div>
+	<div class="form-group col-xs-6 col-md-4">
+		<textarea rows="1" name="ip" class="form-control">{$smarty.request.ip}</textarea>
+		{formhelp note="IP. Comma separated list"}
 	</div>
 	<div class="form-group submit">
 		<input class="btn btn-xs" type="submit" name="search" value="{tr}Find{/tr}"> <input class="btn btn-xs" type="reset" name="reset" value="{tr}Reset{/tr}">
 	</div>
 {/form}
-</div>
 {else}
 	{minifind}
 {/if}
