@@ -978,9 +978,7 @@ class BitUser extends LibertyMime {
 
 			if( !empty($pParamHash['hash'] ) ) {
 				unset( $pParamHash['password'] );
-				if($gBitSystem->isFeatureActive( 'users_clear_passwords' ) ) {
-					$this->mErrors['password'] = tra( 'You cannot import a password hash when setting to stor password in plan text is set.' );
-				} elseif( strlen( $pParamHash['hash'] ) <> 32 ) {
+				if( strlen( $pParamHash['hash'] ) <> 32 ) {
 					$this->mErrors['password'] = tra( 'When importing a MD5 password hash it needto have a length of 32 bytes.' );
 				}
 			} else {
@@ -1017,11 +1015,7 @@ class BitUser extends LibertyMime {
 					// renew password only next half year ;)
 					$pParamHash['user_store']['pass_due'] = $now + (60 * 60 * 24 * $pParamHash['pass_due']);
 				}
-				if( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) ) {
-					$pParamHash['user_store']['user_password'] = $pParamHash['password'];
-				} else {
-					$pParamHash['user_store']['user_password'] = '';
-				}
+				$pParamHash['user_store']['user_password'] = '';
 			}
 		} elseif( !empty( $pParamHash['hash'] )) {
 			$pParamHash['user_store']['hash'] = $pParamHash['hash'];
@@ -1536,7 +1530,7 @@ class BitUser extends LibertyMime {
 		$query = "
 			SELECT `user_id`, `provpass`, `user_password`, `login`, `email` FROM `".BIT_DB_PREFIX."users_users`
 			WHERE `user_id`=? AND `provpass`=? AND ( `provpass_expires` IS NULL OR `provpass_expires` > ?)";
-		return( $this->mDb->getRow( $query, array( $pUserId, $pProvpass, $gBitSystem->getUTCTime() )));
+		return( $this->mDb->getRow( $query, array( (int)$pUserId, $pProvpass, $gBitSystem->getUTCTime() )));
 	}
 
 	/**
@@ -1765,9 +1759,7 @@ class BitUser extends LibertyMime {
 				// renew password according to config value
 				$passDue = $now + ( 60 * 60 * 24 * $gBitSystem->getConfig( 'users_pass_due' ));
 			}
-			if( !$gBitSystem->isFeatureActive( 'users_clear_passwords' )) {
-				$pPass = NULL;
-			}
+			$pPass = NULL;
 			$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
 			$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `provpass`= NULL, `provpass_expires` = NULL,`hash`=? ,`user_password`=? ,`pass_due`=? WHERE `".$loginCol."`=?";
 			$result = $this->mDb->query( $query, array( $hash, $pPass, $passDue, $pLogin ));

@@ -29,22 +29,14 @@ if( $gBitUser->isRegistered() ) {
 		$userInfo = $gBitUser->getUserInfo( array( $loginCol => $pLogin ) );
 	}
 	if( $userInfo ) {
-		if ( $gBitSystem->isFeatureActive( 'users_clear_passwords' ) && !empty($userInfo['user_password']) ) {
-			$gBitSmarty->assign( 'userPass', $userInfo['user_password'] );
-			$tmp['success'] = tra("A password reminder email has been sent ");
-			$pass = $userInfo['user_password'];
-		} else {
-			$pass = $gBitUser->genPass();
-			list($pass,$provpass) = $gBitUser->createTempPassword( $_REQUEST["username"], $pass );
-			$gBitSmarty->assign( 'mailProvPass', $provpass );
-			$gBitSmarty->assign( 'mailUserId', $userInfo['user_id'] );
-			$pageTitle = tra( 'Change Your Password' );
-			$tmp['success'] = tra("Information to change your password has been sent ");
-		}
-		$tmp['success'] .= tra("to the registered email address for")." " . $_REQUEST["username"] . ".";
+		$pass = $gBitUser->genPass();
+		list($pass,$provpass) = $gBitUser->createTempPassword( $_REQUEST["username"], $pass );
+		$gBitSmarty->assign( 'mailProvPass', $provpass );
+		$gBitSmarty->assign( 'mailUserId', $userInfo['user_id'] );
+		$pageTitle = tra( 'Change Your Password' );
+		$tmp['success'] = tra("Information to change your password has been sent to the registered email address for")." " . $_REQUEST["username"] . ".";
 
 		$gBitSmarty->assign('mail_user', $userInfo[$loginCol]);
-		$gBitSmarty->assign('mail_same', $gBitSystem->isFeatureActive( 'users_clear_passwords' ));
 		$gBitSmarty->assign('mail_pass', $pass);
 		$gBitSmarty->assign('linkUri', $gBitSystem->isFeatureActive("site_https_login_required") ? 'https://'.$_SERVER['HTTP_HOST'].USERS_PKG_URL : USERS_PKG_URI );
 		$mail_data = $gBitSmarty->fetch('bitpackage:users/password_reminder.tpl');

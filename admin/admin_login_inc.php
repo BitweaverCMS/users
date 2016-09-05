@@ -52,11 +52,6 @@ $loginSettings = array(
 		'type' => "text",
 		'note' => "",
 	),
-	'users_clear_passwords' => array(
-		'label' => "Store plaintext passwords",
-		'type' => "checkbox",
-		'note' => "Passwords will be visible in the database. If a user requests a password, their password will *not* be reset and simply emailed to them in plain text. This option is less secure, but better suited to sites with a wide variety of users.",
-	),
 	'users_case_sensitive_login' => array(
 		'label' => 'Case-Sensitive Login',
 		'type' => "checkbox",

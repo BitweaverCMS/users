@@ -15,6 +15,7 @@ if (!$gBitUser->userExists( array( 'user_id' => $_REQUEST["assign_user"] ) ) ) {
 }
 
 $assignUser = new BitPermUser( $_REQUEST["assign_user"] );
+$assignUser->setCacheableObject( FALSE );
 $assignUser->load( TRUE );
 
 if( $assignUser->isAdmin() && !$gBitUser->isAdmin() ) {

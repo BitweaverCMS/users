@@ -2,7 +2,7 @@
 
 <div class="display login">
 	<div class="header">
-		<h1>{tr}Change password enforced{/tr}</h1>
+		<h1>{tr}Password Change Required{/tr}</h1>
 	</div>
 
 	<div class="body">
@@ -23,7 +23,7 @@
 				<div class="form-group">
 					{formlabel label="Old Password" for="oldpass"}
 					{forminput}
-						<input type="password" name="oldpass" id="oldpass" />
+						<input type="password" name="oldpass" id="oldpass" class="form-control"/>
 					{/forminput}
 				</div>
 			{/if}
@@ -31,14 +31,14 @@
 			<div class="form-group">
 				{formlabel label="New Password" for="pass"}
 				{forminput}
-					<input type="password" name="pass" id="pass" />
+					<input type="password" name="pass" id="pass" class="form-control"/>
 				{/forminput}
 			</div>
 
 			<div class="form-group">
 				{formlabel label="Again Please" for="pass2"}
 				{forminput}
-					<input type="password" name="pass2" id="pass2" />
+					<input type="password" name="pass2" id="pass2" class="form-control"/>
 				{/forminput}
 			</div>
 
