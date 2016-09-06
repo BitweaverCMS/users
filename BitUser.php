@@ -1355,7 +1355,8 @@ class BitUser extends LibertyMime {
 				$url = USERS_PKG_URL.'remind_password.php?remind=y&required=y&username='.$pLogin;
 			}else{
 				$this->mUserId = ANONYMOUS_USER_ID;
-				unset( $this->mInfo );
+				$this->mInfo = array();
+				$this->clearFromCache();
 				$this->mErrors['login'] = tra( 'Invalid username or password' );
 				$url = USERS_PKG_URL.'login.php?error=' . urlencode( $this->mErrors['login'] );
 			}
