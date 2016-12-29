@@ -17,7 +17,7 @@
 						<div class="form-group">
 							{formlabel label="Real Name" for="real_name"}
 							{forminput}
-								<input type="text" name="real_name" id="real_name" value="{$editUser->mInfo.real_name|escape}" />
+								<input class="form-control" type="text" name="real_name" id="real_name" value="{$editUser->mInfo.real_name|escape}" />
 								{if !$gBitSystem->getConfig('users_display_name') or $gBitSystem->getConfig('users_display_name') eq 'real_name'}
 									{formhelp note="This is the name that is visible to other users when viewing information added by you."}
 								{/if}
@@ -28,7 +28,7 @@
 							{formlabel label="Username"}
 							{forminput}
 								{if $gBitUser->hasPermission('p_users_admin')}
-									<input type="text" name="login" value="{$editUser->mInfo.login|escape}" />
+									<input class="form-control" type="text" name="login" value="{$editUser->mInfo.login|escape}" />
 								{else}
 									{$editUser->mInfo.login}
 								{/if}
@@ -49,7 +49,7 @@
 						<div class="form-group">
 							{formlabel label="Is email public?" for="users_email_display"}
 							{forminput}
-								<select name="users_email_display" id="users_email_display">
+								<select name="users_email_display" id="users_email_display" class="form-control">
 									{section name=ix loop=$scramblingMethods}
 										<option value="{$scramblingMethods[ix]|escape}" {if $editUser->mPrefs.users_email_display eq $scramblingMethods[ix]}selected="selected"{/if}>{$scramblingEmails[ix]}</option>
 									{/section}
@@ -61,7 +61,7 @@
 						<div class="form-group">
 							{formlabel label="Country" for="country"}
 							{forminput}
-								<select name="users_country" id="country">
+								<select name="users_country" id="country" class="form-control">
 									<option value=""></option>
 										{section name=ix loop=$flags}
 											<option value="{$flags[ix]|escape}" {if $editUser->mPrefs.flag eq $flags[ix]}selected="selected"{/if}>{tr}{$flags[ix]|replace:'_':' '}{/tr}</option>
@@ -76,7 +76,7 @@
 							<div class="form-group">
 								{formlabel label="Language" for="language"}
 								{forminput}
-									<select name="bitlanguage" id="bitlanguage">
+									<select name="bitlanguage" id="bitlanguage" class="form-control">
 										{foreach from=$languages key=langCode item=lang}
 											<option value="{$langCode}"{if $gBitLanguage->mLanguage eq $langCode} selected="selected"{/if}>
 												{$lang.full_name}
@@ -92,7 +92,7 @@
 							<div class="form-group">
 								{formlabel label=$field}
 								{forminput}
-									<input type="text" name="CUSTOM[{$field}]" value="{$editUser->mPrefs.$field}" maxlength="250" />
+									<input class="form-control" type="text" name="CUSTOM[{$field}]" value="{$editUser->mPrefs.$field}" maxlength="250" />
 								{/forminput}
 							</div>
 						{/foreach}
@@ -100,7 +100,7 @@
 						<div class="form-group">
 							{formlabel label="User information" for="users_information"}
 							{forminput}
-								<select name="users_information" id="users_information">
+								<select name="users_information" id="users_information" class="form-control">
 									<option value="public" {if $editUser->mPrefs.users_information eq 'public'}selected="selected"{/if}>{tr}public{/tr}</option>
 									<option value="private" {if $editUser->mPrefs.users_information eq 'private'}selected="selected"{/if}>{tr}private{/tr}</option>
 								</select>
@@ -111,7 +111,7 @@
 						<div class="form-group">
 							{formlabel label="HomePage" for="users_homepage"}
 							{forminput}
-								<input size="50" type="text" name="users_homepage" id="users_homepage" value="{$editUser->mInfo.users_homepage|escape|default:'http://'}" />
+								<input class="form-control" type="text" name="users_homepage" id="users_homepage" value="{$editUser->mInfo.users_homepage|escape|default:'http://'}" />
 								{formhelp note="If you have a personal or professional homepage, enter it here."}
 							{/forminput}
 						</div>
@@ -133,23 +133,13 @@
 						<div class="form-group">
 							{formlabel label="Displayed time zone"}
 							{forminput}
-								<label><input type="radio" name="site_display_utc" value="UTC" {if $editUser->mPrefs.site_display_utc eq 'UTC'}checked="checked"{/if} />{tr}UTC{/tr}</label>
-								<br />
-								<label><input type="radio" name="site_display_utc" value="Local" {if $editUser->mPrefs.site_display_utc eq 'Local'}checked="checked"{/if} />{tr}Local{/tr}</label>
-								<br />
-								<label><input type="radio" name="site_display_utc" value="Fixed" {if $editUser->mPrefs.site_display_utc eq 'Fixed'}checked="checked"{/if} />{tr}Fixed{/tr}</label>
-								<br />
-								<select name="site_display_timezone" id="site_display_timezone">
+								<div class="radio"><label><input type="radio" name="site_display_utc" value="UTC" {if $editUser->mPrefs.site_display_utc eq 'UTC'}checked="checked"{/if} />{tr}UTC{/tr}</label></div>
+								<div class="radio"><label><input type="radio" name="site_display_utc" value="Local" {if $editUser->mPrefs.site_display_utc eq 'Local'}checked="checked"{/if} />{tr}Local{/tr}</label></div>
+								<div class="radio"><label><input type="radio" name="site_display_utc" value="Fixed" {if $editUser->mPrefs.site_display_utc eq 'Fixed'}checked="checked"{/if} />{tr}Fixed{/tr}</label></div>
+								<select name="site_display_timezone" id="site_display_timezone" class="form-control">
 									{html_options values=$userTimezones output=$userTimezones selected=$editUser->mPrefs.site_display_timezone}
 								</select>
 								{formhelp note="Internal data is stored using UTC time stamps, these can then be displayed using your current browser timezone offset (which ignores daylight saving), or a fixed timezone which will also manage the correct daylight saving"}
-							{/forminput}
-						</div>
-
-						<div class="form-group">
-							{forminput label="checkbox"}
-								<input type="checkbox" name="users_double_click" id="users_double_click" {if $editUser->mPrefs.users_double_click eq 'y'}checked="checked"{/if} />Use double-click to edit pages
-								{formhelp note="Enabling this feature will allow you to double click on any wiki page and it will automatically take you to the edit page. Note that this does not work in all browsers."}
 							{/forminput}
 						</div>
 
@@ -165,7 +155,7 @@
 					<div class="form-group">
 						{formlabel label="Email" for="email"}
 						{forminput}
-							<input size="50" type="email" name="email" id="email" value="{$editUser->mInfo.email|escape}"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+							<input type="email" name="email" id="email" value="{$editUser->mInfo.email|escape}" class="form-control" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
 							{formhelp note=""}
 						{/forminput}
 					</div>
@@ -173,7 +163,7 @@
 					<div class="form-group">
 						{formlabel label="Password" for="pass"}
 						{forminput}
-							<input type="password" name="pass" id="pass" />
+							<input type="password" name="pass" id="pass"  class="form-control"/>
 							{formhelp note=""}
 						{/forminput}
 					</div>
@@ -192,7 +182,7 @@
 						<div class="form-group">
 							{formlabel label="Old password" for="old"}
 							{forminput}
-								<input type="password" name="old" id="old" />
+								<input type="password" name="old" id="old" class="form-control" />
 								{formhelp note=""}
 							{/forminput}
 						</div>
@@ -203,7 +193,7 @@
 					<div class="form-group">
 						{formlabel label="New password" for="pass1"}
 						{forminput}
-							<input type="password" name="pass1" id="pass1" />
+							<input type="password" name="pass1" id="pass1" class="form-control" />
 							{formhelp note=""}
 						{/forminput}
 					</div>
@@ -211,7 +201,7 @@
 					<div class="form-group">
 						{formlabel label="Again please" for="pass2"}
 						{forminput}
-							<input type="password" name="pass2" id="pass2" />
+							<input type="password" name="pass2" id="pass2" class="form-control" />
 							{formhelp note=""}
 						{/forminput}
 					</div>

@@ -125,9 +125,8 @@ if( isset( $_REQUEST["prefs"] )) {
 			$editUser->storePreference( 'bitlanguage', ( $_REQUEST['bitlanguage'] != $gBitLanguage->mLanguage ) ? $_REQUEST['bitlanguage'] : NULL, LANGUAGES_PKG_NAME );
 		}
 
-		// toggles
+		/*/ toggles
 		$toggles = array(
-			'users_double_click'  => USERS_PKG_NAME,
 		);
 
 		foreach( $toggles as $toggle => $package ) {
@@ -137,6 +136,7 @@ if( isset( $_REQUEST["prefs"] )) {
 				$editUser->storePreference( $toggle, NULL, $package );
 			}
 		}
+		*/
 
 		// process custom fields
 		if( isset( $customFields ) && is_array( $customFields )) {
