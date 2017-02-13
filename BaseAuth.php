@@ -6,11 +6,6 @@
  */
 
 /**
- * required setup
- */
-require_once(UTIL_PKG_PATH . "PHP_Compat/Compat/Function/scandir.php");
-
-/**
  * Class that manages the base autentication method
  *
  * @package users
