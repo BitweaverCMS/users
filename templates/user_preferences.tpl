@@ -155,7 +155,7 @@
 					<div class="form-group">
 						{formlabel label="Email" for="email"}
 						{forminput}
-							<input type="email" name="email" id="email" value="{$editUser->mInfo.email|escape}" class="form-control" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+							<input type="email" name="email" id="email" autocomplete="off" value="{$editUser->mInfo.email|escape}" class="form-control" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
 							{formhelp note=""}
 						{/forminput}
 					</div>
@@ -163,7 +163,7 @@
 					<div class="form-group">
 						{formlabel label="Password" for="pass"}
 						{forminput}
-							<input type="password" name="pass" id="pass"  class="form-control"/>
+							<input type="password" name="pass" id="pass" autocomplete="off" class="form-control"/>
 							{formhelp note=""}
 						{/forminput}
 					</div>
@@ -182,7 +182,7 @@
 						<div class="form-group">
 							{formlabel label="Old password" for="old"}
 							{forminput}
-								<input type="password" name="old" id="old" class="form-control" />
+								<input type="password" name="old" id="old" autocomplete="off" class="form-control" />
 								{formhelp note=""}
 							{/forminput}
 						</div>
@@ -193,7 +193,7 @@
 					<div class="form-group">
 						{formlabel label="New password" for="pass1"}
 						{forminput}
-							<input type="password" name="pass1" id="pass1" class="form-control" />
+							<input type="password" name="pass1" id="pass1" autocomplete="off" class="form-control" />
 							{formhelp note=""}
 						{/forminput}
 					</div>
