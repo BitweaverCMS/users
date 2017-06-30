@@ -85,7 +85,7 @@ class BitHybridAuthManager extends BitSingleton {
 		}
 	}
 
-	private function storeUserProfile( $pUserId, $pProvider, $pIdentifier, $pAuthProfile ) {
+	public function storeUserProfile( $pUserId, $pProvider, $pIdentifier, $pAuthProfile ) {
 		if( BitBase::verifyId( $pUserId ) && !empty( $pProvider ) && !empty( $pIdentifier ) ) {
 			$this->StartTrans();
 			$query    = "DELETE FROM `".BIT_DB_PREFIX."users_auth_map` WHERE `user_id`=? AND `provider`=?";
