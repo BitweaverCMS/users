@@ -7,11 +7,6 @@
 require_once( USERS_PKG_PATH.'BaseAuth.php' );
 
 $loginSettings = array(
-	'users_create_user_auth' => array(
-		'label' => "Propagate Users",
-		'type' => "checkbox",
-		'note' => "Create a User in all lower Authentication Methods.<br />This won't work for methods in Method 1.",
-	),
 	'users_allow_register' => array(
 		'label' => "Users can register",
 		'type' => "checkbox",
@@ -37,40 +32,10 @@ $loginSettings = array(
 		'type' => "checkbox",
 		'note' => "This will create a group for each user with the same name as the user. This might be useful if you want to assign different permission settings to every user.",
 	),
-	'users_validate_user' => array(
-		'label' => "Validate users by email",
-		'type' => "checkbox",
-		'note' => "Send an email to the user, to validate registration.",
-	),
 	'users_forgot_pass' => array(
 		'label' => "Remind passwords by email",
 		'type' => "checkbox",
 		'note' => "This will display a 'forgot password' link on the login page and allow users to have their password sent to their registered email address.",
-	),
-	'users_pass_due' => array(
-		'label' => "Password invalid after days",
-		'type' => "text",
-		'note' => "",
-	),
-	'users_case_sensitive_login' => array(
-		'label' => 'Case-Sensitive Login',
-		'type' => "checkbox",
-		'note' => 'This determines whether user login names are case-sensitive.'
-	),
-	'user_password_generator' => array(
-		'label' => "Password generator",
-		'type' => "checkbox",
-		'note' => "Display password generator on registration page that creates secure passwords.",
-	),
-	'users_pass_chr_num' => array(
-		'label' => "Force to use characters <strong>and</strong> numbers in passwords",
-		'type' => "checkbox",
-		'note' => "",
-	),
-	'users_min_pass_length' => array(
-		'label' => "Minimum password length",
-		'type' => "text",
-		'note' => "",
 	),
 	'users_remember_me' => array(
 		'label' => "Remember me feature",
@@ -87,77 +52,26 @@ $loginSettings = array(
 		'type' => "text",
 		'note' => "The path '/foo' would match '/foobar' and '/foo/bar.html'",
 	),
+);
+$gBitSmarty->assign( 'loginSettings', $loginSettings );
+
+$registerSettings = array(
+	'users_validate_user' => array(
+		'label' => "Validate users by email",
+		'type' => "checkbox",
+		'note' => "Send an email to the user, to validate registration.",
+	),
 	'users_validate_email' => array(
 		'label' => "Validate email address",
 		'type' => "checkbox",
 		'link' => "kernel/admin/index.php?page=server/General Settings",
 		'note' => "This feature should be used only when you need the maximum security and should be used with discretion. If a visitor's email server is not responding, they will not be placed into the group specified below for verified emails. If a users email is determined to be invalid (meaning, the server does respond, but negatively) they will not be able to register. You also must have a valid sender email to use this feature.",
 	),
-);
-$gBitSmarty->assign( 'loginSettings', $loginSettings );
-
-
-if (defined ('ROLE_MODEL') ) {
-	$listHash = array( 'sort_mode' => 'role_name_asc' );
-	$gBitSmarty->assign( 'roleList', $gBitUser->getAllRoles( $listHash ));
-} else {
-	$listHash = array( 'sort_mode' => 'group_name_asc' );
-	$gBitSmarty->assign('groups', $gBitUser->getAllGroups( $listHash ));
-}
-
-if( !function_exists("gd_info" ) ) {
-	$gBitSmarty->assign( 'warning', 'PHP GD library is required for this feature (not found on your system)' );
-}
-
-if( !empty( $_REQUEST["loginprefs"] ) ) {
-	if( !preg_match( "#^/#", $_REQUEST['cookie_path'] ) ) {
-		$_REQUEST['cookie_path'] = '/'.$_REQUEST['cookie_path'];
-	} elseif( $_REQUEST['cookie_path'] == BIT_ROOT_URL ) {
-		$_REQUEST['cookie_path'] = '';
-	}
-
-	if( $_REQUEST['cookie_domain'] == $_SERVER["SERVER_NAME"] ) {
-		$_REQUEST['cookie_domain'] = '';
-	}
-
-	foreach( array_keys( $loginSettings ) as $feature ) {
-		if( $loginSettings[$feature]['type'] == 'text' ) {
-			simple_set_value( $feature, USERS_PKG_NAME );
-		} else {
-			simple_set_toggle( $feature, USERS_PKG_NAME );
-		}
-	}
-	simple_set_value( 'users_remember_time', USERS_PKG_NAME );
-	simple_set_value( 'users_auth_method', USERS_PKG_NAME );
-	simple_set_value( 'users_validate_email_group', USERS_PKG_NAME );
-
-	if( isset( $_REQUEST['registration_group_choice'] ) ) {
-		$listHash = array();
-		$groupList = $gBitUser->getAllGroups( $listHash );
-		$in = array();
-		$out = array();
-		foreach( $groupList as $gr ) {
-			if( $gr['group_id'] == ANONYMOUS_GROUP_ID ) {
-				continue;
-			}
-
-			// work out if someting has been selected or deselected
-			if( $gr['is_public'] == 'y' && !in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] )) {
-				$out[] = $gr['group_id'];
-			} elseif( $gr['is_public'] != 'y' && in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] )) {
-				$in[] = $gr['group_id'];
-			}
-		}
-		if( count( $in ) ) {
-			$gBitUser->storeRegistrationChoice( $in, 'y' );
-		}
-		if( count( $out ) ) {
-			$gBitUser->storeRegistrationChoice( $out, NULL );
-		}
-	}
-}
-
-$registerSettings = array(
+	'users_case_sensitive_login' => array(
+		'label' => 'Case-Sensitive Login',
+		'type' => "checkbox",
+		'note' => 'This determines whether user login names are case-sensitive.'
+	),
 	'reg_real_name' => array(
 		'label' => "Real Name",
 		'type' => "checkbox",
@@ -182,6 +96,26 @@ $registerSettings = array(
 		'label' => "Profile Picture",
 		'type' => "checkbox",
 		'note' => "Allow users to upload a profile picture.",
+	),
+	'users_pass_due' => array(
+		'label' => "Password invalid after days",
+		'type' => "text",
+		'note' => "",
+	),
+	'users_pass_chr_num' => array(
+		'label' => "Force to use characters <strong>and</strong> numbers in passwords",
+		'type' => "checkbox",
+		'note' => "",
+	),
+	'users_min_pass_length' => array(
+		'label' => "Minimum password length",
+		'type' => "text",
+		'note' => "",
+	),
+	'user_password_generator' => array(
+		'label' => "Password generator",
+		'type' => "checkbox",
+		'note' => "Display password generator on registration page that creates secure passwords.",
 	),
 	'users_register_require_passcode' => array(
 		'label' => "Request passcode to register",
@@ -236,16 +170,6 @@ $registerSettings = array(
 );
 $gBitSmarty->assign( 'registerSettings', $registerSettings );
 
-if( !empty( $_REQUEST["registerprefs"] ) ) {
-	foreach( array_keys( $registerSettings ) as $feature ) {
-		if( $registerSettings[$feature]['type'] == 'text' ) {
-			simple_set_value( $feature, USERS_PKG_NAME );
-		} else {
-			simple_set_toggle( $feature, USERS_PKG_NAME );
-		}
-	}
-}
-
 $httpSettings = array(
 	'site_https_login' => array(
 		'label' => "Allow secure (https) login",
@@ -290,15 +214,96 @@ $httpSettings = array(
 );
 $gBitSmarty->assign( 'httpSettings', $httpSettings );
 
-if( !empty( $_REQUEST["httpprefs"] ) ) {
-	foreach( array_keys( $httpSettings ) as $feature ) {
-		if( $httpSettings[$feature]['type'] == 'text' ) {
-			simple_set_value( $feature, USERS_PKG_NAME );
-		} else {
-			simple_set_toggle( $feature, USERS_PKG_NAME );
+
+if (defined ('ROLE_MODEL') ) {
+	$listHash = array( 'sort_mode' => 'role_name_asc' );
+	$gBitSmarty->assign( 'roleList', $gBitUser->getAllRoles( $listHash ));
+} else {
+	$listHash = array( 'sort_mode' => 'group_name_asc' );
+	$gBitSmarty->assign('groups', $gBitUser->getAllGroups( $listHash ));
+}
+
+if( !function_exists("gd_info" ) ) {
+	$gBitSmarty->assign( 'warning', 'PHP GD library is required for this feature (not found on your system)' );
+}
+
+require_once( USERS_PKG_PATH.'classes/BitHybridAuthManager.php' );
+BitHybridAuthManager::loadSingleton();
+global $gBitHybridAuthManager;
+
+if( !empty( $_POST ) ) {
+	// Save all HybridAuth Single Sign On configuration
+	if( !empty( $_REQUEST['hybridauth'] ) ) {
+		$allAuthProviders = $gBitHybridAuthManager->getAllProviders();
+		// make sure all (un)checkboxes stick
+		foreach( $allAuthProviders as $providerKey=>$providerConfig ) {
+			$enabledConfig = $gBitHybridAuthManager->getEnabledConfigKey( $providerConfig['provider'] );
+			$gBitSystem->storeConfig( $enabledConfig, BitBase::getParameter( $_REQUEST['hybridauth'], $enabledConfig, NULL ) );
+		}
+		foreach( $_REQUEST['hybridauth'] as $prefName=>$prefValue ) {
+			if( $prefName == 'users_ha_facebook_scope' ) {
+				$prefName = preg_replace('/\s+/', '', $prefName );
+			}
+			$gBitSystem->storeConfig( $prefName, (!empty( $prefValue ) ? $prefValue : NULL ) );
+		}
+		$gBitHybridAuthManager->clearFromCache();
+	}
+
+	// Save all preferences
+	foreach( array( 'loginprefs'=>'loginSettings', 'registerprefs'=>'registerSettings', 'httpprefs'=>'httpSettings' ) as $prefGroup=>$prefHash ) {
+		$settings = $$prefHash;
+		foreach( array_keys( $settings ) as $feature ) {
+			if( $settings[$feature]['type'] == 'text' ) {
+				simple_set_value( $feature, USERS_PKG_NAME );
+			} else {
+				simple_set_toggle( $feature, USERS_PKG_NAME );
+			}
 		}
 	}
+
+	if( !preg_match( "#^/#", $_REQUEST['cookie_path'] ) ) {
+		$_REQUEST['cookie_path'] = '/'.$_REQUEST['cookie_path'];
+	} elseif( $_REQUEST['cookie_path'] == BIT_ROOT_URL ) {
+		$_REQUEST['cookie_path'] = '';
+	}
+
+	if( $_REQUEST['cookie_domain'] == $_SERVER["SERVER_NAME"] ) {
+		$_REQUEST['cookie_domain'] = '';
+	}
+
+	simple_set_value( 'users_remember_time', USERS_PKG_NAME );
+	simple_set_value( 'users_auth_method', USERS_PKG_NAME );
+	simple_set_value( 'users_validate_email_group', USERS_PKG_NAME );
+
+	if( isset( $_REQUEST['registration_group_choice'] ) ) {
+		$listHash = array();
+		$groupList = $gBitUser->getAllGroups( $listHash );
+		$in = array();
+		$out = array();
+		foreach( $groupList as $gr ) {
+			if( $gr['group_id'] == ANONYMOUS_GROUP_ID ) {
+				continue;
+			}
+
+			// work out if someting has been selected or deselected
+			if( $gr['is_public'] == 'y' && !in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] )) {
+				$out[] = $gr['group_id'];
+			} elseif( $gr['is_public'] != 'y' && in_array( $gr['group_id'], $_REQUEST['registration_group_choice'] )) {
+				$in[] = $gr['group_id'];
+			}
+		}
+		if( count( $in ) ) {
+			$gBitUser->storeRegistrationChoice( $in, 'y' );
+		}
+		if( count( $out ) ) {
+			$gBitUser->storeRegistrationChoice( $out, NULL );
+		}
+	}
+	$gBitSystem->clearFromCache();
 }
+
+$gBitSmarty->assign( 'hybridProviders', $gBitHybridAuthManager->getAllProviders() );
+
 
 $listHash = array();
 

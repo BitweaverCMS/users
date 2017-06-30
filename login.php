@@ -12,6 +12,7 @@
  * required setup
  */
 include_once ("../kernel/setup_inc.php");
+require_once( USERS_PKG_PATH.'classes/BitHybridAuthManager.php' );
 
 if( !empty( $_REQUEST['returnto'] ) ) {
 	$_SESSION['returnto'] = $_REQUEST['returnto'];
@@ -31,6 +32,8 @@ if( !empty( $_REQUEST['error'] ) ) {
 	$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_UNAUTHORIZED );
 }
 
+BitHybridAuthManager::loadSingleton();
+global $gBitHybridAuthManager;
+$gBitSmarty->assign( 'hybridProviders', $gBitHybridAuthManager->getEnabledProviders() );
 $gBitSmarty->assign( 'metaKeywords', 'Login, Sign in, Registration, Register, Create new account' );
 $gBitSystem->display( 'bitpackage:users/login.tpl', $gBitSystem->getConfig( 'site_title' ).' Login' , array( 'display_mode' => 'display' ));
-?>

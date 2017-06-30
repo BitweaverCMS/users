@@ -38,6 +38,14 @@ $tables = array(
 			 '
 ",
 
+'users_auth_map' => "
+  user_id I4 PRIMARY,
+  provider C(64) PRIMARY,
+  provider_identifier C(64) NOTNULL
+  CONSTRAINT ', CONSTRAINT `users_auth_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)
+			 '
+",
+
 'users_permissions' => "
   perm_name C(30) PRIMARY,
   perm_desc C(250),
@@ -204,6 +212,8 @@ foreach( array_keys( $tables ) AS $tableName ) {
 
 $indices = array (
 	'users_users_email_idx' => array( 'table' => 'users_users', 'cols' => 'email', 'opts' => array('UNIQUE') ),
+	'users_auth_user_idx' => array( 'table' => 'users_auth_map', 'cols' => 'user_id', 'opts' => NULL ),
+	'users_auth_provider_ident_idx' => array( 'table' => 'users_auth_map', 'cols' => 'provider,provider_identifier', 'opts' => array('UNIQUE') ),
 	'users_users_login_idx' => array( 'table' => 'users_users', 'cols' => 'login', 'opts' => array('UNIQUE') ),
 	'users_users_avatar_atment_idx' => array( 'table' => 'users_users', 'cols' => 'avatar_attachment_id', 'opts' => NULL ),
 	'users_fav_con_idx' => array( 'table' => 'users_favorites_map', 'cols' => 'favorite_content_id', 'opts' => NULL ),
