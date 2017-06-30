@@ -1,6 +1,17 @@
 {strip}
 {form class="col-md-6 col-xs-12 form-horizontal" name="login" legend="Please sign in to continue" ipackage=users ifile='validate.php' secure=$gBitSystem->isFeatureActive("site_https_login_required")}
 
+{if $hybridProviders}
+	<div class="form-group">
+		{formlabel label="Connect with" for="user"}
+		{forminput}
+			{foreach from=$hybridProviders key=providerKey item=providerHash}<a class="btn btn-default" href="{$smarty.const.USERS_PKG_URL}validate.php?provider={$providerHash.provider}">{booticon iname=$providerHash.icon} {$providerHash.provider}</a> {/foreach}
+			{formhelp note="Use one of the sites above to login."}
+		{/forminput}
+	</div>
+	<hr>
+{/if}
+
 	{formfeedback error=$error}
 
 	<div class="form-group">

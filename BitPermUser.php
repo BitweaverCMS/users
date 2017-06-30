@@ -899,6 +899,7 @@ class BitPermUser extends BitUser {
 	 */
 	function storeRegistrationChoice( $pGroupMixed, $pValue = NULL ) {
 		if( !empty( $pGroupMixed )) {
+			$this->clearFromCache();
 			$bindVars[] = $pValue;
 			if( is_array( $pGroupMixed )) {
 				$mid = implode( ',', array_fill( 0, count( $pGroupMixed ),'?' ));

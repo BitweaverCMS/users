@@ -1089,7 +1089,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
-	function updateSession( $pSessionId ) {
+	protected function updateSession( $pSessionId ) {
 		global $gLightWeightScan;
 		if ( !$this->isDatabaseValid() ) return true;
 		global $gBitSystem, $gBitUser;
@@ -1167,7 +1167,7 @@ class BitUser extends LibertyMime {
 		$this->mInfo['default_group_id'] = -1;
 	}
 
-	function sendSessionCookie( $pCookie=TRUE ) {
+	protected function sendSessionCookie( $pCookie=TRUE ) {
 		global $gBitSystem;
 
 		$siteCookie = static::getSiteCookieName();
@@ -1263,13 +1263,13 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return password
 	 */
-	function genPass( $pLength=NULL ) {
+	public static function genPass( $pLength=NULL ) {
 		global $gBitSystem;
 		$vocales = "AaEeIiOoUu13580";
 		$consonantes = "BbCcDdFfGgHhJjKkLlMmNnPpQqRrSsTtVvWwXxYyZz24679";
 		$ret = '';
 		if( empty( $pLength ) || !is_numeric( $pLength ) ) {
-			$pLength = $gBitSystem->getConfig( 'users_min_pass_length', 4 );
+			$pLength = $gBitSystem->getConfig( 'users_min_pass_length', 16 );
 		}
 		for( $i = 0; $i < $pLength; $i++ ) {
 			if( $i % 2 ) {
@@ -1327,24 +1327,9 @@ class BitUser extends LibertyMime {
 				$this->load();
 				$this->loadPermissions( TRUE );
 
-				// set post-login url
-				// if group home is set for this user we get that
-				// default to general post-login
-				// @see BitSystem::getIndexPage
-				$indexType = 'my_page';
-				// getGroupHome is BitPermUser method
-				if( method_exists( $this, 'getGroupHome' ) &&
-					(( @$this->verifyId( $this->mInfo['default_group_id'] ) && ( $group_home = $this->getGroupHome( $this->mInfo['default_group_id'] ) ) ) ||
-					( $gBitSystem->getConfig( 'default_home_group' ) && ( $group_home = $this->getGroupHome( $gBitSystem->getConfig( 'default_home_group' ) ) ) )) ){
-					$indexType = 'group_home';
-				}
+				$url = $this->getPostLoginUrl();
 
-				$url = isset($_SESSION['loginfrom']) ? $_SESSION['loginfrom'] : $gBitSystem->getIndexPage( $indexType );
-				unset( $_SESSION['loginfrom'] );
-
-				$sessionId = session_id();
-				$this->sendSessionCookie( $sessionId );
-				$this->updateSession( $sessionId );
+				$this->setUserSession();
 			}
 		} else {
 			// before we give up lets see if the user exists and if the password is expired
@@ -1384,6 +1369,35 @@ class BitUser extends LibertyMime {
 			}
 		}
 		return( $url );
+	}
+
+	public function getPostLoginUrl() {
+		global $gBitSystem;
+		$url = BIT_ROOT_URL;
+		if( $this->isRegistered() ) {
+			// set post-login url
+			// if group home is set for this user we get that
+			// default to general post-login
+			// @see BitSystem::getIndexPage
+			$indexType = 'my_page';
+			// getGroupHome is BitPermUser method
+			if( method_exists( $this, 'getGroupHome' ) &&
+				(( @$this->verifyId( $this->mInfo['default_group_id'] ) && ( $group_home = $this->getGroupHome( $this->mInfo['default_group_id'] ) ) ) ||
+				( $gBitSystem->getConfig( 'default_home_group' ) && ( $group_home = $this->getGroupHome( $gBitSystem->getConfig( 'default_home_group' ) ) ) )) ){
+				$indexType = 'group_home';
+			}
+
+			$url = isset($_SESSION['loginfrom']) ? $_SESSION['loginfrom'] : $gBitSystem->getIndexPage( $indexType );
+			unset( $_SESSION['loginfrom'] );
+		}
+		return $url;
+	}
+	public function setUserSession() {
+		if( $this->isRegistered() ) {
+			$sessionId = session_id();
+			$this->sendSessionCookie( $sessionId );
+			$this->updateSession( $sessionId );
+		}
 	}
 
 	/**

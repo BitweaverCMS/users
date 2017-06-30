@@ -12,6 +12,10 @@
  * required setup
  */
 include_once ("../kernel/setup_inc.php");
+require_once( USERS_PKG_PATH.'classes/BitHybridAuthManager.php' );
+
+BitHybridAuthManager::loadSingleton();
+global $gBitHybridAuthManager;
 
 if( !empty( $_REQUEST['returnto'] ) ) {
 	$_SESSION['returnto'] = $_REQUEST['returnto'];
@@ -30,6 +34,10 @@ if( !empty( $_REQUEST['error'] ) ) {
 	$gBitSmarty->assign( 'error', $_REQUEST['error'] );
 	$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_UNAUTHORIZED );
 }
+
+BitHybridAuthManager::loadSingleton();
+global $gBitHybridAuthManager;
+$gBitSmarty->assign( 'hybridProviders', $gBitHybridAuthManager->getEnabledProviders() );
 
 $languages = array();
 $languages = $gBitLanguage->listLanguages();
