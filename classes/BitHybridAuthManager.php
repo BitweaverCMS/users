@@ -60,7 +60,6 @@ class BitHybridAuthManager extends BitSingleton {
 					if( $pUser->load() ) {
 						$pUser->loadPermissions( TRUE );
 						$pUser->setUserSession();
-						$this->mDb->query( "UPDATE `".BIT_DB_PREFIX."users_auth_map` SET `last_login`=? WHERE `user_id`=? AND `provider`=?", array( time(), $pUser->mUserId, $pProvider ) );
 						$pUser->clearFromCache();
 						$ret = $userId;
 					}
@@ -75,9 +74,9 @@ class BitHybridAuthManager extends BitSingleton {
 
 	public function expungeUserProfile( $pUserId, $pProvider ) {
 		global $gBitSystem;
-		if( $authProfile = $this->getUserProfile( $pProvider, $pUserId ) ) {
+		if( $authData = $this->getAuthData( $pProvider, $pUserId ) ) {
 			if( $gBitSystem::isCacheActive() ) {
-				$cacheKey = $this->getProfileCacheKey( $pProvider, $authProfile->identifier );
+				$cacheKey = $this->getProfileCacheKey( $pProvider, $authData['profile_hash']['identifier'] );
 				apc_delete( $cacheKey );
 			}
 			$query = "DELETE FROM `".BIT_DB_PREFIX."users_auth_map` WHERE `user_id`=? AND `provider`=?";
@@ -114,32 +113,20 @@ class BitHybridAuthManager extends BitSingleton {
 		return $ret;
 	}
 
-	public function getUserProfile( $pProvider, $pUserId=NULL ) {
+	public function getAuthData( $pProvider, $pUserId=NULL ) {
+		$ret = array();
 		try {
 			if( empty( $pUserId ) ) {
 				global $gBitUser;
 				$pUserId = $gBitUser->mUserId;
 			}
-			if( $profileId = $this->mDb->getOne( "SELECT `provider_identifier` FROM `".BIT_DB_PREFIX."users_auth_map` WHERE `user_id`=? AND `provider`=?", array( $pUserId, $pProvider ) ) ) {
-				$cacheKey = $this->getProfileCacheKey( $pProvider, $profileId );
-				global $gBitSystem;
-				if( $gBitSystem::isCacheActive() ) {
-					$hybridAuth = $this->getHybridAuth();
-					$hybridAuth->setup( $pProvider );
-					if( $ret = apc_fetch( $cacheKey ) ) {
-						return $ret;
-					}
-				}
-
-				$hybridAuth = $this->getHybridAuth();
-				$authedProvider = $hybridAuth->authenticate( $pProvider );
-				if( $ret = $authedProvider->getUserProfile() ) {
-					$this->cacheUserProfile( $pProvider, $ret );
-					return $ret;
-				}
+			if( $ret = $this->mDb->getRow( "SELECT * FROM `".BIT_DB_PREFIX."users_auth_map` WHERE `user_id`=? AND `provider`=?", array( $pUserId, $pProvider ) ) ) {
+				$ret['profile_hash'] = json_decode( $ret['profile_json'], TRUE );
 			}
 		} catch( Exception $e ) {
+			bit_error_log( $e->GetMessage() );
 		}
+		return $ret;
 	}
 
 	public function getHybridAuth() {
