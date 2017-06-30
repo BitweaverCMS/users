@@ -60,6 +60,7 @@ class BitHybridAuthManager extends BitSingleton {
 					if( $pUser->load() ) {
 						$pUser->loadPermissions( TRUE );
 						$pUser->setUserSession();
+						$this->mDb->query( "UPDATE `".BIT_DB_PREFIX."users_auth_map` SET `last_login`=? WHERE `user_id`=? AND `provider`=?", array( time(), $pUser->mUserId, $pProvider ) );
 						$pUser->clearFromCache();
 						$ret = $userId;
 					}
@@ -90,8 +91,10 @@ class BitHybridAuthManager extends BitSingleton {
 			$query    = "DELETE FROM `".BIT_DB_PREFIX."users_auth_map` WHERE `user_id`=? AND `provider`=?";
 			$result   = $this->mDb->query( $query, array( $pUserId, $pProvider ) );
 			if( !is_null( $pIdentifier ) ) {
-				$query      = "INSERT INTO `".BIT_DB_PREFIX."users_auth_map` (`user_id`,`provider`,`provider_identifier`) VALUES(?, ?, ?)";
-				$result     = $this->mDb->query( $query, array( $pUserId, $pProvider, $pIdentifier ) );
+				$profileHash = get_object_vars( $pAuthProfile );
+				ksort( $profileHash );
+				$query      = "INSERT INTO `".BIT_DB_PREFIX."users_auth_map` (`user_id`,`provider`,`provider_identifier`,`last_login`,`profile_json`) VALUES(?, ?, ?, ?, ?)";
+				$result     = $this->mDb->query( $query, array( $pUserId, $pProvider, $pIdentifier, time(), json_encode( $profileHash ) ) );
 			}
 			$this->CompleteTrans();
 		}

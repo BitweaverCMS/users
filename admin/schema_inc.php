@@ -41,7 +41,9 @@ $tables = array(
 'users_auth_map' => "
   user_id I4 PRIMARY,
   provider C(64) PRIMARY,
-  provider_identifier C(64) NOTNULL
+  provider_identifier C(64) NOTNULL,
+  last_login I8,
+  profile_json X
   CONSTRAINT ', CONSTRAINT `users_auth_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)
 			 '
 ",
