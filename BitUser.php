@@ -1080,6 +1080,7 @@ class BitUser extends LibertyMime {
 				$this->storeActionLog( $logHash );
 				$this->CompleteTrans();
 				$this->clearFromCache();
+
 				return TRUE;
 			} else {
 				$this->mDb->RollbackTrans();
