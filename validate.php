@@ -50,10 +50,10 @@ if( !empty( $_REQUEST['provider'] ) ) {
 			$auth = $gBitHybridAuthManager->authenticate( $_REQUEST['provider'], $gBitUser );
 			if( $auth === FALSE ) {
 				// social auth failed
-vd( 'social auth failed' );die;
+				throw new Exception( 'social auth failed' );
 			} elseif( $auth === TRUE ) {
 				// account was connected to current object
-vd( 'account was connected to current object' );die;
+				throw new Exception( 'account was connected to current object' );
 			} elseif( BitBase::verifyId( $auth ) ) {
 				$redirectUrl = $gBitUser->getPostLoginUrl();
 			} elseif( is_object( $auth ) && is_a( $auth, 'Hybrid_User_Profile' ) ) {
@@ -89,9 +89,9 @@ vd( 'account was connected to current object' );die;
 						if( $auth->birthMonth && $auth->birthDay ) {
 							$registerHash['customers_dob'] = ($auth->birthYear ? $auth->birthYear : 1900).'-'.$auth->birthMonth.'-'.$auth->birthDay;
 						}
-
+vd( $_REQUEST ); die;
 						$prefId = $gBitHybridAuthManager->getConfigName( $_REQUEST['provider'], 'id' );
-
+						$_SESSION['returnto'] = $gBitHybridAuthManager->getConnectUri( $_REQUEST['provider'] );
 						include( USERS_PKG_PATH.'register_inc.php' );
 					}
 				}
@@ -118,11 +118,14 @@ vd( 'account was connected to current object' );die;
 					break;
 				case 8 : $authError = 'Provider does not support this feature.';
 					break;
+				default: $authError = $e->getMessage();
+					break;
 			}
 	 
 			$gBitSmarty->assign_by_ref( 'authError', $authError );
 			$gBitSmarty->assign_by_ref( 'authExpection', $e );
-				$tpl = 'bitpackage:users/validate_auth.tpl';
+			bit_log_error( $authError );
+			$tpl = 'bitpackage:users/validate_auth.tpl';
 		}
 	}
 } else {
