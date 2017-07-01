@@ -1038,49 +1038,56 @@ class BitUser extends LibertyMime {
 	 */
 	function expunge( $pExpungeContent = NULL ) {
 		global $gBitSystem;
-		$this->StartTrans();
+		$this->invokeServices( 'users_expunge_check_function' );
+		if( !empty( $this->mErrors['expunge_check'] ) ) {
+			$this->mDb->RollbackTrans();
+		} else {
+			$this->StartTrans();
 
-		if( !empty( $pExpungeContent ) ) {
-			if( $pExpungeContent == 'all' ) {
-				if( $userContent = $this->mDb->getAssoc( "SELECT content_id, content_type_guid FROM `".BIT_DB_PREFIX."liberty_content` WHERE `user_id`=? AND `content_type_guid` != 'bituser'", array( $this->mUserId ) ) ) {
-					foreach( $userContent as $contentId=>$contentTypeGuid ) {
-						if( $delContent = static::getLibertyObject( $contentId, $contentTypeGuid ) ) {
-							$delContent->expunge();
+			if( !empty( $pExpungeContent ) ) {
+				if( $pExpungeContent == 'all' ) {
+					if( $userContent = $this->mDb->getAssoc( "SELECT content_id, content_type_guid FROM `".BIT_DB_PREFIX."liberty_content` WHERE `user_id`=? AND `content_type_guid` != 'bituser'", array( $this->mUserId ) ) ) {
+						foreach( $userContent as $contentId=>$contentTypeGuid ) {
+							if( $delContent = static::getLibertyObject( $contentId, $contentTypeGuid ) ) {
+								$delContent->expunge();
+							}
 						}
 					}
 				}
 			}
-		}
 
-		if( $this->mUserId != ANONYMOUS_USER_ID ) {
-			$this->purgeImage( 'avatar' );
-			$this->purgeImage( 'portrait' );
-			$this->purgeImage( 'logo' );
-			$this->invokeServices( 'users_expunge_function' );
-			$userTables = array(
-				'users_cnxn',
-				'users_watches',
-				'users_favorites_map',
-				'users_auth_map',
-				'users_users',
-			);
-			foreach( $userTables as $table ) {
-				$query = "DELETE FROM `".BIT_DB_PREFIX.$table."` WHERE `user_id` = ?";
-				$result = $this->mDb->query( $query, array( $this->mUserId ) );
+			if( $this->mUserId != ANONYMOUS_USER_ID ) {
+				$this->purgeImage( 'avatar' );
+				$this->purgeImage( 'portrait' );
+				$this->purgeImage( 'logo' );
+				$this->invokeServices( 'users_expunge_function' );
+				$userTables = array(
+					'users_cnxn',
+					'users_watches',
+					'users_favorites_map',
+					'users_auth_map',
+					'users_users',
+				);
+				foreach( $userTables as $table ) {
+					$query = "DELETE FROM `".BIT_DB_PREFIX.$table."` WHERE `user_id` = ?";
+					$result = $this->mDb->query( $query, array( $this->mUserId ) );
+				}
+
+				parent::expunge();
+
+				$logHash['action_log']['title'] = $this->mInfo['login'];
+				$this->mLogs['user_del'] = 'User deleted';
+				$this->storeActionLog( $logHash );
+				$this->CompleteTrans();
+				$this->clearFromCache();
+
+				return TRUE;
+			} else {
+				$this->mDb->RollbackTrans();
+				$gBitSystem->fatalError( tra( 'The anonymous user cannot be deleted' ) );
 			}
-
-			parent::expunge();
-
-			$logHash['action_log']['title'] = $this->mInfo['login'];
-			$this->mLogs['user_del'] = 'User deleted';
-			$this->storeActionLog( $logHash );
-			$this->CompleteTrans();
-			$this->clearFromCache();
-			return TRUE;
-		} else {
-			$this->mDb->RollbackTrans();
-			$gBitSystem->fatalError( tra( 'The anonymous user cannot be deleted' ) );
 		}
+		return count( $this->mErrors ) === 0;
 	}
 
 	// {{{ ==================== Sessions and logging in and out methods ====================
