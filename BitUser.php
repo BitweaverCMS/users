@@ -1065,6 +1065,7 @@ class BitUser extends LibertyMime {
 					'users_cnxn',
 					'users_watches',
 					'users_favorites_map',
+					'users_auth_map',
 					'users_users',
 				);
 				foreach( $userTables as $table ) {
@@ -1078,6 +1079,7 @@ class BitUser extends LibertyMime {
 				$this->mLogs['user_del'] = 'User deleted';
 				$this->storeActionLog( $logHash );
 				$this->CompleteTrans();
+				$this->clearFromCache();
 				return TRUE;
 			} else {
 				$this->mDb->RollbackTrans();
