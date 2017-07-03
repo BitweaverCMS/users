@@ -20,7 +20,7 @@ if( !$gBitUser->isRegistered() ) {
 	$gBitSystem->fatalError( tra( "You are not logged in" ));
 }
 
-include_once( USERS_PKG_PATH.'lookup_user_inc.php' );
+include_once( USERS_PKG_PATH.'includes/lookup_user_inc.php' );
 
 if( $gQueryUser->mUserId != $gBitUser->mUserId && !$gBitUser->hasPermission( 'p_users_admin' ) ) {
 	$gBitSystem->fatalError( tra( "You do not have permission to edit this user's images" ));

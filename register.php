@@ -43,7 +43,7 @@ if( isset( $_REQUEST["register"] ) ) {
 
 	$regiserHash = $_REQUEST;
 
-	include( USERS_PKG_PATH.'register_inc.php' );
+	include( USERS_PKG_PATH.'includes/register_inc.php' );
 
 	$gBitSmarty->assignByRef( 'reg', $regiserHash );
 
