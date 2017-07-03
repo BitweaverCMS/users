@@ -82,7 +82,8 @@ if( !empty( $_REQUEST['provider'] ) ) {
 						$redirectUrl = $gBitUser->getPostLoginUrl();
 						$tpl = NULL;
 					} elseif( !empty( $_REQUEST['auth_new'] ) && !$gBitUser->isRegistered() ) {
-						$registerHash = array( 'password'=>BitUser::genPass(20), 'novalidation'=>TRUE );
+						$registerHash = $_REQUEST;
+						$registerHash['novalidation'] = TRUE;
 						foreach( array( 'displayName' => 'real_name', 'email'=>'email', 'emailVerified'=>'verified_email', 'gender'=>'customers_gender', 'firstName'=>'customers_firstname', 'lastName'=>'customers_lastname', 'phone'=>'customers_telephone' ) as $member=>$key ) {
 							if( $auth->$member ) {
 								$registerHash[$key] = $auth->$member;

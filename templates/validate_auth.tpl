@@ -43,8 +43,24 @@
 				<p>Ok, no problem! Confirm your email below and we will connect the account above.</p>
 				<div class="form-group">
 					<label>We will create a new account using this email:</label>
-					<input type="email" name="auth_email" value="{$authProfile->email}" class="form-control">
+					<div class="alert alert-info">{$authProfile->email}</div>
 				</div>
+			<div class="form-group">
+				{formfeedback error=$errors.password}
+				{formlabel label="Password" for="pass"}
+				{forminput}
+					<input class="form-control" type="password" id="pass1" name="password" required />
+					{formhelp note="This password will be used to confirm account changes and recovery."}
+				{/forminput}
+			</div>
+
+			<div class="form-group">
+				{formfeedback error=$errors.password2}
+				{formlabel label="Confirm Password" for="password2"}
+				{forminput}
+					<input class="form-control" type="password" id="password2" name="password2" required />
+				{/forminput}
+			</div>
 				<input type="submit" name="auth_new" class="btn btn-primary" value="{tr}Continue{/tr}">
 			</div>
 			{/if}
