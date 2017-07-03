@@ -13,7 +13,7 @@
 		{/if}
 	{else}
 		{assign var=force_secure value=$gBitSystem->isFeatureActive("site_https_login_required")}
-		{form ipackage=users ifile='validate.php' secure=$force_secure}
+		{form ipackage=users ifile='validate' secure=$force_secure}
 			<div class="form-group">
 				<input type="text" name="user" id="user" value="{tr}Username{/tr}" size="15" onblur="if (this.value == '') {ldelim}this.value = '{tr}Username{/tr}';{rdelim}" onfocus="if (this.value == '{tr}Username{/tr}') {ldelim}this.value = '';{rdelim}" />
 			</div>

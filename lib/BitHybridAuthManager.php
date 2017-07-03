@@ -155,8 +155,10 @@ class BitHybridAuthManager extends BitSingleton {
 		return isset( $this->mEnabledProviders[strtolower( $pProvider )] );
 	}
 
-	public function getConnectUri( $pProviderKey ) {
-		return USERS_PKG_URI.'hauth/connect?provider='.$this->mEnabledProviders[$pProviderKey]['provider'];
+	public function getConnectUri( $pProvider ) {
+		if( $this->isProviderEnabled( $pProvider ) ) {
+			return USERS_PKG_URI.'validate?provider='.$pProvider;
+		}
 	}
 
 	public function getProviderConfig( $pProviderKey, $pConfigKey ) {

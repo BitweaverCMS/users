@@ -12,7 +12,7 @@
  * required setup
  */
 include_once ("../kernel/setup_inc.php");
-require_once( USERS_PKG_PATH.'classes/BitHybridAuthManager.php' );
+require_once( USERS_PKG_PATH.'lib/BitHybridAuthManager.php' );
 
 BitHybridAuthManager::loadSingleton();
 global $gBitHybridAuthManager;

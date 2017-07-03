@@ -12,6 +12,9 @@
 	RewriteRule ^						- [L,QSA]
 
 #	rule to support users/view/alan
+	RewriteRule		^validate$		validate.php [L,QSA]
+
+#	rule to support users/view/alan
 	RewriteRule		^view/([-A-Za-z0-9_]+)$		index.php?home=$1 [L,QSA]
 
 #	rule to support users/grace

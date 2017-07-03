@@ -25,18 +25,19 @@ $redirectUrl = FALSE;
 
 //Remember where user is logging in from and send them back later; using session variable for those of us who use WebISO services
 //do not use session loginfrom with login.php or register.php - only "inline" login forms display in perm denied fatals, etc.
-if( !empty( $_SESSION['returnto'] ) ) {
-	// we have been explicitly told where we want to return
-	$_SESSION['loginfrom'] = $_SESSION['returnto'];
-} elseif( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], 'login.php' ) === FALSE && strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) === FALSE ) {
+if( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], USERS_PKG_DIR.'/login' ) === FALSE && strpos( $_SERVER['HTTP_REFERER'], USERS_PKG_DIR.'/register' ) === FALSE && strpos( $_SERVER['HTTP_REFERER'], USERS_PKG_DIR.'/validate' ) === FALSE ) {
 	$from = parse_url( $_SERVER['HTTP_REFERER'] );
-	$_SESSION['loginfrom'] = (!empty($from['path']) ? $from['path'] : '').( !empty( $from['query'] ) ? '?'.$from['query'] : '' );
-} elseif( !empty( $_SESSION['loginfrom'] ) ) {
-	unset( $_SESSION['loginfrom'] );
+	if( $_SERVER['HTTP_HOST'] == $from['host'] ) {
+		// We have a referer  from this site, but not an authentication URL
+		$_SESSION['loginfrom'] = (!empty($from['path']) ? $from['path'] : '').( !empty( $from['query'] ) ? '?'.$from['query'] : '' );
+	}
+} else {
+	$_SESSION['loginfrom'] = NULL;
+	$_SESSION['returnto'] = NULL;
 }
 
 if( !empty( $_REQUEST['provider'] ) ) {
-	require_once( USERS_PKG_PATH.'classes/BitHybridAuthManager.php' );
+	require_once( USERS_PKG_PATH.'lib/BitHybridAuthManager.php' );
 	BitHybridAuthManager::loadSingleton();
 	global $gBitHybridAuthManager;
 
@@ -57,6 +58,7 @@ if( !empty( $_REQUEST['provider'] ) ) {
 			} elseif( BitBase::verifyId( $auth ) ) {
 				$redirectUrl = $gBitUser->getPostLoginUrl();
 			} elseif( is_object( $auth ) && is_a( $auth, 'Hybrid_User_Profile' ) ) {
+				$_SESSION['returnto'] = NULL;
 				// an unconnected authProfile was found
 				$gBitSmarty->assign_by_ref( 'authProfile', $auth );
 				$tpl = 'bitpackage:users/validate_auth.tpl';
@@ -89,9 +91,8 @@ if( !empty( $_REQUEST['provider'] ) ) {
 						if( $auth->birthMonth && $auth->birthDay ) {
 							$registerHash['customers_dob'] = ($auth->birthYear ? $auth->birthYear : 1900).'-'.$auth->birthMonth.'-'.$auth->birthDay;
 						}
-vd( $_REQUEST ); die;
 						$prefId = $gBitHybridAuthManager->getConfigName( $_REQUEST['provider'], 'id' );
-						$_SESSION['returnto'] = $gBitHybridAuthManager->getConnectUri( $_REQUEST['provider'] );
+                        $_SESSION['returnto'] = $_SERVER['SCRIPT_URI'].'?provider='.$_REQUEST['provider'].'&auth_login=1';
 						include( USERS_PKG_PATH.'register_inc.php' );
 					}
 				}
@@ -145,7 +146,6 @@ if( !empty( $tpl ) ) {
 // but if we came from a login page, let's go home (except if we got an error when login in)
 	$redirectUrl = $gBitUser->getPostLoginUrl();
 } else {
-	echo "no where to go";
 }
 
 if( !empty( $redirectUrl ) ) {

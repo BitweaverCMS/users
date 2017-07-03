@@ -9,7 +9,7 @@
 		{if $authProfile}
 		<div class="row">	
 			<div class="col-xs-12 col-sm-8 col-md-6">
-			{form ifile="validate.php"}
+			{form}
 			<input type="hidden" name="provider" value="{$smarty.request.provider}">
 			<div class="well">
 				<div class="row">
