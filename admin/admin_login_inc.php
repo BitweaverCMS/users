@@ -4,7 +4,7 @@
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
 
-require_once( USERS_PKG_PATH.'lib/BaseAuth.php' );
+require_once( USERS_PKG_PATH.'includes/BaseAuth.php' );
 
 $loginSettings = array(
 	'users_allow_register' => array(
@@ -227,7 +227,7 @@ if( !function_exists("gd_info" ) ) {
 	$gBitSmarty->assign( 'warning', 'PHP GD library is required for this feature (not found on your system)' );
 }
 
-require_once( USERS_PKG_PATH.'lib/BitHybridAuthManager.php' );
+require_once( USERS_PKG_PATH.'includes/BitHybridAuthManager.php' );
 BitHybridAuthManager::loadSingleton();
 global $gBitHybridAuthManager;
 

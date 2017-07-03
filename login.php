@@ -12,7 +12,7 @@
  * required setup
  */
 include_once ("../kernel/setup_inc.php");
-require_once( USERS_PKG_PATH.'lib/BitHybridAuthManager.php' );
+require_once( USERS_PKG_PATH.'includes/BitHybridAuthManager.php' );
 
 if( !empty( $_REQUEST['returnto'] ) ) {
 	$_SESSION['returnto'] = $_REQUEST['returnto'];

@@ -18,7 +18,7 @@
 /**
  * required setup
  */
-require_once( USERS_PKG_PATH.'lib/BitUser.php' );
+require_once( USERS_PKG_PATH.'includes/BitUser.php' );
 
 /**
  * Class that holds all information for a given user

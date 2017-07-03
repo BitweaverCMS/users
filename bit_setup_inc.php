@@ -41,7 +41,7 @@ if( !defined( 'LOGO_MAX_DIM' )) {
 
 // a package can decide to override the default user class
 $userClass = $gBitSystem->getConfig( 'user_class', (defined('ROLE_MODEL') ) ?  'RolePermUser' : 'BitPermUser' );
-require_once( USERS_PKG_PATH.'lib/' . $userClass .'.php' );
+require_once( USERS_PKG_PATH.'includes/' . $userClass .'.php' );
 
 // set session lifetime
 if( $gBitSystem->isFeatureActive( 'site_session_lifetime' )) {
@@ -179,6 +179,6 @@ if( $gBitUser->isValid() && $gBitUser->isRegistered() ) {
 	$gBitSystem->registerAppMenu( $menuHash );
 }
 
-require_once( USERS_PKG_PATH.'lib/BaseAuth.php' );
+require_once( USERS_PKG_PATH.'includes/BaseAuth.php' );
 
 ?>

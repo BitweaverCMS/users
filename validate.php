@@ -37,7 +37,7 @@ if( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], USERS
 }
 
 if( !empty( $_REQUEST['provider'] ) ) {
-	require_once( USERS_PKG_PATH.'lib/BitHybridAuthManager.php' );
+	require_once( USERS_PKG_PATH.'includes/BitHybridAuthManager.php' );
 	BitHybridAuthManager::loadSingleton();
 	global $gBitHybridAuthManager;
 
