@@ -9,7 +9,9 @@
 
 require_once( USERS_PKG_PATH.'hauth/Hybrid/Auth.php' );
 
-require_once( EXTERNAL_LIBS_PATH . 'facebook/src/Facebook/autoload.php' );
+if( file_exists( EXTERNAL_LIBS_PATH.'facebook/src/Facebook/autoload.php' ) ) {
+	require_once( EXTERNAL_LIBS_PATH.'facebook/src/Facebook/autoload.php' );
+}
 
 class BitHybridAuthManager extends BitSingleton {
 
