@@ -14,4 +14,8 @@ require_once( EXTERNAL_LIBS_PATH . 'facebook/src/Facebook/autoload.php' );
 require_once( "Hybrid/Auth.php" );
 require_once( "Hybrid/Endpoint.php" );
 
-Hybrid_Endpoint::process();
+try {
+	Hybrid_Endpoint::process();
+} catch( Exception $e ) {
+	$gBitSystem->fatalError( $e->getMessage(), NULL, NULL, HttpStatusCodes::HTTP_UNAUTHORIZED );
+}
