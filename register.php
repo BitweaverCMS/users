@@ -41,7 +41,7 @@ if( $gBitUser->isRegistered() ) {
 }
 if( isset( $_REQUEST["register"] ) ) {
 
-	$regiserHash = $_REQUEST;
+	$registerHash = $_REQUEST;
 
 	include( USERS_PKG_PATH.'includes/register_inc.php' );
 
