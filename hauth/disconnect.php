@@ -14,7 +14,7 @@ require_once( '../../kernel/setup_inc.php' );
 
 if( !empty( $_REQUEST['returnto'] ) ) {
 	$_SESSION['returnto'] = $_REQUEST['returnto'];
-} elseif( !empty( $_SERVER['HTTP_REFERER'] ) && !strpos( $_SERVER['HTTP_REFERER'], 'login.php' )  && !strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) ) {
+} elseif( !empty( $_SERVER['HTTP_REFERER'] ) && !strpos( $_SERVER['HTTP_REFERER'], 'signin.php' )  && !strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) ) {
 	$from = parse_url( $_SERVER['HTTP_REFERER'] );
 	if( !empty( $from['path'] ) && $from['host'] == $_SERVER['SERVER_NAME'] ) {
 		$_SESSION['loginfrom'] = $from['path'].'?'.( !empty( $from['query'] ) ? $from['query'] : '' );

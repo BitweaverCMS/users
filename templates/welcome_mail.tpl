@@ -2,7 +2,7 @@
 
 {tr}Welcome to{/tr} {$siteName}!
 
-{tr}To login, visit{/tr} {$smarty.const.USERS_PKG_URI}login.php
+{tr}To login, visit{/tr} {$smarty.const.USERS_PKG_URI}signin.php
 
 {tr}Your login email is:{/tr} {$mailEmail}
 

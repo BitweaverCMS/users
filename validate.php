@@ -24,7 +24,7 @@ global $gBitSystem;
 $redirectUrl = FALSE;
 
 //Remember where user is logging in from and send them back later; using session variable for those of us who use WebISO services
-//do not use session loginfrom with login.php or register.php - only "inline" login forms display in perm denied fatals, etc.
+//do not use session loginfrom with signin.php or register.php - only "inline" login forms display in perm denied fatals, etc.
 if( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], USERS_PKG_DIR.'/login' ) === FALSE && strpos( $_SERVER['HTTP_REFERER'], USERS_PKG_DIR.'/register' ) === FALSE && strpos( $_SERVER['HTTP_REFERER'], USERS_PKG_DIR.'/validate' ) === FALSE ) {
 	$from = parse_url( $_SERVER['HTTP_REFERER'] );
 	if( $_SERVER['HTTP_HOST'] == $from['host'] ) {
@@ -143,7 +143,7 @@ if( !empty( $_REQUEST['provider'] ) ) {
 
 if( !empty( $tpl ) ) {
 	$gBitSystem->display( $tpl );
-} elseif(( strpos( $redirectUrl, 'login.php?' ) || strpos( $redirectUrl, 'remind_password.php' )) && strpos( $redirectUrl, 'login.php?error=' ) == -1 ) {
+} elseif(( strpos( $redirectUrl, 'signin.php?' ) || strpos( $redirectUrl, 'remind_password.php' )) && strpos( $redirectUrl, 'signin.php?error=' ) == -1 ) {
 // but if we came from a login page, let's go home (except if we got an error when login in)
 	$redirectUrl = $gBitUser->getPostLoginUrl();
 } else {

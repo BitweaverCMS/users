@@ -1352,7 +1352,7 @@ class BitUser extends LibertyMime {
 				$this->mInfo = array();
 				$this->clearFromCache();
 				$this->mErrors['login'] = tra( 'Invalid username or password' );
-				$url = USERS_PKG_URL.'login.php?error=' . urlencode( $this->mErrors['login'] );
+				$url = USERS_PKG_URL.'signin.php?error=' . urlencode( $this->mErrors['login'] );
 			}
 		}
 		$this->CompleteTrans();

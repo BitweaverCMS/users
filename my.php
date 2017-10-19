@@ -14,7 +14,7 @@
 require_once( '../kernel/setup_inc.php' );
 
 if( !$gBitUser->isRegistered() ) {
-	Header( 'Location: '.USERS_PKG_URL.'login.php' );
+	Header( 'Location: '.USERS_PKG_URL.'signin.php' );
 	die;
 }
 

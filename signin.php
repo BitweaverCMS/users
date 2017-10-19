@@ -12,14 +12,15 @@
  * required setup
  */
 include_once ("../kernel/setup_inc.php");
-require_once( USERS_PKG_PATH.'includes/BitHybridAuthManager.php' );
 
+require_once( USERS_PKG_PATH.'includes/BitHybridAuthManager.php' );
 BitHybridAuthManager::loadSingleton();
 global $gBitHybridAuthManager;
+$gBitSmarty->assign( 'hybridProviders', $gBitHybridAuthManager->getEnabledProviders() );
 
 if( !empty( $_REQUEST['returnto'] ) ) {
 	$_SESSION['returnto'] = $_REQUEST['returnto'];
-} elseif( !empty( $_SERVER['HTTP_REFERER'] ) && !strpos( $_SERVER['HTTP_REFERER'], 'login.php' )  && !strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) ) {
+} elseif( !empty( $_SERVER['HTTP_REFERER'] ) && !strpos( $_SERVER['HTTP_REFERER'], 'signin.php' )  && !strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) ) {
 	$from = parse_url( $_SERVER['HTTP_REFERER'] );
 	if( !empty( $from['path'] ) && $from['host'] == $_SERVER['SERVER_NAME'] ) {
 		$_SESSION['loginfrom'] = $from['path'].'?'.( !empty( $from['query'] ) ? $from['query'] : '' );
@@ -34,10 +35,6 @@ if( !empty( $_REQUEST['error'] ) ) {
 	$gBitSmarty->assign( 'error', $_REQUEST['error'] );
 	$gBitSystem->setHttpStatus( HttpStatusCodes::HTTP_UNAUTHORIZED );
 }
-
-BitHybridAuthManager::loadSingleton();
-global $gBitHybridAuthManager;
-$gBitSmarty->assign( 'hybridProviders', $gBitHybridAuthManager->getEnabledProviders() );
 
 $languages = array();
 $languages = $gBitLanguage->listLanguages();

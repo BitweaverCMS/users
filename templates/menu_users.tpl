@@ -45,7 +45,7 @@
 		{/if}
 		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}logout.php">{booticon iname="icon-signout" iexplain="Log out" ilocation=$location}</a></li>
 	{else}
-		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}login.php">{booticon iname="icon-signin" iexplain="Login" ilocation=$location}</a></li>
+		<li><a class="item" href="{$smarty.const.USERS_PKG_URL}signin.php">{booticon iname="icon-signin" iexplain="Login" ilocation=$location}</a></li>
 		{if $gBitSystem->isFeatureActive('users_allow_register')}
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}register.php">{booticon iname="icon-user" iexplain="Register" ilocation=$location}</a></li>
 		{/if}

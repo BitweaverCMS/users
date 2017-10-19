@@ -8,7 +8,7 @@
 
 {if $showmsg ne 'y'}
 	<div class="body">
-		<p>{tr}If you are already registered, please{/tr} <a href="{$smarty.const.USERS_PKG_URL}login.php">{tr}login{/tr}</a></p>
+		<p>{tr}If you are already registered, please{/tr} <a href="{$smarty.const.USERS_PKG_URL}signin.php">{tr}login{/tr}</a></p>
 		{form enctype="multipart/form-data" legend="Please fill in the following details"}
 			{foreach from=$reg.CUSTOM item='custom' key='custom_name'}
 				<input type="hidden" name="CUSTOM[{$custom_name}]" value="{$custom}"/>

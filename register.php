@@ -23,13 +23,18 @@ require_once( USERS_PKG_PATH.'includes/recaptchalib.php' );
 
 $gBitSystem->verifyFeature( 'users_allow_register' );
 
+require_once( USERS_PKG_PATH.'includes/BitHybridAuthManager.php' );
+BitHybridAuthManager::loadSingleton();
+global $gBitHybridAuthManager;
+$gBitSmarty->assign( 'hybridProviders', $gBitHybridAuthManager->getEnabledProviders() );
+
 // Everything below here is needed for registration
 
 require_once( USERS_PKG_PATH.'includes/BaseAuth.php' );
 
 if( !empty( $_REQUEST['returnto'] ) ) {
 	$_SESSION['returnto'] = $_REQUEST['returnto'];
-} elseif( !empty( $_SERVER['HTTP_REFERER'] ) && !strpos( $_SERVER['HTTP_REFERER'], 'login.php' )  && !strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) ) {
+} elseif( !empty( $_SERVER['HTTP_REFERER'] ) && !strpos( $_SERVER['HTTP_REFERER'], 'signin.php' )  && !strpos( $_SERVER['HTTP_REFERER'], 'register.php' ) ) {
 	$from = parse_url( $_SERVER['HTTP_REFERER'] );
 	if( !empty( $from['path'] ) && $from['host'] == $_SERVER['SERVER_NAME'] ) {
 		$_SESSION['loginfrom'] = $from['path'].'?'.( !empty( $from['query'] ) ? $from['query'] : '' );

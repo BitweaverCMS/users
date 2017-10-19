@@ -6,7 +6,7 @@
 		{formlabel label="Connect with" for="user"}
 		{forminput}
 			{foreach from=$hybridProviders key=providerKey item=providerHash}<a class="btn btn-default" href="{$smarty.const.USERS_PKG_URL}validate?provider={$providerHash.provider}">{booticon iname=$providerHash.icon} {$providerHash.provider}</a> {/foreach}
-			{formhelp note="Use one of the sites above to login."}
+			{formhelp note="Use one of the sites above to login. If you have previously logged in, we will connect your existing account."}
 		{/forminput}
 	</div>
 	<hr>

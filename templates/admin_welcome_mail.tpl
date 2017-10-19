@@ -2,7 +2,7 @@
 
 Welcome to {$siteName}!
 
-To login, visit http://{$mail_site}{$smarty.const.USERS_PKG_URL}login.php
+To login, visit http://{$mail_site}{$smarty.const.USERS_PKG_URL}signin.php
 
 Your login email is: {$mailEmail}
 
