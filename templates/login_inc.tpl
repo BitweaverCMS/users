@@ -3,9 +3,9 @@
 
 {if $hybridProviders}
 	<div class="form-group">
-		{formlabel label="Connect with" for="user"}
+		{formlabel label="Sign in with" for="user"}
 		{forminput}
-			{foreach from=$hybridProviders key=providerKey item=providerHash}<a class="btn btn-default" href="{$smarty.const.USERS_PKG_URL}validate?provider={$providerHash.provider}">{booticon iname=$providerHash.icon} {$providerHash.provider}</a> {/foreach}
+			{foreach from=$hybridProviders key=providerKey item=providerHash}<a {if !$providerHash.image}class="btn btn-default"{/if} href="{$smarty.const.USERS_PKG_URL}validate?provider={$providerHash.provider}">{if $providerHash.image}<img src="{$providerHash.image}" alt="{tr}Sign in with {$providerHash.provider}{/tr}" style="max-height:40px">{else}{booticon iname=$providerHash.icon} {$providerHash.provider}{/if}</a> {/foreach}
 			{formhelp note="Use one of the sites above to login. If you have previously logged in, we will connect your existing account."}
 		{/forminput}
 	</div>

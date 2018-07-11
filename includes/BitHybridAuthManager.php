@@ -227,11 +227,11 @@ class BitHybridAuthManager extends BitSingleton {
 
 	public function getAllProviders() {
 		return array (
+			'google' => array( 'provider' => 'Google', 'icon' => 'icon-google-plus-sign', 'image' => USERS_PKG_URL.'hauth/images/google.png', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
 			'amazon' => array( 'provider' => 'Amazon', 'icon' => 'icon-user', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
 			'aol' => array( 'provider' => 'AOL', 'icon' => 'icon-user', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
 			'facebook' => array( 'provider' => 'Facebook', 'icon' => 'icon-facebook-sign', 'keys' => array( 'id'=>'', 'secret'=> '' ), 'options' => array( 'scope'=>'Comma separated list of requested permissions. Default are: email, user_about_me, user_birthday, user_hometown, user_location, user_website, publish_actions, read_custom_friendlists' ) ),
 			'foursquare' => array( 'provider' => 'Foursquare', 'icon' => 'icon-foursquare', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
-			'google' => array( 'provider' => 'Google', 'icon' => 'icon-google-plus-sign', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
 			'instagram' => array( 'provider' => 'Instagram', 'icon' => 'icon-instagram', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
 			'linkedin' => array( 'provider' => 'LinkedIn', 'icon' => 'icon-linkedin', 'keys' => array( 'key'=>'', 'secret'=> '' ) ),
 			'live' => array( 'provider' => 'Live', 'icon' => 'icon-windows', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
