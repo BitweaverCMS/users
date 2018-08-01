@@ -8,8 +8,8 @@
 /**
  * required setup
  */
-if (file_exists(UTIL_PKG_PATH."pear/Auth/Auth.php")) {
-	require_once (UTIL_PKG_PATH."pear/Auth/Auth.php");
+if (file_exists(UTIL_PKG_INC."pear/Auth/Auth.php")) {
+	require_once (UTIL_PKG_INC."pear/Auth/Auth.php");
 } else {
 // THIS may need changing if a different PEAR installation is used
 	include_once("Auth/Auth.php");
