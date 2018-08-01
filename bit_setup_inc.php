@@ -52,8 +52,8 @@ if( $gBitSystem->isFeatureActive( 'site_session_lifetime' )) {
 if( $gBitSystem->isFeatureActive( 'site_store_session_db' ) && !empty( $gBitDbType )) {
 	if( file_exists( EXTERNAL_LIBS_PATH.'adodb/session/adodb-session.php' )) {
 		include_once( EXTERNAL_LIBS_PATH . 'adodb/session/adodb-session.php' );
-	} elseif( file_exists( UTIL_PKG_PATH.'adodb/session/adodb-session.php' )) {
-		include_once( UTIL_PKG_PATH.'adodb/session/adodb-session.php' );
+	} elseif( file_exists( UTIL_PKG_INC.'adodb/session/adodb-session.php' )) {
+		include_once( UTIL_PKG_INC.'adodb/session/adodb-session.php' );
 	}
 	if ( class_exists( 'ADODB_Session' ) ) {
 		ADODB_Session::dataFieldName( 'session_data' );
