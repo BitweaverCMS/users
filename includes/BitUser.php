@@ -1209,7 +1209,8 @@ class BitUser extends LibertyMime {
 	public static function getSiteCookieName() {
 		global $gBitSystem;
 
-		$cookie_site = strtolower( preg_replace( "/[^a-zA-Z0-9]/", "", $gBitSystem->getConfig( 'site_title', 'bitweaver' )));
+		$cookieName = (is_object( $gBitSystem ) ? $gBitSystem->getConfig( 'site_title', 'bitweaver' ) : 'bitweaver');
+		$cookie_site = strtolower( preg_replace( "/[^a-zA-Z0-9]/", "", $cookieName) );
 		return( 'bit-user-'.$cookie_site );
 	}
 
