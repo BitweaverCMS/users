@@ -79,12 +79,12 @@ class BitUser extends LibertyMime {
 	}
 
 	public function getCacheKey() {
+		$ret = $this->mUserId;
 		$siteCookie = static::getSiteCookieName();
 		if( $this->isRegistered() && !empty( $_COOKIE[$siteCookie] ) ) { 
-			return $_COOKIE[$siteCookie];
-		} else {
-			return ANONYMOUS_USER_ID;
+			$ret .= $_COOKIE[$siteCookie];
 		}
+		return $ret;
 	}
 
 	public static function isCacheableClass() {
