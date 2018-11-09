@@ -510,7 +510,7 @@ class BitUser extends LibertyMime {
 		} elseif( $pEmail == 'root@localhost' || $pEmail == 'guest@localhost' ) {
 			// nothing to do
 		} elseif( !validate_email_syntax( $pEmail ) ) {
-			$pErrors['email'] = 'The email address "'.$pEmail.'" is invalid.';
+			$pErrors['email'] = 'The email address '.$pEmail.' is invalid.';
 		} elseif( $gBitSystem->isFeatureActive( 'users_validate_email' ) ) {
 			$mxErrors;
 			$ret = $this->verifyMX( $pEmail, $mxErrors ) ;
@@ -2739,16 +2739,17 @@ class BitUser extends LibertyMime {
 	function exportHash() {
 		global $gBitSystem;
 		$ret = array();
+
 		if( $this->isValid() ) {
-			$ret = array(
-				'user_id' 		=> $this->mUserId,
-				'content_id' 	=> $this->mContentId,
-				'real_name' 	=> $this->getField( 'real_name' ),
-				'email'	 		=> $this->getField( 'email' ),
-				'uri'        	=> $this->getDisplayUri(),
-				'registration_date' 	=> date( DateTime::W3C, $this->getField('registration_date') ),
-				'last_login' => date( DateTime::W3C, $this->getField('last_login') ),
-			);
+			$ret = parent::exportHash();
+			$ret['login']	 			= $this->getField( 'login' );
+			$ret['user_id'] 			= $this->mUserId;
+			$ret['content_id'] 			= $this->mContentId;
+			$ret['real_name'] 			= $this->getField( 'real_name' );
+			$ret['email']	 			= $this->getField( 'email' );
+			$ret['uri']        			= $this->getDisplayUri();
+			$ret['registration_date'] 	= date( DateTime::W3C, $this->getField('registration_date') );
+			$ret['last_login'] 			= date( DateTime::W3C, $this->getField('last_login') );
 			$ret['content_count'] = get_user_content_count( $this->mUserId );
 			if( $gBitSystem->isPackageActive( 'stats' ) ) {
 				$ret['referer'] = $this->mDb->getOne( "SELECT sru.`referer_url` FROM `".BIT_DB_PREFIX."stats_referer_urls` sru INNER JOIN `".BIT_DB_PREFIX."stats_referer_users_map` srum ON (srum.`referer_url_id`=sru.`referer_url_id`) WHERE `user_id`=?", $this->mUserId );
