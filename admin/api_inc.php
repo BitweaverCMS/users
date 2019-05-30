@@ -12,9 +12,9 @@ function bituser_api_handler( $pMethod, $pRequest ) {
 //		case 'PUT':
 			$newUser = new BitUser();
 			if( $newUser->register( $pRequest ) ) {
-				$gApi->outputJson( 200, $newUser->exportHash() );
+				$gApi->outputJson( $newUser->exportHash(), 200 );
 			} else {
-				$gApi->outputJson( HttpStatusCodes::HTTP_CONFLICT, $newUser->mErrors );
+				$gApi->outputJson( $newUser->mErrors, HttpStatusCodes::HTTP_CONFLICT );
 			}
 			break;
 
@@ -22,7 +22,7 @@ function bituser_api_handler( $pMethod, $pRequest ) {
 			$gApi->verifyAuthorization();
 			$gContent = &$gBitUser;
 			$gContent->verifyViewPermission();
-			$gApi->outputJson( HttpStatusCodes::HTTP_OK, $gContent->exportHash() );
+			$gApi->outputJson( $gContent->exportHash(), HttpStatusCodes::HTTP_OK );
 			break;
 		
 		case 'DELETE':
