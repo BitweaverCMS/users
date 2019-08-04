@@ -4,6 +4,7 @@ global $gApiHelp, $gBitUser, $gBitSystem;
 
 $gApiHelp['User Registration'] = array( 
 	'Request Methods' => array(
+		'method' => 'POST '.API_PKG_URI.'users/register'
 		'help' => '',
 		'parameters' => array(
 			'POST '.API_PKG_URI.'users' => 'POST can be used for creation *and* updating existing user objects',
@@ -40,7 +41,7 @@ Set-Cookie: <strong>'.$gBitUser->getSiteCookieName().'=2ishv84g637mrp7o07hd8829f
 
 $gApiHelp['User Authentication'] = array( 
 	'Authentication' => array(
-		'method' => 'POST '.API_PKG_URI.'users/authenticate',
+		'method' => 'POST '.API_PKG_URI.'users/autheticate',
 		'help' => 'Authentication is performed once per session (application launch) using the standard <a href="http://en.wikipedia.org/wiki/Basic_access_authentication">HTTP Basic Authentication</a>. Once authentication is successful, a cookie named "'.$gBitUser->getSiteCookieName().'" will be returned for the user. Those cookies will need to be included for every request which will automatically identify the user for the lifetime of the cookie.',
 		'parameters' => array(
 			'Authorization: Basic <em>base64encode(username + ":" + password)</em>' => 'HTTP Basic authenictaion sent via HTTP headers. Most frameworks will handle this for you automatically with a simple call. For example AFNetworking <a href=http://engineering.gowalla.com/AFNetworking/Classes/AFHTTPClient.html">::setAuthorizationHeaderWithUsername</a>',
