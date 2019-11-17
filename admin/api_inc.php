@@ -6,7 +6,6 @@ $gApi->registerRoute( USERS_PKG_DIR, 'bituser_api_handler' );
 
 function bituser_api_handler( $pMethod, $pRequest ) {
 	global $gApi, $gBitSystem, $gBitSmarty, $gBitUser;
-			bit_error_log( $pRequest );
 
 	$routeAction = BitBase::getParameter( $pRequest, 'route_action' );
 
