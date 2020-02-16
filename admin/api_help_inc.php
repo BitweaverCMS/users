@@ -4,7 +4,7 @@ global $gApiHelp, $gBitUser, $gBitSystem;
 
 $gApiHelp['User Registration'] = array( 
 	'Request Methods' => array(
-		'method' => 'POST '.API_PKG_URI.'users/register'
+		'method' => 'POST '.API_PKG_URI.'users/register',
 		'help' => '',
 		'parameters' => array(
 			'POST '.API_PKG_URI.'users' => 'POST can be used for creation *and* updating existing user objects',
