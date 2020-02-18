@@ -98,7 +98,7 @@ class BitUser extends LibertyMime {
 	 */
 	public function isCacheableObject() {
 		global $gBitSystem;
-		return parent::isCacheableObject() && (!$this->isAdmin() || $gBitSystem->isLive()); // Do not cache admin object for live sites per paranoia
+		return parent::isCacheableObject() && (!$this->isAdmin() || ($gBitSystem && $gBitSystem->isLive())); // Do not cache admin object for live sites per paranoia
 	}
 
 	/**
@@ -2747,15 +2747,18 @@ class BitUser extends LibertyMime {
 			$ret['content_id'] 			= $this->mContentId;
 			$ret['real_name'] 			= $this->getField( 'real_name' );
 			$ret['email']	 			= $this->getField( 'email' );
-			$ret['uri']        			= $this->getDisplayUri();
+			$ret['display_uri']			= $this->getDisplayUri();
 			$ret['registration_date'] 	= date( DateTime::W3C, $this->getField('registration_date') );
 			$ret['last_login'] 			= date( DateTime::W3C, $this->getField('last_login') );
-			$ret['content_count'] = get_user_content_count( $this->mUserId );
+			$ret['content_count'] 		= get_user_content_count( $this->mUserId );
+			$ret['avatar_uri']			= BIT_BASE_URI.$this->getField( 'avatar_url' );
+			$ret['avatar_url']			= $this->getField( 'avatar_url' );
 			if( $gBitSystem->isPackageActive( 'stats' ) ) {
 				$ret['referer'] = $this->mDb->getOne( "SELECT sru.`referer_url` FROM `".BIT_DB_PREFIX."stats_referer_urls` sru INNER JOIN `".BIT_DB_PREFIX."stats_referer_users_map` srum ON (srum.`referer_url_id`=sru.`referer_url_id`) WHERE `user_id`=?", $this->mUserId );
 			}
 			$ret['ips'] = implode( ',', $this->mDb->getCol( "SELECT DISTINCT(`ip`) FROM `".BIT_DB_PREFIX."users_cnxn` uc WHERE `user_id`=?", $this->mUserId ) );
 		}
+
 		return $ret;
 	}
 
