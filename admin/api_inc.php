@@ -19,7 +19,7 @@ function bituser_api_handler( $pMethod, $pRequest ) {
 				$respStatus = HttpStatusCodes::HTTP_OK;
 				$respData = $newUser->exportHash();
 			} else {
-				$respStatus = HTTP_CONFLICT;
+				$respStatus = HttpStatusCodes::HTTP_CONFLICT;
 				$respData = $newUser->mErrors;
 			}
 		}
