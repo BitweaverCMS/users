@@ -2375,7 +2375,7 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return get a link to the the users homepage
 	 */
-	public function getDisplayLink( $pLinkText=NULL, $pMixed=NULL, $pAnchor=NULL ) {
+	public static function getDisplayLink( $pLinkText=NULL, $pMixed=NULL, $pAnchor=NULL ) {
 		return BitUser::getDisplayNameFromHash( TRUE, $pMixed );
 	}
 
