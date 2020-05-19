@@ -2326,7 +2326,7 @@ class BitUser extends LibertyMime {
 	 * getDisplayUrl
 	 *
 	 * @param array $pUserName
-	 * @param array $pMixed
+	 * @param array $pParamHash
 	 * @access public
 	 * @return URL to users homepage
 	 */
@@ -2358,8 +2358,8 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return get a link to the the users homepage
 	 */
-	public function getDisplayLink( $pLinkText=NULL, $pMixed=NULL, $pAnchor=NULL ) {
-		return BitUser::getDisplayNameFromHash( TRUE, $pMixed );
+	public function getDisplayLink( $pParamHash, $pLinkText=NULL, $pAnchor=NULL ) {
+		return BitUser::getDisplayNameFromHash( $pParamHash, TRUE );
 	}
 
 	/**
@@ -2370,7 +2370,7 @@ class BitUser extends LibertyMime {
 	 * @return get the users display name
 	 */
 	public static function getTitleFromHash( &$pHash, $pDefault=TRUE ) {
-		return BitUser::getDisplayNameFromHash( FALSE, $pHash );
+		return BitUser::getDisplayNameFromHash( $pHash, FALSE );
 	}
 
 	/**
@@ -2440,7 +2440,7 @@ class BitUser extends LibertyMime {
 		if( empty( $pHash ) && !empty( $this ) && !empty( $this->mInfo )) {
 			$pHash = &$this->mInfo;
 		}
-		return static::getDisplayNameFromHash( $pUseLink, $pHash );
+		return static::getDisplayNameFromHash( $pHash, $pUseLink );
 	}
 
 	/**

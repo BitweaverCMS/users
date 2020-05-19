@@ -1692,13 +1692,13 @@ class BitUser extends LibertyMime {
 	/**
 	 * getByHash get user from cookie hash
 	 *
-	 * @param array $pHash
+	 * @param array $pParamHash
 	 * @access public
 	 * @return user info
 	 */
-	function getUserIdFromCookieHash( $pHash ) {
+	function getUserIdFromCookieHash( $pParamHash ) {
 		$query = "SELECT `user_id` FROM `".BIT_DB_PREFIX."users_cnxn` WHERE `cookie` = ?";
-		return $this->mDb->getOne( $query, array( $pHash ));
+		return $this->mDb->getOne( $query, array( $pParamHash ));
 	}
 
 	/**
@@ -2220,13 +2220,13 @@ class BitUser extends LibertyMime {
 	/**
 	 * remove_user_watch_by_hash
 	 *
-	 * @param array $pHash
+	 * @param array $pParamHash
 	 * @access public
 	 * @return TRUE on success, FALSE on failure
 	 */
-	function remove_user_watch_by_hash( $pHash ) {
+	function remove_user_watch_by_hash( $pParamHash ) {
 		$query = "DELETE FROM `".BIT_DB_PREFIX."users_watches` WHERE `hash`=?";
-		$this->mDb->query( $query,array( $pHash ));
+		$this->mDb->query( $query,array( $pParamHash ));
 	}
 
 	/**
@@ -2340,10 +2340,10 @@ class BitUser extends LibertyMime {
 	}
 
 	/**
-	 * getDisplayUrl
+	 * getDisplayUrlFromHash
 	 *
 	 * @param array $pUserName
-	 * @param array $pMixed
+	 * @param array $pParamHash
 	 * @access public
 	 * @return URL to users homepage
 	 */
@@ -2375,65 +2375,65 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return get a link to the the users homepage
 	 */
-	public static function getDisplayLink( $pLinkText=NULL, $pMixed=NULL, $pAnchor=NULL ) {
-		return BitUser::getDisplayNameFromHash( TRUE, $pMixed );
+	public static function getDisplayLinkFromHash( &$pParamHash, $pLinkText=NULL, $pAnchor=NULL ) {
+		return BitUser::getDisplayNameFromHash( $pParamHash, TRUE );
 	}
 
 	/**
 	 * getTitle
 	 *
-	 * @param array $pHash
+	 * @param array $pParamHash
 	 * @access public
 	 * @return get the users display name
 	 */
-	public static function getTitleFromHash( &$pHash, $pDefault=TRUE ) {
-		return BitUser::getDisplayNameFromHash( FALSE, $pHash );
+	public static function getTitleFromHash( &$pParamHash, $pDefault=TRUE ) {
+		return BitUser::getDisplayNameFromHash( $pParamHash );
 	}
 
 	/**
 	 * Get user information for a particular user
 	 *
 	 * @param pUseLink return the information in the form of a url that links to the users information page
-	 * @param pHash todo - need explanation on how to use this...
+	 * @param pParamHash todo - need explanation on how to use this...
 	 * @return display name or link to user information page
 	 **/
-	public static function getDisplayNameFromHash( $pUseLink=FALSE, $pHash ) {
+	public static function getDisplayNameFromHash( $pParamHash, $pUseLink=FALSE ) {
 		global $gBitSystem, $gBitUser;
-		if( !empty( $pHash )) {
-			if( !empty( $pHash['real_name'] ) && $gBitSystem->getConfig( 'users_display_name', 'real_name' ) == 'real_name' ) {
-				$displayName = $pHash['real_name'];
-			} elseif( !empty( $pHash['user'] )) {
-				$displayName = $pHash['user'];
-			} elseif( !empty( $pHash['login'] )) {
-				$displayName = $pHash['login'];
-			} elseif( !empty( $pHash['email'] )) {
-				$displayName = substr( $pHash['email'], 0, strpos( $pHash['email'], '@' ));
+		if( !empty( $pParamHash )) {
+			if( !empty( $pParamHash['real_name'] ) && $gBitSystem->getConfig( 'users_display_name', 'real_name' ) == 'real_name' ) {
+				$displayName = $pParamHash['real_name'];
+			} elseif( !empty( $pParamHash['user'] )) {
+				$displayName = $pParamHash['user'];
+			} elseif( !empty( $pParamHash['login'] )) {
+				$displayName = $pParamHash['login'];
+			} elseif( !empty( $pParamHash['email'] )) {
+				$displayName = substr( $pParamHash['email'], 0, strpos( $pParamHash['email'], '@' ));
 			} else {
-				$displayName = $pHash['user_id'];
+				$displayName = $pParamHash['user_id'];
 			}
 
-			if( !empty( $pHash['user'] )) {
-				$iHomepage = $pHash['user'];
-			} elseif( !empty( $pHash['login'] )) {
+			if( !empty( $pParamHash['user'] )) {
+				$iHomepage = $pParamHash['user'];
+			} elseif( !empty( $pParamHash['login'] )) {
 				// user of 'login' is deprecated and eventually should go away!
-				$iHomepage = $pHash['login'];
-			} elseif( BitBase::verifyId( $pHash['user_id'] )) {
-				$iHomepage = $pHash['user_id'];
-			} elseif( !empty( $pHash['email'] )) {
-				$iHomepage = $pHash['email'];
+				$iHomepage = $pParamHash['login'];
+			} elseif( BitBase::verifyId( $pParamHash['user_id'] )) {
+				$iHomepage = $pParamHash['user_id'];
+			} elseif( !empty( $pParamHash['email'] )) {
+				$iHomepage = $pParamHash['email'];
 			} else {
 				// this won't work right now, we need to alter userslib::interpret_home() to interpret a real name
-				$iHomepage = $pHash['real_name'];
+				$iHomepage = $pParamHash['real_name'];
 			}
 
-			if( empty( $pHash['users_information'] ) && !empty( $pHash['login'] ) ) {
-				$pHash['users_information'] = $gBitSystem->mDb->getOne( "SELECT pref_value FROM liberty_content_prefs lcp INNER JOIN users_users uu ON (lcp.content_id=uu.content_id) WHERE uu.login=? AND pref_name='users_information'", array( $pHash['login'] ), 1, NULL, 86400 );
+			if( empty( $pParamHash['users_information'] ) && !empty( $pParamHash['login'] ) ) {
+				$pParamHash['users_information'] = $gBitSystem->mDb->getOne( "SELECT pref_value FROM liberty_content_prefs lcp INNER JOIN users_users uu ON (lcp.content_id=uu.content_id) WHERE uu.login=? AND pref_name='users_information'", array( $pParamHash['login'] ), 1, NULL, 86400 );
 			}
 
-			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' ) && (empty( $pHash['users_information'] ) || $pHash['users_information'] == 'public') ) {
-				$ret = '<a class="username" title="'.( !empty( $pHash['link_title'] ) ? $pHash['link_title'] : tra( 'Profile for' ).' '.htmlspecialchars( $displayName ))
-					.'" href="'.BitUser::getDisplayUrlFromHash( $pHash ).'">'
-					. htmlspecialchars( isset( $pHash['link_label'] ) ? $pHash['link_label'] : $displayName )
+			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' ) && (empty( $pParamHash['users_information'] ) || $pParamHash['users_information'] == 'public') ) {
+				$ret = '<a class="username" title="'.( !empty( $pParamHash['link_title'] ) ? $pParamHash['link_title'] : tra( 'Profile for' ).' '.htmlspecialchars( $displayName ))
+					.'" href="'.BitUser::getDisplayUrlFromHash( $pParamHash ).'">'
+					. htmlspecialchars( isset( $pParamHash['link_label'] ) ? $pParamHash['link_label'] : $displayName )
 					.'</a>';
 			} else {
 				$ret = htmlspecialchars( $displayName );
@@ -2449,15 +2449,11 @@ class BitUser extends LibertyMime {
 	 * Get user information for a particular user
 	 *
 	 * @param pUseLink return the information in the form of a url that links to the users information page
-	 * @param pHash todo - need explanation on how to use this...
+	 * @param pParamHash todo - need explanation on how to use this...
 	 * @return display name or link to user information page
 	 **/
-	function getDisplayName( $pUseLink=FALSE, $pHash=NULL ) {
-		$ret = NULL;
-		if( empty( $pHash ) && !empty( $this ) && !empty( $this->mInfo )) {
-			$pHash = &$this->mInfo;
-		}
-		return static::getDisplayNameFromHash( $pUseLink, $pHash );
+	function getDisplayName( $pUseLink=FALSE ) {
+		return static::getDisplayNameFromHash( $this->mInfo, $pUseLink );
 	}
 
 	/**
