@@ -2489,8 +2489,7 @@ class BitUser extends LibertyMime {
 		LibertyContent::prepGetList( $pParamHash );
 
 		$selectSql = $joinSql = $whereSql = '';
-		$bindVars = array();
-		array_push( $bindVars, 'bituser' );
+		$bindVars = array( 'bituser' );
 		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, NULL, $pParamHash );
 
 		// limit search to users with a specific language

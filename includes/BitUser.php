@@ -904,7 +904,7 @@ class BitUser extends LibertyMime {
 		trim_array( $pParamHash );
 
 		// perhaps someone is importing users and *knows* what they are doing
-		if( @$this->verifyId( $pParamHash['user_id'] ) ) {
+		if( $this->verifyIdParameter( $pParamHash, 'user_id' ) ) {
 			// only import user_id if it doesn't exist or overwrite is set.
 			if( !$this->userExists( array( 'user_id' => $pParamHash['user_id'] ) ) || !empty( $_REQUEST['overwrite'] ) ) {
 				$pParamHash['user_store']['user_id'] = $pParamHash['user_id'];
@@ -2502,8 +2502,7 @@ class BitUser extends LibertyMime {
 		LibertyContent::prepGetList( $pParamHash );
 
 		$selectSql = $joinSql = $whereSql = '';
-		$bindVars = array();
-		array_push( $bindVars, 'bituser' );
+		$bindVars = array( 'bituser' );
 		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars, NULL, $pParamHash );
 
 		// limit search to users with a specific language

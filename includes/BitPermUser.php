@@ -384,7 +384,7 @@ class BitPermUser extends BitUser {
 	 * @return Default Group ID if one is set
 	 */
 	function getDefaultGroup( $pGroupId = NULL ) {
-		$bindvars = NULL;
+		$bindvars = FALSE;
 		$whereSql = '';
 		if( @BitBase::verifyId( $pGroupId )) {
 			$whereSql = "AND `group_id`=? ";

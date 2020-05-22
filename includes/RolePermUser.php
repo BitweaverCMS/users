@@ -384,7 +384,7 @@ class RolePermUser extends BitUser {
 	 * @return Default Role ID if one is set
 	 */
 	function getDefaultRole( $pRoleId = NULL ) {
-		$bindvars = NULL;
+		$bindvars = FALSE;
 		$whereSql = '';
 		if( @BitBase::verifyId( $pRoleId )) {
 			$whereSql = "AND `role_id`=? ";
