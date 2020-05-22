@@ -19,30 +19,7 @@
 					<div class="form-group">
 						{formlabel label="Real Name" for="real_name"}
 						{forminput}
-							<input type="text" name="real_name" id="real_name" value="{$newUser.real_name}" />
-						{/forminput}
-					</div>
-
-					<div class="form-group">
-						{formfeedback error=$errors.login}
-						{formlabel label="User" for="login"}
-						{forminput}
-							<input type="text" name="login" id="login" value="{$newUser.login}"  />
-						{/forminput}
-					</div>
-
-					<div class="form-group">
-						{formfeedback error=$errors.password}
-						{formlabel label="Password" for="password"}
-						{forminput}
-							<input type="password" name="password" id="password" value="{$newUser.password}"  />
-						{/forminput}
-					</div>
-
-					<div class="form-group">
-						{formlabel label="Repeat Password" for="password2"}
-						{forminput}
-							<input type="password" name="password2" id="password2" value="{$newUser.password2}"  />
+							<input class="form-control" type="text" name="real_name" id="real_name" value="{$newUser.real_name}" />
 						{/forminput}
 					</div>
 
@@ -50,7 +27,45 @@
 						{formfeedback error=$errors.email}
 						{formlabel label="Email" for="email"}
 						{forminput}
-							<input type="email" name="email" id="email" size="30" value="{$newUser.email}" />
+							<input class="form-control" type="email" name="email" id="email" size="30" value="{$newUser.email}" />
+						{/forminput}
+					</div>
+
+					<div class="form-group">
+						{formfeedback error=$errors.login}
+						{formlabel label="Username" for="login"}
+						{forminput}
+							<input class="form-control" type="text" name="login" id="login" value="{$newUser.login}"  />
+						{/forminput}
+					</div>
+
+					<div class="form-group">
+						{formfeedback error=$errors.password}
+						{formlabel label="Password" for="password"}
+						{forminput}
+							<div class="input-group">
+								<input class="form-control" type="password" name="password" id="password" value="{$newUser.password}"  />
+								<span class="input-group-addon" onclick="BitBase.genPass('password','password','password2');$('#password').prop('type','text');">{tr}Generate{/tr}</span>
+							</div>
+						{/forminput}
+						{forminput}
+							
+						{/forminput}
+					</div>
+
+					<div class="form-group">
+						{formlabel label="Repeat Password" for="password2"}
+						{forminput}
+							<input class="form-control" type="password" name="password2" id="password2" value="{$newUser.password2}"  />
+						{/forminput}
+					</div>
+
+					<div class="form-group">
+						{formfeedback error=$errors.login}
+						{formlabel label="User ID" for="user_id"}
+						{forminput}
+							<input class="form-control" type="number" min="1" step="1" name="user_id" id="user_id" value="{$newUser.user_id}"/>
+							{formhelp note="Specify an exact user_id. This is not recommended. If you have no idea why you would need to do this, you do not need this."}
 						{/forminput}
 					</div>
 
@@ -77,11 +92,6 @@
 					</div>
 
 					<div class="form-group">
-						{formlabel label="<a href=\"javascript:BitBase.genPass('genepass','password','password2');\">{tr}Generate a password{/tr}</a>" for="email"}
-						{forminput}
-							<input id="genepass" type="text" />
-							{formhelp note="You can use this link to create a random password. Make sure you pass the information on to the user."}
-						{/forminput}
 					</div>
 
 					<div class="form-group">
@@ -102,8 +112,8 @@
 
 					<div class="form-group">
 						{forminput label="checkbox"}
-							<input type="checkbox" name="admin_noemail_user" id="admin_noemail_user" /> {tr}Don't email added user" for="admin_noemail_user{/tr}
-							{formhelp note="If you for some reason don't want to email the added user the login and password, or validation url."}
+							<input type="checkbox" name="admin_noemail_user" id="admin_noemail_user" /> {tr}Don't email new user{/tr}
+							{formhelp note="Do not email the new user a registration confirmation with their login information."}
 						{/forminput}
 					</div>
 
