@@ -22,9 +22,16 @@
 				</tr>
 			{sectionelse}
 				<tr>
-					<td class="norecords" colspan="5">no records found</td>
+					<td class="norecords" colspan="5">{tr}No user activity found{/tr}</td>
 				</tr>
 			{/section}
+			{if $smarty.request.user_id}
+				<tr class="{cycle values="odd,even"}">
+					<td class="item" style="width:150px;">{displayname hash=$userInfo}<br/>(<a href="{$smarty.server.SCRIPT_NAME}?user_id={$userInfo.user_id}">{$userInfo.user_id}</a>)</td>
+					<td class="item" style="width:150px;">{$userInfo.registration_date|bit_short_datetime}</td>
+					<td class="item">{tr}Registered{/tr}</td>
+				</tr>
+			{/if}
 
 			{if $watches}
 				<tr>
@@ -32,7 +39,6 @@
 				</tr>
 			{/if}
 		</table>
-
 		{pagination}
 	</div><!-- end .body -->
 </div><!-- end .useractivity -->
