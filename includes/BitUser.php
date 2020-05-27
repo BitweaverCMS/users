@@ -2430,7 +2430,7 @@ class BitUser extends LibertyMime {
 				$pParamHash['users_information'] = $gBitSystem->mDb->getOne( "SELECT pref_value FROM liberty_content_prefs lcp INNER JOIN users_users uu ON (lcp.content_id=uu.content_id) WHERE uu.login=? AND pref_name='users_information'", array( $pParamHash['login'] ), 1, NULL, 86400 );
 			}
 
-			if( $pUseLink && $gBitUser->hasPermission( 'p_users_view_user_homepage' ) && (empty( $pParamHash['users_information'] ) || $pParamHash['users_information'] == 'public') ) {
+			if( $pUseLink && ($gBitUser->hasPermission( 'p_users_view_user_homepage' ) || $pParamHash['users_information'] == 'public') ) {
 				$ret = '<a class="username" title="'.( !empty( $pParamHash['link_title'] ) ? $pParamHash['link_title'] : tra( 'Profile for' ).' '.htmlspecialchars( $displayName ))
 					.'" href="'.BitUser::getDisplayUrlFromHash( $pParamHash ).'">'
 					. htmlspecialchars( isset( $pParamHash['link_label'] ) ? $pParamHash['link_label'] : $displayName )
