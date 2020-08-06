@@ -1819,16 +1819,15 @@ class BitUser extends LibertyMime {
 
 		if( !empty( $pListHash['ip'] ) ) {
 			$ips = split( ',', $pListHash['ip'] );
-			$whereSql .= ' AND ( ';
+			$ipList = '';
 			do {
 				$ip = array_pop( $ips );
-				$whereSql .= ' uc.`ip` = ? ';
-				$bindVars[] = $ip;
-				if( !empty( $ips ) ) {
-					$whereSql .= ' OR ';
+				if( !empty( $ipList ) ) {
+					$ipList .= ", ";
 				}
+				$ipList .= "'$ip'";
 			} while( $ips );
-			$whereSql .= ' ) ';
+			$whereSql .= ' AND (uc.`ip` IN ('.$ipList.') OR lc.`ip` IN ('.$ipList.'))';
 		}
 
 		if( !empty( $pListHash['online'] ) ) {
@@ -1836,10 +1835,11 @@ class BitUser extends LibertyMime {
 		}
 
 		$query = "
-			SELECT DISTINCT uc.`user_id`, `login`, `real_name`, `connect_time`, `ip`, `user_agent`, `last_get`, uu.`content_id`
-			FROM `".BIT_DB_PREFIX."users_cnxn` uc
-				INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (uc.`user_id` = uu.`user_id`)
-			WHERE uc.`user_id` IS NOT NULL $whereSql
+			SELECT DISTINCT uc.`user_id`, `login`, `real_name`, `connect_time`, uc.`ip`, `user_agent`, `last_get`, uu.`content_id`
+			FROM `".BIT_DB_PREFIX."users_users` uu 
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (uu.`content_id` = lc.`content_id`)
+				LEFT JOIN `".BIT_DB_PREFIX."users_cnxn` uc ON (uc.`user_id` = uu.`user_id`)
+			WHERE uu.`user_id` IS NOT NULL $whereSql
 			ORDER BY ".$this->mDb->convertSortmode( $pListHash['sort_mode'] );
 		$result = $this->mDb->query( $query, $bindVars, $pListHash['max_records'], $pListHash['offset'] );
 		$ret = array();
@@ -1850,8 +1850,9 @@ class BitUser extends LibertyMime {
 
 		$countSql = "
 			SELECT COUNT( uc.`user_id` )
-			FROM `".BIT_DB_PREFIX."users_cnxn` uc
-				INNER JOIN `".BIT_DB_PREFIX."users_users` uu ON (uc.`user_id` = uu.`user_id`)
+			FROM `".BIT_DB_PREFIX."users_users` uu 
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (uu.`content_id` = lc.`content_id`)
+				LEFT JOIN `".BIT_DB_PREFIX."users_cnxn` uc ON (uc.`user_id` = uu.`user_id`)
 			WHERE uc.`user_id` IS NOT NULL $whereSql";
 		$pListHash['cant'] = $this->mDb->GetOne( $countSql, $bindVars );
 		$this->postGetList( $pListHash );
@@ -2520,21 +2521,16 @@ class BitUser extends LibertyMime {
 		// limit search to users with a specific IP
 		if( !empty( $pParamHash['ip'] ) ) {
 			$joinSql .= " LEFT OUTER JOIN `".BIT_DB_PREFIX."users_cnxn` uc ON ( uu.`user_id`=uc.`user_id`) ";
-			$ips = explode( ',', $pParamHash['ip'] );
-			$whereSql .= ' AND ( ';
+			$ips = split( ',', $pParamHash['ip'] );
+			$ipList = '';
 			do {
 				$ip = array_pop( $ips );
-				if( strpos( $ip, '%' ) ) {
-					$whereSql .= " uc.`ip` LIKE ? ";
-				} else {
-					$whereSql .= " uc.`ip`=? ";
+				if( !empty( $ipList ) ) {
+					$ipList .= ", ";
 				}
-				$bindVars[] = $ip;
-				if( !empty( $ips ) ) {
-					$whereSql .= ' OR ';
-				}
+				$ipList .= "'$ip'";
 			} while( $ips );
-			$whereSql .= ' ) ';
+			$whereSql .= ' AND (uc.`ip` IN ('.$ipList.') OR lc.`ip` IN ('.$ipList.'))';
 		}
 
 		// limit to registrations over a time period like 'YYYY-MM-DD' or 'Y \Week W' or anything convertible by SQLDate
