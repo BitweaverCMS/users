@@ -1,12 +1,12 @@
 {strip}
 {if $packageMenuTitle}<a href="#"> {tr}{$packageMenuTitle}{/tr}</a>{/if}
 <ul class="{$packageMenuClass}">
-	<li><a class="item" href="{$smarty.const.USERS_PKG_URL}admin/index.php">{tr}Edit Users{/tr}</a></li>
-	<li><a class="item" href="{$smarty.const.KERNEL_PKG_URL}admin/index.php?page=users">{tr}User Settings{/tr}</a></li>
+	<li><a class="item" href="{$smarty.const.USERS_PKG_URL}admin/">{tr}Edit Users{/tr}</a></li>
+	<li><a class="item" href="{$smarty.const.KERNEL_PKG_URL}admin/?page=users">{tr}User Settings{/tr}</a></li>
 		{if $gBitSystem->isPackageActive('tidbits')}
-			<li><a class="item" href="{$smarty.const.KERNEL_PKG_URL}admin/index.php?page=tidbits">{tr}Users Tidbits{/tr}</a></li>
+			<li><a class="item" href="{$smarty.const.KERNEL_PKG_URL}admin/?page=tidbits">{tr}Users Tidbits{/tr}</a></li>
 		{/if}
-	<li><a class="item" href="{$smarty.const.KERNEL_PKG_URL}admin/index.php?page=login">{tr}Login Options{/tr}</a></li>
+	<li><a class="item" href="{$smarty.const.KERNEL_PKG_URL}admin/?page=login">{tr}Login Options{/tr}</a></li>
 	<li><a class="item" href="{$smarty.const.USERS_PKG_URL}admin/user_activity.php">{tr}User Activity{/tr}</a></li>
 	<li><a class="item" href="{$smarty.const.USERS_PKG_URL}admin/users_import.php">{tr}Import Users{/tr}</a></li>
 		{if $gBitSystem->isPackageActive('protector')}
