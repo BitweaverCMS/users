@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * Copyright (c) 2009 by Jeff Weisberg
  * Author: Jeff Weisberg
  * Created: 2009-Jun-22 16:44 (EDT)
@@ -12,9 +12,6 @@
  *          http://www.solvemedia.com/
  *    - Get a SolveMedia API Keys
  *          http://api.solvemedia.com/public/signup
- *
- * @package users
- * @subpackage functions
  */
 
 /* This code is based on code from,
@@ -146,8 +143,6 @@ function solvemedia_get_html ($pubkey, $error = null, $use_ssl = false)
 
 /**
  * A SolveMediaResponse is returned from solvemedia_check_answer()
- *
- * @package users
  */
 class SolveMediaResponse {
         var $is_valid;
@@ -228,7 +223,48 @@ function solvemedia_get_signup_url ($domain = null, $appname = null) {
 }
 
 
+/**
+  * Calls an HTTP POST function to verify if the user's response was correct
+  * @param string $privkey
+  * @param string $$verifycode
+  * @return SolveMediaResponse
+  */
+function solvemedia_precheck_response ($privkey, $verifycode)
+{
+
+    //discard spam submissions
+    if ($verifycode == null || strlen($verifycode) == 0 ) {
+            $adcopy_response = new SolveMediaResponse();
+            $adcopy_response->is_valid = false;
+            $adcopy_response->error = 'incorrect-solution';
+            return $adcopy_response;
+    }
+
+    $response = _adcopy_http_post (ADCOPY_VERIFY_SERVER, "/papi/verify.precheck.server",
+                                      array (
+                                             'privatekey' => $privkey,
+                                             'verify_code' => $verifycode
+                                             )
+                                      );
+
+    $answers = explode ("\n", $response [1]);
+    $adcopy_response = new SolveMediaResponse();
+
+    if (trim ($answers [0]) == 'true') {
+            $adcopy_response->is_valid = true;
+    }
+    else {
+            $adcopy_response->is_valid = false;
+            $adcopy_response->error = $answers [1];
+    }
+
+    return $adcopy_response;
+
+}
+
+
 /* Mailhide related code */
 /* [ deleted ] */
 
 ?>
+
