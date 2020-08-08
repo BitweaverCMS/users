@@ -6,8 +6,6 @@
 // Initialization
 require_once( '../../kernel/setup_inc.php' );
 
-
-
 $gBitSystem->verifyPermission( 'p_users_admin' );
 
 $feedback = array();
@@ -90,7 +88,7 @@ if( isset( $_REQUEST["action"] ) ) {
 			foreach( $_REQUEST['batch_user_ids'] as $uid ) {
 				$expungeUser = BitUser::getUserObject( $uid );
 				$userInfo = $gBitUser->getUserInfo( array( 'user_id' => $uid ) );
-				if( $expungeUser->load() && $expungeUser->expunge() ) {
+				if( $expungeUser->load() && $expungeUser->expunge( BitBase::getParameter( $_REQUEST, 'delete_user_content' ) ) ) {
 					$delUsers .= "<li>{$userInfo['real_name']} ({$userInfo['login']})</li>";
 				} else {
 					$errDelUsers .= "<li>User $uid could not be deleted:".var_export( $expungeUser->mErrors, TRUE )."</li>";
@@ -111,6 +109,7 @@ if( isset( $_REQUEST["action"] ) ) {
 					$formHash['input'][] = '<span class="error"/>'.$uid.' '.tra('not found').'</span>';
 				}
 			}
+			$formHash['input'][] = "<input type='checkbox' name='delete_user_content' value='all' checked='checked'/> ".tra( 'Delete all content created by this user' );
 			$gBitSystem->setBrowserTitle( 'Delete users' );
 			$msgHash = array(
 				'confirm_item' => tra( 'Are you sure you want to remove these users?' ),

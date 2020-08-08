@@ -112,21 +112,24 @@
 	</ul>
 
 	{if $gBitUser->hasPermission( 'p_users_admin' )}
-		<div style="text-align:right;">
-			<script type="text/javascript">/* <![CDATA[ check / uncheck all */
-				document.write("<label for=\"switcher\">{tr}Select All{/tr}</label> ");
-				document.write("<input class='form-control' name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"BitBase.switchCheckboxes(this.form.id,'batch_user_ids[]','switcher')\" />");
-			/* ]]> */</script>
-			<br />
-			<select name="action" onchange="this.form.submit();">
-				<option value="">{tr}with checked{/tr}:</option>
-				<option value="delete">{tr}Remove{/tr}</option>
-				<option value="export">{tr}Export List{/tr}</option>
-			</select>
-
-			<noscript>
-				<div><input type="submit" class="btn btn-default" value="{tr}Submit{/tr}" /></div>
-			</noscript>
+		<div class="clear">
+			<div class="form-inline">
+				<div class="form-group">
+					{forminput label="checkbox"}
+						<input name="switcher" id="switcher" type="checkbox" onclick="BitBase.switchCheckboxes(this.form.id,'batch_user_ids[]','switcher')" /> {tr}Select All{/tr}
+					{/forminput}
+					{forminput}
+						<select class="form-control input-xs" name="action">
+							<option value="">{tr}with checked{/tr}:</option>
+							<option value="delete">{tr}Remove{/tr}</option>
+							<option value="export">{tr}Export List{/tr}</option>
+						</select>
+					{/forminput}
+					{forminput}
+						<input type="submit" class="btn btn-xs btn-default" name="" value="Submit"/>
+					{/forminput}
+				</div>
+			</div>
 		</div>
 	{/if}
 {/form}
