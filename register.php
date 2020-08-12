@@ -19,7 +19,6 @@ if( isset( $_REQUEST['tk'] ) ) {
 require_once( '../kernel/setup_inc.php' );
 require_once( KERNEL_PKG_PATH.'BitBase.php' );
 include_once( KERNEL_PKG_PATH.'notification_lib.php' );
-require_once( USERS_PKG_PATH.'includes/recaptchalib.php' );
 
 $gBitSystem->verifyFeature( 'users_allow_register' );
 
