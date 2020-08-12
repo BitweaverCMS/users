@@ -403,14 +403,19 @@ class BitUser extends LibertyMime {
 		}
 
 		if( $gBitSystem->isFeatureActive( 'users_register_recaptcha' ) && (empty( $pParamHash['novalidation'] ) || $pParamHash['novalidation'] != 'yes') ) {
-			require_once( USERS_PKG_PATH.'includes/recaptchalib.php' );
-			if( !empty( $pParamHash["recaptcha_challenge_field"] ) && !empty( $pParamHash["recaptcha_response_field"] ) ) {
-				$resp = recaptcha_check_answer ( $gBitSystem->getConfig( 'users_register_recaptcha_private_key' ), $_SERVER["REMOTE_ADDR"], $pParamHash["recaptcha_challenge_field"], $pParamHash["recaptcha_response_field"] );
-				if( !$resp->is_valid ) {
-					$this->mErrors['recaptcha'] = $resp->error;
+			if( !empty( $pParamHash['g-recaptcha-response'] ) ) {
+				require_once UTIL_PKG_PATH.'includes/recaptcha/autoload.php';
+
+				$recaptcha = new \ReCaptcha\ReCaptcha( $gBitSystem->getConfig( 'users_register_recaptcha_private_key' ) );
+				$resp = $recaptcha->setExpectedHostname( $_SERVER['HTTP_HOST'] )
+								  ->verify( $pParamHash['g-recaptcha-response'], $_SERVER['REMOTE_ADDR'] );
+				if( !$resp->isSuccess() ) {
+					foreach( $resp->getErrorCodes() as $errorCode ) {
+						$this->mErrors['recaptcha'][] = ucwords( str_replace( '-', ' ', $errorCode ) );
+					}
 				}
 			} else {
-				$this->mErrors['recaptcha'] = 'Wrong Answer';
+				$this->mErrors['recaptcha'] = 'No reCAPTCHA Response';
 			}
 		}
 

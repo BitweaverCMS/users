@@ -28,7 +28,7 @@
 			{formfeedback error=$errors.passcode}
 			{formlabel label="Passcode to register" for="passcode"}
 			{forminput}
-				<input class="form-control" type="password" name="passcode" id="passcode" required />
+				<input class="form-control" type="password" name="passcode" value="{$reg.passcode}" id="passcode" required />
 				{formhelp note="This is not your user password. It is a code required for registration. Contact your site administrator for details."}
 			{/forminput}
 		</div>

@@ -50,7 +50,7 @@ if( isset( $_REQUEST["register"] ) ) {
 
 	include( USERS_PKG_PATH.'includes/register_inc.php' );
 
-	$gBitSmarty->assignByRef( 'reg', $regiserHash );
+	$gBitSmarty->assignByRef( 'reg', $registerHash );
 
 } else {
 	if( $gBitSystem->isFeatureActive( 'custom_user_fields' ) ) {

@@ -137,8 +137,8 @@ $registerSettings = array(
 		'type' => "checkbox",
 		'note' => "To use reCAPTCHA you must get your API keys from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a> and enter them below.",
 	),
-	'users_register_recaptcha_public_key' => array(
-		'label' => "reCAPTCHA Public Key",
+	'users_register_recaptcha_site_key' => array(
+		'label' => "reCAPTCHA Site Key",
 		'type' => "text",
 		'note' => "This will be given to you after registering your site with Google",
 	),
