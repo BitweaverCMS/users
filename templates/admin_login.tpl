@@ -36,13 +36,13 @@
 			{formlabel label="Default group for users with verifiable emails" for="users_validate_email_group"}
 			{forminput}
 
-				<select name="users_validate_email_group" id="users_validate_email_group">
+				<select name="users_validate_email_group" class="form-control" id="users_validate_email_group">
 					<option value="" {if $gBitSystem->getConfig('users_validate_email_group') eq ''} selected="selected"{/if}>(none)</option>
 					{foreach from=$groups item='group'}
 						<option value="{$group.group_id}" {if $gBitSystem->getConfig('users_validate_email_group') eq $group.group_id} selected="selected"{/if}>{$group.group_name}</option>
 					{/foreach}
 				</select>
-				<div class="formhelp">Selecting (none) will prevent the user from registering with a non responsive email. Click <a href='{$smarty.const.USERS_PKG_URL}admin/verify_emails.php?tk={$gBitUser->mTicket}'>here</a> to validate all of your current users emails.</div>
+				<div class="formhelp">Selecting (none) will prevent the user from registering with a non responsive email. <a class="btn btn-default btn-xs" href='{$smarty.const.USERS_PKG_URL}admin/verify_emails.php?tk={$gBitUser->mTicket}'>{tr}Verify User Emails{/tr}</a></div>
 			{/forminput}
 		</div>
 		<div class="form-group">
@@ -158,7 +158,7 @@
 				{if $output.type == 'text'}
 					{forminput}
 						{formlabel label=$output.label for=$feature}
-						<input type="text" size="50" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
+						<input type="text" class="form-control" name="{$feature}" id="{$feature}" value="{$gBitSystem->getConfig($feature)|escape}" />
 						{formhelp note=$output.note page=$output.page link=$output.link}
 					{/forminput}
 				{else}
@@ -210,7 +210,7 @@
 									{/foreach}
 								</select>
 							{else}
-								<input type="text" size="50" name="{$op_id}" id="{$op_id}" value="{$output.value|escape}" />
+								<input type="text" class="form-control" name="{$op_id}" id="{$op_id}" value="{$output.value|escape}" />
 							{/if}
 							{formhelp note=$output.note page=$output.page link=$output.link}
 						{/forminput}

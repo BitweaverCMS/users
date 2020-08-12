@@ -142,8 +142,8 @@ $registerSettings = array(
 		'type' => "text",
 		'note' => "This will be given to you after registering your site with Google",
 	),
-	'users_register_recaptcha_private_key' => array(
-		'label' => "reCAPTCHA Private Key",
+	'users_register_recaptcha_secret_key' => array(
+		'label' => "reCAPTCHA Secret Key",
 		'type' => "text",
 		'note' => "This will be given to you after registering your site with Google",
 	),

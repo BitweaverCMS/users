@@ -405,7 +405,7 @@ class BitUser extends LibertyMime {
 		if( $gBitSystem->isFeatureActive( 'users_register_recaptcha' ) && (empty( $pParamHash['novalidation'] ) || $pParamHash['novalidation'] != 'yes') ) {
 			require_once( USERS_PKG_PATH.'includes/recaptchalib.php' );
 			if( !empty( $pParamHash["recaptcha_challenge_field"] ) && !empty( $pParamHash["recaptcha_response_field"] ) ) {
-				$resp = recaptcha_check_answer ( $gBitSystem->getConfig( 'users_register_recaptcha_private_key' ), $_SERVER["REMOTE_ADDR"], $pParamHash["recaptcha_challenge_field"], $pParamHash["recaptcha_response_field"] );
+				$resp = recaptcha_check_answer ( $gBitSystem->getConfig( 'users_register_recaptcha_secret_key' ), $_SERVER["REMOTE_ADDR"], $pParamHash["recaptcha_challenge_field"], $pParamHash["recaptcha_response_field"] );
 				if( !$resp->is_valid ) {
 					$this->mErrors['recaptcha'] = $resp->error;
 				}

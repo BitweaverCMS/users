@@ -404,9 +404,9 @@ class BitUser extends LibertyMime {
 
 		if( $gBitSystem->isFeatureActive( 'users_register_recaptcha' ) && (empty( $pParamHash['novalidation'] ) || $pParamHash['novalidation'] != 'yes') ) {
 			if( !empty( $pParamHash['g-recaptcha-response'] ) ) {
-				require_once UTIL_PKG_PATH.'includes/recaptcha/autoload.php';
+				require_once USERS_PKG_PATH.'includes/recaptcha/autoload.php';
 
-				$recaptcha = new \ReCaptcha\ReCaptcha( $gBitSystem->getConfig( 'users_register_recaptcha_private_key' ) );
+				$recaptcha = new \ReCaptcha\ReCaptcha( $gBitSystem->getConfig( 'users_register_recaptcha_secret_key' ) );
 				$resp = $recaptcha->setExpectedHostname( $_SERVER['HTTP_HOST'] )
 								  ->verify( $pParamHash['g-recaptcha-response'], $_SERVER['REMOTE_ADDR'] );
 				if( !$resp->isSuccess() ) {

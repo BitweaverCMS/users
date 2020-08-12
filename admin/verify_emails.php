@@ -6,7 +6,7 @@
 // Initialization
 require_once( '../../kernel/setup_inc.php' );
 
-	
+if( $validatedGroup = $gBitSystem->getConfig( 'users_validate_email_group' ) ) {	
 	$gBitUser->verifyTicket();
 
 	$whereSql = '';
@@ -24,7 +24,7 @@ require_once( '../../kernel/setup_inc.php' );
 		flush();
 		$emailStatus = $gBitUser->verifyMx($email,$errors);
 		if( $emailStatus === true){
-			$gBitUser->addUserToGroup( $id , $gBitSystem->getConfig('users_validate_email_group') );
+			$gBitUser->addUserToGroup( $id , $validatedGroup );
 			print "valid";
 		} elseif( $emailStatus === -1 )  {
 			print "MX connection failed";
@@ -34,5 +34,7 @@ require_once( '../../kernel/setup_inc.php' );
 		print "<br/>\n";
 		flush();
 	}
-
+} else {
+	
+}
 
