@@ -18,7 +18,7 @@ function smarty_function_captcha( $pParams, &$gBitSmarty ) {
 
 	if( $gBitSystem->isFeatureActive('users_register_smcaptcha') ) {
 		require_once( USERS_PKG_PATH.'includes/solvemedialib.php' );
-		$gBitSmarty->assign( 'solveMediaHtml', solvemedia_get_html( $gBitSystem->getConfig( 'users_register_smcaptcha_c_key'), null, !empty( $smarty.server.HTTPS ) ) );
+		$gBitSmarty->assign( 'solveMediaHtml', solvemedia_get_html( $gBitSystem->getConfig( 'users_register_smcaptcha_c_key'), null, !empty( $_SERVER['HTTPS'] ) ) );
 	}
 
 	if( !empty( $pParams['force'] ) || empty( $_SESSION['captcha_verified'] ) && !$gBitUser->hasPermission( 'p_users_bypass_captcha' ) ) {
