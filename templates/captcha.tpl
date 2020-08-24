@@ -41,12 +41,10 @@
 
 {if $gBitSystem->isFeatureActive('users_register_recaptcha')}
 	<div class="form-group {if $errors.recaptcha}error{/if}">
-		{formlabel label="Are you human?" for="recaptcha"}
 		{forminput}
 			{formfeedback error=$errors.recaptcha}
 				<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 				<div class="g-recaptcha" data-sitekey="{$gBitSystem->getConfig('users_register_recaptcha_site_key')}"></div>
-			{formhelp note="Sorry, we have to ask."}
 		{/forminput}
 	</div>
 {/if}
