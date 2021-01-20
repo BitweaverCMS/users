@@ -203,7 +203,7 @@
 		</div>
 	{/foreach}
 
-	{if count($groupList) > 1}
+	{if $groupList && count($groupList) > 1}
 		<hr />
 		{formlabel label="Group" for="group"}
 		{forminput}
