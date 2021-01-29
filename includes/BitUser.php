@@ -704,7 +704,7 @@ class BitUser extends LibertyMime {
 			}
 
 			if( !empty( $pParamHash['verified_email'] ) && $pParamHash['verified_email'] && $gBitSystem->getConfig('users_validate_email_group') ) {
-				BitPermUser::addUserToGroup( $this->mUserId, $gBitSystem->getConfig('users_validate_email_group') );
+				$this->addUserToGroup( $this->mUserId, $gBitSystem->getConfig('users_validate_email_group') );
 			}
 
 			$this->mLogs['register'] = 'New user registered.';
@@ -854,7 +854,7 @@ class BitUser extends LibertyMime {
 			$pParamHash['content_type_guid'] = BITUSER_CONTENT_TYPE_GUID;
 			if( !empty( $pParamHash['user_store'] ) && count( $pParamHash['user_store'] ) ) {
 				// lookup and asign the default group for user
-				$defaultGroups = BitPermUser::getDefaultGroup();
+				$defaultGroups = $this->getDefaultGroup();
 				if( !empty( $defaultGroups ) ) {
 					$pParamHash['user_store']['default_group_id'] = key( $defaultGroups );
 				}
@@ -870,13 +870,13 @@ class BitUser extends LibertyMime {
 				}
 				// make sure user is added into the default group map
 				if( !empty( $pParamHash['user_store']['default_group_id'] ) ) {
-					BitPermUser::addUserToGroup( $pParamHash['user_store']['user_id'],$pParamHash['user_store']['default_group_id'] );
+					$this->addUserToGroup( $pParamHash['user_store']['user_id'],$pParamHash['user_store']['default_group_id'] );
 				}
 
 			}
 			// Prevent liberty from assuming ANONYMOUS_USER_ID while storing
 			$pParamHash['user_id'] = $this->mUserId;
-			if( LibertyContent::store( $pParamHash )) {
+			if( parent::store( $pParamHash )) {
 				if( empty( $this->mInfo['content_id'] ) || $pParamHash['content_id'] != $this->mInfo['content_id'] )  {
 					$query = "UPDATE `".BIT_DB_PREFIX."users_users` SET `content_id`=? WHERE `user_id`=?";
 					$result = $this->mDb->query( $query, array( $pParamHash['content_id'], $this->mUserId ) );
