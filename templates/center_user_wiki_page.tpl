@@ -43,7 +43,7 @@
 			<h1 class="page-header">{$userInfo.title|escape}</h1>
 		</header>
 		<article>
-			{$gQueryUser->parseData()}
+			{$gQueryUser->getParsedData()}
 		</article>
 	</div>
 </div>

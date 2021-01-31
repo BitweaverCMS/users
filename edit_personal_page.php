@@ -42,8 +42,12 @@ if(isset($_REQUEST["preview"])) {
 	}
 	$gBitUser->mInfo['data'] = $_REQUEST["edit"];
 
-	$parsed = $gBitUser->parseData($_REQUEST["edit"], (!empty( $_REQUEST['format_guid'] ) ? $_REQUEST['format_guid'] :
-		( isset($gBitUser->mInfo['format_guid']) ? $gBitUser->mInfo['format_guid'] : 'tikiwiki' ) ) );
+	$parseHash = array( 
+		'data' => $_REQUEST["edit"], 
+		'format' => BitBase::getParameter( $_REQUEST, 'format_guid', $gBitUser->getField( 'format_guid', 'tikiwiki' ) ),
+	);
+
+	$parsed = LibertyContent::parseDataHash( $parseHash );
 	$gBitUser->mInfo['parsed_data'] = $parsed;
 	/* SPELLCHECKING INITIAL ATTEMPT */
 	//This nice function does all the job!
