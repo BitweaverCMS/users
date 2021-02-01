@@ -227,7 +227,7 @@ if( !function_exists("gd_info" ) ) {
 	$gBitSmarty->assign( 'warning', 'PHP GD library is required for this feature (not found on your system)' );
 }
 
-require_once( USERS_PKG_PATH.'includes/BitHybridAuthManager.php' );
+require_once( USERS_PKG_CLASS_PATH.'BitHybridAuthManager.php' );
 BitHybridAuthManager::loadSingleton();
 global $gBitHybridAuthManager;
 

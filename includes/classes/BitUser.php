@@ -66,7 +66,7 @@ class BitUser extends LibertyMime {
 				'content_name_plural' => 'User Information',
 				'handler_class'       => 'BitUser',
 				'handler_package'     => 'users',
-				'handler_file'        => 'includes/BitUser.php',
+				'handler_file'        => 'includes/classes/BitUser.php',
 				'maintainer_url'      => 'http://www.bitweaver.org'
 			)
 		);

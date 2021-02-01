@@ -13,7 +13,7 @@
  */
 include_once ("../kernel/setup_inc.php");
 
-require_once( USERS_PKG_PATH.'includes/BitHybridAuthManager.php' );
+require_once( USERS_PKG_CLASS_PATH.'BitHybridAuthManager.php' );
 BitHybridAuthManager::loadSingleton();
 global $gBitHybridAuthManager;
 $gBitSmarty->assign( 'hybridProviders', $gBitHybridAuthManager->getEnabledProviders() );
