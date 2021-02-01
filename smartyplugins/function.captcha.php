@@ -13,7 +13,9 @@ function smarty_function_captcha( $pParams, &$gBitSmarty ) {
 
 	if( $gBitSystem->isFeatureActive('users_register_recaptcha') ) {
 		require_once USERS_PKG_PATH.'includes/recaptcha/autoload.php';
-		$recaptcha = new \ReCaptcha\ReCaptcha( $gBitSystem->getConfig( 'users_register_recaptcha_secret_key' ) );
+		if( $recapKey = $gBitSystem->getConfig( 'users_register_recaptcha_secret_key' ) ) {	
+			$recaptcha = new \ReCaptcha\ReCaptcha( $recapKey );
+		}
 	}
 
 	if( $gBitSystem->isFeatureActive('users_register_smcaptcha') ) {
