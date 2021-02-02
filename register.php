@@ -17,7 +17,7 @@ if( isset( $_REQUEST['tk'] ) ) {
 }
 
 require_once( '../kernel/setup_inc.php' );
-require_once( KERNEL_PKG_PATH.'BitBase.php' );
+require_once( KERNEL_PKG_CLASS_PATH.'BitBase.php' );
 include_once( KERNEL_PKG_PATH.'notification_lib.php' );
 
 $gBitSystem->verifyFeature( 'users_allow_register' );
@@ -47,7 +47,7 @@ if( isset( $_REQUEST["register"] ) ) {
 
 	$registerHash = $_REQUEST;
 
-	include( USERS_PKG_PATH.'includes/register_inc.php' );
+	include( USERS_PKG_INCLUDE_PATH.'includes/register_inc.php' );
 
 	$gBitSmarty->assignByRef( 'reg', $registerHash );
 

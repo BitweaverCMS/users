@@ -120,7 +120,7 @@ if( !empty( $_REQUEST['group_id'] ) || (!empty( $_REQUEST["action"] ) && $_REQUE
 
 /*
 	// get content and pass it on to the template
-	include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
+	include_once( LIBERTY_PKG_INCLUDE_PATH.'get_content_list_inc.php' );
 	foreach( $contentList as $cItem ) {
 		$cList[$contentTypes[$cItem['content_type_guid']]][$cItem['content_id']] = $cItem['title'].' [id: '.$cItem['content_id'].']';
 	}

@@ -16,7 +16,7 @@
 /**
  * required setup
  */
-require_once( LIBERTY_PKG_PATH.'LibertyMime.php' );
+require_once( LIBERTY_PKG_CLASS_PATH.'LibertyMime.php' );
 require_once( USERS_PKG_PATH.'includes/users_lib.php' );
 
 define( 'AVATAR_TYPE_CENTRALIZED', 'c' );
@@ -2450,7 +2450,7 @@ class BitUser extends LibertyMime {
 	 * @return the fully specified path to file to be included
 	 */
 	function getRenderFile() {
-		return USERS_PKG_PATH."display_bituser_inc.php";
+		return USERS_PKG_INCLUDE_PATH.'display_bituser_inc.php';
 	}
 
 	/**

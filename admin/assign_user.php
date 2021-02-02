@@ -44,7 +44,7 @@ $gBitSmarty->assign('groups', $gBitUser->getAllGroups( $listHash ));
 $gBitSystem->setBrowserTitle( 'Edit User: '.$assignUser->mUsername );
 
 if($gBitSystem->isPackageActive("quota")) {
-	include(QUOTA_PKG_PATH.'quota_inc.php');	
+	include(QUOTA_PKG_INCLUDE_PATH.'quota_inc.php');	
 }
 
 

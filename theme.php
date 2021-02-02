@@ -15,7 +15,7 @@ $gEditMode = 'theme';
  */
 include_once( '../kernel/setup_inc.php' );
 include_once( THEMES_PKG_PATH.'css_lib.php' );
-include_once( KERNEL_PKG_PATH.'BitSystem.php' );
+include_once( KERNEL_PKG_CLASS_PATH.'BitSystem.php' );
 
 global $gBitUser, $gBitSystem;
 
@@ -25,7 +25,7 @@ if (!$gBitUser->isRegistered()) {
 	die;
 }
 
-include_once(USERS_PKG_PATH.'includes/lookup_user_inc.php');
+include_once(USERS_PKG_INCLUDE_PATH.'includes/lookup_user_inc.php');
 
 if ($gQueryUser->mUserId != $gBitUser->mUserId && !$gBitUser->object_has_permission($gBitUser->mUserId, $gQueryUser->mInfo['content_id'], 'bituser', 'p_users_admin')) {
 	$gBitSmarty->assign('msg', tra('You do not have permission to edit this user\'s theme'));

@@ -22,7 +22,7 @@ if( $gBitSystem->getConfig( 'custom_user_fields' )) {
 }
 
 // lookup may be via content_id which will then return user_id for search request
-require_once( USERS_PKG_PATH.'includes/lookup_user_inc.php' );
+require_once( USERS_PKG_INCLUDE_PATH.'includes/lookup_user_inc.php' );
 
 // i think we should always allow looking at yourself - regardless of permissions
 if( !empty( $_REQUEST['home'] ) ) {
@@ -68,7 +68,7 @@ if( !empty( $_REQUEST['home'] ) ) {
 			$gBitSmarty->assign( 'user_id', $gQueryUserId);
 
 			// now that we have all the offsets, we can get the content list
-			include_once( LIBERTY_PKG_PATH.'get_content_list_inc.php' );
+			include_once( LIBERTY_PKG_INCLUDE_PATH.'get_content_list_inc.php' );
 
 			//$gBitSmarty->assignByRef('offset', $offset);
 			$gBitSmarty->assign( 'contentSelect', $contentSelect );

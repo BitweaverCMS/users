@@ -15,7 +15,7 @@ require_once( "../kernel/setup_inc.php" );
 $gBitSystem->verifyPackage( 'rss' );
 $gBitSystem->verifyFeature( 'users_rss' );
 
-require_once( RSS_PKG_PATH."rss_inc.php" );
+require_once( RSS_PKG_INCLUDE_PATH.'rss_inc.php' );
 
 $rss->title = $gBitSystem->getConfig( 'users_rss_title', $gBitSystem->getConfig( 'site_title' ).' - '.tra( 'Registrations' ) );
 $rss->description = $gBitSystem->getConfig( 'users_rss_description', $gBitSystem->getConfig( 'site_title' ).' - '.tra( 'RSS Feed' ) );
