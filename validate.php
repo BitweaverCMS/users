@@ -94,7 +94,7 @@ if( !empty( $_REQUEST['provider'] ) ) {
 						}
 						$prefId = $gBitHybridAuthManager->getConfigName( $_REQUEST['provider'], 'id' );
                         $_SESSION['returnto'] = $_SERVER['SCRIPT_URI'].'?provider='.$_REQUEST['provider'].'&auth_login=1';
-						include( USERS_PKG_INCLUDE_PATH.'includes/register_inc.php' );
+						include( USERS_PKG_INCLUDE_PATH.'register_inc.php' );
 					}
 				}
 			}

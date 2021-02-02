@@ -25,7 +25,7 @@ if (!$gBitUser->isRegistered()) {
 	die;
 }
 
-include_once(USERS_PKG_INCLUDE_PATH.'includes/lookup_user_inc.php');
+include_once(USERS_PKG_INCLUDE_PATH.'lookup_user_inc.php');
 
 if ($gQueryUser->mUserId != $gBitUser->mUserId && !$gBitUser->object_has_permission($gBitUser->mUserId, $gQueryUser->mInfo['content_id'], 'bituser', 'p_users_admin')) {
 	$gBitSmarty->assign('msg', tra('You do not have permission to edit this user\'s theme'));

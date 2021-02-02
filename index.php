@@ -22,7 +22,7 @@ if( $gBitSystem->getConfig( 'custom_user_fields' )) {
 }
 
 // lookup may be via content_id which will then return user_id for search request
-require_once( USERS_PKG_INCLUDE_PATH.'includes/lookup_user_inc.php' );
+require_once( USERS_PKG_INCLUDE_PATH.'lookup_user_inc.php' );
 
 // i think we should always allow looking at yourself - regardless of permissions
 if( !empty( $_REQUEST['home'] ) ) {
