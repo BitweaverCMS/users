@@ -8,7 +8,7 @@
 // ------------------------------------------------------------------------
 //	HybridAuth End Point
 // ------------------------------------------------------------------------
-require_once( '../../kernel/setup_inc.php' );
+require_once( '../../kernel/includes/setup_inc.php' );
 require_once( EXTERNAL_LIBS_PATH . 'facebook/src/Facebook/autoload.php' );
 
 require_once( "Hybrid/Auth.php" );

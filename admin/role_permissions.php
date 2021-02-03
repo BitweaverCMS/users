@@ -1,5 +1,5 @@
 <?php
-require_once( '../../kernel/setup_inc.php' );
+require_once( '../../kernel/includes/setup_inc.php' );
 $gBitSystem->verifyPermission( 'p_admin' );
 
 $feedback = array();

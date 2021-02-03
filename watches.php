@@ -11,7 +11,7 @@
 /**
  * required setup
  */
-include_once( '../kernel/setup_inc.php' );
+include_once( '../kernel/includes/setup_inc.php' );
 $user = $gBitUser->mUserId;
 if (!$user) {
 	$gBitSmarty->assign('msg', tra("You must log in to use this feature"));

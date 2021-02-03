@@ -14,7 +14,7 @@ $gEditMode = 'layout';
 /**
  * required setup
  */
-require_once( '../kernel/setup_inc.php' );
+require_once( '../kernel/includes/setup_inc.php' );
 
 $gBitSystem->fatalError( 'This page is not functional and will be fixed asap.' );
 

@@ -4,7 +4,7 @@
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
 // Initialization
-require_once( '../../kernel/setup_inc.php' );
+require_once( '../../kernel/includes/setup_inc.php' );
 
 if( $validatedGroup = $gBitSystem->getConfig( 'users_validate_email_group' ) ) {	
 	$gBitUser->verifyTicket();

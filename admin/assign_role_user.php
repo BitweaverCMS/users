@@ -6,7 +6,7 @@
 // This script is used to assign roles to a particular user
 // ASSIGN USER TO ROLES
 // Initialization
-require_once( '../../kernel/setup_inc.php' );
+require_once( '../../kernel/includes/setup_inc.php' );
 
 $gBitSystem->verifyPermission( 'p_users_admin' );
 

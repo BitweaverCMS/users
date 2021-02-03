@@ -13,7 +13,7 @@ $bypass_siteclose_check = 'y';
 /**
  * required setup
  */
-require_once( '../kernel/setup_inc.php' );
+require_once( '../kernel/includes/setup_inc.php' );
 global $gBitSystem;
 // go offline in Live Support
 if ($gBitSystem->isPackageActive( 'LIVE_SUPPORT_PKG_NAME' ) ) {

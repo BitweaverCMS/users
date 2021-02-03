@@ -11,7 +11,7 @@
 /**
  * required setup
  */
-require_once( '../kernel/setup_inc.php' );
+require_once( '../kernel/includes/setup_inc.php' );
 
 if( !empty( $_REQUEST["v"] ) && strpos( $_REQUEST["v"], ':' ) ) {
 	list( $userId, $provPass ) = explode( ':', $_REQUEST["v"] );

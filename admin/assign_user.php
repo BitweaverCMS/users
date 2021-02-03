@@ -6,7 +6,7 @@
 // This script is used to assign groups to a particular user
 // ASSIGN USER TO GROUPS
 // Initialization
-require_once( '../../kernel/setup_inc.php' );
+require_once( '../../kernel/includes/setup_inc.php' );
 
 $gBitSystem->verifyPermission( 'p_users_admin' );
 

@@ -11,7 +11,7 @@
 /**
  * required setup
  */
-include_once ("../kernel/setup_inc.php");
+include_once ("../kernel/includes/setup_inc.php");
 
 require_once( USERS_PKG_CLASS_PATH.'BitHybridAuthManager.php' );
 BitHybridAuthManager::loadSingleton();
