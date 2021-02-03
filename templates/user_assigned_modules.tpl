@@ -157,10 +157,6 @@
 										<option value="{$styles[ix]|escape}" {if $assignStyle eq $styles[ix]}selected="selected"{/if}>{$styles[ix]}</option>
 									{/section}
 								</select>
-{if $gBitUser->hasPermission('bit_p_create_css')}
-	&nbsp; <strong>{tr}OR{/tr}</strong> &nbsp;
-	<a href="{$smarty.const.USERS_PKG_URL}theme.php?fUseCustomTheme=1">Use your custom theme >></a>
-{/if}
 								{formhelp note="Pick the theme for your personal Homepage."}
 							{/forminput}
 						</div>
