@@ -41,7 +41,7 @@ $parsedUrl = parse_url( $_SERVER["REQUEST_URI"] );
 
 // settings only applicable when the wiki package is active
 if( $gBitSystem->isPackageActive( 'wiki' )) {
-	include_once( WIKI_PKG_PATH.'BitPage.php' );
+	include_once( WIKI_PKG_CLASS_PATH.'BitPage.php' );
 	$parsedUrl1 = str_replace( USERS_PKG_URL."user_preferences", WIKI_PKG_URL."edit", $parsedUrl["path"] );
 	$parsedUrl2 = str_replace( USERS_PKG_URL."user_preferences", WIKI_PKG_URL."index", $parsedUrl["path"] );
 	$gBitSmarty->assign( 'url_edit', httpPrefix(). $parsedUrl1 );
