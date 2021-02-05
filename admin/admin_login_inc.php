@@ -4,7 +4,7 @@
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
 
-require_once( USERS_PKG_PATH.'includes/BaseAuth.php' );
+require_once( USERS_PKG_CLASS_PATH.'BaseAuth.php' );
 
 $loginSettings = array(
 	'users_allow_register' => array(

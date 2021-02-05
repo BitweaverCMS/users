@@ -11,7 +11,7 @@
 /**
  * required setup
  */
-include_once( USERS_PKG_PATH.'userprefs_lib.php' );
+include_once( USERS_PKG_INCLUDE_PATH.'userprefs_lib.php' );
 // application to display an image from the database with
 // option to resize the image dynamically creating a thumbnail on the fly.
 // you have to check if the user has permission to see this gallery

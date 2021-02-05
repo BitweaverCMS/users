@@ -18,7 +18,7 @@
 /**
  * required setup
  */
-require_once( USERS_PKG_PATH.'/classes/RoleUser.php' );
+require_once( USERS_PKG_CLASS_PATH.'RoleUser.php' );
 
 /**
  * Class that holds all information for a given user

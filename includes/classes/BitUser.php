@@ -17,7 +17,7 @@
  * required setup
  */
 require_once( LIBERTY_PKG_CLASS_PATH.'LibertyMime.php' );
-require_once( USERS_PKG_PATH.'includes/users_lib.php' );
+require_once( USERS_PKG_INCLUDE_PATH.'users_lib.php' );
 
 define( 'AVATAR_TYPE_CENTRALIZED', 'c' );
 define( 'AVATAR_TYPE_USER_DB', 'u' );
@@ -407,7 +407,7 @@ class BitUser extends LibertyMime {
 
 		if( $gBitSystem->isFeatureActive( 'users_register_recaptcha' ) && (empty( $pParamHash['novalidation'] ) || $pParamHash['novalidation'] != 'yes') ) {
 			if( !empty( $pParamHash['g-recaptcha-response'] ) ) {
-				require_once USERS_PKG_PATH.'includes/recaptcha/autoload.php';
+				require_once USERS_PKG_INCLUDE_PATH.'recaptcha/autoload.php';
 
 				$recaptcha = new \ReCaptcha\ReCaptcha( $gBitSystem->getConfig( 'users_register_recaptcha_secret_key' ) );
 				$resp = $recaptcha->setExpectedHostname( $_SERVER['HTTP_HOST'] )
@@ -423,7 +423,7 @@ class BitUser extends LibertyMime {
 		}
 
 		if( $gBitSystem->isFeatureActive( 'users_register_smcaptcha' ) && (empty( $pParamHash['novalidation'] ) || $pParamHash['novalidation'] != 'yes') ) {
-			require_once( USERS_PKG_PATH.'includes/solvemedialib.php' );
+			require_once( USERS_PKG_INCLUDE_PATH.'solvemedialib.php' );
 			if( !empty( $pParamHash['adcopy_challenge'] ) && !empty( $pParamHash['adcopy_response'] ) ) {
 				$solvemediaResponse = solvemedia_check_answer($gBitSystem->getConfig( 'users_register_smcaptcha_v_key' ), $_SERVER["REMOTE_ADDR"], $pParamHash["adcopy_challenge"], $pParamHash["adcopy_response"], $gBitSystem->getConfig( 'users_register_smcaptcha_h_key' ) );
 				if( !$solvemediaResponse->is_valid ) {
@@ -712,7 +712,7 @@ class BitUser extends LibertyMime {
 
 			$this->load( FALSE, $pParamHash['login'] );
 
-			require_once( KERNEL_PKG_PATH.'notification_lib.php' );
+			require_once( KERNEL_PKG_INCLUDE_PATH.'notification_lib.php' );
 			$notificationlib->post_new_user_event( $pParamHash['login'] );
 
 			// set local time zone as default when registering

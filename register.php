@@ -29,7 +29,7 @@ $gBitSmarty->assign( 'hybridProviders', $gBitHybridAuthManager->getEnabledProvid
 
 // Everything below here is needed for registration
 
-require_once( USERS_PKG_PATH.'includes/BaseAuth.php' );
+require_once( USERS_PKG_CLASS_PATH.'BaseAuth.php' );
 
 if( !empty( $_REQUEST['returnto'] ) ) {
 	$_SESSION['returnto'] = $_REQUEST['returnto'];
