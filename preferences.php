@@ -57,7 +57,9 @@ if( $gBitSystem->isFeatureActive( 'custom_user_fields' )) {
 // include preferences settings from other packages - these will be included as individual tabs
 $includeFiles = $gBitSystem->getIncludeFiles( 'user_preferences_inc.php', 'user_preferences_inc.tpl' );
 foreach( $includeFiles as $file ) {
-	require_once( $file['php'] );
+	if( !empty( $file['php'] ) && is_file( $file['php'] ) ) {
+		require_once( $file['php'] );
+	}
 }
 $gBitSmarty->assign( 'includFiles', $includeFiles );
 
