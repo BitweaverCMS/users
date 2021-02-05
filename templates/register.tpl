@@ -12,7 +12,7 @@
 		<input type="hidden" name="auth[{$auth_name}]" value="{$auth}"/>
 	{/foreach}
 	{formfeedback error=$errors.create}
-	{if $hybridProviders}
+	{*if $hybridProviders}
 		<div class="form-group">
 			{formlabel label="Click to Register" for="user"}
 			{forminput}
@@ -21,7 +21,7 @@
 			{/forminput}
 		</div>
 		<hr>
-	{/if}
+	{/if*}
 
 	{if $gBitSystem->isFeatureActive('users_register_passcode')}
 		<div class="form-group">

@@ -1524,7 +1524,7 @@ class BitUser extends LibertyMime {
 		if( $this->mUserId != ANONYMOUS_USER_ID ) {
 			$this->load();
 			//on first time login we run the users registation service
-			if( $this->mInfo['last_login'] == NULL ) {
+			if( empty( $this->mInfo['last_login'] ) ) {
 				$this->invokeServices( 'users_register_function' );
 			}
 			$this->updateLastLogin( $this->mUserId );
