@@ -2804,9 +2804,9 @@ function get_user_content_count( $pUserId ) {
 
 
 // {{{ ==================== Services ====================
-function users_favs_content_list_sql( &$pObject, $pParamHash=NULL ){
+function users_favs_content_list_sql( $pObject, $pParamHash=NULL ){
     $ret = array();
-	if( !empty( $pParamHash['user_favs'] ) ){
+	if( is_object( $pObject ) && !empty( $pParamHash['user_favs'] ) ){
 		// $ret['select_sql'] = "";
 		$ret['join_sql'] = " INNER JOIN `".BIT_DB_PREFIX."users_favorites_map` ufm ON ( ufm.`favorite_content_id`=lc.`content_id` )";
 		$ret['where_sql'] = " AND ufm.`user_id` = ?";
