@@ -1651,11 +1651,12 @@ class BitUser extends LibertyMime {
 	 * @access public
 	 * @return user info on success, NULL on failure
 	 */
-	function getUserInfo( $pUserMixed ) {
+	public static function getUserInfo( $pUserMixed ) {
+		global $gBitDb;
 		$ret = NULL;
 		if( is_array( $pUserMixed ) ) {
 			if( $val =  current( $pUserMixed ) ) {
-				$key = $this->mDb->sanitizeColumnString( key( $pUserMixed ) );
+				$key = $gBitDb->sanitizeColumnString( key( $pUserMixed ) );
 				if( preg_match( '/_id$/', $key ) ) {
 					$col = " uu.`".$key."` ";
 					$val = (int)$val;
@@ -1672,7 +1673,7 @@ class BitUser extends LibertyMime {
 				}
 				if( !empty( $col ) ) {
 					$query = "SELECT  uu.* FROM `".BIT_DB_PREFIX."users_users` uu LEFT OUTER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON (lc.`content_id`=uu.`content_id`) WHERE $col = ?";
-					$ret = $this->mDb->getRow( $query, array( $val ), 600 );
+					$ret = $gBitDb->getRow( $query, array( $val ), 600 );
 				}
 			}
 		}

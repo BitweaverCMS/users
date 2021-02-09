@@ -691,7 +691,7 @@ class BitPermUser extends BitUser {
 				}
 			}
 		}
-		return( count( $this->mPerms ) );
+		return( !empty( $this->mPerms ) );
 	}
 
 	/**
