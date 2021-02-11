@@ -2330,6 +2330,7 @@ class BitUser extends LibertyMime {
 	function getFavorites(){
 		$ret = NULL;
 		if( $this->isRegistered() ){
+			$listHash['join_sql'] = " INNER JOIN `".BIT_DB_PREFIX."users_favorites_map` ufm ON (ufm.favorite_content_id=lc.content_id AND ufm.user_id=".$this->mUserId.") ";
 			$listHash['user_favs'] = TRUE;
 			$listHash['order_table'] = 'ufm.';
 			$listHash['sort_mode'] = 'map_position_desc';
