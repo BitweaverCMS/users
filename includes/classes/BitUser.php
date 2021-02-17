@@ -1827,7 +1827,7 @@ class BitUser extends LibertyMime {
 		}
 
 		if( !empty( $pListHash['ip'] ) ) {
-			$ips = split( ',', $pListHash['ip'] );
+			$ips = explode( ',', $pListHash['ip'] );
 			$ipList = '';
 			do {
 				$ip = array_pop( $ips );
@@ -2531,7 +2531,7 @@ class BitUser extends LibertyMime {
 		// limit search to users with a specific IP
 		if( !empty( $pParamHash['ip'] ) ) {
 			$joinSql .= " LEFT OUTER JOIN `".BIT_DB_PREFIX."users_cnxn` uc ON ( uu.`user_id`=uc.`user_id`) ";
-			$ips = split( ',', $pParamHash['ip'] );
+			$ips = explode( ',', $pParamHash['ip'] );
 			$ipList = '';
 			do {
 				$ip = array_pop( $ips );
