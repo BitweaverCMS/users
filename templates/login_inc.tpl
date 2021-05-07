@@ -12,7 +12,9 @@
 	<hr>
 {/if}
 
+	<div class="form-group">
 	{formfeedback error=$error}
+	</div>
 
 	<div class="form-group">
 		{formlabel label="Username or Email" for="user"}

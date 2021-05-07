@@ -1236,7 +1236,7 @@ class BitUser extends LibertyMime {
 		if( $pForceCheck == TRUE || !empty( $_REQUEST['tk'] ) ) {
 			if( empty( $_REQUEST['tk'] ) || (!($ret = $_REQUEST['tk'] == $this->mTicket ) && $pFatalOnError) ) {
 				$userString = $gBitUser->isRegistered() ? "\nUSER ID: ".$gBitUser->mUserId.' ( '.$gBitUser->getField( 'email' ).' ) ' : '';
-				error_log( tra( "Security Violation" )."$userString ".$_SERVER['REMOTE_ADDR']."\nURI: $_SERVER[REQUEST_URI] \nREFERER: $_SERVER[HTTP_REFERER] " );
+				error_log( tra( "Security Violation" )."$userString ".$_SERVER['REMOTE_ADDR']."\nURI: $_SERVER[REQUEST_URI] \n".(!empty( $_SERVER['HTTP_REFERER'] ) ? "REFERER: $_SERVER[HTTP_REFERER]\n" : ""));
 				$gBitSystem->fatalError( tra( "Security Violation" ));
 			}
 		}
