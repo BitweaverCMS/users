@@ -7,7 +7,6 @@
 require_once( '../../kernel/includes/setup_inc.php' );
 
 $gBitSystem->verifyPermission( 'p_users_admin' );
-$gBitSystem->mDb->debug();
 
 $feedback = array();
 
