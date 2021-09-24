@@ -404,10 +404,11 @@ class BitPermUser extends BitUser {
 		$ret = array();
 		if( @BitBase::verifyId( $pGroupId )) {
 			$query = "
-				SELECT uu.`user_id` AS hash_key, uu.`login`, uu.`real_name`, uu.`user_id`
+				SELECT uu.`user_id` AS hash_key, uu.`login`, uu.`real_name`, uu.`user_id`, uu.`email`, uu.`registration_date`, uu.`last_login`
 				FROM `".BIT_DB_PREFIX."users_users` uu
 				INNER JOIN `".BIT_DB_PREFIX."users_groups_map` ug ON (uu.`user_id`=ug.`user_id`)
-				WHERE `group_id`=?";
+				WHERE `group_id`=?
+				ORDER BY uu.`registration_date`";
 			$ret = $this->mDb->getAssoc( $query, array( $pGroupId ));
 		}
 		return $ret;
