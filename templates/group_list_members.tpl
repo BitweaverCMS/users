@@ -34,8 +34,11 @@
 					<td class="text-right">{$member.registration_date|bit_short_date}</td>
 					<td class="text-right">{$member.last_login|bit_short_date}</td>
 					<td>
+					{if $gBitSystem->isPackageActive('bitcommerce')} &nbsp;<a class="icon" href="{$smarty.const.BITCOMMERCE_PKG_URL}admin/list_orders.php?user_id={$userId}">{booticon iname="icon-shopping-cart"}</a>{/if}
+&nbsp;<a class="icon" href="{$smarty.const.LIBERTY_PKG_URL}list_content.php?user_id={$userId}{if $gBitSystem->isPackageActive('bitcommerce')}&amp;content_type_guid=bitproduct{/if}">{booticon iname="icon-list-alt"}</a>
+&nbsp;<a class="icon" href="{$smarty.const.USERS_PKG_URL}admin/user_activity.php?user_id={$userId}">{booticon iname="icon-bolt"}</a>
 					{if $member.user_id != $smarty.const.ANONYMOUS_USER_ID && $groupInfo.group_id != $smarty.const.ANONYMOUS_GROUP_ID}
-						&nbsp;<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupInfo.group_id}&amp;assign_user={$member.user_id}">{booticon iname="icon-trash" ipackage="icons" iexplain="remove from group"}</a>
+						&nbsp;<a class="icon" href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupInfo.group_id}&amp;assign_user={$member.user_id}">{booticon iname="icon-remove-circle" ipackage="icons" iexplain="Remove From Group"}</a>
 					{/if}
 					</td>
 				</tr>
