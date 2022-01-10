@@ -4,6 +4,9 @@
 	{if $gBitUser->hasPermission( 'p_users_admin' ) || $gBitUser->mUserId eq $gQueryUser->mUserId}
 		<div class="floaticon">
 			{if $gBitUser->hasPermission( 'p_users_admin' )}
+				{if $gBitUser->hasPermission( 'p_commerce_admin' )}
+					{smartlink ipackage=bitcommerce ifile="admin/list_orders.php" user_id=$userInfo.user_id ititle="Orders" booticon="icon-shopping-cart" iforce="icon"}
+				{/if}
 				{smartlink ipackage=users ifile="admin/index.php" assume_user=$userInfo.user_id ititle="Assume user identity" booticon="icon-user-md" iforce="icon"}
 				{smartlink ipackage=users ifile="preferences.php" view_user=$userInfo.user_id ititle="Edit User Information" booticon="icon-edit" iforce="icon"}
 				{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userInfo.user_id ititle="Assign Role" booticon="icon-key" iforce="icon"}

@@ -78,6 +78,9 @@
 						{if $gBitUser->hasPermission( 'p_users_admin' ) && $contentCount}
 							<strong title="{tr}Content Count{/tr}">{$contentCount} </strong>
 						{/if}
+						{if $gBitUser->hasPermission( 'p_commerce_admin' )}
+							{smartlink ipackage=bitcommerce ifile="admin/list_orders.php" user_id=$userHash.user_id ititle="Orders" booticon="icon-shopping-cart" iforce="icon"}
+						{/if}
 						{smartlink ipackage=liberty ifile="list_content.php" user_id=$userHash.user_id ititle="User Content" booticon="icon-list" iforce="icon"}
 						{smartlink ipackage=users ifile="admin/index.php" assume_user=$userHash.user_id ititle="Assume User Identity" booticon="icon-user-md" iforce=icon}
 						{smartlink ipackage=users ifile="preferences.php" view_user=$userHash.user_id ititle="Edit User Information" booticon="icon-edit" iforce=icon}
