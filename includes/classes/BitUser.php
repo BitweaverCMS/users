@@ -380,6 +380,8 @@ class BitUser extends LibertyMime {
 			}
 		}
 
+		$pParamHash['user_store']['registration_ip'] = $_SERVER['REMOTE_ADDR'];
+
 		// if we have an error we get them all by checking parent classes for additional errors
 		if( count( $this->mErrors ) > 0 ){
 			parent::verify( $pParamHash );

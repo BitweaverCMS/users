@@ -16,6 +16,7 @@ $tables = array(
   last_login I8,
   current_login I8,
   registration_date I8 NOTNULL,
+  registration_ip C(32) NOTNULL,
   challenge C(32),
   pass_due I8,
   hash C(32),
