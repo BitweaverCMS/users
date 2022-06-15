@@ -2421,22 +2421,10 @@ class BitUser extends LibertyMime {
 				$displayName = $pParamHash['login'];
 			} elseif( !empty( $pParamHash['email'] )) {
 				$displayName = substr( $pParamHash['email'], 0, strpos( $pParamHash['email'], '@' ));
-			} else {
+			} elseif( !empty( $pParamHash['user_id'] ) ) {
 				$displayName = $pParamHash['user_id'];
-			}
-
-			if( !empty( $pParamHash['user'] )) {
-				$iHomepage = $pParamHash['user'];
-			} elseif( !empty( $pParamHash['login'] )) {
-				// user of 'login' is deprecated and eventually should go away!
-				$iHomepage = $pParamHash['login'];
-			} elseif( BitBase::verifyId( $pParamHash['user_id'] )) {
-				$iHomepage = $pParamHash['user_id'];
-			} elseif( !empty( $pParamHash['email'] )) {
-				$iHomepage = $pParamHash['email'];
 			} else {
-				// this won't work right now, we need to alter userslib::interpret_home() to interpret a real name
-				$iHomepage = $pParamHash['real_name'];
+				$displayName = 'No Name';
 			}
 
 			if( empty( $pParamHash['users_information'] ) && !empty( $pParamHash['login'] ) ) {
