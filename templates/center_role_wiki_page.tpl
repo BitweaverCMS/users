@@ -5,24 +5,24 @@
 		<div class="floaticon">
 			{if $gBitUser->hasPermission( 'p_users_admin' )}
 				{if $gBitUser->hasPermission( 'p_commerce_admin' )}
-					{smartlink ipackage=bitcommerce ifile="admin/list_orders.php" user_id=$userInfo.user_id ititle="Orders" booticon="icon-shopping-cart" iforce="icon"}
+					{smartlink ipackage=bitcommerce ifile="admin/list_orders.php" user_id=$userInfo.user_id ititle="Orders" booticon="fa-shopping-cart"}
 				{/if}
-				{smartlink ipackage=users ifile="admin/index.php" assume_user=$userInfo.user_id ititle="Assume user identity" booticon="icon-user-md" iforce="icon"}
-				{smartlink ipackage=users ifile="preferences.php" view_user=$userInfo.user_id ititle="Edit User Information" booticon="icon-edit" iforce="icon"}
-				{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userInfo.user_id ititle="Assign Role" booticon="icon-key" iforce="icon"}
-				{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userInfo.user_id ititle="User Activity" booticon="icon-volume-up" iforce="icon"}
+				{smartlink ipackage=users ifile="admin/index.php" assume_user=$userInfo.user_id ititle="Assume user identity" booticon="fa-user-doctor"}
+				{smartlink ipackage=users ifile="preferences.php" view_user=$userInfo.user_id ititle="Edit User Information" booticon="fa-edit"}
+				{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userInfo.user_id ititle="Assign Role" booticon="fa-key"}
+				{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userInfo.user_id ititle="User Activity" booticon="fa-volume-up"}
 				{if $users[user].user_id != $smarty.const.ANONYMOUS_USER_ID}
-					{smartlink ipackage=liberty ifile="list_content.php" user_id=$userInfo.user_id ititle="User Content" booticon="icon-list" iforce="icon"}
-					{smartlink ipackage=users ifile="admin/index.php" action=delete user_id=$userInfo.user_id ititle="Remove" booticon="icon-trash" iforce="icon"}
+					{smartlink ipackage=liberty ifile="list_content.php" user_id=$userInfo.user_id ititle="User Content" booticon="fa-list"}
+					{smartlink ipackage=users ifile="admin/index.php" action=delete user_id=$userInfo.user_id ititle="Remove" booticon="fa-trash"}
 				{/if}
 			{/if}
 			
 			{if $gBitUser->isRegistered() && $gBitUser->mUserId eq $gQueryUser->mUserId}
 				{if $gBitSystem->isFeatureActive('users_preferences')}
-					{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" booticon="icon-file"}
+					{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" booticon="file"}
 				{/if}
 				{if $gBitUser->hasPermission('p_users_edit_user_homepage')}
-					{smartlink ipackage=users ifile="edit_personal_page.php" ititle="Edit personal wiki page" booticon="icon-edit"}
+					{smartlink ipackage=users ifile="edit_personal_page.php" ititle="Edit personal wiki page" booticon="fa-edit"}
 				{/if}
 			{/if}
 		</div>

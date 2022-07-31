@@ -13,10 +13,10 @@
 
 	<div class="floaticon">
 		{if $gQueryUserId and $gBitSystem->isPackageActive( 'messages' ) and $gBitUser->hasPermission( 'p_messages_send' ) and $userPrefs.messages_allow_messages eq 'y'}
-			&nbsp;<a href="{$smarty.const.MESSAGES_PKG_URL}compose.php?to={$userInfo.login}">{booticon iname="icon-envelope"  ipackage="icons"  iexplain="Send user a personal message" iforce="icon"}</a>
+			&nbsp;<a href="{$smarty.const.MESSAGES_PKG_URL}compose.php?to={$userInfo.login}">{booticon iname="fa-envelope" iexplain="Send user a personal message"}</a>
 		{/if}
 		{if $gBitUser->hasPermission('p_users_edit_user_homepage')}
-			<a href="{$smarty.const.USERS_PKG_URL}preferences.php?view_user={$userInfo.user_id}">{booticon iname="icon-edit"   ipackage="icons" iexplain="Edit your preferences"}</a>
+			<a href="{$smarty.const.USERS_PKG_URL}preferences.php?view_user={$userInfo.user_id}">{booticon iname="fa-pencil" iexplain="Edit your preferences"}</a>
 		{/if}
 	</div>
 

@@ -35,7 +35,7 @@
 						{assign var=prev_package value=$perm.package}
 					{/if}
 					<tr class="{cycle values="odd,even"}{if $unassignedPerms.$p} prio5{/if}">
-						<td>{if $unassignedPerms.$p}{booticon iname="icon-warning-sign"   iexplain="Unassigned Permission"}{/if}</td>
+						<td>{if $unassignedPerms.$p}{booticon iname="fa-triangle-exclamation" iexplain="Unassigned Permission"}{/if}</td>
 						<td title="{$perm.perm_desc}"><abbr title="{$perm.perm_desc}">{$p}</abbr></td>
 						{foreach from=$allGroups item=group}
 							{if     $perm.perm_level == 'admin'     }{assign var=id value=1}
@@ -59,7 +59,7 @@
 
 							{if $group.group_id lt 4}
 								<td class="alignleft {$class} width5p">
-									{if $id == $group.group_id}<label for="{$p}{$group.group_id}">{booticon iname="icon-ok"   iexplain="Default"}</label>{/if}
+									{if $id == $group.group_id}<label for="{$p}{$group.group_id}">{booticon iname="fa-check" iexplain="Default"}</label>{/if}
 								</td>
 							{/if}
 						{/foreach}
@@ -67,7 +67,7 @@
 				{/foreach}
 			</table>
 
-			<p class="formhelp">{tr}Default permissions set after installation are marked with:{/tr} {booticon iname="icon-ok"   iexplain="Default"}</p>
+			<p class="formhelp">{tr}Default permissions set after installation are marked with:{/tr} {booticon iname="fa-check" iexplain="Default"}</p>
 
 			<div class="submit">
 				<input type="submit" class="btn btn-default" name="save" value="{tr}Apply Changes{/tr}" />
@@ -95,9 +95,9 @@
 										{foreach from=$perms item=perm}
 											<li>
 												{$perm.group_name}: {if $perm.is_revoked}
-													{booticon iname="icon-minus-sign"   iexplain="Removed Permission"}
+													{booticon iname="fa-circle-minus" iexplain="Removed Permission"}
 												{else}
-													{booticon iname="icon-plus-sign"   iexplain="Added Permission"}
+													{booticon iname="fa-circle-plus" iexplain="Added Permission"}
 												{/if} {$perm.perm_name}
 											</li>
 										{/foreach}

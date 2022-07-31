@@ -39,7 +39,6 @@
 {/if}
 <nav class="clear">
 	<ul class="list-inline navbar">
-		<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
 		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Username" isort="login"}</li>
 		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Real name" isort="real_name"}</li>
 		<li>{smartlink iurl=$control.URL offset=$control.offset numrows=$control.numrows ititle="Registration Date" isort="registration_date"}</li>
@@ -79,24 +78,24 @@
 							<strong title="{tr}Content Count{/tr}">{$contentCount} </strong>
 						{/if}
 						{if $gBitUser->hasPermission( 'p_commerce_admin' )}
-							{smartlink ipackage=bitcommerce ifile="admin/list_orders.php" user_id=$userHash.user_id ititle="Orders" booticon="icon-shopping-cart" iforce="icon"}
+							{smartlink ipackage=bitcommerce ifile="admin/list_orders.php" user_id=$userHash.user_id ititle="Orders" booticon="fa-shopping-cart"}
 						{/if}
-						{smartlink ipackage=liberty ifile="list_content.php" user_id=$userHash.user_id ititle="User Content" booticon="icon-list" iforce="icon"}
-						{smartlink ipackage=users ifile="admin/index.php" assume_user=$userHash.user_id ititle="Assume User Identity" booticon="icon-user-md" iforce=icon}
-						{smartlink ipackage=users ifile="preferences.php" view_user=$userHash.user_id ititle="Edit User Information" booticon="icon-edit" iforce=icon}
+						{smartlink ipackage=liberty ifile="list_content.php" user_id=$userHash.user_id ititle="User Content" booticon="fa-list"}
+						{smartlink ipackage=users ifile="admin/index.php" assume_user=$userHash.user_id ititle="Assume User Identity" booticon="fa-user-doctor"}
+						{smartlink ipackage=users ifile="preferences.php" view_user=$userHash.user_id ititle="Edit User Information" booticon="fa-edit"}
 						{if $gBitSystem->isPackageActive('protector')}
-							{smartlink ipackage=users ifile="admin/assign_role_user.php" assign_user=$userHash.user_id ititle="Assign Group" booticon="icon-key" iforce=icon}
+							{smartlink ipackage=users ifile="admin/assign_role_user.php" assign_user=$userHash.user_id ititle="Assign Group" booticon="fa-key"}
 						{else}
-							{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userHash.user_id ititle="Assign Role" booticon="icon-key" iforce=icon}
+							{smartlink ipackage=users ifile="admin/assign_user.php" assign_user=$userHash.user_id ititle="Assign Role" booticon="fa-key"}
 						{/if}
-						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userHash.user_id ititle="User Activity" booticon="icon-bolt" iforce="icon"}
+						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userHash.user_id ititle="User Activity" booticon="fa-bolt"}
 						{if $userHash.user_id != $smarty.const.ANONYMOUS_USER_ID && $userHash.user_id != $smarty.const.ROOT_USER_ID && $userHash.user_id != $gBitUser->mUserId}
 							{if $userHash.content_status_id > 0}
-								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=ban ititle="Ban User" booticon="icon-minus-sign" iforce=icon}
+								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=ban ititle="Ban User" booticon="fa-circle-minus"}
 							{else}
-								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=unban ititle="Restore the User Account" booticon="icon-recycle" iforce=icon}
+								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=unban ititle="Restore the User Account" booticon="fa-recycle"}
 							{/if}
-							{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=delete ititle="Remove" booticon="icon-trash" iforce=icon}
+							{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=delete ititle="Remove" booticon="fa-trash"}
 						{/if}
 					</div>
 					<div>{tr}User ID{/tr}: {$userHash.user_id}</div>

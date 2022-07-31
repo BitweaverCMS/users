@@ -25,7 +25,7 @@
 								<td>
 									{if $role.public eq 'y'}
 										<a href="{$smarty.const.USERS_PKG_URL}my_roles.php?remove_public_role=y&amp;public_role_id={$roleId}" 
-											onclick="return confirm('{tr}Are you sure you want to leave this role?{/tr}')">{booticon ipackage="icons" iname="icon-cut" iexplain="Leave Role"}</a>
+											onclick="return confirm('{tr}Are you sure you want to leave this role?{/tr}')">{booticon iname="fa-scissors" iexplain="Leave Role"}</a>
 									{else}
 										&nbsp;
 									{/if}
@@ -48,7 +48,7 @@
 								<tr class="{cycle values="odd,even"}">
 									<td>{$role.role_name}</td>
 									<td>{$role.role_desc}</td>
-									<td><a href="{$smarty.const.USERS_PKG_URL}my_roles.php?add_public_role=y&amp;public_role_id={$role.role_id}"  title="{tr}Assign Role{/tr}">{booticon iname="icon-key" ipackage="icons" iexplain="join role"}</a></td>								
+									<td><a href="{$smarty.const.USERS_PKG_URL}my_roles.php?add_public_role=y&amp;public_role_id={$role.role_id}"  title="{tr}Assign Role{/tr}">{booticon iname="fa-key" iexplain="join role"}</a></td>								
 								</tr>
 							{/if}
 						{/foreach}
@@ -113,10 +113,10 @@
 								{/if}
 
 								<td class="actionicon">
-									<a href="{$smarty.const.USERS_PKG_URL}my_roles.php?role_id={$roleId}">{booticon iname="icon-edit" ipackage="icons" iexplain="edit"}</a>
+									<a href="{$smarty.const.USERS_PKG_URL}my_roles.php?role_id={$roleId}">{booticon iname="fa-pen-to-square" iexplain="edit"}</a>
 									{if $roleId ne -1}{* sorry for hardcoding, really need php define ANONYMOUS_TEAM_ID - spiderr *}
 										<a href="{$smarty.const.USERS_PKG_URL}my_roles.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=delete&amp;role_id={$roleId}" 
-										onclick="return confirm('{tr}Are you sure you want to delete this role?{/tr}')">{booticon iname="icon-trash" ipackage="icons" iexplain="Delete Role"}</a>
+										onclick="return confirm('{tr}Are you sure you want to delete this role?{/tr}')">{booticon iname="fa-trash" iexplain="Delete Role"}</a>
 									{/if}
 								</td>
 							</tr>

@@ -8,7 +8,6 @@
 		{smartlink ititle="Add a new role" ipackage=users ifile="admin/edit_role.php" action=create}
 
 		<ul class="list-inline navbar">
-			<li>{booticon iname="icon-circle-arrow-right"  ipackage="icons"  iexplain="sort by"}</li>
 			<li>{smartlink ititle="Name" isort="role_name" offset=$offset idefault=1}</li>
 			<li>{smartlink ititle="Description" isort="role_desc" offset=$offset}</li>
 			<li>{smartlink ititle="Home Page" isort="role_home" offset=$offset}</li>
@@ -20,11 +19,11 @@
 			{foreach from=$roleList key=roleId item=grp}
 				<li class="item {cycle values='odd,even'}">
 					<div class="floaticon">
-						{smartlink ititle="Edit" ipackage="users" ifile="admin/edit_role.php" booticon="icon-edit" role_id=$roleId}
-						{smartlink ititle="Role Members" ipackage="users" ifile="admin/edit_role.php" booticon="icon-group" members=$roleId}
+						{smartlink ititle="Edit" ipackage="users" ifile="admin/edit_role.php" booticon="fa-edit" role_id=$roleId}
+						{smartlink ititle="Role Members" ipackage="users" ifile="admin/edit_role.php" booticon="fa-group" members=$roleId}
 						{if $roleId ne $smarty.const.ANONYMOUS_TEAM_ID}
-							{smartlink ititle="Batch assign" ipackage="users" ifile="admin/edit_role.php" booticon="icon-cogs" batch_assign=$roleId}
-							{smartlink ititle="Remove" ipackage="users" ifile="admin/edit_role.php" booticon="icon-trash" action=delete role_id=$roleId}
+							{smartlink ititle="Batch assign" ipackage="users" ifile="admin/edit_role.php" booticon="fa-cogs" batch_assign=$roleId}
+							{smartlink ititle="Remove" ipackage="users" ifile="admin/edit_role.php" booticon="fa-trash" action=delete role_id=$roleId}
 						{/if}
 					</div>
 

@@ -35,7 +35,7 @@
 
 			{if $watches}
 				<tr>
-					<td><input src="{booticon iname="icon-trash" ipackage="icons" iexplain=remove url=TRUE}" type="image" name="delete" value="{tr}delete{/tr}" /></td>
+					<td><button class="btn btn-default btn-sm" name="delete" value="{tr}delete{/tr}">{booticon iname="fa-trash" iexplain=Remove}</button></td>
 				</tr>
 			{/if}
 		</table>

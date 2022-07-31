@@ -1,7 +1,7 @@
 {* $Header$ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
-<div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{booticon iname="icon-arrow-left"  ipackage="icons"  iexplain="back to users"}</a></div>
+<div class="floaticon"><a href="{$smarty.const.USERS_PKG_URL}admin/index.php">{booticon iname="fa-arrow-left" iexplain="back to users"}</a></div>
 
 <div class="admin users">
 	<div class="header">
@@ -53,7 +53,7 @@
 								{if $groupId eq $assignUser->mInfo.default_group_id}<strong>{/if}
 								{if $groupId eq $assignUser->mInfo.default_group_id}</strong>{/if}
 								{if $groupId != -1}
-									&nbsp;<a class="btn btn-xs btn-danger" href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;tk={$gBitUser->mTicket}">{booticon iname="icon-trash" ipackage="icons" iexplain="remove from group" iforce="icon"}</a>
+									&nbsp;<a class="btn btn-xs btn-danger" href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?action=removegroup&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;tk={$gBitUser->mTicket}">{booticon iname="fa-trash" iexplain="remove from group"}</a>
 								{/if}
 								<a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$groupId}">{$group.group_name}</a>
 								<br />
@@ -86,7 +86,7 @@
 						
 						{if !$assignUser->mGroups.$groupId && $groupId != -1}
 							<dt class="">
-									<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;{tk}" class="btn btn-xs btn-default mr-1">{booticon iname="icon-key" ipackage="icons" iexplain="assign" iforce="icon"}</a>
+									<a href="{$smarty.const.USERS_PKG_URL}admin/assign_user.php?offset={$offset}&amp;sort_mode={$sort_mode}&amp;action=assign&amp;group_id={$groupId}&amp;assign_user={$assignUser->mUserId}&amp;{tk}" class="btn btn-xs btn-default mr-1">{booticon iname="fa-key" iexplain="assign"}</a>
 								{$group.group_name|escape}
 							</dt>
 							<dd class="ml-3 pb-1">

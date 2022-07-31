@@ -56,7 +56,7 @@
 	<div class="form-group">
 		{forminput class="submit"}
 			<input type="submit" class="btn btn-primary" name="login" value="{tr}Sign In{/tr}" />
-			{if !$gBitSystem->isFeatureActive('site_https_login_required') && empty($smarty.server.HTTPS)} {booticon iname="icon-unlock" iexplain="Insecure" class="icon-large"}{/if}
+			{if !$gBitSystem->isFeatureActive('site_https_login_required') && empty($smarty.server.HTTPS)} {booticon iname="fa-unlock" iexplain="Insecure" class="fa-large"}{/if}
 		{/forminput}
 	</div>
 {/form}

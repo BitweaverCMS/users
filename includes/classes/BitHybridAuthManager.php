@@ -184,7 +184,7 @@ class BitHybridAuthManager extends BitSingleton {
 	}
 
 	private function getProviderIcon( $pProvider ) {
-		$ret = 'icon-user';
+		$ret = 'fa-user';
 		$allProviders = $this->getAllProviders();
 		if( !empty( $allProviders[$pProvider]['icon'] ) ) {
 			$ret = $allProviders[$pProvider]['icon'];
@@ -227,18 +227,18 @@ class BitHybridAuthManager extends BitSingleton {
 
 	public function getAllProviders() {
 		return array (
-			'google' => array( 'provider' => 'Google', 'icon' => 'icon-google-plus-sign', 'image' => USERS_PKG_URL.'hauth/images/google.png', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
-			'amazon' => array( 'provider' => 'Amazon', 'icon' => 'icon-user', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
-			'aol' => array( 'provider' => 'AOL', 'icon' => 'icon-user', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
-			'facebook' => array( 'provider' => 'Facebook', 'icon' => 'icon-facebook-sign', 'keys' => array( 'id'=>'', 'secret'=> '' ), 'options' => array( 'scope'=>'Comma separated list of requested permissions. Default are: email, user_about_me, user_birthday, user_hometown, user_location, user_website, publish_actions, read_custom_friendlists' ) ),
-			'foursquare' => array( 'provider' => 'Foursquare', 'icon' => 'icon-foursquare', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
-			'instagram' => array( 'provider' => 'Instagram', 'icon' => 'icon-instagram', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
-			'linkedin' => array( 'provider' => 'LinkedIn', 'icon' => 'icon-linkedin', 'keys' => array( 'key'=>'', 'secret'=> '' ) ),
-			'live' => array( 'provider' => 'Live', 'icon' => 'icon-windows', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
-			'openid' => array( 'provider' => 'OpenID', 'icon' => 'icon-user', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
-			'paypal' => array( 'provider' => 'Paypal', 'icon' => 'icon-user', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
-			'twitter' => array( 'provider' => 'Twitter', 'icon' => 'icon-twitter', 'keys' => array( 'key'=>'', 'secret'=> '' ) ),
-			'yahoo' => array( 'provider' => 'Yahoo', 'icon' => 'icon-user', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
+			'google' => array( 'provider' => 'Google', 'icon' => ' fab fa-google', 'image' => USERS_PKG_URL.'hauth/images/google.png', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
+			'amazon' => array( 'provider' => 'Amazon', 'icon' => ' fab fa-amazon', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
+			'aol' => array( 'provider' => 'AOL', 'icon' => ' fa fa-user', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
+			'facebook' => array( 'provider' => 'Facebook', 'icon' => ' fab fa-facebook', 'keys' => array( 'id'=>'', 'secret'=> '' ), 'options' => array( 'scope'=>'Comma separated list of requested permissions. Default are: email, user_about_me, user_birthday, user_hometown, user_location, user_website, publish_actions, read_custom_friendlists' ) ),
+			'foursquare' => array( 'provider' => 'Foursquare', 'icon' => ' fab fa-foursquare', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
+			'instagram' => array( 'provider' => 'Instagram', 'icon' => ' fab fa-instagram', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
+			'linkedin' => array( 'provider' => 'LinkedIn', 'icon' => ' fab fa-linkedin', 'keys' => array( 'key'=>'', 'secret'=> '' ) ),
+			'live' => array( 'provider' => 'Live', 'icon' => ' fab fa-windows', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
+			'openid' => array( 'provider' => 'OpenID', 'icon' => ' fab fa-openid', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
+			'paypal' => array( 'provider' => 'Paypal', 'icon' => ' fab fa-paypal', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
+			'twitter' => array( 'provider' => 'Twitter', 'icon' => ' fab fa-twitter', 'keys' => array( 'key'=>'', 'secret'=> '' ) ),
+			'yahoo' => array( 'provider' => 'Yahoo', 'icon' => ' fab fa-yahoo', 'keys' => array( 'id'=>'', 'secret'=> '' ) ),
 		);
 	}
             

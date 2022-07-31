@@ -21,7 +21,7 @@
 				</div>
 			</div>
 
-			<p class="alert alert-success">{booticon iname="icon-check"} {tr}Congratulations you have authenticated this account!{/tr}</p>
+			<p class="alert alert-success">{booticon iname="fa-square-check"} {tr}Congratulations you have authenticated this account!{/tr}</p>
 
 			<p>{tr}We do not have an existing user for this account from{/tr} {$smarty.request.provider}.</p> <p>{tr}Have you previously logged into{/tr} {$gBitSystem->getSiteTitle()}? <span class="btn btn-info btn-sm" onclick="BitBase.showById('auth-local-login');BitBase.hideById('auth-local-new');">{tr}Yes{/tr}</span> <span class="btn btn-info btn-sm" onclick="BitBase.showById('auth-local-new');BitBase.hideById('auth-local-login');">{tr}No{/tr}</span></p>
 
