@@ -1,5 +1,6 @@
 <?php
 
+/* ROLE kruft
 if ( defined( 'ROLE_MODEL' ) ) {
 $tables = array(
 
@@ -107,7 +108,74 @@ $tables = array(
 ",
 
 );
-} else {
+
+if ( defined( 'ROLE_MODEL' ) ) {
+	$team_indices = array (
+		'users_roles_user_idx' => array( 'table' => 'users_roles', 'cols' => 'user_id', 'opts' => NULL ),
+		'users_roles_user_name_idx' => array( 'table' => 'users_roles', 'cols' => 'user_id,role_name', 'opts' => array('UNIQUE') ),
+		'users_role_perm_role_idx' => array( 'table' => 'users_role_permissions', 'cols' => 'role_id', 'opts' => NULL ),
+		'users_role_perm_perm_idx' => array( 'table' => 'users_role_permissions', 'cols' => 'perm_name', 'opts' => NULL ),
+		'users_roles_map_user_idx' => array( 'table' => 'users_roles_map', 'cols' => 'user_id', 'opts' => NULL ),
+		'users_roles_map_role_idx' => array( 'table' => 'users_roles_map', 'cols' => 'role_id', 'opts' => NULL )
+	);
+}
+
+if ( defined( 'ROLE_MODEL' ) ) {
+	$sequences = array (
+		'users_users_user_id_seq' => array( 'start' => 2 ),
+		'users_roles_id_seq' => array( 'start' => 4 )
+	);
+
+// ### Default Preferences
+$gBitInstaller->registerPreferences( USERS_PKG_NAME, array(
+//	array(USERS_PKG_NAME,'user_class','RolePermUser'),
+
+// ### Default Permissions
+$gBitInstaller->registerUserPermissions( USERS_PKG_NAME, array(
+	array('p_users_assign_role_perms', 'Can assign permissions to personal roles', 'editors', USERS_PKG_NAME),
+	array('p_users_assign_role_members', 'Can assign users to personal roles', 'registered', USERS_PKG_NAME),
+	array('p_users_role_subroles', 'Can include other roles in roles', 'editors', USERS_PKG_NAME),
+	array('p_users_create_personal_roles', 'Can create personal user roles', 'editors', USERS_PKG_NAME),
+
+	//Various other non-role kruft
+
+	//array('p_tidbits_upload_userfiles', 'Can upload personal files', 'registered', USERS_PKG_NAME),
+	//array('p_tidbits_configure_modules', 'Can configure modules', 'registered', USERS_PKG_NAME),
+	//array('p_tidbits_cache_bookmarks', 'Can cache user bookmarks', 'admin', USERS_PKG_NAME),
+	//array('p_tidbits_use_usermenu', 'Can create items in personal menu', 'registered', USERS_PKG_NAME),
+	//array('p_tidbits_use_tasks', 'Can use tasks', 'registered', USERS_PKG_NAME),
+	//array('p_tidbits_custom_home_theme', 'Can modify user homepage theme', 'editors', USERS_PKG_NAME),
+	//array('p_tidbits_custom_home_layout', 'Can modify user homepage layout', 'editors', USERS_PKG_NAME),
+	//array('p_tidbits_use_custom_css', 'Can create custom style sheets', 'editors', USERS_PKG_NAME),
+
+	//array(USERS_PKG_NAME,'users_webserverauth','n'),
+	//array(USERS_PKG_NAME,'users_auth_create_user_auth','n'),
+	//array(USERS_PKG_NAME,'users_auth_create_gBitDbUser','n'),
+	//array(USERS_PKG_NAME,'users_ldap_adminpass',''),
+	//array(USERS_PKG_NAME,'users_ldap_adminuser',''),
+	//array(USERS_PKG_NAME,'users_ldap_basedn',''),
+	//array(USERS_PKG_NAME,'users_ldap_groupattr','cn'),
+	//array(USERS_PKG_NAME,'users_ldap_groupdn',''),
+	//array(USERS_PKG_NAME,'users_ldap_groupoc','groupOfUniqueNames'),
+	//array(USERS_PKG_NAME,'users_ldap_host','localhost'),
+	//array(USERS_PKG_NAME,'users_ldap_memberattr','uniqueMember'),
+	//array(USERS_PKG_NAME,'users_ldap_memberisdn','n'),
+	//array(USERS_PKG_NAME,'users_ldap_port','389'),
+	//array(USERS_PKG_NAME,'users_ldap_scope','sub'),
+	//array(USERS_PKG_NAME,'users_ldap_userattr','uid'),
+	//array(USERS_PKG_NAME,'users_ldap_userdn',''),
+	//array(USERS_PKG_NAME,'users_ldap_useroc','inetOrgPerson'),
+	//array(USERS_PKG_NAME,'users_auth_skip_admin','y'),
+	//array(USERS_PKG_NAME,'user_files','n'),
+	//array(USERS_PKG_NAME,'site_show_all_modules_always','y'),
+	//array(USERS_PKG_NAME,'users_userfiles_quota','30'),
+	//array(USERS_PKG_NAME,'users_uf_use_db','y'),
+	//array(USERS_PKG_NAME,'uf_use_dir',''),
+	//array(USERS_PKG_NAME,'feature_tasks','n'),
+	//array(USERS_PKG_NAME,'usermenu','n'),
+
+*/
+
 $tables = array(
 
 'users_users' => "
@@ -123,6 +191,7 @@ $tables = array(
   last_login I8,
   current_login I8,
   registration_date I8 NOTNULL,
+  registration_ip C(32) NOTNULL,
   challenge C(32),
   pass_due I8,
   hash C(32),
@@ -213,9 +282,9 @@ $tables = array(
   CONSTRAINT ', CONSTRAINT `users_watches_user_ref` FOREIGN KEY (`user_id`) REFERENCES `".BIT_DB_PREFIX."users_users` (`user_id`)'
 ",
 
-);}
-global $gBitInstaller;
+);
 
+global $gBitInstaller;
 foreach( array_keys( $tables ) AS $tableName ) {
 	$gBitInstaller->registerSchemaTable( USERS_PKG_NAME, $tableName, $tables[$tableName], TRUE );
 }
@@ -227,119 +296,58 @@ $indices = array (
 	'users_users_login_idx' => array( 'table' => 'users_users', 'cols' => 'login', 'opts' => array('UNIQUE') ),
 	'users_users_avatar_atment_idx' => array( 'table' => 'users_users', 'cols' => 'avatar_attachment_id', 'opts' => NULL ),
 	'users_fav_con_idx' => array( 'table' => 'users_favorites_map', 'cols' => 'favorite_content_id', 'opts' => NULL ),
-	'users_fav_user_idx' => array( 'table' => 'users_favorites_map', 'cols' => 'user_id', 'opts' => NULL )
+	'users_fav_user_idx' => array( 'table' => 'users_favorites_map', 'cols' => 'user_id', 'opts' => NULL ),
+	'users_groups_user_idx' => array( 'table' => 'users_groups', 'cols' => 'user_id', 'opts' => NULL ),
+	'users_groups_user_name_idx' => array( 'table' => 'users_groups', 'cols' => 'user_id,group_name', 'opts' => array('UNIQUE') ),
+	'users_group_perm_group_idx' => array( 'table' => 'users_group_permissions', 'cols' => 'group_id', 'opts' => NULL ),
+	'users_group_perm_perm_idx' => array( 'table' => 'users_group_permissions', 'cols' => 'perm_name', 'opts' => NULL ),
+	'users_groups_map_user_idx' => array( 'table' => 'users_groups_map', 'cols' => 'user_id', 'opts' => NULL ),
+	'users_groups_map_group_idx' => array( 'table' => 'users_groups_map', 'cols' => 'group_id', 'opts' => NULL )
 );
-if ( defined( 'ROLE_MODEL' ) ) {
-	$team_indices = array (
-		'users_roles_user_idx' => array( 'table' => 'users_roles', 'cols' => 'user_id', 'opts' => NULL ),
-		'users_roles_user_name_idx' => array( 'table' => 'users_roles', 'cols' => 'user_id,role_name', 'opts' => array('UNIQUE') ),
-		'users_role_perm_role_idx' => array( 'table' => 'users_role_permissions', 'cols' => 'role_id', 'opts' => NULL ),
-		'users_role_perm_perm_idx' => array( 'table' => 'users_role_permissions', 'cols' => 'perm_name', 'opts' => NULL ),
-		'users_roles_map_user_idx' => array( 'table' => 'users_roles_map', 'cols' => 'user_id', 'opts' => NULL ),
-		'users_roles_map_role_idx' => array( 'table' => 'users_roles_map', 'cols' => 'role_id', 'opts' => NULL )
-	);
-} else {
-	$team_indices = array (
-		'users_groups_user_idx' => array( 'table' => 'users_groups', 'cols' => 'user_id', 'opts' => NULL ),
-		'users_groups_user_name_idx' => array( 'table' => 'users_groups', 'cols' => 'user_id,group_name', 'opts' => array('UNIQUE') ),
-		'users_group_perm_group_idx' => array( 'table' => 'users_group_permissions', 'cols' => 'group_id', 'opts' => NULL ),
-		'users_group_perm_perm_idx' => array( 'table' => 'users_group_permissions', 'cols' => 'perm_name', 'opts' => NULL ),
-		'users_groups_map_user_idx' => array( 'table' => 'users_groups_map', 'cols' => 'user_id', 'opts' => NULL ),
-		'users_groups_map_group_idx' => array( 'table' => 'users_groups_map', 'cols' => 'group_id', 'opts' => NULL )
-	);
-}
-
-$indices = array_merge( $indices, $team_indices );
-
 $gBitInstaller->registerSchemaIndexes( USERS_PKG_NAME, $indices );
 
 $gBitInstaller->registerPackageInfo( USERS_PKG_NAME, array(
-	'description' => "The users package contains all user information and gives you the possiblity to assign permissions to roles of users.",
+	'description' => "The users package contains all user information and gives you the possiblity to assign permissions to users.",
 	'license' => '<a href="http://www.gnu.org/licenses/licenses.html#LGPL">LGPL</a>',
 ) );
 
 // ### Sequences
-if ( defined( 'ROLE_MODEL' ) ) {
-	$sequences = array (
-		'users_users_user_id_seq' => array( 'start' => 2 ),
-		'users_roles_id_seq' => array( 'start' => 4 )
-	);
-} else {
-	$sequences = array (
-		'users_users_user_id_seq' => array( 'start' => 2 ),
-		'users_groups_id_seq' => array( 'start' => 4 )
-	);
-}
+$sequences = array (
+	'users_users_user_id_seq' => array( 'start' => 2 ),
+	'users_groups_id_seq' => array( 'start' => 4 )
+);
 $gBitInstaller->registerSchemaSequences( USERS_PKG_NAME, $sequences );
 
 // ### Default Preferences
 $gBitInstaller->registerPreferences( USERS_PKG_NAME, array(
-	//array(USERS_PKG_NAME,'users_webserverauth','n'),
-	//array(USERS_PKG_NAME,'users_auth_create_user_auth','n'),
-	//array(USERS_PKG_NAME,'users_auth_create_gBitDbUser','n'),
-	//array(USERS_PKG_NAME,'users_ldap_adminpass',''),
-	//array(USERS_PKG_NAME,'users_ldap_adminuser',''),
-	//array(USERS_PKG_NAME,'users_ldap_basedn',''),
-	array(USERS_PKG_NAME,'users_ldap_groupattr','cn'),
-	//array(USERS_PKG_NAME,'users_ldap_groupdn',''),
-	array(USERS_PKG_NAME,'users_ldap_groupoc','groupOfUniqueNames'),
-	array(USERS_PKG_NAME,'users_ldap_host','localhost'),
-	array(USERS_PKG_NAME,'users_ldap_memberattr','uniqueMember'),
-	//array(USERS_PKG_NAME,'users_ldap_memberisdn','n'),
-	array(USERS_PKG_NAME,'users_ldap_port','389'),
-	array(USERS_PKG_NAME,'users_ldap_scope','sub'),
-	array(USERS_PKG_NAME,'users_ldap_userattr','uid'),
-	//array(USERS_PKG_NAME,'users_ldap_userdn',''),
-	array(USERS_PKG_NAME,'users_ldap_useroc','inetOrgPerson'),
 	array(USERS_PKG_NAME,'users_auth_method','tiki'),
-	array(USERS_PKG_NAME,'users_auth_skip_admin','y'),
 	array(USERS_PKG_NAME,'users_allow_register','y'),
-	//array(USERS_PKG_NAME,'user_files','n'),
 	array(USERS_PKG_NAME,'users_forgot_pass','y'),
 	//array(USERS_PKG_NAME,'users_eponymous_groups','n'),
-	//array(USERS_PKG_NAME,'site_show_all_modules_always','y'),
 	//array(USERS_PKG_NAME,'users_pass_chr_num','n'),
 	array(USERS_PKG_NAME,'users_pass_due','999'),
 	//array(USERS_PKG_NAME,'users_register_passcode',''),
-	array(USERS_PKG_NAME,'users_remember_me','n'),
-	array(USERS_PKG_NAME,'users_remember_time','7200'),
+	array(USERS_PKG_NAME,'users_remember_me','y'),
+	array(USERS_PKG_NAME,'users_remember_time','86400'),
 	//array(USERS_PKG_NAME,'users_random_number_reg','n'),
-	array(USERS_PKG_NAME,'users_userfiles_quota','30'),
-	array(USERS_PKG_NAME,'users_uf_use_db','y'),
-	//array(USERS_PKG_NAME,'uf_use_dir',''),
 	//array(USERS_PKG_NAME,'users_register_passcode','n'),
 	//array(USERS_PKG_NAME,'users_validate_user','n'),
 	//array(USERS_PKG_NAME,'users_validate_email','n'),
 	array(USERS_PKG_NAME,'users_min_pass_length','4'),
 	//array(USERS_PKG_NAME,'users_custom_home','n'),
 	//array(USERS_PKG_NAME,'user_bookmarks','n'),
-	//array(USERS_PKG_NAME,'feature_tasks','n'),
-	//array(USERS_PKG_NAME,'usermenu','n'),
 	array(USERS_PKG_NAME,'users_preferences','y'),
 	array(USERS_PKG_NAME,'users_display_name','real_name'),
 	array(USERS_PKG_NAME,'users_change_language','y'),
 	array(USERS_PKG_NAME,'users_case_sensitive_login','y'),
-//	array(USERS_PKG_NAME,'user_class','RolePermUser'),
 	//array(USERS_PKG_NAME, 'users_watches','n'),
 ) );
 
 // ### Default Permissions
 $gBitInstaller->registerUserPermissions( USERS_PKG_NAME, array(
-	//array('p_tidbits_upload_userfiles', 'Can upload personal files', 'registered', USERS_PKG_NAME),
-	array('p_users_assign_role_perms', 'Can assign permissions to personal roles', 'editors', USERS_PKG_NAME),
-	array('p_users_assign_role_members', 'Can assign users to personal roles', 'registered', USERS_PKG_NAME),
-	array('p_users_role_subroles', 'Can include other roles in roles', 'editors', USERS_PKG_NAME),
 	array('p_users_create_bookmarks', 'Can create user bookmarksche user bookmarks', 'registered', USERS_PKG_NAME),
-	//array('p_tidbits_configure_modules', 'Can configure modules', 'registered', USERS_PKG_NAME),
-	//array('p_tidbits_cache_bookmarks', 'Can cache user bookmarks', 'admin', USERS_PKG_NAME),
-	//array('p_tidbits_use_usermenu', 'Can create items in personal menu', 'registered', USERS_PKG_NAME),
-	//array('p_tidbits_use_tasks', 'Can use tasks', 'registered', USERS_PKG_NAME),
 	array('p_users_admin', 'Can edit the information for other users', 'admin', USERS_PKG_NAME),
 	array('p_users_view_icons_and_tools', 'Can view tab and tool links', 'basic', USERS_PKG_NAME),
-	//array('p_tidbits_custom_home_theme', 'Can modify user homepage theme', 'editors', USERS_PKG_NAME),
-	//array('p_tidbits_custom_home_layout', 'Can modify user homepage layout', 'editors', USERS_PKG_NAME),
-	//array('p_tidbits_use_custom_css', 'Can create custom style sheets', 'editors', USERS_PKG_NAME),
-	array('p_users_create_personal_roles', 'Can create personal user roles', 'editors', USERS_PKG_NAME),
 	array('p_users_view_user_list', 'Can view list of registered users', 'editors', USERS_PKG_NAME),
 	array('p_users_view_user_homepage', 'Can view personalized homepages', 'basic', USERS_PKG_NAME),
 	array('p_users_edit_user_homepage', 'Can create and display a personalized homepage', 'editors', USERS_PKG_NAME),
