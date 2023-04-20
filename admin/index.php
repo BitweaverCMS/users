@@ -165,18 +165,18 @@ if( isset( $_REQUEST["action"] ) ) {
 			}
 						break;
 					case 'ban':
-						$gBitSystem->setBrowserTitle( tra( 'Ban user' ) );
+						$gBitSystem->setBrowserTitle( tra( 'Disable User' ) );
 						$msgHash = array(
-							'confirm_item' => tra( 'Are you sure you want to ban this user?' ),
-							'warning' => tra( 'This will suspend the account for user' )." <strong>$userInfo[real_name] ($userInfo[login])</strong>",
+							'confirm_item' => tra( 'Are you sure you want to disable this user account?' ),
+							'warning' => tra( 'This will suspend access for user' )." <strong>$userInfo[real_name] ($userInfo[login])</strong>",
 						);
 						$gBitSystem->confirmDialog( $formHash,$msgHash );
 						break;
 					case 'unban':
-						$gBitSystem->setBrowserTitle( tra( 'Unban user' ) );
+						$gBitSystem->setBrowserTitle( tra( 'Re-enable user' ) );
 						$msgHash = array(
-							'confirm_item' => tra( 'Are you sure you want to unban this user?' ),
-							'warning' => tra( 'This will restore the account for user' )." <strong>$userInfo[real_name] ($userInfo[login])</strong>",
+							'confirm_item' => tra( 'Are you sure you want to re-enable this user?' ),
+							'warning' => tra( 'This will restore access for user' )." <strong>$userInfo[real_name] ($userInfo[login])</strong>",
 						);
 						$gBitSystem->confirmDialog( $formHash,$msgHash );
 						break;
