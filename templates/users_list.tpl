@@ -51,7 +51,7 @@
 {form id=checkform action=$smarty.server.REQUEST_URI}
 	<ul class="clear data inline userslist media-grid" start="{$listInfo.offset+1}">
 		{foreach from=$users item=userHash key=userId}
-			<li class="item {cycle values='even,odd'} pull-left" style="width:31%;padding:0 0 0 1%;background:url('{$userHash.thumbnail_url|default:"`$smarty.const.USERS_PKG_URL`icons/silhouette_100.png"|escape}') no-repeat scroll top right transparent;">
+			<li class="item {cycle values='even,odd'} pull-left {if $userHash.content_status_id < 0}warning{/if}" style="width:31%;padding:0 0 0 1%;background:url('{$userHash.thumbnail_url|default:"`$smarty.const.USERS_PKG_URL`icons/silhouette_100.png"|escape}') no-repeat scroll top right transparent;">
 					{if $gBitUser->hasPermission( 'p_users_admin' )}
 					{forminput label="checkbox"}
 						<input type="checkbox" name="batch_user_ids[]" value="{$userHash.user_id}" /> 
@@ -61,7 +61,6 @@
 					{else}
 					<h4>{displayname hash=$userHash}</h4>
 					{/if}
-
 				<div class="usersinfo">
 				{if $gBitUser->hasPermission( 'p_users_admin' )}
 					<div>{if !empty($userHash.email)}{mailto address=$userHash.email encode="javascript"}{else}&nbsp;{/if}</div>
@@ -91,9 +90,9 @@
 						{smartlink ipackage=users ifile="admin/user_activity.php" user_id=$userHash.user_id ititle="User Activity" booticon="fa-bolt"}
 						{if $userHash.user_id != $smarty.const.ANONYMOUS_USER_ID && $userHash.user_id != $smarty.const.ROOT_USER_ID && $userHash.user_id != $gBitUser->mUserId}
 							{if $userHash.content_status_id > 0}
-								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=ban ititle="Ban User" booticon="fa-circle-minus"}
+								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=ban ititle="Disable Account" booticon="fa-ban"}
 							{else}
-								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=unban ititle="Restore the User Account" booticon="fa-recycle"}
+								{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=unban ititle="Re-enable Account" booticon="fa-user-lock"}
 							{/if}
 							{smartlink ipackage=users ifile="admin/index.php" user_id=$userHash.user_id action=delete ititle="Remove" booticon="fa-trash"}
 						{/if}
