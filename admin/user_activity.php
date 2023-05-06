@@ -2,6 +2,8 @@
 
 require_once( '../../kernel/includes/setup_inc.php' );
 
+$gBitSystem->verifyPermission( 'p_users_admin' );
+
 $listHash = $_REQUEST;
 
 if( @BitBase::verifyId( $_REQUEST['user_id'] ) ) {
