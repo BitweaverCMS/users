@@ -42,7 +42,7 @@ Set-Cookie: <strong>'.$gBitUser->getSiteCookieName().'=2ishv84g637mrp7o07hd8829f
 $gApiHelp['User Authentication'] = array( 
 	'Authentication' => array(
 		'method' => 'POST '.API_PKG_URI.'users/autheticate',
-		'help' => 'Authentication is performed once per session (application launch) using the standard <a href="http://en.wikipedia.org/wiki/Basic_access_authentication">HTTP Basic Authentication</a>. Once authentication is successful, a cookie named "'.$gBitUser->getSiteCookieName().'" will be returned for the user. Those cookies will need to be included for every request which will automatically identify the user for the lifetime of the cookie.',
+		'help' => 'Authentication is performed once per session (application launch) using the standard <a href="http://en.wikipedia.org/wiki/Basic_access_authentication">HTTP Basic Authentication</a>. Once authentication is successful, a cookie named "'.$gBitUser->getSiteCookieName().'" will be returned for the user. That cookie can be included for every request which will automatically identify the user for the lifetime of the cookie. For stateless (without session) applications, you can simply include the <strong>Authorization</strong> header with the username and password for every request.',
 		'parameters' => array(
 			'Authorization: Basic <em>base64encode(username + ":" + password)</em>' => 'HTTP Basic authenictaion sent via HTTP headers. Most frameworks will handle this for you automatically with a simple call. For example AFNetworking <a href=http://engineering.gowalla.com/AFNetworking/Classes/AFHTTPClient.html">::setAuthorizationHeaderWithUsername</a>',
 		),
