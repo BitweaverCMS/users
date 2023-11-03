@@ -66,7 +66,7 @@ $gApiHelp['User Authentication'] = array(
 	'Examples' => array(
 		'help' => 'The following is a command-line test of user authentication. Notice the Set-Cookie values returned. Your client should store these values and send them for all subsequent requests.',
 		'code' => '<code>COMMAND:
-lwp-request -se -C test@example.com:s3cr3t -H \'API: API consumer_key="bad6ed95edfd983c8cb58cd397a242a2f83cd80c"\' -m GET '.API_PKG_URI.'users/info
+curl -i -u "test@example.com:s3cr3t" --header \'API: API consumer_key="bad6ed95edfd983c8cb58cd397a242a2f83cd80c"\' -X GET '.API_PKG_URI.'users/info
 
 RESPONSE:
 200 OK

@@ -9,7 +9,7 @@ function bituser_api_handler( $pMethod, $pRequest ) {
 
 	$routeAction = BitBase::getParameter( $pRequest, 'route_action' );
 
-	$pStatus = HttpStatusCodes::HTTP_NOT_FOUND;
+	$respStatus = HttpStatusCodes::HTTP_NOT_FOUND;
 	$respData = "Unknown ".$routeAction." method: ".$pMethod;
 
 	if( $routeAction == 'register' ) {
