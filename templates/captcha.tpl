@@ -41,6 +41,7 @@
 
 {if $gBitSystem->isFeatureActive('users_register_recaptcha')}
 	<div class="form-group {if $errors.recaptcha}error{/if}">
+		{formlabel label="" for=""}
 		{forminput}
 			{formfeedback error=$errors.recaptcha}
 				<script src="https://www.google.com/recaptcha/api.js" async defer></script>

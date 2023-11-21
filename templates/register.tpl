@@ -226,6 +226,7 @@
 	{captcha force=true variant=row}
 
 	<div class="form-group">
+		{formlabel label="" for=""}
 		{forminput class="submit"}
 			<input type="submit" class="btn btn-primary" name="register" value="{tr}Register{/tr}" />
 		{/forminput}

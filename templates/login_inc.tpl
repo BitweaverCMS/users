@@ -36,24 +36,18 @@
 	</div>
 
 	{if $gBitSystem->isFeatureActive('users_remember_me')}
-		<div class="form-group">
-			{forminput label="checkbox"}
-				<input type="checkbox" name="rme" id="rme" value="on" checked="checked" />
-				{tr}Remember Me{/tr}
-			{/forminput}
-		</div>
+	<div class="form-group">
+		{formlabel label="" for=""}
+		{forminput label="checkbox"}
+			<input type="checkbox" name="rme" id="rme" value="on" checked="checked" />
+			{tr}Remember Me{/tr}
+		{/forminput}
+	</div>
 	{/if}
 
 	
-	{if !$gBitSystem->getConfig('site_https_login_required') && $gBitSystem->isFeatureActive('http_login_url') or $gBitSystem->isFeatureActive('https_login_url')}
-		<div class="form-group">
-			{forminput class="offset"}
-				<a href="{$gBitSystem->getConfig('http_login_url')}" title="{tr}Login using the default security protocol{/tr}">{tr}Standard{/tr}</a> | <a href="{$gBitSystem->getConfig('https_login_url')}" title="{tr}Login using a secure protocol{/tr}">{tr}Secure{/tr}</a>
-			{/forminput}
-		</div>
-	{/if}
-
 	<div class="form-group">
+		{formlabel label="" for=""}
 		{forminput class="submit"}
 			<input type="submit" class="btn btn-primary" name="login" value="{tr}Sign In{/tr}" />
 			{if !$gBitSystem->isFeatureActive('site_https_login_required') && empty($smarty.server.HTTPS)} {booticon iname="fa-unlock" iexplain="Insecure" class="fa-large"}{/if}
