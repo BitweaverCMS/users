@@ -55,7 +55,7 @@
 	</div>
 {/form}
 
-<script type="text/javascript">
+<script>
      document.getElementById("user").focus();
 </script>
 {/strip}

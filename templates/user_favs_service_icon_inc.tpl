@@ -13,7 +13,7 @@
 		{booticon iname="fa-bookmark" ipackage="icons" iexplain="Bookmark"}
 	{/if}
 </a>
-	<script type="text/javascript">/* <![CDATA[ */
+	<script>/* <![CDATA[ */
 		if( typeof( BitUser ) == 'undefined' ){ldelim} BitUser = {ldelim}{rdelim} {rdelim};
 		BitUser.bookmarkUrl = "{$smarty.const.USERS_PKG_URL}bookmark.php";
 		BitUser.isBookmarked = {$isBookmarked}; 

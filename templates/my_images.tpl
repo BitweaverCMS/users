@@ -76,7 +76,7 @@
 
 {* this javascript MUST go after the picform above! xoxo spider *}
 {literal}
-<script type="text/javascript">/* <![CDATA[ */
+<script>/* <![CDATA[ */
 	function showHideAvatar() {
 		var viz;
 		if( document.getElementById( "user_auto_avatar" ).checked ) {

@@ -1,6 +1,6 @@
 {if $gBitSystem->isFeatureActive('users_random_number_reg')}
 	{literal}
-	<script type="text/javascript"> /* <![CDATA[ */
+	<script> /* <![CDATA[ */
 	function reloadImage() {
 		element = document.getElementById('captcha_img');
 		if (element) {

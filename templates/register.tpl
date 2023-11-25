@@ -48,7 +48,7 @@
 			{formhelp note="This will be used in links to your profile. Your username can only contain numbers, characters, and underscores."}
 			<div class="alert alert-info nomargin" id="loginurl">{$smarty.const.BIT_ROOT_URI}</div>
 		{/forminput}
-		<script type="text/javascript">/* <![CDATA[ */ {literal}
+		<script>/* <![CDATA[ */ {literal}
 		BitUser = {
 			"updateUserUrl": function(){
 				var loginEle = document.getElementById('login');
