@@ -24,7 +24,7 @@ $gApiHelp['User Registration'] = array(
 	'Examples' => array( 
 		'help' => '',
 		'code' => '<code>COMMAND:
-echo -n \'{"email":"test@example.com","password":"s3cr3t"}\' |lwp-request -se -C test:foobar -c "application/json" -H \'API: API consumer_key="bad6ed95edfd983c8cb58cd397a242a2f83cd80c"\' -m PUT '.API_PKG_URI.'users/info
+echo -n \'{"email":"test@example.com","password":"s3cr3t"}\' |lwp-request -se -C test:foobar -c "application/json" -H \'API: API consumer_key="bad6ed95edfd983c8cb58cd397a242a2f83cd80c"\' -m PUT '.API_PKG_URI.'users/authenticate
 
 RESPONSE:
 200 OK
@@ -41,7 +41,7 @@ Set-Cookie: <strong>'.$gBitUser->getSiteCookieName().'=2ishv84g637mrp7o07hd8829f
 
 $gApiHelp['User Authentication'] = array( 
 	'Authentication' => array(
-		'method' => 'POST '.API_PKG_URI.'users/autheticate',
+		'method' => 'POST '.API_PKG_URI.'users/authenticate',
 		'help' => 'Authentication is performed once per session (application launch) using the standard <a href="http://en.wikipedia.org/wiki/Basic_access_authentication">HTTP Basic Authentication</a>. Once authentication is successful, a cookie named "'.$gBitUser->getSiteCookieName().'" will be returned for the user. That cookie can be included for every request which will automatically identify the user for the lifetime of the cookie. For stateless (without session) applications, you can simply include the <strong>Authorization</strong> header with the username and password for every request.',
 		'parameters' => array(
 			'Authorization: Basic <em>base64encode(username + ":" + password)</em>' => 'HTTP Basic authenictaion sent via HTTP headers. Most frameworks will handle this for you automatically with a simple call. For example AFNetworking <a href=http://engineering.gowalla.com/AFNetworking/Classes/AFHTTPClient.html">::setAuthorizationHeaderWithUsername</a>',
@@ -66,7 +66,7 @@ $gApiHelp['User Authentication'] = array(
 	'Examples' => array(
 		'help' => 'The following is a command-line test of user authentication. Notice the Set-Cookie values returned. Your client should store these values and send them for all subsequent requests.',
 		'code' => '<code>COMMAND:
-curl -i -u "test@example.com:s3cr3t" --header \'API: API consumer_key="bad6ed95edfd983c8cb58cd397a242a2f83cd80c"\' -X GET '.API_PKG_URI.'users/info
+curl -i -u "test@example.com:s3cr3t" --header \'API: API consumer_key="bad6ed95edfd983c8cb58cd397a242a2f83cd80c"\' -X GET '.API_PKG_URI.'users/authenticate
 
 RESPONSE:
 200 OK
