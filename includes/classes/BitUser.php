@@ -913,6 +913,8 @@ class BitUser extends LibertyMime {
 
 		trim_array( $pParamHash );
 
+		$pParamHash['user_store']['registration_ip'] = $_SERVER['REMOTE_ADDR'];
+
 		// perhaps someone is importing users and *knows* what they are doing
 		if( $this->verifyIdParameter( $pParamHash, 'user_id' ) ) {
 			// only import user_id if it doesn't exist or overwrite is set.
