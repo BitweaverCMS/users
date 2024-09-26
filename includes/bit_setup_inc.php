@@ -159,8 +159,8 @@ if( !empty( $gBitSystem->mDomainInfo['style'] )) {
 			$theme = $userStyle;
 		}
 	}
-	if( isset( $_COOKIE['bit-theme'] )) {
-		$theme = $_COOKIE['bit-theme'];
+	if( isset( $_COOKIE['bw-theme'] )) {
+		$theme = $_COOKIE['bw-theme'];
 	}
 }
 
