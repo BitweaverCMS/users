@@ -414,15 +414,15 @@ class BitUser extends LibertyMime {
 			}
 		}
 
-		if( $gBitSystem->isFeatureActive( 'users_register_smcaptcha' ) && (empty( $pParamHash['novalidation'] ) || $pParamHash['novalidation'] != 'yes') ) {
+		if( $gBitSystem->isFeatureActive( 'users_register_cfcaptcha' ) && (empty( $pParamHash['novalidation'] ) || $pParamHash['novalidation'] != 'yes') ) {
 			require_once( USERS_PKG_INCLUDE_PATH.'solvemedialib.php' );
 			if( !empty( $pParamHash['adcopy_challenge'] ) && !empty( $pParamHash['adcopy_response'] ) ) {
 				$solvemediaResponse = solvemedia_check_answer($gBitSystem->getConfig( 'users_register_smcaptcha_v_key' ), $_SERVER["REMOTE_ADDR"], $pParamHash["adcopy_challenge"], $pParamHash["adcopy_response"], $gBitSystem->getConfig( 'users_register_smcaptcha_h_key' ) );
 				if( !$solvemediaResponse->is_valid ) {
-					$this->mErrors['smcaptcha'] = $solvemediaResponse->error;
+					$this->mErrors['cfcaptcha'] = $solvemediaResponse->error;
 				}
 			} else {
-				$this->mErrors['smcaptcha'] = 'Wrong Answer';
+				$this->mErrors['cfcaptcha'] = 'Wrong Answer';
 			}
 		}
 

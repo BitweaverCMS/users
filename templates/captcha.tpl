@@ -50,6 +50,17 @@
 	</div>
 {/if}
 
+{if $gBitSystem->isFeatureActive('users_register_cfturnstile')}
+	<div class="form-group {if $errors.recaptcha}error{/if}">
+		{formlabel label="" for=""}
+		{forminput}
+			{formfeedback error=$errors.recaptcha}
+			<div class="cf-turnstile" data-sitekey="{$gBitSystem->getConfig('users_register_cfturnstile_site_key')}" data-callback="javascriptCallback"></div>
+			<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+		{/forminput}
+	</div>
+{/if}
+
 {if $gBitSystem->isFeatureActive('users_register_smcaptcha')}
 	<div class="form-group {if $errors.smcaptcha}error{/if}">
 		{formlabel label="Are you human?" for="smcaptcha"}

@@ -147,25 +147,20 @@ $registerSettings = array(
 		'type' => "text",
 		'note' => "This will be given to you after registering your site with Google",
 	),
-	'users_register_smcaptcha' => array(
-		'label' => "Use Solve Media CAPTCHA to prevent automatic/robot registration",
+	'users_register_cfturnstile' => array(
+		'label' => "Use Cloudflare Turnstile to prevent automatic/robot registration",
 		'type' => "checkbox",
-		'note' => "To use Solve Media CAPTCHA you must get your API keys from <a href='https://www.solvemedia.com'>https://www.solvemedia.com</a> and enter them below.",
+		'note' => "To use Cloudflare Turnstile you must get your API keys from <a href='https://www.cloudflare.com/application-services/products/turnstile/'>https://www.solvemedia.com</a> and enter them below.",
 	),
-	'users_register_smcaptcha_c_key' => array(
-		'label' => "Solve Media Challenge Key (C-key)",
+	'users_register_cfturnstile_site_key' => array(
+		'label' => "Cloudflare Site Key",
 		'type' => "text",
-		'note' => "This will be given to you after registering your site with Solve Media",
+		'note' => "This will be given to you after registering your site with Cloudflare",
 	),
-	'users_register_smcaptcha_v_key' => array(
-		'label' => "Solve Media Verification Key (V-key)",
+	'users_register_cfturnstile_secret_key' => array(
+		'label' => "Cloudflare Secret Key",
 		'type' => "text",
-		'note' => "This will be given to you after registering your site with Solve Media",
-	),
-	'users_register_smcaptcha_h_key' => array(
-		'label' => "Solve Media Authentication Hash Key (H-key)",
-		'type' => "text",
-		'note' => "This will be given to you after registering your site with Solve Media",
+		'note' => "This will be given to you after registering your site with Cloudflare",
 	),
 );
 $gBitSmarty->assign( 'registerSettings', $registerSettings );

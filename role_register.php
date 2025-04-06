@@ -19,7 +19,6 @@ if( isset( $_REQUEST['tk'] ) ) {
 require_once( '../kernel/includes/setup_inc.php' );
 require_once( KERNEL_PKG_CLASS_PATH.'BitBase.php' );
 include_once( KERNEL_PKG_INCLUDE_PATH.'notification_lib.php' );
-// no longer supported, needs update - spiderr require_once( USERS_PKG_INCLUDE_PATH.'recaptchalib.php' );
 
 $gBitSystem->verifyFeature( 'users_allow_register' );
 
