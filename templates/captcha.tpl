@@ -51,10 +51,10 @@
 {/if}
 
 {if $gBitSystem->isFeatureActive('users_register_cfturnstile')}
-	<div class="form-group {if $errors.recaptcha}error{/if}">
+	<div class="form-group {if $errors.cfturnstile}error{/if}">
 		{formlabel label="" for=""}
 		{forminput}
-			{formfeedback error=$errors.recaptcha}
+			{formfeedback error=$errors.cfturnstile}
 			<div class="cf-turnstile" data-sitekey="{$gBitSystem->getConfig('users_register_cfturnstile_site_key')}" data-callback="javascriptCallback"></div>
 			<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 		{/forminput}

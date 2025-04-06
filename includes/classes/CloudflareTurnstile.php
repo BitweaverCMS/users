@@ -32,32 +32,27 @@ class CloudflareTurnstileValidator {
         
         curl_close($ch);
 
-        // Check if request was successful
-        if ($httpCode !== 200) {
-            return [
-                'success' => false,
-                'error' => 'Failed to connect to verification server'
-            ];
-        }
+		$ret = array();
 
         // Decode JSON response
         $result = json_decode($response, true);
 
         if (!$result) {
-            return [
+            $ret = [
                 'success' => false,
-                'error' => 'Invalid response from verification server'
+                'error_codes' => array( 'Invalid response from verification server ('.$httpCode.')' )
             ];
-        }
+        } else {
+			$ret = [
+				'success' => $result['success'],
+				'timestamp' => $result['challenge_ts'] ?? null,
+				'hostname' => $result['hostname'] ?? null,
+				'error_codes' => $result['error-codes'] ?? []
+			];
+	    }
 
-        // Return validation result
-        return [
-            'success' => $result['success'],
-            'timestamp' => $result['challenge_ts'] ?? null,
-            'hostname' => $result['hostname'] ?? null,
-            'error_codes' => $result['error-codes'] ?? []
-        ];
-    }
+		return $ret;
+	}
 }
 
 // Example usage:

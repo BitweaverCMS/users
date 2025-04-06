@@ -424,15 +424,17 @@ class BitUser extends LibertyMime {
 			}
 		}
 
-		if( $gBitSystem->isFeatureActive( 'users_register_smcaptcha' ) && (empty( $pParamHash['novalidation'] ) || $pParamHash['novalidation'] != 'yes') ) {
-			require_once( USERS_PKG_INCLUDE_PATH.'solvemedialib.php' );
-			if( !empty( $pParamHash['adcopy_challenge'] ) && !empty( $pParamHash['adcopy_response'] ) ) {
-				$solvemediaResponse = solvemedia_check_answer($gBitSystem->getConfig( 'users_register_smcaptcha_v_key' ), $_SERVER["REMOTE_ADDR"], $pParamHash["adcopy_challenge"], $pParamHash["adcopy_response"], $gBitSystem->getConfig( 'users_register_smcaptcha_h_key' ) );
-				if( !$solvemediaResponse->is_valid ) {
-					$this->mErrors['smcaptcha'] = $solvemediaResponse->error;
+		if( $gBitSystem->isFeatureActive( 'users_register_cfturnstile' ) && (empty( $pParamHash['novalidation'] ) || $pParamHash['novalidation'] != 'yes') ) {
+			require_once( USERS_PKG_CLASS_PATH.'CloudflareTurnstile.php' );
+			$cfTurnstile = new CloudflareTurnstileValidator( $gBitSystem->getConfig( 'users_register_cfturnstile_secret_key' ) );
+			if( !empty( $pParamHash['cf-turnstile-response'] ) ) {
+				$result = $cfTurnstile->validate( $pParamHash['cf-turnstile-response'], $_SERVER['REMOTE_ADDR'] );
+				if ($result['success']) {
+				} else {
+					$this->mErrors['cfturnstile'] = "Cloudflare Verification failed: " . implode(', ', $result['error_codes']);
 				}
 			} else {
-				$this->mErrors['smcaptcha'] = 'Wrong Answer';
+				$this->mErrors['smcaptcha'] = 'No Cloudflare Response';
 			}
 		}
 
