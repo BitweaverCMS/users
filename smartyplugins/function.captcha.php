@@ -33,10 +33,10 @@ function smarty_function_captcha( $pParams, &$gBitSmarty ) {
 			$pParams['source'] = USERS_PKG_URL."freecap/freecap.php";
 		} else {
 			$getString = 'size='.$pParams['size'];
-			if( @BitBase::verifyId( $pParams['width'] ) ) {
+			if( @BitBase::verifyIdParameter( $pParams, 'width' ) ) {
 				$getString .= '&width='.$pParams['width'];
 			}
-			if( @BitBase::verifyId( $pParams['height'] ) ) {
+			if( @BitBase::verifyIdParameter( $pParams, 'height' ) ) {
 				$getString .= '&height='.$pParams['height'];
 			}
 			$pParams['source'] = USERS_PKG_URL."captcha_image.php?$getString";

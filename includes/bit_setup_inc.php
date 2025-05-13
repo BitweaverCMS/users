@@ -69,9 +69,9 @@ if( $gBitSystem->isFeatureActive( 'site_store_session_db' ) && !empty( $gBitDbTy
 
 session_name( BIT_SESSION_NAME );
 if( $gBitSystem->isFeatureActive( 'users_remember_me' )) {
-	session_set_cookie_params( $gBitSystem->getConfig( 'site_session_lifetime' ), $gBitSystem->getConfig( 'cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig( 'cookie_domain', '' ));
+	session_set_cookie_params( $gBitSystem->getConfig( 'site_session_lifetime', 0 ), $gBitSystem->getConfig( 'cookie_path', BIT_ROOT_URL ), $gBitSystem->getConfig( 'cookie_domain', '' ));
 } else {
-	session_set_cookie_params( $gBitSystem->getConfig( 'site_session_lifetime' ), BIT_ROOT_URL, '' );
+	session_set_cookie_params( $gBitSystem->getConfig( 'site_session_lifetime', 0 ), BIT_ROOT_URL, '' );
 }
 
 // just use a simple COOKIE (unique random string) that is linked to the users_cnxn table.

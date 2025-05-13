@@ -164,7 +164,7 @@ class BitUser extends LibertyMime {
 				$this->mInfo['user_id']       = $this->mInfo['uu_user_id'];
 				$this->mInfo['is_registered'] = $this->isRegistered();
 				foreach( array( 'portrait', 'avatar', 'logo' ) as $img ) {
-					$this->mInfo[$img.'_path']   = $this->getSourceFile( array( 'user_id'=>$this->getField( 'user_id' ), 'package'=>liberty_mime_get_storage_sub_dir_name( array( 'mime_type' => $this->getField( $img.'_mime_type' ), 'name' =>  $this->getField( $img.'_file_name' ) ) ), 'file_name' => basename( $this->mInfo[$img.'_file_name'] ), 'sub_dir' =>  $this->getField( $img.'_attachment_id' ), 'mime_type' => $this->getField( $img.'_mime_type' ) ) );
+					$this->mInfo[$img.'_path']   = $this->getSourceFile( array( 'user_id'=>$this->getField( 'user_id' ), 'package'=>liberty_mime_get_storage_sub_dir_name( array( 'mime_type' => $this->getField( $img.'_mime_type' ), 'name' =>  $this->getField( $img.'_file_name' ) ) ), 'file_name' => basename( $this->mInfo[$img.'_file_name'] ?? '' ), 'sub_dir' =>  $this->getField( $img.'_attachment_id' ), 'mime_type' => $this->getField( $img.'_mime_type' ) ) );
 					$this->mInfo[$img.'_url']    = liberty_fetch_thumbnail_url( array( 'source_file'=>$this->mInfo[$img.'_path'], 'size' => 'small', 'mime_image' => FALSE ));
 				}
 
@@ -1297,9 +1297,9 @@ class BitUser extends LibertyMime {
 		}
 		for( $i = 0; $i < $pLength; $i++ ) {
 			if( $i % 2 ) {
-				$ret .= $vocales{rand( 0, strlen( $vocales ) - 1 )};
+				$ret .= $vocales[rand( 0, strlen( $vocales ) - 1 )];
 			} else {
-				$ret .= $consonantes{rand( 0, strlen( $consonantes ) - 1 )};
+				$ret .= $consonantes[rand( 0, strlen( $consonantes ) - 1 )];
 			}
 		}
 		return $ret;
