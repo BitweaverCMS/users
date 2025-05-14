@@ -93,18 +93,10 @@ if( isset( $_REQUEST["batchimport"])) {
 	}
 }
 
-if ( defined( 'ROLE_MODEL' ) ) {
-	// get default role and pass it to tpl
-	foreach( $gBitUser->getDefaultRole() as $defaultRoleId => $defaultRoleName ) {
-		$gBitSmarty->assign('defaultRoleId', $defaultRoleId );
-		$gBitSmarty->assign('defaultRoleName', $defaultRoleName );
-	}
-} else {
-	// get default group and pass it to tpl
-	foreach( $gBitUser->getDefaultGroup() as $defaultGroupId => $defaultGroupName ) {
-		$gBitSmarty->assign('defaultGroupId', $defaultGroupId );
-		$gBitSmarty->assign('defaultGroupName', $defaultGroupName );
-	}
+// get default group and pass it to tpl
+foreach( $gBitUser->getDefaultGroup() as $defaultGroupId => $defaultGroupName ) {
+	$gBitSmarty->assign('defaultGroupId', $defaultGroupId );
+	$gBitSmarty->assign('defaultGroupName', $defaultGroupName );
 }
 
 // Display the template

@@ -146,7 +146,7 @@ class LDAPAuth extends BaseAuth {
 		// Roles are not inteneded to match with ldap groups
 		// This area needs a closer look if it needs to be used
 		$groups = array();
-		if ( !defined ('ROLE_MODEL') ) $groups = $gBitUser->getAllGroups($listHash);
+		$groups = $gBitUser->getAllGroups($listHash);
 		$groupsD = array();
 		foreach ($groups as $g) {
 			$groupsD[$g['group_id']]= "{$g['group_name']} ( {$g['group_desc']} )";

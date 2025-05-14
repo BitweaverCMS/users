@@ -209,14 +209,8 @@ $httpSettings = array(
 );
 $gBitSmarty->assign( 'httpSettings', $httpSettings );
 
-
-if (defined ('ROLE_MODEL') ) {
-	$listHash = array( 'sort_mode' => 'role_name_asc' );
-	$gBitSmarty->assign( 'roleList', $gBitUser->getAllRoles( $listHash ));
-} else {
-	$listHash = array( 'sort_mode' => 'group_name_asc' );
-	$gBitSmarty->assign('groups', $gBitUser->getAllGroups( $listHash ));
-}
+$listHash = array( 'sort_mode' => 'group_name_asc' );
+$gBitSmarty->assign('groups', $gBitUser->getAllGroups( $listHash ));
 
 if( !function_exists("gd_info" ) ) {
 	$gBitSmarty->assign( 'warning', 'PHP GD library is required for this feature (not found on your system)' );

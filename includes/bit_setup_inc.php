@@ -40,7 +40,7 @@ if( !defined( 'LOGO_MAX_DIM' )) {
 }
 
 // a package can decide to override the default user class
-$userClass = $gBitSystem->getConfig( 'user_class', (defined('ROLE_MODEL') ) ?  'RolePermUser' : 'BitPermUser' );
+$userClass = $gBitSystem->getConfig( 'user_class', 'BitPermUser' );
 require_once( USERS_PKG_CLASS_PATH.$userClass.'.php' );
 
 // set session lifetime

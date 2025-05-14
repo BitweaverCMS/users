@@ -12,11 +12,7 @@ $feedback = array();
 
 if( isset($_REQUEST["newuser"] ) ) {
 	$userRecord = $_REQUEST;
-	if ( defined( 'ROLE_MODEL' ) ) {
-		$newUser = new RolePermUser();
-	} else {
-		$newUser = new BitPermUser();
-	}
+	$newUser = new BitPermUser();
 	if( $newUser->importUser( $userRecord ) ) {
 		$gBitSmarty->assign( 'addSuccess', "User Added Successfully" );
 		if( empty( $_REQUEST['admin_noemail_user'] ) ) {
@@ -194,18 +190,10 @@ if( isset( $_REQUEST["action"] ) ) {
 	}
 }
 
-if ( defined( 'ROLE_MODEL' ) ) {
-	// get default role and pass it to tpl
-	foreach( $gBitUser->getDefaultRole() as $defaultRoleId => $defaultRoleName ) {
-		$gBitSmarty->assign('defaultRoleId', $defaultRoleId );
-		$gBitSmarty->assign('defaultRoleName', $defaultRoleName );
-	}
-} else {
-	// get default group and pass it to tpl
-	foreach( $gBitUser->getDefaultGroup() as $defaultGroupId => $defaultGroupName ) {
-		$gBitSmarty->assign('defaultGroupId', $defaultGroupId );
-		$gBitSmarty->assign('defaultGroupName', $defaultGroupName );
-	}
+// get default group and pass it to tpl
+foreach( $gBitUser->getDefaultGroup() as $defaultGroupId => $defaultGroupName ) {
+	$gBitSmarty->assign('defaultGroupId', $defaultGroupId );
+	$gBitSmarty->assign('defaultGroupName', $defaultGroupName );
 }
 
 // override default max_records
@@ -222,20 +210,11 @@ if (isset($listHash["numrows"])) {
 $listHash['listInfo']["URL"] = USERS_PKG_URL."admin/index.php";
 $gBitSmarty->assignByRef('listInfo', $listHash['listInfo']);
 
-if ( defined( 'ROLE_MODEL' ) ) {
-	// invoke edit service for the add user feature
-	$userObj = new RolePermUser();
-	$userObj->invokeServices( 'content_edit_function' );
-	// Get roles (list of roles)
-	$rolelist = $gBitUser->getRoles('', '', 'role_name_asc');
-	$gBitSmarty->assign( 'rolelist', $rolelist );
-} else {
-	// invoke edit service for the add user feature
-	$userObj = new BitPermUser();
-	$userObj->invokeServices( 'content_edit_function' );	// Get groups (list of groups)
-	$grouplist = $gBitUser->getGroups('', '', 'group_name_asc');
-	$gBitSmarty->assign( 'grouplist', $grouplist );
-}
+// invoke edit service for the add user feature
+$userObj = new BitPermUser();
+$userObj->invokeServices( 'content_edit_function' );	// Get groups (list of groups)
+$grouplist = $gBitUser->getGroups('', '', 'group_name_asc');
+$gBitSmarty->assign( 'grouplist', $grouplist );
 $gBitSmarty->assign( 'feedback', $feedback );
 
 $gBitSmarty->assign( (!empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'userlist').'TabSelect', 'tdefault' );
