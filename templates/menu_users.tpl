@@ -18,9 +18,6 @@
 		{if $gBitUser->hasPermission( 'p_users_create_personal_groups' )}
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}my_groups.php">{booticon iname="fa-group" iexplain="My Groups"}</a></li>
 		{/if}
-		{if $gBitUser->hasPermission( 'p_users_create_personal_roles' )}
-			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}my_roles.php">{booticon iname="fa-group" iexplain="My Roles"}</a></li>
-		{/if}
 		{if $gBitSystem->isFeatureActive( 'users_watches' )}
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}watches.php">{booticon iname="fa-asterisk" iexplain="My Watches"}</a></li>
 		{/if}

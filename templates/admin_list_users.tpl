@@ -70,25 +70,14 @@
 					</div>
 
 					<div class="form-group">
-						{if $gBitSystem->isPackageActive('protector')}
-							{if $defaultRoleId eq ''}
-								{formfeedback error="No default role is currently set. Please set one in the Administration --&gt; Users --&gt; <a href=\"`$smarty.const.USERS_PKG_URL`admin/edit_role.php\">Roles and Permissions</a> page"}
-							{/if}
-							{formlabel label="User will be added to the following role" for=""}
-							{forminput}
-								{$defaultRoleName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_role.php?role_id={$defaultRoleId}">{booticon iname="fa-pen-to-square" iexplain="change settings"}</a>
-								{formhelp note="This is the role that is selected as the default role. If you would like to change the default role, please click on the edit icon and set a different role as default role."}
-							{/forminput}
-						{else}
-							{if $defaultGroupId eq ''}
-								{formfeedback error="No default group is currently set. Please set one in the Administration --&gt; Users --&gt; <a href=\"`$smarty.const.USERS_PKG_URL`admin/edit_group.php\">Groups and Permissions</a> page"}
-							{/if}
-							{formlabel label="User will be added to the following group" for=""}
-							{forminput}
-								{$defaultGroupName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$defaultGroupId}">{booticon iname="fa-pen-to-square" iexplain="change settings"}</a>
-								{formhelp note="This is the group that is selected as the default group. If you would like to change the default group, please click on the edit icon and set a different group as default group."}
-							{/forminput}
+						{if $defaultGroupId eq ''}
+							{formfeedback error="No default group is currently set. Please set one in the Administration --&gt; Users --&gt; <a href=\"`$smarty.const.USERS_PKG_URL`admin/edit_group.php\">Groups and Permissions</a> page"}
 						{/if}
+						{formlabel label="User will be added to the following group" for=""}
+						{forminput}
+							{$defaultGroupName} <a href="{$smarty.const.USERS_PKG_URL}admin/edit_group.php?group_id={$defaultGroupId}">{booticon iname="fa-pen-to-square" iexplain="change settings"}</a>
+							{formhelp note="This is the group that is selected as the default group. If you would like to change the default group, please click on the edit icon and set a different group as default group."}
+						{/forminput}
 					</div>
 
 					<div class="form-group">

@@ -66,33 +66,18 @@
 		</div>
 
 		<div class="form-group">
-			{if $roleList }
-				{formlabel label="Roles choice at registration" for="registration_role_choice"}
-				{forminput}
-					<select class="form-control" name="registration_role_choice[]" multiple="multiple" size="5">
-						<option value="">&nbsp;</option>
-						{foreach key=r item=ro from=$roleList}
-							{if $ro.role_id ne -1}
-								<option value="{$ro.role_id}" {if $ro.is_public eq 'y'} selected="selected"{/if}>{$ro.role_name|truncate:"52":" ..."}</option>
-							{/if}
-						{/foreach}
-					</select>
-					{formhelp note="A user will be able to select one of the selected roles at registration. If you select the default role (Registered), he will not be obliged to select a role."}
-				{/forminput}
-			{else}
-				{formlabel label="Groups choice at registration" for="registration_group_choice"}
-				{forminput}
-					<select class="form-control" name="registration_group_choice[]" multiple="multiple" size="5">
-						<option value="">&nbsp;</option>
-						{foreach key=g item=gr from=$groupList}
-							{if $gr.group_id ne -1}
-								<option value="{$gr.group_id}" {if $gr.is_public eq 'y'} selected="selected"{/if}>{$gr.group_name|truncate:"52":" ..."}</option>
-							{/if}
-						{/foreach}
-					</select>
-					{formhelp note="A user will be able to select one of the selected group at registration. If you select the default group (Registered), he will not be obliged to select a group."}
-				{/forminput}
-			{/if}
+			{formlabel label="Groups choice at registration" for="registration_group_choice"}
+			{forminput}
+				<select class="form-control" name="registration_group_choice[]" multiple="multiple" size="5">
+					<option value="">&nbsp;</option>
+					{foreach key=g item=gr from=$groupList}
+						{if $gr.group_id ne -1}
+							<option value="{$gr.group_id}" {if $gr.is_public eq 'y'} selected="selected"{/if}>{$gr.group_name|truncate:"52":" ..."}</option>
+						{/if}
+					{/foreach}
+				</select>
+				{formhelp note="A user will be able to select one of the selected group at registration. If you select the default group (Registered), he will not be obliged to select a group."}
+			{/forminput}
 		</div>
 	{/jstab}
 

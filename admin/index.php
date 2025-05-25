@@ -182,9 +182,6 @@ if( isset( $_REQUEST["action"] ) ) {
 			$feedback['error'][] = tra( 'User not found' );
 		}
 	}
-	if ($_REQUEST["action"] == 'removerole') {
-		$gBitUser->removeUserFromRole($_REQUEST["user"], $_REQUEST["role"]);
-	}
 	if ($_REQUEST["action"] == 'removegroup') {
 		$gBitUser->removeUserFromGroup($_REQUEST["user"], $_REQUEST["group"]);
 	}
