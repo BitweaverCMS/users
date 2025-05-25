@@ -60,7 +60,7 @@ if( !empty( $_REQUEST['provider'] ) ) {
 			} elseif( is_object( $auth ) && is_a( $auth, 'Hybrid_User_Profile' ) ) {
 				$_SESSION['returnto'] = NULL;
 				// an unconnected authProfile was found
-				$gBitSmarty->assign_by_ref( 'authProfile', $auth );
+				$gBitSmarty->assignByRef( 'authProfile', $auth );
 				$tpl = 'bitpackage:users/validate_auth.tpl';
 				if( !empty( $_REQUEST['auth_login'] ) ) {
 					$user = isset($_REQUEST['user']) ? $_REQUEST['user'] : false;
@@ -124,8 +124,8 @@ if( !empty( $_REQUEST['provider'] ) ) {
 					break;
 			}
 	 
-			$gBitSmarty->assign_by_ref( 'authError', $authError );
-			$gBitSmarty->assign_by_ref( 'authExpection', $e );
+			$gBitSmarty->assignByRef( 'authError', $authError );
+			$gBitSmarty->assignByRef( 'authExpection', $e );
 			bit_error_log( $authError );
 			$tpl = 'bitpackage:users/validate_auth.tpl';
 		}
