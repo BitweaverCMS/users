@@ -28,7 +28,14 @@
 	<div class="form-group">
 		{formlabel label="Password" for="pass"}
 		{forminput}
-			<input class="form-control" type="password" name="pass" id="pass" />
+			<div class="input-group">
+				<input class="form-control" type="password" name="pass" id="password" />
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="button" id="bw-toggle-password">
+						<span class="glyphicon glyphicon-eye-open"></span>
+					</button>
+				</span>
+			</div>
 			{if $gBitSystem->isFeatureActive('users_forgot_pass')}
 				{formhelp note="<a href='`$smarty.const.USERS_PKG_URL`remind_password.php'>Forgot your password?</a> or <a href='`$smarty.const.USERS_PKG_URL`register.php'>Need to register?</a>"}
 			{/if}
@@ -56,6 +63,20 @@
 {/form}
 
 <script>
-     document.getElementById("user").focus();
+	document.getElementById("user").focus();
+	$(document).ready(function() {
+		$('#bw-toggle-password').click(function() {
+			var passwordField = $('#password');
+			var passwordFieldType = passwordField.attr('type');
+			if (passwordFieldType === 'password') {
+				passwordField.attr('type', 'text');
+				$(this).find('span').removeClass('glyphicon-eye-open').addClass('glyphicon-eye-close');
+			} else {
+				passwordField.attr('type', 'password');
+				$(this).find('span').removeClass('glyphicon-eye-close').addClass('glyphicon-eye-open');
+			}
+		});
+	});
+
 </script>
 {/strip}
