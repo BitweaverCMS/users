@@ -61,7 +61,8 @@ if( isset( $_REQUEST["batchimport"])) {
 				if( empty( $_REQUEST['admin_noemail_user'] ) ) {
 					$ret = users_admin_email_user( $userRecord );
 					if( is_array( $ret ) ) {
-						list($key, $val) = each($ret);
+						$key = key($ret);
+						$val = current($ret);
 						$newUser->mLogs[$key] = $val;
 					}
 					$logHash['action_log']['title'] = $userRecord['login'];
