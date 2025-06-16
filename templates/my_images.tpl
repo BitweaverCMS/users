@@ -18,7 +18,7 @@
 				{formlabel label="Self Portrait" for="user_portrait_file"}
 				{if $gQueryUser->mInfo.portrait_attachment_id}
 					{forminput}
-						<img src="{$gQueryUser->mInfo.portrait_url}?{php}print time();{/php}" alt="{tr}self portrait{/tr}" /><br />
+						<img src="{$gQueryUser->mInfo.portrait_url}?{time()}" alt="{tr}self portrait{/tr}" /><br />
 						<input type="submit" class="btn btn-default" value="{tr}delete self portrait{/tr}" name="delete_portrait" id="delete_portrait"/>
 					{/forminput}
 				{/if}
@@ -41,7 +41,7 @@
 				{formlabel label="Avatar" for="user_auto_avatar"}
 				{if $gQueryUser->mInfo.avatar_attachment_id}
 					{forminput}
-						<img src="{$gQueryUser->mInfo.avatar_url}?{php}print time();{/php}" alt="{tr}avatar{/tr}" /><br />
+						<img src="{$gQueryUser->mInfo.avatar_url}?{time()}" alt="{tr}avatar{/tr}" /><br />
 						<input type="submit" class="btn btn-default" value="{tr}delete avatar{/tr}" name="delete_avatar" />
 					{/forminput}
 				{/if}
@@ -56,7 +56,7 @@
 				{formlabel label="Logo" for="user_logo_file"}
 				{if $gQueryUser->mInfo.logo_attachment_id}
 					{forminput}
-						<img src="{$gQueryUser->mInfo.logo_url}?{php}print time();{/php}" alt="{tr}logo{/tr}" /><br />
+						<img src="{$gQueryUser->mInfo.logo_url}?{time()}" alt="{tr}logo{/tr}" /><br />
 						<input type="submit" class="btn btn-default" value="{tr}delete logo{/tr}" id="delete_logo" name="delete_logo" />
 					{/forminput}
 				{/if}
