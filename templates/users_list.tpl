@@ -76,7 +76,7 @@
 						{if $gBitUser->hasPermission( 'p_users_admin' ) && $contentCount}
 							<strong title="{tr}Content Count{/tr}">{$contentCount} </strong>
 						{/if}
-						{if $gBitUser->hasPermission( 'p_commerce_admin' )}
+						{if $gBitSystem->isPackageActive( 'bitcommerce' ) && $gBitUser->hasPermission( 'p_commerce_admin' )}
 							{smartlink ipackage=bitcommerce ifile="admin/list_orders.php" user_id=$userHash.user_id ititle="Orders" booticon="fa-shopping-cart"}
 						{/if}
 						{smartlink ipackage=liberty ifile="list_content.php" user_id=$userHash.user_id ititle="User Content" booticon="fa-list"}
