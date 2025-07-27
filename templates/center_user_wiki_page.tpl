@@ -4,7 +4,7 @@
 	{if $gBitUser->hasPermission( 'p_users_admin' ) || $gBitUser->mUserId eq $gQueryUser->mUserId}
 		<div class="floaticon">
 			{if $gBitUser->hasPermission( 'p_users_admin' )}
-				{if $gBitUser->hasPermission( 'p_commerce_admin' )}
+				{if $gBitSystem->isPackageActive( 'bitcommerce' ) && $gBitUser->hasPermission( 'p_commerce_admin' )}
 					{smartlink ipackage=bitcommerce ifile="admin/list_orders.php" user_id=$userInfo.user_id ititle="Orders" booticon="fa-shopping-cart"}
 				{/if}
 				{smartlink ipackage=users ifile="admin/index.php" assume_user=$userInfo.user_id ititle="Assume user identity" booticon="fa-user-doctor"}
