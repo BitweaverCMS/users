@@ -22,7 +22,7 @@
 					{assign var="i" value="`$i+1`"}
 					<div class="col-md-3 col-sm-6 col-xs-12">
 						<div class="panel panel-default">
-							<div class="panel-heading {$key}-menu">{biticon iname="pkg_`$key`" ipackage=$key class="menuicon" style="height:24px"} {$menu.menu_title|capitalize}</div>
+							<div class="panel-heading {$key}-menu">{biticon iname="pkg_`$key`" iexplain=$key ipackage=$key class="menuicon" style="height:24px"} {$menu.menu_title|capitalize}</div>
 							<div class="panel-body">{include file=$menu.menu_template packageMenuClass="unstyled"}</div>
 						</div>
 					</div>
