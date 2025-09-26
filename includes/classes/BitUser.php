@@ -1416,7 +1416,9 @@ class BitUser extends LibertyMime {
 			}
 
 			$url = isset($_SESSION['loginfrom']) ? $_SESSION['loginfrom'] : $gBitSystem->getIndexPage( $indexType );
-			unset( $_SESSION['loginfrom'] );
+			if( isset( $_SESSION['loginfrom'] ) ) {
+				unset( $_SESSION['loginfrom'] );
+			}
 		}
 		return $url;
 	}
