@@ -1329,6 +1329,10 @@ class BitUser extends LibertyMime {
 		global $gBitSystem;
 		$isvalid = false;
 
+		if( empty( trim( $pLogin ) ) || !is_string( $pLogin ) ) {
+			return USERS_PKG_URL.'signin.php?error=' . urlencode( tra( 'Unknown login' ) );
+		}
+
 		$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
 
 		$this->StartTrans();
