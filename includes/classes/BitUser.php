@@ -170,12 +170,16 @@ class BitUser extends LibertyMime {
 
 				// break the real name into first and last name using the last space as the beginning of the last name
 				// for people who really want to use first and last name fields
-				if( preg_match( '/ /', $this->mInfo['real_name'] ) ) {
-					$this->mInfo['first_name'] = substr( $this->mInfo['real_name'], 0, strrpos($this->mInfo['real_name'], ' ') );
-					$this->mInfo['last_name'] = substr( $this->mInfo['real_name'], strrpos($this->mInfo['real_name'], ' ')+1 );
-				}else{
-					// no spaces assign the real name to the first name
-					$this->mInfo['first_name'] = $this->mInfo['real_name'];
+				if( !empty( $this->mInfo['real_name'] ) ) {
+					if( preg_match( '/ /', $this->mInfo['real_name'] ) ) {
+						$this->mInfo['first_name'] = substr( $this->mInfo['real_name'], 0, strrpos($this->mInfo['real_name'], ' ') );
+						$this->mInfo['last_name'] = substr( $this->mInfo['real_name'], strrpos($this->mInfo['real_name'], ' ')+1 );
+					}else{
+						// no spaces assign the real name to the first name
+						$this->mInfo['first_name'] = $this->mInfo['real_name'];
+					}
+				} else {
+					$this->mInfo['first_name'] = $this->mInfo['login'];
 				}
 
 				$this->mUserId    = $this->mInfo['uu_user_id'];
@@ -193,7 +197,7 @@ class BitUser extends LibertyMime {
 					$this->setPreference( 'users_country', str_replace( '_', ' ', $this->getPreference( 'users_country' ) ) );
 				}
 				if( $pFull ) {
-					$this->mInfo['real_name'] = trim( $this->mInfo['real_name'] );
+					$this->mInfo['real_name'] = trim( BitBase::getParameter( $this->mInfo, 'real_name', $this->mInfo['login'] ) );
 					$this->mInfo['display_name'] = (
 						( !empty( $this->mInfo['real_name'] ) ? $this->mInfo['real_name'] :
 						( !empty( $this->mUsername) ? $this->mUsername :
