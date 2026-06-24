@@ -48,6 +48,7 @@ class BitUser extends LibertyMime {
 	public $mGroups;
 	public $mTicket;
 	public $mAuth;
+	public $cUserGroups;
 
 	/**
 	 * Constructor - will automatically load all relevant data if passed a user string
