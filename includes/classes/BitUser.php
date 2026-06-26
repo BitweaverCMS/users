@@ -75,6 +75,7 @@ class BitUser extends LibertyMime {
 		$this->mContentId = $pContentId;
 		BitBase::registerSmartyFunction( 'getDisplayLinkFromHash', fn($h, $l=null, $a=null) => BitUser::getDisplayLinkFromHash($h, $l, $a) );
 		BitBase::registerSmartyFunction( 'getDisplayNameFromHash', ['BitUser', 'getDisplayNameFromHash'] );
+		BitBase::registerSmartyClass( 'BitUser', 'BitUser' );
 	}
 
 	public function __sleep() {
