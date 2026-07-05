@@ -181,4 +181,10 @@ if( $gBitUser->isValid() && $gBitUser->isRegistered() ) {
 
 require_once( USERS_PKG_CLASS_PATH.'BaseAuth.php' );
 
+// Expose Bitweaver login to Apache logging via %{bw_login}n in LogFormat.
+// apache_note() is only available under mod_php; guard prevents fatal errors under PHP-FPM.
+if( function_exists('apache_note') ) {
+	apache_note( 'bw_login', $gBitUser->getField('login', '-') );
+}
+
 ?>
