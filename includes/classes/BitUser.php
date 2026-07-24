@@ -73,9 +73,10 @@ class BitUser extends LibertyMime {
 		);
 		$this->mUserId = ( @$this->verifyId( $pUserId ) ? $pUserId : NULL);
 		$this->mContentId = $pContentId;
+		// Pipe modifiers for templates still using |getDisplayLinkFromHash style.
+		// Class itself is registered via BitBase::__construct() → registerForSmarty().
 		BitBase::registerSmartyFunction( 'getDisplayLinkFromHash', fn($h, $l=null, $a=null) => BitUser::getDisplayLinkFromHash($h, $l, $a) );
 		BitBase::registerSmartyFunction( 'getDisplayNameFromHash', ['BitUser', 'getDisplayNameFromHash'] );
-		BitBase::registerSmartyClass( 'BitUser', 'BitUser' );
 	}
 
 	public function __sleep() {
