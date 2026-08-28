@@ -32,7 +32,9 @@ if( isset($_REQUEST["newuser"] ) ) {
 } elseif( isset( $_REQUEST["assume_user"]) && $gBitUser->hasPermission( 'p_users_admin' ) ) {
 	$assume_user = (is_numeric( $_REQUEST["assume_user"] )) ? array( 'user_id' => $_REQUEST["assume_user"] ) : array('login' => $_REQUEST["assume_user"]) ;
 	$userInfo = $gBitUser->getUserInfo( $assume_user );
-	if( isset( $_REQUEST["confirm"] ) ) {
+	if( empty( $userInfo['user_id'] ) ) {
+		$feedback['error'][] = tra( 'User not found' );
+	} elseif( isset( $_REQUEST["confirm"] ) ) {
 		$gBitUser->verifyTicket();
 		if( $gBitUser->assumeUser( $userInfo["user_id"] ) ) {
 			header( 'Location: '.$gBitSystem->getDefaultPage() );
@@ -47,7 +49,7 @@ if( isset($_REQUEST["newuser"] ) ) {
 		$gBitSystem->setBrowserTitle( 'Assume User Identity' );
 		$formHash['assume_user'] = $_REQUEST['assume_user'];
 		$msgHash = array(
-			'confirm_item' => tra( 'This will log you in as the user' )." <strong>$userInfo[real_name] ($userInfo[login])</strong>",
+			'confirm_item' => tra( 'This will log you in as the user' )." <strong>{$userInfo['real_name']} ({$userInfo['login']})</strong>",
 		);
 		$gBitSystem->confirmDialog( $formHash,$msgHash );
 	}
