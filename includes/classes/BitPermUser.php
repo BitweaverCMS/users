@@ -272,51 +272,6 @@ class BitPermUser extends BitUser {
 	}
 
 	/**
-	 * Whitelist body-class token when the *photo owner* is in group Photo Fix.
-	 *
-	 * Do not use isInGroup() here: that treats p_admin as a member of every
-	 * group, so staff editing a customer book would flip CSS for the viewer.
-	 * Owner is the loaded product, else content, else query user, else viewer.
-	 *
-	 * @return string 'photo-rotation-fix' or ''
-	 */
-	function getPhotoRotationFixBodyClass() {
-		global $gBitProduct, $gContent, $gQueryUser, $gBitSystem;
-
-		$ownerId = NULL;
-		if( is_object( $gBitProduct ) && $this->verifyId( $gBitProduct->getField( 'user_id' ) ) ) {
-			$ownerId = $gBitProduct->getField( 'user_id' );
-		} elseif( is_object( $gContent ) && $this->verifyId( $gContent->getField( 'user_id' ) ) ) {
-			$ownerId = $gContent->getField( 'user_id' );
-		} elseif( is_object( $gQueryUser ) && $this->verifyId( $gQueryUser->mUserId ) ) {
-			$ownerId = $gQueryUser->mUserId;
-		} elseif( $this->verifyId( $this->mUserId ) ) {
-			$ownerId = $this->mUserId;
-		}
-		if( !$this->verifyId( $ownerId ) ) {
-			return '';
-		}
-
-		static $photoFixGroupId = FALSE;
-		if( $photoFixGroupId === FALSE ) {
-			$photoFixGroupId = $gBitSystem->getConfig( 'photo_rotation_fix_group_id' );
-			if( !$this->verifyId( $photoFixGroupId ) ) {
-				$photoFixGroupId = $this->mDb->getOne(
-					"SELECT `group_id` FROM `".BIT_DB_PREFIX."users_groups` WHERE `group_name`=?",
-					array( 'Photo Fix' )
-				);
-			}
-			$photoFixGroupId = $this->verifyId( $photoFixGroupId ) ? (int)$photoFixGroupId : 0;
-		}
-		if( !$photoFixGroupId ) {
-			return '';
-		}
-
-		$groups = $this->getGroups( $ownerId );
-		return ( !empty( $groups[$photoFixGroupId] ) ) ? 'photo-rotation-fix' : '';
-	}
-
-	/**
 	 * getAllGroups Get a list of all Groups
 	 * 
 	 * @param array $pListHash List Hash

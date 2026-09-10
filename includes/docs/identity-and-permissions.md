@@ -76,18 +76,6 @@ policy.
 Roles and groups can also provide home-page/layout behavior. Do not treat a
 role identifier as interchangeable with a group identifier.
 
-Group **Photo Fix** (`users_groups.group_name`, optional config
-`photo_rotation_fix_group_id`) opts an account into modern
-`image-orientation: from-image`. `BitPermUser::getPhotoRotationFixBodyClass()`
-returns the whitelist token `photo-rotation-fix` when the **photo owner**
-(product `user_id`, else content, else query user, else viewer) is in that
-group. Do **not** use `isInGroup()` for this: admins match every group, so
-staff editing a customer book would apply the customer's CSS incorrectly.
-`$gBitUser->getGroups( $ownerId )` is the membership check. Theme overlay
-`config/themes/kernel/html.tpl` appends the token to `<body class>`.
-Default CSS remains `img { image-orientation: none }` until that class is
-present. New registrations join Photo Fix via `is_default`.
-
 ## Registration and confirmation
 
 `register.php` and `includes/register_inc.php` coordinate account creation.
