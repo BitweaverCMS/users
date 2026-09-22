@@ -141,15 +141,15 @@ if( !empty( $_REQUEST['provider'] ) ) {
 	$redirectUrl = $gBitUser->login( $user, $pass, $challenge, $response );
 }
 
-if( !empty( $tpl ) ) {
-	$gBitSystem->display( $tpl );
-} elseif(( strpos( $redirectUrl, 'signin.php?' ) || strpos( $redirectUrl, 'remind_password.php' )) && strpos( $redirectUrl, 'signin.php?error=' ) == -1 ) {
-// but if we came from a login page, let's go home (except if we got an error when login in)
+if( !empty( $redirectUrl ) && ( strpos( $redirectUrl, 'signin.php?' ) || strpos( $redirectUrl, 'remind_password.php' ) ) && strpos( $redirectUrl, 'signin.php?error=' ) === FALSE ) {
+	// Came from a login page. Go home unless the login itself failed.
 	$redirectUrl = $gBitUser->getPostLoginUrl();
-} else {
 }
 
 if( !empty( $redirectUrl ) ) {
+	// display() prints the page. A redirect after that cannot send Location.
 	bit_redirect( $redirectUrl );
+} elseif( !empty( $tpl ) ) {
+	$gBitSystem->display( $tpl );
 }
 
