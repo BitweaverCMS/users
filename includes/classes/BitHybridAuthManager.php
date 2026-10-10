@@ -7,11 +7,7 @@
  * Copyright (c) 2017 bitweaver.org
  */
 
-require_once( USERS_PKG_PATH.'hauth/Hybrid/Auth.php' );
-
-if( file_exists( EXTERNAL_LIBS_PATH.'facebook/src/Facebook/autoload.php' ) ) {
-	require_once( EXTERNAL_LIBS_PATH.'facebook/src/Facebook/autoload.php' );
-}
+require_once( USERS_PKG_INCLUDE_PATH.'hybridauth3/autoload.php' );
 
 class BitHybridAuthManager extends BitSingleton {
 
@@ -47,9 +43,8 @@ class BitHybridAuthManager extends BitSingleton {
 	public function authenticate( $pProvider, &$pUser ) {
 		$ret = FALSE;
 		if( $this->isProviderEnabled( $pProvider ) ) {
-			$hybridAuth = $this->getHybridAuth();
-			$authedProvider = $hybridAuth->authenticate( $pProvider );
-			if( $authProfile = $authedProvider->getUserProfile() ) {
+			$authProfile = $this->authenticateProvider( $pProvider );
+			if( !empty( $authProfile ) ) {
 				$ret = $authProfile;
 				$this->cacheUserProfile( $pProvider, $authProfile );
 				if( ($userId = $this->mDb->getOne( "SELECT `user_id` FROM `".BIT_DB_PREFIX."users_auth_map` uam WHERE uam.`provider`=? AND uam.`provider_identifier`=?", array( $pProvider, $authProfile->identifier ) )) > ROOT_USER_ID ) {
@@ -79,7 +74,7 @@ class BitHybridAuthManager extends BitSingleton {
 		if( $authData = $this->getAuthData( $pProvider, $pUserId ) ) {
 			if( $gBitSystem::isCacheActive() ) {
 				$cacheKey = $this->getProfileCacheKey( $pProvider, $authData['profile_hash']['identifier'] );
-				apc_delete( $cacheKey );
+				apcu_delete( $cacheKey );
 			}
 			$query = "DELETE FROM `".BIT_DB_PREFIX."users_auth_map` WHERE `user_id`=? AND `provider`=?";
 			$result = $this->mDb->query( $query, array( $pUserId, $pProvider ) );
@@ -110,7 +105,7 @@ class BitHybridAuthManager extends BitSingleton {
 		global $gBitSystem;
 		if( $gBitSystem::isCacheActive() ) {
 			$cacheKey = $this->getProfileCacheKey( $pProvider, $pProfile->identifier );
-			apc_store( $cacheKey, $pProfile );
+			apcu_store( $cacheKey, $pProfile, 3600 );
 		}
 		return $ret;
 	}
@@ -131,26 +126,85 @@ class BitHybridAuthManager extends BitSingleton {
 		return $ret;
 	}
 
-	public function getHybridAuth() {
-		$config = array(
-			// "base_url" the url that point to HybridAuth Endpoint (where the index.php and config.php are found)
-			"base_url" => USERS_PKG_URI.'hauth/',
-			"debug_mode" => TRUE,
-			"debug_file" => sys_get_temp_dir().'/hybridauth_log',
-		);
+	/**
+	 * Sign-in uses Hybridauth 3. The callback query matches the previous
+	 * endpoint so an existing provider registration still fits.
+	 */
+	public function authenticateProvider( $pProvider ) {
+		$adapter = $this->getProviderAdapter( $pProvider );
+		$adapter->authenticate();
+		return $this->normalizeHybridProfile( $adapter->getUserProfile() );
+	}
 
-		foreach( $this->mEnabledProviders as $providerKey => $providerHash ) {
-			$config['providers'][$providerHash['provider']] = array ( "enabled" => true );
-			foreach( array_keys( $providerHash['keys'] ) as $configKey ) {
-				$config['providers'][$providerHash['provider']]['keys'][$configKey] = $this->getProviderConfig( $providerKey, $configKey );
-			}
-			if( !empty( $providerHash['options'] ) ) {
-				foreach( array_keys( $providerHash['options'] ) as $optionKey ) {
-					$config['providers'][$providerHash['provider']][$optionKey] = $this->getProviderConfig( $providerKey, $optionKey );
-				}
+	public function getCallbackUrl( $pProvider ) {
+		return USERS_PKG_URI.'hauth/?hauth.done='.rawurlencode( $pProvider );
+	}
+
+	private function hybridauthProviderName( $pProvider ) {
+		$names = array(
+			'AOL' => 'AOLOpenID',
+			'Live' => 'WindowsLive',
+		);
+		return isset( $names[$pProvider] ) ? $names[$pProvider] : $pProvider;
+	}
+
+	private function getProviderAdapter( $pProvider ) {
+		$providerKey = strtolower( $pProvider );
+		$allProviders = $this->getAllProviders();
+		if( empty( $allProviders[$providerKey] ) ) {
+			throw new Exception( 'Unknown sign-in provider.' );
+		}
+		if( $providerKey === 'instagram' ) {
+			throw new Exception( 'Instagram sign-in is not available.' );
+		}
+		$adapterName = $this->hybridauthProviderName( $pProvider );
+		if( !is_file( USERS_PKG_INCLUDE_PATH.'hybridauth3/src/Provider/'.$adapterName.'.php' ) ) {
+			throw new Exception( 'Sign-in provider is not available.' );
+		}
+		$keys = array();
+		foreach( array_keys( $allProviders[$providerKey]['keys'] ) as $configKey ) {
+			$keys[$configKey] = $this->getProviderConfig( $providerKey, $configKey );
+		}
+		if( empty( $keys['id'] ) && !empty( $keys['key'] ) ) {
+			$keys['id'] = $keys['key'];
+		}
+		$providerConfig = array(
+			'enabled' => true,
+			'keys' => $keys,
+		);
+		$scope = $this->getProviderConfig( $providerKey, 'scope' );
+		if( !empty( $scope ) ) {
+			$providerConfig['scope'] = $scope;
+		}
+		if( $providerKey === 'google' ) {
+			$providerConfig['scope'] = 'openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile';
+			$providerConfig['authorize_url_parameters'] = array(
+				'prompt' => 'select_account',
+				'access_type' => 'online',
+			);
+		}
+		$config = array(
+			'callback' => $this->getCallbackUrl( $pProvider ),
+			'providers' => array(
+				$adapterName => $providerConfig,
+			),
+		);
+		$hybridauth = new Hybridauth\Hybridauth( $config );
+		return $hybridauth->getAdapter( $adapterName );
+	}
+
+	private function normalizeHybridProfile( $pProfile ) {
+		require_once( USERS_PKG_PATH.'hauth/Hybrid/User_Profile.php' );
+		if( $pProfile instanceof Hybrid_User_Profile ) {
+			return $pProfile;
+		}
+		$normalized = new Hybrid_User_Profile();
+		foreach( array_keys( get_object_vars( $normalized ) ) as $key ) {
+			if( isset( $pProfile->$key ) ) {
+				$normalized->$key = $pProfile->$key;
 			}
 		}
-		return new Hybrid_Auth( $config );
+		return $normalized;
 	}
 
 	public function isProviderEnabled( $pProvider ) {

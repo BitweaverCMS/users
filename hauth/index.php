@@ -9,13 +9,23 @@
 //	HybridAuth End Point
 // ------------------------------------------------------------------------
 require_once( '../../kernel/includes/setup_inc.php' );
-require_once( EXTERNAL_LIBS_PATH . 'facebook/src/Facebook/autoload.php' );
 
-require_once( "Hybrid/Auth.php" );
-require_once( "Hybrid/Endpoint.php" );
-
+$providerDone = isset( $_REQUEST['hauth_done'] ) ? $_REQUEST['hauth_done'] : '';
+if( $providerDone === '' ) {
+	bit_redirect( USERS_PKG_URI.'signin.php' );
+}
 try {
-	Hybrid_Endpoint::process();
+	require_once( USERS_PKG_CLASS_PATH.'BitHybridAuthManager.php' );
+	BitHybridAuthManager::loadSingleton();
+	global $gBitHybridAuthManager;
+	if( !$gBitHybridAuthManager->isProviderEnabled( $providerDone ) ) {
+		$_SESSION['users_ha_error'] = tra( 'Sign-in is not available.' );
+	} else {
+		$gBitHybridAuthManager->authenticateProvider( $providerDone );
+	}
+	bit_redirect( USERS_PKG_URI.'validate?provider='.rawurlencode( $providerDone ) );
 } catch( Exception $e ) {
-	$gBitSystem->fatalError( $e->getMessage(), NULL, NULL, HttpStatusCodes::HTTP_UNAUTHORIZED );
+	bit_error_log( 'Sign-in failed for '.$providerDone.': '.$e->getMessage() );
+	$_SESSION['users_ha_error'] = tra( 'Sign-in failed.' );
+	bit_redirect( USERS_PKG_URI.'validate?provider='.rawurlencode( $providerDone ) );
 }

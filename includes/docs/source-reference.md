@@ -7,10 +7,12 @@
 
 | Artifact | Count |
 |---|---:|
-| PHP files | 116 |
+| PHP files | 217 |
 | Smarty templates | 51 |
 | JavaScript files | 0 |
 | CSS files | 0 |
+
+`includes/hybridauth3/` is vendored Hybridauth 3.13 (see `composer.json`). Its classes are not listed below.
 
 ## Bootstrap and schema artifacts
 

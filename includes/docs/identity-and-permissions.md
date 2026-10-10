@@ -108,6 +108,13 @@ implementation.
 identity to local accounts. Treat provider profile fields as untrusted input.
 State/nonce validation and redirect URI restrictions are security boundaries.
 
+Sign-in uses the vendored Hybridauth 3.13 tree in `includes/hybridauth3/`.
+The callback stays `hauth/?hauth.done=<Provider>`. A profile from Hybridauth 3
+is copied onto `Hybrid_User_Profile` before account matching. Google requests
+openid, email, and profile. Facebook uses the Hybridauth Graph client at
+v25.0 and does not load `facebook/graph-sdk`. Instagram Basic Display is not
+offered from this endpoint.
+
 Disconnect must not leave an account without an intended usable authentication
 method.
 

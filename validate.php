@@ -25,8 +25,11 @@ $redirectUrl = FALSE;
 
 //Remember where user is logging in from and send them back later; using session variable for those of us who use WebISO services
 //do not use session loginfrom with signin.php or register.php - only "inline" login forms display in perm denied fatals, etc.
-if( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], USERS_PKG_DIR.'/login' ) === FALSE && strpos( $_SERVER['HTTP_REFERER'], USERS_PKG_DIR.'/register' ) === FALSE && strpos( $_SERVER['HTTP_REFERER'], USERS_PKG_DIR.'/validate' ) === FALSE ) {
-	$from = parse_url( $_SERVER['HTTP_REFERER'] );
+$authReferer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
+if( $authReferer && strpos( $authReferer, USERS_PKG_DIR.'/hauth' ) !== FALSE ) {
+	// Provider callbacks return through hauth. Keep the page captured before that redirect.
+} elseif( $authReferer && strpos( $authReferer, USERS_PKG_DIR.'/login' ) === FALSE && strpos( $authReferer, USERS_PKG_DIR.'/register' ) === FALSE && strpos( $authReferer, USERS_PKG_DIR.'/validate' ) === FALSE ) {
+	$from = parse_url( $authReferer );
 	if( $_SERVER['HTTP_HOST'] == $from['host'] ) {
 		// We have a referer  from this site, but not an authentication URL
 		$_SESSION['loginfrom'] = (!empty($from['path']) ? $from['path'] : '').( !empty( $from['query'] ) ? '?'.$from['query'] : '' );
@@ -41,7 +44,12 @@ if( !empty( $_REQUEST['provider'] ) ) {
 	BitHybridAuthManager::loadSingleton();
 	global $gBitHybridAuthManager;
 
-	if( !empty( $_REQUEST['disconnect'] ) ) {
+	if( !empty( $_SESSION['users_ha_error'] ) ) {
+		$authError = $_SESSION['users_ha_error'];
+		unset( $_SESSION['users_ha_error'] );
+		$gBitSmarty->assignByRef( 'authError', $authError );
+		$tpl = 'bitpackage:users/validate_auth.tpl';
+	} elseif( !empty( $_REQUEST['disconnect'] ) ) {
 		if( $gBitUser->isRegistered() ) {
 			$gBitHybridAuthManager->expungeUserProfile( $gBitUser->mUserId, $_REQUEST['provider'] );
 		}

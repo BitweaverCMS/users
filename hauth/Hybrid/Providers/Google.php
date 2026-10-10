@@ -11,6 +11,9 @@
  *
  * http://hybridauth.sourceforge.net/userguide/IDProvider_info_Google.html
  */
+/**
+ * Unused for sign-in. BitHybridAuthManager loads Hybridauth 3 for Google.
+ */
 class Hybrid_Providers_Google extends Hybrid_Provider_Model_OAuth2 {
 
 	/**
