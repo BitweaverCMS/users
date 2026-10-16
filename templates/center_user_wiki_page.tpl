@@ -23,7 +23,7 @@
 					{smartlink ipackage=users ifile="preferences.php" ititle="Edit personal profile and images" booticon="fa-check"}
 				{/if}
 				{if $gBitUser->hasPermission('p_users_edit_user_homepage')}
-					{smartlink ipackage=users ifile="edit_personal_page.php" ititle="Edit personal wiki page" booticon="fa-edit"}
+					{smartlink ipackage=users ifile="edit_personal_page.php" ititle="Edit profile page" booticon="fa-edit"}
 				{/if}
 			{/if}
 		</div>

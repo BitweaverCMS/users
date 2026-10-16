@@ -109,10 +109,10 @@
 						</div>
 
 						<div class="form-group">
-							{formlabel label="HomePage" for="users_homepage"}
+							{formlabel label="Website" for="users_homepage"}
 							{forminput}
 								<input class="form-control" type="text" name="users_homepage" id="users_homepage" value="{$editUser->mInfo.users_homepage|escape|default:'http://'}" />
-								{formhelp note="If you have a personal or professional homepage, enter it here."}
+								{formhelp note="If you have a personal or professional website, enter it here."}
 							{/forminput}
 						</div>
 
@@ -125,7 +125,7 @@
 											<option value="{$styles[ix]|escape}" {if $assignStyle eq $styles[ix]}selected="selected"{/if}>{$styles[ix]}</option>
 										{/section}
 									</select>
-									{formhelp note="Pick the theme for your personal Homepage."}
+									{formhelp note="Pick the theme for your Profile Page."}
 								{/forminput}
 							</div>
 						{/if}

@@ -3,14 +3,14 @@
 
 <div class="admin user modules">
 	<div class="header">
-		<h1>{tr}Configure Homepage Layout{/tr}</h1>
+		<h1>{tr}Configure Profile Page Layout{/tr}</h1>
 	</div>
 
 	<div class="body">
 
 		{if $gBitUser->canCustomizeLayout()}
 			<table style="width:100%" cellpadding="5" cellspacing="0" border="0">
-				<caption>{tr}Your HomePage Layout{/tr}</caption>
+				<caption>{tr}Your Profile Page Layout{/tr}</caption>
 				<tr>
 					{foreach from=$layoutAreas item=area key=colkey }
 						<td style="width:33%" valign="top">
@@ -157,7 +157,7 @@
 										<option value="{$styles[ix]|escape}" {if $assignStyle eq $styles[ix]}selected="selected"{/if}>{$styles[ix]}</option>
 									{/section}
 								</select>
-								{formhelp note="Pick the theme for your personal Homepage."}
+								{formhelp note="Pick the theme for your Profile Page."}
 							{/forminput}
 						</div>
 
@@ -314,7 +314,7 @@ for instance, i don't know where the page heading stuff is used.
 
 	<form action="{$smarty.const.USERS_PKG_URL}assigned_modules.php" method="post">
 <table class="panel">
-<caption>{tr}Enter Homepage Heading{/tr}</caption>
+<caption>{tr}Enter Profile Page Heading{/tr}</caption>
 <tr><td>{tr}Enter a maximum of 250 characters. You can include Wiki syntax.{/tr}</td></tr>
 <tr>
 	<td><textarea name="homeHeaderData" cols="50" rows="3">{$homeHeaderData}</textarea></td>
@@ -330,7 +330,7 @@ for instance, i don't know where the page heading stuff is used.
 
 	<form method="POST" action="{$smarty.const.USERS_PKG_URL}assigned_modules.php">
 	<table class="panel">
-		<caption>{tr}Select Theme for your Homepage{/tr}</caption>
+		<caption>{tr}Select Theme for your Profile Page{/tr}</caption>
 		<tr><td>
 		<select name="style">
 		{section name=ix loop=$styles}

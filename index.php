@@ -50,7 +50,7 @@ if( !empty( $_REQUEST['home'] ) ) {
 
 		$userHomeTitle = $gQueryUser->getPreference( 'homepage_title' );
 		if( empty( $userHomeTitle )) {
-			$userHomeTitle = $gQueryUser->getDisplayName()."'s Homepage";
+			$userHomeTitle = $gQueryUser->getDisplayName()."'s Profile";
 		}
 		$browserTitle = $userHomeTitle;
 

@@ -88,9 +88,9 @@ $registerSettings = array(
 		'note' => "Allow users to select their preferred language.",
 	),
 	'reg_homepage' => array(
-		'label' => "Homepage URL",
+		'label' => "Website URL",
 		'type' => "checkbox",
-		'note' => "Allow users to enter the url to their own homepage.",
+		'note' => "Allow users to enter the url to their own website.",
 	),
 	'reg_portrait' => array(
 		'label' => "Profile Picture",

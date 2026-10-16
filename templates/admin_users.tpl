@@ -27,7 +27,7 @@
 		{forminput}
 			<select name="settings[users_layouts]" id="users_layouts">
 				<option value="">Never</option>
-				<option value="h" {if $gBitSystem->getConfig('users_layouts') eq 'h'}selected="selected"{/if}>{tr}Just For Their Homepage{/tr}</option>
+				<option value="h" {if $gBitSystem->getConfig('users_layouts') eq 'h'}selected="selected"{/if}>{tr}Just For Their Profile Page{/tr}</option>
 			</select>
 			{formhelp note="Allows users to position and display their own set of modules" page="UsersConfigureModules"}
 		{/forminput}
@@ -38,7 +38,7 @@
 		{forminput}
 			<select name="settings[users_themes]" id="users_themes">
 				<option value="">Never</option>
-				<option value="h" {if $gBitSystem->getConfig('users_themes') eq 'h'}selected="selected"{/if}>{tr}Just For Their Homepage{/tr}</option>
+				<option value="h" {if $gBitSystem->getConfig('users_themes') eq 'h'}selected="selected"{/if}>{tr}Just For Their Profile Page{/tr}</option>
 				<option value="y" {if $gBitSystem->isFeatureActive( 'users_themes' )}selected="selected"{/if}>{tr}For the Entire Site{/tr}</option>
 			</select>
 			{formhelp note="Allows users to choose their own theme." page="UserTheme"}

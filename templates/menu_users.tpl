@@ -10,7 +10,7 @@
 			<li><a class="item" href="{$gBitUser->getDisplayUrl()}">{booticon iname="fa-home" iexplain="My Profile"}</a></li>
 		{/if}
 		{if $gBitUser->hasPermission( 'p_users_edit_user_homepage' )}
-			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">{booticon iname="fa-pen-to-square" iexplain="Edit My Homepage"}</a></li>
+			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}edit_personal_page.php">{booticon iname="fa-pen-to-square" iexplain="Edit Profile Page"}</a></li>
 		{/if}
 		{if $gBitSystem->isFeatureActive( 'users_preferences' )}
 			<li><a class="item" href="{$smarty.const.USERS_PKG_URL}preferences.php">{booticon iname="fa-inbox" iexplain=Preferences}</a></li>

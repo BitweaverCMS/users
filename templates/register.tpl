@@ -117,10 +117,10 @@
 	{if $gBitSystem->isFeatureActive( 'reg_real_name' ) or $gBitSystem->isFeatureActive( 'reg_homepage' ) or $gBitSystem->isFeatureActive( 'reg_country' ) or $gBitSystem->isFeatureActive( 'reg_language' ) or $gBitSystem->isFeatureActive( 'reg_portrait' )}
 		{if $gBitSystem->isFeatureActive( 'reg_homepage' )}
 			<div class="form-group">
-				{formlabel label="HomePage" for="users_homepage"}
+				{formlabel label="Website" for="users_homepage"}
 				{forminput}
 					<input class="form-control" type="text" name="prefs[users_homepage]" id="users_homepage" value="{$smarty.request.prefs.users_homepage}" />
-					{formhelp note="If you have a personal or professional homepage, enter it here."}
+					{formhelp note="If you have a personal or professional website, enter it here."}
 				{/forminput}
 			</div>
 		{/if}
