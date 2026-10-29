@@ -763,7 +763,7 @@ class BitUser extends LibertyMime {
 					$gBitSmarty->assign( 'mailUserId',$this->mUserId );
 					$gBitSmarty->assign( 'mailProvPass',$apass );
 					$mail_data = $gBitSmarty->fetch( 'bitpackage:users/user_validation_mail.tpl' );
-					mail( $pParamHash["email"], $siteName.' - '.tra( 'Your registration information' ), $mail_data, "From: ".$gBitSystem->getConfig('site_sender_email')."\nContent-type: text/plain;charset=utf-8\n" );
+					bit_mail( $pParamHash["email"], $siteName.' - '.tra( 'Your registration information' ), $mail_data, "From: ".$gBitSystem->getConfig('site_sender_email')."\nContent-type: text/plain;charset=utf-8\n" );
 					$gBitSmarty->assign( 'showmsg', 'y' );
 
 					$this->mLogs['confirm'] = 'Validation email sent.';
@@ -772,7 +772,7 @@ class BitUser extends LibertyMime {
 					$gBitSmarty->assign( 'mailPassword',$pParamHash['password'] );
 					$gBitSmarty->assign( 'mailEmail',$pParamHash['email'] );
 					$mail_data = $gBitSmarty->fetch( 'bitpackage:users/welcome_mail.tpl' );
-					mail( $pParamHash["email"], tra( 'Welcome to' ).' '.$siteName, $mail_data, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\nContent-type: text/plain;charset=utf-8\n" );
+					bit_mail( $pParamHash["email"], tra( 'Welcome to' ).' '.$siteName, $mail_data, "From: ".$gBitSystem->getConfig( 'site_sender_email' )."\nContent-type: text/plain;charset=utf-8\n" );
 
 					$this->mLogs['welcome'] = 'Welcome email sent.';
 				}

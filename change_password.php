@@ -54,7 +54,7 @@ if( isset( $_REQUEST["change"] )) {
 				$gBitSmarty->assign( 'mailPassword',$_REQUEST['pass'] );
 				$gBitSmarty->assign( 'mailEmail',$validated['email'] );
 				$mail_data = $gBitSmarty->fetch('bitpackage:users/welcome_mail.tpl');
-				mail($validated["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
+				bit_mail($validated["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n");
 			}
 		} else	{
 				$gBitSystem->fatalError( tra("Password reset request is invalid or has expired") );

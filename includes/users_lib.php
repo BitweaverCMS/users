@@ -29,7 +29,7 @@ function users_admin_email_user( &$pParamHash ) {
 		$gBitSmarty->assign( 'mailUserId', $pParamHash['user_store']['user_id'] );
 		$gBitSmarty->assign( 'mailProvPass', $apass );
 		$mail_data = $gBitSmarty->fetch( 'bitpackage:users/admin_validation_mail.tpl' );
-		mail( $pParamHash['email'], $siteName.' - '.tra( 'Your registration information' ),$mail_data,"From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n" );
+		bit_mail( $pParamHash['email'], $siteName.' - '.tra( 'Your registration information' ),$mail_data,"From: ".$gBitSystem->getConfig( 'site_sender_email' )."\r\nContent-type: text/plain;charset=utf-8\r\n" );
 		$gBitSmarty->assign( 'showmsg', 'n' );
 
 		$ret = array(
@@ -40,7 +40,7 @@ function users_admin_email_user( &$pParamHash ) {
 		$gBitSmarty->assign( 'mailPassword',$pParamHash['password'] );
 		$gBitSmarty->assign( 'mailEmail',$pParamHash['email'] );
 		$mail_data = $gBitSmarty->fetch( 'bitpackage:users/admin_welcome_mail.tpl' );
-		mail( $pParamHash["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n" );
+		bit_mail( $pParamHash["email"], tra( 'Welcome to' ).' '.$siteName,$mail_data,"From: ".$gBitSystem->getConfig('site_sender_email')."\r\nContent-type: text/plain;charset=utf-8\r\n" );
 		$ret = array(
 			'welcome' => 'Welcome email sent to '.$pParamHash['email'].'.'
 		);
