@@ -825,7 +825,29 @@ class BitUser extends LibertyMime {
 						$pParamHash['user_store']['user_id'] = $this->mDb->GenID( 'users_users_user_id_seq' );
 					}
 					$this->mUserId = $pParamHash['user_store']['user_id'];
+					$savedRaise = $this->mDb->mDb->raiseErrorFn;
+					$this->mDb->mDb->raiseErrorFn = '';
 					$result = $this->mDb->associateInsert( BIT_DB_PREFIX.'users_users', $pParamHash['user_store'] );
+					$insertMeta = $this->mDb->mDb->MetaError();
+					$insertMsg = $this->mDb->mDb->ErrorMsg();
+					$this->mDb->mDb->raiseErrorFn = $savedRaise;
+					if( !$result ) {
+						$this->RollbackTrans();
+						if( defined( 'DB_ERROR_ALREADY_EXISTS' ) && $insertMeta == DB_ERROR_ALREADY_EXISTS ) {
+							if( stripos( $insertMsg, 'email' ) !== FALSE ) {
+								$email = !empty( $pParamHash['email'] ) ? $pParamHash['email'] : '';
+								$this->mErrors['email'] = 'The email address "'.$email.'" has already been registered.';
+							} elseif( stripos( $insertMsg, 'login' ) !== FALSE ) {
+								$this->mErrors['login'] = 'The username is already in use';
+							} else {
+								$this->mErrors['store'] = tra( 'That account could not be created because it already exists.' );
+							}
+						} elseif( $savedRaise ) {
+							$savedRaise( $this->mDb->mDb->databaseType, 'EXECUTE', $insertMeta, $insertMsg, 'INSERT INTO users_users', $pParamHash['user_store'], $this->mDb->mDb );
+							$this->mErrors['store'] = tra( 'That account could not be created.' );
+						}
+						return( count( $this->mErrors ) == 0 );
+					}
 				}
 			}
 
@@ -1345,14 +1367,15 @@ class BitUser extends LibertyMime {
 		$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
 
 		$this->StartTrans();
+		$url = USERS_PKG_URL.'signin.php?error=' . urlencode( tra( 'Invalid username or password' ) );
 		// Verify user is valid
 		if( $this->validate( $pLogin, $pPassword, $pChallenge, $pResponse )) {
 			$userInfo = $this->getUserInfo( array( $loginCol => $pLogin ));
 
-			// If the password is valid but it is due then force the user to change the password by
-			// sending the user to the new password change screen without letting him use
-			// The user must re-nter the old password so no secutiry risk here
-			if( $this->isPasswordDue() ) {
+			if( empty( $userInfo['user_id'] ) ) {
+				$this->mErrors['login'] = tra( 'Invalid username or password' );
+				$url = USERS_PKG_URL.'signin.php?error=' . urlencode( $this->mErrors['login'] );
+			} elseif( $this->isPasswordDue() ) {
 				// Redirect the user to the screen where he must change his password.
 				// Note that the user is not logged in he's just validated to change his password
 				// The user must re-enter his old password so no secutiry risk involved

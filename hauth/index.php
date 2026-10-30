@@ -25,7 +25,10 @@ try {
 	}
 	bit_redirect( USERS_PKG_URI.'validate?provider='.rawurlencode( $providerDone ) );
 } catch( Exception $e ) {
-	bit_error_log( 'Sign-in failed for '.$providerDone.': '.$e->getMessage() );
+	$haMessage = $e->getMessage();
+	if( stripos( $haMessage, 'access_denied' ) === FALSE ) {
+		bit_error_log( 'Sign-in failed for '.$providerDone.': '.$haMessage );
+	}
 	$_SESSION['users_ha_error'] = tra( 'Sign-in failed.' );
 	bit_redirect( USERS_PKG_URI.'validate?provider='.rawurlencode( $providerDone ) );
 }

@@ -102,6 +102,7 @@ class BitAuth extends BaseAuth {
 
 		if( !$u->store( $pUserHash ) ) {
 			$this->mErrors = array_merge($this->mErrors,$u->mErrors);
+			return FALSE;
 		}
 		return $u->mUserId;
 	}
