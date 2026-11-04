@@ -134,7 +134,9 @@ if( !empty( $_REQUEST['provider'] ) ) {
 	 
 			$gBitSmarty->assignByRef( 'authError', $authError );
 			$gBitSmarty->assignByRef( 'authExpection', $e );
-			bit_error_log( $authError );
+			if( (int)$e->getCode() !== 0 ) {
+				bit_error_log( $authError );
+			}
 			$tpl = 'bitpackage:users/validate_auth.tpl';
 		}
 	}
