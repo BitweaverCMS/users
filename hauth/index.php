@@ -26,7 +26,10 @@ try {
 	bit_redirect( USERS_PKG_URI.'validate?provider='.rawurlencode( $providerDone ) );
 } catch( Exception $e ) {
 	$haMessage = $e->getMessage();
-	if( stripos( $haMessage, 'access_denied' ) === FALSE ) {
+	$haQuiet = ( stripos( $haMessage, 'access_denied' ) !== FALSE )
+		|| ( stripos( $haMessage, 'already been consumed' ) !== FALSE )
+		|| ( stripos( $haMessage, 'authorization state' ) !== FALSE );
+	if( !$haQuiet ) {
 		bit_error_log( 'Sign-in failed for '.$providerDone.': '.$haMessage );
 	}
 	$_SESSION['users_ha_error'] = tra( 'Sign-in failed.' );
