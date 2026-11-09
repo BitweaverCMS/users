@@ -43,20 +43,14 @@
 						{formfeedback error=$errors.password}
 						{formlabel label="Password" for="password"}
 						{forminput}
-							<div class="input-group">
-								<input class="form-control" type="password" name="password" id="password" value="{$newUser.password}"  />
-								<span class="input-group-addon" onclick="BitBase.genPass('password','password','password2');$('#password').prop('type','text');">{tr}Generate{/tr}</span>
-							</div>
-						{/forminput}
-						{forminput}
-							
+							{passwordinput id="password" name="password" value=$newUser.password autocomplete="new-password" generate="password2"}
 						{/forminput}
 					</div>
 
 					<div class="form-group">
 						{formlabel label="Repeat Password" for="password2"}
 						{forminput}
-							<input class="form-control" type="password" name="password2" id="password2" value="{$newUser.password2}"  />
+							{passwordinput id="password2" name="password2" value=$newUser.password2 autocomplete="new-password"}
 						{/forminput}
 					</div>
 
