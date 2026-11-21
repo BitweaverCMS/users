@@ -7,7 +7,7 @@
 
 | Artifact | Count |
 |---|---:|
-| PHP files | 217 |
+| PHP files | 215 |
 | Smarty templates | 51 |
 | JavaScript files | 0 |
 | CSS files | 0 |
@@ -123,7 +123,6 @@
 - `custom_home.php`
 - `edit_personal_page.php`
 - `freecap/freecap.php`
-- `freecap/freecap_wrap.php`
 - `hauth/Hybrid/Auth.php`
 - `hauth/Hybrid/Endpoint.php`
 - `hauth/Hybrid/Error.php`
@@ -178,7 +177,6 @@
 - `preferences.php`
 - `register.php`
 - `remind_password.php`
-- `show_user_avatar.php`
 - `signin.php`
 - `users_rss.php`
 - `validate.php`
