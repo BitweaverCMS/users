@@ -22,19 +22,18 @@ if( $gBitUser->isRegistered() ) {
 	die;
 } elseif (isset($_REQUEST["remind"])) {
 	$userInfo = '';
-	$_REQUEST["username"] = strip_tags( urldecode( $_REQUEST["username"]) );
-	$pLogin = trim( $_REQUEST["username"] );
-    if ( strlen ( $pLogin ) ) {
+	$pLogin = isset( $_REQUEST['username'] ) && is_string( $_REQUEST['username'] ) ? trim( strip_tags( $_REQUEST['username'] ) ) : '';
+	if( $pLogin !== '' ) {
 		$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
 		$userInfo = $gBitUser->getUserInfo( array( $loginCol => $pLogin ) );
 	}
 	if( $userInfo ) {
 		$pass = $gBitUser->genPass();
-		list($pass,$provpass) = $gBitUser->createTempPassword( $_REQUEST["username"], $pass );
+		list($pass,$provpass) = $gBitUser->createTempPassword( $pLogin, $pass );
 		$gBitSmarty->assign( 'mailProvPass', $provpass );
 		$gBitSmarty->assign( 'mailUserId', $userInfo['user_id'] );
 		$pageTitle = tra( 'Change Your Password' );
-		$tmp['success'] = tra("Information to change your password has been sent to the registered email address for")." " . $_REQUEST["username"] . ".";
+		$tmp['success'] = tra("Information to change your password has been sent to the registered email address for")." " . $pLogin . ".";
 
 		$gBitSmarty->assign('mail_user', $userInfo[$loginCol]);
 		$gBitSmarty->assign('mail_pass', $pass);
@@ -46,7 +45,7 @@ if( $gBitUser->isRegistered() ) {
 	} else {
 		// Show error message (and leave form visible so user can fix problem)
 		$gBitSmarty->assign('showmsg', 'e');
-		$tmp['error'] = tra("Invalid or unknown username").": ".$_REQUEST["username"];
+		$tmp['error'] = tra("Invalid or unknown username").": ".$pLogin;
 	}
 	$gBitSmarty->assign('msg', $tmp);
 }

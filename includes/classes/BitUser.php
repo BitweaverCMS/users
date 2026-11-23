@@ -1360,8 +1360,12 @@ class BitUser extends LibertyMime {
 		global $gBitSystem;
 		$isvalid = false;
 
-		if( empty( trim( $pLogin ) ) || !is_string( $pLogin ) ) {
+		if( !is_string( $pLogin ) || trim( $pLogin ) === '' ) {
 			return USERS_PKG_URL.'signin.php?error=' . urlencode( tra( 'Unknown login' ) );
+		}
+
+		if( is_array( $pPassword ) || is_array( $pChallenge ) || is_array( $pResponse ) ) {
+			return USERS_PKG_URL.'signin.php?error=' . urlencode( tra( 'Invalid username or password' ) );
 		}
 
 		$loginCol = strpos( $pLogin, '@' ) ? 'email' : 'login';
@@ -1397,7 +1401,7 @@ class BitUser extends LibertyMime {
 			$result = $this->mDb->getRow( $query, array( $pLogin ) );
 			if( !empty( $result['user_id'] ) && $this->isPasswordDue( $result['user_id'] ) ) {
 				// user needs email password reset so send it and let them know
-				$url = USERS_PKG_URL.'remind_password.php?remind=y&required=y&username='.$pLogin;
+				$url = USERS_PKG_URL.'remind_password.php?remind=y&required=y&username='.rawurlencode( $pLogin );
 			}else{
 				$this->mUserId = ANONYMOUS_USER_ID;
 				$this->mInfo = array();
